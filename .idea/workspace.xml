@@ -1,47 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icons/angle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icons/bars.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icons/check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icons/close.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icons/logout.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icons/profile.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Header.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro-Bold.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro-Bold.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro-Bold.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro-Medium.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro-Medium.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro-Medium.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/GothamPro.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/icomoon.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/icomoon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/icomoon.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fonts/icomoon.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sass/_breakpoints.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sass/_fonts.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sass/_mixins.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sass/_variables.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/webResources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/Catalog.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/CatalogItem.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/shop/CourseOverview.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/shop/Shop.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/img/dummy_poster.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_breakpoints.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_variables.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -73,19 +53,20 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\WebStormProjects\ege-hack\src\fonts" />
-      <recent name="C:\WebStormProjects\ege-hack\src\sass" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\WebStormProjects\ege-hack\src\components\common" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\shop" />
       <recent name="C:\WebStormProjects\ege-hack\icons" />
       <recent name="C:\WebStormProjects\ege-hack\src\img" />
       <recent name="C:\WebStormProjects\ege-hack\src\sass" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components" />
-      <recent name="C:\WebStormProjects\ege-hack\src\App" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\WebStormProjects\ege-hack\src\fonts" />
+      <recent name="C:\WebStormProjects\ege-hack\src\sass" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -114,6 +95,26 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="start-custom-post" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start-custom-post" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="JavaScript Debug.Debug Application" />
+      <item itemvalue="npm.npm start" />
+      <item itemvalue="npm.start-custom-post" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start-custom-post" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -125,8 +126,18 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1566944050915</updated>
-      <workItem from="1566944052637" duration="19467000" />
+      <workItem from="1566944052637" duration="19832000" />
+      <workItem from="1567018382907" duration="15148000" />
+      <workItem from="1567684228898" duration="29675000" />
     </task>
+    <task id="LOCAL-00001" summary="Initial stage">
+      <created>1567014085290</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1567014085290</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -137,10 +148,16 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial stage" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial stage" />
   </component>
 </project>

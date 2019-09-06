@@ -1,7 +1,9 @@
 import React from 'react';
 import '../sass/index.scss';
-import { BrowserRouter as Router, Route, Link, Prompt } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Header from "./Header";
+import SideBar from "./SideBar";
+import Shop from "./shop/Shop";
 
 export default class App extends React.Component {
     state = {opened: false};
@@ -10,20 +12,20 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <div className="app">
-                <Router>
+            <Router>
+                <div className="app">
                     <Header onMenuButtonClick={this.onMenuButtonClick}/>
-                    <main className={`layout ${this.state.opened ? 'drawer-opened' : ''}`}>
-                        <div className="layout__drawer">
-                            Мои курсы
-                        </div>
+                    <div className={`layout ${this.state.opened ? 'sidebar-opened' : ''}`}>
+                        <SideBar onMenuClose={this.onMenuButtonClick}/>
                         <Route exact path="/" render={() => <div className="layout__content">Home</div>}/>
-                        <Route path="/about" render={() => <div className="layout__content">About</div>}/>
-                        <Route path="/topics" render={() => <div className="layout__content">Topics</div>}/>
-                    </main>
-                    <footer>Footer</footer>
-                </Router>
-            </div>
+                        <Switch>
+                            <Route path="/shop" component={Shop}/>
+                            <Route path="/:section" render={(props) => <div className="layout__content">{props.match.params.section}</div>}/>
+                        </Switch>
+                    </div>
+                </div>
+                {/*<footer>Footer</footer>*/}
+            </Router>
         );
     }
 }
