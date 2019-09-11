@@ -5,21 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/webResources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jsconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/common/Catalog.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/common/CatalogItem.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/shop/CourseOverview.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/shop/Shop.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/helpers.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/dummy_poster.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Page.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/Contacts.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/Course.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/CoverImage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/Teacher.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/courses/MyCourses.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ui/Input.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ui/Select.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/data/test_data.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/definitions/constants.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/definitions/hooks.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/definitions/polyfills.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SideBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Catalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/List.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/CatalogItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/ListItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/shop/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/shop/CourseOverview.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/shop/Shop.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/shop/Shop.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/helpers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_breakpoints.scss" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_variables.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
     </list>
@@ -32,6 +42,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="SCSS File" />
         <option value="JavaScript File" />
       </list>
     </option>
@@ -44,7 +55,8 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/fonts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/common" />
+    <property name="list.type.of.created.stylesheet" value="SCSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -58,13 +70,14 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\WebStormProjects\ege-hack\src\components\ui" />
+      <recent name="C:\WebStormProjects\ege-hack\src\definitions" />
       <recent name="C:\WebStormProjects\ege-hack\src\components\common" />
       <recent name="C:\WebStormProjects\ege-hack\src\components\shop" />
       <recent name="C:\WebStormProjects\ege-hack\icons" />
-      <recent name="C:\WebStormProjects\ege-hack\src\img" />
-      <recent name="C:\WebStormProjects\ege-hack\src\sass" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\WebStormProjects\ege-hack\src\components\common" />
       <recent name="C:\WebStormProjects\ege-hack\src\fonts" />
       <recent name="C:\WebStormProjects\ege-hack\src\sass" />
     </key>
@@ -128,7 +141,7 @@
       <updated>1566944050915</updated>
       <workItem from="1566944052637" duration="19832000" />
       <workItem from="1567018382907" duration="15148000" />
-      <workItem from="1567684228898" duration="29675000" />
+      <workItem from="1567684228898" duration="127433000" />
     </task>
     <task id="LOCAL-00001" summary="Initial stage">
       <created>1567014085290</created>
@@ -137,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567014085290</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Basic catalog">
+      <created>1567742209914</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1567742209914</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -158,6 +178,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial stage" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial stage" />
+    <MESSAGE value="Basic catalog" />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic catalog" />
   </component>
 </project>

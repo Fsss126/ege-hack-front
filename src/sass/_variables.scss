@@ -5,6 +5,7 @@ $bg-grey: #f8f8f8;
 $text-dark: #525252;
 $text-grey: #888888;
 $text-light-grey: #d7d7d7;
+$accent-orange: #fa9346;
 
 // fonts
 $font-medium: 'Gotham Pro Medium', sans-serif;
@@ -12,4 +13,7 @@ $font-regular: 'Gotham Pro Regular', sans-serif;
 $font-bold: 'Gotham Pro Bold', sans-serif;
 
 $card-border-radius: 10px;
+$content-padding-top: 12px;
+$content-padding-sides: 18px;
+$content-padding: $content-padding-top $content-padding-sides;
 $border: 1px solid $border-grey;

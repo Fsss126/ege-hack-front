@@ -5,3 +5,21 @@ export const daysBetween = (date1, date2) => {
     const difference_ms = date2_ms - date1_ms;
     return Math.floor(difference_ms / one_day);
 };
+
+export const renderDate = (date, options, locale='ru') => date.toLocaleString(locale, options);
+Object.assign(renderDate, {
+    date: {
+        day: 'numeric',
+        month: 'long'
+    },
+    shortDate: {
+        day: 'numeric',
+        month: 'long'
+    },
+    hour: {
+        hour: 'numeric',
+        minute: 'numeric'
+    }
+});
+
+window.renderDate = renderDate;
