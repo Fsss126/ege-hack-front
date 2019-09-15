@@ -53,17 +53,24 @@
   display: inline-block;
   text-align: center;
   width: 1em;
+  box-sizing: content-box;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-bars:before {
-  content: "\e903";
-}
 .icon-logout:before {
   content: "\e905";
+}
+.icon-login:before {
+  content: "\e906";
+}
+.icon-arrow:before {
+  content: "\e907";
+}
+.icon-bars:before {
+  content: "\e903";
 }
 .icon-angle:before {
   content: "\e900";

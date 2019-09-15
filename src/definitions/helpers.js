@@ -14,7 +14,7 @@ Object.assign(renderDate, {
     },
     shortDate: {
         day: 'numeric',
-        month: 'long'
+        month: 'numeric'
     },
     hour: {
         hour: 'numeric',

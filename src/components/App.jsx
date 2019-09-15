@@ -8,6 +8,7 @@ import Shop from "./shop/Shop";
 import MyCourses from "./courses/MyCourses";
 import Page from "./Page";
 import {useUpdateEffect} from "../definitions/hooks";
+import {StickyContainer} from "react-sticky";
 
 const ScrollToTop = withRouter(({ children, location: { pathname }, history }) => {
     useUpdateEffect(() => {
@@ -37,7 +38,7 @@ export default class App extends React.Component {
         const {opened} = this.state;
         return (
             <Router>
-                <div className="app">
+                <StickyContainer className="app">
                     <Header onMenuButtonClick={this.onMenuButtonClick}/>
                     <CSSTransition
                         in={opened}
@@ -55,7 +56,7 @@ export default class App extends React.Component {
                             </ScrollToTop>
                         </div>
                     </CSSTransition>
-                </div>
+                </StickyContainer>
                 {/*<footer>Footer</footer>*/}
             </Router>
         );

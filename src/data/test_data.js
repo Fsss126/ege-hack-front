@@ -56,10 +56,11 @@ export const COURSES = SUBJECTS.slice(0, 5).map((subject, i) => ({
     start: getDate(7 + i),
     totalHours: 80,
     description: lorem.generateParagraphs(1),
-    classes: _.times(4, (i) => ({
-        number: i,
-        date: getDate(7 + i),
-        title: `Занятие ${i + 1}`,
+    classes: _.times(4, (j) => ({
+        number: j + 1,
+        id: j + 1,
+        date: getDate(-4 + i + j),
+        title: `Занятие ${j + 1}`,
         description: lorem.generateParagraphs(1),
         cover: poster
     })),
@@ -67,7 +68,10 @@ export const COURSES = SUBJECTS.slice(0, 5).map((subject, i) => ({
 }));
 
 export const SHOP_CATALOG = {
-    catalog: COURSES.map(course => ({...course, offer: {price: 2500, discount: 1300}})),
+    catalog: COURSES.map((course, i) => ({...course, offer: {price: 2500, discount: i === 0 ? 1300 : undefined}})),
+    // promotions: [{
+    //
+    // }]
     // subjects:
 };
 

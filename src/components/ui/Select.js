@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import SelectInput, { components } from 'react-select';
-import {Scrollbars} from 'react-custom-scrollbars';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import ScrollBars from "./ScrollBars";
 
 const DropdownIndicator = (props) => (
     <components.DropdownIndicator {...props}>
@@ -10,13 +10,17 @@ const DropdownIndicator = (props) => (
     </components.DropdownIndicator>
 );
 
-const SelectContainer = ({ children, selectProps, setValue, ...props }) => (
+const SelectContainer = ({ children, selectProps, hasValue, setValue, ...props }) => (
     <div className="select">
-        <components.SelectContainer selectProps={{...selectProps, isClearable: false}} setValue={setValue} {...props}>
+        <components.SelectContainer
+            selectProps={{...selectProps, isClearable: false}}
+            hasValue={hasValue}
+            setValue={setValue}
+            {...props}>
             {children}
         </components.SelectContainer>
         {selectProps.isClearable && (
-            <div className="select__clear-btn" onClick={() => {setValue(null);}}>
+            <div className={hasValue ? 'select__clear-btn' : 'select__clear-btn select__clear-btn-hidden'} onClick={() => {setValue(null);}}>
                 <i className="icon-close"/>
             </div>
         )}
@@ -41,23 +45,17 @@ export class MenuList extends Component {
         this.props.innerRef(this.scrollBar.view);
     }
 
-    renderTrackVertical = props => (<div {...props} className="track-vertical"/>);
-
-    renderThumbHorizontal = props => (<div {...props} className="thumb-vertical"/>);
-
     render() {
         return (
-            <Scrollbars
+            <ScrollBars
                 autoHeight
-                renderTrackVertical={this.renderTrackVertical}
-                renderThumbVertical={this.renderThumbHorizontal}
                 hideTracksWhenNotNeeded
                 ref={ref => { this.scrollBar = ref; }}
                 autoHeightMax={this.props.maxHeight}>
                 <div className='select__list'>
                     {this.props.children}
                 </div>
-            </Scrollbars>
+            </ScrollBars>
         );
     }
 
@@ -75,7 +73,6 @@ export default class Select extends React.PureComponent {
     };
 
     render() {
-        console.log(this.props.value, _.find(this.props.options, {value: this.props.value}));
         return (
             <SelectInput
                 name={this.props.name}

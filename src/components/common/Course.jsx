@@ -3,13 +3,13 @@ import {daysBetween} from "../../definitions/helpers";
 import ListItem from "./ListItem";
 import CoverImage from "./CoverImage";
 
-export default function Course({course, online=true,children: action, selectable, onClick}) {
+export default function Course({course, online=true, isSelected=false, ...props}) {
     const {title, cover, start, description} = course;
     const startsIn = daysBetween(new Date(), start);
     return (
         <ListItem
             item={course}
-            className={`course ${selectable ? 'course-selectable' : ''}`}
+            className={isSelected ? 'course course-selected' : 'course'}
             title={title}
             subtitle={`До начала курса ${startsIn} ${startsIn === 1 ? 'день' : 'дней'}`}
             description={description}
@@ -20,11 +20,9 @@ export default function Course({course, online=true,children: action, selectable
                             <span>Онлайн</span>
                         </div>
                     )}
-                    <CoverImage src={cover} classname="course__cover"/>
+                    <CoverImage src={cover} classname="poster-cover course__cover"/>
                 </div>
             )}
-            onClick={onClick}>
-            {action}
-        </ListItem>
-    )
+            {...props}/>
+    );
 }

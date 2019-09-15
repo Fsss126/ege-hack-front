@@ -97,6 +97,26 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
   }
 }
 
+.track {
+  z-index: 3;
+  background: $bg-grey;
+  &.track-vertical {
+    right: 0;
+    bottom: 0;
+    top: 0;
+    width: 6px;
+  }
+  &.track-horizontal {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 6px;
+  }
+  .thumb {
+    background: $text-light-grey;
+  }
+}
+
 .select {
   display: flex;
   align-items: center;
@@ -158,24 +178,19 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
           background: $text-light-grey;
         }
       }
-      .track-vertical {
-        z-index: 3;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        background: $bg-grey;
-        .thumb-vertical {
-          background: $text-light-grey;
-        }
-      }
     }
   }
   .select__clear-btn {
     padding: 8px;
     cursor: pointer;
+    transition: transform .3s;
     i {
       display: block;
       color: $text-light-grey;
+    }
+
+    &.select__clear-btn-hidden {
+      transform: scale(0);
     }
   }
 }

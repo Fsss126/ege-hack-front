@@ -1,12 +1,14 @@
 import React from 'react';
 import { Switch, Route } from "react-router-dom";
-import CourseOverview from "components/shop/CourseOverview";
+import CourseOverview from "components/common/CourseOverview";
 import Course from "components/common/Course";
 import {MY_COURSES} from "data/test_data";
 import Page, {PageContent} from "../Page";
 import CourseCatalog from "../common/CourseCatalog";
 import {USER_COURSE_STATUS} from "../../definitions/constants";
 import _ from 'lodash';
+import {renderDate} from "../../definitions/helpers";
+import Lesson from "../common/Lesson";
 
 export default class MyCourses extends React.Component {
     state = {
@@ -21,42 +23,80 @@ export default class MyCourses extends React.Component {
         });
     };
 
-    renderCourse = (course) => {
+    openClass = (lesson, course) => {
+        const {match, history} = this.props;
+        console.log(lesson, course);
+        history.push({
+            pathname: `${match.path}/${course.id}/${lesson.id}`
+            // search: `?${query}`
+        });
+    };
+
+    renderCourse = (course, props) => (
+        <Course
+            course={course}
+            selectable
+            online={false}
+            key={course.id}
+            onClick={this.openCourse}
+            onActionClick={this.openCourse}
+            {...props}>
+            {course.status === USER_COURSE_STATUS.learning
+                ? <div className="course__select-btn button">Изучать</div>
+                : <div className="course__select-btn button button-inactive">Пройден</div>}
+        </Course>
+    );
+
+    renderLesson = (lesson, props) => {
+        const {date, id} = lesson;
+        const selectable = date < new Date();
         return (
-            <Course
-                course={course}
-                selectable
-                online={false}
-                onClick={this.openCourse}
-                key={course.id}>
-                {course.status === USER_COURSE_STATUS.learning
-                    ? <div className="course__select-btn button" onClick={this.openCourse}>Изучать</div>
-                    : <div className="course__select-btn button button-inactive" onClick={this.openCourse}>Пройден</div>}
-            </Course>
-        )
+            <Lesson
+                lesson={lesson}
+                locked={!selectable}
+                selectable={selectable}
+                onClick={this.openClass}
+                onActionClick={this.openClass}
+                key={id}
+                {...props}>
+                <div className="list__item-action-info">{renderDate(date, renderDate.shortDate)}</div>
+                {selectable
+                    ? <div className="button">Изучать</div>
+                    : <div className="button button-inactive">Скоро</div>}
+            </Lesson>
+        );
     };
 
     render() {
-        const {match, location, history} = this.props;
+        const {match} = this.props;
         const {courses} = this.state;
         return (
             <Switch>
-                <Route exact path={`${match.path}`} render={() => (
-                    <Page title="Мои курсы">
+                <Route exact path={`${match.path}`} render={(props) => (
+                    <CourseCatalog.Body
+                        className="course-shop"
+                        title="Магазин курсов"
+                        courses={courses}
+                        {...props}>
                         <PageContent>
-                            <CourseCatalog
-                                className="course-shop"
-                                courses={courses}
-                                location={location}
-                                history={history}
-                                renderCourse={this.renderCourse}/>
+                            <CourseCatalog.Filter/>
+                            <CourseCatalog.Catalog
+                                renderCourse={this.renderCourse}
+                                onItemClick={this.openCourse}/>
                         </PageContent>
-                    </Page>
+                    </CourseCatalog.Body>
                 )}/>
+                <Route path={`${match.path}/:courseId/:lessonId`} component={Page}/>
                 <Route path={`${match.path}/:id`} component={props => (
-                    <CourseOverview {...props} path={match.path}>
-                        {courses.courses}
-                    </CourseOverview>
+                    <CourseOverview.Body
+                        path={match.path}
+                        courses={courses}
+                        {...props}>
+                        <PageContent>
+                            <CourseOverview.Title/>
+                            <CourseOverview.Lessons renderLesson={this.renderLesson} onItemClick={this.openClass}/>
+                        </PageContent>
+                    </CourseOverview.Body>
                 )}/>
             </Switch>
         )
