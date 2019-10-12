@@ -1,4 +1,5 @@
 import React from 'react';
+import Select from "./Select";
 
 function useChangeHandler(callback, inputProp = 'value') {
     return React.useCallback((event) => {
@@ -25,7 +26,8 @@ const Input = ({className, onChange: callback, ...props}) => {
 };
 
 Object.assign(Input, {
-    CheckBox
+    CheckBox,
+    Select
 });
 
 export default Input;

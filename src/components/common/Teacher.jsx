@@ -8,7 +8,7 @@ export default function Teacher(props) {
             <div className="container p-0">
                 <div className="row flex-nowrap">
                     <div className="col-auto d-flex align-items-center">
-                        <CoverImage src={photo} classname="teacher-profile__photo"/>
+                        <CoverImage src={photo} className="teacher-profile__photo"/>
                     </div>
                     <div className="col d-flex align-items-center">
                         <div className="teacher-profile__name">{firstName} {lastName}</div>

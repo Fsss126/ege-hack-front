@@ -10,14 +10,6 @@ export default class Shop extends React.Component {
         selectedCourses: new Set()
     };
 
-    onCourseClick = (course) => {
-        const {match, history} = this.props;
-        history.push({
-            pathname: `${match.path}/${course.id}`
-            // search: `?${query}`
-        });
-    };
-
     onCourseSelect = (course) => {
         let {selectedCourses} = this.state;
         if (selectedCourses.has(course))
@@ -56,7 +48,6 @@ export default class Shop extends React.Component {
                     <CatalogPage
                         catalog={catalog}
                         selectedCourses={selectedCourses}
-                        onCourseClick={this.onCourseClick}
                         onCourseSelect={this.onCourseSelect}
                         onCourseDeselect={this.onCourseDeselect}
                         {...props}/>

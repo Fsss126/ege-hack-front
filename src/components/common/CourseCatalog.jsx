@@ -1,5 +1,4 @@
 import React from 'react';
-import Select from "components/ui/Select";
 import List from "./List";
 import Input from "../ui/Input";
 import _ from "lodash";
@@ -14,7 +13,7 @@ const Filter = () => {
             <div className="container p-0">
                 <div className="row">
                     <div className="col-auto d-flex align-items-center">
-                        <Select
+                        <Input.Select
                             name="subject"
                             options={options}
                             value={subject}
@@ -34,8 +33,11 @@ const Filter = () => {
     );
 };
 
-const Catalog = ({renderCourse}) => {
+const Catalog = ({renderCourse: renderFunc}) => {
     const {courses} = React.useContext(CourseCatalogContext);
+    const renderCourse = React.useCallback((item) => {
+        return renderFunc(item, {link: `${item.id}/`});
+    }, [renderFunc]);
     return (
         <div className="layout__content-block course-catalog__catalog">
             {courses.length > 0 ? (

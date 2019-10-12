@@ -1,9 +1,10 @@
 import React from 'react';
 import ListItem from "./ListItem";
 import CoverImage from "./CoverImage";
+import VideoCover from "./VideoCover";
 
 export default function Lesson({lesson, locked=false, ...props}) {
-    const {title, cover, description} = lesson;
+    const {title, cover, description, watchProgress} = lesson;
     return (
         <ListItem
             item={lesson}
@@ -11,9 +12,11 @@ export default function Lesson({lesson, locked=false, ...props}) {
             title={title}
             description={description}
             preview={(
-                <CoverImage
-                    src={cover}
-                    classname={`video-class__cover video-cover ${locked ? 'video-locked' : ''}`}/>
+                <VideoCover
+                    cover={cover}
+                    className="video-class__cover"
+                    locked={locked}
+                    watchProgress={!locked && watchProgress}/>
             )}
             key={lesson.id}
             {...props}/>

@@ -20,7 +20,7 @@ export default function Course({course, online=true, isSelected=false, ...props}
                             <span>Онлайн</span>
                         </div>
                     )}
-                    <CoverImage src={cover} classname="poster-cover course__cover"/>
+                    <CoverImage src={cover} className="poster-cover course__cover"/>
                 </div>
             )}
             {...props}/>

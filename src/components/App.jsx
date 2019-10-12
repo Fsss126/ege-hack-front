@@ -1,25 +1,14 @@
 import React from 'react';
 import {CSSTransition} from "react-transition-group";
 import 'sass/index.scss';
-import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Shop from "./shop/Shop";
 import MyCourses from "./courses/MyCourses";
 import Page from "./Page";
-import {useUpdateEffect} from "../definitions/hooks";
 import {StickyContainer} from "react-sticky";
-
-const ScrollToTop = withRouter(({ children, location: { pathname }, history }) => {
-    useUpdateEffect(() => {
-        if (history.action !== 'POP') {
-            console.log('scroll top');
-            window.scrollTo(0, 0);
-        }
-    }, [pathname]);
-
-    return children || null;
-});
+import {ForceTrailingSlash, LocationListener, ScrollToTop} from "./HOCs";
 
 export default class App extends React.Component {
     static layoutAnimationClassNames = {
@@ -38,7 +27,10 @@ export default class App extends React.Component {
         const {opened} = this.state;
         return (
             <Router>
-                <StickyContainer className="app">
+                <LocationListener onLocationChange={(location) => {
+                    console.log(`- - - location: '${location.pathname}'`);
+                }}/>
+                <div className="app">
                     <Header onMenuButtonClick={this.onMenuButtonClick}/>
                     <CSSTransition
                         in={opened}
@@ -46,17 +38,19 @@ export default class App extends React.Component {
                         classNames={App.layoutAnimationClassNames}>
                         <div className="layout">
                             <SideBar onMenuClose={this.onMenuButtonClick}/>
-                            <ScrollToTop>
-                                <Switch>
-                                    <Route exact path="/" render={() => <div className="layout__content">Home</div>}/>
-                                    <Route path="/courses" component={MyCourses}/>
-                                    <Route path="/shop" component={Shop}/>
-                                    <Route path="/:section" component={Page}/>
-                                </Switch>
-                            </ScrollToTop>
+                            <ForceTrailingSlash>
+                                <ScrollToTop>
+                                    <Switch>
+                                        <Route exact path="/" render={() => <div className="layout__content">Home</div>}/>
+                                        <Route path="/courses" component={MyCourses}/>
+                                        <Route path="/shop" component={Shop}/>
+                                        <Route path="/:section" component={Page}/>
+                                    </Switch>
+                                </ScrollToTop>
+                            </ForceTrailingSlash>
                         </div>
                     </CSSTransition>
-                </StickyContainer>
+                </div>
                 {/*<footer>Footer</footer>*/}
             </Router>
         );

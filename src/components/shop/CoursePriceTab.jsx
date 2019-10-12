@@ -19,7 +19,7 @@ const CoursePriceTab = () => {
                         </h2>
                     </div>
                     <div className="col-auto">
-                        <div className="button">
+                        <div className="btn">
                             Купить
                         </div>
                     </div>

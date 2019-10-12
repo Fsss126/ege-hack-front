@@ -6,7 +6,6 @@ import Course from "../common/Course";
 
 const CatalogPage = ({catalog, selectedCourses, onCourseClick, onCourseSelect, onCourseDeselect, ...props}) => {
     const renderCourse = React.useCallback((course, props) => {
-        console.log(props);
         const isSelected = selectedCourses.has(course);
         const {offer: {price, discount}} = course;
         return (
@@ -14,16 +13,16 @@ const CatalogPage = ({catalog, selectedCourses, onCourseClick, onCourseSelect, o
                 course={course}
                 selectable
                 isSelected={isSelected}
-                onClick={onCourseClick}
                 onActionClick={onCourseSelect}
-                key={course.id}>
+                key={course.id}
+                {...props}>
                 <div className="list__item-action-info">
                     <span className="price">{price}₽</span> {discount && <span className="discount font-size-xs">{discount + price}₽</span>}
                 </div>
-                <div className="button" style={{minWidth: '110px'}}>{isSelected ? 'Выбрано' : 'Выбрать'}</div>
+                <div className="btn" style={{minWidth: '110px'}}>{isSelected ? 'Выбрано' : 'Выбрать'}</div>
             </Course>
         )
-    }, [selectedCourses, onCourseSelect, onCourseClick]);
+    }, [selectedCourses, onCourseSelect]);
     return (
         <CourseCatalog.Body
             className="course-shop"

@@ -55,11 +55,21 @@
   width: 1em;
   box-sizing: content-box;
 
+  &::before {
+    display: inline-block;
+  }
+
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-settings:before {
+  content: "\e903";
+}
+.icon-download:before {
+  content: "\e908";
+}
 .icon-logout:before {
   content: "\e905";
 }
@@ -70,7 +80,7 @@
   content: "\e907";
 }
 .icon-bars:before {
-  content: "\e903";
+  content: "\1f302";
 }
 .icon-angle:before {
   content: "\e900";
@@ -83,4 +93,13 @@
 }
 .icon-profile:before {
   content: "\e904";
+}
+
+.icon-upload:before {
+  content: "\e908";
+  transform: rotate(180deg);
+}
+.icon-add:before {
+  content: "\e902";
+  transform: rotate(45deg);
 }

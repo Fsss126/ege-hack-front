@@ -1,4 +1,4 @@
-// rem fallback - credits: http://zerosixthree.se/
+@import "variables";
 
 @function calculateRem($size) {
   $remSize: $size / 16px;
@@ -49,8 +49,16 @@
   }
 }
 
-// border radius
-@mixin border-radius($radius:.25em) {
-  border-radius: $radius;
+@mixin btnBehavior{
+  cursor: pointer;
+}
+
+@mixin linkBehavior($color: $text-dark, $activeColor: black) {
+  cursor: pointer;
+  color: $color;
+  transition: color .3s;
+  &:hover {
+    color: $activeColor !important;
+  }
 }
 

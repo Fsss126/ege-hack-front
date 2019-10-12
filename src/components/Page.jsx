@@ -1,21 +1,37 @@
 import React from 'react';
 import {Helmet} from "react-helmet";
-import StickyElement from "components/ui/Sticky";
+import Sticky from 'react-sticky-el';
+import {Link} from "react-router-dom";
 
-export const PageContent = ({children, className}) => (
+export const PageLink = ({to, arrow=true, forward=true, className, children, ...props}) => (
+    <Link
+        className={`${arrow ? 'arrow-link' : ''} ${forward ? 'arrow-link-forward' : 'arrow-link-backward'} ${className || ''}`}
+        to={to}
+        {...props}>
+        {children}
+    </Link>
+);
+
+export const PageContent = ({children, className, parentSection}) => (
     <div className={`layout__content-container container ${className || ''}`}>
+        {parentSection && (
+            <PageLink
+                to={parentSection.url || '..'}
+                forward={false}
+                className="layout__content-parent-section-link">
+                {parentSection.name}
+            </PageLink>
+        )}
         {children}
     </div>
 );
 
-export const BottomTab = ({children, className}) => (
-    <StickyElement>
-        {({style}) => (
-            <div className={`layout__bottom-tab ${className || ''}`} style={{...style, top: 'auto', bottom: 0}}>
-                {children}
-            </div>
-        )}
-    </StickyElement>
+export const BottomTab = ({children, className, ...stickyProps}) => (
+    <Sticky mode="bottom" {...stickyProps}>
+        <div className={`layout__bottom-tab ${className || ''}`}>
+            {children}
+        </div>
+    </Sticky>
 );
 
 const Page = ({title, className, children}) => {

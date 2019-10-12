@@ -1,4 +1,4 @@
-export const USER_COURSE_STATUS = {
+export const LEARNING_STATUS = {
   learning: 'learning',
   finished: 'finished'
 };

@@ -1,9 +1,10 @@
 import {LoremIpsum} from "lorem-ipsum";
 import poster from "../img/dummy_poster.jpg";
 import _ from "lodash";
-import {USER_COURSE_STATUS} from "../definitions/constants";
+import {LEARNING_STATUS} from "../definitions/constants";
 
 const lorem = new LoremIpsum();
+
 function getDate(daysForward) {
     const date = new Date();
     date.setDate(date.getDate() + daysForward);
@@ -56,9 +57,9 @@ export const COURSES = SUBJECTS.slice(0, 5).map((subject, i) => ({
     start: getDate(7 + i),
     totalHours: 80,
     description: lorem.generateParagraphs(1),
-    classes: _.times(4, (j) => ({
+    lessons: _.times(4, (j) => ({
         number: j + 1,
-        id: j + 1,
+        id: (j + 1).toString(),
         date: getDate(-4 + i + j),
         title: `Занятие ${j + 1}`,
         description: lorem.generateParagraphs(1),
@@ -72,10 +73,22 @@ export const SHOP_CATALOG = {
     // promotions: [{
     //
     // }]
-    // subjects:
 };
 
 export const MY_COURSES = COURSES.map((course, i) => ({
     ...course,
-    status: i <= 2 ? USER_COURSE_STATUS.finished : USER_COURSE_STATUS.learning
+    lessons: course.lessons.map((lesson, j) => ({
+        ...lesson,
+        watchProgress: lesson.date < new Date() ? (100 - j * 15) : undefined,
+        homework: {
+            files: [
+                {name: "Задание", url: "/robots.txt"},
+                {name: "Дополнительное задание", url: "/robots.txt"}
+            ],
+            description: lorem.generateParagraphs(1),
+            deadline: getDate(7),
+            submit: true
+        }
+    })),
+    status: i <= 2 ? LEARNING_STATUS.finished : LEARNING_STATUS.learning
 }));

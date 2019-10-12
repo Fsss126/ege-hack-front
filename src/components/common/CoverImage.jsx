@@ -1,9 +1,12 @@
 import React from 'react';
 
-export default function CoverImage({src, classname}) {
+const CoverImage = ({src, className, children}) => {
     return (
-        <div className={`${classname} cover`}>
+        <div className={`${className} cover`}>
             <div className="cover-img" style={{backgroundImage: `url(${src})`}}/>
+            {children}
         </div>
     );
-}
+};
+
+export default CoverImage;

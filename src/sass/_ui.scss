@@ -2,6 +2,7 @@
 @import "~bootstrap/scss/bootstrap-reboot";
 @import "fonts";
 @import "variables";
+@import "animations";
 @import "mixins";
 
 @mixin btnBehavior{
@@ -13,13 +14,45 @@
   color: $color;
   transition: color .3s;
   &:hover {
-    color: $activeColor;
+    color: $activeColor !important;
   }
 }
 
 a {
   text-decoration: none !important;
-  @include linkBehavior();
+  &:not(.button) {
+    @include linkBehavior();
+  }
+
+  &.arrow-link {
+    &:before, &:after {
+      display: inline-block;
+      opacity: 0.6;
+      font-family: $icon-font;
+      vertical-align: middle;
+      transition: transform .3s, opacity .3s;
+      margin: 0 12px;
+    }
+    &.arrow-link-backward {
+      &:before {
+        content: "\e907";
+        transform: rotate(180deg);
+      }
+      &:hover:before {
+        opacity: 1;
+        transform: rotate(180deg) translateX(4px);
+      }
+    }
+    &.arrow-link-forward {
+      &:after {
+        content: "\e907";
+      }
+      &:hover:after {
+        opacity: 1;
+        transform: translateX(4px);
+      }
+    }
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -28,28 +61,167 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
 }
 
+label {
+  margin-bottom: 0;
+}
+
+.btn {
+  @include btnBehavior;
+  background: $accent-orange;
+  border-radius: $card-border-radius;
+  overflow: hidden;
+  color: white;
+  cursor: pointer;
+  transition: background-color .3s;
+
+  .btn__content {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  .btn__name {
+    display: inline-block;
+    padding: 4px 16px;
+  }
+  .btn__before, .btn__after {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    transition: background-color .3s;
+  }
+  .btn__before {
+    padding-left: 12px;
+  }
+  .btn__after {
+    order: 3;
+    padding-right: 12px;
+  }
+  .btn__before~.btn__name {
+    padding-left: 6px;
+  }
+  .btn__after~.btn__name {
+    padding-right: 6px;
+  }
+
+  &:not(.btn-inactive) {
+    &:hover {
+      color: white;
+      background: lighten($accent-orange, 6%);
+    }
+
+    .btn__after, .btn__before {
+      &:hover {
+        background: lighten($accent-orange, 10%);
+      }
+    }
+  }
+  &.btn-inactive {
+    background: white;
+    border: $border;
+    color: $text-grey;
+    cursor: default;
+  }
+
+  &.btn-neutral {
+    background: white;
+    color: inherit;
+
+    &:not(.btn-inactive) {
+      &:hover {
+        color: inherit;
+        background: $bg-grey;
+      }
+
+      .btn__after, .btn__before {
+        &:hover {
+          background: $border-grey;
+        }
+      }
+    }
+  }
+}
+
+.file {
+  position: relative;
+  .file__name, .btn__after, .btn__before, i {
+    position: relative;
+    z-index: 1;
+  }
+
+  .file__icon {
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .file__name {
+    max-width: 150px;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: middle;
+  }
+
+  &.loading {
+    background: $bg-grey;
+
+    .file__loading-progress {
+      position: absolute;
+      width: 0;
+      height: 100%;
+      max-width: 100%;
+      background: $border-grey;
+      z-index: 0;
+      left: 0;
+      top: 0;
+      transition: width .3s;
+    }
+
+    &:hover:not(.btn-inactive) {
+      .btn__after, .btn__before {
+        background: inherit;
+      }
+    }
+  }
+}
+
+.file-container {
+  display: flex;
+  flex-wrap: wrap;
+
+  .file {
+    flex-shrink: 0;
+    margin: 8px;
+  }
+}
+
+.file-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .file-input__files-title {
+    margin-top: 16px;
+  }
+  .file {
+    &.file-rejected {
+      background: $error-bg;
+      .file__loading-progress {
+        background: $error-red;
+      }
+    }
+    &.file-uploaded {
+      background: $success-bg;
+      .file__loading-progress {
+        width: 100%;
+        background: $success-green;
+      }
+    }
+  }
+}
+
 input[type='text'], input[type='email'], input[type='tel'], input[type='number'], input[type='date']{
   border: none;
   outline: none;
   background-color: transparent;
-}
-
-.button {
-  @include btnBehavior;
-  background: $accent-orange;
-  border-radius: $card-border-radius;
-  color: white;
-  padding: 4px 18px;
-  cursor: pointer;
-  transition: background-color .3s;
-  &:hover:not(.button-inactive) {
-    background: lighten($accent-orange, 6%);
-  }
-  &.button-inactive {
-    background: white;
-    border: $border;
-    color: $text-grey;
-  }
 }
 
 [class*=input-] {
@@ -82,7 +254,7 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
 
   input[type='radio']:checked, input[type='checkbox']:checked{
     &~.input__box::before {
-      font-family: 'icomoon';
+      font-family: $icon-font;
       color: $accent-orange;
       content: '\e901';
       font-size: 20px;
@@ -194,125 +366,3 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
     }
   }
 }
-//.suggestions-container {
-//  //&>*:first-child {
-//  //  padding-top: 8px;
-//  //}
-//  .header {
-//    padding-top: 8px;
-//    //padding-bottom: 8px;
-//    font-size: 14px;
-//    overflow: hidden;
-//    transition: max-height .3s;
-//    position: relative;
-//    //&:after {
-//    //  content: '';
-//    //  z-index: 1;
-//    //  position: absolute;
-//    //  top: 100%;
-//    //  left: 0;
-//    //  right: 0;
-//    //  height: 40px;
-//    //  background: linear-gradient(180deg, #fff 0, #fff 10%, rgba(255, 255, 255, 0.9) 35%, transparent);
-//    //}
-//    &.transition-enter {
-//      max-height: 0;
-//    }
-//    &.transition-enter-active, &.transition-exit {
-//      max-height: 1000px;
-//    }
-//    &.transition-exit-active {
-//      max-height: 0;
-//    }
-//    i {
-//      font-size: 20px;
-//    }
-//  }
-//  .section {
-//    border-bottom: 1px solid $text-light-grey;
-//    padding: 8px 0;
-//    //&:first-child {
-//    //  padding-top: 0;
-//    //}
-//    &:last-child {
-//      //padding-bottom: 8px;
-//      border-bottom: none;
-//    }
-//    .section-title {
-//      padding: 0 15px;
-//      font-size: 12px;
-//      color: $text-grey;
-//      margin-bottom: 4px;
-//    }
-//    .suggestions__list {
-//      padding: 0;
-//    }
-//  }
-//
-//  .suggestions__list {
-//    list-style: none;
-//    width: 100%;
-//    padding: 8px 0;
-//    margin: 0;
-//    //max-height: 480px;
-//    overflow: auto;
-//    //&:first-child {
-//    //  padding-top: 0;
-//    //}
-//  }
-//  .suggestions__option {
-//    width: 100%;
-//    cursor: default;
-//    padding-left: 8px;
-//    padding-right: 8px;
-//
-//    &>.container {
-//      width: 100%;
-//      max-width: 100%;
-//      padding: 7px;
-//      border-radius: 50em;
-//      cursor: pointer;
-//      position: relative;
-//      &.disabled {
-//        cursor: default;
-//      }
-//    }
-//
-//    &:hover .container:not(.disabled), &.suggestions__option--is-focused .container{
-//      background-color: $text-light-grey;
-//    }
-//  }
-//  .suggestions__menu-notice--no-options {
-//    font-size: 12px;
-//    color: $text-grey;
-//    text-align: center;
-//    padding: 0;
-//  }
-//
-//  .suggestions__menu {
-//    left: 0;
-//    box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.1), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-//    padding: 0;
-//    border-radius: 22px;
-//    overflow: hidden;
-//  }
-//  .suggestions__control {
-//    border: none;
-//    transition: none;
-//    min-height: unset;
-//    background-color: transparent;
-//    box-shadow: none;
-//    .suggestions__value-container {
-//      padding: 0;
-//      .suggestions__single-value {
-//        margin: 0 !important;
-//      }
-//      .suggestions__input {
-//        color: $text-grey;
-//      }
-//    }
-//    .suggestions__indicators {
-//      display: none !important;
-//    }
-//  }
-//}

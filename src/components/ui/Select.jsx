@@ -39,7 +39,7 @@ Option.propTypes = {
     label: PropTypes.node
 };
 
-export class MenuList extends Component {
+class MenuList extends Component {
     componentDidMount() {
         //needed to the select to scroll the list to the selected option
         this.props.innerRef(this.scrollBar.view);

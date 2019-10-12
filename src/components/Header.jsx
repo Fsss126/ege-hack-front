@@ -8,7 +8,7 @@ export default class Header extends React.Component {
                 <div className="container-fluid header__container">
                     <div className="row">
                         <div className="col-auto d-lg-none">
-                            <div className="nav-button" onClick={this.props.onMenuButtonClick}>
+                            <div className="nav-btn" onClick={this.props.onMenuButtonClick}>
                                 <i className="icon-bars"/>
                             </div>
                         </div>
@@ -20,10 +20,10 @@ export default class Header extends React.Component {
                         <div className="col-auto">
                             <div className="user-nav">
                                 <div className="user-nav__user-name">Вася Пупкин</div>
-                                <div className="nav-button">
+                                <div className="nav-btn">
                                     <i className="icon-profile"/>
                                 </div>
-                                <div className="nav-button d-none d-lg-block">
+                                <div className="nav-btn d-none d-lg-block">
                                     <i className="icon-logout"/>
                                 </div>
                             </div>

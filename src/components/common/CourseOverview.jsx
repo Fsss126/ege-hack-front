@@ -5,7 +5,8 @@ import CoverImage from "components/common/CoverImage";
 import {renderDate} from "../../definitions/helpers";
 import List from "./List";
 import Teacher from "./Teacher";
-import Page from "../Page";
+import Page, {PageLink} from "../Page";
+import ErrorPage from "../ErrorPage";
 
 window._ = _;
 
@@ -15,7 +16,7 @@ const Description = () => {
     const {course} = React.useContext(CourseOverviewContext);
     return (
         <React.Fragment>
-            <CoverImage src={course.cover} classname="course-overview__cover"/>
+            <CoverImage src={course.cover} className="course-overview__cover"/>
             <div className="course-overview__info layout__content-block">
                 <h2>{course.title}</h2>
                 <div className="course-overview__summary">
@@ -39,7 +40,9 @@ const Title = () => {
     return (
         <div className="course-overview__title layout__content-block">
             <h2>{course.title}</h2>
-            <Link className="course-overview__link" to={`/shop/${course.id}`}>Страница курса <i className="icon-arrow"/></Link>
+            <PageLink className="course-overview__link" to={`/shop/${course.id}`}>
+                Страница курса
+            </PageLink>
         </div>
     );
 };
@@ -64,24 +67,26 @@ const Teachers = () => {
     );
 };
 
-const Lessons = ({renderLesson}) => {
+const Lessons = ({renderLesson: renderFunc}) => {
     const {course} = React.useContext(CourseOverviewContext);
+    const renderCourse = React.useCallback((item) => {
+        return renderFunc(item, {link: `${item.id}/`});
+    }, [renderFunc]);
     return (
         <div className="layout__content-block">
             <h3>Уроки</h3>
             <List
-                renderItem={renderLesson}
-                renderProps={{callbackProps: course}}>
-                {course.classes}
+                renderItem={renderCourse}>
+                {course.lessons}
             </List>
         </div>
     );
 };
 
 const CourseOverview = (props) => {
-    const {match: {params: {id}}, path, courses, children, className} = props;
+    const {match: {params: {id}}, path: root, courses, children, className} = props;
     const course = _.find(courses, {id});
-    if (id) {
+    if (course) {
         return (
             <Page title={`${course.title}`} className={`course-overview ${className || ''}`}>
                 <CourseOverviewContext.Provider
@@ -93,7 +98,7 @@ const CourseOverview = (props) => {
             </Page>
         )
     } else
-        return (<Redirect to={`${path}`}/>);
+        return <ErrorPage errorCode={404} message="Курс не найден" link={{url: root}}/>;
 };
 
 export default {

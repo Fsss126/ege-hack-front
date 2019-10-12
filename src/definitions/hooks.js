@@ -35,6 +35,13 @@ export function useTruncate(text) {
     return [descriptionRef, isFontLoaded];
 }
 
+export function useLocationChangeEffect(effect, history, dependencies = []) {
+    React.useEffect(() => {
+        effect(history.location);
+        return history.listen(effect);
+    }, [history, ...dependencies]); // eslint-disable-line react-hooks/exhaustive-deps
+}
+
 export function useUpdateEffect(effect, dependencies = []) {
     const isInitialMount = React.useRef(true);
 
@@ -45,4 +52,9 @@ export function useUpdateEffect(effect, dependencies = []) {
             effect();
         }
     }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
+}
+
+export function useForceUpdate() {
+    const [, update] = React.useReducer(state => !state, true);
+    return update;
 }

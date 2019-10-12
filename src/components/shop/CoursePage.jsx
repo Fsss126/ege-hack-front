@@ -10,15 +10,14 @@ const CoursePage = ({path, catalog, ...props}) => {
             lesson={lesson}
             selectable={false}
             locked={false}
-            key={lesson.id}
-            {...props}/>
+            key={lesson.id}/>
     );
     return (
         <CourseOverview.Body
             path={path}
             courses={catalog}
             {...props}>
-            <PageContent>
+            <PageContent parentSection={{name: "Магазин курсов"}}>
                 <CourseOverview.Description/>
                 <CourseOverview.Teachers/>
                 <CourseOverview.Lessons renderLesson={renderLesson}/>
