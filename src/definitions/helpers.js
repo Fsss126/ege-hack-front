@@ -22,4 +22,19 @@ Object.assign(renderDate, {
     }
 });
 
-window.renderDate = renderDate;
+export const getAuthHeader = (username, password) => ({'Authorization': `Basic ${btoa(username + ":" + password)}`});
+
+export const downloadFile = async (url, name) => {
+    // IE10+ : (has Blob, but not a[download] or URL)
+    if (navigator.msSaveBlob) {
+        let blob = await fetch(url).then(r => r.blob());
+        return navigator.msSaveBlob(blob, name);
+    }
+    else {
+        let link = document.createElement('a');
+        link.download = name;
+        link.href = url;
+        let event = new MouseEvent('click');
+        link.dispatchEvent(event);
+    }
+};

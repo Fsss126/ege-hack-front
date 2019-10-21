@@ -1,4 +1,5 @@
 import React from 'react';
+import Auth from "./auth";
 
 export function useTruncate(text) {
     const descriptionRef = React.useRef(null);
@@ -42,19 +43,40 @@ export function useLocationChangeEffect(effect, history, dependencies = []) {
     }, [history, ...dependencies]); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
+export function useIsMounted() {
+    const isMounted = React.useRef(false);
+
+    React.useEffect(() => {
+        isMounted.current = true;
+    }, []);
+
+    return isMounted.current;
+}
+
 export function useUpdateEffect(effect, dependencies = []) {
     const isInitialMount = React.useRef(true);
 
     React.useEffect(() => {
-        if (isInitialMount.current) {
-            isInitialMount.current = false;
-        } else {
+        if (!isInitialMount.current) {
             effect();
         }
     }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
+
+    React.useEffect(() => {
+        isInitialMount.current = false;
+    }, []);
 }
 
 export function useForceUpdate() {
     const [, update] = React.useReducer(state => !state, true);
     return update;
+}
+
+export function useRefValue(initialValue) {
+    const ref = React.useRef(initialValue);
+    const getValue = React.useCallback(() => ref.current, []);
+    const setValue = React.useCallback((value) => {
+        ref.current = value;
+    }, []);
+    return [getValue, setValue];
 }

@@ -64,6 +64,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-alert:before {
+  content: "\e90a";
+}
+.icon-spinner:before {
+  content: "\e90b";
+}
+.icon-reload:before {
+  content: "\e909";
+}
 .icon-settings:before {
   content: "\e903";
 }

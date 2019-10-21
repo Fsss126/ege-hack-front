@@ -1,9 +1,11 @@
 @import "~bootstrap/scss/bootstrap-grid";
 @import "~bootstrap/scss/bootstrap-reboot";
+@import "~bootstrap/scss/spinners";
 @import "fonts";
 @import "variables";
 @import "animations";
 @import "mixins";
+@import "tooltip";
 
 @mixin btnBehavior{
   cursor: pointer;
@@ -110,7 +112,7 @@ label {
 
     .btn__after, .btn__before {
       &:hover {
-        background: lighten($accent-orange, 10%);
+        background: #ffffff24;
       }
     }
   }
@@ -133,7 +135,7 @@ label {
 
       .btn__after, .btn__before {
         &:hover {
-          background: $border-grey;
+          background: #0000000d;
         }
       }
     }
@@ -141,44 +143,85 @@ label {
 }
 
 .file {
-  position: relative;
-  .file__name, .btn__after, .btn__before, i {
+  display: flex;
+  align-items: center;
+  z-index: 0;
+
+  .file__btn {
     position: relative;
-    z-index: 1;
+    transition: background-color .3s;
+
+    .file__name, .btn__after, .btn__before, i {
+      position: relative;
+      z-index: 1;
+    }
+
+    .file__icon {
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .file__name {
+      max-width: 150px;
+      display: inline-block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      vertical-align: middle;
+    }
   }
 
-  .file__icon {
-    margin-right: 8px;
-    vertical-align: middle;
-  }
-  .file__name {
-    max-width: 150px;
-    display: inline-block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    vertical-align: middle;
+  .file__loading-progress {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 100%;
+    max-width: 100%;
+    background: $border-grey;
+    z-index: 0;
+    left: 0;
+    top: 0;
+    transition: width .3s, background-color .3s;
   }
 
-  &.loading {
+  &.file-loading .file__btn {
     background: $bg-grey;
 
     .file__loading-progress {
-      position: absolute;
-      width: 0;
-      height: 100%;
-      max-width: 100%;
-      background: $border-grey;
-      z-index: 0;
-      left: 0;
-      top: 0;
-      transition: width .3s;
+      opacity: 1;
     }
 
     &:hover:not(.btn-inactive) {
       .btn__after, .btn__before {
         background: inherit;
       }
+    }
+  }
+
+  &.file-error .file__btn, &.file-rejected .file__btn {
+    background: $error-bg !important;
+    .file__loading-progress {
+      opacity: 1;
+      background: $error-red !important;
+    }
+  }
+  &.file-loaded .file__btn {
+    background: $success-bg !important;
+    .file__loading-progress {
+      opacity: 1;
+      width: 100%;
+      background: $success-green !important;
+    }
+  }
+  &.file-success .file__btn .file__loading-progress {
+    width: 100%;
+    background: $success-green !important;
+    transition: opacity 1s;
+  }
+  .file__state-indicator {
+    margin-left: 8px;
+    cursor: pointer;
+    i {
+      display: block;
     }
   }
 }
@@ -198,23 +241,22 @@ label {
   flex-direction: column;
   align-items: flex-start;
 
+  .file-container {
+    flex-direction: column;
+    align-items: baseline;
+  }
+
+  .file-input__controls {
+    display: flex;
+    flex-wrap: wrap;
+    .btn {
+      flex-shrink: 0;
+      margin: 8px 8px 8px 0;
+    }
+  }
+
   .file-input__files-title {
     margin-top: 16px;
-  }
-  .file {
-    &.file-rejected {
-      background: $error-bg;
-      .file__loading-progress {
-        background: $error-red;
-      }
-    }
-    &.file-uploaded {
-      background: $success-bg;
-      .file__loading-progress {
-        width: 100%;
-        background: $success-green;
-      }
-    }
   }
 }
 
@@ -365,4 +407,10 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
       transform: scale(0);
     }
   }
+}
+
+.spinner-border {
+  width: 1em;
+  height: 1em;
+  border-width: .1em;
 }

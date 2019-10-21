@@ -204,9 +204,7 @@ header {
     cursor: pointer;
 
     will-change: background;
-    transition-property: background;
-    transition-duration: .2s;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background .2s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(0, 0, 0, 0);
 
     .layout__sidebar-bar {
@@ -219,9 +217,7 @@ header {
       transform-style: preserve-3d;
 
       will-change: transform;
-      transition-property: transform;
-      transition-duration: .2s;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform .2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     @include media-breakpoint-up(lg) {
@@ -673,19 +669,25 @@ header {
       }
     }
     .lesson-page__other-lessons {
-      .list__item-preview {
-        flex: 0 0 auto;
-        width: auto;
-        max-width: 100%;
-        padding-right: 0;
-
-        .video-class__cover {
-          width: 150px;
-          margin-bottom: 0;
+      .list__item {
+        &>.row {
+          flex-wrap: nowrap;
         }
-      }
-      .list__item-description {
-        width: 180px;
+        .list__item-preview {
+          flex: 0 0 auto;
+          width: auto;
+          max-width: 100%;
+          padding-right: 0;
+
+          .video-class__cover {
+            width: 150px;
+            margin-bottom: 0;
+          }
+        }
+        .list__item-description {
+          width: 180px;
+          flex-basis: 180px;
+        }
       }
     }
   }

@@ -8,8 +8,13 @@
 .animation-fade-enter-active, .animation-fade-appear-active {
   opacity: 1;
   transition: opacity 300ms ease;
+  .animated__action-button {
+    opacity: 0;
+    transform: scale(0);
+  }
 }
 .animation-fade-enter-done, .animation-fade-appear-done {
+  opacity: 1;
   .animated__action-button {
     opacity: 1;
     transform: scale(1);
@@ -22,4 +27,28 @@
 .animation-fade-exit-active {
   opacity: 0;
   transition: opacity 300ms ease;
+}
+
+
+.animation-scale-enter, .animation-scale-appear {
+  opacity: 0;
+  transform: scale(0);
+}
+.animation-scale-enter-active, .animation-scale-appear-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+.animation-scale-enter-done, .animation-scale-appear-done {
+  opacity: 1;
+  transform: scale(1);
+}
+.animation-scale-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.animation-scale-exit-active {
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 300ms ease, transform 300ms ease;
 }

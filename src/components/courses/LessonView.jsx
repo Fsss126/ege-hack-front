@@ -2,13 +2,13 @@ import React from "react";
 import VideoCover from "../common/VideoCover";
 import Button from "../ui/Button";
 import FileInput from "../ui/FileInput";
-import FileButton from "../ui/FileButton";
+import File from "../ui/File";
 import {renderDate} from "../../definitions/helpers";
+import StableCSSTransition from "../ui/StableCSSTransition";
 
 const LessonView = ({lesson: {title, cover, description, homework}}) => {
     const ref = React.useRef(null);
     const isHomeworkSubmissionClosed = React.useCallback(() => homework.deadline && new Date() >= homework.deadline, [homework]);
-    console.log(isHomeworkSubmissionClosed());
     return (
         <div className="col-12 col-lg layout__content-block lesson-page__current-lesson">
             <div className="block-container video-container">
@@ -27,7 +27,7 @@ const LessonView = ({lesson: {title, cover, description, homework}}) => {
                         {homework.files && (
                             <div className="assignment__files file-container">
                                 {homework.files.map((assignment, i) => (
-                                    <FileButton file={assignment} key={i}/>
+                                    <File file={assignment} key={i}/>
                                 ))}
                             </div>
                         )}
@@ -39,7 +39,10 @@ const LessonView = ({lesson: {title, cover, description, homework}}) => {
                         <div className="submission">
                             <FileInput
                                 ref={ref}
-                                onChange={(files) => {console.log(files);}}
+                                // inputContent="Отправить решение"
+                                accept="image/*,audio/*,video/*"
+                                initialFiles={homework.submittedFiles}
+                                onSubmit={(files) => {console.log('files changed', files);}}
                                 isDisabled={isHomeworkSubmissionClosed}/>
                         </div>
                     )}
