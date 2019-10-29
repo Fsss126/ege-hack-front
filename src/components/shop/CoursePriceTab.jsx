@@ -1,6 +1,7 @@
 import React from "react";
 import {CourseOverviewContext} from "components/common/CourseOverview";
 import {BottomTab} from "components/Page";
+import Button from "../ui/Button";
 
 const CoursePriceTab = () => {
     const {course: {offer: {price, discount}}} = React.useContext(CourseOverviewContext);
@@ -19,9 +20,7 @@ const CoursePriceTab = () => {
                         </h2>
                     </div>
                     <div className="col-auto">
-                        <div className="btn">
-                            Купить
-                        </div>
+                        <Button>Купить</Button>
                     </div>
                 </div>
             </div>

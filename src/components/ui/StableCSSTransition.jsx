@@ -1,6 +1,4 @@
-import React from 'react';
-import {CSSTransition, Transition} from "react-transition-group";
-import {useIsMounted} from "../../definitions/hooks";
+import {CSSTransition} from "react-transition-group";
 import ReactDOM from 'react-dom';
 
 //hack to get context because lib doesn't export it properly and import doesn't work

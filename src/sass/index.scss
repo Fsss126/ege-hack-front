@@ -17,7 +17,7 @@ body {
 }
 
 body {
-  //color: $text-dark;
+  color: $text-dark;
   font-family: $font-regular;
   display: flex;
   width: 100%;
@@ -62,6 +62,8 @@ body {
 
 .cover {
   position: relative;
+  width: 100%;
+
   z-index: 0;
   .cover-img {
     position: absolute;
@@ -78,6 +80,15 @@ body {
     overflow: hidden;
     border-radius: calc(0.08*56.25%)/8%;
     padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  }
+
+  &.square-cover {
+    padding-top: 100%;
+  }
+
+  &.round-cover {
+    border-radius: 50em;
+    overflow: hidden;
   }
 
   &.video-cover {
@@ -167,7 +178,10 @@ header {
     display: flex;
     align-items: center;
     height: 100%;
+    position: relative;
+
     .user-nav__user-name {
+      cursor: default;
       margin-right: 18px;
       display: none;
       @include media-breakpoint-up(lg) {
@@ -176,8 +190,64 @@ header {
     }
 
     .nav-btn {
-      i {
-        color: $icon-grey;
+      width: 1em;
+      height: 1em;
+      box-sizing: content-box;
+      position: relative;
+      .cover {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+
+    .user-nav__menu-container {
+      position: absolute;
+      z-index: 1;
+      top: 100%;
+      right: 0;
+      padding-top: 8px;
+      display: none;
+
+      .user-nav__menu {
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 0 0 1px rgba(100,111,121,.15), 0 5px 20px 0 rgba(21,27,38,.08);
+
+        .user-nav__user_info {
+          padding: 8px 12px;
+          border-bottom: $border;
+          cursor: default;
+          white-space: nowrap;
+          overflow: hidden;
+          max-width: 200px;
+          text-overflow: ellipsis;
+        }
+
+        .user-nav__menu-options {
+          overflow: hidden;
+
+          .menu-option {
+            display: block;
+            margin: 8px 0;
+            padding: 0 12px;
+            cursor: pointer;
+            opacity: 1;
+            white-space: nowrap;
+          }
+
+          i {
+            color: $icon-grey;
+            vertical-align: middle;
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+
+    &:hover, &:focus {
+      .user-nav__menu-container {
+        display: block;
       }
     }
   }
@@ -186,6 +256,18 @@ header {
 .layout {
   flex-grow: 1;
   display: flex;
+  background: $bg-grey;
+  position: relative;
+
+  .layout__loading-spinner {
+    position: absolute;
+    @include center(xy);
+    font-size: 2rem;
+    i {
+      border-width: .05em;
+    }
+  }
+
   @include media-breakpoint-up(lg) {
     position: relative;
 
@@ -510,29 +592,33 @@ header {
   }
 
   .teacher-profile {
-    padding: 8px $content-padding-sides;
+    background: white;
+    padding: 12px $content-padding-sides;
+    @include selectableCover;
+
     .teacher-profile__photo {
       width: 80px;
-      height: 80px;
-      border-radius: 50em;
-      overflow: hidden;
     }
     .teacher-profile__name {
       white-space: nowrap;
     }
+    .teacher-profile__subjects {
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
   }
 
-  .course-catalog {
-    .course-catalog__catalog {
+  .catalog {
+    .catalog__catalog {
       padding-top: 0;
       padding-bottom: 0;
       background: none;
     }
-    .course-catalog__empty-catalog-fallback-message {
+    .catalog__empty-catalog-fallback-message {
       text-align: center;
 
     }
-    .course-catalog__filters {
+    .catalog__filters {
       .select {
         width: 200px;
       }
@@ -569,9 +655,6 @@ header {
     }
     .course-overview__teachers {
       padding-top: calc(#{$content-padding-top} - 8px);
-      .teacher-profile {
-        @include selectableCover;
-      }
     }
   }
 
@@ -689,6 +772,52 @@ header {
           flex-basis: 180px;
         }
       }
+    }
+  }
+
+  .teachers-catalog {
+    .teacher-profile {
+      width: 100%;
+    }
+    .list__item {
+      background: none;
+      padding: 0 15px;
+    }
+  }
+
+  .user-profile__avatar-container {
+    position: relative;
+
+    .user-profile__avatar-wrap {
+      width: 20%;
+      max-width: 150px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+
+      .user-profile__avatar {
+        background: white;
+        //margin-bottom: -50%;
+      }
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      background: white;
+    }
+  }
+
+  .teacher-page {
+    .social-media {
+      margin-top: 16px;
+    }
+    .description-text {
+      padding-bottom: 16px;
     }
   }
 }

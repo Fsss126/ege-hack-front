@@ -1,6 +1,7 @@
 import React from "react";
 import Page from "./Page";
 import {Link} from "react-router-dom";
+import Button from "./ui/Button";
 
 const ErrorPage = ({errorCode, message, link: {text, url} = {}}) => {
     const code = errorCode && errorCode.toString();
@@ -10,7 +11,7 @@ const ErrorPage = ({errorCode, message, link: {text, url} = {}}) => {
                 {code && code.split('').map((number, i) => <span key={i}>{number}</span>)}
             </div>
             <div className="error-page__error-message">{message || 'Похоже, вы потерялись'}</div>
-            <Link to={url || '/'} className="btn">{text || 'На главную'}</Link>
+            <Button tag={Link} to={`${url || ''}/`} replace className="btn">{text || 'На главную'}</Button>
         </Page>
     );
 };

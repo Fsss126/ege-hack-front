@@ -1,0 +1,22 @@
+{
+  "env": {
+    "es6": true
+  },
+  "globals": {
+    "VK": true
+  },
+  "plugins": [
+    "react-hooks"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  }
+}

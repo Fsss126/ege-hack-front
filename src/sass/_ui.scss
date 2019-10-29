@@ -1,6 +1,8 @@
 @import "~bootstrap/scss/bootstrap-grid";
 @import "~bootstrap/scss/bootstrap-reboot";
 @import "~bootstrap/scss/spinners";
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/forms";
 @import "fonts";
 @import "variables";
 @import "animations";
@@ -22,7 +24,7 @@
 
 a {
   text-decoration: none !important;
-  &:not(.button) {
+  &:not(.btn) {
     @include linkBehavior();
   }
 
@@ -74,7 +76,7 @@ label {
   overflow: hidden;
   color: white;
   cursor: pointer;
-  transition: background-color .3s;
+  transition: all .3s;
 
   .btn__content {
     display: flex;
@@ -87,15 +89,15 @@ label {
   .btn__before, .btn__after {
     display: flex;
     align-items: center;
-    padding: 4px 8px;
+    padding: 4px 6px;
     transition: background-color .3s;
   }
   .btn__before {
-    padding-left: 12px;
+    padding-left: 10px;
   }
   .btn__after {
     order: 3;
-    padding-right: 12px;
+    padding-right: 10px;
   }
   .btn__before~.btn__name {
     padding-left: 6px;

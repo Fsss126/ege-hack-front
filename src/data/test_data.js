@@ -2,7 +2,6 @@ import {LoremIpsum} from "lorem-ipsum";
 import poster from "../img/dummy_poster.jpg";
 import _ from "lodash";
 import {LEARNING_STATUS} from "../definitions/constants";
-import {API_ROOT} from "../definitions/requests";
 
 const lorem = new LoremIpsum();
 
@@ -37,7 +36,8 @@ export const TEACHERS = [
         lastName: 'Черткова',
         subjects: SUBJECTS.slice(0,2),
         photo: poster,
-        contacts: {vk: '/', fb: '/', ok: '/', ig: '/'}
+        contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
+        about: lorem.generateSentences(1)
     },
     {
         id: '2',
@@ -45,7 +45,8 @@ export const TEACHERS = [
         lastName: 'Авдошин',
         subjects: [SUBJECTS[3]],
         photo: poster,
-        contacts: {vk: '/', fb: '/', ok: '/', ig: '/'}
+        contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
+        about: lorem.generateSentences(1)
     }
 ];
 
@@ -94,11 +95,6 @@ export const MY_COURSES = COURSES.map((course, i) => ({
                     "original_file_name": "5_64x64.png",
                     "id_file_name": "501371cc-f349-11e9-aa47-7990bff4dcd7.png",
                     "file_link": "/files/601371cc-f349-11e9-aa47-7990bff4dcd7.png"
-                },
-                {
-                    "original_file_name": "5_64x64.png",
-                    "id_file_name": "601371cc-f349-11e9-aa47-7990bff4dcd7.png",
-                    "file_link": "/robots.txt"
                 }
             ]
         }

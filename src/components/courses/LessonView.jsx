@@ -1,14 +1,10 @@
 import React from "react";
 import VideoCover from "../common/VideoCover";
-import Button from "../ui/Button";
-import FileInput from "../ui/FileInput";
 import File from "../ui/File";
 import {renderDate} from "../../definitions/helpers";
-import StableCSSTransition from "../ui/StableCSSTransition";
+import HomeworkLoader from "./HomeworkLoader";
 
-const LessonView = ({lesson: {title, cover, description, homework}}) => {
-    const ref = React.useRef(null);
-    const isHomeworkSubmissionClosed = React.useCallback(() => homework.deadline && new Date() >= homework.deadline, [homework]);
+const LessonView = ({lesson: {id, title, cover, description, homework}}) => {
     return (
         <div className="col-12 col-lg layout__content-block lesson-page__current-lesson">
             <div className="block-container video-container">
@@ -36,15 +32,7 @@ const LessonView = ({lesson: {title, cover, description, homework}}) => {
                         <div className="assignment__deadline">Дедлайн: {renderDate(homework.deadline, renderDate.date)}</div>}
                     </div>
                     {homework.submit && (
-                        <div className="submission">
-                            <FileInput
-                                ref={ref}
-                                // inputContent="Отправить решение"
-                                accept="image/*,audio/*,video/*"
-                                initialFiles={homework.submittedFiles}
-                                onSubmit={(files) => {console.log('files changed', files);}}
-                                isDisabled={isHomeworkSubmissionClosed}/>
-                        </div>
+                        <HomeworkLoader homework={homework} lessonId={id}/>
                     )}
                 </div>
             )}

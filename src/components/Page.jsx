@@ -3,6 +3,12 @@ import {Helmet} from "react-helmet";
 import Sticky from 'react-sticky-el';
 import {Link} from "react-router-dom";
 
+export const PageLoadingPlaceholder = () => (
+    <div className="layout__loading-spinner">
+        <i className="spinner-border"/>
+    </div>
+);
+
 export const PageLink = ({to, arrow=true, forward=true, className, children, ...props}) => (
     <Link
         className={`${arrow ? 'arrow-link' : ''} ${forward ? 'arrow-link-forward' : 'arrow-link-backward'} ${className || ''}`}
@@ -37,7 +43,7 @@ export const BottomTab = ({children, className, ...stickyProps}) => (
 const Page = ({title, className, children}) => {
     return (
         <div className={`layout__content ${className || ''}`}>
-            {title && <Helmet><title>{title} — ЕГЭ HACK</title></Helmet>}
+            {title && <Helmet><title>{title} – ЕГЭ HACK</title></Helmet>}
             {children}
         </div>
     );

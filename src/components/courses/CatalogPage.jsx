@@ -1,8 +1,9 @@
-import {PageContent} from "../Page";
-import CourseCatalog from "../common/CourseCatalog";
 import React from "react";
-import Course from "../common/Course";
-import {LEARNING_STATUS} from "../../definitions/constants";
+import CourseCatalog from "components/common/CourseCatalog";
+import Course from "components/common/Course";
+import Button from "components/ui/Button";
+import {PageContent} from "components/Page";
+import {LEARNING_STATUS} from "definitions/constants";
 
 const CatalogPage = ({catalog, ...props}) => {
     const renderCourse = React.useCallback((course, props) => (
@@ -13,12 +14,12 @@ const CatalogPage = ({catalog, ...props}) => {
             key={course.id}
             {...props}>
             {course.status === LEARNING_STATUS.learning
-                ? <div className="course__select-btn btn">Изучать</div>
-                : <div className="course__select-btn btn btn-inactive">Пройден</div>}
+                ? <Button className="course__select-btn">Изучать</Button>
+                : <Button className="course__select-btn" active={false}>Пройден</Button>}
         </Course>
     ), []);
     return (
-        <CourseCatalog.Body
+        <CourseCatalog.Page
             className="user-courses"
             title="Мои курсы"
             courses={catalog}
@@ -28,7 +29,7 @@ const CatalogPage = ({catalog, ...props}) => {
                 <CourseCatalog.Catalog
                     renderCourse={renderCourse}/>
             </PageContent>
-        </CourseCatalog.Body>
+        </CourseCatalog.Page>
     );
 };
 

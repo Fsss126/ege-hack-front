@@ -3,6 +3,7 @@ import CourseOverview from "../common/CourseOverview";
 import React from "react";
 import Lesson from "../common/Lesson";
 import {renderDate} from "../../definitions/helpers";
+import Button from "../ui/Button";
 
 const CoursePage = ({path, catalog, ...props}) => {
     const renderLesson = (lesson, props) => {
@@ -17,8 +18,8 @@ const CoursePage = ({path, catalog, ...props}) => {
                 {...props}>
                 <div className="list__item-action-info">{renderDate(date, renderDate.shortDate)}</div>
                 {selectable
-                    ? <div className="btn">Изучать</div>
-                    : <div className="btn btn-inactive">Скоро</div>}
+                    ? <Button>Изучать</Button>
+                    : <Button active={false}>Скоро</Button>}
             </Lesson>
         );
     };

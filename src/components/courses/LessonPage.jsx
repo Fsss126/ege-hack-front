@@ -1,23 +1,16 @@
 import React from "react";
 import _ from "lodash";
 import Page, {PageContent} from "../Page";
-import {Link} from "react-router-dom";
 import ErrorPage from "components/ErrorPage";
-import CoverImage from "../common/CoverImage";
 import Lesson from "components/common/Lesson";
 import List from "components/common/List";
-import {renderDate} from "../../definitions/helpers";
-import VideoCover from "components/common/VideoCover";
-import Button from "../ui/Button";
 import LessonView from "./LessonView";
-
 
 const LessonPage = (props) => {
     const {match: {params: {courseId, lessonId}}, catalog} = props;
     const course = _.find(catalog, {id: courseId});
-    const lessonIndex = course ? _.findIndex(course.lessons, {id: lessonId}) : null;
-    const selectedLesson = lessonIndex !== null ? course.lessons[lessonIndex] : null;
-    const renderLesson = (lesson, props) => {
+    const selectedLesson = _.find(course.lessons, {id: lessonId}) || null;
+    const renderLesson = (lesson) => {
         return (
             <Lesson
                 lesson={lesson}

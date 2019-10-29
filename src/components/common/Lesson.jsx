@@ -1,6 +1,5 @@
 import React from 'react';
 import ListItem from "./ListItem";
-import CoverImage from "./CoverImage";
 import VideoCover from "./VideoCover";
 
 export default function Lesson({lesson, locked=false, ...props}) {

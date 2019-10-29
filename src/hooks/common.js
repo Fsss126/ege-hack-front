@@ -1,5 +1,4 @@
 import React from 'react';
-import Auth from "./auth";
 
 export function useTruncate(text) {
     const descriptionRef = React.useRef(null);
@@ -34,13 +33,6 @@ export function useTruncate(text) {
         }
     }, [isFontLoaded, text]);
     return [descriptionRef, isFontLoaded];
-}
-
-export function useLocationChangeEffect(effect, history, dependencies = []) {
-    React.useEffect(() => {
-        effect(history.location);
-        return history.listen(effect);
-    }, [history, ...dependencies]); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 export function useIsMounted() {

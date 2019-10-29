@@ -3,6 +3,7 @@ import CourseCatalog from "../common/CourseCatalog";
 import SelectedCoursesTab from "./SelectedCoursesTab";
 import React from "react";
 import Course from "../common/Course";
+import Button from "../ui/Button";
 
 const CatalogPage = ({catalog, selectedCourses, onCourseClick, onCourseSelect, onCourseDeselect, ...props}) => {
     const renderCourse = React.useCallback((course, props) => {
@@ -19,12 +20,12 @@ const CatalogPage = ({catalog, selectedCourses, onCourseClick, onCourseSelect, o
                 <div className="list__item-action-info">
                     <span className="price">{price}₽</span> {discount && <span className="discount font-size-xs">{discount + price}₽</span>}
                 </div>
-                <div className="btn" style={{minWidth: '110px'}}>{isSelected ? 'Выбрано' : 'Выбрать'}</div>
+                <Button style={{minWidth: '110px'}}>{isSelected ? 'Выбрано' : 'Выбрать'}</Button>
             </Course>
         )
     }, [selectedCourses, onCourseSelect]);
     return (
-        <CourseCatalog.Body
+        <CourseCatalog.Page
             className="course-shop"
             title="Магазин курсов"
             courses={catalog}
@@ -37,7 +38,7 @@ const CatalogPage = ({catalog, selectedCourses, onCourseClick, onCourseSelect, o
             <SelectedCoursesTab
                 onCourseDeselect={onCourseDeselect}
                 courses={[...selectedCourses]}/>
-        </CourseCatalog.Body>
+        </CourseCatalog.Page>
     );
 };
 

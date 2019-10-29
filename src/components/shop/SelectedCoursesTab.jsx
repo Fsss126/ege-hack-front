@@ -1,11 +1,12 @@
 import React from 'react';
-import {useTruncate} from "../../definitions/hooks";
+import {useTruncate} from "../../hooks/common";
 import CoverImage from "../common/CoverImage";
 import Truncate from "react-truncate";
 import _ from "lodash";
 import {BottomTab} from "../Page";
 import ScrollBars from "../ui/ScrollBars";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
+import Button from "../ui/Button";
 
 const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
     const {title} = course;
@@ -73,7 +74,7 @@ const SelectedCoursesTab = ({courses, onCourseDeselect}) => {
                     </div>
                     <div className="col-12 col-md-auto p-0">
                         <div className="selected-courses__price layout__bottom-tab-container container d-flex align-items-center justify-content-end">
-                            <div className="btn order-1 order-md-0">Оплатить</div>
+                            <Button className="order-1 order-md-0 flex-shrink-0">Оплатить</Button>
                             <div className="price selected-courses__price-container container">
                                 {discount && <div className="discount font-size-sm d-inline-block d-md-block">{price + discount}₽</div>}
                                 <div className="price font-size-lg d-inline-block d-md-block">{price}₽</div>

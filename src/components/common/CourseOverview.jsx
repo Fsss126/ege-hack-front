@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link, Redirect} from "react-router-dom";
 import _ from 'lodash';
 import CoverImage from "components/common/CoverImage";
 import {renderDate} from "../../definitions/helpers";
@@ -56,9 +55,9 @@ const Teachers = () => {
                 <div className="row">
                     {course.teachers.map((teacher, i) => (
                         <div className="col-12 col-md d-flex p-0" key={i}>
-                            <Link to={`/teachers/${teacher.id}`}>
-                                <Teacher teacher={teacher} key={i}/>
-                            </Link>
+                            <Teacher
+                                teacher={teacher}
+                                link={`/teachers/${teacher.id}/`}/>
                         </div>
                     ))}
                 </div>

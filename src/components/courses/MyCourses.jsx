@@ -1,7 +1,6 @@
 import React from 'react';
 import { Switch, Route } from "react-router-dom";
 import {MY_COURSES} from "data/test_data";
-import Page from "../Page";
 import {LEARNING_STATUS} from "../../definitions/constants";
 import _ from 'lodash';
 import CatalogPage from "./CatalogPage";

@@ -1,8 +1,11 @@
 import 'definitions/polyfills';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import App from 'components/App';
+import APIRequest from "definitions/api";
 import * as serviceWorker from './serviceWorker';
+
+window.APIRequest = APIRequest;
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

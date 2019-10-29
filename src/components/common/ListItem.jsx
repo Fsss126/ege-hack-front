@@ -1,6 +1,6 @@
 import React from 'react';
 import Truncate from 'react-truncate';
-import {useTruncate} from "../../definitions/hooks";
+import {useTruncate} from "../../hooks/common";
 import {Link} from "react-router-dom";
 
 export default function ListItem(props) {
