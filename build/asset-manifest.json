@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/ege-hack-front/static/css/main.420626b4.chunk.css",
-    "main.js": "/ege-hack-front/static/js/main.c5098646.chunk.js",
-    "main.js.map": "/ege-hack-front/static/js/main.c5098646.chunk.js.map",
+    "main.css": "/ege-hack-front/static/css/main.fcda87b0.chunk.css",
+    "main.js": "/ege-hack-front/static/js/main.b56b2686.chunk.js",
+    "main.js.map": "/ege-hack-front/static/js/main.b56b2686.chunk.js.map",
     "runtime~main.js": "/ege-hack-front/static/js/runtime~main.8351ce98.js",
     "runtime~main.js.map": "/ege-hack-front/static/js/runtime~main.8351ce98.js.map",
     "static/css/2.44d09fed.chunk.css": "/ege-hack-front/static/css/2.44d09fed.chunk.css",
     "static/js/2.9778c32c.chunk.js": "/ege-hack-front/static/js/2.9778c32c.chunk.js",
     "static/js/2.9778c32c.chunk.js.map": "/ege-hack-front/static/js/2.9778c32c.chunk.js.map",
     "index.html": "/ege-hack-front/index.html",
-    "precache-manifest.b4ce243eaeeb1af27d1fe6e1aa9db364.js": "/ege-hack-front/precache-manifest.b4ce243eaeeb1af27d1fe6e1aa9db364.js",
+    "precache-manifest.16dcf3ffd8a97c45e6fce47c0b9c81e3.js": "/ege-hack-front/precache-manifest.16dcf3ffd8a97c45e6fce47c0b9c81e3.js",
     "service-worker.js": "/ege-hack-front/service-worker.js",
     "static/css/2.44d09fed.chunk.css.map": "/ege-hack-front/static/css/2.44d09fed.chunk.css.map",
-    "static/css/main.420626b4.chunk.css.map": "/ege-hack-front/static/css/main.420626b4.chunk.css.map",
+    "static/css/main.fcda87b0.chunk.css.map": "/ege-hack-front/static/css/main.fcda87b0.chunk.css.map",
     "static/media/index.scss": "/ege-hack-front/static/media/icomoon.eec383c9.ttf",
     "static/media/dummy_poster.jpg": "/ege-hack-front/static/media/dummy_poster.f51c6af6.jpg",
     "static/media/logo.svg": "/ege-hack-front/static/media/logo.54b51040.svg"
