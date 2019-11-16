@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f066d7c2aeaec35f07e468f8ad97104c",
+    "revision": "5a9524da1edc4c87fb927013fcb519bf",
     "url": "/ege-hack-front/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ege-hack-front/static/css/2.44d09fed.chunk.css"
   },
   {
-    "revision": "3119646cee8376fabe51",
+    "revision": "1952edd7e3a4f1c2da73",
     "url": "/ege-hack-front/static/css/main.420626b4.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ege-hack-front/static/js/2.b8ee383d.chunk.js"
   },
   {
-    "revision": "3119646cee8376fabe51",
-    "url": "/ege-hack-front/static/js/main.ef766b67.chunk.js"
+    "revision": "1952edd7e3a4f1c2da73",
+    "url": "/ege-hack-front/static/js/main.18287770.chunk.js"
   },
   {
     "revision": "45795b25efaf8bc464fe",
