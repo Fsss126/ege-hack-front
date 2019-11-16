@@ -5,44 +5,11 @@
     <option name="CUSTOM_SCOPE_NAME" value="Module 'ege-hack'" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Added shop and teachers API">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HOCs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HOCs.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Catalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Catalog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Course.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Lesson.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Lesson.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Teacher.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Teacher.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/UserProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/UserProfile.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/account/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/account/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/login/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/SelectedCoursesTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/SelectedCoursesTab.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePriceTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePriceTab.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Select.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Select.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/test_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/test_data.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/constants.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_variables.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SideBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,7 +33,8 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/pages/admin" />
+    <property name="add_unversioned_files" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="SCSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -83,17 +51,17 @@
     <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\WebStormProjects\ege-hack" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\admin" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\login" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\account" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\courses\catalog-page" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\WebStormProjects\ege-hack\src\components\common" />
       <recent name="C:\WebStormProjects\ege-hack\src\components\pages" />
       <recent name="C:\WebStormProjects\ege-hack\src\components\courses\lesson-page" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\courses\catalog-page" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\courses\course-page" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\admin" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\login" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\account" />
       <recent name="C:\WebStormProjects\ege-hack\src\components\courses\catalog-page" />
       <recent name="C:\WebStormProjects\ege-hack\src\components\courses\course-page" />
     </key>

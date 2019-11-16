@@ -1,6 +1,6 @@
 import React from 'react';
 import {CSSTransition} from "react-transition-group";
-import {BrowserRouter as Router, Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {HashRouter as Router, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Page from "./Page";
@@ -78,7 +78,7 @@ function App() {
                     <React.Fragment>
                         {showSidebar && (<SideBar onMenuClose={toggleSideBar}/>)}
                         <Switch>
-                            <Route exact path="/" render={() => <div className="layout__content">Home</div>}/>
+                            <Route exact path="/" render={() => <Redirect to="/courses"/>}/>
                             <Route path="/login" component={Login}/>
                             <Route path="/courses" component={MyCourses}/>
                             <Route path="/shop" component={Shop}/>
@@ -102,7 +102,7 @@ App.layoutAnimationClassNames = {
 };
 
 export default () => (
-    <Router basename="/ege-hack-front">
+    <Router basename={process.env.REACT_APP_BASE_NAME}>
         <GlobalStore>
             <App/>
         </GlobalStore>

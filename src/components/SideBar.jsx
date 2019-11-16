@@ -20,12 +20,12 @@ export default class SideBar extends React.Component{
                         <div className="layout__sidebar-menu">
                             <div className="layout__sidebar-menu-section">
                                 <Link to="/courses/">Мои курсы</Link>
-                                <Link to="/homework/">Домашняя работа</Link>
+                                {/*<Link to="/homework/">Домашняя работа</Link>*/}
                             </div>
                             <div className="layout__sidebar-menu-section">
                                 <Link to="/shop/">Магазин курсов</Link>
                                 <Link to="/teachers/">Преподаватели</Link>
-                                <Link to="/about/">О нас</Link>
+                                {/*<Link to="/about/">О нас</Link>*/}
                             </div>
                         </div>
                         <Contacts contacts={{vk: '/', fb: '/', ig: '/'}}/>
