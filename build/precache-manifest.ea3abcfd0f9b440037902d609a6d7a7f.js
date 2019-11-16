@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "97e91609b58a4eb22d9cf631bc1f0851",
+    "revision": "7e229354049a17f9ba1a67d31226d4e7",
     "url": "/ege-hack-front/index.html"
   },
   {
-    "revision": "38bfed0b8b084c42b60a",
+    "revision": "03f75accc686493b7ce1",
     "url": "/ege-hack-front/static/css/2.44d09fed.chunk.css"
   },
   {
-    "revision": "f2b8f859aa65f4695259",
+    "revision": "3245c7960f21e3c22b1d",
     "url": "/ege-hack-front/static/css/main.420626b4.chunk.css"
   },
   {
-    "revision": "38bfed0b8b084c42b60a",
-    "url": "/ege-hack-front/static/js/2.b8ee383d.chunk.js"
+    "revision": "03f75accc686493b7ce1",
+    "url": "/ege-hack-front/static/js/2.98dfde56.chunk.js"
   },
   {
-    "revision": "f2b8f859aa65f4695259",
-    "url": "/ege-hack-front/static/js/main.7393e1b2.chunk.js"
+    "revision": "3245c7960f21e3c22b1d",
+    "url": "/ege-hack-front/static/js/main.9cfb8e7d.chunk.js"
   },
   {
     "revision": "45795b25efaf8bc464fe",
