@@ -18,7 +18,7 @@ const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnlin
                                 name="subject"
                                 options={options}
                                 value={subject}
-                                selectProps={selectProps}
+                                placeholder='Предмет'
                                 callback={onChange}/>
                         </div>
                     )}
@@ -38,10 +38,10 @@ const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnlin
 };
 
 const Catalog = ({renderFunc, placeholder, baseUrl, ...listProps}) => {
-    const {items} = React.useContext(CatalogContext);
+    const {items, renderProps} = React.useContext(CatalogContext);
     const renderItem = React.useCallback((item) => {
-        return renderFunc(item, {link: `${item.id}/`});
-    }, [renderFunc]);
+        return renderFunc(item, {link: `${item.id}/`, ...renderProps});
+    }, [renderFunc, renderProps]);
     return (
         <div className="layout__content-block catalog__catalog">
             {items.length > 0 ? (
@@ -58,14 +58,12 @@ const Catalog = ({renderFunc, placeholder, baseUrl, ...listProps}) => {
     );
 };
 
-const selectProps = {isClearable: true, placeholder: 'Предмет'};
-
 const Body = (props) => {
-    const {options, filterItems, children} = props;
+    const {options, filterItems, children, renderProps={}} = props;
     const history = useHistory();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const subject = params.get('subject') || null;
+    const subject = parseInt(params.get('subject')) || null;
     const online = params.get('online') === 'true';
     const onFilterChange = React.useCallback((value, name) => {
         const params = new URLSearchParams(location.search);
@@ -84,7 +82,7 @@ const Body = (props) => {
     return (
         <CatalogContext.Provider
             value={{
-                options, subject, online, onChange: onFilterChange, items: matchingItems
+                options, subject, online, onChange: onFilterChange, items: matchingItems, renderProps
             }}>
             <div className="catalog">
                 {children}
@@ -92,18 +90,18 @@ const Body = (props) => {
         </CatalogContext.Provider>
     );
 };
-
-const CatalogPage = ({title, className, BodyComponent = Body, ...props}) => {
-    return (
-        <Page title={title} className={className}>
-            <BodyComponent {...props}/>
-        </Page>
-    )
-};
+//
+// const CatalogPage = ({title, className, BodyComponent = Body, ...props}) => {
+//     return (
+//         <Page title={title} className={className}>
+//             <BodyComponent {...props}/>
+//         </Page>
+//     )
+// };
 
 export default {
     Filter,
     Catalog,
     Body,
-    Page: CatalogPage
+    // Page: CatalogPage
 };

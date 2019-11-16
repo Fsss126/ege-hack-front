@@ -15,17 +15,17 @@ const Description = () => {
     const {course} = React.useContext(CourseOverviewContext);
     return (
         <React.Fragment>
-            <CoverImage src={course.cover} className="course-overview__cover"/>
+            <CoverImage src={course.image_link} className="course-overview__cover"/>
             <div className="course-overview__info layout__content-block">
-                <h2>{course.title}</h2>
+                <h2>{course.name}</h2>
                 <div className="course-overview__summary">
                     <div className="col-auto course-overview__summary-item">
                         <i className="far fa-calendar-alt"/>
-                        Начало: {renderDate(course.start, renderDate.date)}
+                        Начало: {renderDate(course.date_start, renderDate.date)}
                     </div>
                     <div className="col-auto course-overview__summary-item">
                         <i className="far fa-clock"/>
-                        Длительность: {course.totalHours} часов
+                        Длительность: {course.total_hours} часов
                     </div>
                 </div>
                 <div className="description-text font-size-sm">{course.description}</div>
@@ -38,7 +38,7 @@ const Title = () => {
     const {course} = React.useContext(CourseOverviewContext);
     return (
         <div className="course-overview__title layout__content-block">
-            <h2>{course.title}</h2>
+            <h2>{course.name}</h2>
             <PageLink className="course-overview__link" to={`/shop/${course.id}`}>
                 Страница курса
             </PageLink>
@@ -46,18 +46,19 @@ const Title = () => {
     );
 };
 
+//TODO: error boundaries
 const Teachers = () => {
-    const {course} = React.useContext(CourseOverviewContext);
+    const {course, teachers} = React.useContext(CourseOverviewContext);
     return (
         <div className="layout__content-block">
             <h3>Преподаватели</h3>
             <div className="course-overview__teachers container negate-block-padding">
                 <div className="row">
-                    {course.teachers.map((teacher, i) => (
+                    {course.teacher_ids.map((id, i) => (
                         <div className="col-12 col-md d-flex p-0" key={i}>
                             <Teacher
-                                teacher={teacher}
-                                link={`/teachers/${teacher.id}/`}/>
+                                teacher={_.find(teachers, {id})}
+                                link={`/teachers/${id}/`}/>
                         </div>
                     ))}
                 </div>
@@ -83,14 +84,19 @@ const Lessons = ({renderLesson: renderFunc}) => {
 };
 
 const CourseOverview = (props) => {
-    const {match: {params: {id}}, path: root, courses, children, className} = props;
+    const {match: {params: {id:param_id}}, path: root, courses, teachers, children, className, location} = props;
+    const id = parseInt(param_id);
     const course = _.find(courses, {id});
     if (course) {
         return (
-            <Page title={`${course.title}`} className={`course-overview ${className || ''}`}>
+            <Page
+                title={`${course.title}`}
+                className={`course-overview ${className || ''}`}
+                location={location}>
                 <CourseOverviewContext.Provider
                     value={{
-                        course
+                        course,
+                        teachers
                     }}>
                     {children}
                 </CourseOverviewContext.Provider>

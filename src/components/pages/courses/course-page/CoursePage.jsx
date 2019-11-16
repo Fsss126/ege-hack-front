@@ -1,9 +1,9 @@
-import {PageContent} from "../../Page";
-import CourseOverview from "../../common/CourseOverview";
 import React from "react";
-import Lesson from "../../common/Lesson";
-import {renderDate} from "../../../definitions/helpers";
-import Button from "../../ui/Button";
+import {PageContent} from "components/Page";
+import CourseOverview from "components/common/CourseOverview";
+import Lesson from "components/common/Lesson";
+import Button from "components/ui/Button";
+import {renderDate} from "definitions/helpers";
 
 const CoursePage = ({path, catalog, ...props}) => {
     const renderLesson = (lesson, props) => {

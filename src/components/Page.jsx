@@ -1,11 +1,14 @@
 import React from 'react';
 import {Helmet} from "react-helmet";
 import Sticky from 'react-sticky-el';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
+import {useUser} from "../store";
 
 export const PageLoadingPlaceholder = () => (
-    <div className="layout__loading-spinner">
-        <i className="spinner-border"/>
+    <div className="layout__content">
+        <div className="layout__loading-spinner">
+            <i className="spinner-border"/>
+        </div>
     </div>
 );
 
@@ -40,7 +43,24 @@ export const BottomTab = ({children, className, ...stickyProps}) => (
     </Sticky>
 );
 
-const Page = ({title, className, children}) => {
+class PageErrorBoundary extends React.Component {
+    state = {
+        error: null
+    }
+}
+
+const Page = ({title, className, children, checkLogin=true, location}) => {
+    //TODO: check permissions
+    const {user, userInfo} = useUser();
+    if (checkLogin) {
+        if (!user) {
+            return (
+                <Redirect to={{
+                    pathname: '/login/',
+                    state: location ? { referrer: location.pathname } : undefined
+                }}/>);
+        }
+    }
     return (
         <div className={`layout__content ${className || ''}`}>
             {title && <Helmet><title>{title} – ЕГЭ HACK</title></Helmet>}

@@ -2,6 +2,7 @@
   "name": "ege-hack",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://fsss126.github.io/ege-hack-front/",
   "dependencies": {
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",

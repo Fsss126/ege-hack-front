@@ -4,7 +4,7 @@ import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import Page, {PageContent} from "components/Page";
 import {LEARNING_STATUS} from "definitions/constants";
-import {SUBJECTS} from "../../../data/test_data";
+import {SUBJECTS} from "../../../../data/test_data";
 
 const CatalogPage = ({catalog, location}) => {
     const renderCourse = React.useCallback((course, props) => (

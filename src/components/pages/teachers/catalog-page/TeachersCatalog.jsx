@@ -1,7 +1,7 @@
 import React from 'react';
 import _  from 'lodash';
 import Catalog from "components/common/Catalog";
-import Teacher from "../../common/Teacher";
+import Teacher from "../../../common/Teacher";
 
 const Filter = (props) => (<Catalog.Filter filterBy={{online: false}} {...props}/>);
 

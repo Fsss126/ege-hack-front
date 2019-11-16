@@ -1,7 +1,7 @@
 import React from "react";
 import FileInput from "components/ui/FileInput";
 import APIRequest from "definitions/api";
-import NavigationBlocker from "components/ui/NavigationBlocker";
+import NavigationBlocker from "components/common/NavigationBlocker";
 
 const HomeworkLoader = ({homework, lessonId}) => {
     const isHomeworkSubmissionClosed = React.useCallback(() => homework.deadline && new Date() >= homework.deadline, [homework]);

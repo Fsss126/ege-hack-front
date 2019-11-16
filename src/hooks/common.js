@@ -1,4 +1,5 @@
 import React from 'react';
+import {useUser} from "../store";
 
 export function useTruncate(text) {
     const descriptionRef = React.useRef(null);
@@ -35,14 +36,28 @@ export function useTruncate(text) {
     return [descriptionRef, isFontLoaded];
 }
 
-export function useIsMounted() {
-    const isMounted = React.useRef(false);
+export function useRefValue(initialValue) {
+    const ref = React.useRef(initialValue);
+    const getValue = React.useCallback(() => ref.current, []);
+    const setValue = React.useCallback((value) => {
+        ref.current = value;
+    }, []);
+    return [getValue, setValue];
+}
 
-    React.useEffect(() => {
-        isMounted.current = true;
+export function useIsMounted() {
+    const [getIsMounted, setIsMounted] = useRefValue(false);
+
+    React.useLayoutEffect(() => {
+        console.log('mounting');
+        setIsMounted(true);
+        return () => {
+            console.log('unmounting');
+            setIsMounted(false);
+        };
     }, []);
 
-    return isMounted.current;
+    return getIsMounted;
 }
 
 export function useUpdateEffect(effect, dependencies = []) {
@@ -64,11 +79,6 @@ export function useForceUpdate() {
     return update;
 }
 
-export function useRefValue(initialValue) {
-    const ref = React.useRef(initialValue);
-    const getValue = React.useCallback(() => ref.current, []);
-    const setValue = React.useCallback((value) => {
-        ref.current = value;
-    }, []);
-    return [getValue, setValue];
-}
+// export function useCheckPageAccess(checkLogin) {
+//
+// }

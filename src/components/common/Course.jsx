@@ -4,13 +4,13 @@ import ListItem from "./ListItem";
 import CoverImage from "./CoverImage";
 
 export default function Course({course, online=true, isSelected=false, ...props}) {
-    const {title, cover, start, description} = course;
-    const startsIn = daysBetween(new Date(), start);
+    const {name, image_link, date_start, description} = course;
+    const startsIn = daysBetween(new Date(), date_start);
     return (
         <ListItem
             item={course}
             className={isSelected ? 'course course-selected' : 'course'}
-            title={title}
+            title={name}
             subtitle={`До начала курса ${startsIn} ${startsIn === 1 ? 'день' : 'дней'}`}
             description={description}
             preview={(
@@ -20,7 +20,7 @@ export default function Course({course, online=true, isSelected=false, ...props}
                             <span>Онлайн</span>
                         </div>
                     )}
-                    <CoverImage src={cover} className="poster-cover course__cover"/>
+                    <CoverImage src={image_link} className="poster-cover course__cover"/>
                 </div>
             )}
             {...props}/>

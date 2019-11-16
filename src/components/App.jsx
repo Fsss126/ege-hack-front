@@ -1,18 +1,19 @@
 import React from 'react';
 import {CSSTransition} from "react-transition-group";
-import 'sass/index.scss';
 import {BrowserRouter as Router, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import Header from "./Header";
 import SideBar from "./SideBar";
-import Shop from "./shop/Shop";
-import MyCourses from "./courses/MyCourses";
-import Page, {PageLoadingPlaceholder} from "./Page";
-import LoginPage from "./auth/LoginPage";
-import Auth, {AuthEventTypes} from "definitions/auth";
-import Teachers from "./teachers/Teachers";
+import Page from "./Page";
 import {useRefValue} from "../hooks/common";
 import GlobalStore, {useUser} from "store";
-import AccountPage from "./account/AccountPage";
+
+import Login from "./pages/login";
+import Account from "./pages/account";
+import Teachers from "./pages/teachers";
+import Shop from "./pages/shop";
+import MyCourses from "./pages/courses";
+
+import 'sass/index.scss';
 
 function useLocationChangeEffect(effect) {
     const history = useHistory();
@@ -62,28 +63,30 @@ function App() {
 
     const [isSideBarOpened, toggleSideBar] = useSideBarState();
     const {user, userInfo} = useUser();
+    const showSidebar = userInfo !== null;
     return (
         <div className="app">
-            <Header onMenuButtonClick={toggleSideBar}/>
+            <Header
+                onMenuButtonClick={toggleSideBar}
+                user={user}
+                sidebar={showSidebar}/>
             <CSSTransition
                 in={isSideBarOpened}
                 timeout={200}
                 classNames={App.layoutAnimationClassNames}>
                 <div className="layout">
-                    {userInfo ? (
                     <React.Fragment>
-                        <SideBar onMenuClose={toggleSideBar}/>
+                        {showSidebar && (<SideBar onMenuClose={toggleSideBar}/>)}
                         <Switch>
                             <Route exact path="/" render={() => <div className="layout__content">Home</div>}/>
-                            <Route path="/login" component={LoginPage}/>
+                            <Route path="/login" component={Login}/>
                             <Route path="/courses" component={MyCourses}/>
                             <Route path="/shop" component={Shop}/>
                             <Route path="/teachers" component={Teachers}/>
-                            <Route path="/account" component={AccountPage}/>
+                            <Route path="/account" component={Account}/>
                             <Route path="/:section" component={Page}/>
                         </Switch>
                     </React.Fragment>
-                    ) : (<PageLoadingPlaceholder/>)}
                 </div>
             </CSSTransition>
         </div>
@@ -99,7 +102,7 @@ App.layoutAnimationClassNames = {
 };
 
 export default () => (
-    <Router>
+    <Router basename="/ege-hack-front">
         <GlobalStore>
             <App/>
         </GlobalStore>

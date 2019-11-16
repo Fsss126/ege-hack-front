@@ -338,6 +338,7 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
   align-items: center;
   .select__container {
     flex-grow: 1;
+    max-width: 100%;
     .select__control {
       border: $border;
       box-shadow: none;
@@ -365,17 +366,17 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
           transform: rotate(180deg);
         }
       }
-      .select__placeholder, .select__single-value {
-        position: static;
-        transform: none;
-        max-width: 100%;
-        &~div {
-          position: absolute;
-          margin-top: 0;
-          margin-bottom: 0;
-          @include center(y);
-        }
-      }
+      //.select__placeholder, .select__single-value {
+      //  position: static;
+      //  transform: none;
+      //  max-width: 100%;
+      //  &~div {
+      //    position: absolute;
+      //    margin-top: 0;
+      //    margin-bottom: 0;
+      //    @include center(y);
+      //  }
+      //}
       .select__placeholder {
         color: $text-grey;
       }
@@ -384,14 +385,21 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
       border: $border;
       overflow: hidden;
       box-shadow: 0 4px 11px hsla(0,0%,0%,0.1);
-      .select__option {
-        padding: 4px 8px;
-        cursor: pointer;
-        @include media-breakpoint-down(sm) {
-          margin-right: 6px;
+      .select__menu-list {
+        overflow: visible;
+        padding: 0;
+        .select__menu-notice {
+          font-size: $font-size-sm;
         }
-        &.select__option--is-focused {
-          background: $text-light-grey;
+        .select__option {
+          padding: 4px 8px;
+          cursor: pointer;
+          @include media-breakpoint-down(sm) {
+            margin-right: 6px;
+          }
+          &.select__option--is-focused {
+            background: $bg-active;
+          }
         }
       }
     }

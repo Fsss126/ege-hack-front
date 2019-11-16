@@ -1,14 +1,14 @@
 /*global VK*/
 import APIRequest from "definitions/api";
 
-VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
-
 const LOCAL_STORAGE_KEY = 'ege-hack-user-data';
 
 export const AuthEventTypes = {
     login: 'auth.login',
     logout: 'auth.logout'
 };
+
+const initVK = false;
 
 class Auth {
     user = null;
@@ -36,14 +36,23 @@ class Auth {
     eventHandlers = {};
 
     login = async (user) => {
+        if (!VK)
+            return;
+        if (!initVK)
+            VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
+        user = {
+            ...user,
+            uid: 1,
+            hash: '68ab57e7e70fae3f8f96afc0d85465a9'
+        };
         console.info('Login', user);
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
         this.user = user;
-        await this.getUserInfo();
-        if (!this.userInfo)
-            return;
+        // await this.getUserInfo();
+        // if (!this.userInfo)
+        //     return;
         for(let handler of (this.eventHandlers[AuthEventTypes.login] || []))
-            handler(this.user, this.userInfo);
+            handler(this.user);
     };
 
     logout = () => {
@@ -91,6 +100,10 @@ class Auth {
     }
 
     loginWidget(elementId) {
+        if (!VK)
+            return;
+        if (!initVK)
+            VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
         VK.Widgets.Auth(elementId, {onAuth: this.login});
     }
 }

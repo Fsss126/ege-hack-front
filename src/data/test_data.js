@@ -12,66 +12,82 @@ function getDate(daysForward) {
 }
 
 export const SUBJECTS = [
-    { id: 'russian', name: 'Русский язык' },
-    { id: 'literature', name: 'Литература' },
-    { id: 'math', name: 'Математика' },
-    { id: 'informatics', name: 'Информатика' },
-    { id: 'physics', name: 'Физика' },
-    { id: 'chemistry', name: 'Химия' },
-    { id: 'biology', name: 'Биология' },
-    { id: 'sociology', name: 'Обществознание' },
-    { id: 'history', name: 'История' },
-    { id: 'geography', name: 'География' },
-    { id: 'english', name: 'Английский язык' },
-    { id: 'german', name: 'Немецкий язык' },
-    { id: 'french', name: 'Французский язык' },
-    { id: 'chinese', name: 'Китайский язык' },
-    { id: 'spanish', name: 'Испанский язык' }
+    // { id: 'russian', name: 'Русский язык' },
+    // { id: 'literature', name: 'Литература' },
+    // { id: 'math', name: 'Математика' },
+    // { id: 'informatics', name: 'Информатика' },
+    // { id: 'physics', name: 'Физика' },
+    // { id: 'chemistry', name: 'Химия' },
+    // { id: 'biology', name: 'Биология' },
+    // { id: 'sociology', name: 'Обществознание' },
+    // { id: 'history', name: 'История' },
+    // { id: 'geography', name: 'География' },
+    // { id: 'english', name: 'Английский язык' },
+    // { id: 'german', name: 'Немецкий язык' },
+    // { id: 'french', name: 'Французский язык' },
+    // { id: 'chinese', name: 'Китайский язык' },
+    // { id: 'spanish', name: 'Испанский язык' }
+    { id: 1, name: 'Русский язык' },
+    { id: 2, name: 'Литература' },
+    { id: 3, name: 'Математика' },
+    { id: 4, name: 'Информатика' },
+    { id: 5, name: 'Физика' },
+    { id: 6, name: 'Химия' },
+    { id: 7, name: 'Биология' },
+    { id: 8, name: 'Обществознание' },
+    { id: 9, name: 'История' },
+    { id: 10, name: 'География' },
+    { id: 11, name: 'Английский язык' },
+    { id: 12, name: 'Немецкий язык' },
+    { id: 13, name: 'Французский язык' },
+    { id: 14, name: 'Китайский язык' },
+    { id: 15, name: 'Испанский язык' }
 ];
 
 export const TEACHERS = [
     {
-        id: '1',
-        firstName: 'Елена',
-        lastName: 'Черткова',
-        subjects: SUBJECTS.slice(0,2),
+        id: 1,
+        first_name: 'Елена',
+        last_name: 'Черткова',
+        subject_ids: SUBJECTS.slice(0,2).map(({id}) => id),
         photo: poster,
         contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
-        about: lorem.generateSentences(1)
+        bio: lorem.generateSentences(1)
     },
     {
-        id: '2',
-        firstName: 'Сергей',
-        lastName: 'Авдошин',
-        subjects: [SUBJECTS[3]],
+        id: 2,
+        first_name: 'Сергей',
+        last_name: 'Авдошин',
+        subject_ids: [SUBJECTS[3].id],
         photo: poster,
         contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
-        about: lorem.generateSentences(1)
+        bio: lorem.generateSentences(1)
     }
 ];
 
 export const COURSES = SUBJECTS.slice(0, 5).map((subject, i) => ({
-    title: `${subject.name}. Мастер группа. Апрель.`,
-    id: i.toString(),
-    subject: subject,
+    name: `${subject.name}. Мастер группа. Апрель.`,
+    id: i,
+    subject_id: subject.id,
     online: i <= 2,
-    cover: poster,
-    start: getDate(7 + i),
-    totalHours: 80,
+    image_link: poster,
+    date_start: getDate(7 + i),
+    date_end: getDate(7 + i),
+    // totalHours: 80,
     description: lorem.generateParagraphs(1),
     lessons: _.times(4, (j) => ({
         number: j + 1,
-        id: (j + 1).toString(),
+        id: j,
         date: getDate(-4 + i + j),
         title: `Занятие ${j + 1}`,
         description: lorem.generateParagraphs(1),
         cover: poster
     })),
-    teachers: i <= 2 ? [TEACHERS[0]] : TEACHERS
+    teacher_ids: i <= 2 ? [TEACHERS[0].id] : TEACHERS.map(({id}) => id)
 }));
 
 export const SHOP_CATALOG = {
-    catalog: COURSES.map((course, i) => ({...course, offer: {price: 2500, discount: i === 0 ? 1300 : undefined}})),
+    catalog: COURSES.map((course, i) => ({...course, price: 2500, discount: i === 0 ? 1000 : undefined})),
     // promotions: [{
     //
     // }]

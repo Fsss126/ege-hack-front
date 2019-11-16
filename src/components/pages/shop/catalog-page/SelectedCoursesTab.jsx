@@ -1,12 +1,12 @@
 import React from 'react';
-import {useTruncate} from "../../../hooks/common";
-import CoverImage from "../../common/CoverImage";
+import {useTruncate} from "../../../../hooks/common";
+import CoverImage from "../../../common/CoverImage";
 import Truncate from "react-truncate";
 import _ from "lodash";
-import {BottomTab} from "../../Page";
-import ScrollBars from "../../ui/ScrollBars";
+import {BottomTab} from "../../../Page";
+import ScrollBars from "../../../ui/ScrollBars";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
-import Button from "../../ui/Button";
+import Button from "../../../ui/Button";
 
 const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
     const {name} = course;
@@ -38,7 +38,7 @@ const SelectedCoursesTab = ({courses, onCourseDeselect}) => {
     const discount = _.sumBy(courses, 'discount');
     // const stickyRef =
     React.useEffect(() => {
-        window.dispatchEvent(new Event('scroll'));
+        // window.dispatchEvent(new Event('scroll'));
     });
     return (
         <BottomTab

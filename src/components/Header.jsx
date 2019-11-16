@@ -2,21 +2,21 @@ import React from 'react';
 import logo from 'img/logo.svg';
 import Auth from 'definitions/auth';
 import {Link} from 'react-router-dom';
-import {useUser} from "store";
 import CoverImage from "./common/CoverImage";
 
 const Header = (props) => {
-    const {onMenuButtonClick} = props;
-    const {user} = useUser();
+    const {onMenuButtonClick, user, sidebar} = props;
     return (
         <header>
             <div className="container-fluid header__container">
                 <div className="row">
-                    <div className="col-auto d-lg-none">
-                        <div className="nav-btn" onClick={onMenuButtonClick}>
-                            <i className="icon-bars"/>
+                    {sidebar && (
+                        <div className="col-auto d-lg-none">
+                            <div className="nav-btn" onClick={onMenuButtonClick}>
+                                <i className="icon-bars"/>
+                            </div>
                         </div>
-                    </div>
+                    )}
                     <div className="col d-flex justify-content-center justify-content-lg-start p-0">
                         <div className="logo-container container d-flex align-items-center justify-content-center m-0">
                             <img src={logo} className="logo" alt="Logo"/>

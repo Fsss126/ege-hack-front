@@ -2,8 +2,8 @@ import React from "react";
 import CoverImage from "./CoverImage";
 import Contacts from "./Contacts";
 
-const UserProfile = ({firstName, lastName, photo, contacts, about, role}) => {
-    const fullName = `${firstName} ${lastName}`;
+const UserProfile = ({first_name, last_name, photo, contacts, about, role}) => {
+    const fullName = `${first_name} ${last_name}`;
     return (
         <React.Fragment>
             <div className="user-profile__avatar-container">

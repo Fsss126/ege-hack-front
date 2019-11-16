@@ -10,14 +10,14 @@ const CourseCatalog = ({renderCourse, ...otherProps}) => (
 );
 
 const Body = (props) => {
-    const {courses, ...otherProps} = props;
+    const {courses, subjects, ...otherProps} = props;
 
     const options = React.useMemo(() =>
-            _.uniq(courses.map((course) => course.subject)).map(({id, name}) => ({value: id, label: name})),
-        [courses]);
+            subjects.map(({id, name}) => ({value: id, label: name})),
+        [subjects]);
 
     const getMatchingCourses = React.useCallback((subject, online) => courses.filter((course) =>
-        (subject ? course.subject.id === subject : true) && (online ? course.online === online : true)), [courses]);
+        (subject ? course.subject_id === subject : true) && (online ? course.online === online : true)), [courses]);
 
     return (
         <Catalog.Body
@@ -27,11 +27,11 @@ const Body = (props) => {
     )
 };
 
-const CourseCatalogPage = (props) => (<Catalog.Page BodyComponent={Body} {...props}/>);
+// const CourseCatalogPage = (props) => (<Catalog.Page BodyComponent={Body} {...props}/>);
 
 export default {
     ...Catalog,
     Catalog: CourseCatalog,
     Body,
-    Page: CourseCatalogPage
+    // Page: CourseCatalogPage
 }

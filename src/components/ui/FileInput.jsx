@@ -6,13 +6,12 @@ import {useRefValue} from "hooks/common";
 import Auth from 'definitions/auth';
 import {API_ROOT} from "definitions/api";
 import {getAuthHeader} from "definitions/helpers";
+import StableCSSTransition from "components/common/StableCSSTransition";
 import {LOADING_STATE, LoadingIndicator, useLoadingState} from "./LoadingIndicator";
-import StableCSSTransition from "./StableCSSTransition";
 import File from "./File";
 import Button from "./Button";
 
 import 'react-dropzone-uploader/dist/styles.css';
-
 
 const trimExtension = (filename) => filename.replace(/\.[^/.]+$/, "");
 

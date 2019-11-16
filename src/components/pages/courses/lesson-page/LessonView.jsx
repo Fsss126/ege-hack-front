@@ -1,7 +1,7 @@
 import React from "react";
-import VideoCover from "../../common/VideoCover";
-import File from "../../ui/File";
-import {renderDate} from "../../../definitions/helpers";
+import VideoCover from "../../../common/VideoCover";
+import File from "../../../ui/File";
+import {renderDate} from "../../../../definitions/helpers";
 import HomeworkLoader from "./HomeworkLoader";
 
 const LessonView = ({lesson: {id, title, cover, description, homework}}) => {

@@ -5,52 +5,44 @@
     <option name="CUSTOM_SCOPE_NAME" value="Module 'ege-hack'" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/media/icons/alert.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/angle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/arrow.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/bars.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/close.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/download.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/login.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/logout.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/profile.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/reload.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/settings.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/icons/spinner.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/img/favicon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/img/favicon_old.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/img/vk_poster.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/android-icon-144x144.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/android-icon-192x192.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/android-icon-36x36.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/android-icon-48x48.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/android-icon-72x72.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/android-icon-96x96.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-114x114.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-120x120.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-144x144.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-152x152.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-180x180.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-57x57.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-60x60.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-72x72.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-76x76.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon-precomposed.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/apple-icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/browserconfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/favicon-16x16.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/favicon-32x32.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/favicon-96x96.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/ms-icon-144x144.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/ms-icon-150x150.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/ms-icon-310x310.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/ms-icon-70x70.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/img/icon.svg" afterDir="false" />
+    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Added shop and teachers API">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HOCs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HOCs.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Catalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Catalog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Course.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Lesson.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Lesson.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Teacher.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Teacher.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/UserProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/UserProfile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/account/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/account/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/login/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/SelectedCoursesTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/SelectedCoursesTab.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePriceTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePriceTab.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Select.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Select.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/test_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/test_data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_variables.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,7 +66,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/node_modules/bootstrap/scss" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/pages/admin" />
     <property name="list.type.of.created.stylesheet" value="SCSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -92,18 +84,18 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\WebStormProjects\ege-hack\src\hooks" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\ui" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\ui\input\select" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\ui\input" />
       <recent name="C:\WebStormProjects\ege-hack\src\components\common" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\pages" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\courses\lesson-page" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\courses\catalog-page" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\courses\course-page" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\WebStormProjects\ege-hack\src\components\teachers" />
-      <recent name="C:\WebStormProjects\ege-hack" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\ui" />
-      <recent name="C:\WebStormProjects\ege-hack\src\sass" />
-      <recent name="C:\WebStormProjects\ege-hack\src\components\courses" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\admin" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\login" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\pages\account" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\courses\catalog-page" />
+      <recent name="C:\WebStormProjects\ege-hack\src\components\courses\course-page" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -120,6 +112,16 @@
   </component>
   <component name="RunManager" selected="npm.start-custom-port">
     <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
       <method v="2" />
     </configuration>
     <configuration name="npm start" type="js.build_tools.npm">
@@ -157,9 +159,11 @@
       <item itemvalue="npm.npm start" />
       <item itemvalue="npm.start-custom-post" />
       <item itemvalue="npm.start-custom-port" />
+      <item itemvalue="npm.build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.build" />
         <item itemvalue="npm.start-custom-port" />
         <item itemvalue="npm.start-custom-post" />
       </list>
@@ -196,7 +200,9 @@
       <workItem from="1571789526134" duration="1942000" />
       <workItem from="1571958498988" duration="96137000" />
       <workItem from="1572436077358" duration="555000" />
-      <workItem from="1572548939717" duration="437000" />
+      <workItem from="1572548939717" duration="84536000" />
+      <workItem from="1572963631858" duration="12384000" />
+      <workItem from="1573902106113" duration="5293000" />
     </task>
     <task id="LOCAL-00001" summary="Initial stage">
       <created>1567014085290</created>
@@ -247,7 +253,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572382841494</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Commit icons and img resources">
+      <created>1572549595910</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1572549595910</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -274,6 +287,8 @@
     <MESSAGE value="Files upload and a lot of staff" />
     <MESSAGE value="File upload; Login" />
     <MESSAGE value="Added teachers; Added account page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added teachers; Added account page" />
+    <MESSAGE value="Commit icons and img resources" />
+    <MESSAGE value="Added shop and teachers API" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added shop and teachers API" />
   </component>
 </project>

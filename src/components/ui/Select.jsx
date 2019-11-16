@@ -52,9 +52,9 @@ class MenuList extends Component {
                 hideTracksWhenNotNeeded
                 ref={ref => { this.scrollBar = ref; }}
                 autoHeightMax={this.props.maxHeight}>
-                <div className='select__list'>
+                <components.MenuList {...this.props}>
                     {this.props.children}
-                </div>
+                </components.MenuList>
             </ScrollBars>
         );
     }
@@ -73,22 +73,24 @@ export default class Select extends React.PureComponent {
     };
 
     render() {
+        const {name, options, value, components, selectProps, isClearable=true, isSearchable=true, placeholder} = this.props;
         return (
             <SelectInput
-                name={this.props.name}
-                options={this.props.options}
+                name={name}
+                options={options}
                 maxMenuHeight={200}
-                value={_.find(this.props.options, {value: this.props.value}) || null}
+                value={_.find(options, {value: value}) || null}
                 className='select__container' classNamePrefix='select'
                 onChange={this.onChange}
                 menuPlacement="auto"
+                noOptionsMessage={() => 'Нет опций'}
                 components={
-                    this.props.components ? ({
+                    components ? ({
                         Option,
                         MenuList,
                         DropdownIndicator,
                         SelectContainer,
-                        ...this.props.components
+                        ...components
                     }) : ({
                         Option,
                         MenuList,
@@ -100,7 +102,10 @@ export default class Select extends React.PureComponent {
                     //removes default styles from option elements
                     option: () => ({})
                 }}
-                {...this.props.selectProps}
+                isClearable={isClearable}
+                isSearchable={isSearchable}
+                placeholder={placeholder}
+                {...selectProps}
             />
         );
     }

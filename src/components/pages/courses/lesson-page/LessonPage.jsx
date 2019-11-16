@@ -7,7 +7,7 @@ import List from "components/common/List";
 import LessonView from "./LessonView";
 
 const LessonPage = (props) => {
-    const {match: {params: {courseId: param_course, lessonId: param_lesson}}, catalog} = props;
+    const {match: {params: {courseId: param_course, lessonId: param_lesson}}, catalog, location} = props;
     const courseId = parseInt(param_course);
     const lessonId = parseInt(param_lesson);
     const course = _.find(catalog, {id: courseId});
@@ -27,7 +27,7 @@ const LessonPage = (props) => {
         const now = new Date();
         const otherLessons = course.lessons.filter(lesson => lesson.date < now && lesson.id !== selectedLesson.id);
         return (
-            <Page title={`${selectedLesson.title}`} className="lesson-page">
+            <Page title={`${selectedLesson.title}`} className="lesson-page" location={location}>
                 <PageContent parentSection={{name: course.name}}>
                     <div className="layout__content-block">
                         <div className="container p-lg-0">

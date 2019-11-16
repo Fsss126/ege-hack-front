@@ -1,7 +1,7 @@
 import React from "react";
 import {CourseOverviewContext} from "components/common/CourseOverview";
 import {BottomTab} from "components/Page";
-import Button from "../../ui/Button";
+import Button from "../../../ui/Button";
 
 const CoursePriceTab = () => {
     const {course: {price, discount}} = React.useContext(CourseOverviewContext);
