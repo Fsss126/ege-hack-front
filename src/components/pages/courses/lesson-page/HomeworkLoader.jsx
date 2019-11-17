@@ -20,8 +20,11 @@ const HomeworkLoader = ({homework, lessonId}) => {
             data: {
                 file
             }
+        }).then(() => {
+            setChanges(false);
         });
-    }, [homework, lessonId]);
+        // return Promise.resolve();
+    }, [homework, lessonId, setChanges]);
     return (
         <div className="submission">
             {hasChanges && <NavigationBlocker/>}

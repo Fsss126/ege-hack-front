@@ -42,11 +42,11 @@ const ShopCatalogPage = ({selectedCourses, onCourseClick, onCourseSelect, onCour
                         <CourseCatalog.Catalog
                             renderCourse={renderCourse}/>
                     </PageContent>
-                    <SelectedCoursesTab
-                        onCourseDeselect={onCourseDeselect}
-                        courses={[...selectedCourses]}/>
                 </CourseCatalog.Body>
             )}
+            <SelectedCoursesTab
+                onCourseDeselect={onCourseDeselect}
+                courses={[...selectedCourses]}/>
         </Page>
     );
 };

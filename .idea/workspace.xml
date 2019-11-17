@@ -5,11 +5,23 @@
     <option name="CUSTOM_SCOPE_NAME" value="Module 'ege-hack'" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
+    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Hash routing; Prod and dev env">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Lesson.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Lesson.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Teacher.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Teacher.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/test_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/test_data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -228,7 +240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572549595910</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Hash routing; Prod and dev env">
+      <created>1573914104237</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1573914104238</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -257,6 +276,7 @@
     <MESSAGE value="Added teachers; Added account page" />
     <MESSAGE value="Commit icons and img resources" />
     <MESSAGE value="Added shop and teachers API" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added shop and teachers API" />
+    <MESSAGE value="Hash routing; Prod and dev env" />
+    <option name="LAST_COMMIT_MESSAGE" value="Hash routing; Prod and dev env" />
   </component>
 </project>

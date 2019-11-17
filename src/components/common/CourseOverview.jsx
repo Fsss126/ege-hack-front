@@ -68,7 +68,7 @@ const Teachers = () => {
 };
 
 const Lessons = ({renderLesson: renderFunc}) => {
-    const {course} = React.useContext(CourseOverviewContext);
+    const {course, lessons} = React.useContext(CourseOverviewContext);
     const renderCourse = React.useCallback((item) => {
         return renderFunc(item, {link: `${item.id}/`});
     }, [renderFunc]);
@@ -77,14 +77,14 @@ const Lessons = ({renderLesson: renderFunc}) => {
             <h3>Уроки</h3>
             <List
                 renderItem={renderCourse}>
-                {course.lessons}
+                {lessons}
             </List>
         </div>
     );
 };
 
 const CourseOverview = (props) => {
-    const {match: {params: {id:param_id}}, path: root, courses, teachers, children, className, location} = props;
+    const {match: {params: {id: param_id}}, path: root, courses, teachers, lessons, children, className, location} = props;
     const id = parseInt(param_id);
     const course = _.find(courses, {id});
     if (course) {
@@ -96,7 +96,8 @@ const CourseOverview = (props) => {
                 <CourseOverviewContext.Provider
                     value={{
                         course,
-                        teachers
+                        teachers,
+                        lessons
                     }}>
                     {children}
                 </CourseOverviewContext.Provider>

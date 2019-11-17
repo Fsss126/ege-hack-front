@@ -4,8 +4,13 @@ import CourseOverview from "components/common/CourseOverview";
 import Lesson from "components/common/Lesson";
 import Button from "components/ui/Button";
 import {renderDate} from "definitions/helpers";
+import _ from "lodash";
 
-const CoursePage = ({path, catalog, ...props}) => {
+const CoursePage = ({path, catalog, match, ...props}) => {
+    const {params: {id: courseId}} = match;
+    const id = parseInt(courseId);
+    const course = _.find(catalog, {id});
+    console.log(catalog, courseId, course);
     const renderLesson = (lesson, props) => {
         const {date, id} = lesson;
         const selectable = date < new Date();
@@ -27,6 +32,8 @@ const CoursePage = ({path, catalog, ...props}) => {
         <CourseOverview.Body
             path={path}
             courses={catalog}
+            lessons={course && course.lessons}
+            match={match}
             {...props}>
             <PageContent parentSection={{name: "Мои курсы"}}>
                 <CourseOverview.Title/>

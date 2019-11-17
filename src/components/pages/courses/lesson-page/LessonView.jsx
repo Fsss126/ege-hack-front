@@ -1,10 +1,10 @@
 import React from "react";
-import VideoCover from "../../../common/VideoCover";
-import File from "../../../ui/File";
-import {renderDate} from "../../../../definitions/helpers";
+import VideoCover from "components/common/VideoCover";
+import File from "components/ui/File";
+import {renderDate} from "definitions/helpers";
 import HomeworkLoader from "./HomeworkLoader";
 
-const LessonView = ({lesson: {id, title, cover, description, homework}}) => {
+const LessonView = ({lesson: {id, name, image_link: cover, description, homework}}) => {
     return (
         <div className="col-12 col-lg layout__content-block lesson-page__current-lesson">
             <div className="block-container video-container">
@@ -13,7 +13,7 @@ const LessonView = ({lesson: {id, title, cover, description, homework}}) => {
                     cover={cover}/>
             </div>
             <div className="block-container description-container">
-                <h2>{title}</h2>
+                <h2>{name}</h2>
                 <div className="description-text">{description}</div>
             </div>
             {homework && (

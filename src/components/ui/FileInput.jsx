@@ -51,7 +51,7 @@ const getUploadParams = () => {
 const getFileProp = ({original_file_name, id_file_name}) => ({
     name: original_file_name,
     downloadName: `${trimExtension(original_file_name)}_${id_file_name}`,
-    url: `${API_ROOT}/files/attachments/${id_file_name}`
+    url: `${API_ROOT}/files/attachments/${id_file_name}?disp=attachment`
 });
 
 const Input = (props) => {
@@ -269,18 +269,20 @@ const FileInput = (props) => {
         console.log(status, meta, _.cloneDeep(files));
         setChanged(true);
         setInputFiles(files);
-        onChange && onChange(getCallbackFiles(files, preloadedFiles));
+        onChange && onChange(true, getCallbackFiles(files, preloadedFiles));
     }, [onChange, preloadedFiles, setInputFiles]);
 
     const handleSubmit = React.useCallback(async (files) => {
         console.log(files.map(f => f.meta));
         if (onSubmit) {
-            const returnValue = onSubmit(getCallbackFiles(files, preloadedFiles));
+            const filesToSubmit = getCallbackFiles(files, preloadedFiles);
+            const returnValue = onSubmit(filesToSubmit);
             if (returnValue instanceof Promise) {
                 setSubmitting(true);
                 try {
                     await returnValue;
                     setChanged(false);
+                    onChange && onChange(false, filesToSubmit);
                 }
                 finally {
                     setSubmitting(false);

@@ -34,8 +34,8 @@ const TeacherPage = (props) => {
         const teacher = _.find(teachers, {id});
 
         if (teacher) {
-            const {first_name, last_name, photo, contacts, subject_ids, bio} = teacher;
-            const teacherSubjects = subject_ids.map(id => _.find(subjects, {id}));
+            const {vk_info: {first_name, last_name, photo_max_orig: photo}, contacts, subjects: teacherSubjects, bio} = teacher;
+            // const teacherSubjects = subject_ids.map(id => _.find(subjects, {id}));
             const teachersCourses = catalog.filter(course => _.indexOf(course.teacher_ids, id) >= 0);
             const profile = {
                 first_name,

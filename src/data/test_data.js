@@ -46,20 +46,43 @@ export const SUBJECTS = [
 
 export const TEACHERS = [
     {
+        id: 154792439,
+        vk_info: {
+            id: 154792439,
+            first_name: "Alexandra",
+            last_name: "Petrova",
+            photo_max_orig: "https://sun9-44.userapi.com/2Gx1eh3eOObO2tKqf0h3fuCDU0GEOjenhYUrjg/Q8hXPVStYbc.jpg?ava=1"
+        },
+        subjects: [
+            {
+                id: 1,
+                name: "Математика",
+                description: "Лучший предмет",
+                image_link: "/files/asdsadasda.jpg"
+            }
+        ]
+    },
+    {
         id: 1,
-        first_name: 'Елена',
-        last_name: 'Черткова',
-        subject_ids: SUBJECTS.slice(0,2).map(({id}) => id),
-        photo: poster,
+        vk_info: {
+            id: 1,
+            first_name: 'Елена',
+            last_name: 'Черткова',
+            photo_max_orig: poster,
+        },
+        subjects: SUBJECTS.slice(0,2),
         contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
         bio: lorem.generateSentences(1)
     },
     {
         id: 2,
-        first_name: 'Сергей',
-        last_name: 'Авдошин',
-        subject_ids: [SUBJECTS[3].id],
-        photo: poster,
+        vk_info: {
+            id: 2,
+            first_name: 'Сергей',
+            last_name: 'Авдошин',
+            photo_max_orig: poster,
+        },
+        subjects: [SUBJECTS[3]],
         contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
         bio: lorem.generateSentences(1)
     }
@@ -76,12 +99,12 @@ export const COURSES = SUBJECTS.slice(0, 5).map((subject, i) => ({
     // totalHours: 80,
     description: lorem.generateParagraphs(1),
     lessons: _.times(4, (j) => ({
-        number: j + 1,
+        num: j + 1,
         id: j,
         date: getDate(-4 + i + j),
-        title: `Занятие ${j + 1}`,
+        name: `Занятие ${j + 1}`,
         description: lorem.generateParagraphs(1),
-        cover: poster
+        image_link: poster
     })),
     teacher_ids: i <= 2 ? [TEACHERS[0].id] : TEACHERS.map(({id}) => id)
 }));
@@ -119,4 +142,4 @@ export const MY_COURSES = COURSES.map((course, i) => ({
 }));
 
 export const TEST_ID = 1;
-export const TEST_HASH = '68ab57e7e70fae3f8f96afc0d85465a9';
+export const TEST_HASH = '2d01669a3c8cda169545b4f7b607efb3';

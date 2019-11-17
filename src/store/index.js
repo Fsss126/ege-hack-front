@@ -12,8 +12,8 @@ function useUserAuth() {
 
     React.useEffect(() => {
         const fetchUserInfo = async () => {
-            // const userInfo = await Auth.getUserInfo();
-            const userInfo = {};
+            const userInfo = await Auth.getUserInfo();
+            // const userInfo = {};
             setUserInfo(userInfo);
         };
         if (user)
@@ -47,21 +47,25 @@ function useUserAuth() {
 const useShopCatalogStore = () => React.useState(null);
 const useSubjectsStore = () => React.useState(null);
 const useTeachersStore = () => React.useState(null);
+const useLessonsStore = () => React.useState({});
 
 function useStoreData() {
     const [catalog, setCatalog] = useShopCatalogStore();
     const [subjects, setSubjects] = useSubjectsStore();
     const [teachers, setTeachers] = useTeachersStore();
+    const [lessons, setLessons] = useLessonsStore();
     return {
         data: {
             catalog,
             subjects,
-            teachers
+            teachers,
+            lessons
         },
         setters: {
             setCatalog,
             setSubjects,
-            setTeachers
+            setTeachers,
+            setLessons
         }
     }
 }
@@ -74,14 +78,13 @@ export function useSubjects() {
     const fetchSubjects = React.useCallback(async () => {
         if (requests.subjects)
             return requests.subjects;
-        // const request = APIRequest.get('/subjects');
-        const request = null;
+        const request = APIRequest.get('/subjects');
         requests.subjects = request;
         try {
             if (error)
                 setError(null);
-            // const subjects = await request;
-            const subjects = SUBJECTS;
+            const subjects = await request;
+            // const subjects = SUBJECTS;
             setSubjects(subjects);
         } catch (e) {
             console.error(e);
@@ -118,8 +121,8 @@ export function useTeachers() {
         try {
             if (error)
                 setError(null);
-            // const teachers = await request;
-            const teachers = TEACHERS;
+            const teachers = (await request).map(({account_id: id, ...teacher}) => ({id, ...teacher}));
+            // const teachers = TEACHERS;
             console.log('set teachers', teachers);
             setTeachers(teachers);
         } catch (e) {
@@ -163,19 +166,21 @@ export function useShopCatalog() {
     const fetchCatalog = React.useCallback(async () => {
         if (requests.shopCatalog)
             return requests.shopCatalog;
-        const request = APIRequest.get('/courses');
+        const request = APIRequest.get('/courses', {params: {
+            group: 'MARKET'
+            }});
         requests.shopCatalog = request;
         try {
             if (error)
                 setError(null);
-            // const catalog = (await request).map(({date_start, date_end, image_link, teacher_id, ...rest}) => ({
-            //     date_start: new Date(date_start),
-            //     date_end: new Date(date_end),
-            //     image_link: `${API_ROOT}${image_link}`,
-            //     teacher_ids: [teacher_id],
-            //     ...rest
-            // }));
-            const catalog = SHOP_CATALOG.catalog;
+            const catalog = (await request).map(({date_start, date_end, image_link, teacher_id, ...rest}) => ({
+                date_start: new Date(date_start),
+                date_end: new Date(date_end),
+                image_link: `${API_ROOT}${image_link}`,
+                teacher_ids: [teacher_id],
+                ...rest
+            }));
+            // const catalog = SHOP_CATALOG.catalog;
             setCatalog(catalog);
         } catch (e) {
             console.error(e);
@@ -208,6 +213,53 @@ export function useShopCatalog() {
     }
     else {
         return {catalog, subjects};
+    }
+}
+
+export function useLessons(courseId) {
+    const {data: {lessons}, setters: {setLessons}} = React.useContext(StoreContext);
+    const [error, setError] = React.useState(null);
+    const fetchLessons = React.useCallback(async (courseId) => {
+        if (requests.lessons && requests.lessons[courseId])
+            return requests.lessons[courseId];
+        const request = APIRequest.get(`/lessons`, {params: {
+                courseId
+            }});
+        (requests.lessons || (requests.lessons = {}))[courseId] = request;
+        try {
+            if (error)
+                setError(null);
+            const lessons = (await request).map(lesson => ({...lesson, image_link: `${API_ROOT}${lesson.image_link}`}));
+            console.log(lessons);
+            setLessons(loadedLessons => ({...loadedLessons, [courseId]: lessons}));
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+        finally {
+            delete requests.lessons[courseId];
+        }
+        return request;
+    }, [error]);
+
+    React.useEffect(() => {
+        if (!(lessons[courseId] || (requests.lessons && requests.lessons[courseId]) || error)) {
+            fetchLessons(courseId);
+        }
+    }, [lessons, courseId, error]);
+
+    if (error) {
+        return {
+            lessons: lessons[courseId],
+            error: error,
+            retry: () => {
+                if (error)
+                    fetchLessons();
+            }
+        };
+    }
+    else {
+        return {lessons: lessons[courseId]};
     }
 }
 

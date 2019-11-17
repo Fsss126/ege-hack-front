@@ -30,14 +30,14 @@ const Body = (props) => {
     const options = React.useMemo(() => {
         const subjectsMap = _.zipObject(subjects.map(({id}) => id), subjects);
         const subjectsTeachers = _.reduce(teachers, (result, teacher) => {
-            teacher.subject_ids.forEach(subject_id => {result[subject_id] = subjectsMap[subject_id]});
+            teacher.subjects.forEach(subject => {result[subject.id] = subject});
             return result;
         }, {});
         return _.values(subjectsTeachers).map(({id, name}) => ({value: id, label: name}));
     }, [teachers, subjects]);
 
     const getMatchingCourses = React.useCallback((subject) => teachers.filter((teacher) =>
-        (subject ? teacher.subject_ids.some(id => subject === id)  : true)), [teachers]);
+        (subject ? teacher.subjects.some(({id}) => subject === id)  : true)), [teachers]);
 
     return (
         <Catalog.Body

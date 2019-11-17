@@ -3,12 +3,12 @@ import ListItem from "./ListItem";
 import VideoCover from "./VideoCover";
 
 export default function Lesson({lesson, locked=false, link, ...props}) {
-    const {title, cover, description, watchProgress} = lesson;
+    const {name, image_link: cover, description, watchProgress} = lesson;
     return (
         <ListItem
             item={lesson}
             className={`video-class ${locked ? 'disabled' : ''}`}
-            title={title}
+            title={name}
             description={description}
             preview={(
                 <VideoCover

@@ -5,12 +5,19 @@ import CoverImage from "./CoverImage";
 import Contacts from "./Contacts";
 
 export default function Teacher(props) {
-    const {teacher: {first_name, last_name, photo, contacts, subject_ids, bio: about}, subjects, link, bio=false, className} = props;
+    const {
+        teacher: {
+        vk_info: {first_name, last_name, photo_max_orig: photo}, contacts, subjects: teacherSubjects, bio: about
+        },
+        subjects,
+        link,
+        bio=false,
+        className} = props;
     const onClick = React.useCallback((event) => {
         const clicked = !event.target.closest('.social-media');
         // event.preventDefault();
     }, []);
-    const teacherSubjects = subject_ids.map(id => _.find(subjects, {id}));
+    // const teacherSubjects = subject_ids.map(id => _.find(subjects, {id}));
     return (
         <Link to={link} className={`${className} teacher-profile`} onClick={onClick}>
             <div className="container p-0">
@@ -24,7 +31,7 @@ export default function Teacher(props) {
                             <div className="teacher-profile__subjects font-size-sm">
                                 {teacherSubjects.map(({name}, i) => i === 0 ? name : name.toLowerCase()).join(', ')}
                             </div>)}
-                        {bio && (<Contacts contacts={contacts}/>)}
+                        {contacts && (<Contacts contacts={contacts}/>)}
                     </div>
                 </div>
                 {bio && (
