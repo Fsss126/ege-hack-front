@@ -4,7 +4,7 @@ import {HashRouter as Router, Redirect, Route, Switch, useHistory, useLocation} 
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Page from "./Page";
-import {useRefValue} from "../hooks/common";
+import {useRefValue} from "hooks/common";
 import GlobalStore, {useUser} from "store";
 
 import Login from "./pages/login";

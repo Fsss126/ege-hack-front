@@ -1,16 +1,14 @@
 import React from "react";
-import VideoCover from "components/common/VideoCover";
 import File from "components/ui/File";
+import VideoPlayer from "components/common/VideoPlayer";
 import {renderDate} from "definitions/helpers";
 import HomeworkLoader from "./HomeworkLoader";
 
-const LessonView = ({lesson: {id, name, image_link: cover, description, homework}}) => {
+const LessonView = ({lesson: {id, name, image_link: cover, video_link: video, description, homework}}) => {
     return (
         <div className="col-12 col-lg layout__content-block lesson-page__current-lesson">
             <div className="block-container video-container">
-                <VideoCover
-                    className="video-class__cover"
-                    cover={cover}/>
+                <VideoPlayer video_link={video}/>
             </div>
             <div className="block-container description-container">
                 <h2>{name}</h2>

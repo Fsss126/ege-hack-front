@@ -128,6 +128,19 @@ body {
   }
 }
 
+.video-player {
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background: black;
+  position:relative;
+  .video-player__video {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+  }
+}
+
 #root {
   display: flex;
   width: 100%;

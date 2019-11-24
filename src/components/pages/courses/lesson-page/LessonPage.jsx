@@ -13,19 +13,24 @@ const LessonPage = (props) => {
     const course = _.find(catalog, {id: courseId});
     const selectedLesson = (course &&_.find(course.lessons, {id: lessonId})) || null;
     const renderLesson = (lesson) => {
+        const {id, locked} = lesson;
         return (
             <Lesson
                 lesson={lesson}
-                locked={false}
-                selectable={true}
-                key={lesson.id}
+                locked={locked}
+                selectable={!locked}
+                key={id}
                 link={`../${lesson.id}/`}>
             </Lesson>
         );
     };
-    if (selectedLesson) {
-        const now = new Date();
-        const otherLessons = course.lessons.filter(lesson => lesson.date < now && lesson.id !== selectedLesson.id);
+    if (selectedLesson && !selectedLesson.locked) {
+        let nextVideo = course.lessons[selectedLesson.num];
+        if (nextVideo.locked)
+            nextVideo = null;
+        const otherLessons = _.sortBy(course.lessons.filter(lesson => (
+            lesson.id !== selectedLesson.id && (nextVideo ? lesson.id !== nextVideo.id : true
+            ))), 'num');
         return (
             <Page title={`${selectedLesson.title}`} className="lesson-page" location={location}>
                 <PageContent parentSection={{name: course.name}}>
@@ -34,6 +39,10 @@ const LessonPage = (props) => {
                             <div className="row">
                                 <LessonView lesson={selectedLesson}/>
                                 <div className="col-12 col-lg-auto layout__content-block lesson-page__other-lessons">
+                                    {nextVideo && <h3>Следующее занятие</h3>}
+                                    {nextVideo && (
+                                        <List renderItem={renderLesson}>{[nextVideo]}</List>
+                                    )}
                                     <h3>Другие занятия</h3>
                                     <List
                                         renderItem={renderLesson}>

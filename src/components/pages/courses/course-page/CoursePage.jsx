@@ -12,17 +12,16 @@ const CoursePage = ({path, catalog, match, ...props}) => {
     const course = _.find(catalog, {id});
     console.log(catalog, courseId, course);
     const renderLesson = (lesson, props) => {
-        const {date, id} = lesson;
-        const selectable = date < new Date();
+        const {date, id, locked} = lesson;
         return (
             <Lesson
                 lesson={lesson}
-                locked={!selectable}
-                selectable={selectable}
+                locked={locked}
+                selectable={!locked}
                 key={id}
                 {...props}>
-                <div className="list__item-action-info">{renderDate(date, renderDate.shortDate)}</div>
-                {selectable
+                {/*<div className="list__item-action-info">{renderDate(date, renderDate.shortDate)}</div>*/}
+                {!locked
                     ? <Button>Изучать</Button>
                     : <Button active={false}>Скоро</Button>}
             </Lesson>

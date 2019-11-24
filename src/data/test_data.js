@@ -101,10 +101,20 @@ export const COURSES = SUBJECTS.slice(0, 5).map((subject, i) => ({
     lessons: _.times(4, (j) => ({
         num: j + 1,
         id: j,
-        date: getDate(-4 + i + j),
+        // date: getDate(-4 + i + j),
         name: `Занятие ${j + 1}`,
         description: lorem.generateParagraphs(1),
-        image_link: poster
+        image_link: poster,
+        video_link: '375255364',
+        locked: -4 + i + j > 0,
+        hometask: {
+            description: lorem.generateParagraphs(1),
+            files: [
+                {name: "Задание", url: "/robots.txt"},
+                {name: "Дополнительное задание", url: "/robots.txt"}
+            ],
+            deadline: new Date(0)
+        }
     })),
     teacher_ids: i <= 2 ? [TEACHERS[0].id] : TEACHERS.map(({id}) => id)
 }));
@@ -120,7 +130,7 @@ export const MY_COURSES = COURSES.map((course, i) => ({
     ...course,
     lessons: course.lessons.map((lesson, j) => ({
         ...lesson,
-        watchProgress: lesson.date < new Date() ? (100 - j * 15) : undefined,
+        watchProgress: lesson.locked ? undefined : (100 - j * 15),
         homework: {
             files: [
                 {name: "Задание", url: "/robots.txt"},
