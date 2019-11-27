@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/ege-hack-front/static/css/main.082ec208.chunk.css",
-    "main.js": "/ege-hack-front/static/js/main.163d53ae.chunk.js",
-    "main.js.map": "/ege-hack-front/static/js/main.163d53ae.chunk.js.map",
-    "runtime~main.js": "/ege-hack-front/static/js/runtime~main.8351ce98.js",
-    "runtime~main.js.map": "/ege-hack-front/static/js/runtime~main.8351ce98.js.map",
-    "static/css/2.44d09fed.chunk.css": "/ege-hack-front/static/css/2.44d09fed.chunk.css",
-    "static/js/2.41c3577c.chunk.js": "/ege-hack-front/static/js/2.41c3577c.chunk.js",
-    "static/js/2.41c3577c.chunk.js.map": "/ege-hack-front/static/js/2.41c3577c.chunk.js.map",
-    "index.html": "/ege-hack-front/index.html",
-    "precache-manifest.53e41c781e5387b96c570b6b71892fe5.js": "/ege-hack-front/precache-manifest.53e41c781e5387b96c570b6b71892fe5.js",
-    "service-worker.js": "/ege-hack-front/service-worker.js",
-    "static/css/2.44d09fed.chunk.css.map": "/ege-hack-front/static/css/2.44d09fed.chunk.css.map",
-    "static/css/main.082ec208.chunk.css.map": "/ege-hack-front/static/css/main.082ec208.chunk.css.map",
-    "static/media/index.scss": "/ege-hack-front/static/media/icomoon.eec383c9.ttf",
-    "static/media/dummy_poster.jpg": "/ege-hack-front/static/media/dummy_poster.f51c6af6.jpg",
-    "static/media/logo.svg": "/ege-hack-front/static/media/logo.54b51040.svg"
+    "main.css": "/web/static/css/main.77989666.chunk.css",
+    "main.js": "/web/static/js/main.640f5985.chunk.js",
+    "main.js.map": "/web/static/js/main.640f5985.chunk.js.map",
+    "runtime~main.js": "/web/static/js/runtime~main.c75ffd02.js",
+    "runtime~main.js.map": "/web/static/js/runtime~main.c75ffd02.js.map",
+    "static/css/2.44d09fed.chunk.css": "/web/static/css/2.44d09fed.chunk.css",
+    "static/js/2.302a6e18.chunk.js": "/web/static/js/2.302a6e18.chunk.js",
+    "static/js/2.302a6e18.chunk.js.map": "/web/static/js/2.302a6e18.chunk.js.map",
+    "index.html": "/web/index.html",
+    "precache-manifest.936b97445635bbb2ce0f5cdc4b8eca73.js": "/web/precache-manifest.936b97445635bbb2ce0f5cdc4b8eca73.js",
+    "service-worker.js": "/web/service-worker.js",
+    "static/css/2.44d09fed.chunk.css.map": "/web/static/css/2.44d09fed.chunk.css.map",
+    "static/css/main.77989666.chunk.css.map": "/web/static/css/main.77989666.chunk.css.map",
+    "static/media/index.scss": "/web/static/media/icomoon.eec383c9.ttf",
+    "static/media/dummy_poster.jpg": "/web/static/media/dummy_poster.f51c6af6.jpg",
+    "static/media/logo.svg": "/web/static/media/logo.54b51040.svg"
   }
 }
