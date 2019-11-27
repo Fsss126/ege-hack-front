@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/ege-hack-front/precache-manifest.13b4f0d7f2a8ddb5b429faa7cb5aaf1f.js"
+  "/ege-hack-front/precache-manifest.53e41c781e5387b96c570b6b71892fe5.js"
 );
 
 self.addEventListener('message', (event) => {

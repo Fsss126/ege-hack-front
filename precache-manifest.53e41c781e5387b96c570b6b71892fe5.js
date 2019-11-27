@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c6815fbfffc84892b14fa2b9540e600c",
+    "revision": "b73d5a026656368e1b6297c65a2da810",
     "url": "/ege-hack-front/index.html"
   },
   {
-    "revision": "3d1ee8f50277bd936723",
+    "revision": "6580b493d7e0e2f872e9",
     "url": "/ege-hack-front/static/css/2.44d09fed.chunk.css"
   },
   {
-    "revision": "035d5f7c25d314de9703",
-    "url": "/ege-hack-front/static/css/main.1d433ab9.chunk.css"
+    "revision": "c3915ceb55e2fb02c4c1",
+    "url": "/ege-hack-front/static/css/main.082ec208.chunk.css"
   },
   {
-    "revision": "3d1ee8f50277bd936723",
-    "url": "/ege-hack-front/static/js/2.cd409850.chunk.js"
+    "revision": "6580b493d7e0e2f872e9",
+    "url": "/ege-hack-front/static/js/2.41c3577c.chunk.js"
   },
   {
-    "revision": "035d5f7c25d314de9703",
-    "url": "/ege-hack-front/static/js/main.8d543620.chunk.js"
+    "revision": "c3915ceb55e2fb02c4c1",
+    "url": "/ege-hack-front/static/js/main.163d53ae.chunk.js"
   },
   {
     "revision": "45795b25efaf8bc464fe",
