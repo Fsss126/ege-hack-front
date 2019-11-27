@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.94dfcbb7.chunk.css",
-    "main.js": "/static/js/main.5c6fbc10.chunk.js",
-    "main.js.map": "/static/js/main.5c6fbc10.chunk.js.map",
-    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
-    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/css/2.44d09fed.chunk.css": "/static/css/2.44d09fed.chunk.css",
-    "static/js/2.302a6e18.chunk.js": "/static/js/2.302a6e18.chunk.js",
-    "static/js/2.302a6e18.chunk.js.map": "/static/js/2.302a6e18.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.1df5fac7c18fa8666744d300c0375d1e.js": "/precache-manifest.1df5fac7c18fa8666744d300c0375d1e.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.44d09fed.chunk.css.map": "/static/css/2.44d09fed.chunk.css.map",
-    "static/css/main.94dfcbb7.chunk.css.map": "/static/css/main.94dfcbb7.chunk.css.map",
-    "static/media/index.scss": "/static/media/icomoon.eec383c9.ttf",
-    "static/media/dummy_poster.jpg": "/static/media/dummy_poster.f51c6af6.jpg",
-    "static/media/logo.svg": "/static/media/logo.54b51040.svg"
+    "main.css": "./static/css/main.0fd925b2.chunk.css",
+    "main.js": "./static/js/main.4c173571.chunk.js",
+    "main.js.map": "./static/js/main.4c173571.chunk.js.map",
+    "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
+    "runtime~main.js.map": "./static/js/runtime~main.d653cc00.js.map",
+    "static/css/2.44d09fed.chunk.css": "./static/css/2.44d09fed.chunk.css",
+    "static/js/2.302a6e18.chunk.js": "./static/js/2.302a6e18.chunk.js",
+    "static/js/2.302a6e18.chunk.js.map": "./static/js/2.302a6e18.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.f128c8c05d4517a4b54927b22a39a6d3.js": "./precache-manifest.f128c8c05d4517a4b54927b22a39a6d3.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.44d09fed.chunk.css.map": "./static/css/2.44d09fed.chunk.css.map",
+    "static/css/main.0fd925b2.chunk.css.map": "./static/css/main.0fd925b2.chunk.css.map",
+    "static/media/index.scss": "./static/media/icomoon.eec383c9.ttf",
+    "static/media/dummy_poster.jpg": "./static/media/dummy_poster.f51c6af6.jpg",
+    "static/media/logo.svg": "./static/media/logo.54b51040.svg"
   }
 }
