@@ -22,7 +22,7 @@ const Header = (props) => {
                             <img src={logo} className="logo" alt="Logo"/>
                         </div>
                     </div>
-                    <div className="col-auto">
+                    <div className="col-auto d-flex">
                         <div className="user-nav">
                             {user ? (
                                 <React.Fragment>

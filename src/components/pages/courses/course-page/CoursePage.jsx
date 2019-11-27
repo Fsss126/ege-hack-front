@@ -1,16 +1,16 @@
 import React from "react";
-import {PageContent} from "components/Page";
+import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
 import CourseOverview from "components/common/CourseOverview";
 import Lesson from "components/common/Lesson";
 import Button from "components/ui/Button";
 import {renderDate} from "definitions/helpers";
-import _ from "lodash";
+import {useLessons, useUserCourses} from "store";
 
-const CoursePage = ({path, catalog, match, ...props}) => {
+const CoursePage = ({path, match, location, ...props}) => {
     const {params: {id: courseId}} = match;
-    const id = parseInt(courseId);
-    const course = _.find(catalog, {id});
-    console.log(catalog, courseId, course);
+    const {courses, error, retry} = useUserCourses();
+    // const {teachers, error: errorLoadingTeachers, retry: reloadTeachers} = useTeachers();
+    const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     const renderLesson = (lesson, props) => {
         const {date, id, locked} = lesson;
         return (
@@ -27,19 +27,28 @@ const CoursePage = ({path, catalog, match, ...props}) => {
             </Lesson>
         );
     };
-    return (
-        <CourseOverview.Body
-            path={path}
-            courses={catalog}
-            lessons={course && course.lessons}
-            match={match}
-            {...props}>
-            <PageContent parentSection={{name: "Мои курсы"}}>
-                <CourseOverview.Title/>
-                <CourseOverview.Lessons renderLesson={renderLesson}/>
-            </PageContent>
-        </CourseOverview.Body>
-    );
+    if (courses && lessons ) {
+        return (
+            <CourseOverview.Body
+                match={match}
+                path={path}
+                courses={courses}
+                lessons={lessons}
+                location={location}>
+                <PageContent parentSection={{name: "Мои курсы"}}>
+                    <CourseOverview.Title/>
+                    <CourseOverview.Lessons renderLesson={renderLesson}/>
+                </PageContent>
+            </CourseOverview.Body>
+        );
+    } else {
+        return (
+            <Page
+                location={location}>
+                <PageLoadingPlaceholder/>
+            </Page>
+        );
+    }
 };
 
 export default CoursePage;

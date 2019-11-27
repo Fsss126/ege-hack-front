@@ -190,7 +190,6 @@ header {
   .user-nav {
     display: flex;
     align-items: center;
-    height: 100%;
     position: relative;
 
     .user-nav__user-name {
@@ -488,6 +487,7 @@ header {
     border-top: $border;
     .layout__bottom-tab-container {
       padding: $content-padding;
+      height: 100%;
       @include media-breakpoint-up(md) {
         padding-left: 24px;
         padding-right: 24px;
@@ -719,8 +719,10 @@ header {
           }
         }
       }
-      .selected-courses__price {
-        height: 100%;
+      @include media-breakpoint-up(m) {
+        .selected-courses__price {
+          max-width: 40%;
+        }
       }
       .selected-courses__price-container {
         padding-left: inherit;
@@ -807,6 +809,8 @@ header {
     .list__item {
       background: none;
       padding: 0 15px;
+      margin-top: 0 !important;
+      margin-bottom: 16px;
     }
   }
 

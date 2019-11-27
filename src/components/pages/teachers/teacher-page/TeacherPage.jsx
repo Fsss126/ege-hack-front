@@ -45,7 +45,6 @@ const TeacherPage = (props) => {
                 about: bio,
                 role: teacherSubjects.map(({name}, i) => i === 0 ? name : name.toLowerCase()).join(', ')
             };
-            console.log(catalog, teachersCourses);
             const fullName = `${first_name} ${last_name}`;
             return (
                 <Page

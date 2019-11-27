@@ -1,5 +1,4 @@
 import React from 'react';
-import {useUser} from "../store";
 
 export function useTruncate(text) {
     const descriptionRef = React.useRef(null);
@@ -78,7 +77,3 @@ export function useForceUpdate() {
     const [, update] = React.useReducer(state => !state, true);
     return update;
 }
-
-// export function useCheckPageAccess(checkLogin) {
-//
-// }

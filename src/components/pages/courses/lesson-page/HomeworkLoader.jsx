@@ -1,10 +1,11 @@
 import React from "react";
 import FileInput from "components/ui/FileInput";
-import APIRequest from "definitions/api";
+import APIRequest from "api";
 import NavigationBlocker from "components/common/NavigationBlocker";
+import {useHomework} from "store";
 
-const HomeworkLoader = ({homework, lessonId}) => {
-    const isHomeworkSubmissionClosed = React.useCallback(() => homework.deadline && new Date() >= homework.deadline, [homework]);
+const HomeworkLoader = ({homework, deadline, lessonId}) => {
+    const isHomeworkSubmissionClosed = React.useCallback(() => deadline && new Date() >= deadline, [deadline]);
     const [hasChanges, setChanges] = React.useState(false);
     const onChange = React.useCallback((files) => {
         console.log('files changed', files);
@@ -15,8 +16,8 @@ const HomeworkLoader = ({homework, lessonId}) => {
         const file = files[0] ? files[0].id_file_name : null;
         //TODO: add error alert
         return APIRequest({
-            url: `/lessons/${lessonId}/homeworks/`,
-            method: file ? (homework.submittedFiles ? 'PUT' : 'POST') : 'DELETE',
+            url: `/lessons/${lessonId}/homeworks/pupil`,
+            method: file ? 'PUT' : 'DELETE',
             data: {
                 file
             }
@@ -31,7 +32,7 @@ const HomeworkLoader = ({homework, lessonId}) => {
             <FileInput
                 maxFiles={1}
                 accept="image/*,audio/*,video/*"
-                initialFiles={homework.submittedFiles}
+                initialFiles={homework.files}
                 onChange={onChange}
                 onSubmit={onSubmit}
                 isDisabled={isHomeworkSubmissionClosed}/>

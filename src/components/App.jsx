@@ -14,6 +14,7 @@ import Shop from "./pages/shop";
 import MyCourses from "./pages/courses";
 
 import 'sass/index.scss';
+import {ACCOUNT_ROLES} from "../definitions/constants";
 
 function useLocationChangeEffect(effect) {
     const history = useHistory();
@@ -63,7 +64,7 @@ function App() {
 
     const [isSideBarOpened, toggleSideBar] = useSideBarState();
     const {user, userInfo} = useUser();
-    const showSidebar = userInfo !== null;
+    const showSidebar = user !== null;
     return (
         <div className="app">
             <Header
@@ -76,7 +77,11 @@ function App() {
                 classNames={App.layoutAnimationClassNames}>
                 <div className="layout">
                     <React.Fragment>
-                        {showSidebar && (<SideBar onMenuClose={toggleSideBar}/>)}
+                        {showSidebar && (
+                            <SideBar
+                                accountRoles={user ? (userInfo ? userInfo.roles : undefined) : null}
+                                onMenuClose={toggleSideBar}/>
+                        )}
                         <Switch>
                             <Route exact path="/" render={() => <Redirect to="/courses"/>}/>
                             <Route path="/login" component={Login}/>

@@ -1,12 +1,12 @@
 import React from 'react';
-import {useTruncate} from "../../../../hooks/common";
-import CoverImage from "../../../common/CoverImage";
+import {CSSTransition, TransitionGroup} from "react-transition-group";
+import {useTruncate} from "hooks/common";
+import CoverImage from "components/common/CoverImage";
 import Truncate from "react-truncate";
 import _ from "lodash";
-import {BottomTab} from "../../../Page";
-import ScrollBars from "../../../ui/ScrollBars";
-import {CSSTransition, TransitionGroup} from "react-transition-group";
-import Button from "../../../ui/Button";
+import {BottomTab} from "components/Page";
+import ScrollBars from "components/ui/ScrollBars";
+import Button from "components/ui/Button";
 
 const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
     const {name} = course;
@@ -33,12 +33,17 @@ const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
 
 const renderView = ({style, ...props}) => (<div style={{...style, height: `calc(100% + ${style.minHeight}px)`}} {...props}/>);
 
-const SelectedCoursesTab = ({courses, onCourseDeselect}) => {
-    const price = _.sumBy(courses, 'price');
-    const discount = _.sumBy(courses, 'discount');
-    // const stickyRef =
+const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect}) => {
+    let price, discount, message;
+    if (discountInfo) {
+        const fullPrice = _.sumBy(courses, 'price');
+        price = discountInfo.discounted_price;
+        discount = fullPrice - discountInfo.discounted_price;
+        message = discountInfo.message;
+    }
+    // const discount = _.sumBy(courses, 'discount');
     React.useEffect(() => {
-        // window.dispatchEvent(new Event('scroll'));
+        window.dispatchEvent(new Event('scroll'));
     });
     return (
         <BottomTab
@@ -72,14 +77,20 @@ const SelectedCoursesTab = ({courses, onCourseDeselect}) => {
                             </TransitionGroup>
                         </ScrollBars>
                     </div>
-                    <div className="col-12 col-md-auto p-0">
-                        <div className="selected-courses__price layout__bottom-tab-container container d-flex align-items-center justify-content-end">
-                            <Button className="order-1 order-md-0 flex-shrink-0">Оплатить</Button>
-                            <div className="price selected-courses__price-container container">
-                                {discount && <div className="discount font-size-sm d-inline-block d-md-block">{price + discount}₽</div>}
-                                <div className="price font-size-lg d-inline-block d-md-block">{price}₽</div>
-                                {discount && <div className="promotion font-size-xs">Цена со скидкой за 2 курса</div>}
-                            </div>
+                    <div className="col-12 col-md-auto p-0 selected-courses__price">
+                        <div className="layout__bottom-tab-container container d-flex align-items-center justify-content-end">
+                            {discountInfo ? (
+                                <React.Fragment>
+                                    <Button className="order-1 order-md-0 flex-shrink-0">Оплатить</Button>
+                                    <div className="price selected-courses__price-container container">
+                                        {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{price + discount}₽</div>}
+                                        <div className="price font-size-lg d-inline-block d-md-block">{price}₽</div>
+                                        {message && <div className="promotion font-size-xs">{message}</div>}
+                                    </div>
+                                </React.Fragment>
+                            ) : (
+                                <div className="spinner-border"/>
+                            )}
                         </div>
                     </div>
                 </div>

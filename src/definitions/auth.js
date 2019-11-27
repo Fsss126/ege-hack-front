@@ -1,5 +1,5 @@
 /*global VK*/
-import APIRequest from "definitions/api";
+import APIRequest from "api";
 
 const LOCAL_STORAGE_KEY = 'ege-hack-user-data';
 
@@ -8,7 +8,9 @@ export const AuthEventTypes = {
     logout: 'auth.logout'
 };
 
-const initVK = false;
+const initVK = true;
+
+VK.init({apiId: process.env.REACT_APP_VK_APP_ID}, true);
 
 class Auth {
     user = null;
@@ -39,7 +41,7 @@ class Auth {
         if (!VK)
             return;
         if (!initVK)
-            VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
+            VK.init({apiId: process.env.REACT_APP_VK_APP_ID}, true);
         // user = {
         //     ...user,
         //     uid: 1,

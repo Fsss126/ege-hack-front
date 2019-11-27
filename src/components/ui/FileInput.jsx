@@ -4,16 +4,14 @@ import Dropzone from "react-dropzone-uploader";
 import {TransitionGroup} from "react-transition-group";
 import {useRefValue} from "hooks/common";
 import Auth from 'definitions/auth';
-import {API_ROOT} from "definitions/api";
-import {getAuthHeader} from "definitions/helpers";
+import {API_ROOT} from "api";
+import {getAuthHeader, trimFileExtension} from "definitions/helpers";
 import StableCSSTransition from "components/common/StableCSSTransition";
 import {LOADING_STATE, LoadingIndicator, useLoadingState} from "./LoadingIndicator";
 import File from "./File";
 import Button from "./Button";
 
 import 'react-dropzone-uploader/dist/styles.css';
-
-const trimExtension = (filename) => filename.replace(/\.[^/.]+$/, "");
 
 const FILE_STATUS = {
     rejected_file_type: 'rejected_file_type',
@@ -50,8 +48,8 @@ const getUploadParams = () => {
 };
 const getFileProp = ({original_file_name, id_file_name}) => ({
     name: original_file_name,
-    downloadName: `${trimExtension(original_file_name)}_${id_file_name}`,
-    url: `${API_ROOT}/files/attachments/${id_file_name}?disp=attachment`
+    downloadName: `${trimFileExtension(original_file_name)}_${id_file_name}`,
+    url: `${API_ROOT}/files/${id_file_name}?disp=attachment`
 });
 
 const Input = (props) => {

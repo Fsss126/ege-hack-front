@@ -8,6 +8,7 @@
 @import "animations";
 @import "mixins";
 @import "tooltip";
+@import "shimmer";
 
 @mixin btnBehavior{
   cursor: pointer;
