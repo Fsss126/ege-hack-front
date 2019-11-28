@@ -5,7 +5,7 @@ import axios from 'axios';
 import {LEARNING_STATUS} from "definitions/constants";
 import {getFileExtension} from "definitions/helpers";
 
-export const API_ROOT = 'https://egehackbottest.tk:8080';
+export const API_ROOT = 'https://egehackbottest.tk';
 
 const CancelToken = axios.CancelToken;
 

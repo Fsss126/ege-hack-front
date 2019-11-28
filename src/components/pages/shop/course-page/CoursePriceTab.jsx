@@ -14,7 +14,8 @@ const CoursePriceTab = (props) => {
         message = discountInfo.message;
     }
     React.useEffect(() => {
-        window.dispatchEvent(new Event('scroll'));
+        if (window.dispatchEvent)
+            window.dispatchEvent(new CustomEvent('scroll'));
     });
     return (
         <BottomTab className="course-overview__offer">

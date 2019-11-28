@@ -43,7 +43,8 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect})
     }
     // const discount = _.sumBy(courses, 'discount');
     React.useEffect(() => {
-        window.dispatchEvent(new Event('scroll'));
+        if (window.dispatchEvent)
+            window.dispatchEvent(new CustomEvent('scroll'));
     });
     return (
         <BottomTab
@@ -70,7 +71,7 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect})
                                             course={course}
                                             onCourseDeselect={onCourseDeselect}
                                             onTruncate={() => {
-                                                window.dispatchEvent(new Event('scroll'));
+                                                window.dispatchEvent(new CustomEvent('scroll'));
                                             }}/>
                                     </CSSTransition>
                                 ))}

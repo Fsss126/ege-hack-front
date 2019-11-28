@@ -849,6 +849,17 @@ header {
       padding-bottom: 16px;
     }
   }
+
+  .webinar-schedule {
+    .webinar-schedule__webinar {
+      background: black;
+      height: 50px;
+      min-width: 400px;
+      &~.webinar-schedule__webinar {
+        margin-left: 8px;
+      }
+    }
+  }
 }
 
 .social-media {

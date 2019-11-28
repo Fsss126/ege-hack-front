@@ -14,7 +14,6 @@ import Shop from "./pages/shop";
 import MyCourses from "./pages/courses";
 
 import 'sass/index.scss';
-import {ACCOUNT_ROLES} from "../definitions/constants";
 
 function useLocationChangeEffect(effect) {
     const history = useHistory();
@@ -107,7 +106,7 @@ App.layoutAnimationClassNames = {
 };
 
 export default () => (
-    <Router basename={process.env.REACT_APP_BASE_NAME}>
+    <Router basename={process.env.REACT_APP_BASE_URL}>
         <GlobalStore>
             <App/>
         </GlobalStore>

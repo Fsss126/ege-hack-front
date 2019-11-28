@@ -13,29 +13,29 @@ function getDate(daysForward) {
 }
 
 export const ACCOUNT_INFO = {
-    "id": 154792439,
-    "roles": [
+    id: 154792439,
+    roles: [
         "PUPIL",
         "TEACHER"
     ],
-    "permissions": [],
-    "vk_info": {
-        "id": 154792439,
-        "first_name": "Alexandra",
-        "last_name": "Petrova",
-        "photo_max_orig": poster,
+    permissions: [],
+    vk_info: {
+        id: 154792439,
+        first_name: "Alexandra",
+        last_name: "Petrova",
+        photo_max_orig: poster,
     },
-    "pupil": {
-        "account_id": 154792439
+    pupil: {
+        account_id: 154792439
     },
-    "teacher": {
-        "account_id": 154792439,
-        "subjects": [
+    teacher: {
+        account_id: 154792439,
+        subjects: [
             {
-                "id": 1,
-                "name": "Математика",
-                "description": "Лучший предмет",
-                "image_link": "/files/asdsadasda.jpg"
+                id: 1,
+                name: "Математика",
+                description: "Лучший предмет",
+                image_link: "/files/asdsadasda.jpg"
             }
         ]
     }
@@ -164,9 +164,9 @@ export const HOMEWORK = {
             file_link: `${API_ROOT}/files/51657ffc-fc8f-11e9-a562-0338e4bfa1ca.jpg?disp=attachment`
         }
     ],
-    "lesson_id": 0,
-    "mark": 4,
-    "pupil_id": 0
+    lesson_id: 0,
+    mark: 4,
+    pupil_id: 0
 };
 
 export const SHOP_CATALOG = COURSES.map((course, i) => ({...course, price: 2500, discount: i === 0 ? 1000 : undefined}));
@@ -190,15 +190,30 @@ export const MY_COURSES = COURSES.slice(0, 3).map((course, i) => ({
 //             submit: true,
 //             submittedFiles: [
 //                 {
-//                     "original_file_name": "5_64x64.png",
-//                     "id_file_name": "501371cc-f349-11e9-aa47-7990bff4dcd7.png",
-//                     "file_link": "/files/601371cc-f349-11e9-aa47-7990bff4dcd7.png"
+//                     original_file_name: "5_64x64.png",
+//                     id_file_name: "501371cc-f349-11e9-aa47-7990bff4dcd7.png",
+//                     file_link: "/files/601371cc-f349-11e9-aa47-7990bff4dcd7.png"
 //                 }
 //             ]
 //         }
 //     })),
 //     status: i <= 2 ? LEARNING_STATUS.finished : LEARNING_STATUS.learning
 // }));
+
+export const UPCOMING_WEBINAR_SCHEDULE = COURSES.slice(0, 3).map(({id, name, subject_id}, i) => ({
+    subject_id,
+    subject_name: SUBJECTS[subject_id - 1].name,
+    course_id: id,
+    course_name: name,
+    webinar: {
+        id: 0,
+        name: "Играю в майнкрафт",
+        description: "Скидывайте ваши донаты",
+        date_start: getDate(1 + i),
+        duration: 60*2
+    },
+    image_link: poster
+}));
 
 export const TEST_ID = 1;
 export const TEST_HASH = '2d01669a3c8cda169545b4f7b607efb3';

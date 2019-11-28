@@ -5,6 +5,8 @@ import Button from "components/ui/Button";
 import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
 import {LEARNING_STATUS} from "definitions/constants";
 import {useUserCourses} from "store";
+import WebinarSchedule from "components/common/WebinarSchedule";
+import {UPCOMING_WEBINAR_SCHEDULE} from "data/test_data";
 
 const CatalogPage = ({location}) => {
     const {courses, subjects, error, retry} = useUserCourses();
@@ -33,6 +35,7 @@ const CatalogPage = ({location}) => {
                     subjects={subjects}>
                     <PageContent>
                         <CourseCatalog.Filter/>
+                        <WebinarSchedule schedule={UPCOMING_WEBINAR_SCHEDULE}/>
                         <CourseCatalog.Catalog
                             renderCourse={renderCourse}/>
                     </PageContent>
