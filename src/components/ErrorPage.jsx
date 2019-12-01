@@ -3,7 +3,7 @@ import Page from "./Page";
 import {Link} from "react-router-dom";
 import Button from "./ui/Button";
 
-const ErrorPage = ({errorCode, message, link: {text, url} = {}}) => {
+const ErrorPage = ({errorCode = 404, message, link: {text, url} = {}}) => {
     const code = errorCode && errorCode.toString();
     return (
         <Page title={code} className="error-page">

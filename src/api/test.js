@@ -1,4 +1,13 @@
-import {ACCOUNT_INFO, HOMEWORK, LESSONS, MY_COURSES, SHOP_CATALOG, SUBJECTS, TEACHERS} from "data/test_data";
+import {
+    ACCOUNT_INFO,
+    HOMEWORK,
+    LESSONS,
+    MY_COURSES,
+    SHOP_CATALOG,
+    SUBJECTS,
+    TEACHERS,
+    WEBINAR_SCHEDULE
+} from "data/test_data";
 
 const getResponse = (data) => (data);
 
@@ -28,6 +37,9 @@ export const handleRequstsWithTestData = (api) => {
                 return getResponse(LESSONS);
             case /\/lessons\/(.*)\/homeworks\/pupil$/.test(url.pathname):
                 return getResponse(HOMEWORK);
+            case url.pathname === '/courses/schedule/person':
+            case /\/courses\/(.*)\/schedule\/person$/.test(url.pathname):
+                return getResponse(WEBINAR_SCHEDULE);
             default:
                 throw error;
         }

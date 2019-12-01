@@ -1,8 +1,10 @@
 import {LoremIpsum} from "lorem-ipsum";
-import poster from "../img/dummy_poster.jpg";
 import _ from "lodash";
-import {LEARNING_STATUS} from "../definitions/constants";
-import {API_ROOT} from "../api";
+import {LEARNING_STATUS} from "definitions/constants";
+import {API_ROOT} from "api";
+
+import poster from "img/dummy_poster.jpg";
+import pic from "img/dummy-pic.jpg";
 
 const lorem = new LoremIpsum();
 
@@ -200,19 +202,18 @@ export const MY_COURSES = COURSES.slice(0, 3).map((course, i) => ({
 //     status: i <= 2 ? LEARNING_STATUS.finished : LEARNING_STATUS.learning
 // }));
 
-export const UPCOMING_WEBINAR_SCHEDULE = COURSES.slice(0, 3).map(({id, name, subject_id}, i) => ({
+export const WEBINAR_SCHEDULE = COURSES.slice(0, 3).map(({id, name, subject_id}, i) => ({
     subject_id,
     subject_name: SUBJECTS[subject_id - 1].name,
     course_id: id,
     course_name: name,
-    webinar: {
-        id: 0,
-        name: "Играю в майнкрафт",
-        description: "Скидывайте ваши донаты",
-        date_start: getDate(1 + i),
-        duration: 60*2
-    },
-    image_link: poster
+    id: i,
+    name: "Играю в майнкрафт",
+    description: "Скидывайте ваши донаты",
+    date_start: getDate(i),
+    duration: 60*2,
+    date_end: new Date(getDate(1 + i).getTime() + 60*2 * 1000 * 60),
+    image_link: pic
 }));
 
 export const TEST_ID = 1;

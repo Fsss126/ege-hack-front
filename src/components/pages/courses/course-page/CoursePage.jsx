@@ -4,11 +4,13 @@ import CourseOverview from "components/common/CourseOverview";
 import Lesson from "components/common/Lesson";
 import Button from "components/ui/Button";
 import {renderDate} from "definitions/helpers";
-import {useLessons, useUserCourses} from "store";
+import {useCourseWebinars, useLessons, useUpcomingWebinars, useUserCourses} from "store";
+import WebinarSchedule from "../../../common/WebinarSchedule";
 
 const CoursePage = ({path, match, location, ...props}) => {
     const {params: {id: courseId}} = match;
     const {courses, error, retry} = useUserCourses();
+    const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useCourseWebinars(courseId);
     // const {teachers, error: errorLoadingTeachers, retry: reloadTeachers} = useTeachers();
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     const renderLesson = (lesson, props) => {
@@ -27,7 +29,7 @@ const CoursePage = ({path, match, location, ...props}) => {
             </Lesson>
         );
     };
-    if (courses && lessons ) {
+    if (courses && lessons && webinars) {
         return (
             <CourseOverview.Body
                 match={match}
@@ -37,6 +39,9 @@ const CoursePage = ({path, match, location, ...props}) => {
                 location={location}>
                 <PageContent parentSection={{name: "Мои курсы"}}>
                     <CourseOverview.Title/>
+                    <WebinarSchedule
+                        schedule={webinars}
+                        courseId={courseId}/>
                     <CourseOverview.Lessons renderLesson={renderLesson}/>
                 </PageContent>
             </CourseOverview.Body>

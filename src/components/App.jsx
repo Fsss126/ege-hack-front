@@ -1,6 +1,6 @@
 import React from 'react';
 import {CSSTransition} from "react-transition-group";
-import {HashRouter as Router, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {BrowserRouter as Router, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Page from "./Page";
@@ -14,6 +14,7 @@ import Shop from "./pages/shop";
 import MyCourses from "./pages/courses";
 
 import 'sass/index.scss';
+import ErrorPage from "./ErrorPage";
 
 function useLocationChangeEffect(effect) {
     const history = useHistory();
@@ -55,6 +56,8 @@ const onLocationChange = (location, args) => {
     console.log(`- - - location: '${location.pathname}'`, args);
 };
 
+const DefaultRedirect = () => <Redirect to="/courses"/>;
+
 function App() {
     // routing effects
     useForceTrailingSlash();
@@ -82,13 +85,15 @@ function App() {
                                 onMenuClose={toggleSideBar}/>
                         )}
                         <Switch>
-                            <Route exact path="/" render={() => <Redirect to="/courses"/>}/>
+                            <Route path="/index.html" component={DefaultRedirect}/>
+                            <Route exact path="/" component={DefaultRedirect}/>
                             <Route path="/login" component={Login}/>
                             <Route path="/courses" component={MyCourses}/>
                             <Route path="/shop" component={Shop}/>
                             <Route path="/teachers" component={Teachers}/>
                             <Route path="/account" component={Account}/>
-                            <Route path="/:section" component={Page}/>
+                            {/*<Route path="/:section" component={Page}/>*/}
+                            <Route component={ErrorPage}/>
                         </Switch>
                     </React.Fragment>
                 </div>

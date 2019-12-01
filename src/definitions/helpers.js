@@ -26,7 +26,12 @@ export const getAuthHeader = (username, password) => ({'Authorization': `Basic $
 
 export const trimFileExtension = (filename) => filename.replace(/\.[^/.]+$/, "");
 
-export const getFileExtension = (filename) => filename.split('.').pop() || '';
+export const getFileExtension = (filename) => {
+    const filenameParts = filename.split('.');
+    if (filenameParts.length < 2)
+        return '';
+    return `.${filenameParts.pop()}`;
+};
 
 export const downloadFile = async (url, name) => {
     console.log(url, name);

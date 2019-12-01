@@ -395,9 +395,6 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
         .select__option {
           padding: 4px 8px;
           cursor: pointer;
-          @include media-breakpoint-down(sm) {
-            margin-right: 6px;
-          }
           &.select__option--is-focused {
             background: $bg-active;
           }

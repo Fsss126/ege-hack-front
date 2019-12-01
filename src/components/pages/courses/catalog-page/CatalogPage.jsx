@@ -4,12 +4,12 @@ import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
 import {LEARNING_STATUS} from "definitions/constants";
-import {useUserCourses} from "store";
+import {useUpcomingWebinars, useUserCourses} from "store";
 import WebinarSchedule from "components/common/WebinarSchedule";
-import {UPCOMING_WEBINAR_SCHEDULE} from "data/test_data";
 
 const CatalogPage = ({location}) => {
     const {courses, subjects, error, retry} = useUserCourses();
+    const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useUpcomingWebinars();
     const renderCourse = React.useCallback((course, props) => (
         <Course
             course={course}
@@ -27,7 +27,7 @@ const CatalogPage = ({location}) => {
             className="user-courses"
             location={location}
             title="Мои курсы">
-            {!(courses && subjects) ? (
+            {!(courses && subjects && webinars) ? (
                     <PageLoadingPlaceholder/>
                 ) : (
                 <CourseCatalog.Body
@@ -35,7 +35,7 @@ const CatalogPage = ({location}) => {
                     subjects={subjects}>
                     <PageContent>
                         <CourseCatalog.Filter/>
-                        <WebinarSchedule schedule={UPCOMING_WEBINAR_SCHEDULE}/>
+                        <WebinarSchedule schedule={webinars}/>
                         <CourseCatalog.Catalog
                             renderCourse={renderCourse}/>
                     </PageContent>

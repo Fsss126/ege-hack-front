@@ -1,8 +1,7 @@
 import React from "react";
 import Auth, {AuthEventTypes} from "definitions/auth";
 import APIRequest, {getCancelToken} from "api";
-import {SHOP_CATALOG, SUBJECTS, TEACHERS} from "../data/test_data";
-import {useRefValue} from "../hooks/common";
+import {useRefValue} from "hooks/common";
 
 const StoreContext = React.createContext(null);
 
@@ -44,6 +43,7 @@ const useUserCoursesStore = () => React.useState(null);
 const useSubjectsStore = () => React.useState(null);
 const useTeachersStore = () => React.useState(null);
 const useLessonsStore = () => React.useState({});
+const useWebinarsStore = () => React.useState({});
 
 function useStoreData() {
     const [catalog, setCatalog] = useShopCatalogStore();
@@ -51,20 +51,23 @@ function useStoreData() {
     const [subjects, setSubjects] = useSubjectsStore();
     const [teachers, setTeachers] = useTeachersStore();
     const [lessons, setLessons] = useLessonsStore();
+    const [webinars, setWebinars] = useWebinarsStore();
     return {
         data: {
             catalog,
             subjects,
             teachers,
             lessons,
-            userCourses
+            userCourses,
+            webinars
         },
         setters: {
             setCatalog,
             setSubjects,
             setTeachers,
             setLessons,
-            setUserCourses
+            setUserCourses,
+            setWebinars
         }
     }
 }
@@ -391,6 +394,96 @@ export function useHomework(lessonId) {
     }
     else {
         return {homework};
+    }
+}
+
+export function useUpcomingWebinars() {
+    const {data: {webinars}, setters: {setWebinars}} = React.useContext(StoreContext);
+    const [error, setError] = React.useState(null);
+    const fetchWebinars = React.useCallback(async () => {
+        if (requests.webinars && requests.webinars.upcoming)
+            return requests.webinars.upcoming;
+        const request = APIRequest.get('/courses/schedule/person');
+        (requests.webinars || (requests.webinars = {})).upcoming = request;
+        try {
+            if (error)
+                setError(null);
+            const webinars = await request;
+            console.log('set webinars', webinars);
+            setWebinars(loadedWebinars => ({...loadedWebinars, upcoming: webinars}));
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+        finally {
+            delete requests.webinars.upcoming;
+        }
+        return request;
+    }, [error]);
+
+    React.useEffect(() => {
+        if (!(webinars.upcoming || (requests.webinars && requests.webinars.upcoming) || error)) {
+            fetchWebinars();
+        }
+    }, [webinars, error]);
+
+    if (error) {
+        return {
+            webinars: webinars.upcoming,
+            error: error,
+            retry: () => {
+                if (error)
+                    fetchWebinars();
+            }
+        };
+    }
+    else {
+        return {webinars: webinars.upcoming};
+    }
+}
+
+export function useCourseWebinars(courseId) {
+    const {data: {webinars}, setters: {setWebinars}} = React.useContext(StoreContext);
+    const [error, setError] = React.useState(null);
+    const fetchWebinars = React.useCallback(async (courseId) => {
+        if (requests.webinars && requests.webinars[courseId])
+            return requests.webinars.upcoming;
+        const request = APIRequest.get(`/courses/${courseId}/schedule/person`);
+        (requests.webinars || (requests.webinars = {}))[courseId] = request;
+        try {
+            if (error)
+                setError(null);
+            const webinars = await request;
+            console.log('set course webinars', webinars);
+            setWebinars(loadedWebinars => ({...loadedWebinars, [courseId]: webinars}));
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+        finally {
+            delete requests.webinars[courseId];
+        }
+        return request;
+    }, [error]);
+
+    React.useEffect(() => {
+        if (!(webinars[courseId] || (requests.webinars && requests.webinars[courseId]) || error)) {
+            fetchWebinars(courseId);
+        }
+    }, [webinars, courseId, error]);
+
+    if (error) {
+        return {
+            webinars: webinars[courseId],
+            error: error,
+            retry: () => {
+                if (error)
+                    fetchWebinars(courseId);
+            }
+        };
+    }
+    else {
+        return {webinars: webinars[courseId]};
     }
 }
 
