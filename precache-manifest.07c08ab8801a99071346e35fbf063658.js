@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d6a30a9128fa3457f7279812f3b7d2c0",
+    "revision": "958bb79f5a28ffaab82d0a90f248ac6d",
     "url": "./index.html"
   },
   {
-    "revision": "6580b493d7e0e2f872e9",
+    "revision": "846630c3e1bd0abff32c",
     "url": "./static/css/2.44d09fed.chunk.css"
   },
   {
-    "revision": "8e8a9d83376819a5e10f",
-    "url": "./static/css/main.0fd925b2.chunk.css"
+    "revision": "23142b3426a48e8906f1",
+    "url": "./static/css/main.f12d648d.chunk.css"
   },
   {
-    "revision": "6580b493d7e0e2f872e9",
-    "url": "./static/js/2.41c3577c.chunk.js"
+    "revision": "846630c3e1bd0abff32c",
+    "url": "./static/js/2.df2df028.chunk.js"
   },
   {
-    "revision": "8e8a9d83376819a5e10f",
-    "url": "./static/js/main.f44c947d.chunk.js"
+    "revision": "23142b3426a48e8906f1",
+    "url": "./static/js/main.8ef0f79b.chunk.js"
   },
   {
     "revision": "8c97409f0ee389fe75da",
@@ -34,6 +34,18 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "ee9b8c537d217fef51d4bca8cf436d7d",
     "url": "./static/media/GothamPro-Bold.ee9b8c53.eot"
+  },
+  {
+    "revision": "677c3a32938f905b22eb14afd1d5cff4",
+    "url": "./static/media/GothamPro-Light.677c3a32.woff"
+  },
+  {
+    "revision": "7fd3861de823f75a6923000a948c494a",
+    "url": "./static/media/GothamPro-Light.7fd3861d.eot"
+  },
+  {
+    "revision": "abd5115e2ddae490f9cb393fb8cdfc5a",
+    "url": "./static/media/GothamPro-Light.abd5115e.ttf"
   },
   {
     "revision": "6fe466da15644ccc370d3b2ce3a19f6f",
@@ -58,6 +70,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "c31a8e097cb6c2901857d8c686f0063d",
     "url": "./static/media/GothamPro.c31a8e09.eot"
+  },
+  {
+    "revision": "c0547b67875f10ee43874e24e8a2ac35",
+    "url": "./static/media/dummy-pic.c0547b67.jpg"
   },
   {
     "revision": "f51c6af686f7f9656651e04fc3cbeb5a",
