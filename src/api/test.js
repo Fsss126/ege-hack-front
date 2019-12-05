@@ -16,6 +16,8 @@ export const handleRequstsWithTestData = (api) => {
         if (!error.toJSON)
             throw error;
         const {config} = error.toJSON();
+        if (config.method !== 'get')
+            throw error;
         const url = new URL(config.url);
         switch (true) {
             case url.pathname === '/accounts/info':

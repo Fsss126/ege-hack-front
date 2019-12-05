@@ -18,13 +18,18 @@
   cursor: pointer;
   color: $color;
   transition: color .3s;
-  &:hover {
+  &:not(.disabled):hover {
     color: $activeColor !important;
   }
 }
 
 a {
   text-decoration: none !important;
+
+  &.disabled {
+    color: $text-light-grey !important;
+  }
+
   &:not(.btn) {
     @include linkBehavior();
   }
@@ -414,6 +419,18 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
     &.select__clear-btn-hidden {
       transform: scale(0);
     }
+  }
+}
+
+.badge {
+  background: $text-grey;
+  color: white;
+  font-family: $font-bold;
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 6px;
+  &.accent {
+    background: $accent-orange;
   }
 }
 

@@ -1,11 +1,10 @@
 import Auth from 'definitions/auth';
 import _ from 'lodash';
 import axios from 'axios';
-// import {handleRequstsWithTestData} from "./test";
+// import {handleRequestsWithTestData} from "./test";
 import {LEARNING_STATUS} from "definitions/constants";
-import {getFileExtension} from "definitions/helpers";
 
-export const API_ROOT = 'https://egehackbottest.tk';
+export const API_ROOT = process.env.REACT_APP_API_ROOT;
 
 const CancelToken = axios.CancelToken;
 
@@ -50,10 +49,15 @@ APIRequest.interceptors.request.use(function (config) {
 //Interceptors
 const transformData = (response) => {
     const {config, data} = response;
+    if (config.method !== 'get')
+        return response.data;
     const url = new URL(config.url);
     switch (true) {
         case url.pathname === '/accounts/teachers':
-            return data.map(({account_id: id, ...teacher}) => ({id, ...teacher}));
+            return data.map(({account_id: id, instagram, ...teacher}) => ({
+                id,
+                contacts: {ig: instagram},
+                ...teacher}));
         case url.pathname === '/courses':
             return data.map(({date_start, date_end, image_link, teacher_id, ...rest}) => ({
                 date_start: new Date(date_start),
@@ -64,31 +68,32 @@ const transformData = (response) => {
                 ...rest
             }));
         case url.pathname === '/lessons':
-            return _.sortBy(data, 'num').map(({hometask, ...lesson}) => ({
+            return _.sortBy(data, 'num').map(({hometask, is_locked: locked, ...lesson}) => ({
                 ...lesson,
+                locked,
                 image_link: `${API_ROOT}${lesson.image_link}`,
                 assignment: hometask ? ({
                     deadline: hometask.deadline ? new Date(hometask.deadline) : hometask.deadline,
                     description: hometask.description,
-                    files: hometask.file_link ? [
+                    files: hometask.file_info ? [
                         {
-                            name: "Задание",
-                            downloadName: `Задание${getFileExtension(hometask.file_link)}`,
-                            url: `${API_ROOT}${hometask.file_link}?disp=attachment`},
+                            name: hometask.file_info.file_name,
+                            // downloadName: hometask.file_info.file_name,
+                            url: `${API_ROOT}${hometask.file_info.file_link}?disp=attachment`},
                     ] : hometask.file_link,
                 }) : hometask
             }));
         case /\/lessons\/(.*)\/homeworks\/pupil$/.test(url.pathname):
-            const {file_link:file, date:dateTime, ...rest} = response.data;
+            const {file_info: {file_id, file_name, file_link}, date:dateTime, ...rest} = response.data;
             const date = new Date();
             return {
                 ...rest,
                 date,
                 files: [
                     {
-                        original_file_name: `Загруженное_решение${getFileExtension(file)}`,
-                        id_file_name: file,
-                        file_link: `${API_ROOT}/files/${file}?disp=attachment`
+                        file_name,
+                        file_id,
+                        file_link: `${API_ROOT}${file_link}?disp=attachment`
                     }
                 ]
             };
@@ -110,6 +115,8 @@ const transformError = (error) => {
     if (!error.toJSON)
         throw error;
     const {config} = error.toJSON();
+    if (config.method !== 'get')
+        throw error;
     const url = new URL(config.url);
     if (error.response && error.response.status === 404) {
         switch (true) {
@@ -125,7 +132,7 @@ const transformError = (error) => {
 APIRequest.interceptors.response.use(transformData, transformError);
 
 //returns test data for all failed requests
-// handleRequstsWithTestData(APIRequest);
+// handleRequestsWithTestData(APIRequest);
 
 window.APIRequest = APIRequest;
 

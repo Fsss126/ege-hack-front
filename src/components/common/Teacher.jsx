@@ -1,5 +1,6 @@
 import React from 'react';
-import _ from 'lodash';
+import Truncate from 'react-truncate';
+import {useTruncate} from "hooks/common";
 import {Link} from "react-router-dom";
 import CoverImage from "./CoverImage";
 import Contacts from "./Contacts";
@@ -18,6 +19,7 @@ export default function Teacher(props) {
         // event.preventDefault();
     }, []);
     // const teacherSubjects = subject_ids.map(id => _.find(subjects, {id}));
+    const [descriptionRef, isFontLoaded] = useTruncate(about);
     return (
         <Link to={link} className={`${className} teacher-profile`} onClick={onClick}>
             <div className="container p-0">
@@ -36,8 +38,14 @@ export default function Teacher(props) {
                 </div>
                 {bio && (
                     <div className="row">
-                        <div className="col-12 description-text">
-                            {about}
+                        <div className="col-12">
+                            <div className="description-text">
+                                {isFontLoaded ? (
+                                    <Truncate lines={4} ref={descriptionRef}>
+                                        {about}
+                                    </Truncate>
+                                ) : null}
+                            </div>
                         </div>
                     </div>
                 )}

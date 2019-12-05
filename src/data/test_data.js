@@ -147,8 +147,8 @@ export const LESSONS = _.times(4, (j) => {
         assignment: {
             description: lorem.generateParagraphs(1),
             files: [
-                {name: "Задание", url: "/robots.txt"},
-                {name: "Дополнительное задание", url: "/robots.txt"}
+                {name: "Задание", id: 0, url: "/robots.txt"},
+                {name: "Дополнительное задание", id: 1, url: "/robots.txt"}
             ],
             deadline:  getDate(7)
         },
@@ -177,30 +177,6 @@ export const MY_COURSES = COURSES.slice(0, 3).map((course, i) => ({
     ...course,
     status: i <= 1 ? LEARNING_STATUS.finished : LEARNING_STATUS.learning
 }));
-// export const MY_COURSES = COURSES.map((course, i) => ({
-//     ...course,
-//     lessons: LESSONS.map((lesson, j) => ({
-//         ...lesson,
-//         watchProgress: lesson.locked ? undefined : (100 - j * 15),
-//         homework: {
-//             files: [
-//                 {name: "Задание", url: "/robots.txt"},
-//                 {name: "Дополнительное задание", url: "/robots.txt"}
-//             ],
-//             description: lorem.generateParagraphs(1),
-//             deadline: getDate(7),
-//             submit: true,
-//             submittedFiles: [
-//                 {
-//                     original_file_name: "5_64x64.png",
-//                     id_file_name: "501371cc-f349-11e9-aa47-7990bff4dcd7.png",
-//                     file_link: "/files/601371cc-f349-11e9-aa47-7990bff4dcd7.png"
-//                 }
-//             ]
-//         }
-//     })),
-//     status: i <= 2 ? LEARNING_STATUS.finished : LEARNING_STATUS.learning
-// }));
 
 export const WEBINAR_SCHEDULE = COURSES.slice(0, 3).map(({id, name, subject_id}, i) => ({
     subject_id,

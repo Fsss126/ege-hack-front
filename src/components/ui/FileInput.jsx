@@ -46,10 +46,10 @@ const getUploadParams = () => {
     else
         throw new Error('User not logged in');
 };
-const getFileProp = ({original_file_name, id_file_name}) => ({
-    name: original_file_name,
-    downloadName: `${trimFileExtension(original_file_name)}_${id_file_name}`,
-    url: `${API_ROOT}/files/${id_file_name}?disp=attachment`
+
+const getFileProp = ({file_name, file_link}) => ({
+    name: file_name,
+    url: file_link
 });
 
 const Input = (props) => {
@@ -102,14 +102,10 @@ const Preview = (props) => {
     const [getResponse, setResponse] = useRefValue(null);
     if (!getResponse() && xhr && xhr.responseText) {
         try {
-            const {original_file_name, file_link, id_file_name} = JSON.parse(xhr.responseText);
-            if (!(original_file_name && file_link && id_file_name))
+            const {file_name, file_link, file_id} = JSON.parse(xhr.responseText);
+            if (!(file_name && file_link && file_id))
                 throw new Error('Incorrect response');
-            setResponse({
-                original_file_name,
-                file_link,
-                id_file_name
-            });
+            setResponse({file_name, file_link, file_id});
         }
         catch (e) {
             console.log(e);
@@ -196,13 +192,13 @@ const Layout = ({input, previews=[], submitButton, dropzoneProps, files, extra: 
                 {
                     preloadedFiles && (
                         preloadedFiles.map((file) => {
-                            const {id_file_name} = file;
+                            const {file_id} = file;
                             const deleteCallback = () => {deletePreloadedFile(file);};
                             return (
                                 <StableCSSTransition
                                     classNames="animation-fade"
                                     timeout={300}
-                                    key={id_file_name}>
+                                    key={file_id}>
                                     <File
                                         file={getFileProp(file)}
                                         done={true}

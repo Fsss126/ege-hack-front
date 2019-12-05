@@ -40,7 +40,7 @@ const LessonPage = (props) => {
                 lesson.id !== selectedLesson.id && (nextVideo ? lesson.id !== nextVideo.id : true
                 ))), 'num');
             return (
-                <Page title={`${selectedLesson.title}`} className="lesson-page" location={location}>
+                <Page title={`${selectedLesson.name}`} className="lesson-page" location={location}>
                     <PageContent parentSection={{name: course.name}}>
                         <div className="layout__content-block">
                             <div className="container p-lg-0">

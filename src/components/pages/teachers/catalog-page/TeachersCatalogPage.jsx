@@ -7,7 +7,7 @@ const TeachersCatalogPage = ({location}) => {
     const {teachers, subjects, error, retry} = useTeachers();
     return (
         <Page
-            title="Мои курсы"
+            title="Преподаватели"
             className="catalog teachers-catalog"
             location={location}>
             {!(teachers && subjects) ? (

@@ -90,7 +90,7 @@ const CourseOverview = (props) => {
     if (course) {
         return (
             <Page
-                title={`${course.title}`}
+                title={`${course.name}`}
                 className={`course-overview ${className || ''}`}
                 location={location}>
                 <CourseOverviewContext.Provider

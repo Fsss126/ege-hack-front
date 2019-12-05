@@ -155,6 +155,14 @@ body {
   position: relative;
 }
 
+.nav-btn {
+  padding: 6px;
+  @include btnBehavior;
+  i {
+    display: block;
+  }
+}
+
 header {
   @include media-breakpoint-down(md) {
     position: sticky;
@@ -168,13 +176,6 @@ header {
   .header__container {
     &>.row {
       justify-content: space-between;
-    }
-  }
-  .nav-btn {
-    padding: 6px;
-    @include btnBehavior;
-    i {
-      display: block;
     }
   }
   .logo-container {
@@ -204,12 +205,12 @@ header {
     .nav-btn {
       width: calc(1em + 12px);
       height: calc(1em + 12px);
-      padding: 0; //fixes IOS bug
       position: relative;
       .cover {
         position: absolute;
         top: 0;
         left: 0;
+        height: 100%; //fixes IOS bug
       }
     }
 
@@ -291,24 +292,33 @@ header {
   }
 
   .layout__sidebar {
+    min-width: 250px;
     position: fixed;
     visibility: hidden;
-    @include media-breakpoint-up(lg) {
-      position: absolute;
-      visibility: visible;
-    }
     top: 0;
     height: 100%;
     width: 100%;
     cursor: pointer;
-
     will-change: background;
     transition: background .2s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(0, 0, 0, 0);
 
+    @include media-breakpoint-up(lg) {
+      position: static;
+      visibility: visible;
+      height: auto;
+      flex: 0 0 auto;
+      width: auto;
+    }
+
     .layout__sidebar-bar {
+      @include media-breakpoint-down(md) {
+        width: auto;
+        position: absolute;
+        max-width: 80%;
+      }
+      max-width: 100%;
       height: 100%;
-      width: 240px;
       background: white;
       border-right: $border;
       cursor: default;
@@ -320,7 +330,6 @@ header {
     }
 
     @include media-breakpoint-up(lg) {
-      width: 240px;
       transform: translateX(-100%);
       will-change: transform;
       transition-property: transform;
@@ -337,6 +346,7 @@ header {
     position: relative;
     max-width: 100%;
     flex-basis: 100%;
+    overflow-y: hidden;
     //@include media-breakpoint-up(lg) {
     //  max-width: calc(100% - 240px);
     //  // fix for IE horizontal scroll bug
@@ -367,10 +377,10 @@ header {
         transform: translateX(0);
       }
       .layout__sidebar~.layout__content {
-        margin-left: 240px;
-        max-width: calc(100% - 240px);
-        // fix for IE horizontal scroll bug
-        flex-basis: calc(100% - 240px);
+        //margin-left: 240px;
+        //max-width: calc(100% - 240px);
+        //// fix for IE horizontal scroll bug
+        //flex-basis: calc(100% - 240px);
       }
     }
   }
@@ -389,14 +399,17 @@ header {
       }
     }
     .layout__sidebar~.layout__content {
-      margin-left: 240px;
-      max-width: calc(100% - 240px);
-      // fix for IE horizontal scroll bug
-      flex-basis: calc(100% - 240px);
+      //margin-left: 240px;
+      //max-width: calc(100% - 240px);
+      //// fix for IE horizontal scroll bug
+      //flex-basis: calc(100% - 240px);
     }
   }
 
   .layout__sidebar-bar {
+    .sidebar__nav-btn-container {
+      padding-top: 16px;
+    }
     .layout__sidebar-content {
       padding: 32px 24px;
       @include media-breakpoint-up(lg) {
@@ -422,28 +435,46 @@ header {
           padding: 12px 0;
           position: relative;
           transition: padding-left .3s;
-          &::before {
-            font-family: $icon-font;
-            content: "\e900";
-            vertical-align: middle;
-            display: inline-block;
-            position: absolute;
-            left: 0;
-            transform: rotate(-90deg) scale(0);
-            transition: transform .3s;
-          }
-          &.active, &:hover {
-            padding-left: 20px;
-            color: black;
+          &:not(.disabled) {
             &::before {
-              transform: rotate(-90deg) scale(1);
+              font-family: $icon-font;
+              content: "\e900";
+              vertical-align: middle;
+              display: inline-block;
+              position: absolute;
+              left: 0;
+              transform: rotate(-90deg) scale(0);
+              transition: transform .3s;
             }
+            &.active, &:hover {
+              padding-left: 20px;
+              color: black;
+              &::before {
+                transform: rotate(-90deg) scale(1);
+              }
+            }
+          }
+          .ph-text {
+            min-width: 180px;
+          }
+          .badge-soon {
+            opacity: .7;
+            transition: opacity .3s;
+            &:before {
+              content: ' ';
+            }
+          }
+          &:hover .badge-soon{
+            opacity: 1;
           }
         }
 
         .layout__sidebar-menu-link~.layout__sidebar-menu-link {
           padding-top: 0;
         }
+      }
+      .social-media {
+        padding-top: 8px;
       }
     }
   }
@@ -499,6 +530,7 @@ header {
     color: $text-grey;
     padding-top: 12px;
     font-size: $font-size-sm;
+    white-space: pre-wrap;
   }
 
   .list {
@@ -719,7 +751,7 @@ header {
           }
         }
       }
-      @include media-breakpoint-up(m) {
+      @include media-breakpoint-up(md) {
         .selected-courses__price {
           max-width: 40%;
         }
@@ -950,7 +982,6 @@ header {
   .social-media__link {
     padding: 4px;
     margin: 0 4px;
-    color: $text-light-grey;
     &:first-child {
       margin-left: 0;
     }
@@ -959,6 +990,7 @@ header {
     }
     i {
       transition: color .3s;
+      color: $text-light-grey;
     }
     &:hover i{
       &.vk {
