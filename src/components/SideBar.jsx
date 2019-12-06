@@ -66,7 +66,7 @@ export default class SideBar extends React.Component{
                     ) : (
                         <div className="layout__sidebar-content">
                             <div className="layout__sidebar-menu">
-                                {isPupil && (
+                                {/*{isPupil && (*/}
                                     <React.Fragment>
                                         <div className="layout__sidebar-menu-section">
                                             <Link to="/courses/">Мои курсы</Link>
@@ -80,7 +80,7 @@ export default class SideBar extends React.Component{
                                             <Link to="/teachers/">Преподаватели</Link>
                                         </div>
                                     </React.Fragment>
-                                )}
+                                {/*)}*/}
                                 {(isTeacher || isAssistent) && (
                                     <React.Fragment>
                                         <div className="layout__sidebar-menu-section">

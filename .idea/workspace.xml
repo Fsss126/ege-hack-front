@@ -6,36 +6,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Fixed for IE; Changed env; Changed API port">
-      <change beforePath="$PROJECT_DIR$/.env.development" beforeDir="false" afterPath="$PROJECT_DIR$/.env.development" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/asset-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/precache-manifest.0f0f4eabdb4f4879a956bb3189b4f1eb.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/service-worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/service-worker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/css/main.dc968296.chunk.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/css/main.dc968296.chunk.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/js/2.a04cfee1.chunk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/js/2.a04cfee1.chunk.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/js/main.a4b68747.chunk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/js/main.a4b68747.chunk.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/SideBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Course.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/List.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/List.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Teacher.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Teacher.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/test_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/test_data.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,12 +136,12 @@
     </configuration>
     <list>
       <item itemvalue="JavaScript Debug.Debug Application" />
-      <item itemvalue="npm.npm start" />
-      <item itemvalue="npm.start-custom-post" />
-      <item itemvalue="npm.start-custom-port" />
       <item itemvalue="npm.build" />
       <item itemvalue="npm.deploy" />
+      <item itemvalue="npm.npm start" />
+      <item itemvalue="npm.start-custom-port" />
       <item itemvalue="npm.start-custom-post-mac" />
+      <item itemvalue="npm.start-custom-post" />
     </list>
     <recent_temporary>
       <list>
