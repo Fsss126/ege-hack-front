@@ -8,53 +8,38 @@ export const AuthEventTypes = {
     logout: 'auth.logout'
 };
 
-const initVK = true;
-
 VK.init({apiId: process.env.REACT_APP_VK_APP_ID}, true);
 
 class Auth {
     user = null;
+    userInfo = null;
 
     constructor() {
         try {
             const storedString = localStorage.getItem(LOCAL_STORAGE_KEY);
             if (!storedString) {
                 this.user = null;
+                this.userInfo = null;
                 return;
             }
             const storedData = JSON.parse(storedString);
-            const {uid, first_name, last_name, photo, photo_rec, hash} = storedData;
-            if (!(uid && hash))
+            const {session, user} = storedData;
+            if (!(session && user))
                 throw new Error(`Incomplete data parsed from local storage: ${storedString}`);
-            this.user = {uid, first_name, last_name, photo, photo_rec, hash};
+            this.user = {session, user};
         }
         catch (e) {
             console.error('User data can not be recovered', e);
             localStorage.removeItem(LOCAL_STORAGE_KEY);
             this.user = null;
+            this.userInfo = null;
         }
     }
 
     eventHandlers = {};
 
-    login = async (user) => {
-        if (!VK)
-            return;
-        if (!initVK)
-            VK.init({apiId: process.env.REACT_APP_VK_APP_ID}, true);
-        // user = {
-        //     ...user,
-        //     uid: 1,
-        //     hash: '68ab57e7e70fae3f8f96afc0d85465a9'
-        // };
-        console.info('Login', user);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
-        this.user = user;
-        // await this.getUserInfo();
-        // if (!this.userInfo)
-        //     return;
-        for(let handler of (this.eventHandlers[AuthEventTypes.login] || []))
-            handler(this.user);
+    login = () => {
+        VK.Auth.login(this.onLogin);
     };
 
     logout = () => {
@@ -66,6 +51,19 @@ class Auth {
             for(let handler of (this.eventHandlers[AuthEventTypes.logout] || []))
                 handler();
         // });
+    };
+
+    onLogin = ({session: {user, ...session}}) => {
+        // user = {
+        //     ...user,
+        //     uid: 1,
+        //     hash: '68ab57e7e70fae3f8f96afc0d85465a9'
+        // };
+        console.info('Login', user, session);
+        this.user = {session, user};
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.user));
+        for(let handler of (this.eventHandlers[AuthEventTypes.login] || []))
+            handler(this.user);
     };
 
     subscribe(eventType, handler) {
@@ -99,14 +97,6 @@ class Auth {
             this.userInfo = null;
         }
         return this.userInfo;
-    }
-
-    loginWidget(elementId) {
-        if (!VK)
-            return;
-        if (!initVK)
-            VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
-        VK.Widgets.Auth(elementId, {onAuth: this.login});
     }
 }
 

@@ -36,8 +36,8 @@ APIRequest.interceptors.request.use(function (config) {
     if (Auth.user) {
         return {
             auth: {
-                username: Auth.user.uid,
-                password: Auth.user.hash
+                username: Auth.user.session.mid,
+                password: JSON.stringify(Auth.user.session)
             },
             ...config
         }
@@ -68,10 +68,15 @@ const transformData = (response) => {
                 ...rest
             }));
         case url.pathname === '/lessons':
-            return _.sortBy(data, 'num').map(({hometask, is_locked: locked, ...lesson}) => ({
+            return _.sortBy(data, 'num').map(({hometask, is_locked: locked, attachments, ...lesson}) => ({
                 ...lesson,
                 locked,
                 image_link: `${API_ROOT}${lesson.image_link}`,
+                attachments: attachments ? (
+                    attachments.map(({file_name: name, file_link}) => ({
+                            name,
+                            url: `${API_ROOT}${file_link}?disp=attachment`}
+                    ))) : (attachments),
                 assignment: hometask ? ({
                     deadline: hometask.deadline ? new Date(hometask.deadline) : hometask.deadline,
                     description: hometask.description,

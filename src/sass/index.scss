@@ -74,6 +74,10 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
+
+    &.cover-img--placeholder {
+      background: $border-grey;
+    }
   }
 
   &.poster-cover, &.video-cover {
@@ -798,9 +802,11 @@ header {
     }
     .block-container {
       margin: 8px 0;
+      &:not(:first-child) {
+        margin-top: 32px;
+      }
     }
     .hw-container {
-      margin-top: 32px;
       .assignment {
         .assignment__deadline {
           padding-top: 4px;
@@ -1036,6 +1042,20 @@ header {
   }
   .btn {
     margin-top: 10vh;
+  }
+}
+
+.login-btn {
+  background: $vk-blue;
+  color: white;
+  padding: 16px 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: $font-medium;
+  i {
+    margin-left: 12px;
+    vertical-align: middle;
+    font-size: 18px;
   }
 }
 

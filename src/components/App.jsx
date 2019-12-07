@@ -72,6 +72,7 @@ function App() {
             <Header
                 onMenuButtonClick={toggleSideBar}
                 user={user}
+                userInfo={userInfo}
                 sidebar={showSidebar}/>
             <CSSTransition
                 in={isSideBarOpened}

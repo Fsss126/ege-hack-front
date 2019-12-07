@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import CoverImage from "./common/CoverImage";
 
 const Header = (props) => {
-    const {onMenuButtonClick, user, sidebar} = props;
+    const {onMenuButtonClick, user, userInfo, sidebar} = props;
     return (
         <header>
             <div className="container-fluid header__container">
@@ -26,14 +26,16 @@ const Header = (props) => {
                         <div className="user-nav">
                             {user ? (
                                 <React.Fragment>
-                                    <div className="user-nav__user-name">{user.first_name} {user.last_name}</div>
-                                    {user.photo_rec ? (
+                                    <div className="user-nav__user-name">{user.user.first_name} {user.user.last_name}</div>
+                                    {userInfo ? (
                                         <div className="nav-btn">
-                                            <CoverImage src={user.photo_rec} round square/>
+                                            {userInfo.vk_info.photo_max ?
+                                                <CoverImage src={userInfo.vk_info.photo_max} round square/>
+                                                : <i className="icon-profile"/>}
                                         </div>
                                     ) : (
                                         <div className="nav-btn">
-                                            <i className="icon-profile"/>
+                                            <CoverImage placeholder round square/>
                                         </div>
                                     )}
                                     <div className="user-nav__menu-container">

@@ -24,7 +24,6 @@ function useUserAuth() {
 
     const logoutCallback = React.useCallback(() => {
         setUser(null);
-        setUserInfo(null);
     }, []);
 
     React.useLayoutEffect(() => {
@@ -35,7 +34,7 @@ function useUserAuth() {
             Auth.unsubscribe(AuthEventTypes.logout, logoutCallback);
         }
     }, [loginCallback, logoutCallback]);
-    return [user, userInfo];
+    return {user, userInfo};
 }
 
 const useShopCatalogStore = () => React.useState(null);
@@ -488,7 +487,7 @@ export function useCourseWebinars(courseId) {
 }
 
 const GlobalStore = ({children}) => {
-    const [user, userInfo] = useUserAuth();
+    const {user, userInfo} = useUserAuth();
     const data = useStoreData();
     return (
         <StoreContext.Provider value={{user, userInfo, ...data}}>
