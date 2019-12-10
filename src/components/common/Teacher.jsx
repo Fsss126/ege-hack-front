@@ -8,7 +8,7 @@ import Contacts from "./Contacts";
 export default function Teacher(props) {
     const {
         teacher: {
-        vk_info: {first_name, last_name, photo_max_orig: photo}, contacts, subjects: teacherSubjects, bio: about
+        vk_info: {first_name, last_name, photo_max: photo}, contacts, subjects: teacherSubjects, bio: about
         },
         subjects,
         link,
@@ -27,13 +27,15 @@ export default function Teacher(props) {
                     <div className="col-auto d-flex align-items-center">
                         <CoverImage src={photo} className="teacher-profile__photo" round square/>
                     </div>
-                    <div className="col d-flex flex-column justify-content-center">
-                        <h3 className="teacher-profile__name">{first_name} {last_name}</h3>
-                        {bio && (
-                            <div className="teacher-profile__subjects font-size-sm">
-                                {teacherSubjects.map(({name}, i) => i === 0 ? name : name.toLowerCase()).join(', ')}
-                            </div>)}
-                        {contacts && (<Contacts contacts={contacts}/>)}
+                    <div className="col d-flex flex-column justify-content-center teacher-profile__info-container">
+                        <div className="teacher-profile__info">
+                            <h3 className="teacher-profile__name">{first_name} {last_name}</h3>
+                            {bio && (
+                                <div className="teacher-profile__subjects font-size-sm">
+                                    {teacherSubjects.map(({name}, i) => i === 0 ? name : name.toLowerCase()).join(', ')}
+                                </div>)}
+                            {contacts && (<Contacts contacts={contacts}/>)}
+                        </div>
                     </div>
                 </div>
                 {bio && (

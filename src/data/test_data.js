@@ -25,7 +25,7 @@ export const ACCOUNT_INFO = {
         id: 154792439,
         first_name: "Alexandra",
         last_name: "Petrova",
-        photo_max_orig: poster,
+        photo_max: poster,
     },
     pupil: {
         account_id: 154792439
@@ -83,7 +83,7 @@ export const TEACHERS = [
             id: 154792439,
             first_name: "Alexandra",
             last_name: "Petrova",
-            photo_max_orig: poster,
+            photo_max: poster,
         },
         subjects: [
             {
@@ -100,7 +100,7 @@ export const TEACHERS = [
             id: 1,
             first_name: 'Елена',
             last_name: 'Черткова',
-            photo_max_orig: poster,
+            photo_max: poster,
         },
         subjects: SUBJECTS.slice(0,2),
         contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
@@ -112,7 +112,7 @@ export const TEACHERS = [
             id: 2,
             first_name: 'Сергей',
             last_name: 'Авдошин',
-            photo_max_orig: poster,
+            photo_max: poster,
         },
         subjects: [SUBJECTS[3]],
         contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},

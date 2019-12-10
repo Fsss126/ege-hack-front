@@ -659,8 +659,21 @@ header {
     .teacher-profile__photo {
       width: 80px;
     }
+    .teacher-profile__info-container {
+      position: relative;
+      .teacher-profile__info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: inherit;
+      }
+    }
     .teacher-profile__name {
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .teacher-profile__subjects {
       margin-top: 4px;
@@ -1046,6 +1059,7 @@ header {
 }
 
 .login-btn {
+  @include btnBehavior;
   background: $vk-blue;
   color: white;
   padding: 16px 32px;

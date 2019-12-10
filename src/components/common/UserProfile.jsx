@@ -8,7 +8,7 @@ const UserProfile = ({first_name, last_name, photo, contacts, about, role}) => {
         <React.Fragment>
             <div className="user-profile__avatar-container">
                 <div className="user-profile__avatar-wrap">
-                    <CoverImage src={photo} className="user-profile__avatar" round square/>
+                    <CoverImage src={photo} className="user-profile__avatar" placeholder round square/>
                 </div>
             </div>
             <div className="user-profile__info layout__content-block">

@@ -10,16 +10,13 @@
       <change beforePath="$PROJECT_DIR$/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/asset-manifest.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/service-worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/service-worker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CoverImage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CoverImage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Teacher.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Teacher.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/UserProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/UserProfile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/account/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/account/AccountPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/test_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/test_data.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +213,7 @@
       <workItem from="1574613850554" duration="99306000" />
       <workItem from="1575495249102" duration="19372000" />
       <workItem from="1575722664012" duration="3515000" />
-      <workItem from="1575727535377" duration="4508000" />
+      <workItem from="1575727535377" duration="7461000" />
     </task>
     <task id="LOCAL-00001" summary="Initial stage">
       <created>1567014085290</created>
@@ -309,7 +306,14 @@
       <option name="project" value="LOCAL" />
       <updated>1575592613720</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Changed auth">
+      <created>1575733403917</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1575733403917</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -343,33 +347,34 @@
     <MESSAGE value="Video player" />
     <MESSAGE value="User courses; Homework upload; Sidebar shimmer" />
     <MESSAGE value="Sidebar fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sidebar fix" />
+    <MESSAGE value="Changed auth" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed auth" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="303" y="52" key="CommitChangelistDialog2" timestamp="1575592613616">
+    <state x="303" y="52" key="CommitChangelistDialog2" timestamp="1575733403761">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1575592613616" />
+    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1575733403761" />
     <state x="100" y="100" width="1240" height="700" key="DiffContextDialog" timestamp="1575499180459">
       <screen x="0" y="23" width="1440" height="820" />
     </state>
     <state x="100" y="100" width="1240" height="700" key="DiffContextDialog/0.23.1440.820@0.23.1440.820" timestamp="1575499180459" />
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1575733200402">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1575837579325">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1575733200402" />
-    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1575733200401">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1575837579325" />
+    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1575837579324">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1575733200401" />
-    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1575733200398">
+    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1575837579324" />
+    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1575837579323">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1575733200398" />
-    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1575733200402">
+    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1575837579323" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1575837579324">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1575733200402" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1575837579324" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1575496047285">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -378,10 +383,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1575726108474" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1575592617723">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1575733424663">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1575592617723" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1575733424663" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -390,9 +395,9 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1575509494995">
+    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1575733562662">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1575509494995" />
+    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1575733562662" />
   </component>
 </project>
