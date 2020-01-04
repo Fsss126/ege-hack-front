@@ -26,7 +26,7 @@ export default function ListItem(props) {
     }, [item, actionCallback, selectable, callbackProps]);
     const content = (
         <div className="row align-items-center">
-            <div className="list__item-preview col-12 col-md-auto">
+            <div className="preview-container col-12 col-md-auto">
                 {preview}
             </div>
             <div className="list__item-description col align-self-stretch">

@@ -68,8 +68,7 @@ export const LoadingIndicator = ({state, onClick, errorMessage}) => {
                         className="file__state-indicator"
                         onClick={onClick}>
                         <Tooltip content={errorMessage}>
-                            <i
-                                className={icon}/>
+                            <i className={icon}/>
                         </Tooltip>
                     </div>
                 </CSSTransition>

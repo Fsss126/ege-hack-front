@@ -1,7 +1,7 @@
 import Auth from 'definitions/auth';
 import _ from 'lodash';
 import axios from 'axios';
-// import {handleRequestsWithTestData} from "./test";
+import {handleRequestsWithTestData} from "./test";
 import {LEARNING_STATUS} from "definitions/constants";
 
 export const API_ROOT = process.env.REACT_APP_API_ROOT;
@@ -33,17 +33,17 @@ const APIRequest = axios.create({
 });
 
 APIRequest.interceptors.request.use(function (config) {
-    if (Auth.user) {
+    try {
         return {
             auth: {
-                username: Auth.user.session.mid,
-                password: JSON.stringify(Auth.user.session)
+                username: Auth.getUserId(),
+                password: Auth.getUserPassword()
             },
             ...config
         }
+    } catch (e) {
+        throw new axios.Cancel(e.message);
     }
-    else
-        throw new axios.Cancel('User not logged in.');
 });
 
 //Interceptors

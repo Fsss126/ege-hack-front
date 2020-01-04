@@ -97,6 +97,9 @@ label {
     align-items: center;
     padding: 4px 6px;
     transition: background-color .3s;
+    i {
+      display: block;
+    }
   }
   .btn__before {
     padding-left: 10px;
@@ -191,36 +194,41 @@ label {
     transition: width .3s, background-color .3s;
   }
 
-  &.file-loading .file__btn {
-    background: $bg-grey;
+  &.file-loading {
+    .file__btn {
+      background: $bg-grey;
 
+      &:hover:not(.btn-inactive) {
+        .btn__after, .btn__before {
+          background: inherit;
+        }
+      }
+    }
     .file__loading-progress {
       opacity: 1;
     }
-
-    &:hover:not(.btn-inactive) {
-      .btn__after, .btn__before {
-        background: inherit;
-      }
-    }
   }
 
-  &.file-error .file__btn, &.file-rejected .file__btn {
-    background: $error-bg !important;
+  &.file-error, &.file-rejected {
+    .file__btn {
+      background: $error-bg !important;
+    }
     .file__loading-progress {
       opacity: 1;
       background: $error-red !important;
     }
   }
-  &.file-loaded .file__btn {
-    background: $success-bg !important;
+  &.file-loaded {
+    .file__btn {
+      background: $success-bg !important;
+    }
     .file__loading-progress {
       opacity: 1;
       width: 100%;
       background: $success-green !important;
     }
   }
-  &.file-success .file__btn .file__loading-progress {
+  &.file-success .file__loading-progress {
     width: 100%;
     background: $success-green !important;
     transition: opacity 1s;
@@ -257,6 +265,7 @@ label {
   .file-input__controls {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     .btn {
       flex-shrink: 0;
       margin: 8px 8px 8px 0;
@@ -268,10 +277,105 @@ label {
   }
 }
 
-input[type='text'], input[type='email'], input[type='tel'], input[type='number'], input[type='date']{
-  border: none;
+.image-file {
+  position: relative;
+  .file__action-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 4px;
+    background: $bg-grey;
+    border-radius: 8px;
+    i {
+      display: block;
+    }
+  }
+  .file__state-indicator {
+    position: absolute;
+    font-size: 24px;
+    margin: 0;
+    @include center(xy);
+    padding: 8px;
+    background: $bg-grey;
+    border-radius: 8px;
+  }
+  .image-file__overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+  }
+  .image-file__overlay {
+    opacity: 0.6;
+  }
+  .file__loading-progress {
+    left: auto;
+    right: 0;
+  }
+  &.file-loading .file__loading-progress {
+    opacity: 0.8;
+  }
+  &.file-error .image-file__overlay, &.file-rejected .image-file__overlay {
+    background: $error-bg !important;
+  }
+  &.file-loaded .image-file__overlay {
+    background: $success-bg !important;
+  }
+  &.file-success .fimage-file__overlay {
+    width: 100%;
+    background: $success-green !important;
+    transition: opacity 1s;
+  }
+}
+
+.image-input {
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+  .poster-cover {
+    border: 2px dashed $border-grey;
+  }
+  .image-input__controls {
+    @include center(y);
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .btn {
+      display: block;
+      cursor: pointer;
+    }
+  }
+}
+
+input[type='text'], input[type='email'], input[type='tel'], input[type='number'], input[type='date'], textarea {
   outline: none;
   background-color: transparent;
+  border: 1px solid #ebebeb;
+  padding: 6px 10px;
+  border-radius: 4px;
+  width: 100%;
+
+  &::placeholder {
+    color: $text-grey;
+  }
+}
+
+
+
+//Removes increment buttons from number input
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
 }
 
 [class*=input-] {
@@ -418,6 +522,14 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
 
     &.select__clear-btn-hidden {
       transform: scale(0);
+    }
+  }
+}
+
+.form {
+  .form__fields {
+    &>*~* {
+      margin-top: 16px;
     }
   }
 }

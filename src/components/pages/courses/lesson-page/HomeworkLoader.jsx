@@ -1,8 +1,7 @@
 import React from "react";
-import FileInput from "components/ui/FileInput";
 import APIRequest from "api";
 import NavigationBlocker from "components/common/NavigationBlocker";
-import {useHomework} from "store";
+import {FileInput} from "components/ui/file-input";
 
 const HomeworkLoader = ({homework, deadline, lessonId}) => {
     const isHomeworkSubmissionClosed = React.useCallback(() => deadline && new Date() >= deadline, [deadline]);
@@ -26,7 +25,7 @@ const HomeworkLoader = ({homework, deadline, lessonId}) => {
             setChanges(false);
         });
         // return Promise.resolve();
-    }, [homework, lessonId, setChanges]);
+    }, [lessonId, setChanges]);
     return (
         <div className="submission">
             {hasChanges && <NavigationBlocker/>}

@@ -46,13 +46,27 @@ const WEBINAR_STATE = {
     ENDED: 'ENDED'
 };
 
+const UNLOCK_TIME = 1000*60*5; //opens 5 minutes before start
+
 const getWebinarState = (webinar) => {
     const now = new Date();
     return webinar.date_start > now ? WEBINAR_STATE.WAITING : (now > webinar.date_end ? WEBINAR_STATE.ENDED : WEBINAR_STATE.AIRING);
 };
 
+const isWebinarUnlocked = (param) => {
+    if (param.date_start && param.date_end) {
+        const webinar = param;
+        const now = new Date();
+        return now >= new Date(webinar.date_start - UNLOCK_TIME) && now < webinar.date_end;
+    } else {
+        const timeDelta = param;
+        return timeDelta.total <= UNLOCK_TIME;
+    }
+};
+
 const Webinar = ({webinar, courseId}) => {
     const [state, setState] = React.useState(getWebinarState(webinar));
+    const [isUnlocked, setIsUnlocked] = React.useState(isWebinarUnlocked(webinar));
     const onWebinarStart = React.useCallback(() => {
         setState(WEBINAR_STATE.AIRING);
     }, []);
@@ -68,19 +82,23 @@ const Webinar = ({webinar, courseId}) => {
             };
         }
     }, [state, webinar]);
+
+    const onTick = React.useCallback((timeDelta) => {
+        setIsUnlocked(isWebinarUnlocked(timeDelta));
+    }, []);
+
     const onClick = React.useCallback(async (event) => {
-        if (state !== WEBINAR_STATE.AIRING) {
+        if (!isUnlocked) {
             event.preventDefault();
             return;
         }
         const newWindow = window.open();
         const response = await APIRequest.get(`/courses/${webinar.course_id || courseId}/schedule/link`);
         newWindow.location = response.link;
-    }, [state, webinar, courseId]);
+    }, [isUnlocked, webinar, courseId]);
     if (state === WEBINAR_STATE.ENDED) {
         return null;
     }
-    const isAiring = state === WEBINAR_STATE.AIRING;
     const renderCountdown = (remainingTime) => {
         const {formatted: {days, hours, minutes, seconds}, completed} = remainingTime;
         return completed ? (
@@ -97,11 +115,11 @@ const Webinar = ({webinar, courseId}) => {
     return (
         <div
             onClick={onClick}
-            className={`webinar-schedule__webinar d-flex ${isAiring ? '' : 'webinar-schedule__webinar-locked'}`}>
+            className={`webinar-schedule__webinar d-flex ${isUnlocked ? '' : 'webinar-schedule__webinar-locked'}`}>
             <div className="container d-flex overflow-hidden">
                 <div className="row flex-nowrap flex-grow-1">
                     <div className="col-auto d-flex align-items-center webinar-schedule__webinar-status">
-                        {isAiring ? <i className="fas fa-unlock"/> : <i className="fas fa-lock"/>}
+                        {isUnlocked ? <i className="fas fa-unlock"/> : <i className="fas fa-lock"/>}
                     </div>
                     <div className="col d-flex flex-shrink-0 p-0">
                         <CoverImage
@@ -117,6 +135,7 @@ const Webinar = ({webinar, courseId}) => {
                             date={webinar.date_start}
                             className="countdown"
                             renderer={renderCountdown}
+                            onTick={onTick}
                             onComplete={onWebinarStart}>
                         </Countdown>
                     </div>
@@ -126,7 +145,7 @@ const Webinar = ({webinar, courseId}) => {
     );
 };
 
-const WebinarSchedule = ({schedule}) => {
+const WebinarSchedule = ({schedule, courseId}) => {
     if (schedule.length === 0)
         return null;
     return (
@@ -141,7 +160,10 @@ const WebinarSchedule = ({schedule}) => {
                 className="scrollbars">
                 <div className="d-flex flex-nowrap">
                     {schedule.map((webinar) => (
-                        <Webinar webinar={webinar} key={webinar.id}/>
+                        <Webinar
+                            webinar={webinar}
+                            courseId={courseId}
+                            key={webinar.id}/>
                     ))}
                 </div>
             </ScrollBars>

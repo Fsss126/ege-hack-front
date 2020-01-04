@@ -99,10 +99,7 @@ export default class SideBar extends React.Component{
                                     <React.Fragment>
                                         <div className="layout__sidebar-menu-section">
                                             <Link to="/admin/subjects/" disabled>
-                                                Предметы
-                                            </Link>
-                                            <Link to="/admin/courses" disabled>
-                                                Курсы
+                                                Управление контентом
                                             </Link>
                                             <Link to="/admin/users/" disabled>
                                                 Пользователи

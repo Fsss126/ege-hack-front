@@ -132,6 +132,12 @@ body {
   }
 }
 
+.ph-item {
+  .cover-img--placeholder.ph-item:before {
+    display: none;
+  }
+}
+
 .video-player {
   padding-top: 56.25%; /* 16:9 Aspect Ratio */
   background: black;
@@ -210,12 +216,17 @@ header {
       width: calc(1em + 12px);
       height: calc(1em + 12px);
       position: relative;
+      flex-shrink: 0;
       .cover {
         position: absolute;
         top: 0;
         left: 0;
         height: 100%; //fixes IOS bug
       }
+    }
+
+    .ph-text {
+      width: 200px;
     }
 
     .user-nav__menu-container {
@@ -495,6 +506,7 @@ header {
     background: white;
     padding: $content-padding;
     .negate-block-padding, .list {
+      width: auto;
       margin-left: -$content-padding-sides;
       margin-right: -$content-padding-sides;
     }
@@ -537,6 +549,23 @@ header {
     white-space: pre-wrap;
   }
 
+  .preview-container {
+    .cover {
+      //height: 130px;
+      width: 100%;
+      @include media-breakpoint-up(md) {
+        width: 240px;
+      }
+      @include media-breakpoint-down(sm) {
+        margin-bottom: 8px;
+        border-radius: 10px;
+      }
+    }
+    @include media-breakpoint-up(md) {
+      padding-right: 0;
+    }
+  }
+
   .list {
     .list__item {
       display: block;
@@ -546,22 +575,6 @@ header {
       &.list__item-selectable {
         cursor: pointer;
         @include selectableCover;
-      }
-      .list__item-preview {
-        .cover {
-          //height: 130px;
-          width: 100%;
-          @include media-breakpoint-up(md) {
-            width: 240px;
-          }
-          @include media-breakpoint-down(sm) {
-            margin-bottom: 8px;
-            border-radius: 10px;
-          }
-        }
-        @include media-breakpoint-up(md) {
-          padding-right: 0;
-        }
       }
       .list__item-description-inner {
         @include media-breakpoint-up(md) {
@@ -659,17 +672,7 @@ header {
     .teacher-profile__photo {
       width: 80px;
     }
-    .teacher-profile__info-container {
-      position: relative;
-      .teacher-profile__info {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        padding: inherit;
-      }
-    }
+
     .teacher-profile__name {
       white-space: nowrap;
       overflow: hidden;
@@ -863,6 +866,25 @@ header {
       margin-top: 0 !important;
       margin-bottom: 16px;
     }
+    .teacher-profile {
+      .teacher-profile__info-container {
+        position: relative;
+        .teacher-profile__info {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          padding: inherit;
+        }
+      }
+    }
+  }
+
+  .user-profile__info {
+    .ph-text {
+      width: 200px;
+    }
   }
 
   .user-profile__avatar-container {
@@ -963,10 +985,13 @@ header {
           right: 0;
         }
       }
-      &.webinar-schedule__webinar-locked .webinar-schedule__webinar-status{
-        color: $icon-grey;
-        &:before {
-          background: $bg-grey;
+      &.webinar-schedule__webinar-locked {
+        cursor: default;
+        .webinar-schedule__webinar-status{
+          color: $icon-grey;
+          &:before {
+            background: $bg-grey;
+          }
         }
       }
       &~.webinar-schedule__webinar {
@@ -1055,6 +1080,12 @@ header {
   }
   .btn {
     margin-top: 10vh;
+  }
+}
+
+.course-form-page {
+  h3 {
+    margin-bottom: 16px;
   }
 }
 

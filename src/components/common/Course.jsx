@@ -1,5 +1,5 @@
 import React from 'react';
-import {daysBetween} from "../../definitions/helpers";
+import {daysBetween} from "definitions/helpers";
 import ListItem from "./ListItem";
 import CoverImage from "./CoverImage";
 

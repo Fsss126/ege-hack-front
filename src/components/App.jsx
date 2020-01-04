@@ -15,6 +15,7 @@ import MyCourses from "./pages/courses";
 
 import 'sass/index.scss';
 import ErrorPage from "./ErrorPage";
+import CourseFormPage from "./pages/admin/CourseFormPage";
 
 function useLocationChangeEffect(effect) {
     const history = useHistory();
@@ -82,13 +83,14 @@ function App() {
                     <React.Fragment>
                         {showSidebar && (
                             <SideBar
-                                accountRoles={user ? (userInfo ? userInfo.roles : undefined) : null}
+                                accountRoles={user !== null ? (userInfo ? userInfo.roles : undefined) : null}
                                 onMenuClose={toggleSideBar}/>
                         )}
                         <Switch>
                             <Route path="/index.html" component={DefaultRedirect}/>
                             <Route exact path="/" component={DefaultRedirect}/>
                             <Route path="/login" component={Login}/>
+                            <Route path="/courses/create" component={CourseFormPage}/>
                             <Route path="/courses" component={MyCourses}/>
                             <Route path="/shop" component={Shop}/>
                             <Route path="/teachers" component={Teachers}/>

@@ -1,27 +1,31 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 
-class Tooltip extends Component {
-    componentDidMount() {
-    }
+export const TooltipPositions = {
+    top: 'pos-top',
+    right: 'pos-right',
+    left: 'pos-left',
+    bottom: 'pos-bottom'
+};
 
-    render() {
-        let child = React.Children.only(this.props.children);
-        let position = 'pos-' + this.props.position;
-        return React.cloneElement(child, {
-            className: (child.props.className ? child.props.className + ' tooltip ' : 'tooltip ') + position,
-            children: (
-                <Fragment>
-                    {child.props.children}
-                    <div className="tooltip-arrow"/>
-                    <div className="tooltip-block">
-                        {
-                            this.props.content
-                        }
-                    </div>
-                </Fragment>
-            )
-        });
-    }
-}
+const Tooltip = (props) => {
+    const {
+        children,
+        content,
+        position
+    } = props;
+    let child = React.Children.only(children);
+    if (!content)
+        return child;
+    return React.cloneElement(child, {
+        className: (child.props.className ? child.props.className + ' tooltip ' : 'tooltip ') + (position || ''),
+        children: (
+            <Fragment>
+                {child.props.children}
+                <div className="tooltip-arrow"/>
+                <div className="tooltip-block">{content}</div>
+            </Fragment>
+        )
+    });
+};
 
 export default Tooltip;

@@ -1,5 +1,5 @@
 import React from "react";
-import File from "components/ui/File";
+import {File} from "components/ui/file-input";
 import VideoPlayer from "components/common/VideoPlayer";
 import {renderDate} from "definitions/helpers";
 import HomeworkLoader from "./HomeworkLoader";

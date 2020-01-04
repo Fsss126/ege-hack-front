@@ -11,7 +11,7 @@ import {
 
 const getResponse = (data) => (data);
 
-export const handleRequstsWithTestData = (api) => {
+export const handleRequestsWithTestData = (api) => {
     api.interceptors.response.use(undefined, (error) => {
         if (!error.toJSON)
             throw error;

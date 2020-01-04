@@ -25,9 +25,21 @@ const Input = ({className, onChange: callback, ...props}) => {
     );
 };
 
+Input.defaultProps = {
+    maxLength: 50
+};
+
+const TextArea = ({className, onChange: callback, ...props}) => {
+    const onChange = useChangeHandler(callback);
+    return (
+        <textarea className={`input ${className || ''}`} onChange={onChange} {...props}/>
+    );
+};
+
 Object.assign(Input, {
     CheckBox,
-    Select
+    Select,
+    TextArea
 });
 
 export default Input;

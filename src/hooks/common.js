@@ -12,24 +12,21 @@ export function useTruncate(text) {
             }
         }
         window.addEventListener('resize', handleResize);
+        const cleanUpFn = () => {
+            window.removeEventListener('resize', handleResize);
+        };
         if (isFontLoaded)
-            return () => {
-                window.removeEventListener('resize', handleResize);
-            };
+            return cleanUpFn;
         if (document.readyState === "complete") {
             setFontLoaded(true);
-            return () => {
-                window.removeEventListener('resize', handleResize);
-            };
+            return cleanUpFn;
         }
         else {
             function handleLoading() {
                 setFontLoaded(true);
             }
             window.addEventListener('load', handleLoading);
-            return () => {
-                window.removeEventListener('load', handleLoading);
-            };
+            return cleanUpFn;
         }
     }, [isFontLoaded, text]);
     return [descriptionRef, isFontLoaded];

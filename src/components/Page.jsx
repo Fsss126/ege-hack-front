@@ -53,7 +53,7 @@ const Page = ({title, className, children, checkLogin=true, location}) => {
     //TODO: check permissions
     const {user, userInfo} = useUser();
     if (checkLogin) {
-        if (!user) {
+        if (user === null) {
             return (
                 <Redirect to={{
                     pathname: '/login/',
