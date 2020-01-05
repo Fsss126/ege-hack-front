@@ -1,10 +1,11 @@
 import React from "react";
-import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
+import Page, {PageContent} from "components/Page";
 import CourseOverview from "components/common/CourseOverview";
 import CoursePriceTab from "./CoursePriceTab";
 import Lesson from "components/common/Lesson";
 import {useShopCatalog, useTeachers, useLessons, useDiscount} from "store";
 
+//TODO: fix 404 error screen
 const CoursePage = ({path, location, match}) => {
     const {params: {id: courseId}} = match;
     const {catalog, subjects, error, retry} = useShopCatalog();
@@ -18,7 +19,7 @@ const CoursePage = ({path, location, match}) => {
             locked={false}
             key={lesson.id}/>
     );
-    if (catalog && teachers && lessons ) {
+    if (catalog && teachers && lessons) {
         return (
             <CourseOverview.Body
                 match={match}
@@ -41,10 +42,7 @@ const CoursePage = ({path, location, match}) => {
     }
     else {
         return (
-            <Page
-                location={location}>
-                <PageLoadingPlaceholder/>
-            </Page>
+            <Page isLoaded={false} location={location}/>
         );
     }
 };

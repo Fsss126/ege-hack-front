@@ -1,11 +1,11 @@
 import React from "react";
-import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
+import Page, {PageContent} from "components/Page";
 import CourseOverview from "components/common/CourseOverview";
 import Lesson from "components/common/Lesson";
 import Button from "components/ui/Button";
 import {renderDate} from "definitions/helpers";
 import {useCourseWebinars, useLessons, useUpcomingWebinars, useUserCourses} from "store";
-import WebinarSchedule from "../../../common/WebinarSchedule";
+import WebinarSchedule from "components/common/WebinarSchedule";
 
 const CoursePage = ({path, match, location, ...props}) => {
     const {params: {id: courseId}} = match;
@@ -48,10 +48,7 @@ const CoursePage = ({path, match, location, ...props}) => {
         );
     } else {
         return (
-            <Page
-                location={location}>
-                <PageLoadingPlaceholder/>
-            </Page>
+            <Page isLoaded={false} location={location}/>
         );
     }
 };

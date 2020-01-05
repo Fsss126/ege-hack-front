@@ -1,6 +1,6 @@
 import React from "react";
 import _ from "lodash";
-import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
+import Page, {PageContent} from "components/Page";
 import ErrorPage from "components/ErrorPage";
 import Lesson from "components/common/Lesson";
 import List from "components/common/List";
@@ -40,7 +40,7 @@ const LessonPage = (props) => {
                 lesson.id !== selectedLesson.id && (nextVideo ? lesson.id !== nextVideo.id : true
                 ))), 'num');
             return (
-                <Page title={`${selectedLesson.name}`} className="lesson-page" location={location}>
+                <Page isLoaded={true} title={`${selectedLesson.name}`} className="lesson-page" location={location}>
                     <PageContent parentSection={{name: course.name}}>
                         <div className="layout__content-block">
                             <div className="container p-lg-0">
@@ -71,10 +71,7 @@ const LessonPage = (props) => {
             return <ErrorPage errorCode={404} message="Урок не найден" />;
     } else {
         return (
-            <Page
-                location={location}>
-                <PageLoadingPlaceholder/>
-            </Page>
+            <Page isLoaded={false} location={location}/>
         );
     }
 };

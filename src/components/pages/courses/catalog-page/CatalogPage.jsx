@@ -2,7 +2,7 @@ import React from "react";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
-import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
+import Page, {PageContent} from "components/Page";
 import {LEARNING_STATUS} from "definitions/constants";
 import {useUpcomingWebinars, useUserCourses} from "store";
 import WebinarSchedule from "components/common/WebinarSchedule";
@@ -22,14 +22,14 @@ const CatalogPage = ({location}) => {
                 : <Button className="course__select-btn" active={false}>Пройден</Button>}
         </Course>
     ), []);
+    const isLoaded = courses && subjects && webinars;
     return (
         <Page
+            isLoaded={isLoaded}
             className="user-courses"
             location={location}
             title="Мои курсы">
-            {!(courses && subjects && webinars) ? (
-                    <PageLoadingPlaceholder/>
-                ) : (
+            {isLoaded && (
                 <CourseCatalog.Body
                     courses={courses}
                     subjects={subjects}>
@@ -40,8 +40,7 @@ const CatalogPage = ({location}) => {
                             renderCourse={renderCourse}/>
                     </PageContent>
                 </CourseCatalog.Body>
-            )
-            }
+            )}
         </Page>
     );
 };

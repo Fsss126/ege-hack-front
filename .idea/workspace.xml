@@ -5,15 +5,20 @@
     <option name="CUSTOM_SCOPE_NAME" value="Module 'ege-hack'" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Fixes">
+    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ErrorPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ErrorPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/account/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/account/AccountPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -152,8 +157,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.start-custom-post-mac" />
         <item itemvalue="npm.build-prod" />
+        <item itemvalue="npm.start-custom-post-mac" />
         <item itemvalue="npm.build" />
         <item itemvalue="npm.start-custom-port" />
         <item itemvalue="npm.deploy" />
@@ -328,7 +333,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578171579270</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Changed layout">
+      <created>1578184751659</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1578184751659</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -365,7 +377,8 @@
     <MESSAGE value="Changed auth" />
     <MESSAGE value="Fixes" />
     <MESSAGE value="Fixes; Changed Auth" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes; Changed Auth" />
+    <MESSAGE value="Changed layout" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed layout" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Inspections" timestamp="1578065894058">
@@ -376,31 +389,37 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="423" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578062435898" />
-    <state x="303" y="52" key="CommitChangelistDialog2" timestamp="1578171579071">
+    <state x="303" y="52" key="CommitChangelistDialog2" timestamp="1578184751511">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578184751511" />
     <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1578171579071" />
-    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1577623377288">
+    <state x="100" y="55" width="1240" height="845" key="DiffContextDialog" timestamp="1578185803491">
       <screen x="0" y="23" width="1440" height="820" />
     </state>
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1577623266851" />
+    <state x="100" y="55" width="1240" height="845" key="DiffContextDialog/0.23.1440.820/1440.23.1360.745@0.23.1440.820" timestamp="1578185803491" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.820@0.23.1440.820" timestamp="1577623377288" />
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1577623121684">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1578190825085">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1577623121684" />
-    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1577623121683">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578186729130" />
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1578190825085" />
+    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1578190825083">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1577623121683" />
-    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1577623121681">
+    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578186729128" />
+    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1578190825083" />
+    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1578190825082">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1577623121681" />
-    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1577623121684">
+    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578186729125" />
+    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1578190825082" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1578190825085">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1577623121684" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578186729129" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1578190825085" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1575496047285">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -409,9 +428,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1575726108474" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1578171583718">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1578184754530">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578184754530" />
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1578171583718" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
@@ -421,10 +441,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1578178447867">
+    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1578190868839">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578060594377" />
-    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1578178447867" />
+    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578186034729" />
+    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1578190868839" />
   </component>
 </project>

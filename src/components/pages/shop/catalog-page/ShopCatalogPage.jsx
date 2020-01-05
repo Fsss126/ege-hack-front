@@ -1,5 +1,5 @@
 import React from "react";
-import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
+import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
 import SelectedCoursesTab from "./SelectedCoursesTab";
 import Course from "components/common/Course";
@@ -33,14 +33,14 @@ const ShopCatalogPage = ({selectedCourses, onCourseClick, onCourseSelect, onCour
             </Course>
         )
     }, [selectedCourses, onCourseSelect]);
+    const isLoaded = catalog && subjects;
     return (
         <Page
+            isLoaded={isLoaded}
             className="course-shop"
             title="Магазин курсов"
             location={location}>
-            {!(catalog && subjects) ? (
-                <PageLoadingPlaceholder/>
-            ) : (
+            {isLoaded && (
                 <CourseCatalog.Body
                     subjects={subjects}
                     courses={catalog}>

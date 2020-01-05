@@ -13,7 +13,7 @@ const AccountPage = () => {
         ({vk_info: {photo_max}} = userInfo);
     }
     return (
-        <Page title="Аккаунт" className="account-page">
+        <Page title="Аккаунт" className="account-page" isLoaded={true}>
             <PageContent>
                 <UserProfile
                     first_name={first_name}

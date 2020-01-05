@@ -1,18 +1,18 @@
 import React from "react";
-import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
+import Page, {PageContent} from "components/Page";
 import TeachersCatalog from "./TeachersCatalog";
 import {useTeachers} from "store";
 
 const TeachersCatalogPage = ({location}) => {
     const {teachers, subjects, error, retry} = useTeachers();
+    const isLoaded = teachers && subjects;
     return (
         <Page
+            isLoaded={isLoaded}
             title="Преподаватели"
             className="catalog teachers-catalog"
             location={location}>
-            {!(teachers && subjects) ? (
-                    <PageLoadingPlaceholder/>
-                ) : (
+            {isLoaded && (
                 <TeachersCatalog.Body
                     subjects={subjects}
                     teachers={teachers}>
@@ -21,8 +21,7 @@ const TeachersCatalogPage = ({location}) => {
                         <TeachersCatalog.Catalog/>
                     </PageContent>
                 </TeachersCatalog.Body>
-            )
-            }
+            )}
         </Page>
     );
 };

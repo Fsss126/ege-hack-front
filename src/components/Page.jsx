@@ -10,7 +10,7 @@ import SideBar from "./SideBar";
 import {useSideBarState} from "./App";
 import {PermissionsDeniedError} from "./ErrorPage";
 
-export const PageLoadingPlaceholder = () => (
+const PageLoadingPlaceholder = () => (
     <div className="layout__content">
         <div className="layout__loading-spinner">
             <i className="spinner-border"/>
@@ -18,7 +18,7 @@ export const PageLoadingPlaceholder = () => (
     </div>
 );
 
-export const PageLink = ({to, arrow=true, forward=true, className, children, ...props}) => (
+export const PageLink = ({to, arrow = true, forward = true, className, children, ...props}) => (
     <Link
         className={`${arrow ? 'arrow-link' : ''} ${forward ? 'arrow-link-forward' : 'arrow-link-backward'} ${className || ''}`}
         to={to}
@@ -63,7 +63,18 @@ const LayoutAnimationClassNames = {
     exitActive: 'sidebar-hiding'
 };
 
-const Page = ({title, className, children, checkLogin=true, showSidebar=true, showHeader=true, showUserNav=true, location, permissions}) => {
+const Page = ({
+                  title,
+                  className,
+                  children,
+                  checkLogin = true,
+                  showSidebar = true,
+                  showHeader = true,
+                  showUserNav = true,
+                  location,
+                  requiredPermissions,
+                  isLoaded=true
+              }) => {
     const [isSideBarOpened, toggleSideBar] = useSideBarState();
     const {user, userInfo} = useUser();
 
@@ -73,20 +84,15 @@ const Page = ({title, className, children, checkLogin=true, showSidebar=true, sh
             return (
                 <Redirect to={{
                     pathname: '/login/',
-                    state: location ? { referrer: location.pathname } : undefined
+                    state: location ? {referrer: location.pathname} : undefined
                 }}/>);
         }
     }
-    if (permissions && userInfo.permissions) {
-        if (_.difference(permissions, userInfo.permissions).length !== 0)
+
+    if (requiredPermissions && userInfo && userInfo.permissions) {
+        if (_.difference(requiredPermissions, userInfo.permissions).length !== 0)
             return <PermissionsDeniedError/>;
     }
-    const page = (
-        <div className={`layout__content ${className || ''}`}>
-            {title && <Helmet><title>{title} – ЕГЭ HACK</title></Helmet>}
-            {children}
-        </div>
-    );
     return (
         <div className="app">
             {showHeader && (
@@ -108,7 +114,12 @@ const Page = ({title, className, children, checkLogin=true, showSidebar=true, sh
                                 accountRoles={user !== null ? (userInfo ? userInfo.roles : undefined) : null}
                                 onMenuClose={toggleSideBar}/>
                         )}
-                        {page}
+                        <div className={`layout__content ${className || ''}`}>
+                            {title && <Helmet><title>{title} – ЕГЭ HACK</title></Helmet>}
+                            {user && userInfo && isLoaded ?
+                                children :
+                                <PageLoadingPlaceholder/>}
+                        </div>
                     </React.Fragment>
                 </div>
             </CSSTransition>

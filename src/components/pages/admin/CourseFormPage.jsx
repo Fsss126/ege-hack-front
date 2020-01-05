@@ -1,8 +1,13 @@
 import React from "react";
-import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
+import Page, {PageContent} from "components/Page";
 import Input from "components/ui/Input";
 import {useTeachers} from "store";
 import {ImageInput} from "components/ui/file-input";
+import {PERMISSIONS} from "definitions/constants";
+
+const REQUIRED_PERMISSIONS = [
+    PERMISSIONS.COURSE_EDIT
+];
 
 const INITIAL_FORM_DATA = {
     name: '',
@@ -52,100 +57,95 @@ const CourseFormPage = (props) => {
         setFormData(state => ({...state, image: file}));
     }, []);
 
-    if (teachers && subjects) {
-        return (
-            <Page
-                className="course-form-page"
-                title="Магазин курсов"
-                location={location}>
-                <PageContent>
-                    <div className="layout__content-block">
-                        <h3>Новый курс</h3>
-                        <form className="course-form form container p-0 course-page">
-                            <div className="row">
-                                <div className="preview-container col-12 col-md-auto">
-                                    <ImageInput
-                                        maxFiles={1}
-                                        initialFiles={initialFiles}
-                                        accept="image/*"
-                                        onChange={onFileUpload}
-                                        maxSizeBytes={1024 * 1024}/>
-                                </div>
-                                <div className="col form__fields">
-                                    <Input
-                                        name="name"
-                                        type="text"
-                                        required
-                                        placeholder="Название"
-                                        value={name}
-                                        onChange={onInputChange}/>
-                                    <Input.Select
-                                        name="subject_id"
-                                        placeholder="Предмет"
-                                        options={subjectOptions}
-                                        value={subject_id}
-                                        selectProps={SUBJECT_SELECT_PROPS}
-                                        callback={onInputChange}/>
-                                    <Input.Select
-                                        name="teacher_id"
-                                        placeholder="Предмет"
-                                        options={teacherOptions}
-                                        value={teacher_id}
-                                        selectProps={TEACHER_SELECT_PROPS}
-                                        callback={onInputChange}/>
-                                    <Input //TODO: add ₽ sign
-                                        name="price"
-                                        type="number"
-                                        required
-                                        placeholder="Цена"
-                                        value={price}
-                                        onChange={onInputChange}/>
-                                    <Input.CheckBox
-                                        name="online"
-                                        value={online}
-                                        label="Онлайн курс"
-                                        onChange={onInputChange}/>
-                                    <div className="row">
-                                        <div className="col">
-                                            <Input
-                                                name="date_start"
-                                                type="date"
-                                                required
-                                                placeholder="Дата начала"
-                                                value={date_start}
-                                                onChange={onInputChange}/>
-                                        </div>
-                                        <div className="col">
-                                            <Input
-                                                name="date_end"
-                                                type="date"
-                                                required
-                                                placeholder="Дата окончания"
-                                                value={date_end}
-                                                onChange={onInputChange}/>
-                                        </div>
-                                    </div>
-                                    <Input.TextArea
-                                        name="description"
-                                        required
-                                        placeholder="Описание"
-                                        value={description}
-                                        onChange={onInputChange}/>
-                                </div>
+    const isLoaded = teachers && subjects;
+
+    return (
+        <Page
+            isLoaded={isLoaded}
+            requiredPermissions={REQUIRED_PERMISSIONS}
+            className="course-form-page"
+            title="Магазин курсов"
+            location={location}>
+            <PageContent>
+                <div className="layout__content-block">
+                    <h3>Новый курс</h3>
+                    <form className="course-form form container p-0 course-page">
+                        <div className="row">
+                            <div className="preview-container col-12 col-md-auto">
+                                <ImageInput
+                                    maxFiles={1}
+                                    initialFiles={initialFiles}
+                                    accept="image/*"
+                                    onChange={onFileUpload}
+                                    maxSizeBytes={1024 * 1024}/>
                             </div>
-                        </form>
-                    </div>
-                </PageContent>
-            </Page>
-        );
-    } else {
-        return (
-            <Page
-                location={location}>
-                <PageLoadingPlaceholder/>
-            </Page>
-        );
-    }
+                            <div className="col form__fields">
+                                <Input
+                                    name="name"
+                                    type="text"
+                                    required
+                                    placeholder="Название"
+                                    value={name}
+                                    onChange={onInputChange}/>
+                                <Input.Select
+                                    name="subject_id"
+                                    placeholder="Предмет"
+                                    options={subjectOptions}
+                                    value={subject_id}
+                                    selectProps={SUBJECT_SELECT_PROPS}
+                                    callback={onInputChange}/>
+                                <Input.Select
+                                    name="teacher_id"
+                                    placeholder="Предмет"
+                                    options={teacherOptions}
+                                    value={teacher_id}
+                                    selectProps={TEACHER_SELECT_PROPS}
+                                    callback={onInputChange}/>
+                                <Input //TODO: add ₽ sign
+                                    name="price"
+                                    type="number"
+                                    required
+                                    placeholder="Цена"
+                                    value={price}
+                                    onChange={onInputChange}/>
+                                <Input.CheckBox
+                                    name="online"
+                                    value={online}
+                                    label="Онлайн курс"
+                                    onChange={onInputChange}/>
+                                <div className="row">
+                                    <div className="col">
+                                        <Input
+                                            name="date_start"
+                                            type="date"
+                                            required
+                                            placeholder="Дата начала"
+                                            value={date_start}
+                                            onChange={onInputChange}/>
+                                    </div>
+                                    <div className="col">
+                                        <Input
+                                            name="date_end"
+                                            type="date"
+                                            required
+                                            placeholder="Дата окончания"
+                                            value={date_end}
+                                            onChange={onInputChange}/>
+                                    </div>
+                                </div>
+                                <Input.TextArea
+                                    name="description"
+                                    required
+                                    placeholder="Описание"
+                                    value={description}
+                                    onChange={onInputChange}/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </PageContent>
+        </Page>
+    );
 };
 
 export default CourseFormPage;

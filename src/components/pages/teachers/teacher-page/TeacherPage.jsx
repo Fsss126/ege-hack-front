@@ -1,6 +1,6 @@
 import React from "react";
 import _ from "lodash";
-import Page, {PageContent, PageLoadingPlaceholder} from "components/Page";
+import Page, {PageContent} from "components/Page";
 import ErrorPage from "components/ErrorPage";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
@@ -48,6 +48,7 @@ const TeacherPage = (props) => {
             const fullName = `${first_name} ${last_name}`;
             return (
                 <Page
+                    isLoaded={true}
                     title={`${fullName}`}
                     className={`teacher-page ${className || ''}`}
                     location={location}>
@@ -72,10 +73,7 @@ const TeacherPage = (props) => {
     }
     else {
         return (
-            <Page
-                location={location}>
-                <PageLoadingPlaceholder/>
-            </Page>
+            <Page isLoaded={false} location={location}/>
         );
     }
 };

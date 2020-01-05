@@ -120,10 +120,13 @@ export function useSubjects() {
 }
 
 export function useDiscount(selectedCourses) {
+    const {user} = useUser();
     const [discount, setDiscount] = React.useState(null);
     const [error, setError] = React.useState(null);
     const [getCancel, setCancel] = useRefValue(null);
     const fetchDiscount = React.useCallback(async () => {
+        if (Auth.getUser() === undefined)
+            return;
         const courses = selectedCourses instanceof Set ? [...selectedCourses].map(({id}) => id) : [selectedCourses];
         if (courses.length === 0)
             return ;
@@ -152,7 +155,7 @@ export function useDiscount(selectedCourses) {
     React.useEffect(() => {
         if (!(error))
             fetchDiscount();
-    }, [selectedCourses, error]);
+    }, [user, selectedCourses, error]);
     if (error) {
         return {discount, error, retry: fetchDiscount};
     }
