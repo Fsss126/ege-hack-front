@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import CoverImage from "./common/CoverImage";
 
 const Header = (props) => {
-    const {onMenuButtonClick, user, userInfo, sidebar} = props;
+    const {onMenuButtonClick, user, userInfo, sidebar, showUserNav} = props;
     return (
         <header>
             <div className="container-fluid header__container">
@@ -24,60 +24,62 @@ const Header = (props) => {
                     </div>
                     <div className="col-auto d-flex">
                         <div className="user-nav">
-                            {user !== null ? (
-                                <React.Fragment>
-                                    <div className={`user-nav__info d-flex align-items-center ${user ? '' : 'ph-item'}`}>
-                                        {user ? (
-                                            <div className="user-nav__user-name">{user.user.first_name} {user.user.last_name}</div>
-                                        ) : (
-                                            <div className="user-nav__user-name ph-text"/>
-                                        )}
-                                        {userInfo ? (
-                                            <div className="nav-btn">
-                                                {userInfo.vk_info.photo_max ?
-                                                    <CoverImage src={userInfo.vk_info.photo_max} round square/>
-                                                    : <i className="icon-profile"/>}
-                                            </div>
-                                        ) : (
-                                            <div className="nav-btn">
-                                                <CoverImage placeholder round square/>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="user-nav__menu-container">
-                                        <div className="user-nav__menu">
-                                            <div className="user-nav__menu-options">
-                                                <Link to="/account/" className="menu-option">
-                                                    <i className="icon-profile"/>Аккаунт
-                                                </Link>
-                                                <Link to="/account/settings/" className="menu-option">
-                                                    <i className="icon-settings"/>Настройки
-                                                </Link>
-                                                <div
-                                                    className="menu-option"
-                                                    tabIndex={2}
-                                                    onClick={Auth.logout}>
-                                                    <i className="icon-logout"/>Выход
+                            {showUserNav && (
+                                user !== null ? (
+                                    <React.Fragment>
+                                        <div className={`user-nav__info d-flex align-items-center ${user ? '' : 'ph-item'}`}>
+                                            {user ? (
+                                                <div className="user-nav__user-name">{user.user.first_name} {user.user.last_name}</div>
+                                            ) : (
+                                                <div className="user-nav__user-name ph-text"/>
+                                            )}
+                                            {userInfo ? (
+                                                <div className="nav-btn">
+                                                    {userInfo.vk_info.photo_max ?
+                                                        <CoverImage src={userInfo.vk_info.photo_max} round square/>
+                                                        : <i className="icon-profile"/>}
+                                                </div>
+                                            ) : (
+                                                <div className="nav-btn">
+                                                    <CoverImage placeholder round square/>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="user-nav__menu-container">
+                                            <div className="user-nav__menu">
+                                                <div className="user-nav__menu-options">
+                                                    <Link to="/account/" className="menu-option">
+                                                        <i className="icon-profile"/>Аккаунт
+                                                    </Link>
+                                                    <Link to="/account/settings/" className="menu-option">
+                                                        <i className="icon-settings"/>Настройки
+                                                    </Link>
+                                                    <div
+                                                        className="menu-option"
+                                                        tabIndex={2}
+                                                        onClick={Auth.logout}>
+                                                        <i className="icon-logout"/>Выход
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    <div className="nav-btn">
-                                        <i className="icon-profile"/>
-                                    </div>
-                                    <div className="user-nav__menu-container">
-                                        <div className="user-nav__menu">
-                                            <div className="user-nav__menu-options">
-                                                <Link to="/login/" className="menu-option">
-                                                    <i className="icon-login"/>Войти
-                                                </Link>
+                                    </React.Fragment>
+                                ) : (
+                                    <React.Fragment>
+                                        <div className="nav-btn">
+                                            <i className="icon-profile"/>
+                                        </div>
+                                        <div className="user-nav__menu-container">
+                                            <div className="user-nav__menu">
+                                                <div className="user-nav__menu-options">
+                                                    <Link to="/login/" className="menu-option">
+                                                        <i className="icon-login"/>Войти
+                                                    </Link>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </React.Fragment>
+                                    </React.Fragment>
+                                )
                             )}
                         </div>
                     </div>

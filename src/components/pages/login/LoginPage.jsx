@@ -23,6 +23,8 @@ const LoginPage = (props) => {
             title="Вход"
             className="login-page align-items-center justify-content-center"
             checkLogin={false}
+            showSidebar={false}
+            showUserNav={false}
             location={location}>
             <div className="login-btn" onClick={onClick}>Войти{' '}<i className="fab fa-vk vk"/></div>
         </Page>

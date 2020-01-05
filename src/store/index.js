@@ -4,6 +4,7 @@ import APIRequest, {getCancelToken} from "api";
 import {useRefValue} from "hooks/common";
 
 const StoreContext = React.createContext(null);
+StoreContext.displayName = 'StoreContext';
 
 function useUserAuth() {
     const [user, setUser] = React.useState(Auth.getUser());

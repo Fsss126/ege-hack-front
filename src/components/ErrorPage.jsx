@@ -16,4 +16,8 @@ const ErrorPage = ({errorCode = 404, message, link: {text, url} = {}}) => {
     );
 };
 
+export const PermissionsDeniedError = () => {
+    return <ErrorPage errorCode={403} message="Недостаточно прав"/>;
+};
+
 export default ErrorPage;

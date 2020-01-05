@@ -1,8 +1,14 @@
 import React from 'react';
+import _ from 'lodash';
 import {Helmet} from "react-helmet";
 import Sticky from 'react-sticky-el';
 import {Link, Redirect} from "react-router-dom";
 import {useUser} from "../store";
+import Header from "./Header";
+import {CSSTransition} from "react-transition-group";
+import SideBar from "./SideBar";
+import {useSideBarState} from "./App";
+import {PermissionsDeniedError} from "./ErrorPage";
 
 export const PageLoadingPlaceholder = () => (
     <div className="layout__content">
@@ -49,9 +55,19 @@ class PageErrorBoundary extends React.Component {
     }
 }
 
-const Page = ({title, className, children, checkLogin=true, location}) => {
-    //TODO: check permissions
+const LayoutAnimationClassNames = {
+    enter: 'sidebar-opened',
+    enterActive: 'sidebar-opened',
+    enterDone: 'sidebar-opened',
+    exit: 'sidebar-hiding',
+    exitActive: 'sidebar-hiding'
+};
+
+const Page = ({title, className, children, checkLogin=true, showSidebar=true, showHeader=true, showUserNav=true, location, permissions}) => {
+    const [isSideBarOpened, toggleSideBar] = useSideBarState();
     const {user, userInfo} = useUser();
+
+    //TODO: check permissions
     if (checkLogin) {
         if (user === null) {
             return (
@@ -61,12 +77,43 @@ const Page = ({title, className, children, checkLogin=true, location}) => {
                 }}/>);
         }
     }
-    return (
+    if (permissions && userInfo.permissions) {
+        if (_.difference(permissions, userInfo.permissions).length !== 0)
+            return <PermissionsDeniedError/>;
+    }
+    const page = (
         <div className={`layout__content ${className || ''}`}>
             {title && <Helmet><title>{title} – ЕГЭ HACK</title></Helmet>}
             {children}
         </div>
     );
+    return (
+        <div className="app">
+            {showHeader && (
+                <Header
+                    onMenuButtonClick={toggleSideBar}
+                    showUserNav={showUserNav}
+                    user={user}
+                    userInfo={userInfo}
+                    sidebar={showSidebar}/>
+            )}
+            <CSSTransition
+                in={isSideBarOpened}
+                timeout={200}
+                classNames={LayoutAnimationClassNames}>
+                <div className="layout">
+                    <React.Fragment>
+                        {showSidebar && (
+                            <SideBar
+                                accountRoles={user !== null ? (userInfo ? userInfo.roles : undefined) : null}
+                                onMenuClose={toggleSideBar}/>
+                        )}
+                        {page}
+                    </React.Fragment>
+                </div>
+            </CSSTransition>
+        </div>
+    )
 };
 
 export default Page;

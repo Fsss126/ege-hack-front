@@ -6,103 +6,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Fixes">
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/File.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/GenericFileInput.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/default/FileInput.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/default/InputButton.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/default/Layout.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/default/Preview.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/default/SubmitButton.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/image/ImageInput.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/image/InputPlaceholder.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/image/Layout.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/image/Preview.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/file-input/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/asset-manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/android-icon-144x144.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/android-icon-192x192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/android-icon-36x36.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/android-icon-48x48.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/android-icon-72x72.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/android-icon-96x96.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-114x114.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-120x120.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-144x144.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-152x152.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-180x180.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-57x57.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-60x60.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-72x72.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-76x76.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon-precomposed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/apple-icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/browserconfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/favicon-16x16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/favicon-32x32.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/favicon-96x96.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/ms-icon-144x144.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/ms-icon-150x150.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/ms-icon-310x310.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/icons/ms-icon-70x70.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/logo192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/logo512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/robots.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/service-worker.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/css/2.44d09fed.chunk.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/css/2.44d09fed.chunk.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/js/runtime~main.d653cc00.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/js/runtime~main.d653cc00.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Bold.a3d7d652.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Bold.c15ee62b.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Bold.ee9b8c53.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Light.677c3a32.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Light.7fd3861d.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Light.abd5115e.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Medium.6fe466da.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Medium.b86e995a.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro-Medium.c1613691.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro.3100f91b.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro.3cb46b37.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/GothamPro.c31a8e09.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/dummy-pic.c0547b67.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/dummy_poster.f51c6af6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/icomoon.47c780a6.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/icomoon.4b8bffb0.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/icomoon.4bc4e829.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/icomoon.eec383c9.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/static/media/logo.9d4c48e7.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ErrorPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ErrorPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Course.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CoverImage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CoverImage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/ListItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/ListItem.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/UserProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/UserProfile.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/WebinarSchedule.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/WebinarSchedule.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/account/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/account/AccountPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/File.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/FileInput.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Input.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Input.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/LoadingIndicator.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/LoadingIndicator.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Tooltip.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Tooltip.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/constants.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -410,7 +321,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576021176781</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Fixes; Changed Auth">
+      <created>1578171579270</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1578171579270</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -446,7 +364,8 @@
     <MESSAGE value="Sidebar fix" />
     <MESSAGE value="Changed auth" />
     <MESSAGE value="Fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes" />
+    <MESSAGE value="Fixes; Changed Auth" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes; Changed Auth" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Inspections" timestamp="1578065894058">
@@ -457,10 +376,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="423" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578062435898" />
-    <state x="303" y="52" key="CommitChangelistDialog2" timestamp="1578171455036">
+    <state x="303" y="52" key="CommitChangelistDialog2" timestamp="1578171579071">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1578171455036" />
+    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1578171579071" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1577623377288">
       <screen x="0" y="23" width="1440" height="820" />
     </state>
@@ -490,10 +409,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1575726108474" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1576021185513">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1578171583718">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1576021185513" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1578171583718" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -502,10 +421,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1578171222305">
+    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1578178447867">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578060594377" />
-    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1578171222305" />
+    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1578178447867" />
   </component>
 </project>
