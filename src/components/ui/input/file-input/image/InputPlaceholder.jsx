@@ -1,7 +1,7 @@
 import React from "react";
 import CoverImage from "components/common/CoverImage";
-import {useInputCallback} from "../GenericFileInput";
-import Button from "../../Button";
+import {FileInputContext, useInputCallback} from "../GenericFileInput";
+import Button from "../../../Button";
 
 const InputPlaceholder = (props) => {
     const {
@@ -15,6 +15,7 @@ const InputPlaceholder = (props) => {
         files,
         content
     } = props;
+    const {name, required} = React.useContext(FileInputContext);
     const onChange = useInputCallback(getFilesFromEvent, onFiles);
     return (
         <label className="image-input">
@@ -29,6 +30,8 @@ const InputPlaceholder = (props) => {
             <input
                 className={className}
                 style={style}
+                name={name}
+                required={required}
                 type="file"
                 accept={accept}
                 multiple={multiple}

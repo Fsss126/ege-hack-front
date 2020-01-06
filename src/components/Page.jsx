@@ -78,7 +78,6 @@ const Page = ({
     const [isSideBarOpened, toggleSideBar] = useSideBarState();
     const {user, userInfo} = useUser();
 
-    //TODO: check permissions
     if (checkLogin) {
         if (user === null) {
             return (
@@ -87,12 +86,12 @@ const Page = ({
                     state: location ? {referrer: location.pathname} : undefined
                 }}/>);
         }
+        if (requiredPermissions && userInfo && userInfo.permissions) {
+            if (_.difference(requiredPermissions, userInfo.permissions).length !== 0)
+                return <PermissionsDeniedError/>;
+        }
     }
-
-    if (requiredPermissions && userInfo && userInfo.permissions) {
-        if (_.difference(requiredPermissions, userInfo.permissions).length !== 0)
-            return <PermissionsDeniedError/>;
-    }
+    const showContent = (checkLogin ? (requiredPermissions ? user && userInfo : !!user) : true) && isLoaded;
     return (
         <div className="app">
             {showHeader && (
@@ -116,7 +115,7 @@ const Page = ({
                         )}
                         <div className={`layout__content ${className || ''}`}>
                             {title && <Helmet><title>{title} – ЕГЭ HACK</title></Helmet>}
-                            {user && userInfo && isLoaded ?
+                            {showContent ?
                                 children :
                                 <PageLoadingPlaceholder/>}
                         </div>

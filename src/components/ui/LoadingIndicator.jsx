@@ -53,7 +53,7 @@ export function useLoadingState(loading, done, rejected, error) {
 export const LoadingIndicator = ({state, onClick, errorMessage}) => {
     const icon = (state === LOADING_STATE.LOADED && "spinner-border")
         || (state === LOADING_STATE.SUCCESS && "icon-check")
-        || (state === LOADING_STATE.ERROR && "icon-reload")
+        || (state === LOADING_STATE.ERROR && "icon-retry")
         || (state === LOADING_STATE.REJECTED && "icon-alert")
         || "spinner-border";
     return (

@@ -10,6 +10,7 @@ import ErrorPage from "../ErrorPage";
 window._ = _;
 
 export const CourseOverviewContext = React.createContext({});
+CourseOverviewContext.displayName = 'CourseOverviewContext';
 
 const Description = () => {
     const {course} = React.useContext(CourseOverviewContext);

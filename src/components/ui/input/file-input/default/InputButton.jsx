@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "components/ui/Button";
-import {useInputCallback} from "../GenericFileInput";
+import {FileInputContext, useInputCallback} from "../GenericFileInput";
 
 const InputButton = (props) => {
     const {
@@ -15,6 +15,7 @@ const InputButton = (props) => {
         content,
         extra: { maxFiles }
     } = props;
+    const {name, required} = React.useContext(FileInputContext);
     const onChange = useInputCallback(getFilesFromEvent, onFiles);
     const isActive = files.length < maxFiles && !disabled;
     return (
@@ -27,6 +28,8 @@ const InputButton = (props) => {
                 className={className}
                 style={style}
                 type="file"
+                name={name}
+                required={required}
                 accept={accept}
                 multiple={multiple}
                 disabled={!isActive}

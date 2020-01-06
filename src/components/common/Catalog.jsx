@@ -1,10 +1,10 @@
 import React from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import List from "./List";
-import Input from "../ui/Input";
-import Page from "../Page";
+import * as Input from "components/ui/input";
 
 export const CatalogContext = React.createContext({});
+CatalogContext.displayName = 'CatalogContext';
 
 const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnline = true}={}}) => {
     const {options, subject, online, onChange} = React.useContext(CatalogContext);

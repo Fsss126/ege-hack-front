@@ -22,7 +22,7 @@ const CatalogPage = ({location}) => {
                 : <Button className="course__select-btn" active={false}>Пройден</Button>}
         </Course>
     ), []);
-    const isLoaded = courses && subjects && webinars;
+    const isLoaded = !!(courses && subjects && webinars);
     return (
         <Page
             isLoaded={isLoaded}

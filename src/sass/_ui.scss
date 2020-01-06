@@ -9,6 +9,7 @@
 @import "mixins";
 @import "tooltip";
 @import "shimmer";
+@import "popup";
 
 @mixin btnBehavior{
   cursor: pointer;
@@ -299,13 +300,13 @@ label {
     background: $bg-grey;
     border-radius: 8px;
   }
-  .image-file__overlay {
+  .image-file__overlay, .image-file__overlay-bg {
     position: absolute;
     height: 100%;
     width: 100%;
     top: 0;
   }
-  .image-file__overlay {
+  .image-file__overlay-bg {
     opacity: 0.6;
   }
   .file__loading-progress {
@@ -315,13 +316,13 @@ label {
   &.file-loading .file__loading-progress {
     opacity: 0.8;
   }
-  &.file-error .image-file__overlay, &.file-rejected .image-file__overlay {
+  &.file-error .image-file__overlay-bg, &.file-rejected .image-file__overlay-bg {
     background: $error-bg !important;
   }
-  &.file-loaded .image-file__overlay {
+  &.file-loaded .image-file__overlay-bg {
     background: $success-bg !important;
   }
-  &.file-success .fimage-file__overlay {
+  &.file-success .fimage-file__overlay-bg {
     width: 100%;
     background: $success-green !important;
     transition: opacity 1s;
@@ -526,11 +527,85 @@ input[type=number] {
   }
 }
 
+.DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  background-color: #f0f8ff !important;
+  color: #4a90e2;
+}
+.DayPicker-Day {
+  border-radius: 0 !important;
+}
+.DayPicker-Day--start {
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+.DayPicker-Day--end {
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+.DayPicker-Day--today {
+  color: $text-dark;
+  font-family: $font-medium;
+}
+
+.DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+  background-color: $bg-grey;
+  overflow: hidden;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  background-color: $accent-orange;
+  color: white;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  background-color: $bg-grey !important;
+  color: $accent-orange;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
+  background-color: $accent-orange;
+  opacity: .9;
+}
+
+.DayPicker-NavButton {
+  font-family: $icon-font;
+  background: none;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+  text-align: center;
+  //margin-top: 4px;
+  font-size: 18px;
+  color: $icon-grey;
+  &:before {
+    content: "\e900";
+    vertical-align: middle;
+    display: inline-block;
+  }
+  &.DayPicker-NavButton--prev {
+    transform: rotate(90deg);
+  }
+  &.DayPicker-NavButton--next{
+    transform: rotate(-90deg);
+  }
+}
+
+.DayPickerInput {
+  position: relative;
+
+  .DayPickerInput-OverlayWrapper {
+    position: static;
+  }
+}
+
 .form {
   .form__fields {
     &>*~* {
       margin-top: 16px;
     }
+  }
+  .form__action-container {
+    margin-top: 16px;
   }
 }
 

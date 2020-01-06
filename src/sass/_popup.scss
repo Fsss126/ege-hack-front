@@ -1,0 +1,123 @@
+@import "variables";
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    cursor: pointer;
+    visibility: hidden;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+
+    .popup__container {
+        position: relative;
+        width: 90%;
+        max-width: 400px;
+        margin: 0 auto;
+        cursor: auto;
+        transition: transform .3s;
+        .popup__window {
+            border-radius: $card-border-radius;
+            background: white;
+            box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.1), 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    &.animation {
+        opacity: 0;
+        transition: opacity 0.3s, visibility 0.3s, background 0.3s;
+
+        &.scale .popup__container {
+            top: 50%;
+            transform: scale(0) translateY(-50%);
+        }
+        &.bottom-up .popup__container {
+            top: 50%;
+            transform: translateY(100%);
+        }
+    }
+
+    &.is-visible {
+        visibility: visible;
+        &.animation {
+            opacity: 1;
+            &.scale .popup__container {
+                transform: scale(1) translateY(-50%);
+            }
+            &.bottom-up .popup__container {
+                transform: translateY(-50%);
+            }
+        }
+    }
+}
+
+.message-popup {
+    background: rgba(0, 0, 0, 0.75);
+    .popup__container {
+        max-width: 320px;
+    }
+    .popup__window {
+        padding-bottom: 32px;
+    }
+
+    &.large {
+        .popup__container {
+            max-width: 400px;
+        }
+    }
+    &.error-popup {
+        .message-text {
+            text-align: left;
+            word-break: break-word;
+        }
+    }
+
+    .message-text {
+        text-align: center;
+        max-width: calc(100% - 80px);
+        //padding-left: 0;
+    }
+
+    .alert-icon {
+        font-size: 36px;
+        padding: 0 20px;
+        margin-left: -24px;
+
+        &.error-icon {
+            color: $error-red;
+        }
+
+        &.success-icon {
+            color: $success-green;
+        }
+    }
+
+    .close-button {
+        padding: 15px 0 8px;
+        cursor: pointer;
+        &.hidden {
+            display: block;
+            visibility: hidden;
+        }
+    }
+
+    .action-wrap {
+        margin-top: 32px;
+        padding-bottom: 16px;
+        text-align: center;
+        .btn {
+            display: inline-block;
+            margin: 0 4px;
+            &:first-child {
+                margin-left: 0;
+            }
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}

@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from "../Button";
+import Button from "../../Button";
 import {downloadFile} from "definitions/helpers";
-import {LoadingIndicator, useLoadingState} from "../LoadingIndicator";
-import CoverImage from "../../common/CoverImage";
+import {LoadingIndicator, useLoadingState} from "../../LoadingIndicator";
+import CoverImage from "../../../common/CoverImage";
 
 const DefaultFileProps = {
     error: null,
@@ -86,22 +86,23 @@ export const ImageFile = ({
                 src={url}
                 className="poster-cover"
                 onClick={downloadCallback}>
-                <div className="image-file__overlay"/>
-                {loading !== null && <div className="file__loading-progress" style={{width: `${100 - loading}%`}}/>}
-                {deletable && (
-                    <div className="file__action-btn file__delete-btn">
-                        <i
-                            onClick={onDelete}
-                            className="icon-close"/>
-                    </div>
-                )}
-                {loading !== null && (
-                    <LoadingIndicator
-                        onClick={onIndicatorClick}
-                        state={state}
-                        errorMessage={errorMessage}/>
-                )}
+                <div className="image-file__overlay">
+                    {loading !== null && <div className="file__loading-progress" style={{width: `${100 - loading}%`}}/>}
+                    {deletable && (
+                        <div className="file__action-btn file__delete-btn">
+                            <i
+                                onClick={onDelete}
+                                className="icon-close"/>
+                        </div>
+                    )}
+                </div>
             </CoverImage>
+            {loading !== null && (
+                <LoadingIndicator
+                    onClick={onIndicatorClick}
+                    state={state}
+                    errorMessage={errorMessage}/>
+            )}
         </div>
     );
 };

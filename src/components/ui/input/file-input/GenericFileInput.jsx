@@ -5,6 +5,7 @@ import {useRefValue} from "hooks/common";
 import Auth from 'definitions/auth';
 import {API_ROOT} from "api";
 import {getAuthHeader} from "definitions/helpers";
+import {useFormState} from "components/ui/Form";
 
 import 'react-dropzone-uploader/dist/styles.css';
 
@@ -29,6 +30,7 @@ const FILE_STATUS = {
 };
 
 export const FileInputContext = React.createContext(null);
+FileInputContext.displayName = 'FileInputContext';
 
 const isFileReady = f => f.meta.status === 'done';
 const getUploadParams = () => {
@@ -108,55 +110,63 @@ const GenericFileInput = (props) => {
     let {
         initialFiles=[],
         inputContent="Загрузить файл",
-        onChange,
+        onChange: changeCallback,
         onSubmit,
         maxFiles=5,
         maxSizeBytes=1024 * 1024 * 4,
         accept,
         isDisabled=false,
+        name,
+        required,
+        value,
         ...otherProps
     } = props;
 
     const [preloadedFiles, setPreloadedFiles] = React.useState(initialFiles);
-    const [hasChanged, setChanged] = React.useState(false);
-    const [submitting, setSubmitting] = React.useState(null);
-    const [getInputFiles, setInputFiles] = useRefValue([]);
 
-    const deletePreloadedFile = React.useCallback((file) => {
-        const newPreloadedFiles = preloadedFiles.filter(item => item !== file);
-        setChanged(true);
-        setPreloadedFiles(newPreloadedFiles);
-        onChange && onChange(getCallbackFiles(getInputFiles(), newPreloadedFiles));
-    }, [preloadedFiles, onChange, getInputFiles]);
+    const inputFilesRef = React.useRef([]);
 
-    const handleChangeStatus = React.useCallback(({meta, ...file}, status, files) => {
-        console.log(status, meta, _.cloneDeep(files));
-        setChanged(true);
-        setInputFiles(files);
-        onChange && onChange(true, getCallbackFiles(files, preloadedFiles));
-    }, [onChange, preloadedFiles, setInputFiles]);
-
-    const handleSubmit = React.useCallback(async (files) => {
+    const onSubmitClick = React.useCallback((files) => {
         console.log(files.map(f => f.meta));
         if (onSubmit) {
             const filesToSubmit = getCallbackFiles(files, preloadedFiles);
             const returnValue = onSubmit(filesToSubmit);
             if (returnValue instanceof Promise) {
-                setSubmitting(true);
-                try {
+                (async () => {
                     await returnValue;
-                    setChanged(false);
-                    onChange && onChange(false, filesToSubmit);
-                }
-                finally {
-                    setSubmitting(false);
-                }
+                    changeCallback && changeCallback(filesToSubmit, name, false);
+                })();
             }
+            return returnValue;
         }
-    }, [onChange, onSubmit, preloadedFiles]);
+    }, [changeCallback, onSubmit, preloadedFiles, name]);
+
+    const {submitting, handleSubmit, hasChanged, onChange} = useFormState(onSubmitClick);
+
+    const deletePreloadedFile = React.useCallback((file) => {
+        const newPreloadedFiles = preloadedFiles.filter(item => item !== file);
+        onChange();
+        setPreloadedFiles(newPreloadedFiles);
+        changeCallback && changeCallback(getCallbackFiles(inputFilesRef.current, newPreloadedFiles), name, true);
+    }, [preloadedFiles, changeCallback, name, onChange]);
+
+    const handleChangeStatus = React.useCallback(({meta, ...file}, status, files) => {
+        onChange();
+        inputFilesRef.current = files;
+        changeCallback && changeCallback(getCallbackFiles(files, preloadedFiles), name, true);
+    }, [changeCallback, preloadedFiles, name, onChange]);
 
     maxFiles = preloadedFiles ? maxFiles - preloadedFiles.length : maxFiles;
     const disabled = typeof isDisabled === 'function' ? isDisabled() : isDisabled;
+
+    React.useEffect(() => {
+        if (value === null) {
+            for (let file of inputFilesRef.current) {
+                file.remove();
+            }
+            setPreloadedFiles([]);
+        }
+    }, [value]);
 
     return (
         <FileInputContext.Provider
@@ -165,7 +175,9 @@ const GenericFileInput = (props) => {
                 deletePreloadedFile,
                 hasChanged,
                 disabled,
-                submitting
+                submitting,
+                name,
+                required
             }}>
             <Dropzone
                 inputContent={inputContent}

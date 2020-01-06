@@ -18,10 +18,10 @@ function getUserFromStorage() {
     try {
         const storedString = localStorage.getItem(LOCAL_STORAGE_KEY);
         const user = JSON.parse(storedString);
-        //TODO: add check
-        if (!(user && user.first_name && user.last_name))
+        if (!user)
+            return null;
+        if (!(user.first_name && user.last_name))
             throw new Error(`Incomplete data parsed from local storage: ${storedString}`);
-
         return user;
     } catch (e) {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -39,14 +39,25 @@ class Auth {
         window.VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
         window.VK.Auth.getLoginStatus(res => {
             try {
-                console.log('for login status', res);
-                const user = getUserFromStorage();
+                console.log('retrieved login status', res);
+                let user;
+                try {
+                    user = getUserFromStorage();
+                } catch (e) {
+                    console.log('error retrieving user from local storage, revoking grants');
+                    VK.Auth.revokeGrants();
+                }
                 if (!res.session) {
                     this.setUser(null);
                     if (user) {
+                        console.log('No session retrieved, removing user from local storage');
                         setUserToStorage(null);
-                        VK.Auth.revokeGrants();
                     }
+                    return;
+                }
+                if (!user) {
+                    this.setUser(null);
+                    VK.Auth.logout();
                     return;
                 }
                 const {session} = this.getSession(res);

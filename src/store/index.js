@@ -115,7 +115,7 @@ export function useSubjects() {
         return {subjects, error, retry: fetchSubjects};
     }
     else {
-        return {subjects};
+        return {subjects, reload: fetchSubjects};
     }
 }
 
@@ -160,12 +160,12 @@ export function useDiscount(selectedCourses) {
         return {discount, error, retry: fetchDiscount};
     }
     else {
-        return {discount};
+        return {discount, reload: fetchDiscount};
     }
 }
 
 export function useTeachers() {
-    const {subjects, errorLoadingSubjects, reloadSubjects} = useSubjects();
+    const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
     const {user, data: {teachers}, setters: {setTeachers}} = React.useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchTeachers = React.useCallback(async () => {
@@ -211,7 +211,7 @@ export function useTeachers() {
         };
     }
     else {
-        return {teachers, subjects};
+        return {teachers, subjects, reload: fetchTeachers};
     }
 }
 
@@ -255,7 +255,7 @@ export function useShopCatalog() {
         return {
             catalog,
             subjects,
-            error: error || errorLoadingSubjects ,
+            error: error || errorLoadingSubjects,
             retry: () => {
                 if (error)
                     fetchCatalog();
@@ -265,8 +265,16 @@ export function useShopCatalog() {
         };
     }
     else {
-        return {catalog, subjects};
+        return {catalog, subjects, reload: fetchCatalog};
     }
+}
+
+export function useRevokeShopCatalog() {
+    const {setters: {setCatalog}} = React.useContext(StoreContext);
+
+    return React.useCallback(() => {
+        setCatalog(null);
+    }, [setCatalog]);
 }
 
 export function useUserCourses() {
@@ -319,7 +327,7 @@ export function useUserCourses() {
         };
     }
     else {
-        return {courses: userCourses, subjects};
+        return {courses: userCourses, subjects, reload: fetchUserCourses};
     }
 }
 
@@ -368,8 +376,16 @@ export function useLessons(courseId) {
         };
     }
     else {
-        return {lessons: lessons[courseId]};
+        return {lessons: lessons[courseId], reload: fetchLessons};
     }
+}
+
+export function useRevokeLessons(courseId) {
+    const {setters: {setLessons}} = React.useContext(StoreContext);
+
+    return React.useCallback(() => {
+        setLessons(({[courseId]: courseLessons, ...loadedLessons}) => ({...loadedLessons}));
+    }, [setLessons, courseId]);
 }
 
 export function useHomework(lessonId) {
@@ -416,7 +432,7 @@ export function useHomework(lessonId) {
         };
     }
     else {
-        return {homework};
+        return {homework, reload: fetchHomework};
     }
 }
 
@@ -463,7 +479,7 @@ export function useUpcomingWebinars() {
         };
     }
     else {
-        return {webinars: webinars.upcoming};
+        return {webinars: webinars.upcoming, reload: fetchWebinars};
     }
 }
 
@@ -510,7 +526,7 @@ export function useCourseWebinars(courseId) {
         };
     }
     else {
-        return {webinars: webinars[courseId]};
+        return {webinars: webinars[courseId], reload: fetchWebinars};
     }
 }
 

@@ -46,7 +46,7 @@ const Header = (props) => {
                                             )}
                                         </div>
                                         <div className="user-nav__menu-container">
-                                            <div className="user-nav__menu">
+                                            <div className="user-nav__menu overlay-window">
                                                 <div className="user-nav__menu-options">
                                                     <Link to="/account/" className="menu-option">
                                                         <i className="icon-profile"/>Аккаунт

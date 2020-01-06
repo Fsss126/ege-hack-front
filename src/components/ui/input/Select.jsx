@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import SelectInput, { components } from 'react-select';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import ScrollBars from "./ScrollBars";
+import ScrollBars from "../ScrollBars";
 
 const DropdownIndicator = (props) => (
     <components.DropdownIndicator {...props}>
@@ -66,8 +66,7 @@ class MenuList extends Component {
     }
 }
 
-//TODO: try react virtualized select
-export default class Select extends React.PureComponent {
+export class Select extends React.PureComponent {
     onChange = (option) => {
         this.props.callback(option ? option.value : null, this.props.name);
     };

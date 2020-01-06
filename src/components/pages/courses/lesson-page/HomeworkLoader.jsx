@@ -1,12 +1,12 @@
 import React from "react";
 import APIRequest from "api";
 import NavigationBlocker from "components/common/NavigationBlocker";
-import {FileInput} from "components/ui/file-input";
+import {FileInput} from "components/ui/input";
 
 const HomeworkLoader = ({homework, deadline, lessonId}) => {
     const isHomeworkSubmissionClosed = React.useCallback(() => deadline && new Date() >= deadline, [deadline]);
     const [hasChanges, setChanges] = React.useState(false);
-    const onChange = React.useCallback((changed, files) => {
+    const onChange = React.useCallback((files, name, changed) => {
         console.log('files changed', changed, files);
         setChanges(changed);
     }, []);

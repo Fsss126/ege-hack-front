@@ -11,7 +11,7 @@ const CoursePage = ({path, match, location, ...props}) => {
     const {params: {id: courseId}} = match;
     const {courses, error, retry} = useUserCourses();
     const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useCourseWebinars(courseId);
-    // const {teachers, error: errorLoadingTeachers, retry: reloadTeachers} = useTeachers();
+    // const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     const renderLesson = (lesson, props) => {
         const {date, id, locked} = lesson;

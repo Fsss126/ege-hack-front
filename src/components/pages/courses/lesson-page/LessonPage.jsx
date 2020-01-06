@@ -13,7 +13,7 @@ const LessonPage = (props) => {
     const lessonId = parseInt(param_lesson);
 
     const {courses, error, retry} = useUserCourses();
-    // const {teachers, error: errorLoadingTeachers, retry: reloadTeachers} = useTeachers();
+    // const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     const {homework, error: errorLoadingHomework, retry: reloadHomework} = useHomework(lessonId);
     const renderLesson = (lesson) => {
