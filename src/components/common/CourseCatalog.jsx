@@ -1,6 +1,5 @@
 import React from 'react';
 import Catalog from "./Catalog";
-import _ from "lodash";
 
 const CourseCatalog = ({renderCourse, ...otherProps}) => (
     <Catalog.Catalog

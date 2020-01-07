@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export const daysBetween = (date1, date2) => {
     const one_day = 1000 * 60 * 60 * 24;
     const date1_ms = new Date(date1.getYear(), date1.getMonth(), date1.getDate()).getTime();
@@ -49,3 +51,5 @@ export const downloadFile = async (url, name) => {
         link.dispatchEvent(event);
     }
 };
+
+export const checkInclusion = (subset, superset) => _.difference(subset, superset).length === 0;

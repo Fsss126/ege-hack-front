@@ -9,6 +9,7 @@ import {CSSTransition} from "react-transition-group";
 import SideBar from "./SideBar";
 import {useSideBarState} from "./App";
 import {PermissionsDeniedError} from "./ErrorPage";
+import {checkInclusion} from "../definitions/helpers";
 
 const PageLoadingPlaceholder = () => (
     <div className="layout__content">
@@ -73,7 +74,8 @@ const Page = ({
                   showUserNav = true,
                   location,
                   requiredPermissions,
-                  isLoaded=true
+                  loadUserInfo = false,
+                  isLoaded = true,
               }) => {
     const [isSideBarOpened, toggleSideBar] = useSideBarState();
     const {user, userInfo} = useUser();
@@ -87,11 +89,11 @@ const Page = ({
                 }}/>);
         }
         if (requiredPermissions && userInfo && userInfo.permissions) {
-            if (_.difference(requiredPermissions, userInfo.permissions).length !== 0)
+            if (!checkInclusion(requiredPermissions, userInfo.permissions))
                 return <PermissionsDeniedError/>;
         }
     }
-    const showContent = (checkLogin ? (requiredPermissions ? user && userInfo : !!user) : true) && isLoaded;
+    const showContent = (checkLogin ? (requiredPermissions || loadUserInfo ? user && userInfo : !!user) : true) && isLoaded;
     return (
         <div className="app">
             {showHeader && (

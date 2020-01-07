@@ -6,6 +6,7 @@ import * as Input from "components/ui/input";
 export const CatalogContext = React.createContext({});
 CatalogContext.displayName = 'CatalogContext';
 
+//TODO: add search input
 const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnline = true}={}}) => {
     const {options, subject, online, onChange} = React.useContext(CatalogContext);
     return (
