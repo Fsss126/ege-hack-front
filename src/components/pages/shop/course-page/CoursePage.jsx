@@ -4,6 +4,10 @@ import CourseOverview from "components/common/CourseOverview";
 import CoursePriceTab from "./CoursePriceTab";
 import Lesson from "components/common/Lesson";
 import {useShopCatalog, useTeachers, useLessons, useDiscount} from "store";
+import Button from "../../../ui/Button";
+import {Link} from "react-router-dom";
+import ConditionalRenderer from "../../../ConditionalRender";
+import {LESSON_EDIT_PERMISSIONS} from "../../admin/lessons/LessonCreatingPage";
 
 //TODO: fix 404 error screen
 const CoursePage = ({path, location, match}) => {
@@ -31,6 +35,17 @@ const CoursePage = ({path, location, match}) => {
                 <PageContent parentSection={{name: "Магазин курсов"}}>
                     <CourseOverview.Description/>
                     <CourseOverview.Teachers/>
+                    <ConditionalRenderer
+                        requiredPermissions={LESSON_EDIT_PERMISSIONS}>
+                        <div className="layout__content-block d-flex justify-content-end">
+                            <Button
+                                tag={Link}
+                                to={`/courses/${courseId}/create_lesson`}
+                                icon={<i className="icon-add"/>}>
+                                Добавить урок
+                            </Button>
+                        </div>
+                    </ConditionalRenderer>
                     <CourseOverview.Lessons renderLesson={renderLesson}/>
                 </PageContent>
                 <CoursePriceTab

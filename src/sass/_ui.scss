@@ -536,6 +536,7 @@ input[type=number] {
   color: #4a90e2;
 }
 .DayPicker-Day {
+  line-height: 22px;
   border-radius: 0 !important;
 }
 .DayPicker-Day--start {
@@ -603,6 +604,15 @@ input[type=number] {
 }
 
 .form {
+  .input {
+    display: block;
+  }
+  .form__title {
+    margin-bottom: 16px;
+  }
+  &>.row~.row {
+    margin-top: 16px;
+  }
   .form__fields {
     &>*~* {
       margin-top: 16px;

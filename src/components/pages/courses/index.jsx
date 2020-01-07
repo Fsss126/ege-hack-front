@@ -6,6 +6,8 @@ import {LEARNING_STATUS} from "definitions/constants";
 import CatalogPage from "./catalog-page";
 import CoursePage from "./course-page";
 import LessonPage from "./lesson-page";
+import CourseCreatingPage from "../admin/courses/CourseCreatingPage";
+import LessonCreatingPage from "../admin/lessons/LessonCreatingPage";
 
 export default class MyCourses extends React.Component {
     state = {
@@ -17,6 +19,8 @@ export default class MyCourses extends React.Component {
         const {courses} = this.state;
         return (
             <Switch>
+                <Route path={`${match.path}/create`} component={CourseCreatingPage}/>
+                <Route path={`${match.path}/:courseId/create_lesson`} component={LessonCreatingPage}/>
                 <Route path={`${match.path}/:courseId/:lessonId`} render={(props) => (
                     <LessonPage catalog={courses}
                                 {...props}/>

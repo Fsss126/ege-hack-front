@@ -42,11 +42,6 @@ const getUploadParams = () => {
 };
 export const allFilesReady = files => files.every(f => isFileReady(f));
 
-export const getFileProp = ({file_name, file_link}) => ({
-    name: file_name,
-    url: `${API_ROOT}${file_link}`
-});
-
 export function useInputCallback(getFilesFromEvent, onFiles) {
     return React.useCallback(async e => {
         const target = e.target;
@@ -58,7 +53,7 @@ export function useInputCallback(getFilesFromEvent, onFiles) {
 
 export function usePreviewState(fileWithMeta, meta, isUpload) {
     const { cancel, remove, restart, xhr } = fileWithMeta;
-    const { name = '', percent = 0, status, previewUrl: url} = meta;
+    const { name: file_name = '', percent = 0, status, previewUrl: file_link} = meta;
 
     const [getResponse, setResponse] = useRefValue(null);
     if (!getResponse() && xhr && xhr.responseText) {
@@ -83,7 +78,7 @@ export function usePreviewState(fileWithMeta, meta, isUpload) {
     const isRejected = hasError && status === FILE_STATUS.error_file_size ? true : undefined;
     const loading = isUpload ? status === 'done' || status === 'headers_received' ? 100 : percent : null;
     const isDone = status === 'done';
-    const file = {name, url};
+    const file = {file_name, file_link};
     const errorMessage = hasError && isRejected ? 'Файл превышает максимальный допустимый размер' : undefined;
     const action = hasError && !isRejected ? restart : undefined;
     return {
@@ -110,6 +105,7 @@ const GenericFileInput = (props) => {
     let {
         initialFiles=[],
         inputContent="Загрузить файл",
+        filesName,
         onChange: changeCallback,
         onSubmit,
         maxFiles=5,
@@ -174,6 +170,7 @@ const GenericFileInput = (props) => {
                 preloadedFiles,
                 deletePreloadedFile,
                 hasChanged,
+                filesName,
                 disabled,
                 submitting,
                 name,

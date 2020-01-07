@@ -13,7 +13,7 @@ const DefaultFileProps = {
 };
 
 export const File = ({
-                         file: {name, downloadName, url},
+                         file: {file_name: name, downloadName, file_link: url},
                          error,
                          rejected,
                          loading,
@@ -62,7 +62,7 @@ export const File = ({
 File.defaultProps = DefaultFileProps;
 
 export const ImageFile = ({
-                              file: {name, downloadName, url},
+                              file: {file_name: name, downloadName, file_link: url},
                               error,
                               rejected,
                               loading,

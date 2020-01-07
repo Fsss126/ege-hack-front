@@ -1,7 +1,7 @@
 import React from "react";
 import _ from 'lodash';
 import {ImageFile} from "../File";
-import {FileInputContext, getFileProp} from "../GenericFileInput";
+import {FileInputContext} from "../GenericFileInput";
 
 const Layout = ({input, previews = [], dropzoneProps, extra: { maxFiles } }) => {
     const context = React.useContext(FileInputContext);
@@ -12,16 +12,18 @@ const Layout = ({input, previews = [], dropzoneProps, extra: { maxFiles } }) => 
         <div
             ref={ref}
             className="image-input-container">
-            {preloadedFiles.map(preloadedImage => {
-                const deleteCallback = () => {deletePreloadedFile(preloadedImage);};
-                return (
-                    <ImageFile
-                        file={getFileProp(preloadedImage)}
-                        done={true}
-                        deletable={!disabled}
-                        onDelete={deleteCallback}/>
-                );
-            })}
+            {preloadedFiles && (
+                preloadedFiles.map(preloadedImage => {
+                    const deleteCallback = () => {deletePreloadedFile(preloadedImage);};
+                    return (
+                        <ImageFile
+                            file={preloadedImage}
+                            done={true}
+                            deletable={!disabled}
+                            onDelete={deleteCallback}/>
+                    );
+                })
+            )}
             {previews}
             {placeholders}
         </div>

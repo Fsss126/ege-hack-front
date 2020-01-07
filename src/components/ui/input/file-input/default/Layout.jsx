@@ -2,17 +2,16 @@ import React from "react";
 import {TransitionGroup} from "react-transition-group";
 import StableCSSTransition from "components/common/StableCSSTransition";
 import {File} from "../File";
-import {FileInputContext, getFileProp} from "../GenericFileInput";
+import {FileInputContext} from "../GenericFileInput";
 
 const Layout = ({input, previews=[], submitButton, dropzoneProps, files, extra: { maxFiles } }) => {
-    const context = React.useContext(FileInputContext);
-    const {preloadedFiles=[], deletePreloadedFile, disabled} = context || ({});
+    const {preloadedFiles=[], deletePreloadedFile, disabled, filesName = "Загруженные файлы"} = React.useContext(FileInputContext);
     const {ref} = dropzoneProps;
     return (
         <div
             ref={ref}
             className="file-input">
-            <h4 className="file-input__files-title">Загруженные файлы</h4>
+            {filesName && <h4 className="file-input__files-title">{filesName}</h4>}
             <TransitionGroup className="file-container">
                 {
                     preloadedFiles && (
@@ -25,7 +24,7 @@ const Layout = ({input, previews=[], submitButton, dropzoneProps, files, extra: 
                                         timeout={300}
                                         key={file_id}>
                                         <File
-                                            file={getFileProp(file)}
+                                            file={file}
                                             done={true}
                                             deletable={!disabled}
                                             onDelete={deleteCallback}/>

@@ -78,6 +78,7 @@ export const FieldsContainer = ({children, className}) => {
 
 const Form = (props, ref) => {
     const {
+        title,
         className,
         children,
         submitButtonText = 'Сохранить',
@@ -127,6 +128,7 @@ const Form = (props, ref) => {
             onChange={onChange}
             className={`form ${className || ''}`}
             autoComplete={autocomplete}>
+            {title && <h3 className="form__title">{title}</h3>}
             {children}
             <div className="form__action-container d-flex justify-content-end">
                 <Button

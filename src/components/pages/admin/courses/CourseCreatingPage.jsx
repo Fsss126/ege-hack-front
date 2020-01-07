@@ -6,7 +6,7 @@ import {useRevokeShopCatalog, useTeachers} from "store";
 import {PERMISSIONS} from "definitions/constants";
 import APIRequest from "api";
 
-const REQUIRED_PERMISSIONS = [
+export const COURSE_EDIT_PERMISSIONS = [
     PERMISSIONS.COURSE_EDIT
 ];
 
@@ -31,7 +31,7 @@ function getRequestData(formData) {
         name,
         subject_id: parseInt(subject_id),
         teacher_id: parseInt(teacher_id),
-        image,
+        image: image[0].file_id,
         price: parseFloat(price),
         date_start: date_start.getTime(),
         date_end: date_end.getTime(),
@@ -40,7 +40,7 @@ function getRequestData(formData) {
     };
 }
 
-const CourseFormPage = (props) => {
+const CourseCreatingPage = (props) => {
     const {location} = props;
     const {teachers, subjects, error: errorLoadingTeachers, retry: reloadTeachers} = useTeachers();
     const subjectOptions = React.useMemo(() =>
@@ -59,8 +59,8 @@ const CourseFormPage = (props) => {
         for (let name in INITIAL_FORM_DATA) {
             if (name === 'image') {
                 if (!formData[name])
-                    // return false;
-                    continue;
+                    return false;
+                    // continue;
                 else continue;
             }
             const input = formElement.elements[name];
@@ -70,18 +70,19 @@ const CourseFormPage = (props) => {
         return true;
     }, []);
 
+    const {courseData} = props;
     const {
         formData,
         isValid,
         onInputChange,
         reset
     } = useForm(() => {
-        if (props.courseData) {
-            const {image_link, id, purchased, teacher_ids, status, ...courseData} = props.courseData;
+        if (courseData) {
+            const {image_link, id, purchased, teacher_ids, status, ...otherData} = courseData;
             return ({
-                ...courseData,
                 teacher_id: teacher_ids[0],
-                image: image_link.split('/').pop()
+                image: image_link ? {file_id: image_link.split('/').pop(), file_link: image_link} : undefined,
+                ...otherData
             })
         } else {
             return INITIAL_FORM_DATA;
@@ -90,20 +91,13 @@ const CourseFormPage = (props) => {
 
     const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description} = formData;
 
-    const onFileChange = React.useCallback((files, name) => {
-        const file = files ? files[0].file_id : null;
-        onInputChange(file, name);
-    }, [onInputChange]);
-
-    const initialFiles = React.useMemo(() => (
-        image ? [image] : undefined
-    ), []);
+    const initialImageFile = React.useMemo(() => (formData.image), []);
 
     const from = date_start, to = date_end;
     const modifiers = { start: from, end: to };
 
-    // const dateStartInput = React.useRef(null);
-    const dateEndInput = React.useRef(null);
+    // const dateStartInputRef = React.useRef(null);
+    const dateEndInputRef = React.useRef(null);
 
     const onSubmit = React.useCallback(() => {
         console.log('submit', formData);
@@ -120,7 +114,7 @@ const CourseFormPage = (props) => {
             },
             {
                 text: 'Вернуться к курсам',
-                url: '/courses'
+                url: '/shop/'
             }
         ]);
     }, [reset, revokeShopCatalog]);
@@ -141,9 +135,9 @@ const CourseFormPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={REQUIRED_PERMISSIONS}
+            requiredPermissions={COURSE_EDIT_PERMISSIONS}
             className="course-form-page"
-            title="Магазин курсов"
+            title="Создание курса"
             location={location}>
             {isLoaded && (
                 <PageContent>
@@ -151,7 +145,7 @@ const CourseFormPage = (props) => {
                         <h3>Новый курс</h3>
                         <Form
                             ref={formElementRef}
-                            className="course-form container p-0 course-page"
+                            className="course-form container p-0"
                             isValid={isValid}
                             reset={reset}
                             onSubmit={onSubmit}
@@ -162,10 +156,11 @@ const CourseFormPage = (props) => {
                                     <Input.ImageInput
                                         name="image"
                                         // required
+                                        value={image}
                                         maxFiles={1}
-                                        initialFiles={initialFiles}
+                                        initialFiles={initialImageFile}
                                         accept="image/*"
-                                        onChange={onFileChange}
+                                        onChange={onInputChange}
                                         maxSizeBytes={1024 * 1024}/>
                                 </div>
                                 <FieldsContainer className="col">
@@ -215,15 +210,14 @@ const CourseFormPage = (props) => {
                                                     disabledDays: { after: to },
                                                     toMonth: to,
                                                     modifiers,
-                                                    onDayClick: () => dateEndInput.current.getInput().focus()
+                                                    onDayClick: () => dateEndInputRef.current.getInput().focus()
                                                 }}
                                                 name="date_start"
-                                                onChange={onInputChange}
-                                            />
+                                                onChange={onInputChange}/>
                                         </div>
                                         <div className="col end-date-input-container">
                                             <Input.DateInput
-                                                ref={dateEndInput}
+                                                ref={dateEndInputRef}
                                                 required
                                                 value={to}
                                                 placeholder="Дата окончания"
@@ -235,8 +229,7 @@ const CourseFormPage = (props) => {
                                                     fromMonth: from
                                                 }}
                                                 name="date_end"
-                                                onChange={onInputChange}
-                                            />
+                                                onChange={onInputChange}/>
                                         </div>
                                     </div>
                                     <Input.TextArea
@@ -255,4 +248,4 @@ const CourseFormPage = (props) => {
     );
 };
 
-export default CourseFormPage;
+export default CourseCreatingPage;

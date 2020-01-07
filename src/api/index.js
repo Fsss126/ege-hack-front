@@ -68,23 +68,25 @@ const transformData = (response) => {
                 ...rest
             }));
         case url.pathname === '/lessons':
-            return _.sortBy(data, 'num').map(({hometask, is_locked: locked, attachments, ...lesson}) => ({
+            return _.sortBy(data, 'num').map(({hometask, video_link, is_locked: locked, attachments, ...lesson}) => ({
                 ...lesson,
                 locked,
                 image_link: `${API_ROOT}${lesson.image_link}`,
+                video_link: `https://player.vimeo.com/video/${video_link}`,
                 attachments: attachments ? (
-                    attachments.map(({file_name: name, file_link}) => ({
-                            name,
-                            url: `${API_ROOT}${file_link}?disp=attachment`}
+                    attachments.map(({file_name, file_link, file_id}) => ({
+                            file_name,
+                            file_id,
+                            file_link: `${API_ROOT}${file_link}?disp=attachment`}
                     ))) : (attachments),
                 assignment: hometask ? ({
                     deadline: hometask.deadline ? new Date(hometask.deadline) : hometask.deadline,
                     description: hometask.description,
                     files: hometask.file_info ? [
                         {
-                            name: hometask.file_info.file_name,
+                            ...hometask.file_info,
                             // downloadName: hometask.file_info.file_name,
-                            url: `${API_ROOT}${hometask.file_info.file_link}?disp=attachment`},
+                            file_link: `${API_ROOT}${hometask.file_info.file_link}?disp=attachment`},
                     ] : hometask.file_link,
                 }) : hometask
             }));
