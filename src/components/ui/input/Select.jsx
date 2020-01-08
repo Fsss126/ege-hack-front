@@ -3,6 +3,7 @@ import SelectInput, { components } from 'react-select';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import ScrollBars from "../ScrollBars";
+import {getPlaceholder} from "./Input";
 
 const DropdownIndicator = (props) => (
     <components.DropdownIndicator {...props}>
@@ -72,7 +73,7 @@ export class Select extends React.PureComponent {
     };
 
     render() {
-        const {name, options, value, components, selectProps, isClearable=true, isSearchable=true, placeholder} = this.props;
+        const {name, options, value, components, selectProps, isClearable=true, isSearchable=true, placeholder, required} = this.props;
         return (
             <SelectInput
                 name={name}
@@ -103,7 +104,7 @@ export class Select extends React.PureComponent {
                 }}
                 isClearable={isClearable}
                 isSearchable={isSearchable}
-                placeholder={placeholder}
+                placeholder={getPlaceholder(placeholder, required)}
                 {...selectProps}
             />
         );

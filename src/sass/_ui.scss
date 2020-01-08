@@ -83,8 +83,9 @@ label {
 .btn {
   @include btnBehavior;
   background: $accent-orange;
+  border: 1px solid $accent-orange;
   border-radius: $card-border-radius;
-  overflow: hidden;
+  @include overflow-hidden;
   color: white;
   cursor: pointer;
   transition: all .3s;
@@ -181,7 +182,7 @@ label {
       display: inline-block;
       white-space: nowrap;
       text-overflow: ellipsis;
-      overflow: hidden;
+      @include overflow-hidden;
       vertical-align: middle;
     }
   }
@@ -358,7 +359,7 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
   outline: none;
   background-color: transparent;
   border: 1px solid #ebebeb;
-  padding: 6px 10px;
+  padding: 6px 18px;
   border-radius: 4px;
   width: 100%;
 
@@ -370,6 +371,10 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
 
 
 //Removes increment buttons from number input
+
+input, textarea {
+  -webkit-appearance: none;
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -426,6 +431,7 @@ input[type=number] {
       opacity: 0.5;
     }
   }
+
 }
 
 .track {
@@ -457,6 +463,9 @@ input[type=number] {
     .select__control {
       border: $border;
       box-shadow: none;
+      .select__value-container {
+        padding-left: 12px;
+      }
       input {
         &::placeholder {
           color: $text-grey;
@@ -498,7 +507,7 @@ input[type=number] {
     }
     .select__menu {
       border: $border;
-      overflow: hidden;
+      @include overflow-hidden;
       box-shadow: 0 4px 11px hsla(0,0%,0%,0.1);
       .select__menu-list {
         overflow: visible;
@@ -554,7 +563,7 @@ input[type=number] {
 
 .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
   background-color: $bg-grey;
-  overflow: hidden;
+  @include overflow-hidden;
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {

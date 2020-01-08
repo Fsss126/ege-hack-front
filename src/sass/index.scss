@@ -81,7 +81,7 @@ body {
   }
 
   &.poster-cover, &.video-cover {
-    overflow: hidden;
+    @include overflow-hidden;
     border-radius: calc(0.08*56.25%)/8%;
     padding-top: 56.25%; /* 16:9 Aspect Ratio */
   }
@@ -92,7 +92,7 @@ body {
 
   &.round-cover {
     border-radius: 50em;
-    overflow: hidden;
+    @include overflow-hidden;
   }
 
   &.video-cover {
@@ -120,7 +120,7 @@ body {
       left: 8px;
       height: 4px;
       border-radius: 50em;
-      overflow: hidden;
+      @include overflow-hidden;
       background: rgba(255, 255, 255, 0.4);
       .watch-progress-bar__progress-line {
         height: 100%;
@@ -251,13 +251,13 @@ header {
           border-bottom: $border;
           cursor: default;
           white-space: nowrap;
-          overflow: hidden;
+          @include overflow-hidden;
           max-width: 200px;
           text-overflow: ellipsis;
         }
 
         .user-nav__menu-options {
-          overflow: hidden;
+          @include overflow-hidden;
           padding: 4px 0;
 
           .menu-option {
@@ -528,7 +528,7 @@ header {
     padding-right: 1em;
     max-width: 100%;
     white-space: nowrap;
-    overflow: hidden;
+    @include overflow-hidden;
     text-overflow: ellipsis;
   }
 
@@ -596,7 +596,7 @@ header {
           @include media-breakpoint-up(md) {
             white-space: nowrap;
           }
-          overflow: hidden;
+          @include overflow-hidden;
           text-overflow: ellipsis;
         }
         .description-container {
@@ -679,7 +679,7 @@ header {
 
     .teacher-profile__name {
       white-space: nowrap;
-      overflow: hidden;
+      @include overflow-hidden;
       text-overflow: ellipsis;
     }
     .teacher-profile__subjects {
@@ -747,7 +747,7 @@ header {
   .course-shop {
     .selected-courses {
       .selected-courses__courses {
-        overflow: hidden;
+        @include overflow-hidden;
         border-right: $border;
         .selected-course {
           cursor: default;
@@ -1011,7 +1011,7 @@ header {
         &>div {
           white-space: nowrap;
           text-overflow: ellipsis;
-          overflow: hidden;
+          @include overflow-hidden;
         }
       }
     }
@@ -1123,7 +1123,7 @@ header {
   color: white;
   padding: 16px 32px;
   border-radius: 8px;
-  overflow: hidden;
+  @include overflow-hidden;
   font-family: $font-medium;
   i {
     margin-left: 12px;

@@ -95,7 +95,7 @@ export function usePreviewState(fileWithMeta, meta, isUpload) {
 
 const getCallbackFiles = (files, preloadedFiles) => {
     if (!allFilesReady(files))
-        return null;
+        return undefined;
     else
         return _.concat(preloadedFiles, files.map(({xhr}) => JSON.parse(xhr.responseText)));
 };
@@ -155,6 +155,7 @@ const GenericFileInput = (props) => {
     maxFiles = preloadedFiles ? maxFiles - preloadedFiles.length : maxFiles;
     const disabled = typeof isDisabled === 'function' ? isDisabled() : isDisabled;
 
+    //reset on null
     React.useEffect(() => {
         if (value === null) {
             for (let file of inputFilesRef.current) {

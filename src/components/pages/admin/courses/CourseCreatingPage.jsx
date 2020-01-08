@@ -22,8 +22,8 @@ const INITIAL_FORM_DATA = {
     description: ''
 };
 
-const SUBJECT_SELECT_PROPS = {isClearable: false, placeholder: 'Предмет'};
-const TEACHER_SELECT_PROPS = {isClearable: false, placeholder: 'Преподаватель', };
+const SUBJECT_SELECT_PROPS = {isClearable: false};
+const TEACHER_SELECT_PROPS = {isClearable: false};
 
 function getRequestData(formData) {
     const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description} = formData;
@@ -182,7 +182,7 @@ const CourseCreatingPage = (props) => {
                                     <Input.Select
                                         name="teacher_id"
                                         required
-                                        placeholder="Предмет"
+                                        placeholder="Преподаватель"
                                         options={teacherOptions}
                                         value={teacher_id}
                                         selectProps={TEACHER_SELECT_PROPS}

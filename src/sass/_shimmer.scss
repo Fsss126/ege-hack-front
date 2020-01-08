@@ -8,7 +8,7 @@ $ph-spacer:               15px !default;
 
 .ph-item {
   position: relative;
-  overflow: hidden;
+  @include overflow-hidden;
 
   &::before {
     content: " ";

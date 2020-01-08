@@ -49,6 +49,18 @@
   }
 }
 
+@mixin overflow-hidden {
+  overflow: hidden;
+  //Safari border-radius + overflow: hidden + CSS transform fix
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+
+  //another solution
+  //-webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
 @mixin btnBehavior{
   cursor: pointer;
 }

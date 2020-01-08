@@ -241,7 +241,6 @@ const LessonCreatingPage = (props) => {
                                     <h4 className="file-input__files-title">Домашнее задание</h4>
                                     <Input.TextArea
                                         name="hometask_description"
-                                        required
                                         placeholder="Описание"
                                         value={hometask_description}
                                         onChange={onInputChange}/>

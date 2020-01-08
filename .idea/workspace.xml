@@ -6,19 +6,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonCreatingPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/VideoPlayer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/VideoPlayer.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/CourseFormPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseCreatingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Form.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Form.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/File.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/File.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseCreatingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonCreatingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/DateInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/DateInput.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/Select.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/Select.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/GenericFileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/GenericFileInput.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/default/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/default/Layout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/image/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/image/Layout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_mixins.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_mixins.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_shimmer.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_shimmer.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
     </list>
@@ -362,7 +358,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578357103548</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Added and bind lesson creation page; Fixed extra scroll on mobile">
+      <created>1578407705894</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1578407705894</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -403,7 +406,8 @@
     <MESSAGE value="Changed mechanism of placeholder demonstration; Added page permissions" />
     <MESSAGE value="Course creation page" />
     <MESSAGE value="Course creation button" />
-    <option name="LAST_COMMIT_MESSAGE" value="Course creation button" />
+    <MESSAGE value="Added and bind lesson creation page; Fixed extra scroll on mobile" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added and bind lesson creation page; Fixed extra scroll on mobile" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Inspections" timestamp="1578065894058">
@@ -418,11 +422,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1578407570662">
+    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1578407705690">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578184751511" />
-    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1578407570662" />
+    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1578407705690" />
     <state x="100" y="55" width="1240" height="845" key="DiffContextDialog" timestamp="1578185803491">
       <screen x="0" y="23" width="1440" height="820" />
     </state>
@@ -433,25 +437,25 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1578398815016">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1578421125095">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578398815016" />
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578421125095" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1578190825085" />
-    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1578398815013">
+    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1578421125093">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578398815013" />
+    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578421125093" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1578190825083" />
-    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1578398815012">
+    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1578421125092">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578398815012" />
+    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578421125092" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1578190825082" />
-    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1578398815015">
+    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1578421125094">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578398815015" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578421125094" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1578190825085" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1575496047285">
       <screen x="0" y="0" width="1440" height="900" />
@@ -465,11 +469,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1575726108474" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1578357105242">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1578407713170">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578184754530" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1578357105242" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1578407713170" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -482,10 +486,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1578354670474">
+    <state x="226" y="132" width="837" height="540" key="find.popup" timestamp="1578436766165">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578186034729" />
+    <state x="226" y="132" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578436766165" />
     <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1578354670474" />
   </component>
 </project>

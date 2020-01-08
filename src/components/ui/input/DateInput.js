@@ -7,6 +7,7 @@ import MomentLocaleUtils, {
 import 'moment/locale/ru';
 
 import 'react-day-picker/lib/style.css';
+import {Input} from "./Input";
 
 const localeProps = {
     localeUtils: MomentLocaleUtils,
@@ -38,13 +39,13 @@ const DateInput = (props, forwardedRef) => {
     }, [forwardedRef]);
 
     const onDayChange = React.useCallback((day, modifiers, dayPickerInput) => {
-        onChange && onChange(day, dayPickerInput.getInput().name);
-    }, [onChange]);
+        onChange && onChange(day, name);
+    }, [onChange, name]);
 
     React.useEffect(() => {
         if (!value) {
             const dayPicker = ownRef.current;
-            dayPicker.getInput().value = '';
+            // dayPicker.getInput().value = '';
         }
     }, [value]);
 
@@ -59,6 +60,7 @@ const DateInput = (props, forwardedRef) => {
                 ...localeProps,
                 ...dayPickerProps
             }}
+            component={Input}
             inputProps={{
                 name,
                 type: "text",
