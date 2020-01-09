@@ -46,11 +46,40 @@ APIRequest.interceptors.request.use(function (config) {
     }
 });
 
+const transformCourse = ({date_start, date_end, image_link, teacher_id, is_online, ...rest}) => ({
+    date_start: new Date(date_start),
+    date_end: new Date(date_end),
+    image_link: `${API_ROOT}${image_link}`,
+    teacher_ids: [teacher_id],
+    ...rest
+});
+
+const transformLesson = ({hometask, video_link, is_locked: locked, attachments, ...lesson}) => ({
+    ...lesson,
+    locked,
+    image_link: `${API_ROOT}${lesson.image_link}`,
+    video_link: `https://player.vimeo.com/video/${video_link}`,
+    attachments: attachments ? (
+        attachments.map(({file_name, file_link, file_id}) => ({
+                file_name,
+                file_id,
+                file_link: `${API_ROOT}${file_link}?disp=attachment`}
+        ))) : (attachments),
+    assignment: hometask ? ({
+        deadline: hometask.deadline ? new Date(hometask.deadline) : hometask.deadline,
+        description: hometask.description,
+        files: hometask.file_info ? [
+            {
+                ...hometask.file_info,
+                // downloadName: hometask.file_info.file_name,
+                file_link: `${API_ROOT}${hometask.file_info.file_link}?disp=attachment`},
+        ] : hometask.file_link,
+    }) : hometask
+});
+
 //Interceptors
 const transformData = (response) => {
     const {config, data} = response;
-    if (config.method !== 'get')
-        return response.data;
     const url = new URL(config.url);
     switch (true) {
         case url.pathname === '/accounts/teachers':
@@ -58,38 +87,20 @@ const transformData = (response) => {
                 id,
                 contacts: {ig: instagram},
                 ...teacher}));
-        case url.pathname === '/courses':
-            return data.map(({date_start, date_end, image_link, teacher_id, ...rest}) => ({
-                date_start: new Date(date_start),
-                date_end: new Date(date_end),
-                image_link: `${API_ROOT}${image_link}`,
-                teacher_ids: [teacher_id],
-                status: config.params.group === 'PERSON' ? LEARNING_STATUS.learning : undefined,
-                ...rest
-            }));
-        case url.pathname === '/lessons':
-            return _.sortBy(data, 'num').map(({hometask, video_link, is_locked: locked, attachments, ...lesson}) => ({
-                ...lesson,
-                locked,
-                image_link: `${API_ROOT}${lesson.image_link}`,
-                video_link: `https://player.vimeo.com/video/${video_link}`,
-                attachments: attachments ? (
-                    attachments.map(({file_name, file_link, file_id}) => ({
-                            file_name,
-                            file_id,
-                            file_link: `${API_ROOT}${file_link}?disp=attachment`}
-                    ))) : (attachments),
-                assignment: hometask ? ({
-                    deadline: hometask.deadline ? new Date(hometask.deadline) : hometask.deadline,
-                    description: hometask.description,
-                    files: hometask.file_info ? [
-                        {
-                            ...hometask.file_info,
-                            // downloadName: hometask.file_info.file_name,
-                            file_link: `${API_ROOT}${hometask.file_info.file_link}?disp=attachment`},
-                    ] : hometask.file_link,
-                }) : hometask
-            }));
+        case /\/courses(\/.*)?$/.test(url.pathname):
+            if (config.method === 'get') {
+                return data.map((course) => ({
+                    ...transformCourse(course),
+                    status: config.params.group === 'PERSON' ? LEARNING_STATUS.learning : undefined
+                }));
+            } else {
+                return transformCourse(data);
+            }
+        case /\/lessons(\/.*)?$/.test(url.pathname):
+            if (config.method === 'get')
+                return _.sortBy(data, 'num').map(transformLesson);
+            else
+                return transformLesson(data);
         case /\/lessons\/(.*)\/homeworks\/pupil$/.test(url.pathname):
             const {file_info: {file_id, file_name, file_link}, date:dateTime, ...rest} = response.data;
             const date = new Date();
@@ -105,7 +116,7 @@ const transformData = (response) => {
                 ]
             };
         case url.pathname === '/courses/schedule/person':
-        case /\/courses\/(.*)\/schedule\/person$/.test(url.pathname):
+        case /\/courses\/.*\/schedule\/person$/.test(url.pathname):
             return _.sortBy(data.map(({webinar: {date_start, duration, ...webinar}, image_link, ...rest}) => ({
                 date_start: new Date(date_start),
                 date_end: new Date(date_start + duration * 1000 * 60),

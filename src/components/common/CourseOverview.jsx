@@ -85,9 +85,7 @@ const Lessons = ({renderLesson: renderFunc}) => {
 };
 
 const CourseOverview = (props) => {
-    const {match: {params: {id: param_id}}, path: root, courses, teachers, lessons, children, className, location} = props;
-    const id = parseInt(param_id);
-    const course = _.find(courses, {id});
+    const {path: root, course, teachers, lessons, children, className, location} = props;
     if (course) {
         return (
             <Page

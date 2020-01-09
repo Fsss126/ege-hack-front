@@ -9,7 +9,32 @@ html {
 }
 
 body {
+  min-height: 100%;
   height: 100%;
+}
+
+#root {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  //min-height: 100vh;
+}
+
+//webkit only
+body:not(*:root) {
+  height: auto;
+
+  #root {
+    height: inherit;
+  }
+}
+
+.app {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  flex-direction: column;
+  position: relative;
 }
 
 *, *:after, *:before {
@@ -155,21 +180,6 @@ body {
   background: white;
   border-radius: 4px;
   box-shadow: 0 0 0 1px rgba(100,111,121,.15), 0 5px 20px 0 rgba(21,27,38,.08);
-}
-
-#root {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  //min-height: 100vh;
-}
-
-.app {
-  display: flex;
-  width: 100%;
-  min-height: 100%;
-  flex-direction: column;
-  position: relative;
 }
 
 .nav-btn {
@@ -561,7 +571,6 @@ header {
         width: 240px;
       }
       @include media-breakpoint-down(sm) {
-        margin-bottom: 8px;
         border-radius: 10px;
       }
     }
@@ -579,6 +588,11 @@ header {
       &.list__item-selectable {
         cursor: pointer;
         @include selectableCover;
+      }
+      .preview-container {
+        @include media-breakpoint-down(sm) {
+          margin-bottom: 8px;
+        }
       }
       .list__item-description-inner {
         @include media-breakpoint-up(md) {
@@ -843,7 +857,7 @@ header {
             flex-wrap: nowrap;
           }
         }
-        .list__item-preview {
+        .preview-container {
           flex: 0 0 auto;
           width: auto;
           max-width: 100%;
@@ -872,19 +886,19 @@ header {
       margin-top: 0 !important;
       margin-bottom: 16px;
     }
-    .teacher-profile {
-      .teacher-profile__info-container {
-        position: relative;
-        .teacher-profile__info {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          width: 100%;
-          padding: inherit;
-        }
-      }
-    }
+    //.teacher-profile {
+    //  .teacher-profile__info-container {
+    //    position: relative;
+    //    .teacher-profile__info {
+    //      position: absolute;
+    //      top: 0;
+    //      left: 0;
+    //      right: 0;
+    //      width: 100%;
+    //      padding
+    //    }
+    //  }
+    //}
   }
 
   .user-profile__info {
@@ -1098,7 +1112,7 @@ header {
       right: 0;
     }
   }
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(sm) {
     .start-date-input-container .DayPickerInput .DayPickerInput-Overlay{
       right: auto;
       left: 0;
@@ -1114,6 +1128,12 @@ header {
       right: auto;
       left: 0;
     }
+  }
+}
+
+.course-form, .lesson-form {
+  .image-input-container {
+    padding-bottom: 32px;
   }
 }
 

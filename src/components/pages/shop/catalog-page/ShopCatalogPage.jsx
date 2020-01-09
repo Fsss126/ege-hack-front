@@ -4,18 +4,15 @@ import CourseCatalog from "components/common/CourseCatalog";
 import SelectedCoursesTab from "./SelectedCoursesTab";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
-import {useDiscount, useShopCatalog, useUser} from "store";
+import {useDiscount, useShopCatalog, useSubjects} from "store";
 import {Link} from "react-router-dom";
-import {PERMISSIONS} from "../../../../definitions/constants";
-import ConditionalRenderer from "../../../ConditionalRender";
+import ConditionalRenderer from "components/ConditionalRender";
+import {PERMISSIONS} from "definitions/constants";
 
-const COURSE_EDIT_PERMISSIONS = [
-    PERMISSIONS.COURSE_EDIT
-];
-
-const ShopCatalogPage = ({selectedCourses, onCourseClick, onCourseSelect, onCourseDeselect, location}) => {
-    const {userInfo} = useUser();
-    const {catalog, subjects, error, retry} = useShopCatalog();
+//TODO: Editing mode
+const ShopCatalogPage = ({selectedCourses, onCourseSelect, onCourseDeselect, location}) => {
+    const {catalog, error, retry} = useShopCatalog();
+    const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
     const {discount, error: errorLoadingDiscount, retry: reloadDiscount} = useDiscount(selectedCourses);
     const renderCourse = React.useCallback((course, props) => {
         const isSelected = selectedCourses.has(course);
@@ -56,7 +53,7 @@ const ShopCatalogPage = ({selectedCourses, onCourseClick, onCourseSelect, onCour
                     <PageContent>
                         <CourseCatalog.Filter/>
                         <ConditionalRenderer
-                            requiredPermissions={COURSE_EDIT_PERMISSIONS}>
+                            requiredPermissions={PERMISSIONS.COURSE_EDIT}>
                             <div className="layout__content-block d-flex justify-content-end">
                                 <Button
                                     tag={Link}

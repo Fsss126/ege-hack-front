@@ -5,18 +5,35 @@
     <option name="CUSTOM_SCOPE_NAME" value="Module 'ege-hack'" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
+    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Added lesson edit; Added course edit">
+      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseEditingPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseForm.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonEditingPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Course.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseCreatingPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonCreatingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Form.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Form.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ui/input/DateInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/DateInput.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/Select.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/Select.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/GenericFileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/GenericFileInput.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_mixins.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_mixins.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_shimmer.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_shimmer.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/helpers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,18 +81,18 @@
     <property name="settings.editor.selected.configurable" value="reference.idesettings.emmet" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
-      <recent name="$PROJECT_DIR$/src/components/ui" />
-      <recent name="$PROJECT_DIR$/src/sass" />
-      <recent name="$PROJECT_DIR$/src/components/ui/file-input/image" />
-      <recent name="$PROJECT_DIR$/src/components/ui/file-input/default" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
       <recent name="$PROJECT_DIR$/src/components/ui/input/file-input" />
       <recent name="$PROJECT_DIR$/src/components/ui/input" />
       <recent name="$PROJECT_DIR$/src/components/ui/file-input" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
+      <recent name="$PROJECT_DIR$/src/components/ui" />
+      <recent name="$PROJECT_DIR$/src/sass" />
       <recent name="$PROJECT_DIR$/src/components/ui/file-input/image" />
     </key>
   </component>
@@ -154,8 +171,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.build-prod" />
         <item itemvalue="npm.start-custom-post-mac" />
+        <item itemvalue="npm.build-prod" />
         <item itemvalue="npm.build" />
         <item itemvalue="npm.start-custom-port" />
         <item itemvalue="npm.deploy" />
@@ -217,6 +234,7 @@
       <workItem from="1576061327799" duration="5853000" />
       <workItem from="1576702570160" duration="265000" />
       <workItem from="1577622750035" duration="62197000" />
+      <workItem from="1578497856647" duration="23900000" />
     </task>
     <task id="LOCAL-00001" summary="Initial stage">
       <created>1567014085290</created>
@@ -365,7 +383,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578407705894</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Fixes">
+      <created>1578444127953</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1578444127953</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -400,14 +425,14 @@
     <MESSAGE value="User courses; Homework upload; Sidebar shimmer" />
     <MESSAGE value="Sidebar fix" />
     <MESSAGE value="Changed auth" />
-    <MESSAGE value="Fixes" />
     <MESSAGE value="Fixes; Changed Auth" />
     <MESSAGE value="Changed layout" />
     <MESSAGE value="Changed mechanism of placeholder demonstration; Added page permissions" />
     <MESSAGE value="Course creation page" />
     <MESSAGE value="Course creation button" />
     <MESSAGE value="Added and bind lesson creation page; Fixed extra scroll on mobile" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added and bind lesson creation page; Fixed extra scroll on mobile" />
+    <MESSAGE value="Fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Inspections" timestamp="1578065894058">
@@ -422,58 +447,63 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1578407705690">
+    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1578542497664">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578184751511" />
-    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1578407705690" />
-    <state x="100" y="55" width="1240" height="845" key="DiffContextDialog" timestamp="1578185803491">
+    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1578542497664" />
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1578487129150">
       <screen x="0" y="23" width="1440" height="820" />
     </state>
-    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1577623266851" />
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1578486194649" />
     <state x="100" y="55" width="1240" height="845" key="DiffContextDialog/0.23.1440.820/1440.23.1360.745@0.23.1440.820" timestamp="1578185803491" />
-    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.820@0.23.1440.820" timestamp="1577623377288" />
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.820@0.23.1440.820" timestamp="1578487129150" />
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.821@0.23.1440.821" timestamp="1578486218189" />
     <state x="507" y="212" key="FileChooserDialogImpl" timestamp="1578351106865">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1578421125095">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom" timestamp="1578508857363">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578421125095" />
-    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1578190825085" />
-    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1578421125093">
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1578508857363" />
+    <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
+    <state width="1419" height="245" key="GridCell.Tab.0.center" timestamp="1578508857361">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578421125093" />
-    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1578190825083" />
-    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1578421125092">
+    <state width="1419" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1578508857361" />
+    <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
+    <state width="1419" height="245" key="GridCell.Tab.0.left" timestamp="1578508857360">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578421125092" />
-    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1578190825082" />
-    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1578421125094">
+    <state width="1419" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1578508857360" />
+    <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right" timestamp="1578508857361">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578421125094" />
-    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1578190825085" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1578508857361" />
+    <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1575496047285">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1575496047285" />
-    <state x="368" y="168" key="RollbackChangesDialog" timestamp="1578351580764">
+    <state x="368" y="168" key="RollbackChangesDialog" timestamp="1578521844521">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="368" y="168" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578351580764" />
+    <state x="368" y="168" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578521844521" />
     <state x="221" y="89" key="SettingsEditor" timestamp="1575726108474">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1575726108474" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1578407713170">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1578444133028">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578184754530" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1578407713170" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1578444133028" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -486,10 +516,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="226" y="132" width="837" height="540" key="find.popup" timestamp="1578436766165">
+    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1578541650500">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="226" y="132" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578436766165" />
-    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1578354670474" />
+    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1578541650500" />
   </component>
 </project>

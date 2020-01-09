@@ -52,4 +52,4 @@ export const downloadFile = async (url, name) => {
     }
 };
 
-export const checkInclusion = (subset, superset) => _.difference(subset, superset).length === 0;
+export const checkInclusion = (value, superset) => value instanceof Array ? _.difference(value, superset).length === 0 : _.includes(superset, value);

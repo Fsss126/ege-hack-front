@@ -12,8 +12,8 @@ export default function Course({course, online=true, isSelected=false, ...props}
             className={isSelected ? 'course course-selected' : 'course'}
             title={name}
             subtitle={startsIn > 0 ? `До начала курса ${startsIn} ${
-                startsIn % 10 === 1 ? 'день' : 
-                    startsIn % 10 >= 2 && startsIn % 10 <= 4 ? 'дня' : 'дней'
+                startsIn === 1 ? 'день' : 
+                    startsIn >= 2 && startsIn <= 4 ? 'дня' : 'дней'
                 }` : (
                     date_end > new Date() ? 'Курс стартовал' : 'Курс завершен'
             )}

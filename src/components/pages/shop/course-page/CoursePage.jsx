@@ -3,32 +3,38 @@ import Page, {PageContent} from "components/Page";
 import CourseOverview from "components/common/CourseOverview";
 import CoursePriceTab from "./CoursePriceTab";
 import Lesson from "components/common/Lesson";
-import {useShopCatalog, useTeachers, useLessons, useDiscount} from "store";
-import Button from "../../../ui/Button";
+import {useTeachers, useLessons, useDiscount, useShopCourse} from "store";
+import Button from "components/ui/Button";
 import {Link} from "react-router-dom";
-import ConditionalRenderer from "../../../ConditionalRender";
-import {LESSON_EDIT_PERMISSIONS} from "../../admin/lessons/LessonCreatingPage";
+import ConditionalRenderer, {useCheckPermissions} from "components/ConditionalRender";
+import {PERMISSIONS} from "definitions/constants";
 
 //TODO: fix 404 error screen
 const CoursePage = ({path, location, match}) => {
-    const {params: {id: courseId}} = match;
-    const {catalog, subjects, error, retry} = useShopCatalog();
+    const {params: {id: param_id}} = match;
+    const courseId = parseInt(param_id);
+    const {course, error, retry} = useShopCourse(courseId);
     const {teachers, error: errorLoadingTeachers, retry: reloadTeachers} = useTeachers();
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     const {discount, error: errorLoadingDiscount, retry: reloadDiscount} = useDiscount(courseId);
-    const renderLesson = (lesson, props) => (
+    const canEdit = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
+    const renderLesson = (lesson) => (
         <Lesson
             lesson={lesson}
-            selectable={false}
+            selectable={canEdit}
             locked={false}
-            key={lesson.id}/>
+            key={lesson.id}
+            link={`/courses/${courseId}/${lesson.id}/edit/`}>
+            {canEdit
+                ? <Button>Изменить</Button>
+                : null}
+        </Lesson>
     );
-    if (catalog && teachers && lessons) {
+    if (course && teachers && lessons) {
         return (
             <CourseOverview.Body
-                match={match}
                 path={path}
-                courses={catalog}
+                course={course}
                 teachers={teachers}
                 lessons={lessons}
                 location={location}>
@@ -36,7 +42,7 @@ const CoursePage = ({path, location, match}) => {
                     <CourseOverview.Description/>
                     <CourseOverview.Teachers/>
                     <ConditionalRenderer
-                        requiredPermissions={LESSON_EDIT_PERMISSIONS}>
+                        requiredPermissions={PERMISSIONS.LESSON_EDIT}>
                         <div className="layout__content-block d-flex justify-content-end">
                             <Button
                                 tag={Link}

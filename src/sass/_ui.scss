@@ -83,7 +83,7 @@ label {
 .btn {
   @include btnBehavior;
   background: $accent-orange;
-  border: 1px solid $accent-orange;
+  border: 1px solid transparent;
   border-radius: $card-border-radius;
   @include overflow-hidden;
   color: white;
@@ -338,6 +338,8 @@ label {
   width: 100%;
   position: relative;
   cursor: pointer;
+  display: block;
+
   .poster-cover {
     border: 2px dashed $border-grey;
   }
@@ -540,25 +542,25 @@ input[type=number] {
   }
 }
 
-.DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
-  background-color: #f0f8ff !important;
-  color: #4a90e2;
-}
 .DayPicker-Day {
-  line-height: 22px;
+  line-height: 20px;
   border-radius: 0 !important;
 }
 .DayPicker-Day--start {
+  background-color: $border-grey;
   border-top-left-radius: 50% !important;
   border-bottom-left-radius: 50% !important;
 }
 .DayPicker-Day--end {
+  background-color: $border-grey;
   border-top-right-radius: 50% !important;
   border-bottom-right-radius: 50% !important;
 }
 .DayPicker-Day--today {
-  color: $text-dark;
   font-family: $font-medium;
+  &:not(.DayPicker-Day--disabled) {
+    color: $text-dark;
+  }
 }
 
 .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {

@@ -19,11 +19,11 @@ export function useFormState(callback, onSubmitted, onError) {
                 try {
                     const result = await returnValue;
                     setChanged(false);
-                    onSubmitted && onSubmitted();
+                    onSubmitted && onSubmitted(result);
                 }
                 catch (e) {
                     console.error(e);
-                    onError && onError(handleSubmit);
+                    onError && onError(e, handleSubmit);
                 }
                 finally {
                     setSubmitting(false);
@@ -40,8 +40,8 @@ export function useFormState(callback, onSubmitted, onError) {
     }
 }
 
-export function useForm(initialFormData, checkValidity) {
-    const [formData, setFormData] = React.useState(initialFormData);
+export function useForm(initFormData, checkValidity) {
+    const [formData, setFormData] = React.useState(initFormData);
     const [isValid, setValidity] = React.useState(false);
 
     const onInputChange = React.useCallback((value, name) => {
@@ -49,7 +49,7 @@ export function useForm(initialFormData, checkValidity) {
     }, []);
 
     const reset = React.useCallback(() => {
-        setFormData(initialFormData);
+        setFormData(initFormData);
     }, []);
 
     React.useEffect(() => {
@@ -86,27 +86,28 @@ const Form = (props, ref) => {
         autocomplete="off",
         onSubmit,
         onSubmitted,
-        onError
-        // reset,
-        // redirectUrl
+        onError,
+        reset,
+        revokeRelatedData
     } = props;
 
     const messagePopupRef = React.useRef(null);
 
-    const handleSubmitted = React.useCallback(() => {
+    const handleSubmitted = React.useCallback((response) => {
         const messagePopup = messagePopupRef.current;
-        const showSuccessMessage = (message, actions) => {
+        const showSuccessMessage = (message, actions, modal = true) => {
             messagePopup.showMessage({
                 message,
                 success: true,
-                modal: true,
+                modal,
                 actions
             });
         };
-        onSubmitted(showSuccessMessage);
-    }, [onSubmitted]);
+        revokeRelatedData(response);
+        onSubmitted(response, showSuccessMessage, reset);
+    }, [revokeRelatedData, onSubmitted, reset]);
 
-    const handleError = React.useCallback((reloadCallback) => {
+    const handleError = React.useCallback((error, reloadCallback) => {
         const messagePopup = messagePopupRef.current;
         const showErrorMessage = (message, actions) => {
             messagePopup.showMessage({
@@ -116,7 +117,7 @@ const Form = (props, ref) => {
                 actions
             });
         };
-        onError(showErrorMessage, reloadCallback);
+        onError(error, showErrorMessage, reloadCallback);
     }, [onError]);
 
     const {submitting, handleSubmit, hasChanged, onChange} = useFormState(onSubmit, handleSubmitted, handleError);

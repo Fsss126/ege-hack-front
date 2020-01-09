@@ -4,11 +4,12 @@ import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import Page, {PageContent} from "components/Page";
 import {LEARNING_STATUS} from "definitions/constants";
-import {useUpcomingWebinars, useUserCourses} from "store";
+import {useSubjects, useUpcomingWebinars, useUserCourses} from "store";
 import WebinarSchedule from "components/common/WebinarSchedule";
 
 const CatalogPage = ({location}) => {
-    const {courses, subjects, error, retry} = useUserCourses();
+    const {courses, error, retry} = useUserCourses();
+    const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
     const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useUpcomingWebinars();
     const renderCourse = React.useCallback((course, props) => (
         <Course

@@ -6,11 +6,12 @@ import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import UserProfile from "components/common/UserProfile";
-import {useShopCatalog, useTeachers} from "store";
+import {useShopCatalog, useSubjects, useTeachers} from "store";
 
 const TeacherPage = (props) => {
     const {match: {params: {id: param_id}}, path: root, className, location} = props;
-    const {teachers, subjects, error, retry} = useTeachers();
+    const {teachers, error, retry} = useTeachers();
+    const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
     const {catalog, error: errorLoadingCatalog, retry: reloadCatalog} = useShopCatalog();
     const id = parseInt(param_id);
 

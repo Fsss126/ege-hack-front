@@ -45,7 +45,7 @@ const DateInput = (props, forwardedRef) => {
     React.useEffect(() => {
         if (!value) {
             const dayPicker = ownRef.current;
-            // dayPicker.getInput().value = '';
+            dayPicker.getInput().value = '';
         }
     }, [value]);
 
@@ -57,6 +57,7 @@ const DateInput = (props, forwardedRef) => {
             parseDate={parseDate}
             classNames={classNames}
             dayPickerProps={{
+                showOutsideDays: true,
                 ...localeProps,
                 ...dayPickerProps
             }}
