@@ -74,3 +74,11 @@ export function useForceUpdate() {
     const [, update] = React.useReducer(state => !state, true);
     return update;
 }
+
+export function useToggle(initialState) {
+    const [isOn, toggle] = React.useState(initialState);
+    const toggleSideBar = React.useCallback(() => {
+        toggle(opened => !opened);
+    }, []);
+    return [isOn, toggleSideBar];
+}

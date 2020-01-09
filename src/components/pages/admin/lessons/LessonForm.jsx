@@ -232,7 +232,7 @@ const LessonForm = (props) => {
                         value={hometask_file}
                         maxFiles={1}
                         // accept="image/*,audio/*,video/*"
-                        initialFiles={lesson ? lesson.assignment.files : undefined}
+                        initialFiles={lesson && lesson.assignment && lesson.assignment.files ? lesson.assignment.files : undefined}
                         onChange={onInputChange}/>
                 </FieldsContainer>
             </div>

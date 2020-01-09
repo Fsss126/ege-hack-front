@@ -240,7 +240,6 @@ export function useShopCourse(courseId) {
     }
 }
 
-//TODO: update with new data instead
 export function useRevokeShopCatalog() {
     const {setters: {setCatalog, setUserCourses}} = React.useContext(StoreContext);
 
@@ -346,7 +345,6 @@ export function useLessons(courseId) {
     return {lessons: lessons[courseId], error, reload: fetchLessons};
 }
 
-//TODO: update with new data instead
 export function useRevokeLessons(courseId) {
     const {setters: {setLessons}} = React.useContext(StoreContext);
 

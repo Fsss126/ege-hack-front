@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import CourseOverview from "components/common/CourseOverview";
 import CoursePriceTab from "./CoursePriceTab";
@@ -6,8 +6,9 @@ import Lesson from "components/common/Lesson";
 import {useTeachers, useLessons, useDiscount, useShopCourse} from "store";
 import Button from "components/ui/Button";
 import {Link} from "react-router-dom";
-import ConditionalRenderer, {useCheckPermissions} from "components/ConditionalRender";
+import ConditionalRenderer from "components/ConditionalRender";
 import {PERMISSIONS} from "definitions/constants";
+import {useToggle} from "hooks/common";
 
 //TODO: fix 404 error screen
 const CoursePage = ({path, location, match}) => {
@@ -17,19 +18,19 @@ const CoursePage = ({path, location, match}) => {
     const {teachers, error: errorLoadingTeachers, retry: reloadTeachers} = useTeachers();
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     const {discount, error: errorLoadingDiscount, retry: reloadDiscount} = useDiscount(courseId);
-    const canEdit = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
-    const renderLesson = (lesson) => (
+    const [isEditing, toggleEditing] = useToggle(false);
+    const renderLesson = useCallback((lesson) => (
         <Lesson
             lesson={lesson}
-            selectable={canEdit}
+            selectable={isEditing}
             locked={false}
             key={lesson.id}
             link={`/courses/${courseId}/${lesson.id}/edit/`}>
-            {canEdit
+            {isEditing
                 ? <Button>Изменить</Button>
                 : null}
         </Lesson>
-    );
+    ), [isEditing, courseId]);
     if (course && teachers && lessons) {
         return (
             <CourseOverview.Body
@@ -43,12 +44,16 @@ const CoursePage = ({path, location, match}) => {
                     <CourseOverview.Teachers/>
                     <ConditionalRenderer
                         requiredPermissions={PERMISSIONS.LESSON_EDIT}>
-                        <div className="layout__content-block d-flex justify-content-end">
+                        <div className="layout__content-block btn-container d-flex justify-content-end">
                             <Button
                                 tag={Link}
                                 to={`/courses/${courseId}/create_lesson`}
                                 icon={<i className="icon-add"/>}>
                                 Добавить урок
+                            </Button>
+                            <Button
+                                onClick={toggleEditing}>
+                                Изменить
                             </Button>
                         </div>
                     </ConditionalRenderer>

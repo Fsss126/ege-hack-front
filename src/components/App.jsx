@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
-import {useRefValue} from "hooks/common";
+import {useRefValue, useToggle} from "hooks/common";
 import GlobalStore from "store";
 
 import Login from "./pages/login";
@@ -44,12 +44,8 @@ const UIContext = React.createContext(null);
 UIContext.displayName = 'UIContext';
 
 function useUIState() {
-    const [isSideBarOpened, setSideBar] = React.useState(false);
-    const toggleSideBar = React.useCallback(() => {
-        setSideBar(opened => !opened);
-    }, []);
     return {
-        sidebar: [isSideBarOpened, toggleSideBar]
+        sidebar: useToggle(false)
     };
 }
 

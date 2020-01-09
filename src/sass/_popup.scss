@@ -109,15 +109,5 @@
         margin-top: 32px;
         padding-bottom: 16px;
         text-align: center;
-        .btn {
-            display: inline-block;
-            margin: 0 4px;
-            &:first-child {
-                margin-left: 0;
-            }
-            &:last-child {
-                margin-right: 0;
-            }
-        }
     }
 }

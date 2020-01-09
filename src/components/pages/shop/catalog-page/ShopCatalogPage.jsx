@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
 import SelectedCoursesTab from "./SelectedCoursesTab";
@@ -8,36 +8,38 @@ import {useDiscount, useShopCatalog, useSubjects} from "store";
 import {Link} from "react-router-dom";
 import ConditionalRenderer from "components/ConditionalRender";
 import {PERMISSIONS} from "definitions/constants";
+import {useToggle} from "hooks/common";
 
 //TODO: Editing mode
 const ShopCatalogPage = ({selectedCourses, onCourseSelect, onCourseDeselect, location}) => {
     const {catalog, error, retry} = useShopCatalog();
     const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
     const {discount, error: errorLoadingDiscount, retry: reloadDiscount} = useDiscount(selectedCourses);
-    const renderCourse = React.useCallback((course, props) => {
+    const [isEditing, toggleEditing] = useToggle(false);
+    const renderCourse = useCallback((course, {link}) => {
         const isSelected = selectedCourses.has(course);
         const {price, discount, purchased} = course;
         return (
             <Course
                 course={course}
                 selectable
-                isSelected={isSelected}
-                onActionClick={purchased ? null : onCourseSelect}
+                isSelected={isEditing ? false : isSelected}
+                onActionClick={isEditing || purchased ? null : onCourseSelect}
                 key={course.id}
-                {...props}>
-                {purchased ? (
-                    <Button style={{minWidth: '110px'}} active={false}>Куплено</Button>
-                ) : (
+                link={isEditing ? `/courses/${course.id}/edit` : link}>
+                {isEditing || !purchased ? (
                     <React.Fragment>
                         <div className="list__item-action-info">
-                            <span className="price">{price}₽</span> {discount && <span className="discount font-size-xs">{discount + price}₽</span>}
+                            <span className="price">{price}₽</span> {!isEditing && discount && <span className="discount font-size-xs">{discount + price}₽</span>}
                         </div>
-                        <Button style={{minWidth: '110px'}}>{isSelected ? 'Выбрано' : 'Выбрать'}</Button>
+                        <Button style={{minWidth: '115px'}}>{isEditing ? 'Изменить' : (isSelected ? 'Выбрано' : 'Выбрать')}</Button>
                     </React.Fragment>
+                ) : (
+                    <Button style={{minWidth: '115px'}} active={false}>Куплено</Button>
                 )}
             </Course>
         )
-    }, [selectedCourses, onCourseSelect]);
+    }, [selectedCourses, onCourseSelect, isEditing]);
     const isLoaded = catalog && subjects;
     return (
         <Page
@@ -54,12 +56,16 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, onCourseDeselect, loc
                         <CourseCatalog.Filter/>
                         <ConditionalRenderer
                             requiredPermissions={PERMISSIONS.COURSE_EDIT}>
-                            <div className="layout__content-block d-flex justify-content-end">
+                            <div className="layout__content-block btn-container d-flex justify-content-end">
                                 <Button
                                     tag={Link}
                                     to="/courses/create"
                                     icon={<i className="icon-add"/>}>
                                     Добавить курс
+                                </Button>
+                                <Button
+                                    onClick={toggleEditing}>
+                                    Изменить
                                 </Button>
                             </div>
                         </ConditionalRenderer>

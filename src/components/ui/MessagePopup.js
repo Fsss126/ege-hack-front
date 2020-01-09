@@ -84,14 +84,14 @@ class MessagePopup extends Component {
                     </div>
                     {message && message.action
                         ? <div className="row action-wrap justify-content-center">
-                            <div className="col">
+                            <div className="col btn-container">
                                 <ActionButton {...message.action} callback={this.close} accent={true}/>
                             </div>
                         </div> : null
                     }
                     {message && message.actions
                         ? <div className="row action-wrap justify-content-center">
-                            <div className="col">
+                            <div className="col btn-container">
                                 {
                                     message.actions.map((action, i) => (
                                         <ActionButton {...action} callback={this.close} key={i}/>
