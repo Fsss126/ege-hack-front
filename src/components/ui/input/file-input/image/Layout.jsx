@@ -14,9 +14,11 @@ const Layout = ({input, previews = [], dropzoneProps, extra: { maxFiles } }) => 
             className="image-input-container">
             {preloadedFiles && (
                 preloadedFiles.map(preloadedImage => {
+                    const {file_id} = preloadedImage;
                     const deleteCallback = () => {deletePreloadedFile(preloadedImage);};
                     return (
                         <ImageFile
+                            key={file_id}
                             file={preloadedImage}
                             done={true}
                             deletable={!disabled}

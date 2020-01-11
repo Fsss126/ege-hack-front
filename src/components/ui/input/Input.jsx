@@ -21,18 +21,21 @@ export let CheckBox = ({value, onChange: callback, name, label, ...props}, ref) 
 CheckBox = forwardRef(CheckBox);
 
 function onNumberKeyPress(event) {
-    let enteredChar = String.fromCharCode(event.charCode);
+    let enteredChar = event.key;
     if (!(enteredChar >= '0' && enteredChar <= '9'))
         event.preventDefault();
 }
 
-// function formatPrice(value) {
-//     return value && value.length > 0 ? `${value}₽` : value;
-// }
-//
-// function parsePrice(price) {
-//     return price.slice(0, price.length - 1);
-// }
+function formatPrice(value) {
+    if (value === null || value === undefined)
+        return value;
+    const str = value.toString();
+    return str.length > 0 ? `${value}₽` : value;
+}
+
+function parsePrice(price) {
+    return price.replace(/[^\d]+/g, '');
+}
 
 export const getPlaceholder = (placeholder, required) => placeholder ? (required ? `${placeholder}*` : placeholder) : undefined;
 
@@ -50,8 +53,8 @@ export let Input = ({value, className, onChange: callback, type = "text", format
             placeholder={getPlaceholder(placeholder, required)}
             value={format ? format(value) : value}
             onChange={onChange}
-            type={type === "number" ? "text" : type}
-            onKeyPress={type === "number" ? onNumberKeyPress : undefined}
+            type={type === "number" || type === "price" ? "text" : type}
+            onKeyPress={type === "number" || type === "price" ? onNumberKeyPress : undefined}
             {...props}/>
     );
 };

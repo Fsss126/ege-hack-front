@@ -21,11 +21,7 @@ const InputPlaceholder = (props) => {
         <label className="image-input">
             <CoverImage className="poster-cover"/>
             <div className="image-input__controls">
-                <Button
-                    active={false}
-                    icon={<i className="icon-add"/>}>
-                    {content}
-                </Button>
+                <i className="image-input__icon-camera fas fa-camera"/><i className="image-input__icon-add icon-add"/>
             </div>
             <input
                 className={className}

@@ -7,6 +7,7 @@ import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import UserProfile from "components/common/UserProfile";
 import {useShopCatalog, useSubjects, useTeachers} from "store";
+import {renderPrice} from "../../../../definitions/helpers";
 
 const TeacherPage = (props) => {
     const {match: {params: {id: param_id}}, path: root, className, location} = props;
@@ -24,7 +25,9 @@ const TeacherPage = (props) => {
                 key={course.id}
                 link={`/shop/${link}`}>
                 <div className="list__item-action-info">
-                    <span className="price">{price}₽</span> {discount && <span className="discount font-size-xs">{discount + price}₽</span>}
+                    <span className="price">{renderPrice(price)}</span> {
+                    discount && <span className="discount font-size-xs">{renderPrice(discount + price)}</span>
+                }
                 </div>
                 <Button style={{minWidth: '110px'}}>Открыть</Button>
             </Course>

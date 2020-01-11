@@ -1,8 +1,8 @@
 import React from "react";
 import {CourseOverviewContext} from "components/common/CourseOverview";
 import {BottomTab} from "components/Page";
-import Button from "../../../ui/Button";
-import _ from "lodash";
+import Button from "components/ui/Button";
+import {renderPrice} from "definitions/helpers";
 
 const CoursePriceTab = (props) => {
     const {discount: discountInfo, error, retry} = props;
@@ -28,12 +28,12 @@ const CoursePriceTab = (props) => {
                             <React.Fragment>
                                 {discount > 0 && (
                                     <div className="col-auto">
-                                        <div className="discount">{price + discount}₽</div>
+                                        <div className="discount">{renderPrice(price + discount)}</div>
                                     </div>
                                 )}
                                 <div className="col-auto">
                                     <h2 className="price">
-                                        {price}₽
+                                        {renderPrice(price)}
                                     </h2>
                                 </div>
                                 <div className="col-auto">

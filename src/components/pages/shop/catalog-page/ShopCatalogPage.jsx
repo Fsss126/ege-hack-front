@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 import ConditionalRenderer from "components/ConditionalRender";
 import {PERMISSIONS} from "definitions/constants";
 import {useToggle} from "hooks/common";
+import {renderPrice} from "definitions/helpers";
 
 //TODO: Editing mode
 const ShopCatalogPage = ({selectedCourses, onCourseSelect, onCourseDeselect, location}) => {
@@ -30,7 +31,9 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, onCourseDeselect, loc
                 {isEditing || !purchased ? (
                     <React.Fragment>
                         <div className="list__item-action-info">
-                            <span className="price">{price}₽</span> {!isEditing && discount && <span className="discount font-size-xs">{discount + price}₽</span>}
+                            <span className="price">{renderPrice(price)}</span> {
+                            !isEditing && discount && <span className="discount font-size-xs">{renderPrice(discount + price)}</span>
+                        }
                         </div>
                         <Button style={{minWidth: '115px'}}>{isEditing ? 'Изменить' : (isSelected ? 'Выбрано' : 'Выбрать')}</Button>
                     </React.Fragment>
@@ -56,16 +59,17 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, onCourseDeselect, loc
                         <CourseCatalog.Filter/>
                         <ConditionalRenderer
                             requiredPermissions={PERMISSIONS.COURSE_EDIT}>
-                            <div className="layout__content-block btn-container d-flex justify-content-end">
+                            <div className="layout__content-block btn-container">
                                 <Button
                                     tag={Link}
                                     to="/courses/create"
                                     icon={<i className="icon-add"/>}>
                                     Добавить курс
                                 </Button>
+                                {' '}
                                 <Button
                                     onClick={toggleEditing}>
-                                    Изменить
+                                    Редактировать курсы
                                 </Button>
                             </div>
                         </ConditionalRenderer>
@@ -74,10 +78,12 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, onCourseDeselect, loc
                     </PageContent>
                 </CourseCatalog.Body>
             )}
-            <SelectedCoursesTab
-                onCourseDeselect={onCourseDeselect}
-                courses={[...selectedCourses]}
-                discount={discount}/>
+            {isEditing ? null : (
+                <SelectedCoursesTab
+                    onCourseDeselect={onCourseDeselect}
+                    courses={[...selectedCourses]}
+                    discount={discount}/>
+            )}
         </Page>
     );
 };

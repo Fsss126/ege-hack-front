@@ -87,7 +87,7 @@ const transformData = (response) => {
                 id,
                 contacts: {ig: instagram},
                 ...teacher}));
-        case /\/courses(\/.*)?$/.test(url.pathname):
+        case /\/courses(\/\w*)?$/.test(url.pathname):
             if (config.method === 'get') {
                 return data.map((course) => ({
                     ...transformCourse(course),
@@ -96,12 +96,12 @@ const transformData = (response) => {
             } else {
                 return transformCourse(data);
             }
-        case /\/lessons(\/.*)?$/.test(url.pathname):
+        case /\/lessons(\/\w*)?$/.test(url.pathname):
             if (config.method === 'get')
                 return _.sortBy(data, 'num').map(transformLesson);
             else
                 return transformLesson(data);
-        case /\/lessons\/(.*)\/homeworks\/pupil$/.test(url.pathname):
+        case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):
             const {file_info: {file_id, file_name, file_link}, date:dateTime, ...rest} = response.data;
             const date = new Date();
             return {
@@ -116,7 +116,7 @@ const transformData = (response) => {
                 ]
             };
         case url.pathname === '/courses/schedule/person':
-        case /\/courses\/.*\/schedule\/person$/.test(url.pathname):
+        case /\/courses\/\w*\/schedule\/person$/.test(url.pathname):
             return _.sortBy(data.map(({webinar: {date_start, duration, ...webinar}, image_link, ...rest}) => ({
                 date_start: new Date(date_start),
                 date_end: new Date(date_start + duration * 1000 * 60),
@@ -138,7 +138,7 @@ const transformError = (error) => {
     const url = new URL(config.url);
     if (error.response && error.response.status === 404) {
         switch (true) {
-            case /\/lessons\/(.*)\/homeworks\/pupil$/.test(url.pathname):
+            case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):
                 return ({data: {}});
             default:
                 throw error;

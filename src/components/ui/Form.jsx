@@ -1,7 +1,9 @@
-import React from "react";
+import React, {useCallback} from "react";
 import Button from "./Button";
 import {LOADING_STATE, LoadingIndicator, useLoadingState} from "./LoadingIndicator";
 import MessagePopup from "./MessagePopup";
+import NavigationBlocker from "../common/NavigationBlocker";
+import {Link, useHistory} from "react-router-dom";
 
 export function useFormState(callback, onSubmitted, onError) {
     const [hasChanged, setChanged] = React.useState(false);
@@ -54,7 +56,6 @@ export function useForm(initFormData, checkValidity) {
 
     React.useEffect(() => {
         if (checkValidity) {
-            console.log(checkValidity(formData), formData);
             setValidity(checkValidity(formData));
         }
         else
@@ -88,7 +89,8 @@ const Form = (props, ref) => {
         onSubmitted,
         onError,
         reset,
-        revokeRelatedData
+        revokeRelatedData,
+        cancelLink
     } = props;
 
     const messagePopupRef = React.useRef(null);
@@ -123,6 +125,13 @@ const Form = (props, ref) => {
     const {submitting, handleSubmit, hasChanged, onChange} = useFormState(onSubmit, handleSubmitted, handleError);
     const state = useLoadingState(submitting, submitting === false);
 
+    // const history = useHistory();
+    // const cancelCallback = useCallback(() => {
+    //     if (history.length > 0)
+    //         history.goBack();
+    //     else
+    //         history.push(cancelLink);
+    // }, [history, cancelLink]);
     return (
         <form
             ref={ref}
@@ -131,7 +140,14 @@ const Form = (props, ref) => {
             autoComplete={autocomplete}>
             {title && <h3 className="form__title">{title}</h3>}
             {children}
-            <div className="form__action-container d-flex justify-content-end">
+            <div className="form__action-container btn-container text-right">
+                <Button
+                    tag={Link}
+                    neutral={true}
+                    to={cancelLink}>
+                    Отменить
+                </Button>
+                {' '}
                 <Button
                     active={isValid}
                     icon={(hasChanged || state !== LOADING_STATE.DONE) && (<LoadingIndicator state={state}/>)}
@@ -140,6 +156,7 @@ const Form = (props, ref) => {
                 </Button>
             </div>
             <MessagePopup ref={messagePopupRef}/>
+            {hasChanged && <NavigationBlocker/>}
         </form>
     )
 };

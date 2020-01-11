@@ -248,7 +248,7 @@ export function useRevokeShopCatalog() {
         setUserCourses(null);
         setCatalog(catalog => {
             const courseIndex = _.findIndex(catalog, {id: responseCourse.id});
-            if (courseIndex) {
+            if (courseIndex !== undefined) {
                 const prevCourse = catalog[courseIndex];
                 const newCatalog = [...catalog];
                 newCatalog[courseIndex] = {...prevCourse, ...responseCourse};
@@ -352,7 +352,7 @@ export function useRevokeLessons(courseId) {
         console.log('response', responseLesson);
         setLessons(({[courseId]: courseLessons, ...loadedLessons}) => {
             const lessonIndex = _.findIndex(courseLessons, {id: responseLesson.id});
-            if (lessonIndex) {
+            if (lessonIndex !== undefined) {
                 const prevLesson = courseLessons[lessonIndex];
                 const newLessons = [...courseLessons];
                 newLessons[lessonIndex] = {...prevLesson, ...responseLesson};

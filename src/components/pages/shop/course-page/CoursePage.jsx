@@ -44,17 +44,26 @@ const CoursePage = ({path, location, match}) => {
                     <CourseOverview.Teachers/>
                     <ConditionalRenderer
                         requiredPermissions={PERMISSIONS.LESSON_EDIT}>
-                        <div className="layout__content-block btn-container d-flex justify-content-end">
+                        <div className="layout__content-block btn-container">
+                            <Button
+                                tag={Link}
+                                to={`/courses/${courseId}/edit/`}>
+                                Изменить
+                            </Button>
+                            {' '}
                             <Button
                                 tag={Link}
                                 to={`/courses/${courseId}/create_lesson`}
                                 icon={<i className="icon-add"/>}>
                                 Добавить урок
                             </Button>
-                            <Button
-                                onClick={toggleEditing}>
-                                Изменить
-                            </Button>
+                            {' '}
+                            {lessons.length > 0 && (
+                                <Button
+                                    onClick={toggleEditing}>
+                                    {isEditing ? 'Сохранить уроки' : 'Редактировать уроки'}
+                                </Button>
+                            )}
                         </div>
                     </ConditionalRenderer>
                     <CourseOverview.Lessons renderLesson={renderLesson}/>

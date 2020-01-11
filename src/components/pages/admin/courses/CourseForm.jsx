@@ -123,7 +123,8 @@ const CourseForm = (props) => {
             onSubmit={onSubmit}
             onSubmitted={onSubmitted}
             onError={onError}
-            revokeRelatedData={revokeShopCatalog}>
+            revokeRelatedData={revokeShopCatalog}
+            cancelLink="/shop/">
             <div className="row">
                 <div className="preview-container col-12 col-md-auto">
                     <Input.ImageInput
@@ -160,9 +161,9 @@ const CourseForm = (props) => {
                         value={teacher_id}
                         selectProps={TEACHER_SELECT_PROPS}
                         callback={onInputChange}/>
-                    <Input.Input //TODO: add ₽ sign
+                    <Input.Input
                         name="price"
-                        type="number"
+                        type="price"
                         required
                         placeholder="Цена"
                         value={price}

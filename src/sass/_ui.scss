@@ -98,6 +98,7 @@ label {
     display: inline-block;
     width: 100%;
     text-align: center;
+    white-space: nowrap;
     padding: 4px 16px;
   }
   .btn__before, .btn__after {
@@ -162,16 +163,19 @@ label {
 }
 
 .btn-container {
-  display: flex;
   .btn {
-    margin: 0 4px;
-    &:first-child {
-      margin-left: 0;
-    }
-    &:last-child {
-      margin-right: 0;
-    }
+    display: inline-block;
   }
+  //display: flex;
+  //.btn {
+  //  margin: 0 4px;
+  //  &:first-child {
+  //    margin-left: 0;
+  //  }
+  //  &:last-child {
+  //    margin-right: 0;
+  //  }
+  //}
 }
 
 .file {
@@ -359,15 +363,20 @@ label {
     border: 2px dashed $border-grey;
   }
   .image-input__controls {
-    @include center(y);
+    @include center(xy);
     position: absolute;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    color: $text-grey;
 
-    .btn {
+    .image-input__icon-camera {
+      font-size: 28px;
       display: block;
-      cursor: pointer;
+    }
+
+    .image-input__icon-add {
+      position: absolute;
+      @include center(y);
+      left: 100%;
+      margin-left: 4px;
     }
   }
 }

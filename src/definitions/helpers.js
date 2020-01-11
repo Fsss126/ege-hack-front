@@ -1,4 +1,5 @@
 import _ from "lodash";
+import MobileDetect from "mobile-detect";
 
 export const daysBetween = (date1, date2) => {
     const one_day = 1000 * 60 * 60 * 24;
@@ -53,3 +54,10 @@ export const downloadFile = async (url, name) => {
 };
 
 export const checkInclusion = (value, superset) => value instanceof Array ? _.difference(value, superset).length === 0 : _.includes(superset, value);
+
+export const deviceInfo = new MobileDetect(window.navigator.userAgent);
+
+export const renderPrice = (price) => {
+    const isIphone = deviceInfo.os() === 'iOS';
+    return `${price}${isIphone ? ' руб.' : '₽'}`;
+};

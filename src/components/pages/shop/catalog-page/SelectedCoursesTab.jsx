@@ -7,6 +7,7 @@ import _ from "lodash";
 import {BottomTab} from "components/Page";
 import ScrollBars from "components/ui/ScrollBars";
 import Button from "components/ui/Button";
+import {renderPrice} from "definitions/helpers";
 
 const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
     const {name} = course;
@@ -84,8 +85,8 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect})
                                 <React.Fragment>
                                     <Button className="order-1 order-md-0 flex-shrink-0">Оплатить</Button>
                                     <div className="price selected-courses__price-container container">
-                                        {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{price + discount}₽</div>}
-                                        <div className="price font-size-lg d-inline-block d-md-block">{price}₽</div>
+                                        {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{renderPrice(price + discount)}</div>}
+                                        <div className="price font-size-lg d-inline-block d-md-block">{renderPrice(price)}</div>
                                         {message && <div className="promotion font-size-xs">{message}</div>}
                                     </div>
                                 </React.Fragment>
