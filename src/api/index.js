@@ -1,7 +1,7 @@
 import Auth from 'definitions/auth';
 import _ from 'lodash';
 import axios from 'axios';
-import {handleRequestsWithTestData} from "./test";
+// import {handleRequestsWithTestData} from "./test";
 import {LEARNING_STATUS} from "definitions/constants";
 
 export const API_ROOT = process.env.REACT_APP_API_ROOT;

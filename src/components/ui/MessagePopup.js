@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import Popup, { APPEAR_ANIMATION } from './Popup';
 import PropTypes from 'prop-types';
 import Button from "./Button";
@@ -93,9 +94,9 @@ class MessagePopup extends Component {
                         ? <div className="row action-wrap justify-content-center">
                             <div className="col btn-container">
                                 {
-                                    message.actions.map((action, i) => (
+                                    _.insertAfterEach(message.actions.map((action, i) => (
                                         <ActionButton {...action} callback={this.close} key={i}/>
-                                    ))
+                                    )), ' ')
                                 }
                             </div>
                         </div> : null

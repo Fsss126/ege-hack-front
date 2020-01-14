@@ -1,4 +1,5 @@
 import 'definitions/polyfills';
+import 'definitions/mixins';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from 'components/App';

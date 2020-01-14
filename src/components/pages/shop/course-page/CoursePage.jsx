@@ -64,14 +64,23 @@ const CoursePage = ({path, location, match}) => {
                                     {isEditing ? 'Сохранить уроки' : 'Редактировать уроки'}
                                 </Button>
                             )}
+                            {' '}
+                            <Button
+                                tag={Link}
+                                to={`/courses/${courseId}/participants`}
+                                icon={<i className="icon-add"/>}>
+                                Добавить учеников
+                            </Button>
                         </div>
                     </ConditionalRenderer>
                     <CourseOverview.Lessons renderLesson={renderLesson}/>
                 </PageContent>
-                <CoursePriceTab
-                    discount={discount}
-                    error={error}
-                    retry={reloadDiscount}/>
+                {!isEditing && (
+                    <CoursePriceTab
+                        discount={discount}
+                        error={error}
+                        retry={reloadDiscount}/>
+                )}
             </CourseOverview.Body>
         );
     }

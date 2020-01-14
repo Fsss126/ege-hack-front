@@ -78,11 +78,13 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, onCourseDeselect, loc
                     </PageContent>
                 </CourseCatalog.Body>
             )}
-            {isEditing ? null : (
-                <SelectedCoursesTab
-                    onCourseDeselect={onCourseDeselect}
-                    courses={[...selectedCourses]}
-                    discount={discount}/>
+            {!isEditing && (
+                (
+                    <SelectedCoursesTab
+                        onCourseDeselect={onCourseDeselect}
+                        courses={[...selectedCourses]}
+                        discount={discount}/>
+                )
             )}
         </Page>
     );

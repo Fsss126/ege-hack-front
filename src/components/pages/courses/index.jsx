@@ -7,12 +7,14 @@ import CourseCreatingPage from "../admin/courses/CourseCreatingPage";
 import LessonCreatingPage from "../admin/lessons/LessonCreatingPage";
 import CourseEditingPage from "../admin/courses/CourseEditingPage";
 import LessonEditingPage from "../admin/lessons/LessonEditingPage";
+import ParticipantsPage from "../admin/courses/ParticipantsPage";
 
 const MyCourses = ({match}) => {
     return (
         <Switch>
             <Route path={`${match.path}/create`} component={CourseCreatingPage}/>
             <Route path={`${match.path}/:courseId/:lessonId/edit`} component={LessonEditingPage}/>
+            <Route path={`${match.path}/:courseId/participants`} component={ParticipantsPage}/>
             <Route path={`${match.path}/:courseId/edit`} component={CourseEditingPage}/>
             <Route path={`${match.path}/:courseId/create_lesson`} component={LessonCreatingPage}/>
             <Route path={`${match.path}/:courseId/:lessonId`} component={LessonPage}/>

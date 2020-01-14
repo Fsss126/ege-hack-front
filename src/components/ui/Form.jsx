@@ -105,7 +105,7 @@ const Form = (props, ref) => {
                 actions
             });
         };
-        revokeRelatedData(response);
+        revokeRelatedData && revokeRelatedData(response);
         onSubmitted(response, showSuccessMessage, reset);
     }, [revokeRelatedData, onSubmitted, reset]);
 
