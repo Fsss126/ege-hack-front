@@ -1,9 +1,10 @@
-import React, {useCallback} from "react";
+import React from "react";
+import classnames from 'classnames';
 import Button from "./Button";
 import {LOADING_STATE, LoadingIndicator, useLoadingState} from "./LoadingIndicator";
 import MessagePopup from "./MessagePopup";
 import NavigationBlocker from "../common/NavigationBlocker";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export function useFormState(callback, onSubmitted, onError) {
     const [hasChanged, setChanged] = React.useState(false);
@@ -42,6 +43,25 @@ export function useFormState(callback, onSubmitted, onError) {
     }
 }
 
+export function useFormValidityChecker(formRef, checkInput, dependencies=[]) {
+    return React.useCallback((formData) => {
+        const formElement = formRef.current;
+        if (!formElement)
+            return false;
+        for (let name in formData) {
+            const input = formElement.elements[name];
+            const checkResult = checkInput && checkInput(name, input, formData);
+            if (checkResult === false)
+                return false;
+            else if (checkResult === true)
+                continue;
+            if (!input || !input.checkValidity())
+                return false;
+        }
+        return true;
+    }, [...dependencies]);
+}
+
 export function useForm(initFormData, checkValidity) {
     const [formData, setFormData] = React.useState(initFormData);
     const [isValid, setValidity] = React.useState(false);
@@ -72,7 +92,7 @@ export function useForm(initFormData, checkValidity) {
 
 export const FieldsContainer = ({children, className}) => {
   return (
-      <div className={`form__fields ${className || ''}`}>
+      <div className={classnames('form__fields', className)}>
           {children}
       </div>);
 };
@@ -90,6 +110,7 @@ const Form = (props, ref) => {
         onError,
         reset,
         revokeRelatedData,
+        blockNavigation=true,
         cancelLink
     } = props;
 
@@ -126,7 +147,7 @@ const Form = (props, ref) => {
     const state = useLoadingState(submitting, submitting === false);
 
     // const history = useHistory();
-    // const cancelCallback = useCallback(() => {
+    // const cancelCallback = React.useCallback(() => {
     //     if (history.length > 0)
     //         history.goBack();
     //     else
@@ -136,17 +157,17 @@ const Form = (props, ref) => {
         <form
             ref={ref}
             onChange={onChange}
-            className={`form ${className || ''}`}
+            className={classnames('form', className)}
             autoComplete={autocomplete}>
             {title && <h3 className="form__title">{title}</h3>}
             {children}
             <div className="form__action-container btn-container text-right">
-                <Button
+                {cancelLink && <Button
                     tag={Link}
                     neutral={true}
                     to={cancelLink}>
                     Отменить
-                </Button>
+                </Button>}
                 {' '}
                 <Button
                     active={isValid}
@@ -156,7 +177,7 @@ const Form = (props, ref) => {
                 </Button>
             </div>
             <MessagePopup ref={messagePopupRef}/>
-            {hasChanged && <NavigationBlocker/>}
+            {blockNavigation && hasChanged && <NavigationBlocker/>}
         </form>
     )
 };

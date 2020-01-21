@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import _ from 'lodash';
 import Popup, { APPEAR_ANIMATION } from './Popup';
 import PropTypes from 'prop-types';
@@ -51,13 +52,12 @@ class MessagePopup extends Component {
 
     render() {
         const {opened, message} = this.state;
-        let className = 'message-popup';
-        if (message && message.error)
-            className += ' error-popup';
-        if (message && message.message.length > 60)
-            className += ' large';
         return (
-            <Popup className={className}
+            <Popup
+                className={classnames('message-popup', {
+                    'error-popup': message && message.error,
+                    'large': message && message.message.length > 60
+                })}
                 opened={opened}
                 closeOnBackgroundClick={false}
                 appearAnimation={APPEAR_ANIMATION.SCALE}>
@@ -66,7 +66,9 @@ class MessagePopup extends Component {
                         <div className="col-auto">
                             {message && (
                                 <i
-                                    className={`close-button icon-close ${message.modal ? 'invisible' : ''}`}
+                                    className={classnames('close-button', 'icon-close', {
+                                        'invisible': message.modal
+                                    })}
                                     onClick={this.close}/>
                             )}
                         </div>

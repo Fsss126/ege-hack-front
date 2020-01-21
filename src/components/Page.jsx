@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import _ from 'lodash';
 import {Helmet} from "react-helmet";
 import Sticky from 'react-sticky-el';
@@ -21,7 +22,9 @@ const PageLoadingPlaceholder = () => (
 
 export const PageLink = ({to, arrow = true, forward = true, className, children, ...props}) => (
     <Link
-        className={`${arrow ? 'arrow-link' : ''} ${forward ? 'arrow-link-forward' : 'arrow-link-backward'} ${className || ''}`}
+        className={classnames(className, {
+            'arrow-link': arrow
+        }, forward ? 'arrow-link-forward' : 'arrow-link-backward')}
         to={to}
         {...props}>
         {children}
@@ -29,7 +32,7 @@ export const PageLink = ({to, arrow = true, forward = true, className, children,
 );
 
 export const PageContent = ({children, className, parentSection}) => (
-    <div className={`layout__content-container container ${className || ''}`}>
+    <div className={classnames('layout__content-container', 'container', className)}>
         {parentSection && (
             <PageLink
                 to={parentSection.url || '..'}
@@ -115,7 +118,7 @@ const Page = ({
                                 accountRoles={user !== null ? (userInfo ? userInfo.roles : undefined) : null}
                                 onMenuClose={toggleSideBar}/>
                         )}
-                        <div className={`layout__content ${className || ''}`}>
+                        <div className={classnames('layout__content', className)}>
                             {title && <Helmet><title>{title} – ЕГЭ HACK</title></Helmet>}
                             {showContent ?
                                 children :

@@ -519,13 +519,18 @@ header {
   .layout__content-block {
     background: white;
     padding: $content-padding;
+
+    &.layout__content-block--stacked {
+      margin-top: 0;
+      border-top: 1px solid $border-grey;
+    }
     .negate-block-padding, .list {
       width: auto;
       margin-left: -$content-padding-sides;
       margin-right: -$content-padding-sides;
     }
   }
-  .layout__content-block~.layout__content-block {
+  .layout__content-block~.layout__content-block:not(.layout__content-block--stacked) {
     margin-top: 24px;
   }
 
@@ -645,7 +650,7 @@ header {
 
   .course {
     &.course-selected {
-      background: lighten($accent-orange, 30%);
+      background: $accent-bg;
     }
     .course__cover-container {
       position: relative;
@@ -753,69 +758,74 @@ header {
     }
   }
 
+  .course-overview__offer {
+    transition: background-color .3s;
+    &.course-overview__offer--selected {
+      background: $accent-bg;
+    }
+  }
+
   .discount {
     text-decoration: line-through;
     text-decoration-color: $accent-orange;
   }
 
-  .course-shop {
-    .selected-courses {
-      .selected-courses__courses {
-        @include overflow-hidden;
-        border-right: $border;
-        .selected-course {
-          cursor: default;
-          .selected-course__cover-container {
-            position: relative;
-            .cover {
-              width: 100px;
-            }
-          }
-          .selected-course__deselect-btn {
-            font-size: $font-size-sm;
-            cursor: pointer;
-            position: absolute;
-            top: 0;
-            right: 0;
-            margin-top: calc(-2px/2 - #{$font-size-sm}/2);
-            margin-right: calc(-2px/2 - #{$font-size-sm}/2);
-            padding: 2px;
-            background: $text-light-grey;
-            border-radius: 50%;
-          }
-          .selected-course__description-container {
-            width: 120px;
-            padding: 0 $content-padding-sides;
+  .selected-courses {
+    .selected-courses__courses {
+      @include overflow-hidden;
+      border-right: $border;
+      .selected-course {
+        cursor: default;
+        .selected-course__cover-container {
+          position: relative;
+          .cover {
+            width: 100px;
           }
         }
-      }
-      @include media-breakpoint-up(md) {
-        .selected-courses__price {
-          max-width: 40%;
+        .selected-course__deselect-btn {
+          font-size: $font-size-sm;
+          cursor: pointer;
+          position: absolute;
+          top: 0;
+          right: 0;
+          margin-top: calc(-2px/2 - #{$font-size-sm}/2);
+          margin-right: calc(-2px/2 - #{$font-size-sm}/2);
+          padding: 2px;
+          background: $text-light-grey;
+          border-radius: 50%;
+        }
+        .selected-course__description-container {
+          width: 120px;
+          padding: 0 $content-padding-sides;
         }
       }
-      .selected-courses__price-container {
-        padding-left: inherit;
-        padding-right: 0;
+    }
+    @include media-breakpoint-up(md) {
+      .selected-courses__price {
+        max-width: 40%;
+      }
+    }
+    .selected-courses__price-container {
+      padding-left: inherit;
+      padding-right: 0;
+      @include media-breakpoint-down(sm) {
+        padding-left: 0;
+        padding-right: inherit;
+        text-align: right;
+      }
+      .discount {
+        vertical-align: middle;
+        margin-right: 8px;
         @include media-breakpoint-down(sm) {
-          padding-left: 0;
-          padding-right: inherit;
-          text-align: right;
+          padding: 0;
         }
-        .discount {
-          vertical-align: middle;
-          margin-right: 8px;
-          @include media-breakpoint-down(sm) {
-            padding: 0;
-          }
-        }
-        .price {
-          vertical-align: middle;
-          font-family: $font-medium;
-        }
-        .promotion {
-          color: $accent-orange;
-        }
+      }
+      .price {
+        vertical-align: middle;
+        font-family: $font-medium;
+      }
+      .promotion {
+        color: $accent-orange;
       }
     }
   }
@@ -1128,6 +1138,15 @@ header {
       right: auto;
       left: 0;
     }
+  }
+}
+
+.purchase-form {
+  .form__title, .form__action-container {
+    text-align: center !important;
+  }
+  .purchase-form__note {
+    padding: 0 8px 16px;
   }
 }
 

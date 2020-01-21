@@ -1,10 +1,15 @@
-import React from 'react';
+import React, {Fragment, useState} from 'react';
 import { Switch, Route } from "react-router-dom";
 import ShopCatalogPage from "./catalog-page";
 import CoursePage from "./course-page";
+import {useDiscount} from "../../../store";
+import {useToggle} from "../../../hooks/common";
+import SelectedCoursesTab from "./SelectedCoursesTab";
+import PurchasePopup from "./PurchasePopup";
 
 export default function Shop(props) {
-    const [selectedCourses, setSelectedCourses] = React.useState(new Set());
+    const [selectedCourses, setSelectedCourses] = useState(new Set());
+    const {discount, error: errorLoadingDiscount, retry: reloadDiscount} = useDiscount(selectedCourses);
     const onCourseSelect = React.useCallback((course) => {
         setSelectedCourses(selectedCourses => {
             if (selectedCourses.has(course))
@@ -21,21 +26,44 @@ export default function Shop(props) {
             return selectedCourses;
         });
     }, []);
+    const [isPurchasePopupOpened, togglePopup] = useToggle(false);
     const {match} = props;
+
+    const selectedCoursesTab = (
+        <SelectedCoursesTab
+            onCourseDeselect={onCourseDeselect}
+            courses={[...selectedCourses]}
+            onPurchaseClick={togglePopup}
+            discount={discount}/>
+    );
     return (
-        <Switch>
-            <Route path={`${match.path}/:id`} render={(props) => (
-                <CoursePage
-                    path={match.path}
-                    {...props}/>
-            )}/>
-            <Route exact path={`${match.path}`} render={(props) => (
-                <ShopCatalogPage
-                    selectedCourses={selectedCourses}
-                    onCourseSelect={onCourseSelect}
-                    onCourseDeselect={onCourseDeselect}
-                    {...props}/>
-            )}/>
-        </Switch>
+        <Fragment>
+            <Switch>
+                <Route path={`${match.path}/:id`} render={(props) => (
+                    <CoursePage
+                        selectedCourses={selectedCourses}
+                        discount={discount}
+                        onCourseSelect={onCourseSelect}
+                        path={match.path}
+                        {...props}>
+                        {selectedCoursesTab}
+                    </CoursePage>
+                )}/>
+                <Route exact path={`${match.path}`} render={(props) => (
+                    <ShopCatalogPage
+                        selectedCourses={selectedCourses}
+                        discount={discount}
+                        onCourseSelect={onCourseSelect}
+                        onCourseDeselect={onCourseDeselect}
+                        {...props}>
+                        {selectedCoursesTab}
+                    </ShopCatalogPage>
+                )}/>
+            </Switch>
+            <PurchasePopup
+                opened={isPurchasePopupOpened}
+                selectedCourses={selectedCourses}
+                onCloseClick={togglePopup}/>
+        </Fragment>
     )
 }

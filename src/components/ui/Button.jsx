@@ -1,4 +1,5 @@
 import React from "react";
+import classnames from 'classnames';
 
 const Button = ({className, children, active = true, neutral=false, icon, iconAction, tag:Tag='div', onClick, ...props}) => {
     // const clickCallback = React.useCallback((e) => {
@@ -8,13 +9,16 @@ const Button = ({className, children, active = true, neutral=false, icon, iconAc
     // }, [onClick]);
     return (
         <Tag
-            className={`btn ${active ? '' : 'btn-inactive'} ${neutral ? 'btn-neutral' : ''} ${className ? className : ''}`}
+            className={classnames('btn', {
+                'btn-inactive': !active,
+                'btn-neutral': neutral
+            }, className)}
             {...props}>
         <span className="btn__content">
             {icon && <div className="btn__after" onClick={iconAction ? iconAction : onClick}>{icon}</div>}
             <span
                 className="btn__name"
-                onClick={onClick}>
+                onClick={active ? onClick : undefined}>
                 {children}
             </span>
         </span>

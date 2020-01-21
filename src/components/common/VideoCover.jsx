@@ -1,10 +1,13 @@
 import React from "react";
+import classnames from "classnames";
 import CoverImage from "./CoverImage";
 
 const VideoCover = ({cover, watchProgress, locked=false, className}) => (
     <CoverImage
         src={cover}
-        className={`video-cover ${locked ? 'video-locked' : ''} ${className || ''}`}>
+        className={classnames('video-cover', className, {
+            'video-locked': locked
+        })}>
         {watchProgress && (
             <div className="video-cover__watch-progress-bar">
                 <div

@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 export default function ListItem(props) {
     const {
         preview, title, subtitle, description, item, selectable,
+        adaptive = true,
         className,
         children: action,
         link,
@@ -26,7 +27,7 @@ export default function ListItem(props) {
     }, [item, actionCallback, selectable, callbackProps]);
     const content = (
         <div className="row align-items-center">
-            <div className="preview-container col-12 col-md-auto">
+            <div className={`preview-container ${adaptive ? 'col-12 col-md-auto' : 'col-auto'}`}>
                 {preview}
             </div>
             <div className="list__item-description col align-self-stretch">

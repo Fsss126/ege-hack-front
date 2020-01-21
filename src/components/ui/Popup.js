@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
@@ -71,7 +72,9 @@ class Popup extends Component {
                 timeout={300}
                 unmountOnExit mountOnEnter>
                 <div
-                    className={`popup ${appearAnimation ? `animation ${appearAnimation}` : ''} ${className || ''}`}
+                    className={classnames('popup', {
+                        'animation': appearAnimation
+                    }, appearAnimation, className)}
                     onClick={closeOnBackgroundClick ? this.close : null}>
                     <div className="popup__container">
                         {children}

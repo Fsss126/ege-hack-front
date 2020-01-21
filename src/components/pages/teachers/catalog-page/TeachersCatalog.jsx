@@ -6,13 +6,14 @@ import Teacher from "components/common/Teacher";
 const Filter = (props) => (<Catalog.Filter filterBy={{online: false}} {...props}/>);
 
 const TeachersCatalog = (props) => {
-    const renderTeacher = React.useCallback((teacher, {link, subjects}) => (
+    const renderTeacher = React.useCallback((teacher, {link, subjects, ...rest}) => (
         <div className="list__item col-12 col-md-6 d-flex" key={teacher.id}>
             <Teacher
                 teacher={teacher}
                 subjects={subjects}
                 bio
-                link={link}/>
+                link={link}
+                {...rest}/>
         </div>
     ), []);
     return (

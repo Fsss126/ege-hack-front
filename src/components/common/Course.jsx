@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from "classnames";
 import {daysBetween} from "definitions/helpers";
 import ListItem from "./ListItem";
 import CoverImage from "./CoverImage";
@@ -9,7 +10,9 @@ export default function Course({course, online=true, isSelected=false, ...props}
     return (
         <ListItem
             item={course}
-            className={isSelected ? 'course course-selected' : 'course'}
+            className={classnames('course', {
+                'course-selected': isSelected
+            })}
             title={name}
             subtitle={startsIn > 0 ? `До начала курса ${startsIn} ${
                 startsIn === 1 ? 'день' : 
@@ -21,7 +24,9 @@ export default function Course({course, online=true, isSelected=false, ...props}
             preview={(
                 <div className="course__cover-container">
                     {course.online && (
-                        <div className={`course__online-badge ${online ? 'course__online-text' : ''} font-size-xs`}>
+                        <div className={classnames('course__online-badge', 'font-size-xs', {
+                            'course__online-text': online
+                        })}>
                             <span>Онлайн</span>
                         </div>
                     )}

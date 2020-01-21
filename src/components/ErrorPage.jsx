@@ -11,7 +11,7 @@ const ErrorPage = ({errorCode = 404, message, link: {text, url} = {}}) => {
                 {code && code.split('').map((number, i) => <span key={i}>{number}</span>)}
             </div>
             <div className="error-page__error-message">{message || 'Похоже, вы потерялись'}</div>
-            <Button tag={Link} to={`${url || ''}/`} replace>{text || 'На главную'}</Button>
+            <Button tag={Link} to={url | '/'} replace>{text || 'На главную'}</Button>
         </Page>
     );
 };

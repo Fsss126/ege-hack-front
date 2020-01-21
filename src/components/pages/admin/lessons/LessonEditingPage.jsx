@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import APIRequest from "api";
 import LessonForm from "./LessonForm";
 import Page, {PageContent} from "components/Page";
@@ -10,11 +10,11 @@ const LessonEditingPage = (props) => {
     const courseId = parseInt(param_course);
     const lessonId = parseInt(param_lesson);
 
-    const createRequest = React.useCallback((requestData) => APIRequest.put(`/lessons/${lessonId}`, requestData), [lessonId]);
+    const createRequest = useCallback((requestData) => APIRequest.put(`/lessons/${lessonId}`, requestData), [lessonId]);
 
     const {lesson, error: errorLoadingLesson, retry: reloadLesson} = useLesson(courseId, lessonId);
 
-    const onSubmitted = React.useCallback((response, showSuccessMessage, reset) => {
+    const onSubmitted = useCallback((response, showSuccessMessage, reset) => {
         showSuccessMessage("Изменения сохранены", [
             {
                 text: 'Ок'

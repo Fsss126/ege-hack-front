@@ -63,7 +63,7 @@ const ParticipantsPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={PERMISSIONS.COURSE_EDIT}
+            requiredPermissions={PERMISSIONS.PARTICIPANT_MANAGEMENT}
             className="participants-form-page"
             title="Добавление учеников"
             location={location}>

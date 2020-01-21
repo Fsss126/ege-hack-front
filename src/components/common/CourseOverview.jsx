@@ -70,8 +70,8 @@ const Teachers = () => {
 
 const Lessons = ({renderLesson: renderFunc}) => {
     const {course, lessons} = React.useContext(CourseOverviewContext);
-    const renderCourse = React.useCallback((item) => {
-        return renderFunc(item, {link: `${item.id}/`});
+    const renderCourse = React.useCallback((item, renderProps) => {
+        return renderFunc(item, {link: `${item.id}/`, ...renderProps});
     }, [renderFunc]);
     return (
         <div className="layout__content-block">

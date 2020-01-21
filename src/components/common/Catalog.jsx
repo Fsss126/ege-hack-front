@@ -40,13 +40,15 @@ const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnlin
 
 const Catalog = ({renderFunc, placeholder, baseUrl, ...listProps}) => {
     const {items, renderProps} = React.useContext(CatalogContext);
-    const renderItem = React.useCallback((item) => {
+    const renderItem = React.useCallback((item, renderProps) => {
         return renderFunc(item, {link: `${item.id}/`, ...renderProps});
-    }, [renderFunc, renderProps]);
+    }, [renderFunc]);
     return (
         <div className="layout__content-block catalog__catalog">
             {items.length > 0 ? (
-                <List {...listProps}
+                <List
+                    {...listProps}
+                    renderProps={renderProps}
                     renderItem={renderItem}>
                     {items}
                 </List>

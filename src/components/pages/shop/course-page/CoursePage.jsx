@@ -1,7 +1,7 @@
 import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import CourseOverview from "components/common/CourseOverview";
-import CoursePriceTab from "./CoursePriceTab";
+import CoursePrice from "./CoursePrice";
 import Lesson from "components/common/Lesson";
 import {useTeachers, useLessons, useDiscount, useShopCourse} from "store";
 import Button from "components/ui/Button";
@@ -9,15 +9,18 @@ import {Link} from "react-router-dom";
 import ConditionalRenderer from "components/ConditionalRender";
 import {PERMISSIONS} from "definitions/constants";
 import {useToggle} from "hooks/common";
+import SelectedCoursesTab from "../SelectedCoursesTab";
 
 //TODO: fix 404 error screen
-const CoursePage = ({path, location, match}) => {
+const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, path, location, match}) => {
     const {params: {id: param_id}} = match;
     const courseId = parseInt(param_id);
     const {course, error, retry} = useShopCourse(courseId);
     const {teachers, error: errorLoadingTeachers, retry: reloadTeachers} = useTeachers();
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     const {discount, error: errorLoadingDiscount, retry: reloadDiscount} = useDiscount(courseId);
+    const isSelected = selectedCourses.has(course);
+
     const [isEditing, toggleEditing] = useToggle(false);
     const renderLesson = useCallback((lesson) => (
         <Lesson
@@ -41,6 +44,14 @@ const CoursePage = ({path, location, match}) => {
                 location={location}>
                 <PageContent parentSection={{name: "Магазин курсов"}}>
                     <CourseOverview.Description/>
+                    {!isEditing && (
+                        <CoursePrice
+                            isSelected={isSelected}
+                            discount={discount}
+                            onSelect={onCourseSelect}
+                            error={error}
+                            retry={reloadDiscount}/>
+                    )}
                     <CourseOverview.Teachers/>
                     <ConditionalRenderer
                         requiredPermissions={PERMISSIONS.LESSON_EDIT}>
@@ -75,12 +86,7 @@ const CoursePage = ({path, location, match}) => {
                     </ConditionalRenderer>
                     <CourseOverview.Lessons renderLesson={renderLesson}/>
                 </PageContent>
-                {!isEditing && (
-                    <CoursePriceTab
-                        discount={discount}
-                        error={error}
-                        retry={reloadDiscount}/>
-                )}
+                {!isEditing && selectedCoursesTab}
             </CourseOverview.Body>
         );
     }

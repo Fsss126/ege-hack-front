@@ -1,9 +1,13 @@
 import React from 'react';
+import classnames from "classnames";
 
 const CoverImage = ({src, placeholder=false, className, children, square=false, round=false, ...props}) => {
     return (
         <div
-            className={`${className || ''} cover ${square ? 'square-cover' : ''} ${round ? 'round-cover' : ''}`}
+            className={classnames('cover', className, {
+                'square-cover': square,
+                'round-cover': round
+            })}
             {...props}>
             {src || !placeholder
                 ? <div

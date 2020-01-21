@@ -83,7 +83,7 @@ class Auth {
             return;
         if (!initVK)
             window.VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
-        window.VK.Auth.login(this.onLogin);
+        window.VK.Auth.login(this.onLogin, 4194304);
     };
 
     logout = () => {

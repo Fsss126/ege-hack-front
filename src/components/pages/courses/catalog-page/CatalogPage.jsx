@@ -11,13 +11,13 @@ const CatalogPage = ({location}) => {
     const {courses, error, retry} = useUserCourses();
     const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
     const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useUpcomingWebinars();
-    const renderCourse = React.useCallback((course, props) => (
+    const renderCourse = React.useCallback((course, renderProps) => (
         <Course
             course={course}
             selectable
             online={false}
             key={course.id}
-            {...props}>
+            {...renderProps}>
             {course.status === LEARNING_STATUS.learning
                 ? <Button className="course__select-btn">Изучать</Button>
                 : <Button className="course__select-btn" active={false}>Пройден</Button>}

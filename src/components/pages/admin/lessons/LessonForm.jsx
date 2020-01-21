@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useCallback, useRef} from "react";
 import _ from "lodash";
 import * as Input from "components/ui/input";
-import Form, {FieldsContainer, useForm} from "components/ui/Form";
+import Form, {FieldsContainer, useForm, useFormValidityChecker} from "components/ui/Form";
 import {FileInput} from "components/ui/input";
 import {useRevokeLessons} from "store";
 
@@ -45,27 +45,15 @@ function getRequestData(formData, courseId) {
 const LessonForm = (props) => {
     const {courseId, title, createRequest, onSubmitted, errorMessage} = props;
 
-    const formElementRef = React.useRef(null);
+    const formElementRef = useRef(null);
 
-    const checkValidity = React.useCallback((formData) => {
-        const formElement = formElementRef.current;
-        if (!formElement)
-            return false;
-        for (let name in INITIAL_FORM_DATA) {
-            if (_.includes(['attachments', 'hometask_description', 'hometask_file', 'hometask_deadline'], name))
-                continue;
-            if (name === 'image') {
-                if (!(formData.image && formData.image[0]))
-                    return false;
-                // continue;
-                else continue;
-            }
-            const input = formElement.elements[name];
-            if (!input || !input.checkValidity())
-                return false;
+    const checkValidity = useFormValidityChecker(formElementRef, (name, input, formData) => {
+        if (_.includes(['attachments', 'hometask_description', 'hometask_file', 'hometask_deadline'], name))
+            return true;
+        if (name === 'image') {
+            return formData.image && !!formData.image[0];
         }
-        return true;
-    }, []);
+    });
 
     const {lesson} = props;
     const {
@@ -81,6 +69,7 @@ const LessonForm = (props) => {
                 image_link,
                 video_link,
                 id,
+                course_id,
                 locked: is_locked,
                 assignment: {
                     deadline: hometask_deadline,

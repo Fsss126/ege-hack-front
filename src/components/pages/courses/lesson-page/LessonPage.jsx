@@ -16,7 +16,7 @@ const LessonPage = (props) => {
     // const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     const {homework, error: errorLoadingHomework, retry: reloadHomework} = useHomework(lessonId);
-    const renderLesson = (lesson) => {
+    const renderLesson = (lesson, renderProps) => {
         const {id, locked} = lesson;
         return (
             <Lesson
@@ -24,7 +24,8 @@ const LessonPage = (props) => {
                 locked={locked}
                 selectable={!locked}
                 key={id}
-                link={`../${lesson.id}/`}>
+                link={`../${lesson.id}/`}
+                {...renderProps}>
             </Lesson>
         );
     };

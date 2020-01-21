@@ -1,8 +1,9 @@
 import React from "react";
 import APIRequest from "api";
-import Form, {FieldsContainer, useForm} from "components/ui/Form";
+import Form, {FieldsContainer, useForm, useFormValidityChecker} from "components/ui/Form";
 import {useRevokeShopCatalog} from "store";
 import * as Input from "components/ui/input";
+import _ from "lodash";
 
 const INITIAL_FORM_DATA = {
     name: '',
@@ -46,23 +47,11 @@ const CourseForm = (props) => {
 
     const formElementRef = React.useRef(null);
 
-    const checkValidity = React.useCallback((formData) => {
-        const formElement = formElementRef.current;
-        if (!formElement)
-            return false;
-        for (let name in INITIAL_FORM_DATA) {
-            if (name === 'image') {
-                if (!(formData.image && formData.image[0]))
-                    return false;
-                // continue;
-                else continue;
-            }
-            const input = formElement.elements[name];
-            if (!input || !input.checkValidity())
-                return false;
+    const checkValidity = useFormValidityChecker(formElementRef, (name, input, formData) => {
+        if (name === 'image') {
+            return formData.image && !!formData.image[0];
         }
-        return true;
-    }, []);
+    });
 
     const {course} = props;
     const {

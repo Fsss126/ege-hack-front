@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 
 export function useTruncate(text) {
     const descriptionRef = React.useRef(null);
@@ -33,16 +33,16 @@ export function useTruncate(text) {
 }
 
 export function useRefValue(initialValue) {
-    const ref = React.useRef(initialValue);
-    const getValue = React.useCallback(() => ref.current, []);
-    const setValue = React.useCallback((value) => {
+    const ref = useRef(initialValue);
+    const getValue = useCallback(() => ref.current, []);
+    const setValue = useCallback((value) => {
         ref.current = value;
     }, []);
     return [getValue, setValue];
 }
 
 export function useIsMounted() {
-    const [getIsMounted, setIsMounted] = useRefValue(false);
+    const [isMounted, setIsMounted] = useState(false);
 
     React.useLayoutEffect(() => {
         console.log('mounting');
@@ -53,7 +53,7 @@ export function useIsMounted() {
         };
     }, []);
 
-    return getIsMounted;
+    return isMounted;
 }
 
 export function useUpdateEffect(effect, dependencies = []) {

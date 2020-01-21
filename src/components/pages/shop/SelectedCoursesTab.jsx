@@ -34,7 +34,7 @@ const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
 
 const renderView = ({style, ...props}) => (<div style={{...style, height: `calc(100% + ${style.minHeight}px)`}} {...props}/>);
 
-const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect}) => {
+const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect, onPurchaseClick}) => {
     let price, discount, message;
     if (discountInfo) {
         const fullPrice = _.sumBy(courses, 'price');
@@ -83,7 +83,11 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect})
                         <div className="layout__bottom-tab-container container d-flex align-items-center justify-content-end">
                             {discountInfo ? (
                                 <React.Fragment>
-                                    <Button className="order-1 order-md-0 flex-shrink-0">Оплатить</Button>
+                                    <Button
+                                        className="order-1 order-md-0 flex-shrink-0"
+                                        onClick={onPurchaseClick}>
+                                        Оплатить
+                                    </Button>
                                     <div className="price selected-courses__price-container container">
                                         {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{renderPrice(price + discount)}</div>}
                                         <div className="price font-size-lg d-inline-block d-md-block">{renderPrice(price)}</div>
