@@ -1141,11 +1141,15 @@ header {
   }
 }
 
+.purchase-popup .popup__container {
+  max-width: 380px;
+}
 .purchase-form {
   .form__title, .form__action-container {
     text-align: center !important;
   }
   .purchase-form__note {
+    text-align: center;
     padding: 0 8px 16px;
   }
 }

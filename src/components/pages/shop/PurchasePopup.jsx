@@ -1,10 +1,9 @@
-import React, {useRef, useState} from "react";
+import React, {useRef} from "react";
 import Auth from 'definitions/auth';
-import classnames from 'classnames';
 import Popup, {APPEAR_ANIMATION} from "components/ui/Popup";
 import {Input} from "components/ui/input";
 import {useForm, useFormValidityChecker} from "components/ui/Form";
-import Form from "../../ui/Form";
+import Form from "components/ui/Form";
 import APIRequest from "api";
 
 const LOCAL_STORAGE_KEY = 'ege-hack-email';
@@ -44,15 +43,15 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
     }, [email, selectedCourses]);
 
     const onError = React.useCallback((error, showErrorMessage, reloadCallback) => {
-        // showErrorMessage('Невозможно перейти к оплате', [
-        //     {
-        //         text: 'Закрыть'
-        //     },
-        //     {
-        //         text: 'Заново',
-        //         action: reloadCallback
-        //     }
-        // ]);
+        showErrorMessage('Невозможно перейти к оплате', [
+            {
+                text: 'Закрыть'
+            },
+            {
+                text: 'Заново',
+                action: reloadCallback
+            }
+        ]);
         console.log(error);
     }, []);
 
@@ -94,7 +93,7 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
                                 type="email"
                                 name="email"
                                 required
-                                placeholder="Email"
+                                placeholder="Электронная почта"
                                 value={email}
                                 onChange={onInputChange}/>
                         </Form>

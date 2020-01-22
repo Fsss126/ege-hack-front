@@ -5,40 +5,12 @@
     <option name="CUSTOM_SCOPE_NAME" value="Module 'ege-hack'" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
+    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Purchase touches">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ErrorPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ErrorPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Catalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Catalog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Course.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CoverImage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CoverImage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/List.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/List.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/ListItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/ListItem.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/VideoCover.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/VideoCover.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/ParticipantsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/courses/ParticipantsPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonEditingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/SelectedCoursesTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/SelectedCoursesTab.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePriceTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePrice.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Button.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Button.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Form.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Form.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/MessagePopup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/MessagePopup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Popup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_popup.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_popup.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_variables.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/constants.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -88,19 +60,19 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
-      <recent name="$PROJECT_DIR$/src/components/ui" />
-      <recent name="$PROJECT_DIR$/src/sass" />
-      <recent name="$PROJECT_DIR$/src/components/ui/file-input/image" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/pages/shop" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
       <recent name="$PROJECT_DIR$/src/components/ui/input/file-input" />
       <recent name="$PROJECT_DIR$/src/components/ui/input" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
+      <recent name="$PROJECT_DIR$/src/components/ui" />
+      <recent name="$PROJECT_DIR$/src/sass" />
+      <recent name="$PROJECT_DIR$/src/components/ui/file-input/image" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start-custom-post-mac">
@@ -451,7 +423,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Basic catalog" />
     <MESSAGE value="Course catalog markup; Course routing" />
     <MESSAGE value="Course selection in shop" />
     <MESSAGE value="Files upload and a lot of staff" />
@@ -476,7 +447,9 @@
     <MESSAGE value="Editing mode" />
     <MESSAGE value="Fixed rubble currency sign; Changed admin controls" />
     <MESSAGE value="Participants form" />
-    <option name="LAST_COMMIT_MESSAGE" value="Participants form" />
+    <MESSAGE value="Purchase touches" />
+    <option name="LAST_COMMIT_MESSAGE" value="Purchase touches" />
+    <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Inspections" timestamp="1578065894058">
@@ -491,17 +464,17 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1578972012590">
+    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1579716265151">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1578754326030" />
-    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1578972012590" />
-    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1578958232504">
+    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1579716265151" />
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1579716253722">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1578958232504" />
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1579716253722" />
     <state x="100" y="55" width="1240" height="845" key="DiffContextDialog/0.23.1440.820/1440.23.1360.745@0.23.1440.820" timestamp="1578185803491" />
-    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.820@0.23.1440.820" timestamp="1578487129150" />
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.820@0.23.1440.820" timestamp="1579716024947" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.821@0.23.1440.821" timestamp="1578486218189" />
     <state x="507" y="212" key="FileChooserDialogImpl" timestamp="1578351106865">
       <screen x="0" y="0" width="1440" height="900" />
@@ -569,5 +542,9 @@
     </state>
     <state x="226" y="132" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1579570591525" />
     <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1579634272082" />
+    <state x="73" y="216" key="vcs.ApplyPatchDifferentiatedDialog" timestamp="1579716004874">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="73" y="216" key="vcs.ApplyPatchDifferentiatedDialog/0.0.1440.900@0.0.1440.900" timestamp="1579716004874" />
   </component>
 </project>
