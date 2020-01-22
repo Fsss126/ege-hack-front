@@ -2,6 +2,7 @@
 import APIRequest from "api";
 
 const LOCAL_STORAGE_KEY = 'ege-hack-user-data';
+const VK_APP_ID = process.env.REACT_APP_VK_APP_ID;
 
 export const AuthEventTypes = {
     login: 'auth.login',
@@ -36,7 +37,7 @@ class Auth {
     constructor() {
         if (!window.VK)
             return;
-        window.VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
+        window.VK.init({apiId: VK_APP_ID});
         window.VK.Auth.getLoginStatus(res => {
             try {
                 console.log('retrieved login status', res);
@@ -67,7 +68,7 @@ class Auth {
                 console.error('User data can not be recovered', e);
                 this.setUser(null);
             }
-        });
+        }, true);
     }
 
     setUser(user) {
@@ -78,7 +79,8 @@ class Auth {
 
     eventHandlers = {};
 
-    login = () => {
+    login = (redirectUrl) => {
+        // window.location = `https://oauth.vk.com/authorize?client_id=${VK_APP_ID}&display=page&redirect_uri=${redirectUrl}&response_type=token&openapi=1&scope=email`;
         if (!window.VK)
             return;
         if (!initVK)

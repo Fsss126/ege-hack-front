@@ -38,6 +38,7 @@ function useForceTrailingSlash() {
     const history = useHistory();
     const path = location.pathname;
     if (path.slice(-1) !== '/') {
+        console.log(window.location);
         history.replace(path + '/');
     }
 }
