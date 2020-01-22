@@ -4,14 +4,15 @@ import Auth from "definitions/auth";
 import {useUser} from "store";
 import {Redirect} from "react-router-dom";
 import {DEFAULT_LOGIN_REDIRECT} from "definitions/constants";
+import {getAppUrl, getCurrentUrl} from "definitions/helpers";
 
 const LoginPage = (props) => {
     const {location} = props;
     const {user, userInfo} = useUser();
 
     const onClick = React.useCallback(() => {
-        Auth.login();
-    });
+        Auth.login(getCurrentUrl());
+    }, []);
 
     if (user) {
         if (location.state && location.state.referrer)

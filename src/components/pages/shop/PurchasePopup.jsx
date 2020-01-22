@@ -94,7 +94,7 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
                                 type="email"
                                 name="email"
                                 required
-                                placeholder="Email"
+                                placeholder="Электронная почта"
                                 value={email}
                                 onChange={onInputChange}/>
                         </Form>

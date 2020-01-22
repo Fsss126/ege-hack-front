@@ -1,5 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {APP_BASE_URL} from "definitions/constants";
 import {useRefValue, useToggle} from "hooks/common";
 import GlobalStore from "store";
 
@@ -36,6 +37,7 @@ function useForceTrailingSlash() {
     const history = useHistory();
     const path = location.pathname;
     if (path.slice(-1) !== '/') {
+        console.log(window.location);
         history.replace(path + '/');
     }
 }
@@ -86,7 +88,7 @@ function App() {
 }
 
 export default () => (
-    <Router basename={process.env.REACT_APP_BASE_URL}>
+    <Router basename={APP_BASE_URL}>
         <GlobalStore>
             <App/>
         </GlobalStore>

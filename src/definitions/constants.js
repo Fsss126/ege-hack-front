@@ -21,4 +21,5 @@ export const LEARNING_STATUS = {
   finished: 'finished'
 };
 
+export const APP_BASE_URL = process.env.REACT_APP_BASE_URL;
 export const DEFAULT_LOGIN_REDIRECT = '/shop/';
