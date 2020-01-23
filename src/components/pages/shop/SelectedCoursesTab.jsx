@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 import {useTruncate} from "hooks/common";
 import CoverImage from "components/common/CoverImage";
@@ -8,6 +9,7 @@ import {BottomTab} from "components/Page";
 import ScrollBars from "components/ui/ScrollBars";
 import Button from "components/ui/Button";
 import {renderPrice} from "definitions/helpers";
+import Loader from "../../ui/Loader";
 
 const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
     const {name} = course;
@@ -34,7 +36,7 @@ const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
 
 const renderView = ({style, ...props}) => (<div style={{...style, height: `calc(100% + ${style.minHeight}px)`}} {...props}/>);
 
-const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect, onPurchaseClick}) => {
+const SelectedCoursesTab = ({courses, discount: discountInfo, isLoading, error, retry, onCourseDeselect, onPurchaseClick}) => {
     let price, discount, message;
     if (discountInfo) {
         const fullPrice = _.sumBy(courses, 'price');
@@ -79,25 +81,28 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect, 
                             </TransitionGroup>
                         </ScrollBars>
                     </div>
-                    <div className="col-12 col-md-auto p-0 selected-courses__price">
-                        <div className="layout__bottom-tab-container container d-flex align-items-center justify-content-end">
-                            {discountInfo ? (
-                                <React.Fragment>
+                    <div className="col-12 col-md-auto p-0 selected-courses__price-container">
+                        {discountInfo ? (
+                            <Loader
+                                isLoading={isLoading || !!error}>
+                                <div className="layout__bottom-tab-container container d-flex align-items-center justify-content-end">
                                     <Button
                                         className="order-1 order-md-0 flex-shrink-0"
                                         onClick={onPurchaseClick}>
                                         Оплатить
                                     </Button>
-                                    <div className="price selected-courses__price-container container">
+                                    <div className="price selected-courses__price container">
                                         {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{renderPrice(price + discount)}</div>}
                                         <div className="price font-size-lg d-inline-block d-md-block">{renderPrice(price)}</div>
                                         {message && <div className="promotion font-size-xs">{message}</div>}
                                     </div>
-                                </React.Fragment>
-                            ) : (
+                                </div>
+                            </Loader>
+                        ) : (
+                            <div className="layout__bottom-tab-container container">
                                 <div className="spinner-border"/>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

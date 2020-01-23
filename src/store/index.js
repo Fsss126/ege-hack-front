@@ -119,6 +119,7 @@ export function useDiscount(selectedCourses) {
     const {user} = useUser();
     const [discount, setDiscount] = React.useState(null);
     const [error, setError] = React.useState(null);
+    const [isLoading, setLoading] = React.useState(true);
     const cancelRef = useRef();
     const fetchDiscount = React.useCallback(async () => {
         if (Auth.getUser() === undefined)
@@ -134,7 +135,8 @@ export function useDiscount(selectedCourses) {
         try {
             if (error)
                 setError(null);
-            setDiscount(null);
+            // setDiscount(null);
+            setLoading(true);
             const discount = await APIRequest.get('/payments/discounts', {
                 params: {
                     coursesIds: courses
@@ -145,6 +147,8 @@ export function useDiscount(selectedCourses) {
         } catch (e) {
             console.log('error loading discount', e);
             setError(e);
+        } finally {
+            setLoading(false);
         }
     }, [selectedCourses, error]);
 
@@ -153,7 +157,7 @@ export function useDiscount(selectedCourses) {
             fetchDiscount();
     }, [user, selectedCourses, error]);
 
-    return {discount, error, reload: fetchDiscount};
+    return {discount, error, reload: fetchDiscount, isLoading};
 }
 
 export function useTeachers() {

@@ -801,11 +801,11 @@ header {
       }
     }
     @include media-breakpoint-up(md) {
-      .selected-courses__price {
+      .selected-courses__price-container {
         max-width: 40%;
       }
     }
-    .selected-courses__price-container {
+    .selected-courses__price {
       padding-left: inherit;
       padding-right: 0;
       @include media-breakpoint-down(sm) {
@@ -1038,6 +1038,33 @@ header {
           @include overflow-hidden;
         }
       }
+    }
+  }
+}
+
+.loader {
+  position: relative;
+
+  .loader__loading-content {
+    transition: opacity .3s;
+    opacity: 1;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: none;
+    z-index: 1;
+  }
+  &.loading{
+    &:before {
+      display: block;
+    }
+    .loader__loading-content {
+      opacity: .6;
     }
   }
 }
