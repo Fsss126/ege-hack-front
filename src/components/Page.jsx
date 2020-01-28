@@ -97,6 +97,7 @@ const Page = ({
         }
     }
     const showContent = (checkLogin ? (requiredPermissions || loadUserInfo ? user && userInfo : !!user) : true) && isLoaded;
+    console.log(showContent);
     return (
         <div className="app">
             {showHeader && (

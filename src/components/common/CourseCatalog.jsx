@@ -4,7 +4,7 @@ import Catalog from "./Catalog";
 const CourseCatalog = ({renderCourse, ...otherProps}) => (
     <Catalog.Catalog
         placeholder="Нет курсов, соответствующих условиям поиска"
-        renderFunc={renderCourse}
+        renderItem={renderCourse}
         {...otherProps}/>
 );
 
@@ -15,8 +15,10 @@ const Body = (props) => {
             subjects.map(({id, name}) => ({value: id, label: name})),
         [subjects]);
 
-    const getMatchingCourses = React.useCallback((subject, online) => courses.filter((course) =>
-        (subject ? course.subject_id === subject : true) && (online ? course.online === online : true)), [courses]);
+    const getMatchingCourses = React.useCallback((subject, online, search) => courses.filter((course) =>
+        (subject ? course.subject_id === subject : true) &&
+        (online ? course.online === online : true) &&
+        (search ? course.name.toLowerCase().includes(search.toLowerCase()) : true)), [courses]);
 
     return (
         <Catalog.Body

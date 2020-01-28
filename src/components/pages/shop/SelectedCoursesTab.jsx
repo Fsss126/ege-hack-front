@@ -19,7 +19,7 @@ const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
     }, [onCourseDeselect, course]);
     return (
         <div className="selected-course d-flex align-items-center flex-shrink-0">
-            <div className="selected-course__cover-container">
+            <div className="selected-course__cover-container preview-container miniature">
                 <CoverImage src={course.image_link} className="selected-course__cover poster-cover"/>
                 <i className="icon-close selected-course__deselect-btn animated__action-button" onClick={onDeselectClick}/>
             </div>
@@ -38,8 +38,8 @@ const renderView = ({style, ...props}) => (<div style={{...style, height: `calc(
 
 const SelectedCoursesTab = ({courses, discount: discountInfo, isLoading, error, retry, onCourseDeselect, onPurchaseClick}) => {
     let price, discount, message;
+    const fullPrice = _.sumBy(courses, 'price');
     if (discountInfo) {
-        const fullPrice = _.sumBy(courses, 'price');
         price = discountInfo.discounted_price;
         discount = fullPrice - discountInfo.discounted_price;
         message = discountInfo.message;
@@ -81,29 +81,23 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, isLoading, error, 
                             </TransitionGroup>
                         </ScrollBars>
                     </div>
-                    <div className="col-12 col-md-auto p-0 selected-courses__price-container">
-                        {discountInfo ? (
-                            <Loader
-                                isLoading={isLoading || !!error}>
-                                <div className="layout__bottom-tab-container container d-flex align-items-center justify-content-end">
-                                    <Button
-                                        className="order-1 order-md-0 flex-shrink-0"
-                                        onClick={onPurchaseClick}>
-                                        Оплатить
-                                    </Button>
-                                    <div className="price selected-courses__price container">
-                                        {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{renderPrice(price + discount)}</div>}
-                                        <div className="price font-size-lg d-inline-block d-md-block">{renderPrice(price)}</div>
-                                        {message && <div className="promotion font-size-xs">{message}</div>}
-                                    </div>
-                                </div>
-                            </Loader>
-                        ) : (
-                            <div className="layout__bottom-tab-container container">
-                                <div className="spinner-border"/>
+                    <Loader
+                        className="col-12 col-md-auto p-0 selected-courses__price-container d-flex"
+                        isLoading={isLoading || !!error}>
+                        <div className="layout__bottom-tab-container container d-flex align-items-center justify-content-end">
+                            <Button
+                                loading={isLoading || !!error}
+                                className="order-1 order-md-0 flex-shrink-0"
+                                onClick={onPurchaseClick}>
+                                Оплатить
+                            </Button>
+                            <div className="price selected-courses__price container">
+                                {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{renderPrice(price + discount)}</div>}
+                                <div className="price font-size-lg d-inline-block d-md-block">{renderPrice(price || fullPrice)}</div>
+                                {message && <div className="promotion font-size-xs">{message}</div>}
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    </Loader>
                 </div>
             </div>
         </BottomTab>

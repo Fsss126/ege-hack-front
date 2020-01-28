@@ -74,6 +74,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-ellipsis:before {
+  content: "\e90d";
+}
+.icon-search:before {
+  content: "\e900";
+}
 .icon-alert:before {
   content: "\e90a";
 }
@@ -102,16 +108,16 @@
   content: "\1f302";
 }
 .icon-angle:before {
-  content: "\e900";
-}
-.icon-check:before {
   content: "\e901";
 }
-.icon-close:before {
+.icon-check:before {
   content: "\e902";
 }
-.icon-profile:before {
+.icon-close:before {
   content: "\e904";
+}
+.icon-profile:before {
+  content: "\e90c";
 }
 
 .icon-upload:before {
@@ -119,6 +125,6 @@
   transform: rotate(180deg);
 }
 .icon-add:before {
-  content: "\e902";
+  content: "\e904";
   transform: rotate(45deg);
 }

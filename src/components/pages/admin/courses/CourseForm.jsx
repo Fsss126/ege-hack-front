@@ -17,9 +17,6 @@ const INITIAL_FORM_DATA = {
     description: ''
 };
 
-const SUBJECT_SELECT_PROPS = {isClearable: false};
-const TEACHER_SELECT_PROPS = {isClearable: false};
-
 function getRequestData(formData) {
     const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description} = formData;
     return {
@@ -140,7 +137,7 @@ const CourseForm = (props) => {
                         placeholder="Предмет"
                         options={subjectOptions}
                         value={subject_id}
-                        selectProps={SUBJECT_SELECT_PROPS}
+                        isClearable={false}
                         callback={onInputChange}/>
                     <Input.Select
                         name="teacher_id"
@@ -148,7 +145,7 @@ const CourseForm = (props) => {
                         placeholder="Преподаватель"
                         options={teacherOptions}
                         value={teacher_id}
-                        selectProps={TEACHER_SELECT_PROPS}
+                        isClearable={false}
                         callback={onInputChange}/>
                     <Input.Input
                         name="price"

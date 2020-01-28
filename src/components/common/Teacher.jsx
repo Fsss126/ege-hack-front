@@ -8,7 +8,14 @@ import Contacts from "./Contacts";
 export default function Teacher(props) {
     const {
         teacher: {
-        vk_info: {first_name, last_name, photo_max: photo}, contacts, subjects: teacherSubjects, bio: about
+            vk_info: {
+                first_name,
+                last_name,
+                photo
+            },
+            contacts,
+            subjects: teacherSubjects,
+            bio: about
         },
         subjects,
         link,

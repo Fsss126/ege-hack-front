@@ -77,16 +77,33 @@ const transformLesson = ({hometask, video_link, is_locked: locked, attachments, 
     }) : hometask
 });
 
+const transformUser = ({account_id: id, vk_info: {photo_max: photo, first_name, last_name, ...vk_info}, instagram, ...user}) => ({
+    id,
+    ...user,
+    vk_info: {
+        ...vk_info,
+        photo,
+        first_name,
+        last_name,
+        full_name: `${first_name} ${last_name}`
+    },
+    contacts: {
+        ig: instagram,
+        vk: `https://vk.com/id${id}`
+    }
+});
+
 //Interceptors
 const transformData = (response) => {
     const {config, data} = response;
     const url = new URL(config.url);
     switch (true) {
         case url.pathname === '/accounts/teachers':
-            return data.map(({account_id: id, instagram, ...teacher}) => ({
-                id,
-                contacts: {ig: instagram},
-                ...teacher}));
+            return data.map(transformUser);
+        case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):
+            return transformUser(data);
+        case /\/courses\/(\w*)\/participants$/.test(url.pathname):
+            return data.map(transformUser);
         case /\/courses(\/\w*)?$/.test(url.pathname):
             if (config.method === 'get') {
                 return data.map((course) => ({

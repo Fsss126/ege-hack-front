@@ -89,6 +89,7 @@ label {
   color: white;
   cursor: pointer;
   transition: all .3s;
+  position: relative;
 
   .btn__content {
     display: flex;
@@ -159,6 +160,17 @@ label {
         }
       }
     }
+  }
+  .btn-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -446,7 +458,7 @@ input[type=number] {
     &~.input__box::before {
       font-family: $icon-font;
       color: $accent-orange;
-      content: '\e901';
+      content: '\e902';
       font-size: 20px;
       margin-left: 10%;
     }
@@ -536,7 +548,8 @@ input[type=number] {
       @include overflow-hidden;
       box-shadow: 0 4px 11px hsla(0,0%,0%,0.1);
       .select__menu-list {
-        overflow: visible;
+        //overflow: auto;
+        max-height: none;
         padding: 0;
         .select__menu-notice {
           font-size: $font-size-sm;
@@ -618,7 +631,7 @@ input[type=number] {
   font-size: 18px;
   color: $icon-grey;
   &:before {
-    content: "\e900";
+    content: "\e901";
     vertical-align: middle;
     display: inline-block;
   }
