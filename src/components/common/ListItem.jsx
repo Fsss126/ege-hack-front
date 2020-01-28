@@ -1,12 +1,14 @@
 import React from 'react';
+import classnames from 'classnames';
 import Truncate from 'react-truncate';
 import {useTruncate} from "hooks/common";
-import {Link} from "react-router-dom";
+import Link from "components/ui/Link";
 
 export default function ListItem(props) {
     const {
         preview, title, subtitle, description, item, selectable,
-        adaptive = true,
+        adaptive,
+        plain,
         className,
         children: action,
         link,
@@ -27,12 +29,14 @@ export default function ListItem(props) {
     }, [item, actionCallback, selectable, callbackProps]);
     const content = (
         <div className="row align-items-center">
-            <div className={`preview-container ${adaptive ? 'col-12 col-md-auto' : 'col-auto'}`}>
+            <div className={classnames('preview-container', plain ? 'col-auto' : 'adaptive col-12 col-md-auto', {
+                'miniature': plain
+            })}>
                 {preview}
             </div>
-            <div className="list__item-description col align-self-stretch">
+            <div className="list__item-description col align-self-stretch d-flex">
                 <div className="list__item-description-inner">
-                    <div className="title font-size-lg">{title}</div>
+                    <div className="title">{title}</div>
                     {subtitle && <div className="subtitle">{subtitle}</div>}
                     {description && (
                         <div className="description-container font-size-xs">
@@ -56,10 +60,14 @@ export default function ListItem(props) {
             )}
         </div>
     );
+    const joinedClassname = classnames('list__item', {
+        'list__item-selectable': selectable,
+        'list__item-plain': plain
+    }, 'container', className);
     if (link) {
         return (
             <Link
-                className={`list__item container ${selectable ? 'list__item-selectable' : ''} ${className || ''}`}
+                className={joinedClassname}
                 to={link}
                 onClick={onClick}>
                 {content}
@@ -68,7 +76,7 @@ export default function ListItem(props) {
     }
     else {
         return (
-            <div className={`list__item container ${selectable ? 'list__item-selectable' : ''} ${className || ''}`} onClick={onClick}>
+            <div className={joinedClassname} onClick={onClick}>
                 {content}
             </div>
         );

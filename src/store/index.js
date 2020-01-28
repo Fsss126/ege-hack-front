@@ -40,12 +40,14 @@ function useUserAuth() {
     return {user, userInfo};
 }
 
+//TODO: use Redux
 const useShopCatalogStore = () => React.useState(null);
 const useUserCoursesStore = () => React.useState(null);
 const useSubjectsStore = () => React.useState(null);
 const useTeachersStore = () => React.useState(null);
 const useLessonsStore = () => React.useState({});
 const useWebinarsStore = () => React.useState({});
+const useParticipantsStore = () => React.useState({});
 
 function useStoreData() {
     const [catalog, setCatalog] = useShopCatalogStore();
@@ -54,6 +56,7 @@ function useStoreData() {
     const [teachers, setTeachers] = useTeachersStore();
     const [lessons, setLessons] = useLessonsStore();
     const [webinars, setWebinars] = useWebinarsStore();
+    const [participants, setParticipants] = useParticipantsStore();
     return {
         data: {
             catalog,
@@ -61,7 +64,8 @@ function useStoreData() {
             teachers,
             lessons,
             userCourses,
-            webinars
+            webinars,
+            participants
         },
         setters: {
             setCatalog,
@@ -69,7 +73,8 @@ function useStoreData() {
             setTeachers,
             setLessons,
             setUserCourses,
-            setWebinars
+            setWebinars,
+            setParticipants
         }
     }
 }
@@ -119,6 +124,7 @@ export function useDiscount(selectedCourses) {
     const {user} = useUser();
     const [discount, setDiscount] = React.useState(null);
     const [error, setError] = React.useState(null);
+    const [isLoading, setLoading] = React.useState(true);
     const cancelRef = useRef();
     const fetchDiscount = React.useCallback(async () => {
         if (Auth.getUser() === undefined)
@@ -134,7 +140,8 @@ export function useDiscount(selectedCourses) {
         try {
             if (error)
                 setError(null);
-            setDiscount(null);
+            // setDiscount(null);
+            setLoading(true);
             const discount = await APIRequest.get('/payments/discounts', {
                 params: {
                     coursesIds: courses
@@ -145,6 +152,8 @@ export function useDiscount(selectedCourses) {
         } catch (e) {
             console.log('error loading discount', e);
             setError(e);
+        } finally {
+            setLoading(false);
         }
     }, [selectedCourses, error]);
 
@@ -153,7 +162,7 @@ export function useDiscount(selectedCourses) {
             fetchDiscount();
     }, [user, selectedCourses, error]);
 
-    return {discount, error, reload: fetchDiscount};
+    return {discount, error, reload: fetchDiscount, isLoading};
 }
 
 export function useTeachers() {
@@ -189,6 +198,16 @@ export function useTeachers() {
     }, [user, teachers, error]);
 
     return {teachers, error, reload: fetchTeachers};
+}
+
+export function useTeacher(teacherId) {
+    const {teachers, error, reload} = useTeachers();
+    const teacher = teachers ? _.find(teachers, {id: teacherId}) : undefined;
+    return {
+        teacher,
+        error: teachers && !teacher ? true : error,
+        reload
+    }
 }
 
 export function useShopCatalog() {
@@ -229,7 +248,6 @@ export function useShopCatalog() {
     return {catalog, error, reload: fetchCatalog};
 }
 
-//TODO: add separe API query
 export function useShopCourse(courseId) {
     const {catalog, error, reload} = useShopCatalog();
     const course = catalog ? _.find(catalog, {id: courseId}) : undefined;
@@ -371,6 +389,52 @@ export function useLesson(courseId, lessonId) {
         error: lessons && !lesson ? true : error,
         reload
     }
+}
+
+export function useParticipants(courseId) {
+    const {user, data: {participants}, setters: {setParticipants}} = React.useContext(StoreContext);
+    const [error, setError] = React.useState(null);
+    const fetchParticipants = React.useCallback(async () => {
+        if (Auth.getUser() === undefined)
+            return;
+        if (requests.participants && requests.participants[courseId])
+            return requests.participants[courseId];
+        const request = APIRequest.get(`/courses/${courseId}/participants`);
+        (requests.participants || (requests.participants = {}))[courseId] = request;
+        try {
+            if (error)
+                setError(null);
+            const participants = await request;
+            console.log('set participants', participants);
+            setParticipants(loadedParticipants => ({...loadedParticipants, [courseId]: participants}));
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+        finally {
+            delete requests.participants[courseId];
+        }
+        return request;
+    }, [error, courseId]);
+
+    React.useEffect(() => {
+        if (!(participants[courseId] || (requests.participants && requests.participants[courseId]) || error)) {
+            fetchParticipants();
+        }
+    }, [user, participants, courseId, error]);
+
+    return {participants: participants[courseId], error, reload: fetchParticipants};
+}
+
+export function useRevokeParticipants(courseId) {
+    const {setters: {setParticipants}} = React.useContext(StoreContext);
+
+    return React.useCallback((responseParticipants) => {
+        console.log('response', responseParticipants);
+        setParticipants(({[courseId]: courseParticipants, ...loadedParticipants}) => (
+            {[courseId]: responseParticipants, ...loadedParticipants}
+        ));
+    }, [setParticipants, courseId]);
 }
 
 export function useHomework(lessonId) {

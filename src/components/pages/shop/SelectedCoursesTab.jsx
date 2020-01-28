@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 import {useTruncate} from "hooks/common";
 import CoverImage from "components/common/CoverImage";
@@ -8,6 +9,7 @@ import {BottomTab} from "components/Page";
 import ScrollBars from "components/ui/ScrollBars";
 import Button from "components/ui/Button";
 import {renderPrice} from "definitions/helpers";
+import Loader from "../../ui/Loader";
 
 const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
     const {name} = course;
@@ -17,7 +19,7 @@ const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
     }, [onCourseDeselect, course]);
     return (
         <div className="selected-course d-flex align-items-center flex-shrink-0">
-            <div className="selected-course__cover-container">
+            <div className="selected-course__cover-container preview-container miniature">
                 <CoverImage src={course.image_link} className="selected-course__cover poster-cover"/>
                 <i className="icon-close selected-course__deselect-btn animated__action-button" onClick={onDeselectClick}/>
             </div>
@@ -34,10 +36,10 @@ const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
 
 const renderView = ({style, ...props}) => (<div style={{...style, height: `calc(100% + ${style.minHeight}px)`}} {...props}/>);
 
-const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect, onPurchaseClick}) => {
+const SelectedCoursesTab = ({courses, discount: discountInfo, isLoading, error, retry, onCourseDeselect, onPurchaseClick}) => {
     let price, discount, message;
+    const fullPrice = _.sumBy(courses, 'price');
     if (discountInfo) {
-        const fullPrice = _.sumBy(courses, 'price');
         price = discountInfo.discounted_price;
         discount = fullPrice - discountInfo.discounted_price;
         message = discountInfo.message;
@@ -79,26 +81,23 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, onCourseDeselect, 
                             </TransitionGroup>
                         </ScrollBars>
                     </div>
-                    <div className="col-12 col-md-auto p-0 selected-courses__price">
+                    <Loader
+                        className="col-12 col-md-auto p-0 selected-courses__price-container d-flex"
+                        isLoading={isLoading || !!error}>
                         <div className="layout__bottom-tab-container container d-flex align-items-center justify-content-end">
-                            {discountInfo ? (
-                                <React.Fragment>
-                                    <Button
-                                        className="order-1 order-md-0 flex-shrink-0"
-                                        onClick={onPurchaseClick}>
-                                        Оплатить
-                                    </Button>
-                                    <div className="price selected-courses__price-container container">
-                                        {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{renderPrice(price + discount)}</div>}
-                                        <div className="price font-size-lg d-inline-block d-md-block">{renderPrice(price)}</div>
-                                        {message && <div className="promotion font-size-xs">{message}</div>}
-                                    </div>
-                                </React.Fragment>
-                            ) : (
-                                <div className="spinner-border"/>
-                            )}
+                            <Button
+                                loading={isLoading || !!error}
+                                className="order-1 order-md-0 flex-shrink-0"
+                                onClick={onPurchaseClick}>
+                                Оплатить
+                            </Button>
+                            <div className="price selected-courses__price container">
+                                {discount > 0 && <div className="discount font-size-sm d-inline-block d-md-block">{renderPrice(price + discount)}</div>}
+                                <div className="price font-size-lg d-inline-block d-md-block">{renderPrice(price || fullPrice)}</div>
+                                {message && <div className="promotion font-size-xs">{message}</div>}
+                            </div>
                         </div>
-                    </div>
+                    </Loader>
                 </div>
             </div>
         </BottomTab>

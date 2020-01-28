@@ -1,25 +1,28 @@
 import React from 'react';
+import classnames from 'classnames';
 import ListItem from "./ListItem";
 
 export default function List(props) {
-    const {children, renderItem, renderProps, flex, className, alignment, adaptive} = props;
+    const {children, renderItem, renderProps = {}, flex, className, alignment, plain} = props;
+    const content = children.map((item, index) => renderItem(item, {...renderProps, plain}, index));
     return flex
         ? (
-            <div className={`${className || ''} list`}>
+            <div className={classnames('list', className)}>
                 <div className="container p-0 overflow-hidden">
-                    <div className={`row ${alignment || ''}`}>
-                        {children.map((item, index) => renderItem(item, {...renderProps, adaptive}, index))}
+                    <div className={classnames('row', alignment)}>
+                        {content}
                     </div>
                 </div>
             </div>
         )
         : (
-        <div className={`${className || ''} list`}>
-            {children.map((item, index) => renderItem(item, renderProps, index))}
+        <div className={classnames('list', className)}>
+            {content}
         </div>
     );
 }
 
 List.defaultProps = {
-    renderItem: (item, props, index) => <ListItem {...item} {...props} key={index}/>
+    renderItem: (item, props, index) => <ListItem {...item} {...props} key={index}/>,
+    plain: false
 };

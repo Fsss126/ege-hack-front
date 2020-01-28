@@ -9,10 +9,10 @@ import {Link} from "react-router-dom";
 import ConditionalRenderer from "components/ConditionalRender";
 import {PERMISSIONS} from "definitions/constants";
 import {useToggle} from "hooks/common";
-import SelectedCoursesTab from "../SelectedCoursesTab";
+import ErrorPage from "components/ErrorPage";
 
 //TODO: fix 404 error screen
-const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, path, location, match}) => {
+const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, path: root, location, match}) => {
     const {params: {id: param_id}} = match;
     const courseId = parseInt(param_id);
     const {course, error, retry} = useShopCourse(courseId);
@@ -37,7 +37,7 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
     if (course && teachers && lessons) {
         return (
             <CourseOverview.Body
-                path={path}
+                path={root}
                 course={course}
                 teachers={teachers}
                 lessons={lessons}
@@ -78,9 +78,8 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
                             {' '}
                             <Button
                                 tag={Link}
-                                to={`/courses/${courseId}/participants`}
-                                icon={<i className="icon-add"/>}>
-                                Добавить учеников
+                                to={`/courses/${courseId}/participants/`}>
+                                Ученики
                             </Button>
                         </div>
                     </ConditionalRenderer>
@@ -89,6 +88,9 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
                 {!isEditing && selectedCoursesTab}
             </CourseOverview.Body>
         );
+    }
+    else if (error) {
+        return <ErrorPage errorCode={404} message="Курс не найден" link={{url: root}}/>;
     }
     else {
         return (

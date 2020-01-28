@@ -26,7 +26,8 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCou
                 isSelected={isEditing ? false : isSelected}
                 onActionClick={isEditing || purchased ? null : onCourseSelect}
                 key={course.id}
-                link={isEditing ? `/courses/${course.id}/edit` : link}>
+                link={isEditing ? `/courses/${course.id}/edit` : link}
+                {...rest}>
                 {isEditing || !purchased ? (
                     <React.Fragment>
                         <div className="list__item-action-info">

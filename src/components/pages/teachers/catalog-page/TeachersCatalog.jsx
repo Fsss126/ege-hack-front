@@ -21,7 +21,7 @@ const TeachersCatalog = (props) => {
             placeholder="Нет преподавателей, соответствующих условиям поиска"
             flex
             alignment={"align-items-start"}
-            renderFunc={renderTeacher}
+            renderItem={renderTeacher}
             {...props}/>
     );
 };

@@ -9,7 +9,7 @@ import PurchasePopup from "./PurchasePopup";
 
 export default function Shop(props) {
     const [selectedCourses, setSelectedCourses] = useState(new Set());
-    const {discount, error: errorLoadingDiscount, retry: reloadDiscount} = useDiscount(selectedCourses);
+    const {discount, error: errorLoadingDiscount, retry: reloadDiscount, isLoading} = useDiscount(selectedCourses);
     const onCourseSelect = React.useCallback((course) => {
         setSelectedCourses(selectedCourses => {
             if (selectedCourses.has(course))
@@ -31,6 +31,9 @@ export default function Shop(props) {
 
     const selectedCoursesTab = (
         <SelectedCoursesTab
+            isLoading={isLoading}
+            error={errorLoadingDiscount}
+            retry={reloadDiscount}
             onCourseDeselect={onCourseDeselect}
             courses={[...selectedCourses]}
             onPurchaseClick={togglePopup}

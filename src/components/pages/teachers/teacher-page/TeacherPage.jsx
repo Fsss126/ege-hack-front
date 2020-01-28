@@ -6,15 +6,16 @@ import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import UserProfile from "components/common/UserProfile";
-import {useShopCatalog, useSubjects, useTeachers} from "store";
-import {renderPrice} from "../../../../definitions/helpers";
+import {useShopCatalog, useSubjects, useTeacher} from "store";
+import {renderPrice} from "definitions/helpers";
 
 const TeacherPage = (props) => {
     const {match: {params: {id: param_id}}, path: root, className, location} = props;
-    const {teachers, error, retry} = useTeachers();
+    const id = parseInt(param_id);
+
+    const {teacher, error, reload} = useTeacher(id);
     const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
     const {catalog, error: errorLoadingCatalog, retry: reloadCatalog} = useShopCatalog();
-    const id = parseInt(param_id);
 
     const renderCourse = React.useCallback((course, {link}) => {
         const {price, discount} = course;
@@ -34,46 +35,44 @@ const TeacherPage = (props) => {
         )
     }, []);
 
-    if (teachers && catalog && subjects) {
-        const teacher = _.find(teachers, {id});
-
-        if (teacher) {
-            const {vk_info: {first_name, last_name, photo_max: photo}, contacts, subjects: teacherSubjects, bio} = teacher;
-            // const teacherSubjects = subject_ids.map(id => _.find(subjects, {id}));
-            const teachersCourses = catalog.filter(course => _.indexOf(course.teacher_ids, id) >= 0);
-            const profile = {
-                first_name,
-                last_name,
-                photo,
-                contacts,
-                about: bio,
-                role: teacherSubjects.map(({name}, i) => i === 0 ? name : name.toLowerCase()).join(', ')
-            };
-            const fullName = `${first_name} ${last_name}`;
-            return (
-                <Page
-                    isLoaded={true}
-                    title={`${fullName}`}
-                    className={`teacher-page ${className || ''}`}
-                    location={location}>
-                    <PageContent parentSection={{name: "Преподаватели"}}>
-                        <UserProfile {...profile}/>
-                        <div className="layout__content-block">
-                            <h3>Курсы преподавателя</h3>
-                        </div>
-                        <CourseCatalog.Body
-                            className="course-shop"
-                            subjects={subjects}
-                            courses={teachersCourses}>
-                            <CourseCatalog.Filter/>
-                            <CourseCatalog.Catalog
-                                renderCourse={renderCourse}/>
-                        </CourseCatalog.Body>
-                    </PageContent>
-                </Page>
-            )
-        } else
-            return <ErrorPage errorCode={404} message="Преподаватель не найден" link={{url: root}}/>;
+    if (teacher && catalog && subjects) {
+        const {vk_info: {first_name, last_name, photo}, contacts, subjects: teacherSubjects, bio} = teacher;
+        // const teacherSubjects = subject_ids.map(id => _.find(subjects, {id}));
+        const teachersCourses = catalog.filter(course => _.indexOf(course.teacher_ids, id) >= 0);
+        const profile = {
+            first_name,
+            last_name,
+            photo,
+            contacts,
+            about: bio,
+            role: teacherSubjects.map(({name}, i) => i === 0 ? name : name.toLowerCase()).join(', ')
+        };
+        const fullName = `${first_name} ${last_name}`;
+        return (
+            <Page
+                isLoaded={true}
+                title={`${fullName}`}
+                className={`teacher-page ${className || ''}`}
+                location={location}>
+                <PageContent parentSection={{name: "Преподаватели"}}>
+                    <UserProfile {...profile}/>
+                    <div className="layout__content-block">
+                        <h3>Курсы преподавателя</h3>
+                    </div>
+                    <CourseCatalog.Body
+                        className="course-shop"
+                        subjects={subjects}
+                        courses={teachersCourses}>
+                        <CourseCatalog.Filter/>
+                        <CourseCatalog.Catalog
+                            renderCourse={renderCourse}/>
+                    </CourseCatalog.Body>
+                </PageContent>
+            </Page>
+        );
+    }
+    else if (error) {
+        return <ErrorPage errorCode={404} message="Преподаватель не найден" link={{url: root}}/>;
     }
     else {
         return (
