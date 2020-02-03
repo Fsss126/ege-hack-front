@@ -5,7 +5,7 @@ import {PERMISSIONS} from "definitions/constants";
 import APIRequest from "api";
 import CourseForm from "./CourseForm";
 
-const createRequest = (requestData) => APIRequest.post('/courses', requestData);
+const createRequest = (requestData) => APIRequest.post('/catalog-page', requestData);
 
 const CourseCreatingPage = (props) => {
     const {location} = props;

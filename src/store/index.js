@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useCallback, useContext, useRef} from "react";
 import Auth, {AuthEventTypes} from "definitions/auth";
 import APIRequest, {getCancelToken} from "api";
 import _ from "lodash";
@@ -21,11 +21,11 @@ function useUserAuth() {
             fetchUserInfo();
     }, [user]);
 
-    const loginCallback = React.useCallback((user, userInfo) => {
+    const loginCallback = useCallback((user, userInfo) => {
         setUser(user);
     }, []);
 
-    const logoutCallback = React.useCallback(() => {
+    const logoutCallback = useCallback(() => {
         setUser(null);
     }, []);
 
@@ -41,40 +41,48 @@ function useUserAuth() {
 }
 
 //TODO: use Redux
-const useShopCatalogStore = () => React.useState(null);
+const useShopCoursesStore = () => React.useState(null);
 const useUserCoursesStore = () => React.useState(null);
+const useAdminCoursesStore = () => React.useState(null);
 const useSubjectsStore = () => React.useState(null);
 const useTeachersStore = () => React.useState(null);
 const useLessonsStore = () => React.useState({});
 const useWebinarsStore = () => React.useState({});
 const useParticipantsStore = () => React.useState({});
+const useAdminWebinarsStore = () => React.useState({});
 
 function useStoreData() {
-    const [catalog, setCatalog] = useShopCatalogStore();
+    const [shopCourses, setShopCourses] = useShopCoursesStore();
     const [userCourses, setUserCourses] = useUserCoursesStore();
+    const [adminCourses, setAdminCourses] = useAdminCoursesStore();
     const [subjects, setSubjects] = useSubjectsStore();
     const [teachers, setTeachers] = useTeachersStore();
     const [lessons, setLessons] = useLessonsStore();
     const [webinars, setWebinars] = useWebinarsStore();
+    const [adminWebinars, setAdminWebinars] = useWebinarsStore();
     const [participants, setParticipants] = useParticipantsStore();
     return {
         data: {
-            catalog,
+            shopCourses,
             subjects,
             teachers,
             lessons,
             userCourses,
             webinars,
-            participants
+            adminWebinars,
+            participants,
+            adminCourses
         },
         setters: {
-            setCatalog,
+            setShopCourses,
             setSubjects,
             setTeachers,
             setLessons,
             setUserCourses,
             setWebinars,
-            setParticipants
+            setAdminWebinars,
+            setParticipants,
+            setAdminCourses
         }
     }
 }
@@ -82,14 +90,14 @@ function useStoreData() {
 const requests = {};
 
 export function useUser() {
-    const {user, userInfo} = React.useContext(StoreContext);
+    const {user, userInfo} = useContext(StoreContext);
     return {user, userInfo};
 }
 
 export function useSubjects() {
-    const {user, data: {subjects}, setters: {setSubjects}} = React.useContext(StoreContext);
+    const {user, data: {subjects}, setters: {setSubjects}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchSubjects = React.useCallback(async () => {
+    const fetchSubjects = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.subjects)
@@ -126,7 +134,7 @@ export function useDiscount(selectedCourses) {
     const [error, setError] = React.useState(null);
     const [isLoading, setLoading] = React.useState(true);
     const cancelRef = useRef();
-    const fetchDiscount = React.useCallback(async () => {
+    const fetchDiscount = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         const courses = selectedCourses instanceof Set ? [...selectedCourses].map(({id}) => id) : [selectedCourses];
@@ -166,9 +174,9 @@ export function useDiscount(selectedCourses) {
 }
 
 export function useTeachers() {
-    const {user, data: {teachers}, setters: {setTeachers}} = React.useContext(StoreContext);
+    const {user, data: {teachers}, setters: {setTeachers}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchTeachers = React.useCallback(async () => {
+    const fetchTeachers = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.teachers)
@@ -211,9 +219,9 @@ export function useTeacher(teacherId) {
 }
 
 export function useShopCatalog() {
-    const {user, data: {catalog}, setters: {setCatalog}} = React.useContext(StoreContext);
+    const {user, data: {shopCourses}, setters: {setShopCourses}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchCatalog = React.useCallback(async () => {
+    const fetchCatalog = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.shopCatalog)
@@ -228,7 +236,7 @@ export function useShopCatalog() {
             if (error)
                 setError(null);
             const catalog = await request;
-            setCatalog(catalog);
+            setShopCourses(catalog);
         } catch (e) {
             console.error(e);
             setError(e);
@@ -240,12 +248,12 @@ export function useShopCatalog() {
     }, [error]);
 
     React.useEffect(() => {
-        if (!(catalog || requests.shopCatalog || error)) {
+        if (!(shopCourses || requests.shopCatalog || error)) {
             fetchCatalog();
         }
-    }, [user, catalog, error]);
+    }, [user, shopCourses, error]);
 
-    return {catalog, error, reload: fetchCatalog};
+    return {catalog: shopCourses, error, reload: fetchCatalog};
 }
 
 export function useShopCourse(courseId) {
@@ -258,13 +266,60 @@ export function useShopCourse(courseId) {
     }
 }
 
-export function useRevokeShopCatalog() {
-    const {setters: {setCatalog, setUserCourses}} = React.useContext(StoreContext);
+export function useAdminCourses() {
+    const {user, data: {adminCourses}, setters: {setAdminCourses}} = useContext(StoreContext);
+    const [error, setError] = React.useState(null);
+    const fetchCatalog = useCallback(async () => {
+        if (Auth.getUser() === undefined)
+            return;
+        if (requests.adminCourses)
+            return requests.adminCourses;
+        const request = APIRequest.get('/courses', {
+            params: {
+                group: 'ALL'
+            }
+        });
+        requests.adminCourses = request;
+        try {
+            if (error)
+                setError(null);
+            const catalog = await request;
+            setAdminCourses(catalog);
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+        finally {
+            delete requests.adminCourses;
+        }
+        return request;
+    }, [error]);
 
-    return React.useCallback((responseCourse) => {
+    React.useEffect(() => {
+        if (!(adminCourses || requests.adminCourses || error)) {
+            fetchCatalog();
+        }
+    }, [user, adminCourses, error]);
+
+    return {catalog: adminCourses, error, reload: fetchCatalog};
+}
+
+export function useAdminCourse(courseId) {
+    const {catalog, error, reload} = useAdminCourses();
+    const course = catalog ? _.find(catalog, {id: courseId}) : undefined;
+    return {
+        course,
+        error: catalog && !course ? true : error,
+        reload
+    }
+}
+
+export function useRevokeCoursesCatalog() {
+    const {setters: {setShopCourses, setUserCourses, setAdminCourses}} = useContext(StoreContext);
+
+    return useCallback((responseCourse) => {
         console.log('response', responseCourse);
-        setUserCourses(null);
-        setCatalog(catalog => {
+        const updateCatalog = catalog => {
             const courseIndex = _.findIndex(catalog, {id: responseCourse.id});
             if (courseIndex !== undefined) {
                 const prevCourse = catalog[courseIndex];
@@ -273,14 +328,17 @@ export function useRevokeShopCatalog() {
                 return newCatalog;
             }
             return null;
-        });
-    }, [setCatalog, setUserCourses]);
+        };
+        setUserCourses(null);
+        setShopCourses(updateCatalog);
+        setAdminCourses(updateCatalog);
+    }, [setShopCourses, setUserCourses, setAdminCourses]);
 }
 
 export function useUserCourses() {
-    const {user, data: {userCourses}, setters: {setUserCourses}} = React.useContext(StoreContext);
+    const {user, data: {userCourses}, setters: {setUserCourses}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchUserCourses = React.useCallback(async () => {
+    const fetchUserCourses = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.userCourses)
@@ -327,9 +385,9 @@ export function useUserCourse(courseId) {
 }
 
 export function useLessons(courseId) {
-    const {user, data: {lessons}, setters: {setLessons}} = React.useContext(StoreContext);
+    const {user, data: {lessons}, setters: {setLessons}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchLessons = React.useCallback(async () => {
+    const fetchLessons = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.lessons && requests.lessons[courseId])
@@ -364,9 +422,9 @@ export function useLessons(courseId) {
 }
 
 export function useRevokeLessons(courseId) {
-    const {setters: {setLessons}} = React.useContext(StoreContext);
+    const {setters: {setLessons}} = useContext(StoreContext);
 
-    return React.useCallback((responseLesson) => {
+    return useCallback((responseLesson) => {
         console.log('response', responseLesson);
         setLessons(({[courseId]: courseLessons, ...loadedLessons}) => {
             const lessonIndex = _.findIndex(courseLessons, {id: responseLesson.id});
@@ -392,9 +450,9 @@ export function useLesson(courseId, lessonId) {
 }
 
 export function useParticipants(courseId) {
-    const {user, data: {participants}, setters: {setParticipants}} = React.useContext(StoreContext);
+    const {user, data: {participants}, setters: {setParticipants}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchParticipants = React.useCallback(async () => {
+    const fetchParticipants = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.participants && requests.participants[courseId])
@@ -427,21 +485,66 @@ export function useParticipants(courseId) {
 }
 
 export function useRevokeParticipants(courseId) {
-    const {setters: {setParticipants}} = React.useContext(StoreContext);
+    const {setters: {setParticipants}} = useContext(StoreContext);
 
-    return React.useCallback((responseParticipants) => {
+    return useCallback((responseParticipants) => {
         console.log('response', responseParticipants);
-        setParticipants(({[courseId]: courseParticipants, ...loadedParticipants}) => (
-            {[courseId]: responseParticipants, ...loadedParticipants}
-        ));
+        setParticipants((loadedParticipants) => ({...loadedParticipants, [courseId]: responseParticipants}));
     }, [setParticipants, courseId]);
 }
 
-export function useHomework(lessonId) {
-    const {user} = React.useContext(StoreContext);
-    const [homework, setHomework] = React.useState(null);
+export function useAdminWebinars(courseId) {
+    const {user, data: {adminWebinars}, setters: {setAdminWebinars}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchHomework = React.useCallback(async () => {
+    const fetchWebinars = useCallback(async () => {
+        if (Auth.getUser() === undefined)
+            return;
+        if (requests.adminWebinars && requests.adminWebinars[courseId])
+            return requests.adminWebinars[courseId];
+        const request = APIRequest.get(`/courses/${courseId}/schedule`);
+        (requests.adminWebinars || (requests.adminWebinars = {}))[courseId] = request;
+        try {
+            if (error)
+                setError(null);
+            const webinars = await request;
+            console.log('set admin webinars', webinars);
+            setAdminWebinars(loadedWebinars => ({...loadedWebinars, [courseId]: webinars}));
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+        finally {
+            delete requests.adminWebinars[courseId];
+        }
+        return request;
+    }, [error, courseId]);
+
+    React.useEffect(() => {
+        if (!(adminWebinars[courseId] || adminWebinars[courseId] === null || (requests.adminWebinars && requests.adminWebinars[courseId]) || error)) {
+            fetchWebinars();
+        }
+    }, [user, adminWebinars, courseId, error]);
+
+    return {webinars: adminWebinars[courseId], error, reload: fetchWebinars};
+}
+
+export function useRevokeAdminWebinars(courseId) {
+    const {setters: {setAdminWebinars, setWebinars}} = useContext(StoreContext);
+
+    return useCallback((responseWebinars) => {
+        console.log('response', responseWebinars);
+        setAdminWebinars(({...loadedParticipants}) => (
+            {...loadedParticipants, [courseId]: responseWebinars}
+        ));
+        setWebinars((loadedWebinars) => ({...loadedWebinars, [courseId]: undefined, upcoming: undefined}))
+    }, [setAdminWebinars, setWebinars, courseId]);
+}
+
+export function useHomework(lessonId) {
+    const {user} = useContext(StoreContext);
+    const [homework, setHomework] = React.useState(undefined);
+    const [error, setError] = React.useState(null);
+    const fetchHomework = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.homework && requests.homework[lessonId])
@@ -465,7 +568,7 @@ export function useHomework(lessonId) {
     }, [error, lessonId]);
 
     React.useEffect(() => {
-        if (!(homework || (requests.homework && requests.homework[lessonId]) || error)) {
+        if (!(homework || homework === null || (requests.homework && requests.homework[lessonId]) || error)) {
             fetchHomework();
         }
     }, [user, homework, lessonId, error]);
@@ -474,9 +577,9 @@ export function useHomework(lessonId) {
 }
 
 export function useUpcomingWebinars() {
-    const {user, data: {webinars}, setters: {setWebinars}} = React.useContext(StoreContext);
+    const {user, data: {webinars}, setters: {setWebinars}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchWebinars = React.useCallback(async () => {
+    const fetchWebinars = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.webinars && requests.webinars.upcoming)
@@ -509,9 +612,9 @@ export function useUpcomingWebinars() {
 }
 
 export function useCourseWebinars(courseId) {
-    const {user, data: {webinars}, setters: {setWebinars}} = React.useContext(StoreContext);
+    const {user, data: {webinars}, setters: {setWebinars}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
-    const fetchWebinars = React.useCallback(async () => {
+    const fetchWebinars = useCallback(async () => {
         if (Auth.getUser() === undefined)
             return;
         if (requests.webinars && requests.webinars[courseId])

@@ -54,10 +54,10 @@ const transformCourse = ({date_start, date_end, image_link, teacher_id, is_onlin
     ...rest
 });
 
-const transformLesson = ({hometask, video_link, is_locked: locked, attachments, ...lesson}) => ({
+const transformLesson = ({hometask, video_link, image_link, is_locked: locked, attachments, ...lesson}) => ({
     ...lesson,
     locked,
-    image_link: `${API_ROOT}${lesson.image_link}`,
+    image_link: `${API_ROOT}${image_link}`,
     video_link: `https://player.vimeo.com/video/${video_link}`,
     attachments: attachments ? (
         attachments.map(({file_name, file_link, file_id}) => ({
@@ -104,7 +104,7 @@ const transformData = (response) => {
             return transformUser(data);
         case /\/courses\/(\w*)\/participants$/.test(url.pathname):
             return data.map(transformUser);
-        case /\/courses(\/\w*)?$/.test(url.pathname):
+        case /\/courses(\/\w*)?$/.test(url.pathname): {
             if (config.method === 'get') {
                 return data.map((course) => ({
                     ...transformCourse(course),
@@ -113,13 +113,15 @@ const transformData = (response) => {
             } else {
                 return transformCourse(data);
             }
-        case /\/lessons(\/\w*)?$/.test(url.pathname):
+        }
+        case /\/lessons(\/\w*)?$/.test(url.pathname): {
             if (config.method === 'get')
                 return _.sortBy(data, 'num').map(transformLesson);
             else
                 return transformLesson(data);
-        case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):
-            const {file_info: {file_id, file_name, file_link}, date:dateTime, ...rest} = response.data;
+        }
+        case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname): {
+            const {file_info: {file_id, file_name, file_link}, date:dateTime, ...rest} = data;
             const date = new Date();
             return {
                 ...rest,
@@ -132,8 +134,9 @@ const transformData = (response) => {
                     }
                 ]
             };
+        }
         case url.pathname === '/courses/schedule/person':
-        case /\/courses\/\w*\/schedule\/person$/.test(url.pathname):
+        case /\/courses\/\w*\/schedule\/person$/.test(url.pathname): {
             return _.sortBy(data.map(({webinar: {date_start, duration, ...webinar}, image_link, ...rest}) => ({
                 date_start: new Date(date_start),
                 date_end: new Date(date_start + duration * 1000 * 60),
@@ -142,6 +145,24 @@ const transformData = (response) => {
                 ...webinar,
                 ...rest
             })), 'date_start');
+        }
+        case /\/courses\/\w*\/schedule$/.test(url.pathname): {
+            if (!data)
+                return data;
+            const {image_link: link, webinars, ...rest} = data;
+            const image_link = `${API_ROOT}${link}`;
+            return {
+                image_link,
+                webinars: webinars.map(({date_start, duration, ...webinar}) => ({
+                    ...webinar,
+                    date_start: new Date(date_start),
+                    date_end: new Date(date_start + duration * 1000 * 60),
+                    duration,
+                    image_link
+                })),
+                ...rest
+            };
+        }
         default:
             return response.data;
     }
@@ -156,7 +177,9 @@ const transformError = (error) => {
     if (error.response && error.response.status === 404) {
         switch (true) {
             case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):
-                return ({data: {}});
+                return null;
+            case /\/courses\/\w*\/schedule$/.test(url.pathname):
+                return {webinars: []};
             default:
                 throw error;
         }

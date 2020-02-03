@@ -4,6 +4,7 @@ import Page, {PageContent} from "components/Page";
 import {PERMISSIONS} from "definitions/constants";
 import * as Input from "components/ui/input";
 import Form, {useForm} from "components/ui/Form";
+import {useRevokeParticipants} from "../../../../../store";
 
 const INITIAL_FORM_DATA = {
     accounts: ''
@@ -40,8 +41,8 @@ const ParticipantsEditingPage = (props) => {
                 text: 'Ок'
             },
             {
-                text: 'Вернуться к курсу',
-                url: `/shop/${courseId}/`
+                text: 'Вернуться к ученикам',
+                url: '..'
             }
         ]);
     }, [courseId]);
@@ -57,6 +58,8 @@ const ParticipantsEditingPage = (props) => {
             }
         ]);
     }, []);
+
+    const revokeParticipants = useRevokeParticipants(courseId);
 
     const isLoaded = true;
     return (
@@ -76,6 +79,7 @@ const ParticipantsEditingPage = (props) => {
                             reset={reset}
                             onSubmit={onSubmit}
                             onSubmitted={onSubmitted}
+                            revokeRelatedData={revokeParticipants}
                             onError={onError}
                             cancelLink='..'>
                             <Input.TextArea

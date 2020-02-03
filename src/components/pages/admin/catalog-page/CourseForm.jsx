@@ -1,7 +1,7 @@
 import React from "react";
 import APIRequest from "api";
 import Form, {FieldsContainer, useForm, useFormValidityChecker} from "components/ui/Form";
-import {useRevokeShopCatalog} from "store";
+import {useRevokeCoursesCatalog} from "store";
 import * as Input from "components/ui/input";
 import _ from "lodash";
 
@@ -85,7 +85,7 @@ const CourseForm = (props) => {
         return createRequest(getRequestData(formData));
     }, [formData, createRequest]);
 
-    const revokeShopCatalog = useRevokeShopCatalog();
+    const revokeShopCatalog = useRevokeCoursesCatalog();
 
     const onError = React.useCallback((error, showErrorMessage, reloadCallback) => {
         showErrorMessage(errorMessage, [

@@ -1,6 +1,6 @@
 import React from "react";
 import Page, {PageContent} from "components/Page";
-import {useShopCourse, useSubjects, useTeachers} from "store";
+import {useAdminCourse, useSubjects, useTeachers} from "store";
 import {PERMISSIONS} from "definitions/constants";
 import APIRequest from "api";
 import CourseForm from "./CourseForm";
@@ -13,7 +13,7 @@ const CourseEditingPage = (props) => {
 
     const {subjects, error: errorLoadingSubjects, reload: reloadSubjects} = useSubjects();
     const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
-    const {course, error: errorLoadingCourses, reload: reloadCourses} = useShopCourse(courseId);
+    const {course, error: errorLoadingCourses, reload: reloadCourses} = useAdminCourse(courseId);
 
     const onSubmitted = React.useCallback((response, showSuccessMessage) => {
         showSuccessMessage("Изменения сохранены", [

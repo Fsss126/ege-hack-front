@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import CoverImage from "components/common/CoverImage";
-import {renderDate} from "../../definitions/helpers";
+import {daysBetween, renderDate} from "../../definitions/helpers";
 import List from "./List";
 import Teacher from "./Teacher";
 import Page, {PageLink} from "../Page";
@@ -14,6 +14,14 @@ CourseOverviewContext.displayName = 'CourseOverviewContext';
 
 const Description = () => {
     const {course} = React.useContext(CourseOverviewContext);
+    const now = new Date();
+    const isEnded = course.date_end > now;
+    const {
+        date_start,
+        date_end,
+        description,
+        total_hours
+    } = course;
     return (
         <React.Fragment>
             <CoverImage src={course.image_link} className="course-overview__cover"/>
@@ -22,14 +30,33 @@ const Description = () => {
                 <div className="course-overview__summary">
                     <div className="col-auto course-overview__summary-item">
                         <i className="far fa-calendar-alt"/>
-                        Начало: {renderDate(course.date_start, renderDate.date)}
+                        {
+                            isEnded ? (
+                                <div className="d-inline-block align-top">
+                                    <div>Начался: {
+                                        renderDate(date_start, now.getFullYear() > date_end.getFullYear() ? renderDate.dateWithYear : renderDate.date)
+                                    }</div>
+                                    <div>Закончился: {
+                                        renderDate(date_end, now.getFullYear() > date_end.getFullYear() ? renderDate.dateWithYear : renderDate.date)
+                                    }</div>
+                                </div>
+                            ) : (
+                                <div className="d-inline-block align-top">
+                                    <div>Начало: {renderDate(date_start, renderDate.date)}</div>
+                                    <div>Окончание: {renderDate(date_end, renderDate.date)}</div>
+                                </div>
+                            )
+                        }
                     </div>
-                    <div className="col-auto course-overview__summary-item">
-                        <i className="far fa-clock"/>
-                        Длительность: {course.total_hours} часов
-                    </div>
+                    {
+                        total_hours && (
+                            <div className="col-auto course-overview__summary-item">
+                                <i className="far fa-clock"/>
+                                Длительность: {total_hours} часов
+                            </div>
+                        )}
                 </div>
-                <div className="description-text font-size-sm">{course.description}</div>
+                <div className="description-text font-size-sm">{description}</div>
             </div>
         </React.Fragment>
     );

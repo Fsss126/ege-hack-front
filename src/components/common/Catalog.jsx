@@ -1,10 +1,19 @@
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import List from "./List";
 import * as Input from "components/ui/input";
 
 export const CatalogContext = React.createContext({});
 CatalogContext.displayName = 'CatalogContext';
+
+export function useFilterParams() {
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const subject = parseInt(params.get('subject')) || null;
+    const online = params.get('online') === 'true';
+    const search = params.get('search') || '';
+    return useMemo(() => ({subject, online, search}), [subject, online, search]);
+}
 
 export function useFilterCallback() {
     const location = useLocation();
@@ -32,7 +41,7 @@ const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnlin
             <div className="container p-0">
                 <div className="row align-items-center">
                     {filterBySubject && (
-                        <div className="col-auto d-flex align-items-center">
+                        <div className="catalog__filter-container subject-select-container col-auto align-items-center">
                             <Input.Select
                                 name="subject"
                                 options={options}
@@ -42,7 +51,7 @@ const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnlin
                         </div>
                     )}
                     {filterByOnline && (
-                        <div className="col-auto d-flex align-items-center">
+                        <div className="catalog__filter-container online-checkbox-container col-auto align-items-center">
                             <Input.CheckBox
                                 name="online"
                                 value={online}
@@ -51,7 +60,7 @@ const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnlin
                         </div>
                     )}
                     {search && (
-                        <div className="col-auto d-flex align-items-center">
+                        <div className="catalog__filter-container search-input-container col-auto align-items-center">
                             <div className="search-input">
                                 <Input.Input
                                     name="search"
@@ -69,8 +78,8 @@ const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnlin
     );
 };
 
-const Catalog = ({renderItem: renderFunc, placeholder, baseUrl, ...listProps}) => {
-    const {items, renderProps} = React.useContext(CatalogContext);
+const Catalog = ({renderItem: renderFunc, emptyPlaceholder, noMatchPlaceholder, baseUrl, ...listProps}) => {
+    const {items, renderProps, totalItems} = React.useContext(CatalogContext);
     const renderItem = React.useCallback((item, renderProps) => {
         return renderFunc(item, {link: `${item.id}/`, ...renderProps});
     }, [renderFunc]);
@@ -84,26 +93,30 @@ const Catalog = ({renderItem: renderFunc, placeholder, baseUrl, ...listProps}) =
                     {items}
                 </List>
             ) : (
-                <div className="catalog__empty-catalog-fallback-message text-center font-size-sm">
-                    {placeholder}
-                </div>
+                totalItems === 0 ? (
+                    <div className="catalog__empty-catalog-fallback-message text-center font-size-sm">
+                        {emptyPlaceholder}
+                    </div>
+                    ) : (
+                    <div className="catalog__empty-catalog-fallback-message text-center font-size-sm">
+                        {noMatchPlaceholder}
+                    </div>
+                    )
             )}
         </div>
     );
 };
 
-const Body = (props) => {
-    const {options, filterItems, children, renderProps={}} = props;
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
-    const subject = parseInt(params.get('subject')) || null;
-    const online = params.get('online') === 'true';
-    const search = params.get('search') || '';
-    const matchingItems = filterItems(subject, online, search);
+const Body = ({options, filter, items, children, renderProps={}}) => {
+    const filterParams = useFilterParams();
+    const matchingItems = useMemo(() =>
+        items.filter(item => filter(item, filterParams)), [items, filter, filterParams]);
+    const totalItems = items.length;
+    const {subject, online, search} = filterParams;
     return (
         <CatalogContext.Provider
             value={{
-                options, subject, online, search, items: matchingItems, renderProps
+                options, subject, online, search, items: matchingItems, totalItems, renderProps
             }}>
             <div className="catalog">
                 {children}

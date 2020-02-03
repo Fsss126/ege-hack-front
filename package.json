@@ -31,6 +31,7 @@
     "react-select": "^3.0.8",
     "react-sticky": "^6.0.3",
     "react-sticky-el": "^1.0.20",
+    "react-times": "^3.1.12",
     "react-transition-group": "^4.3.0",
     "react-truncate": "^2.4.0",
     "redux": "^4.0.4"

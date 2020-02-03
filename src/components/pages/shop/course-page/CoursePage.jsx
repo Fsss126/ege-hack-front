@@ -53,36 +53,6 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
                             retry={reloadDiscount}/>
                     )}
                     <CourseOverview.Teachers/>
-                    <ConditionalRenderer
-                        requiredPermissions={PERMISSIONS.LESSON_EDIT}>
-                        <div className="layout__content-block btn-container">
-                            <Button
-                                tag={Link}
-                                to={`/courses/${courseId}/edit/`}>
-                                Изменить
-                            </Button>
-                            {' '}
-                            <Button
-                                tag={Link}
-                                to={`/courses/${courseId}/create_lesson`}
-                                icon={<i className="icon-add"/>}>
-                                Добавить урок
-                            </Button>
-                            {' '}
-                            {lessons.length > 0 && (
-                                <Button
-                                    onClick={toggleEditing}>
-                                    {isEditing ? 'Сохранить уроки' : 'Редактировать уроки'}
-                                </Button>
-                            )}
-                            {' '}
-                            <Button
-                                tag={Link}
-                                to={`/courses/${courseId}/participants/`}>
-                                Ученики
-                            </Button>
-                        </div>
-                    </ConditionalRenderer>
                     <CourseOverview.Lessons renderLesson={renderLesson}/>
                 </PageContent>
                 {!isEditing && selectedCoursesTab}

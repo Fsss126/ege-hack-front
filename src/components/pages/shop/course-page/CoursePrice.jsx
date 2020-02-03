@@ -1,7 +1,6 @@
 import React, {useCallback} from "react";
 import classnames from 'classnames';
 import {CourseOverviewContext} from "components/common/CourseOverview";
-import {BottomTab} from "components/Page";
 import Button from "components/ui/Button";
 import {renderPrice} from "definitions/helpers";
 
@@ -28,7 +27,9 @@ const CoursePrice = (props) => {
         })}>
             <div className="row justify-content-end align-items-center">
                 {purchased ? (
-                    <Button active={false}>Куплено</Button>
+                    <div className="col-auto">
+                        <Button active={false}>Куплено</Button>
+                    </div>
                 ) : (
                     discountInfo ? (
                         <React.Fragment>
@@ -47,7 +48,9 @@ const CoursePrice = (props) => {
                             </div>
                         </React.Fragment>
                     ) : (
-                        <div className="spinner-border"/>
+                        <div className="col-auto">
+                            <div className="spinner-border"/>
+                        </div>
                     )
                 )}
             </div>

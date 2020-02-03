@@ -57,22 +57,6 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCou
                     courses={catalog}>
                     <PageContent>
                         <CourseCatalog.Filter/>
-                        <ConditionalRenderer
-                            requiredPermissions={PERMISSIONS.COURSE_EDIT}>
-                            <div className="layout__content-block btn-container">
-                                <Button
-                                    tag={Link}
-                                    to="/courses/create"
-                                    icon={<i className="icon-add"/>}>
-                                    Добавить курс
-                                </Button>
-                                {' '}
-                                <Button
-                                    onClick={toggleEditing}>
-                                    Редактировать курсы
-                                </Button>
-                            </div>
-                        </ConditionalRenderer>
                         <CourseCatalog.Catalog
                             renderCourse={renderCourse}/>
                     </PageContent>
