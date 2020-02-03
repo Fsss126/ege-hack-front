@@ -147,6 +147,7 @@ label {
   &.btn-neutral {
     background: white;
     color: inherit;
+    border: $border;
 
     &:not(.btn-inactive) {
       &:hover {
@@ -551,6 +552,7 @@ input[type=number] {
         //overflow: auto;
         max-height: none;
         padding: 0;
+        width: 100%;
         .select__menu-notice {
           font-size: $font-size-sm;
         }

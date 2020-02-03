@@ -44,7 +44,7 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, isLoading, error, 
         discount = fullPrice - discountInfo.discounted_price;
         message = discountInfo.message;
     }
-    // const discount = _.sumBy(courses, 'discount');
+    // const discount = _.sumBy(catalog-page, 'discount');
     React.useEffect(() => {
         if (window.dispatchEvent)
             window.dispatchEvent(new CustomEvent('scroll'));

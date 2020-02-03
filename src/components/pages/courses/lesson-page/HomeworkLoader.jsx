@@ -32,7 +32,7 @@ const HomeworkLoader = ({homework, deadline, lessonId}) => {
             <FileInput
                 maxFiles={1}
                 // accept="image/*,audio/*,video/*"
-                initialFiles={homework.files}
+                initialFiles={homework ? homework.files : undefined}
                 onChange={onChange}
                 onSubmit={onSubmit}
                 isDisabled={isHomeworkSubmissionClosed}/>

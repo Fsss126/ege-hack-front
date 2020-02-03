@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useCallback} from "react";
+import classnames from 'classnames';
 import Countdown from 'react-countdown-now';
 import ScrollBars from "components/ui/ScrollBars";
 import CoverImage from "./CoverImage";
@@ -40,7 +41,7 @@ import APIRequest from "api";
 //     return state;
 // }
 
-const WEBINAR_STATE = {
+export const WEBINAR_STATE = {
     WAITING: 'WAITING',
     AIRING: 'AIRING',
     ENDED: 'ENDED'
@@ -48,12 +49,12 @@ const WEBINAR_STATE = {
 
 const UNLOCK_TIME = 1000*60*5; //opens 5 minutes before start
 
-const getWebinarState = (webinar) => {
+export const getWebinarState = (webinar) => {
     const now = new Date();
     return webinar.date_start > now ? WEBINAR_STATE.WAITING : (now > webinar.date_end ? WEBINAR_STATE.ENDED : WEBINAR_STATE.AIRING);
 };
 
-const isWebinarUnlocked = (param) => {
+export const isWebinarUnlocked = (param) => {
     if (param.date_start && param.date_end) {
         const webinar = param;
         const now = new Date();
@@ -64,7 +65,7 @@ const isWebinarUnlocked = (param) => {
     }
 };
 
-const Webinar = ({webinar, courseId}) => {
+export function useWebinar(webinar) {
     const [state, setState] = React.useState(getWebinarState(webinar));
     const [isUnlocked, setIsUnlocked] = React.useState(isWebinarUnlocked(webinar));
     const onWebinarStart = React.useCallback(() => {
@@ -87,6 +88,14 @@ const Webinar = ({webinar, courseId}) => {
         setIsUnlocked(isWebinarUnlocked(timeDelta));
     }, []);
 
+    return {
+        state, isUnlocked, onWebinarStart, onTick
+    }
+}
+
+const Webinar = ({webinar, courseId}) => {
+    const {state, isUnlocked, onTick, onWebinarStart} = useWebinar(webinar);
+
     const onClick = React.useCallback(async (event) => {
         if (!isUnlocked) {
             event.preventDefault();
@@ -96,10 +105,8 @@ const Webinar = ({webinar, courseId}) => {
         const response = await APIRequest.get(`/courses/${webinar.course_id || courseId}/schedule/link`);
         newWindow.location = response.link;
     }, [isUnlocked, webinar, courseId]);
-    if (state === WEBINAR_STATE.ENDED) {
-        return null;
-    }
-    const renderCountdown = (remainingTime) => {
+
+    const renderCountdown = useCallback((remainingTime) => {
         const {formatted: {days, hours, minutes, seconds}, completed} = remainingTime;
         return completed ? (
             <div className="d-flex"><span>В</span><span>&nbsp;</span><span>эфире</span></div> //fixes a big on mobile
@@ -111,11 +118,17 @@ const Webinar = ({webinar, courseId}) => {
                 <span>{seconds}</span>
             </div>
         );
-    };
+    }, []);
+
+    if (state === WEBINAR_STATE.ENDED) {
+        return null;
+    }
     return (
         <div
             onClick={onClick}
-            className={`webinar-schedule__webinar d-flex ${isUnlocked ? '' : 'webinar-schedule__webinar-locked'}`}>
+            className={classnames('webinar-schedule__webinar', 'd-flex', {
+                'webinar-schedule__webinar-locked': !isUnlocked
+            })}>
             <div className="container d-flex overflow-hidden">
                 <div className="row flex-nowrap flex-grow-1">
                     <div className="col-auto d-flex align-items-center webinar-schedule__webinar-status">
@@ -136,8 +149,7 @@ const Webinar = ({webinar, courseId}) => {
                             className="countdown"
                             renderer={renderCountdown}
                             onTick={onTick}
-                            onComplete={onWebinarStart}>
-                        </Countdown>
+                            onComplete={onWebinarStart}/>
                     </div>
                 </div>
             </div>

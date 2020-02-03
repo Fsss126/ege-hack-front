@@ -30,7 +30,7 @@ const LessonPage = (props) => {
         );
     };
 
-    if (courses && lessons && homework) {
+    if (courses && lessons && homework !== undefined) {
         const course = _.find(courses, {id: courseId});
         const selectedLesson = (course && _.find(lessons, {id: lessonId})) || null;
         if (selectedLesson && !selectedLesson.locked) {
