@@ -417,6 +417,7 @@ label {
       overflow: hidden;
       width: auto;
       min-width: 100%;
+
       .picker_container {
         background: $bg-grey;
         margin: 0 15px 15px;
@@ -725,6 +726,10 @@ input[type=number] {
   }
 
   .form-entities-group {
+    &:not(:first-child) {
+      margin-top: 16px;
+    }
+
     .form-entities-group__add-btn-container {
       display: flex;
       justify-content: center;

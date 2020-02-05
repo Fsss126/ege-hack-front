@@ -107,7 +107,7 @@ const WebinarsForm = (props) => {
         <Form
             title={title}
             ref={formElementRef}
-            className="lesson-form container p-0"
+            className="webinars-form container p-0"
             isValid={isValid}
             reset={reset}
             revokeRelatedData={revokeWebinars}

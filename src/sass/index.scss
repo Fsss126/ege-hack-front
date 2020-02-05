@@ -1369,13 +1369,21 @@ header {
   }
 }
 
-.lesson-form {
+.lesson-form, .webinars-form {
   .DayPickerInput {
     //width: 100%;
     .DayPickerInput-Overlay {
       bottom: calc(100% + 8px);
       right: auto;
       left: 0;
+    }
+  }
+
+  .time_picker_container {
+    .time_picker_modal_container {
+      @include center(x);
+      top: auto;
+      bottom: calc(100% + 8px);
     }
   }
 }
@@ -1393,7 +1401,7 @@ header {
   }
 }
 
-.course-form, .lesson-form {
+.course-form, .lesson-form, .webinars-form {
   .image-input-container {
     padding-bottom: 32px;
   }
