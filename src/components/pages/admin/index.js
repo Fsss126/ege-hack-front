@@ -18,10 +18,10 @@ const Admin = ({match}) => {
                 path={[match.path, `${match.path}/list`, `${match.path}/calendar`]}
                 render={props => <CatalogPage path={match.path} {...props}/>}/>
             <Route path={`${match.path}/:courseId/participants/edit`} component={ParticipantsEditingPage}/>
-            <Route path={`${match.path}/:courseId/:lessonId/edit`} component={LessonEditingPage}/>
+            <Route path={`${match.path}/:courseId/lessons/create`} component={LessonCreatingPage}/>
+            <Route path={`${match.path}/:courseId/webinars/edit`} component={WebinarsEditingPage}/>
             <Route path={`${match.path}/:courseId/edit`} component={CourseEditingPage}/>
-            <Route path={`${match.path}/:courseId/create_lesson`} component={LessonCreatingPage}/>
-            <Route path={`${match.path}/:courseId/edit_webinars`} component={WebinarsEditingPage}/>
+            <Route path={`${match.path}/:courseId/:lessonId/edit`} component={LessonEditingPage}/>
             <Route
                 path={`${match.path}/:courseId`}
                 render={props => <CoursePage path={match.path} {...props}/>}/>

@@ -14,6 +14,8 @@ const LessonEditingPage = (props) => {
 
     const {lesson, error: errorLoadingLesson, retry: reloadLesson} = useLesson(courseId, lessonId);
 
+    const returnLink = `/admin/${courseId}/lessons/`;
+
     const onSubmitted = useCallback((response, showSuccessMessage, reset) => {
         showSuccessMessage("Изменения сохранены", [
             {
@@ -21,10 +23,10 @@ const LessonEditingPage = (props) => {
             },
             {
                 text: 'Вернуться к курсу',
-                url: `/shop/${courseId}/`
+                url: returnLink
             }
         ]);
-    }, [courseId]);
+    }, [returnLink]);
 
 
     const isLoaded = !!lesson;
@@ -42,6 +44,7 @@ const LessonEditingPage = (props) => {
                             location={location}
                             title="Изменение урока"
                             errorMessage="Ошибка при сохранении изменений"
+                            cancelLink={returnLink}
                             courseId={courseId}
                             isLoaded={isLoaded}
                             createRequest={createRequest}

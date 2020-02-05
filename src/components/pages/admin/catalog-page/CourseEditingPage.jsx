@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import {useAdminCourse, useSubjects, useTeachers} from "store";
 import {PERMISSIONS} from "definitions/constants";
@@ -15,17 +15,19 @@ const CourseEditingPage = (props) => {
     const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
     const {course, error: errorLoadingCourses, reload: reloadCourses} = useAdminCourse(courseId);
 
-    const onSubmitted = React.useCallback((response, showSuccessMessage) => {
+    const returnLink = `/admin/${courseId}/`;
+
+    const onSubmitted = useCallback((response, showSuccessMessage) => {
         showSuccessMessage("Изменения сохранены", [
             {
                 text: 'Ок'
             },
             {
-                text: 'Вернуться к курсам',
-                url: '/shop/'
+                text: 'Вернуться к курсу',
+                url: returnLink
             }
         ]);
-    }, []);
+    }, [returnLink]);
 
     const isLoaded = teachers && subjects && course;
     return (
@@ -45,6 +47,7 @@ const CourseEditingPage = (props) => {
                             location={location}
                             title="Изменение курса"
                             errorMessage="Ошибка при сохранении изменений"
+                            cancelLink={returnLink}
                             isLoaded={isLoaded}
                             createRequest={createRequest}
                             onSubmitted={onSubmitted}/>

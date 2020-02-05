@@ -43,7 +43,7 @@ function getRequestData(formData, courseId) {
 }
 
 const LessonForm = (props) => {
-    const {courseId, title, createRequest, onSubmitted, errorMessage} = props;
+    const {courseId, title, createRequest, onSubmitted, errorMessage, cancelLink} = props;
 
     const formElementRef = useRef(null);
 
@@ -71,6 +71,8 @@ const LessonForm = (props) => {
                 id,
                 course_id,
                 locked: is_locked,
+                num,
+                description,
                 assignment: {
                     deadline: hometask_deadline,
                     description: hometask_description,
@@ -80,10 +82,12 @@ const LessonForm = (props) => {
             } = lesson;
             return ({
                 image: image_link ? [{file_id: image_link.split('/').pop(), file_link: image_link}] : undefined,
-                video_link,
+                video_link: video_link || '',
+                num: num || '',
+                description: description || '',
                 is_locked,
                 hometask_deadline,
-                hometask_description,
+                hometask_description: hometask_description || '',
                 hometask_file,
                 ...otherData
             })
@@ -137,13 +141,13 @@ const LessonForm = (props) => {
             onSubmit={onSubmit}
             onSubmitted={onSubmitted}
             onError={onError}
-            cancelLink={`/admin/${courseId}/lessons/`}>
+            cancelLink={cancelLink}>
             <div className="row">
                 <div className="preview-container col-12 col-md-auto">
                     <Input.ImageInput
                         name="image"
                         value={image}
-                        // required
+                        required
                         maxFiles={1}
                         initialFiles={initialImageFile}
                         accept="image/*"
@@ -161,20 +165,17 @@ const LessonForm = (props) => {
                     <Input.Input
                         name="num"
                         type="number"
-                        required
                         placeholder="Номер урока"
                         value={num}
                         onChange={onInputChange}/>
                     <Input.Input
                         name="video_link"
                         type="text"
-                        required
                         placeholder="Ссылка на видео"
                         value={video_link}
                         onChange={onInputChange}/>
                     <Input.TextArea
                         name="description"
-                        required
                         placeholder="Описание"
                         value={description}
                         onChange={onInputChange}/>
@@ -197,14 +198,19 @@ const LessonForm = (props) => {
                         onChange={onInputChange}/>
                 </div>
             </div>
-            <div className="row">
-                <FieldsContainer className="col-12">
+            <FieldsContainer className="row">
+                <div className="col-12">
                     <h4 className="file-input__files-title">Домашнее задание</h4>
+                </div>
+                <div className="col-12">
                     <Input.TextArea
                         name="hometask_description"
                         placeholder="Описание"
+                        className="large"
                         value={hometask_description}
                         onChange={onInputChange}/>
+                </div>
+                <div className="col-auto">
                     <Input.DateInput
                         value={hometask_deadline}
                         placeholder="Дедлайн"
@@ -216,6 +222,16 @@ const LessonForm = (props) => {
                         name="hometask_deadline"
                         clickUnselectsDay={true}
                         onChange={onInputChange}/>
+                </div>
+                <div className="col-auto">
+                    <Input.TimeInput
+                        name="hometask_deadline"
+                        disabled={!hometask_deadline}
+                        value={hometask_deadline}
+                        placeholder="Время"
+                        onChange={onInputChange}/>
+                </div>
+                <div className="col-12">
                     <FileInput
                         name="hometask_file"
                         filesName={null}
@@ -224,8 +240,8 @@ const LessonForm = (props) => {
                         // accept="image/*,audio/*,video/*"
                         initialFiles={lesson && lesson.assignment && lesson.assignment.files ? lesson.assignment.files : undefined}
                         onChange={onInputChange}/>
-                </FieldsContainer>
-            </div>
+                </div>
+            </FieldsContainer>
         </Form>
     );
 };

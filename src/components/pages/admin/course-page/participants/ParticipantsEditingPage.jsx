@@ -4,7 +4,7 @@ import Page, {PageContent} from "components/Page";
 import {PERMISSIONS} from "definitions/constants";
 import * as Input from "components/ui/input";
 import Form, {useForm} from "components/ui/Form";
-import {useRevokeParticipants} from "../../../../../store";
+import {useRevokeParticipants} from "store";
 
 const INITIAL_FORM_DATA = {
     accounts: ''
@@ -16,6 +16,8 @@ function getRequestData(formData) {
         accounts: accounts.split(/\s/)
     };
 }
+
+const returnLink = '..';
 
 const ParticipantsEditingPage = (props) => {
     const {match: {params: {courseId: param_course}}, location} = props;
@@ -42,10 +44,10 @@ const ParticipantsEditingPage = (props) => {
             },
             {
                 text: 'Вернуться к ученикам',
-                url: '..'
+                url: returnLink
             }
         ]);
-    }, [courseId]);
+    }, []);
 
     const onError = React.useCallback((error, showErrorMessage, reloadCallback) => {
         showErrorMessage("Ошибка при выполнении запроса", [
@@ -81,7 +83,7 @@ const ParticipantsEditingPage = (props) => {
                             onSubmitted={onSubmitted}
                             revokeRelatedData={revokeParticipants}
                             onError={onError}
-                            cancelLink='..'>
+                            cancelLink={returnLink}>
                             <Input.TextArea
                                 name="accounts"
                                 required

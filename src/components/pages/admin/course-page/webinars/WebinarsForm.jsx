@@ -40,7 +40,7 @@ function getRequestData(formData, courseId) {
 }
 
 const WebinarsForm = (props) => {
-    const {courseId, title, createRequest, onSubmitted, errorMessage} = props;
+    const {courseId, title, createRequest, onSubmitted, errorMessage, cancelLink} = props;
 
     const formElementRef = useRef(null);
 
@@ -70,8 +70,13 @@ const WebinarsForm = (props) => {
             const {image_link, click_meeting_link, webinars} = webinarsSchedule;
             return ({
                 image: image_link ? [{file_id: image_link.split('/').pop(), file_link: image_link}] : undefined,
-                click_meeting_link,
-                webinars: webinars.map(({date_start, duration, name, description}) => ({date_start, duration, name, description}))
+                click_meeting_link: click_meeting_link || '',
+                webinars: webinars.map(({date_start, duration, name, description}) => ({
+                    date_start,
+                    duration,
+                    name,
+                    description: description || ''
+                }))
             })
         }
     }, checkValidity);
@@ -114,7 +119,7 @@ const WebinarsForm = (props) => {
             onSubmit={onSubmit}
             onSubmitted={onSubmitted}
             onError={onError}
-            cancelLink={`/shop/${courseId}/`}>
+            cancelLink={cancelLink}>
             <div className="row">
                 <div className="preview-container col-12 col-md-auto">
                     <Input.ImageInput
@@ -131,6 +136,7 @@ const WebinarsForm = (props) => {
                     <Input.Input
                         name="click_meeting_link"
                         type="text"
+                        maxLength={300}
                         required
                         placeholder="ClickMeeting"
                         value={click_meeting_link}
@@ -182,7 +188,9 @@ const WebinarsForm = (props) => {
                             <div className="col">
                                 <Input.TimeInput
                                     name={`webinars[${i}].date_start`}
+                                    required
                                     disabled={!date_start}
+                                    placeholder="Время"
                                     value={date_start}
                                     onChange={onInputChange}/>
                             </div>

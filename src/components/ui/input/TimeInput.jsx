@@ -6,7 +6,7 @@ import {useToggle} from "hooks/common";
 
 import 'react-times/css/material/default.css';
 
-const TimeInput = ({value, name, onChange, disabled, focused = false}) => {
+const TimeInput = ({value, name, onChange, disabled, placeholder, focused = false, ...inputProps}) => {
     const [isFocused, toggleFocus] = useToggle(focused);
     const onTimeChange = useCallback(({hour, minute}) => {
         const time = new Date(value.getTime());
@@ -19,8 +19,10 @@ const TimeInput = ({value, name, onChange, disabled, focused = false}) => {
     return (
         <TimePicker
             trigger={<Input
+                placeholder={placeholder}
                 onClick={toggleFocus}
-                value={time || ''}/>}
+                value={time || ''}
+                {...inputProps}/>}
             time={time}
             focused={isFocused}
             onTimeChange={onTimeChange}

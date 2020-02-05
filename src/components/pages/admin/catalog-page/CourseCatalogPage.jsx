@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import {ADMIN_ROLES, PERMISSIONS} from "definitions/constants";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
+import {useDeleteCourse} from "store";
 
 const filterBy = {
     search: true,
@@ -20,10 +21,13 @@ const CourseCatalogPage = ({location, path, children: header}) => {
     const {catalog, error, retry} = useAdminCourses();
     const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
 
+    const onDelete = useDeleteCourse();
+
     const canEdit = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
 
     const renderCourse = useCallback((course, {link, ...rest}) => {
         const courseLink = `${path}/${link}`;
+        const deleteCallback = () => { onDelete(course.id) };
         return (
             <Course
                 course={course}
@@ -41,19 +45,19 @@ const CourseCatalogPage = ({location, path, children: header}) => {
                             to={`${courseLink}edit/`}>
                             <i className="far fa-edit"/>Изменить
                         </DropdownMenuOption>
-                        <DropdownMenuOption>
+                        <DropdownMenuOption onClick={deleteCallback}>
                             <i className="icon-close"/>Удалить
                         </DropdownMenuOption>
                         <DropdownMenuOption
                             tag={Link}
-                            to={`${courseLink}create_lesson/`}>
+                            to={`${courseLink}lessons/create/`}>
                             <i className="icon-add"/>Добавить урок
                         </DropdownMenuOption>
                     </DropdownMenu>
                 )}
             </Course>
         )
-    }, [canEdit]);
+    }, [canEdit, onDelete, path]);
     const isLoaded = catalog && subjects;
     return (
         <Page

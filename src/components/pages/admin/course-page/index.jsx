@@ -1,10 +1,14 @@
-import React from "react";
-import {useAdminCourse, useAdminWebinars, useLessons, useParticipants, useSubjects} from "store";
-import {Redirect, Route, Switch} from "react-router-dom";
+import React, {useCallback} from "react";
+import {useAdminCourse, useAdminWebinars, useDeleteCourse, useLessons, useParticipants, useSubjects} from "store";
+import {Link, Redirect, Route, Switch} from "react-router-dom";
 import TabNav, {TabNavLink} from "components/common/TabNav";
 import ParticipantsPage from "./participants/ParticipantsPage";
 import LessonsPage from "./lessons/LessonsPage";
 import WebinarsPage from "./webinars/WebinarsPage";
+import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
+import {useCheckPermissions} from "components/ConditionalRender";
+import {PERMISSIONS} from "definitions/constants";
+
 
 const CoursePage = (props) => {
     const {path: root, match} = props;
@@ -17,9 +21,38 @@ const CoursePage = (props) => {
 
     const isLoaded = !!(course && participants && lessons && webinars);
 
+    const canEdit = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
+
+    const parentPage = `${root}/`;
+    const onDelete = useDeleteCourse(parentPage);
+    const deleteCallback = useCallback(() => {
+        onDelete(courseId);
+    }, [courseId, onDelete]);
+
+    const courseLink = `${match.url}/`;
     const header = isLoaded && (
         <div className="layout__content-block tab-nav-container">
-            <h2>{course.name}</h2>
+            <div className="tab-nav-container__title-container">
+                <div className="tab-nav-container__action">
+                    {canEdit && (
+                        <DropdownMenu
+                            className="user-nav"
+                            content={<DropdownIconButton className="icon-ellipsis"/>}>
+                            <DropdownMenuOption
+                                tag={Link}
+                                to={`${courseLink}edit/`}>
+                                <i className="far fa-edit"/>Изменить курс
+                            </DropdownMenuOption>
+                            <DropdownMenuOption onClick={deleteCallback}>
+                                <i className="icon-close"/>Удалить курс
+                            </DropdownMenuOption>
+                        </DropdownMenu>
+                    )}
+                </div>
+                <div className="tab-nav-container__title">
+                    <h2>{course.name}</h2>
+                </div>
+            </div>
             <TabNav>
                 <TabNavLink to={`${match.url}/lessons/`}>Уроки <span className="badge">{lessons.length}</span></TabNavLink>
                 <TabNavLink to={`${match.url}/participants/`}>Ученики <span className="badge">{participants.length}</span></TabNavLink>

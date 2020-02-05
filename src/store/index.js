@@ -2,6 +2,7 @@ import React, {useCallback, useContext, useRef} from "react";
 import Auth, {AuthEventTypes} from "definitions/auth";
 import APIRequest, {getCancelToken} from "api";
 import _ from "lodash";
+import {useHistory} from "react-router-dom";
 
 const StoreContext = React.createContext(null);
 StoreContext.displayName = 'StoreContext';
@@ -314,22 +315,25 @@ export function useAdminCourse(courseId) {
     }
 }
 
-export function useRevokeCoursesCatalog() {
+export function useRevokeCourses() {
     const {setters: {setShopCourses, setUserCourses, setAdminCourses}} = useContext(StoreContext);
 
     return useCallback((responseCourse) => {
         console.log('response', responseCourse);
         const updateCatalog = catalog => {
+            if (!catalog)
+                return catalog;
             const courseIndex = _.findIndex(catalog, {id: responseCourse.id});
-            if (courseIndex !== undefined) {
+            const newCatalog = [...catalog];
+            if (courseIndex !== -1) {
                 const prevCourse = catalog[courseIndex];
-                const newCatalog = [...catalog];
                 newCatalog[courseIndex] = {...prevCourse, ...responseCourse};
-                return newCatalog;
+            } else {
+                newCatalog.push(responseCourse);
             }
-            return null;
+            return newCatalog;
         };
-        setUserCourses(null);
+        setUserCourses(updateCatalog);
         setShopCourses(updateCatalog);
         setAdminCourses(updateCatalog);
     }, [setShopCourses, setUserCourses, setAdminCourses]);
@@ -425,16 +429,19 @@ export function useRevokeLessons(courseId) {
     const {setters: {setLessons}} = useContext(StoreContext);
 
     return useCallback((responseLesson) => {
-        console.log('response', responseLesson);
         setLessons(({[courseId]: courseLessons, ...loadedLessons}) => {
             const lessonIndex = _.findIndex(courseLessons, {id: responseLesson.id});
-            if (lessonIndex !== undefined) {
+            const newLessons = [...courseLessons];
+            if (lessonIndex !== -1) {
                 const prevLesson = courseLessons[lessonIndex];
                 const newLessons = [...courseLessons];
                 newLessons[lessonIndex] = {...prevLesson, ...responseLesson};
                 return {[courseId]: newLessons, ...loadedLessons};
             }
-            return {...loadedLessons};
+            else {
+                newLessons.push(responseLesson);
+            }
+            return {[courseId]: newLessons, ...loadedLessons};
         });
     }, [setLessons, courseId]);
 }
@@ -533,10 +540,10 @@ export function useRevokeWebinars(courseId) {
 
     return useCallback((responseWebinars) => {
         console.log('response', responseWebinars);
-        setAdminWebinars(({...loadedParticipants}) => (
-            {...loadedParticipants, [courseId]: responseWebinars}
+        setAdminWebinars(({...loadedWebinars}) => (
+            {...loadedWebinars, [courseId]: responseWebinars}
         ));
-        setWebinars((loadedWebinars) => ({...loadedWebinars, [courseId]: undefined, upcoming: undefined}))
+        setWebinars((loadedWebinars) => ({...loadedWebinars, [courseId]: undefined, upcoming: undefined}));
     }, [setAdminWebinars, setWebinars, courseId]);
 }
 
@@ -644,6 +651,84 @@ export function useCourseWebinars(courseId) {
     }, [user, webinars, courseId, error]);
 
     return {webinars: webinars[courseId], error, reload: fetchWebinars};
+}
+
+function useRedirect(redirectUrl) {
+    const history = useHistory();
+    return  useCallback(() => {
+        redirectUrl && history.replace(redirectUrl);
+    }, [history, redirectUrl]);
+}
+
+export function useDeleteCourse(redirectUrl, onDelete, onError) {
+    const {setters: {setShopCourses, setUserCourses, setAdminCourses}} = useContext(StoreContext);
+    const redirectIfSupplied = useRedirect(redirectUrl);
+
+    return useCallback(async (courseId) => {
+        try {
+            await APIRequest.delete(`/courses/${courseId}`);
+            redirectIfSupplied();
+            onDelete&& onDelete(courseId);
+            const removeCourse = catalog => catalog ? catalog.filter(({id}) => id !== courseId) : catalog;
+            setUserCourses(removeCourse);
+            setShopCourses(removeCourse);
+            setAdminCourses(removeCourse);
+        } catch (e) {
+            console.log(e);
+            onError && onError(courseId, e);
+        }
+    }, [redirectIfSupplied, onDelete, onError, setUserCourses, setShopCourses, setAdminCourses]);
+}
+
+export function useDeleteLesson(redirectUrl, onDelete, onError) {
+    const {setters: {setLessons}} = useContext(StoreContext);
+    const redirectIfSupplied = useRedirect(redirectUrl);
+
+    return useCallback(async (courseId, lessonId) => {
+        try {
+            await APIRequest.delete(`/lessons/${lessonId}`);
+            redirectIfSupplied();
+            onDelete&& onDelete(courseId);
+            const removeLesson = ({[courseId]: courseLessons, ...loadedLessons}) => ({
+                ...loadedLessons,
+                [courseId]: courseLessons.filter(({id}) => id !== lessonId)
+            });
+            setLessons(removeLesson);
+        } catch (e) {
+            console.log(e);
+            onError && onError(courseId, e);
+        }
+    }, [redirectIfSupplied, onDelete, onError, setLessons]);
+}
+
+export function useDeleteWebinar(redirectUrl, onDelete, onError) {
+    const {setters: {setAdminWebinars, setWebinars}} = useContext(StoreContext);
+    const redirectIfSupplied = useRedirect(redirectUrl);
+
+    return useCallback(async (courseId, webinarId, webinarsSchedule) => {
+        try {
+            const {course_id, click_meeting_link, image_link, webinars} = webinarsSchedule;
+            const requestData = {
+                course_id,
+                click_meeting_link,
+                image: image_link.split('/').pop(),
+                webinars: webinars.filter(({id}) => id !== webinarId).map(({date_start, ...rest}) => ({
+                    ...rest,
+                    date_start: date_start.getTime()
+                }))
+            };
+            const responseWebinars = await APIRequest.put(`/courses/${courseId}/schedule`, requestData);
+            redirectIfSupplied();
+            onDelete&& onDelete(courseId);
+            setAdminWebinars(({...loadedWebinars}) => (
+                {...loadedWebinars, [courseId]: responseWebinars}
+            ));
+            setWebinars((loadedWebinars) => ({...loadedWebinars, [courseId]: undefined, upcoming: undefined}))
+        } catch (e) {
+            console.log(e);
+            onError && onError(courseId, e);
+        }
+    }, [redirectIfSupplied, onDelete, onError, setWebinars, setAdminWebinars]);
 }
 
 const GlobalStore = ({children}) => {

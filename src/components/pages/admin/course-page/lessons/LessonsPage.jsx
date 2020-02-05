@@ -7,6 +7,7 @@ import Lesson from "components/common/Lesson";
 import Catalog from "components/common/Catalog";
 import Button from "components/ui/Button";
 import ConditionalRenderer, {useCheckPermissions} from "../../../../ConditionalRender";
+import {useDeleteCourse, useDeleteLesson} from "../../../../../store";
 
 const filterBy = {
     search: true,
@@ -26,10 +27,13 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
 
     const canEdit = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
 
+    const onDelete = useDeleteLesson();
+
     const renderLesson = useCallback((lesson, {link, ...rest}) => {
         const {id, locked} = lesson;
         const courseLink = `${path}/${courseId}/${link}`;
 
+        const deleteCallback = () => { onDelete(courseId, id); };
         return (
             <Lesson
                 lesson={lesson}
@@ -49,7 +53,7 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
                             to={`${courseLink}edit/`}>
                             <i className="far fa-edit"/>Изменить
                         </DropdownMenuOption>
-                        <DropdownMenuOption>
+                        <DropdownMenuOption onClick={deleteCallback}>
                             <i className="icon-close"/>Удалить
                         </DropdownMenuOption>
                     </DropdownMenu>
@@ -78,7 +82,7 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
                                 <Button
                                     neutral
                                     tag={Link}
-                                    to={`${path}/${courseId}/create_lesson/`}
+                                    to={`${path}/${courseId}/lessons/create/`}
                                     icon={<i className="icon-add"/>}>
                                     Добавить урок
                                 </Button>

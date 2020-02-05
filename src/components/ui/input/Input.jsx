@@ -9,8 +9,8 @@ function useChangeHandler(callback, inputProp = 'value', parse) {
     }, [callback, inputProp, parse])
 }
 
-export let CheckBox = ({value, onChange: callback, name, label, ...props}, ref) => {
-    const onChange = useChangeHandler(callback, 'checked');
+export let CheckBox = ({value, onChange: callback, name, label, parse, ...props}, ref) => {
+    const onChange = useChangeHandler(callback, 'checked', parse);
     return (
         <label className={`input input-checkbox`}>
             <input ref={ref} type="checkbox" name={name} checked={value} onChange={onChange} {...props}/>

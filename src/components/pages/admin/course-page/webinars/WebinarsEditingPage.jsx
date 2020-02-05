@@ -14,6 +14,8 @@ const WebinarsEditingPage = (props) => {
 
     const createRequest = useCallback((requestData) => APIRequest.put(`/courses/${courseId}/schedule`, requestData), [courseId]);
 
+    const returnLink = `/admin/${courseId}/webinars/`;
+
     const onSubmitted = useCallback((response, showSuccessMessage, reset) => {
         showSuccessMessage("Изменения сохранены", [
             {
@@ -21,10 +23,10 @@ const WebinarsEditingPage = (props) => {
             },
             {
                 text: 'Вернуться к вебинарам',
-                url: `/admin/${courseId}/webinars/`
+                url: returnLink
             }
         ]);
-    }, [courseId]);
+    }, [returnLink]);
 
     const isLoaded = !!(course && webinars);
 
@@ -43,6 +45,7 @@ const WebinarsEditingPage = (props) => {
                             location={location}
                             title={title}
                             errorMessage="Ошибка при сохранении изменений"
+                            cancelLink={returnLink}
                             courseId={courseId}
                             isLoaded={isLoaded}
                             createRequest={createRequest}

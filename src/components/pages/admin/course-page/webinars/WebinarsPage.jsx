@@ -11,7 +11,8 @@ import {renderDate} from "definitions/helpers";
 import {useWebinar, WEBINAR_STATE} from "components/common/WebinarSchedule";
 import PosterCover from "components/common/PosterCover";
 import Countdown from "react-countdown-now";
-import ConditionalRenderer, {useCheckPermissions} from "../../../../ConditionalRender";
+import {useCheckPermissions} from "components/ConditionalRender";
+import {useDeleteWebinar} from "store";
 
 const filterBy = {
     search: true,
@@ -65,14 +66,21 @@ const Webinar = ({webinar, ...rest}) => {
     );
 };
 
-const WebinarsPage = ({location, path, match, children: header, course, webinars: {webinars} = {}, isLoaded, parentSection}) => {
+const WebinarsPage = ({location, path, match, children: header, course, webinars: webinarSchedule = {}, isLoaded, parentSection}) => {
     const {params: {courseId: param_id}} = match;
     const courseId = parseInt(param_id);
+
+    const {webinars} = webinarSchedule;
+
+    const onDelete = useDeleteWebinar();
 
     const canEdit = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
     const courseLink = `${path}/${courseId}`;
     const renderWebinar = useCallback((webinar, {link, ...rest}) => {
         const {id} = webinar;
+        const deleteCallback = () => {
+            onDelete(courseId, id, webinarSchedule);
+        };
         return (
             <Webinar key={id} webinar={webinar} {...rest}>
                 {canEdit && (
@@ -81,17 +89,17 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
                         content={<DropdownIconButton className="icon-ellipsis"/>}>
                         <DropdownMenuOption
                             tag={Link}
-                            to={`${courseLink}/edit_webinars/`}>
+                            to={`${courseLink}/webinars/edit/`}>
                             <i className="far fa-edit"/>Изменить
                         </DropdownMenuOption>
-                        <DropdownMenuOption>
+                        <DropdownMenuOption onClick={deleteCallback}>
                             <i className="icon-close"/>Удалить
                         </DropdownMenuOption>
                     </DropdownMenu>
                 )}
             </Webinar>
         )
-    }, [courseLink, canEdit]);
+    }, [courseLink, canEdit, webinarSchedule, courseId, onDelete]);
     const title = course && `Вебинары курса ${course.name}`;
     return (
         <Page
@@ -113,7 +121,7 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
                                 <Button
                                     neutral
                                     tag={Link}
-                                    to={`${courseLink}/edit_webinars/`}
+                                    to={`${courseLink}/webinars/edit/`}
                                     icon={<i className="icon-add"/>}>
                                     Добавить вебинар
                                 </Button>

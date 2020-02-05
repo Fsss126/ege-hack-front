@@ -10,6 +10,8 @@ const LessonCreatingPage = (props) => {
     const {match: {params: {courseId: param_course}}, location} = props;
     const courseId = parseInt(param_course);
 
+    const returnLink = `/admin/${courseId}/lessons/`;
+
     const onSubmitted = React.useCallback((response, showSuccessMessage, reset) => {
         showSuccessMessage("Урок создан", [
             {
@@ -18,10 +20,10 @@ const LessonCreatingPage = (props) => {
             },
             {
                 text: 'Вернуться к курсу',
-                url: `/shop/${courseId}/`
+                url: returnLink
             }
         ]);
-    }, [courseId]);
+    }, [returnLink]);
 
 
     const isLoaded = true;
@@ -38,6 +40,7 @@ const LessonCreatingPage = (props) => {
                             location={location}
                             title="Новый урок"
                             errorMessage="Ошибка при создании урока"
+                            cancelLink={returnLink}
                             courseId={courseId}
                             isLoaded={isLoaded}
                             createRequest={createRequest}

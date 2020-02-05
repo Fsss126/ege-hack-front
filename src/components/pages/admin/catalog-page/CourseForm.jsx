@@ -1,7 +1,7 @@
 import React from "react";
 import APIRequest from "api";
 import Form, {FieldsContainer, useForm, useFormValidityChecker} from "components/ui/Form";
-import {useRevokeCoursesCatalog} from "store";
+import {useRevokeCourses} from "store";
 import * as Input from "components/ui/input";
 import _ from "lodash";
 
@@ -14,11 +14,12 @@ const INITIAL_FORM_DATA = {
     date_start: null,
     date_end: null,
     online: false,
-    description: ''
+    description: '',
+    hide_from_market: true
 };
 
 function getRequestData(formData) {
-    const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description} = formData;
+    const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description, hide_from_market} = formData;
     return {
         name,
         subject_id: parseInt(subject_id),
@@ -28,12 +29,15 @@ function getRequestData(formData) {
         date_start: date_start.getTime(),
         date_end: date_end.getTime(),
         online,
-        description
+        description,
+        hide_from_market
     };
 }
 
+const isHiddenFromMarket = isAvailable => !isAvailable;
+
 const CourseForm = (props) => {
-    const {subjects, teachers, title, createRequest, onSubmitted, errorMessage} = props;
+    const {subjects, teachers, title, createRequest, onSubmitted, errorMessage, cancelLink} = props;
 
     const subjectOptions = React.useMemo(() =>
             subjects ? subjects.map(({id, name}) => ({value: id, label: name})) : undefined,
@@ -61,16 +65,18 @@ const CourseForm = (props) => {
         if (state || !course) {
             return INITIAL_FORM_DATA;
         } else {
-            const {image_link, id, purchased, teacher_ids, status, ...otherData} = course;
+            const {image_link, id, purchased, teacher_ids, status, hide_from_market, description, ...otherData} = course;
             return ({
+                hide_from_market: hide_from_market || false,
                 teacher_id: teacher_ids[0],
                 image: image_link ? [{file_id: image_link.split('/').pop(), file_link: image_link}] : undefined,
+                description: description || '',
                 ...otherData
             })
         }
     }, checkValidity);
 
-    const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description} = formData;
+    const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description, hide_from_market} = formData;
 
     const initialImageFile = React.useMemo(() => (formData.image), []);
 
@@ -85,7 +91,7 @@ const CourseForm = (props) => {
         return createRequest(getRequestData(formData));
     }, [formData, createRequest]);
 
-    const revokeShopCatalog = useRevokeCoursesCatalog();
+    const revokeShopCatalog = useRevokeCourses();
 
     const onError = React.useCallback((error, showErrorMessage, reloadCallback) => {
         showErrorMessage(errorMessage, [
@@ -110,12 +116,12 @@ const CourseForm = (props) => {
             onSubmitted={onSubmitted}
             onError={onError}
             revokeRelatedData={revokeShopCatalog}
-            cancelLink="/admin/">
+            cancelLink={cancelLink}>
             <div className="row">
                 <div className="preview-container col-12 col-md-auto">
                     <Input.ImageInput
                         name="image"
-                        // required
+                        required
                         value={image}
                         maxFiles={1}
                         initialFiles={initialImageFile}
@@ -194,9 +200,15 @@ const CourseForm = (props) => {
                     </div>
                     <Input.TextArea
                         name="description"
-                        required
+                        className="large"
                         placeholder="Описание"
                         value={description}
+                        onChange={onInputChange}/>
+                    <Input.CheckBox
+                        name="hide_from_market"
+                        value={!hide_from_market}
+                        label="Доступен в магазине"
+                        parse={isHiddenFromMarket}
                         onChange={onInputChange}/>
                 </FieldsContainer>
             </div>
