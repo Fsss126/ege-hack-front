@@ -1,13 +1,12 @@
 import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
-import {PERMISSIONS} from "definitions/constants";
-import {useParticipants, useShopCourse} from "store";
+import {ADMIN_ROLES, PERMISSIONS} from "definitions/constants";
 import ListItem from "components/common/ListItem";
 import CoverImage from "components/common/CoverImage";
 import Catalog from "components/common/Catalog";
 import {Link} from "react-router-dom";
 import Button from "components/ui/Button";
-import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
+import {useCheckPermissions} from "../../../../ConditionalRender";
 
 const filterBy = {
     search: true,
@@ -24,6 +23,8 @@ const filter = ({vk_info: {full_name}}, {subject, online, search}) => {
 const ParticipantsPage = (props) => {
     const {match: {params: {courseId: param_course}}, location, participants, course, isLoaded, children: header, parentSection, path} = props;
     const courseId = parseInt(param_course);
+
+    const canEdit = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
 
     const renderStudent = useCallback((user, renderProps) => {
         const {
@@ -50,7 +51,8 @@ const ParticipantsPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={PERMISSIONS.PARTICIPANT_MANAGEMENT}
+            requiredRoles={ADMIN_ROLES}
+            fullMatch={false}
             className="admin-page admin-page--participants"
             title={title}
             location={location}>
@@ -60,15 +62,17 @@ const ParticipantsPage = (props) => {
                     filter={filter}>
                     <PageContent parentSection={parentSection}>
                         {header}
-                        <div className="layout__content-block layout__content-block--stacked d-flex">
-                            <Button
-                                neutral
-                                tag={Link}
-                                to={`${path}/${courseId}/participants/edit/`}
-                                icon={<i className="icon-add"/>}>
-                                Добавить учеников
-                            </Button>
-                        </div>
+                        {canEdit && (
+                            <div className="layout__content-block layout__content-block--stacked d-flex">
+                                <Button
+                                    neutral
+                                    tag={Link}
+                                    to={`${path}/${courseId}/participants/edit/`}
+                                    icon={<i className="icon-add"/>}>
+                                    Добавить учеников
+                                </Button>
+                            </div>
+                        )}
                         <Catalog.Filter filterBy={filterBy}>
                             {/*<div className="col d-flex justify-content-end">*/}
                             {/*    <DropdownMenu content={(*/}

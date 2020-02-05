@@ -8,7 +8,7 @@ import Header from "./Header";
 import {CSSTransition} from "react-transition-group";
 import SideBar from "./SideBar";
 import {useSideBarState} from "./App";
-import {PermissionsDeniedError} from "./ErrorPage";
+import {PermissionsDeniedErrorPage} from "./ErrorPage";
 import {useCheckPermissions} from "./ConditionalRender";
 
 const PageLoadingPlaceholder = () => (
@@ -94,7 +94,7 @@ const Page = ({
                 }}/>);
         }
         if (permissionsSatisfied === false) {
-            return <PermissionsDeniedError/>;
+            return <PermissionsDeniedErrorPage/>;
         }
     }
     const showContent = (checkLogin ? (requiredPermissions || loadUserInfo ? user && userInfo : !!user) : true) && isLoaded;

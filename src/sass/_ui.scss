@@ -394,6 +394,40 @@ label {
   }
 }
 
+.time_picker_container {
+  .outside_container {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+
+    .time_picker_modal_header {
+      background: $accent-orange;
+      font-size: 1.5em;
+      height: auto;
+      line-height: unset;
+      margin-bottom: 15px;
+      padding: 6px;
+    }
+
+    .time_picker_modal_container {
+      border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(100,111,121,.15), 0 5px 20px 0 rgba(21,27,38,.08);
+      overflow: hidden;
+      width: auto;
+      min-width: 100%;
+      .picker_container {
+        background: $bg-grey;
+        margin: 0 15px 15px;
+        .picker_center, .picker_pointer, .pointer_drag {
+          background: $accent-orange;
+        }
+      }
+    }
+  }
+}
+
 input[type='text'], input[type='email'], input[type='tel'], input[type='number'], input[type='date'], textarea {
   outline: none;
   background-color: transparent;
@@ -668,6 +702,36 @@ input[type=number] {
       margin-top: 16px;
     }
   }
+  .form-entity {
+    padding: 26px 24px;
+    margin: 0;
+    border: 2px dashed $border-grey;
+    border-radius: 10px;
+    &~.form-entity {
+      margin-top: 16px;
+    }
+
+    .form-entity__delete-btn-container {
+      margin-top: -12px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: flex-end;
+
+      i {
+        display: block;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .form-entities-group {
+    .form-entities-group__add-btn-container {
+      display: flex;
+      justify-content: center;
+      padding: 38px 24px 24px;
+    }
+  }
+
   .form__action-container {
     margin-top: 16px;
   }

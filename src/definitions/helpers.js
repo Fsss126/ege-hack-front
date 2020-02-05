@@ -23,16 +23,16 @@ Object.assign(renderDate, {
     dateWithHour: {
         day: 'numeric',
         month: 'long',
-        hour: 'numeric',
-        minute: 'numeric'
+        hour: '2-digit',
+        minute: '2-digit'
     },
     shortDate: {
         day: 'numeric',
         month: 'numeric'
     },
-    hour: {
-        hour: 'numeric',
-        minute: 'numeric'
+    time: {
+        hour: '2-digit',
+        minute: '2-digit'
     }
 });
 

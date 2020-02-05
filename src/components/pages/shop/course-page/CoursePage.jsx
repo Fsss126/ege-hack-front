@@ -5,11 +5,8 @@ import CoursePrice from "./CoursePrice";
 import Lesson from "components/common/Lesson";
 import {useTeachers, useLessons, useDiscount, useShopCourse} from "store";
 import Button from "components/ui/Button";
-import {Link} from "react-router-dom";
-import ConditionalRenderer from "components/ConditionalRender";
-import {PERMISSIONS} from "definitions/constants";
 import {useToggle} from "hooks/common";
-import ErrorPage from "components/ErrorPage";
+import {NotFoundErrorPage} from "components/ErrorPage";
 
 //TODO: fix 404 error screen
 const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, path: root, location, match}) => {
@@ -60,7 +57,7 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
         );
     }
     else if (error) {
-        return <ErrorPage errorCode={404} message="Курс не найден" link={{url: root}}/>;
+        return <NotFoundErrorPage message="Курс не найден" link={{url: root}}/>;
     }
     else {
         return (

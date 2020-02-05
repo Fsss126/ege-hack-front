@@ -6,56 +6,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/common/PosterCover.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/common/TabNav.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsForm.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ui/input/TimeInput.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ErrorPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ErrorPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/SideBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Catalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Catalog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Course.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/DropdownMenu.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/DropdownMenu.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/List.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/List.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/ListItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/ListItem.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/WebinarSchedule.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/WebinarSchedule.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/User.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCreatingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseEditingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/CourseForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/ParticipantsEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/courses/ParticipantsPage.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonCreatingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonEditingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/lessons/LessonForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/SelectedCoursesTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/SelectedCoursesTab.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePrice.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePrice.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Link.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Link.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/ScrollBars.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/ScrollBars.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Form.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Form.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/DateInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/DateInput.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/constants.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/definitions/helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/helpers.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/mixins.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/mixins.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_variables.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
@@ -206,8 +182,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.build-prod" />
         <item itemvalue="npm.start-custom-post-mac" />
+        <item itemvalue="npm.build-prod" />
         <item itemvalue="npm.build" />
         <item itemvalue="npm.start-custom-port" />
         <item itemvalue="npm.deploy" />
@@ -277,6 +253,7 @@
       <workItem from="1579294041201" duration="222000" />
       <workItem from="1579517515853" duration="31684000" />
       <workItem from="1579814341283" duration="13947000" />
+      <workItem from="1580830246492" duration="22681000" />
     </task>
     <task id="LOCAL-00001" summary="Initial stage">
       <created>1567014085290</created>
@@ -488,7 +465,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580769112575</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Admin pages">
+      <created>1580770433491</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1580770433491</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -553,10 +537,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-    <state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580769112309">
+    <state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580770433321">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1579813419237" />
+    <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770433321" />
     <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580769112309" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1580480216383">
       <screen x="0" y="23" width="1440" height="820" />
@@ -570,37 +554,42 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
+    <state x="0" y="61" key="FileDocumentManager.FileCacheConflict" timestamp="1580770518579">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="0" y="61" key="FileDocumentManager.FileCacheConflict/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770518579" />
     <state x="475" y="324" key="Github.CreatePullRequestDialog" timestamp="1580179636246">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="475" y="324" key="Github.CreatePullRequestDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580179636246" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1580577286304">
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1580865841627">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580167996519" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1580577286304" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580806074609" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1580865841627" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1580577286303">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1580865841626">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580167996516" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1580577286303" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580806074606" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1580865841626" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1580577286302">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1580865841625">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580167996515" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1580577286302" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580806074605" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1580865841625" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1580577286304">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1580865841627">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580167996518" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1580577286304" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580806074608" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1580865841627" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1575496047285">
+    <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1580770480909">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770480909" />
     <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1575496047285" />
     <state x="368" y="168" key="RollbackChangesDialog" timestamp="1578521844521">
       <screen x="0" y="0" width="1440" height="900" />
@@ -614,10 +603,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="570" y="373" key="VCS.ChangelistChooser/0.0.1440.900@0.0.1440.900" timestamp="1580769269270" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1580769114551">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1580770435032">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1579813524441" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770435032" />
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580769114551" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
@@ -632,15 +621,16 @@
     </state>
     <state x="378" y="72" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1579818976776" />
     <state x="378" y="72" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1440.900@0.0.1440.900" timestamp="1578940546945" />
-    <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1575496035299">
+    <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1580770460048">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770460048" />
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1580754587055">
+    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1580872238758">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="430" y="161" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580690136230" />
-    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1580754587055" />
+    <state x="430" y="161" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580774187469" />
+    <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1580872238758" />
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1580483864888">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

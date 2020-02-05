@@ -110,7 +110,7 @@ const CourseForm = (props) => {
             onSubmitted={onSubmitted}
             onError={onError}
             revokeRelatedData={revokeShopCatalog}
-            cancelLink="/shop/">
+            cancelLink="/admin/">
             <div className="row">
                 <div className="preview-container col-12 col-md-auto">
                     <Input.ImageInput

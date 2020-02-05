@@ -528,7 +528,7 @@ export function useAdminWebinars(courseId) {
     return {webinars: adminWebinars[courseId], error, reload: fetchWebinars};
 }
 
-export function useRevokeAdminWebinars(courseId) {
+export function useRevokeWebinars(courseId) {
     const {setters: {setAdminWebinars, setWebinars}} = useContext(StoreContext);
 
     return useCallback((responseWebinars) => {

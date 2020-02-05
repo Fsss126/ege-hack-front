@@ -1,11 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
 import CoverImage from "components/common/CoverImage";
-import {daysBetween, renderDate} from "../../definitions/helpers";
+import {renderDate} from "definitions/helpers";
 import List from "./List";
 import Teacher from "./Teacher";
 import Page, {PageLink} from "../Page";
-import ErrorPage from "../ErrorPage";
+import {NotFoundErrorPage} from "../ErrorPage";
 
 window._ = _;
 
@@ -130,7 +130,7 @@ const CourseOverview = (props) => {
             </Page>
         )
     } else
-        return <ErrorPage errorCode={404} message="Курс не найден" link={{url: root}}/>;
+        return <NotFoundErrorPage message="Курс не найден" link={{url: root}}/>;
 };
 
 export default {

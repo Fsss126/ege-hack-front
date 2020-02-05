@@ -1,7 +1,7 @@
 import React, {useCallback} from "react";
 import classnames from 'classnames';
 import {Link} from "react-router-dom";
-import {PERMISSIONS} from "definitions/constants";
+import {ADMIN_ROLES, PERMISSIONS} from "definitions/constants";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import Page, {PageContent} from "components/Page";
 import Catalog from "components/common/Catalog";
@@ -11,6 +11,7 @@ import {renderDate} from "definitions/helpers";
 import {useWebinar, WEBINAR_STATE} from "components/common/WebinarSchedule";
 import PosterCover from "components/common/PosterCover";
 import Countdown from "react-countdown-now";
+import ConditionalRenderer, {useCheckPermissions} from "../../../../ConditionalRender";
 
 const filterBy = {
     search: true,
@@ -68,32 +69,36 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
     const {params: {courseId: param_id}} = match;
     const courseId = parseInt(param_id);
 
+    const canEdit = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
     const courseLink = `${path}/${courseId}`;
     const renderWebinar = useCallback((webinar, {link, ...rest}) => {
         const {id} = webinar;
         return (
             <Webinar key={id} webinar={webinar} {...rest}>
-                <DropdownMenu
-                    className="user-nav"
-                    content={<DropdownIconButton className="icon-ellipsis"/>}>
-                    <DropdownMenuOption
-                        tag={Link}
-                        to={`${courseLink}/edit_webinars/`}>
-                        <i className="far fa-edit"/>Изменить
-                    </DropdownMenuOption>
-                    <DropdownMenuOption>
-                        <i className="icon-close"/>Удалить
-                    </DropdownMenuOption>
-                </DropdownMenu>
+                {canEdit && (
+                    <DropdownMenu
+                        className="user-nav"
+                        content={<DropdownIconButton className="icon-ellipsis"/>}>
+                        <DropdownMenuOption
+                            tag={Link}
+                            to={`${courseLink}/edit_webinars/`}>
+                            <i className="far fa-edit"/>Изменить
+                        </DropdownMenuOption>
+                        <DropdownMenuOption>
+                            <i className="icon-close"/>Удалить
+                        </DropdownMenuOption>
+                    </DropdownMenu>
+                )}
             </Webinar>
         )
-    }, [courseLink]);
+    }, [courseLink, canEdit]);
     const title = course && `Вебинары курса ${course.name}`;
     return (
         <Page
             isLoaded={isLoaded}
             loadUserInfo
-            requiredPermissions={PERMISSIONS.WEBINAR_EDIT}
+            requiredRoles={ADMIN_ROLES}
+            fullMatch={false}
             className="admin-page admin-page--webinars"
             title={title}
             location={location}>
@@ -103,15 +108,17 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
                     filter={filter}>
                     <PageContent parentSection={parentSection}>
                         {header}
-                        <div className="layout__content-block layout__content-block--stacked d-flex">
-                            <Button
-                                neutral
-                                tag={Link}
-                                to={`${courseLink}/edit_webinars/`}
-                                icon={<i className="icon-add"/>}>
-                                Добавить вебинар
-                            </Button>
-                        </div>
+                        {canEdit && (
+                            <div className="layout__content-block layout__content-block--stacked d-flex">
+                                <Button
+                                    neutral
+                                    tag={Link}
+                                    to={`${courseLink}/edit_webinars/`}
+                                    icon={<i className="icon-add"/>}>
+                                    Добавить вебинар
+                                </Button>
+                            </div>
+                        )}
                         <Catalog.Filter filterBy={filterBy}/>
                         <Catalog.Catalog
                             className="webinars-list"

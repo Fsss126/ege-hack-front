@@ -1,13 +1,8 @@
 import React from 'react';
-import classnames from 'classnames';
-import _ from 'lodash';
 import Contacts from "./common/Contacts";
-import {ACCOUNT_ROLES} from "definitions/constants";
+import {ADMIN_ROLES, TEACHER_ROLES} from "definitions/constants";
 import {NavLink} from "./ui/Link";
 import ConditionalRenderer from "./ConditionalRender";
-
-const adminRoles = [ACCOUNT_ROLES.ADMIN, ACCOUNT_ROLES.MODERATOR];
-const teacherRoles = [ACCOUNT_ROLES.TEACHER, ACCOUNT_ROLES.HELPER];
 
 export default class SideBar extends React.Component{
     onClick = (event) => {
@@ -57,7 +52,7 @@ export default class SideBar extends React.Component{
                                     </React.Fragment>
                                 {/*)}*/}
                                 <ConditionalRenderer
-                                    requiredRoles={teacherRoles}
+                                    requiredRoles={TEACHER_ROLES}
                                     fullMatch={false}>
                                     <div className="layout__sidebar-menu-section">
                                         <NavLink className="layout__sidebar-menu-link" to="/homework-assessment/" disabled>
@@ -73,7 +68,7 @@ export default class SideBar extends React.Component{
                                     </div>
                                 </ConditionalRenderer>
                                 <ConditionalRenderer
-                                    requiredRoles={adminRoles}
+                                    requiredRoles={ADMIN_ROLES}
                                     fullMatch={false}>
                                     <div className="layout__sidebar-menu-section">
                                         <NavLink className="layout__sidebar-menu-link" to="/admin/">
@@ -85,10 +80,12 @@ export default class SideBar extends React.Component{
                                     </div>
                                 </ConditionalRenderer>
                             </div>
-                            <Contacts contacts={{vk: 'https://vk.com/egehack', ig: 'https://www.instagram.com/ege_hack_math/'}}/>
-                            <div className="layout__sidebar-copyright font-size-sm font-light-grey">
-                                Все права защищены<br/>
-                                "ЕГЭHACK"
+                            <div className="layout__sidebar-footer">
+                                <Contacts contacts={{vk: 'https://vk.com/egehack', ig: 'https://www.instagram.com/ege_hack_math/'}}/>
+                                <div className="layout__sidebar-copyright font-size-sm font-light-grey">
+                                    Все права защищены<br/>
+                                    "ЕГЭHACK"
+                                </div>
                             </div>
                         </div>
                     )}

@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import Page, {PageContent} from "components/Page";
-import ErrorPage from "components/ErrorPage";
+import {NotFoundErrorPage} from "components/ErrorPage";
 import Lesson from "components/common/Lesson";
 import List from "components/common/List";
 import LessonView from "./LessonView";
@@ -69,7 +69,7 @@ const LessonPage = (props) => {
                 </Page>
             );
         } else
-            return <ErrorPage errorCode={404} message="Урок не найден" />;
+            return <NotFoundErrorPage message="Урок не найден"/>;
     } else {
         return (
             <Page isLoaded={false} location={location}/>

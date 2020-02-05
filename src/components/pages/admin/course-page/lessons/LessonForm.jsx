@@ -137,7 +137,7 @@ const LessonForm = (props) => {
             onSubmit={onSubmit}
             onSubmitted={onSubmitted}
             onError={onError}
-            cancelLink={`/shop/${courseId}/`}>
+            cancelLink={`/admin/${courseId}/lessons/`}>
             <div className="row">
                 <div className="preview-container col-12 col-md-auto">
                     <Input.ImageInput
