@@ -6,8 +6,8 @@ import Page, {PageContent} from "components/Page";
 import Lesson from "components/common/Lesson";
 import Catalog from "components/common/Catalog";
 import Button from "components/ui/Button";
-import ConditionalRenderer, {useCheckPermissions} from "../../../../ConditionalRender";
-import {useDeleteCourse, useDeleteLesson} from "../../../../../store";
+import {useCheckPermissions} from "components/ConditionalRender";
+import {useDeleteLesson} from "store";
 
 const filterBy = {
     search: true,
@@ -46,7 +46,6 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
                 {/*<div className="list__item-action-info">{renderDate(date, renderDate.shortDate)}</div>*/}
                 {canEdit && (
                     <DropdownMenu
-                        className="user-nav"
                         content={<DropdownIconButton className="icon-ellipsis"/>}>
                         <DropdownMenuOption
                             tag={Link}

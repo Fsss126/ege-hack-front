@@ -1192,22 +1192,22 @@ header {
 
   .tab-nav-container {
     padding-bottom: 0;
+  }
 
-    .tab-nav-container__title-container {
+  .title-with-menu {
+    display: flex;
+
+    .title-with-menu__action {
+      order: 1;
+      align-self: flex-start;
+      min-height: 36px;
       display: flex;
+      align-items: center;
+      padding-left: 8px;
+    }
 
-      .tab-nav-container__action {
-        order: 1;
-        align-self: flex-start;
-        min-height: 36px;
-        display: flex;
-        align-items: center;
-        padding-left: 8px;
-      }
-
-      .tab-nav-container__title {
-        flex-grow: 1;
-      }
+    .title-with-menu__title {
+      flex-grow: 1;
     }
   }
 

@@ -85,7 +85,6 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
             <Webinar key={id} webinar={webinar} {...rest}>
                 {canEdit && (
                     <DropdownMenu
-                        className="user-nav"
                         content={<DropdownIconButton className="icon-ellipsis"/>}>
                         <DropdownMenuOption
                             tag={Link}

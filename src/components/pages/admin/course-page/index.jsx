@@ -32,11 +32,10 @@ const CoursePage = (props) => {
     const courseLink = `${match.url}/`;
     const header = isLoaded && (
         <div className="layout__content-block tab-nav-container">
-            <div className="tab-nav-container__title-container">
-                <div className="tab-nav-container__action">
+            <div className="title-with-menu">
+                <div className="title-with-menu__action">
                     {canEdit && (
                         <DropdownMenu
-                            className="user-nav"
                             content={<DropdownIconButton className="icon-ellipsis"/>}>
                             <DropdownMenuOption
                                 tag={Link}
@@ -46,10 +45,17 @@ const CoursePage = (props) => {
                             <DropdownMenuOption onClick={deleteCallback}>
                                 <i className="icon-close"/>Удалить курс
                             </DropdownMenuOption>
+                            {!course.hide_from_market && (
+                                <DropdownMenuOption
+                                    tag={Link}
+                                    to={`/shop/${courseId}/`}>
+                                    <i className="icon-logout"/>Открыть в магазине
+                                </DropdownMenuOption>
+                            )}
                         </DropdownMenu>
                     )}
                 </div>
-                <div className="tab-nav-container__title">
+                <div className="title-with-menu__title">
                     <h2>{course.name}</h2>
                 </div>
             </div>

@@ -25,19 +25,19 @@ const CourseCatalogPage = ({location, path, children: header}) => {
     const canEdit = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
 
     const renderCourse = useCallback((course, {link, ...rest}) => {
+        const {id, hide_from_market} = course;
         const courseLink = `${path}/${link}`;
-        const deleteCallback = () => { onDelete(course.id) };
+        const deleteCallback = () => { onDelete(id) };
         return (
             <Course
                 course={course}
                 selectable
-                key={course.id}
+                key={id}
                 link={courseLink}
                 noOnClickOnAction
                 {...rest}>
                 {canEdit && (
                     <DropdownMenu
-                        className="user-nav"
                         content={<DropdownIconButton className="icon-ellipsis"/>}>
                         <DropdownMenuOption
                             tag={Link}
@@ -52,6 +52,13 @@ const CourseCatalogPage = ({location, path, children: header}) => {
                             to={`${courseLink}lessons/create/`}>
                             <i className="icon-add"/>Добавить урок
                         </DropdownMenuOption>
+                        {!hide_from_market && (
+                            <DropdownMenuOption
+                                tag={Link}
+                                to={`/shop/${id}/`}>
+                                <i className="icon-logout"/>Открыть в магазине
+                            </DropdownMenuOption>
+                        )}
                     </DropdownMenu>
                 )}
             </Course>

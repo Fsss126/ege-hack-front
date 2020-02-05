@@ -6,6 +6,10 @@ import List from "./List";
 import Teacher from "./Teacher";
 import Page, {PageLink} from "../Page";
 import {NotFoundErrorPage} from "../ErrorPage";
+import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "./DropdownMenu";
+import {Link} from "react-router-dom";
+import ConditionalRenderer from "../ConditionalRender";
+import {ADMIN_ROLES} from "../../definitions/constants";
 
 window._ = _;
 
@@ -26,7 +30,23 @@ const Description = () => {
         <React.Fragment>
             <CoverImage src={course.image_link} className="course-overview__cover"/>
             <div className="course-overview__info layout__content-block">
-                <h2>{course.name}</h2>
+                <div className="title-with-menu">
+                    <div className="title-with-menu__action">
+                        <ConditionalRenderer requiredRoles={ADMIN_ROLES} fullMatch={false}>
+                            <DropdownMenu
+                                content={<DropdownIconButton className="icon-ellipsis"/>}>
+                                <DropdownMenuOption
+                                    tag={Link}
+                                    to={`/admin/${course.id}/`}>
+                                    <i className="icon-logout"/>Управление курсом
+                                </DropdownMenuOption>
+                            </DropdownMenu>
+                        </ConditionalRenderer>
+                    </div>
+                    <div className="title-with-menu__title">
+                        <h2>{course.name}</h2>
+                    </div>
+                </div>
                 <div className="course-overview__summary">
                     <div className="col-auto course-overview__summary-item">
                         <i className="far fa-calendar-alt"/>
