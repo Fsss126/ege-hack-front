@@ -16,7 +16,6 @@ const filterBy = {
     online: true
 };
 
-//TODO: Editing mode
 const CourseCatalogPage = ({location, path, children: header}) => {
     const {catalog, error, retry} = useAdminCourses();
     const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();

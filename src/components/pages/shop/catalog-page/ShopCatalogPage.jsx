@@ -1,17 +1,12 @@
 import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
-import SelectedCoursesTab from "../SelectedCoursesTab";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import {useShopCatalog, useSubjects} from "store";
-import {Link} from "react-router-dom";
-import ConditionalRenderer from "components/ConditionalRender";
-import {PERMISSIONS} from "definitions/constants";
 import {useToggle} from "hooks/common";
 import {renderPrice} from "definitions/helpers";
 
-//TODO: Editing mode
 const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, location}) => {
     const {catalog, error, retry} = useShopCatalog();
     const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();

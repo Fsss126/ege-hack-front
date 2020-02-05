@@ -8,7 +8,6 @@ import Button from "components/ui/Button";
 import {useToggle} from "hooks/common";
 import {NotFoundErrorPage} from "components/ErrorPage";
 
-//TODO: fix 404 error screen
 const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, path: root, location, match}) => {
     const {params: {id: param_id}} = match;
     const courseId = parseInt(param_id);

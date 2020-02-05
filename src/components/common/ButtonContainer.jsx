@@ -2,7 +2,6 @@ import React, {forwardRef} from "react";
 import classnames from 'classnames';
 import ScrollBars from "../ui/ScrollBars";
 
-//TODO: scroll to active element
 const ButtonContainer = ({children, className, ...scrollbarProps}, ref) => {
     // const location = useLocation();
     // const scrollBarsRef = useRef(null);

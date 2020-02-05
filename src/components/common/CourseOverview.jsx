@@ -74,7 +74,6 @@ const Title = () => {
     );
 };
 
-//TODO: error boundaries
 const Teachers = () => {
     const {course, teachers} = React.useContext(CourseOverviewContext);
     return (

@@ -32,7 +32,6 @@ export function useFilterCallback() {
     }, [location, history]);
 }
 
-//TODO: add search input
 const Filter = ({filterBy: {subject:filterBySubject = true, online:filterByOnline = true, search = false}={}, children}) => {
     const {options, subject, online, search: searchKey} = React.useContext(CatalogContext);
     const onChange = useFilterCallback();

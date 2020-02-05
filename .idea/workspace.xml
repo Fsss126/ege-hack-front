@@ -6,28 +6,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/common/ButtonContainer.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/TabNav.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/TabNav.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/ButtonContainer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/ButtonContainer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Catalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Catalog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCreatingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseEditingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonCreatingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonEditingPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/TimeInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/TimeInput.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -247,7 +235,7 @@
       <workItem from="1579294041201" duration="222000" />
       <workItem from="1579517515853" duration="31684000" />
       <workItem from="1579814341283" duration="13947000" />
-      <workItem from="1580830246492" duration="39251000" />
+      <workItem from="1580830246492" duration="39889000" />
     </task>
     <task id="LOCAL-00001" summary="Initial stage">
       <created>1567014085290</created>
@@ -480,7 +468,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580878961590</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Added deleting; Fixed forms; Fixed required attributes; Added new form fields">
+      <created>1580918032501</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1580918032501</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -500,7 +495,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Commit icons and img resources" />
     <MESSAGE value="Added shop and teachers API" />
     <MESSAGE value="Hash routing; Prod and dev env" />
     <MESSAGE value="Lessons" />
@@ -525,7 +519,8 @@
     <MESSAGE value="Admin pages" />
     <MESSAGE value="Webinars editing" />
     <MESSAGE value="Webinars style fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Webinars style fixes" />
+    <MESSAGE value="Added deleting; Fixed forms; Fixed required attributes; Added new form fields" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added deleting; Fixed forms; Fixed required attributes; Added new form fields" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -545,11 +540,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-    <state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580878961447">
+    <state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580918032317">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770433321" />
-    <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580878961447" />
+    <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580918032317" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1580902914238">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -611,11 +606,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="570" y="373" key="VCS.ChangelistChooser/0.0.1440.900@0.0.1440.900" timestamp="1580769269270" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1580878963608">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1580918038873">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770435032" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580878963608" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580918038873" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

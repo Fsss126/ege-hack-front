@@ -66,6 +66,8 @@ const LayoutAnimationClassNames = {
     exitActive: 'sidebar-hiding'
 };
 
+//TODO: check error and show popup
+//TODO: parent sections using context
 const Page = ({
                   title,
                   className,

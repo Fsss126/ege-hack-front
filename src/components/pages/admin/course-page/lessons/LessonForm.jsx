@@ -18,7 +18,6 @@ const INITIAL_FORM_DATA = {
     hometask_deadline: null
 };
 
-//TODO: check that course exists
 function getRequestData(formData, courseId) {
     const {name, image, num, video_link, description, is_locked, attachments, hometask_description, hometask_file, hometask_deadline} = formData;
     const requestData = {

@@ -24,7 +24,6 @@ const INITIAL_WEBINAR_DATA = {
     duration: ''
 };
 
-//TODO: check that course exists
 function getRequestData(formData, courseId) {
     const {image, click_meeting_link, webinars} = formData;
     return {
