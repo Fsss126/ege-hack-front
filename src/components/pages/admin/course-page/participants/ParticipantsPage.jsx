@@ -7,6 +7,7 @@ import Catalog from "components/common/Catalog";
 import {Link} from "react-router-dom";
 import Button from "components/ui/Button";
 import {useCheckPermissions} from "../../../../ConditionalRender";
+import {PermissionsDeniedErrorPage} from "../../../../ErrorPage";
 
 const filterBy = {
     search: true,
@@ -51,8 +52,7 @@ const ParticipantsPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredRoles={ADMIN_ROLES}
-            fullMatch={false}
+            requiredPermissions={PERMISSIONS.PARTICIPANT_MANAGEMENT}
             className="admin-page admin-page--participants"
             title={title}
             location={location}>

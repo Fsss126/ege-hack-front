@@ -5,14 +5,15 @@
     <option name="CUSTOM_SCOPE_NAME" value="Module 'ege-hack'" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Added navigation">
+    <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseOverview.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +54,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/node_modules/react-router-dom/package.json&#10;true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/pages/admin/courses" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/pages/teaching" />
     <property name="list.type.of.created.stylesheet" value="SCSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -79,11 +80,11 @@
       <recent name="$PROJECT_DIR$/src/components" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/pages/teaching" />
       <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
       <recent name="$PROJECT_DIR$/src/fonts" />
       <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
       <recent name="$PROJECT_DIR$/src/components/ui" />
-      <recent name="$PROJECT_DIR$/src/sass" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start-custom-post-mac">
@@ -232,7 +233,7 @@
       <workItem from="1579294041201" duration="222000" />
       <workItem from="1579517515853" duration="31684000" />
       <workItem from="1579814341283" duration="13947000" />
-      <workItem from="1580830246492" duration="41863000" />
+      <workItem from="1580830246492" duration="49550000" />
     </task>
     <task id="LOCAL-00001" summary="Initial stage">
       <created>1567014085290</created>
@@ -479,7 +480,21 @@
       <option name="project" value="LOCAL" />
       <updated>1580918392418</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Added navigation between admin and shop">
+      <created>1580922234014</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1580922234014</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Teaching pages">
+      <created>1580977654492</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1580977654492</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -499,8 +514,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Hash routing; Prod and dev env" />
-    <MESSAGE value="Lessons" />
     <MESSAGE value="Video player" />
     <MESSAGE value="User courses; Homework upload; Sidebar shimmer" />
     <MESSAGE value="Sidebar fix" />
@@ -524,7 +537,9 @@
     <MESSAGE value="Webinars style fixes" />
     <MESSAGE value="Added deleting; Fixed forms; Fixed required attributes; Added new form fields" />
     <MESSAGE value="Updated TODOs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated TODOs" />
+    <MESSAGE value="Added navigation between admin and shop" />
+    <MESSAGE value="Teaching pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="Teaching pages" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -540,15 +555,16 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1579963154011" />
-    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1578350731245">
+    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1580947533388">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580947533388" />
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-    <state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580918819150">
+    <state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580979339570">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770433321" />
-    <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580918819150" />
+    <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580979339570" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1580921614881">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -569,29 +585,29 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="475" y="324" key="Github.CreatePullRequestDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580179636246" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1580920404063">
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1580946343134">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580806074609" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1580920404063" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343134" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1580922394880" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1580920404062">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1580946343132">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580806074606" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1580920404062" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343132" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1580922394879" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1580920404061">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1580946343131">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580806074605" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1580920404061" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343131" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1580922394878" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1580920404063">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1580946343133">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580806074608" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1580920404063" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343133" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1580922394879" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1580770480909">
       <screen x="0" y="0" width="1440" height="900" />
@@ -610,11 +626,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="570" y="373" key="VCS.ChangelistChooser/0.0.1440.900@0.0.1440.900" timestamp="1580769269270" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1580918396320">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1580922239199">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770435032" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580918396320" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580922239199" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

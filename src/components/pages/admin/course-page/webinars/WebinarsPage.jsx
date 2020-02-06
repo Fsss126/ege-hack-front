@@ -13,6 +13,7 @@ import PosterCover from "components/common/PosterCover";
 import Countdown from "react-countdown-now";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteWebinar} from "store";
+import {PermissionsDeniedErrorPage} from "../../../../ErrorPage";
 
 const filterBy = {
     search: true,
@@ -104,8 +105,7 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
         <Page
             isLoaded={isLoaded}
             loadUserInfo
-            requiredRoles={ADMIN_ROLES}
-            fullMatch={false}
+            requiredPermissions={PERMISSIONS.WEBINAR_EDIT}
             className="admin-page admin-page--webinars"
             title={title}
             location={location}>

@@ -1,10 +1,7 @@
 import _ from 'lodash';
- import {useUser} from "store";
+import {useUser} from "store";
 
-export function useCheckPermissions(requiredPermissions, requiredRoles, fullMatch = true) {
-    const {userInfo} = useUser();
-    if (!userInfo)
-        return undefined;
+export function checkPermissions(userInfo, requiredPermissions, requiredRoles, fullMatch = true) {
     const {permissions, roles} = userInfo;
     if (requiredPermissions) {
         if (!(fullMatch
@@ -19,6 +16,13 @@ export function useCheckPermissions(requiredPermissions, requiredRoles, fullMatc
             return false;
     }
     return true;
+}
+
+export function useCheckPermissions(requiredPermissions, requiredRoles, fullMatch) {
+    const {userInfo} = useUser();
+    if (!userInfo)
+        return undefined;
+    return checkPermissions(userInfo, requiredPermissions, requiredRoles, fullMatch);
 }
 
 const ConditionalRenderer = ({requiredPermissions, requiredRoles, children, fullMatch}) => {

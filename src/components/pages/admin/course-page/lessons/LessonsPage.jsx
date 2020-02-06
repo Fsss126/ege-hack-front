@@ -8,6 +8,7 @@ import Catalog from "components/common/Catalog";
 import Button from "components/ui/Button";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteLesson} from "store";
+import {PermissionsDeniedErrorPage} from "../../../../ErrorPage";
 
 const filterBy = {
     search: true,
@@ -25,7 +26,7 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
     const {params: {courseId: param_id}} = match;
     const courseId = parseInt(param_id);
 
-    const canEdit = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
+    const canEdit = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
 
     const onDelete = useDeleteLesson();
 
@@ -59,14 +60,13 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
                 )}
             </Lesson>
         );
-    }, [path, courseId, canEdit]);
+    }, [path, courseId, canEdit, onDelete]);
     const title = course && `Уроки курса ${course.name}`;
     return (
         <Page
             isLoaded={isLoaded}
             loadUserInfo
-            requiredRoles={ADMIN_ROLES}
-            fullMatch={false}
+            requiredPermissions={PERMISSIONS.LESSON_EDIT}
             className="admin-page admin-page--lessons"
             title={title}
             location={location}>

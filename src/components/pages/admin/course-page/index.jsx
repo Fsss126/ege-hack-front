@@ -1,5 +1,11 @@
 import React, {useCallback} from "react";
-import {useAdminCourse, useAdminWebinars, useDeleteCourse, useLessons, useParticipants, useSubjects} from "store";
+import {
+    useAdminCourse,
+    useAdminLessons,
+    useAdminWebinars,
+    useDeleteCourse,
+    useParticipants
+} from "store";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
 import TabNav, {TabNavLink} from "components/common/TabNav";
 import ParticipantsPage from "./participants/ParticipantsPage";
@@ -16,12 +22,14 @@ const CoursePage = (props) => {
     const courseId = parseInt(param_id);
     const {course, error, retry} = useAdminCourse(courseId);
     const {participants, error: errorLoadingParticipants, reload: reloadParticipants} = useParticipants(courseId);
-    const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
+    const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useAdminLessons(courseId);
     const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
+    const isLoaded = !!(course !== undefined && participants !== undefined && lessons !== undefined && webinars !== undefined);
 
-    const isLoaded = !!(course && participants && lessons && webinars);
-
-    const canEdit = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
+    const canEditCourse = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
+    // const canEditLessons = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
+    // const canEditParticipants = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
+    // const canEditWebinars = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
 
     const parentPage = `${root}/`;
     const onDelete = useDeleteCourse(parentPage);
@@ -34,7 +42,7 @@ const CoursePage = (props) => {
         <div className="layout__content-block tab-nav-container">
             <div className="title-with-menu">
                 <div className="title-with-menu__action">
-                    {canEdit && (
+                    {canEditCourse && (
                         <DropdownMenu
                             content={<DropdownIconButton className="icon-ellipsis"/>}>
                             <DropdownMenuOption
@@ -60,9 +68,15 @@ const CoursePage = (props) => {
                 </div>
             </div>
             <TabNav>
-                <TabNavLink to={`${match.url}/lessons/`}>Уроки <span className="badge">{lessons.length}</span></TabNavLink>
-                <TabNavLink to={`${match.url}/participants/`}>Ученики <span className="badge">{participants.length}</span></TabNavLink>
-                <TabNavLink to={`${match.url}/webinars/`}>Вебинары <span className="badge">{webinars.webinars.length}</span></TabNavLink>
+                <TabNavLink to={`${match.url}/lessons/`} disabled={lessons === false}>
+                    Уроки {lessons && <span className="badge">{lessons.length}</span>}
+                </TabNavLink>
+                <TabNavLink to={`${match.url}/participants/`} disabled={participants === false}>
+                    Ученики {participants && <span className="badge">{participants.length}</span>}
+                </TabNavLink>
+                <TabNavLink to={`${match.url}/webinars/`} disabled={webinars === false}>
+                    Вебинары {webinars && <span className="badge">{webinars.webinars.length}</span>}
+                </TabNavLink>
                 <TabNavLink to={`${match.url}/teachers/`} disabled>Преподаватели</TabNavLink>
                 <TabNavLink to={`${match.url}/teachers/`} disabled>Календарь</TabNavLink>
             </TabNav>
