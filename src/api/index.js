@@ -108,7 +108,7 @@ const transformData = (response) => {
             if (config.method === 'get') {
                 return data.map((course) => ({
                     ...transformCourse(course),
-                    status: config.params.group === 'PERSON' ? LEARNING_STATUS.learning : undefined
+                    status: config.params && config.params.group === 'PERSON' ? LEARNING_STATUS.learning : undefined
                 }));
             } else {
                 return transformCourse(data);

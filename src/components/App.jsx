@@ -13,6 +13,7 @@ import Admin from "./pages/admin";
 
 import 'sass/index.scss';
 import ErrorPage from "./ErrorPage";
+import Teaching from "./pages/teaching";
 
 function useLocationChangeEffect(effect) {
     const history = useHistory();
@@ -81,6 +82,7 @@ function App() {
                 <Route path="/teachers" component={Teachers}/>
                 <Route path="/account" component={Account}/>
                 <Route path="/admin" component={Admin}/>
+                <Route path="/teaching" component={Teaching}/>
                 {/*<Route path="/:section" component={Page}/>*/}
                 <Route component={ErrorPage}/>
             </Switch>

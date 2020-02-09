@@ -55,7 +55,7 @@ export default class SideBar extends React.Component{
                                     requiredRoles={TEACHER_ROLES}
                                     fullMatch={false}>
                                     <div className="layout__sidebar-menu-section">
-                                        <NavLink className="layout__sidebar-menu-link" to="/homework-assessment/" disabled>
+                                        <NavLink className="layout__sidebar-menu-link" to="/teaching/">
                                             <span>Проверка работ</span>
                                             {' '}
                                             <span className="badge accent">Скоро</span>
