@@ -520,11 +520,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1580136342364">
+    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1581440218437">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1579813419237" />
-    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580136342364" />
+    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581440218437" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1579915064422">
       <screen x="0" y="23" width="1440" height="820" />
     </state>
@@ -537,47 +537,51 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1580167996519">
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1581440307399">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580167996519" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1579970249461" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581440307399" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1580167996516">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1581440307397">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580167996516" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1579970249460" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581440307397" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1580167996515">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1581440307395">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580167996515" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1579970249459" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581440307395" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1580167996518">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1581440307398">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580167996518" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1579970249460" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581440307398" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1575496047285">
+    <state x="144" y="79" key="MergeDialog" timestamp="1581440282709">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1575496047285" />
-    <state x="368" y="168" key="RollbackChangesDialog" timestamp="1578521844521">
+    <state x="144" y="79" key="MergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1581440282709" />
+    <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1581440282732">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="368" y="168" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578521844521" />
+    <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1581440282732" />
+    <state x="368" y="168" key="RollbackChangesDialog" timestamp="1581440153459">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="368" y="168" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1581440153459" />
     <state x="221" y="89" key="SettingsEditor" timestamp="1575726108474">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1575726108474" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1579813524441">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1581440225845">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1579813524441" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1579716713982" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581440225845" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
