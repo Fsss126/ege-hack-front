@@ -1,1 +1,0 @@
-# EGEhack-platform-front
