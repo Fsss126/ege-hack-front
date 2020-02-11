@@ -1,6 +1,5 @@
 import React from 'react';
 import classnames from 'classnames';
-import _ from 'lodash';
 import {Helmet} from "react-helmet";
 import Sticky from 'react-sticky-el';
 import {Link, Redirect} from "react-router-dom";
@@ -9,8 +8,8 @@ import Header from "./Header";
 import {CSSTransition} from "react-transition-group";
 import SideBar from "./SideBar";
 import {useSideBarState} from "./App";
-import {PermissionsDeniedError} from "./ErrorPage";
-import {checkInclusion} from "../definitions/helpers";
+import {PermissionsDeniedErrorPage} from "./ErrorPage";
+import {useCheckPermissions} from "./ConditionalRender";
 
 const PageLoadingPlaceholder = () => (
     <div className="layout__content">
@@ -67,6 +66,8 @@ const LayoutAnimationClassNames = {
     exitActive: 'sidebar-hiding'
 };
 
+//TODO: check error and show popup
+//TODO: parent sections using context
 const Page = ({
                   title,
                   className,
@@ -77,12 +78,15 @@ const Page = ({
                   showUserNav = true,
                   location,
                   requiredPermissions,
+                  requiredRoles,
+                  fullMatch,
                   loadUserInfo = false,
                   isLoaded = true,
               }) => {
     const [isSideBarOpened, toggleSideBar] = useSideBarState();
     const {user, userInfo} = useUser();
 
+    const permissionsSatisfied = useCheckPermissions(requiredPermissions, requiredRoles, fullMatch);
     if (checkLogin) {
         if (user === null) {
             return (
@@ -91,13 +95,11 @@ const Page = ({
                     state: location ? {referrer: location.pathname} : undefined
                 }}/>);
         }
-        if (requiredPermissions && userInfo && userInfo.permissions) {
-            if (!checkInclusion(requiredPermissions, userInfo.permissions))
-                return <PermissionsDeniedError/>;
+        if (permissionsSatisfied === false) {
+            return <PermissionsDeniedErrorPage/>;
         }
     }
     const showContent = (checkLogin ? (requiredPermissions || loadUserInfo ? user && userInfo : !!user) : true) && isLoaded;
-    console.log(showContent);
     return (
         <div className="app">
             {showHeader && (

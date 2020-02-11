@@ -5,13 +5,9 @@ import CoursePrice from "./CoursePrice";
 import Lesson from "components/common/Lesson";
 import {useTeachers, useLessons, useDiscount, useShopCourse} from "store";
 import Button from "components/ui/Button";
-import {Link} from "react-router-dom";
-import ConditionalRenderer from "components/ConditionalRender";
-import {PERMISSIONS} from "definitions/constants";
 import {useToggle} from "hooks/common";
-import ErrorPage from "components/ErrorPage";
+import {NotFoundErrorPage} from "components/ErrorPage";
 
-//TODO: fix 404 error screen
 const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, path: root, location, match}) => {
     const {params: {id: param_id}} = match;
     const courseId = parseInt(param_id);
@@ -53,36 +49,6 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
                             retry={reloadDiscount}/>
                     )}
                     <CourseOverview.Teachers/>
-                    <ConditionalRenderer
-                        requiredPermissions={PERMISSIONS.LESSON_EDIT}>
-                        <div className="layout__content-block btn-container">
-                            <Button
-                                tag={Link}
-                                to={`/courses/${courseId}/edit/`}>
-                                Изменить
-                            </Button>
-                            {' '}
-                            <Button
-                                tag={Link}
-                                to={`/courses/${courseId}/create_lesson`}
-                                icon={<i className="icon-add"/>}>
-                                Добавить урок
-                            </Button>
-                            {' '}
-                            {lessons.length > 0 && (
-                                <Button
-                                    onClick={toggleEditing}>
-                                    {isEditing ? 'Сохранить уроки' : 'Редактировать уроки'}
-                                </Button>
-                            )}
-                            {' '}
-                            <Button
-                                tag={Link}
-                                to={`/courses/${courseId}/participants/`}>
-                                Ученики
-                            </Button>
-                        </div>
-                    </ConditionalRenderer>
                     <CourseOverview.Lessons renderLesson={renderLesson}/>
                 </PageContent>
                 {!isEditing && selectedCoursesTab}
@@ -90,7 +56,7 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
         );
     }
     else if (error) {
-        return <ErrorPage errorCode={404} message="Курс не найден" link={{url: root}}/>;
+        return <NotFoundErrorPage message="Курс не найден" link={{url: root}}/>;
     }
     else {
         return (

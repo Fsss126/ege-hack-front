@@ -1,21 +1,32 @@
+import _ from 'lodash';
 import {useUser} from "store";
-import {checkInclusion} from "definitions/helpers";
 
-export function useCheckPermissions(requiredPermissions, requiredRoles) {
-    const {userInfo} = useUser();
+export function checkPermissions(userInfo, requiredPermissions, requiredRoles, fullMatch = true) {
+    const {permissions, roles} = userInfo;
     if (requiredPermissions) {
-        if (!(userInfo && userInfo.permissions && checkInclusion(requiredPermissions, userInfo.permissions)))
+        if (!(fullMatch
+            ? _.includes(permissions, requiredPermissions)
+            : _.intersection(permissions, requiredPermissions).length !== 0))
             return false;
     }
     if (requiredRoles) {
-        if (!(userInfo && userInfo.role && checkInclusion(requiredPermissions, userInfo.permissions)))
+        if (!(fullMatch
+            ? _.includes(roles, requiredRoles)
+            : _.intersection(roles, requiredRoles).length !== 0))
             return false;
     }
     return true;
 }
 
-const ConditionalRenderer = ({requiredPermissions, requiredRoles, children}) => {
-    const render = useCheckPermissions(requiredPermissions, requiredRoles);
+export function useCheckPermissions(requiredPermissions, requiredRoles, fullMatch) {
+    const {userInfo} = useUser();
+    if (!userInfo)
+        return undefined;
+    return checkPermissions(userInfo, requiredPermissions, requiredRoles, fullMatch);
+}
+
+const ConditionalRenderer = ({requiredPermissions, requiredRoles, children, fullMatch}) => {
+    const render = useCheckPermissions(requiredPermissions, requiredRoles, fullMatch);
     return render ? children : null;
 };
 

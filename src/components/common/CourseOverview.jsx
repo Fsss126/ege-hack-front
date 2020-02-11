@@ -1,11 +1,15 @@
 import React from 'react';
 import _ from 'lodash';
 import CoverImage from "components/common/CoverImage";
-import {renderDate} from "../../definitions/helpers";
+import {renderDate} from "definitions/helpers";
 import List from "./List";
 import Teacher from "./Teacher";
 import Page, {PageLink} from "../Page";
-import ErrorPage from "../ErrorPage";
+import {NotFoundErrorPage} from "../ErrorPage";
+import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "./DropdownMenu";
+import {Link} from "react-router-dom";
+import ConditionalRenderer from "../ConditionalRender";
+import {ADMIN_ROLES} from "../../definitions/constants";
 
 window._ = _;
 
@@ -14,22 +18,65 @@ CourseOverviewContext.displayName = 'CourseOverviewContext';
 
 const Description = () => {
     const {course} = React.useContext(CourseOverviewContext);
+    const now = new Date();
+    const isEnded = course.date_end > now;
+    const {
+        date_start,
+        date_end,
+        description,
+        total_hours
+    } = course;
     return (
         <React.Fragment>
             <CoverImage src={course.image_link} className="course-overview__cover"/>
             <div className="course-overview__info layout__content-block">
-                <h2>{course.name}</h2>
+                <div className="title-with-menu">
+                    <div className="title-with-menu__action">
+                        <ConditionalRenderer requiredRoles={ADMIN_ROLES} fullMatch={false}>
+                            <DropdownMenu
+                                content={<DropdownIconButton className="icon-ellipsis"/>}>
+                                <DropdownMenuOption
+                                    tag={Link}
+                                    to={`/admin/${course.id}/`}>
+                                    <i className="icon-logout"/>Управление курсом
+                                </DropdownMenuOption>
+                            </DropdownMenu>
+                        </ConditionalRenderer>
+                    </div>
+                    <div className="title-with-menu__title">
+                        <h2>{course.name}</h2>
+                    </div>
+                </div>
                 <div className="course-overview__summary">
                     <div className="col-auto course-overview__summary-item">
                         <i className="far fa-calendar-alt"/>
-                        Начало: {renderDate(course.date_start, renderDate.date)}
+                        {
+                            isEnded ? (
+                                <div className="d-inline-block align-top">
+                                    <div>Начался: {
+                                        renderDate(date_start, now.getFullYear() > date_end.getFullYear() ? renderDate.dateWithYear : renderDate.date)
+                                    }</div>
+                                    <div>Закончился: {
+                                        renderDate(date_end, now.getFullYear() > date_end.getFullYear() ? renderDate.dateWithYear : renderDate.date)
+                                    }</div>
+                                </div>
+                            ) : (
+                                <div className="d-inline-block align-top">
+                                    <div>Начало: {renderDate(date_start, renderDate.date)}</div>
+                                    <div>Окончание: {renderDate(date_end, renderDate.date)}</div>
+                                </div>
+                            )
+                        }
                     </div>
-                    <div className="col-auto course-overview__summary-item">
-                        <i className="far fa-clock"/>
-                        Длительность: {course.total_hours} часов
-                    </div>
+                    {
+                        total_hours && (
+                            <div className="col-auto course-overview__summary-item">
+                                <i className="far fa-clock"/>
+                                Длительность: {total_hours} часов
+                            </div>
+                        )}
                 </div>
-                <div className="description-text font-size-sm">{course.description}</div>
+                <div className="description-text font-size-sm">{description}</div>
             </div>
         </React.Fragment>
     );
@@ -47,7 +94,6 @@ const Title = () => {
     );
 };
 
-//TODO: error boundaries
 const Teachers = () => {
     const {course, teachers} = React.useContext(CourseOverviewContext);
     return (
@@ -103,7 +149,7 @@ const CourseOverview = (props) => {
             </Page>
         )
     } else
-        return <ErrorPage errorCode={404} message="Курс не найден" link={{url: root}}/>;
+        return <NotFoundErrorPage message="Курс не найден" link={{url: root}}/>;
 };
 
 export default {

@@ -4,6 +4,7 @@ import Page, {PageContent} from "components/Page";
 import {PERMISSIONS} from "definitions/constants";
 import * as Input from "components/ui/input";
 import Form, {useForm} from "components/ui/Form";
+import {useRevokeParticipants} from "store";
 
 const INITIAL_FORM_DATA = {
     accounts: ''
@@ -15,6 +16,8 @@ function getRequestData(formData) {
         accounts: accounts.split(/\s/)
     };
 }
+
+const returnLink = '..';
 
 const ParticipantsEditingPage = (props) => {
     const {match: {params: {courseId: param_course}}, location} = props;
@@ -40,11 +43,11 @@ const ParticipantsEditingPage = (props) => {
                 text: 'Ок'
             },
             {
-                text: 'Вернуться к курсу',
-                url: `/shop/${courseId}/`
+                text: 'Вернуться к ученикам',
+                url: returnLink
             }
         ]);
-    }, [courseId]);
+    }, []);
 
     const onError = React.useCallback((error, showErrorMessage, reloadCallback) => {
         showErrorMessage("Ошибка при выполнении запроса", [
@@ -57,6 +60,8 @@ const ParticipantsEditingPage = (props) => {
             }
         ]);
     }, []);
+
+    const revokeParticipants = useRevokeParticipants(courseId);
 
     const isLoaded = true;
     return (
@@ -76,8 +81,9 @@ const ParticipantsEditingPage = (props) => {
                             reset={reset}
                             onSubmit={onSubmit}
                             onSubmitted={onSubmitted}
+                            revokeRelatedData={revokeParticipants}
                             onError={onError}
-                            cancelLink='..'>
+                            cancelLink={returnLink}>
                             <Input.TextArea
                                 name="accounts"
                                 required

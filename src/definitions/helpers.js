@@ -15,13 +15,24 @@ Object.assign(renderDate, {
         day: 'numeric',
         month: 'long'
     },
+    dateWithYear: {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    },
+    dateWithHour: {
+        day: 'numeric',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit'
+    },
     shortDate: {
         day: 'numeric',
         month: 'numeric'
     },
-    hour: {
-        hour: 'numeric',
-        minute: 'numeric'
+    time: {
+        hour: '2-digit',
+        minute: '2-digit'
     }
 });
 
@@ -52,8 +63,6 @@ export const downloadFile = async (url, name) => {
         link.dispatchEvent(event);
     }
 };
-
-export const checkInclusion = (value, superset) => value instanceof Array ? _.difference(value, superset).length === 0 : _.includes(superset, value);
 
 export const deviceInfo = new MobileDetect(window.navigator.userAgent);
 

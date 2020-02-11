@@ -9,4 +9,10 @@ function insertAfterEach(array, insertedItem) {
     }, []);
 }
 
-_.mixin({ insertAfterEach });
+const includesValue = _.includes;
+
+function includes(superset, value) {
+    return value instanceof Array ? _.difference(value, superset).length === 0 : includesValue(superset, value);
+}
+
+_.mixin({ insertAfterEach, includes });

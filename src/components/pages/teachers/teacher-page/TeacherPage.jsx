@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import Page, {PageContent} from "components/Page";
-import ErrorPage from "components/ErrorPage";
+import {NotFoundErrorPage} from "components/ErrorPage";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
@@ -72,7 +72,7 @@ const TeacherPage = (props) => {
         );
     }
     else if (error) {
-        return <ErrorPage errorCode={404} message="Преподаватель не найден" link={{url: root}}/>;
+        return <NotFoundErrorPage message="Преподаватель не найден" link={{url: root}}/>;
     }
     else {
         return (

@@ -1,15 +1,16 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useCallback} from 'react';
+import classnames from 'classnames';
 
 function useChangeHandler(callback, inputProp = 'value', parse) {
-    return React.useCallback((event) => {
+    return useCallback((event) => {
         const value = event.currentTarget[inputProp];
         const name = event.currentTarget.name;
         callback(parse ? parse(value) : value, name, event);
     }, [callback, inputProp, parse])
 }
 
-export let CheckBox = ({value, onChange: callback, name, label, ...props}, ref) => {
-    const onChange = useChangeHandler(callback, 'checked');
+export let CheckBox = ({value, onChange: callback, name, label, parse, ...props}, ref) => {
+    const onChange = useChangeHandler(callback, 'checked', parse);
     return (
         <label className={`input input-checkbox`}>
             <input ref={ref} type="checkbox" name={name} checked={value} onChange={onChange} {...props}/>
@@ -48,7 +49,7 @@ export let Input = ({value, className, onChange: callback, type = "text", format
     return (
         <input
             ref={ref}
-            className={`input ${className || ''}`}
+            className={classnames('input', className)}
             required={required}
             placeholder={getPlaceholder(placeholder, required)}
             value={format ? format(value) : value}
@@ -69,7 +70,7 @@ export let TextArea = ({className, onChange: callback, placeholder, required, ..
     return (
         <textarea
             ref={ref}
-            className={`input ${className || ''}`} onChange={onChange}
+            className={classnames('input', className)} onChange={onChange}
             required={required}
             placeholder={getPlaceholder(placeholder, required)}
             {...props}/>

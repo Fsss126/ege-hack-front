@@ -7,6 +7,12 @@ export const DropdownMenuOption = ({tag: Tag = 'div', children, className, ...pr
     </Tag>
 );
 
+export const DropdownIconButton = ({className, ...props}) => {
+    return (
+        <i className={classnames('dropdown__icon-btn', className)} {...props}/>
+    );
+};
+
 const DropdownMenu = ({content, className, children: options}) => {
     return (
         <div className={classnames('dropdown', className)}>

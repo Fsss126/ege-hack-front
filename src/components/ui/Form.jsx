@@ -1,4 +1,5 @@
-import React from "react";
+import React, {Fragment, useCallback} from "react";
+import _ from 'lodash';
 import classnames from 'classnames';
 import Button from "./Button";
 import {LOADING_STATE, LoadingIndicator, useLoadingState} from "./LoadingIndicator";
@@ -67,7 +68,26 @@ export function useForm(initFormData, checkValidity) {
     const [isValid, setValidity] = React.useState(false);
 
     const onInputChange = React.useCallback((value, name) => {
-        setFormData(state => ({...state, [name]: value}));
+        setFormData(state => {
+            if (/\W/.test(name)) {
+                const arrayMatch = name.match(/(.*)\[(.*)\]$/);
+                if (arrayMatch) {
+                    const [, arrayName, indexString] = arrayMatch;
+                    const arrayIndex = parseInt(indexString);
+                    const array = _.get(state, arrayName);
+                    let newArray;
+                    if (arrayIndex >= array.length) {
+                        newArray = [...array];
+                        newArray.push(value)
+                    } else {
+                        newArray = array.filter((element, i) => i !== arrayIndex);
+                    }
+                    return _.set(_.cloneDeep(state), arrayName, newArray);
+                }
+                return _.set(_.cloneDeep(state), name, value);
+            }
+            return {...state, [name]: value};
+        });
     }, []);
 
     const reset = React.useCallback(() => {
@@ -97,9 +117,49 @@ export const FieldsContainer = ({children, className}) => {
       </div>);
 };
 
+export const FormElement = ({index, name, className, onChange, deletable=true, children}) => {
+    const onDelete = useCallback(() => {
+        onChange && onChange(null, `${name}[${index}]`);
+    }, [name, index, onChange]);
+    return (
+        <div className={classnames('form-entity', className)}>
+            {deletable && (
+                <div className="form-entity__delete-btn-container">
+                    <i
+                        className="icon-close"
+                        onClick={onDelete}/>
+                </div>
+            )}
+            {children}
+        </div>
+    );
+};
+
+export const FormElementGroup = ({name, onChange, elements, renderElement, maxElements, initialElementData, addBtnText = 'Добавить элемент'}) => {
+    const elementsCount = elements.length;
+    const onAdd = useCallback(() => {
+        onChange && onChange(_.cloneDeep(initialElementData), `${name}[${elementsCount}]`);
+    }, [name, elementsCount, initialElementData, onChange]);
+    return (
+        <div className="form-entities-group">
+            {elements.map((element, i) => renderElement(element, i))}
+            <div className="form-entities-group__add-btn-container">
+                <Button
+                    neutral
+                    active={maxElements ? elementsCount < maxElements : true}
+                    icon={<i className="icon-add"/>}
+                    onClick={onAdd}>
+                    {addBtnText}
+                </Button>
+            </div>
+        </div>
+    );
+};
+
 const Form = (props, ref) => {
     const {
         title,
+        id,
         className,
         children,
         submitButtonText = 'Сохранить',
@@ -111,7 +171,8 @@ const Form = (props, ref) => {
         reset,
         revokeRelatedData,
         blockNavigation=true,
-        cancelLink
+        cancelLink,
+        withNestedForms=false
     } = props;
 
     const messagePopupRef = React.useRef(null);
@@ -153,12 +214,8 @@ const Form = (props, ref) => {
     //     else
     //         history.push(cancelLink);
     // }, [history, cancelLink]);
-    return (
-        <form
-            ref={ref}
-            onChange={onChange}
-            className={classnames('form', className)}
-            autoComplete={autocomplete}>
+    const content = (
+        <Fragment>
             {title && <h3 className="form__title">{title}</h3>}
             {children}
             <div className="form__action-container btn-container text-right">
@@ -178,6 +235,26 @@ const Form = (props, ref) => {
             </div>
             <MessagePopup ref={messagePopupRef}/>
             {blockNavigation && hasChanged && <NavigationBlocker/>}
+        </Fragment>
+    );
+    return withNestedForms ? (
+        <div
+            className={classnames('form', className)}>
+            <form
+                id={id}
+                ref={ref}
+                onChange={onChange}
+                autoComplete={autocomplete}/>
+            {content}
+        </div>
+    ) : (
+        <form
+            id={id}
+            ref={ref}
+            onChange={onChange}
+            className={classnames('form', className)}
+            autoComplete={autocomplete}>
+            {content}
         </form>
     )
 };

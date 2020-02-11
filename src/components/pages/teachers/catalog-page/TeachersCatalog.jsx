@@ -26,6 +26,9 @@ const TeachersCatalog = (props) => {
     );
 };
 
+const filter = (teacher, {subject}) =>
+    (subject ? teacher.subjects.some(({id}) => subject === id)  : true);
+
 const Body = (props) => {
     const {teachers, subjects, ...otherProps} = props;
 
@@ -38,14 +41,12 @@ const Body = (props) => {
         return _.values(subjectsTeachers).map(({id, name}) => ({value: id, label: name}));
     }, [teachers, subjects]);
 
-    const getMatchingCourses = React.useCallback((subject) => teachers.filter((teacher) =>
-        (subject ? teacher.subjects.some(({id}) => subject === id)  : true)), [teachers]);
-
     return (
         <Catalog.Body
             options={options}
             renderProps={{subjects}}
-            filterItems={getMatchingCourses}
+            filter={filter}
+            items={teachers}
             {...otherProps}/>
     )
 };

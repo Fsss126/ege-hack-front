@@ -26,7 +26,7 @@ export const handleRequestsWithTestData = (api) => {
                 return getResponse(SUBJECTS);
             case url.pathname === '/accounts/teachers':
                 return getResponse(TEACHERS);
-            case url.pathname === '/courses':
+            case url.pathname === '/catalog-page':
                 switch (config.params.group) {
                     case 'MARKET':
                         return getResponse(SHOP_CATALOG);
@@ -39,7 +39,7 @@ export const handleRequestsWithTestData = (api) => {
                 return getResponse(LESSONS);
             case /\/lessons\/(.*)\/homeworks\/pupil$/.test(url.pathname):
                 return getResponse(HOMEWORK);
-            case url.pathname === '/courses/schedule/person':
+            case url.pathname === '/catalog-page/schedule/person':
             case /\/courses\/(.*)\/schedule\/person$/.test(url.pathname):
                 return getResponse(WEBINAR_SCHEDULE);
             default:

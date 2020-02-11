@@ -7,6 +7,8 @@ import CourseForm from "./CourseForm";
 
 const createRequest = (requestData) => APIRequest.post('/courses', requestData);
 
+const returnLink = '/admin/';
+
 const CourseCreatingPage = (props) => {
     const {location} = props;
     const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
@@ -20,7 +22,7 @@ const CourseCreatingPage = (props) => {
             },
             {
                 text: 'Вернуться к курсам',
-                url: '/shop/'
+                url: returnLink
             }
         ]);
     }, []);
@@ -42,6 +44,7 @@ const CourseCreatingPage = (props) => {
                             location={location}
                             title="Новый курс"
                             errorMessage="Ошибка при создании курса"
+                            cancelLink={returnLink}
                             isLoaded={isLoaded}
                             createRequest={createRequest}
                             onSubmitted={onSubmitted}/>

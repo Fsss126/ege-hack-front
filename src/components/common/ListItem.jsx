@@ -14,15 +14,16 @@ export default function ListItem(props) {
         link,
         onClick: clickCallback,
         onActionClick: actionCallback,
+        noOnClickOnAction = false,
         callbackProps} = props;
     const [descriptionRef, isFontLoaded] = useTruncate(description);
     const onClick = React.useCallback((event) => {
-        const clicked = selectable && !(actionCallback && event.target.closest('.list__item-action'));
+        const clicked = selectable && !((actionCallback || noOnClickOnAction) && event.target.closest('.list__item-action'));
         if (clicked && clickCallback)
             clickCallback(item, callbackProps);
         else if (!clicked && link)
             event.preventDefault();
-    }, [item, clickCallback, selectable, callbackProps, link, actionCallback]);
+    }, [item, clickCallback, selectable, callbackProps, link, actionCallback, noOnClickOnAction]);
     const onActionClick = React.useCallback((event) => {
         if (selectable && actionCallback)
             actionCallback(item, callbackProps);

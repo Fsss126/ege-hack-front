@@ -39,8 +39,13 @@ const DateInput = (props, forwardedRef) => {
     }, [forwardedRef]);
 
     const onDayChange = React.useCallback((day, modifiers, dayPickerInput) => {
-        onChange && onChange(day, name);
-    }, [onChange, name]);
+        const newDate = new Date(day.getTime());
+        if (value) {
+            newDate.setHours(value.getHours());
+            newDate.setMinutes(value.getMinutes());
+        }
+        onChange && onChange(newDate, name);
+    }, [onChange, value, name]);
 
     React.useEffect(() => {
         if (!value) {
