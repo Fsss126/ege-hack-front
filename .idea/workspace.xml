@@ -6,17 +6,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/lessons/LessonsPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/participants/ParticipantsPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/webinars/WebinarsPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SideBar.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +35,13 @@
     <option name="CREATE_PULL_REQUEST_DEFAULT_BRANCH" value="master" />
     <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_USER" value="Fsss126" />
     <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_NAME" value="ege-hack-front" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="hiddenUrls">
+      <set>
+        <option value="https://github.com/plotnikovart/EGEhack-platform-front.git" />
+      </set>
+    </option>
   </component>
   <component name="ProjectId" id="1Q1hXixfBJguYvSqgfr2AUchpd4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -167,9 +165,9 @@
       <list>
         <item itemvalue="npm.build-prod" />
         <item itemvalue="npm.start-custom-post-mac" />
+        <item itemvalue="npm.deploy" />
         <item itemvalue="npm.build" />
         <item itemvalue="npm.start-custom-port" />
-        <item itemvalue="npm.deploy" />
       </list>
     </recent_temporary>
   </component>
@@ -550,6 +548,7 @@
     <MESSAGE value="Teaching pages" />
     <MESSAGE value="Fixed permission issue" />
     <option name="LAST_COMMIT_MESSAGE" value="Fixed permission issue" />
+    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -570,16 +569,16 @@
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580947533388" />
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-<state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580979398892">
+    <state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580979398892">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770433321" />
     <state x="0" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580979398892" />
-    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1580921614881">
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog" timestamp="1581442521738">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="100" y="55" width="1240" height="845" key="DiffContextDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1579825634542" />
-    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1580921614881" />
+    <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1581442521738" />
     <state x="100" y="55" width="1240" height="845" key="DiffContextDialog/0.23.1440.820/1440.23.1360.745@0.23.1440.820" timestamp="1579825896683" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.820@0.23.1440.820" timestamp="1580920574263" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.821@0.23.1440.821" timestamp="1578486218189" />
@@ -587,7 +586,7 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
-<state x="0" y="61" key="FileDocumentManager.FileCacheConflict" timestamp="1580770518579">
+    <state x="0" y="61" key="FileDocumentManager.FileCacheConflict" timestamp="1580770518579">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="0" y="61" key="FileDocumentManager.FileCacheConflict/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770518579" />
@@ -595,47 +594,51 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="475" y="324" key="Github.CreatePullRequestDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580179636246" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1581104853893">
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1581443084072">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343134" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581104853893" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581443084072" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1581104853893">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1581443084070">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343132" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581104853893" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581443084070" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1581104853892">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1581443084070">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343131" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581104853892" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581443084070" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1581104853893">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1581443084071">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343133" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581104853893" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581443084071" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1580770480909">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770480909" />
     <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1575496047285" />
-    <state x="368" y="168" key="RollbackChangesDialog" timestamp="1580899845543">
+    <state x="368" y="168" key="RollbackChangesDialog" timestamp="1581442419179">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="368" y="168" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1580899845543" />
+    <state x="368" y="168" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1581442419179" />
     <state x="221" y="89" key="SettingsEditor" timestamp="1575726108474">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1575726108474" />
-<state x="570" y="373" key="VCS.ChangelistChooser" timestamp="1580769269270">
+    <state x="474" y="173" key="VCS.ChangeListViewerDialog" timestamp="1581442411354">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="570" y="373" key="VCS.ChangelistChooser/0.0.1440.900@0.0.1440.900" timestamp="1580769269270" />
+    <state x="474" y="173" key="VCS.ChangeListViewerDialog/0.0.1440.900@0.0.1440.900" timestamp="1581442411354" />
+    <state x="570" y="373" key="VCS.ChangelistChooser" timestamp="1581442372553">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="570" y="373" key="VCS.ChangelistChooser/0.0.1440.900@0.0.1440.900" timestamp="1581442372553" />
     <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1580979400648">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
