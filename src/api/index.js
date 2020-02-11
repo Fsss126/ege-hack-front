@@ -96,7 +96,7 @@ const transformUser = ({account_id: id, vk_info: {photo_max: photo, first_name, 
 //Interceptors
 const transformData = (response) => {
     const {config, data} = response;
-    const url = new URL(config.url);
+    const url = new URL(`${config.baseURL}${config.url.replace(config.baseURL, '')}`);
     switch (true) {
         case url.pathname === '/accounts/teachers':
             return data.map(transformUser);
