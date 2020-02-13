@@ -36,6 +36,8 @@ Object.assign(renderDate, {
     }
 });
 
+export const renderRemainingTime = (time) => {};
+
 export const getAuthHeader = (username, password) => ({'Authorization': `Basic ${btoa(username + ":" + password)}`});
 
 export const trimFileExtension = (filename) => filename.replace(/\.[^/.]+$/, "");

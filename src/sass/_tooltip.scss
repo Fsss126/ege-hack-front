@@ -316,6 +316,8 @@
 }
 
 .tooltip {
+  display: inline-block;
+  position: relative;
   &:hover, &.is-visible {
     .tooltip-arrow, .tooltip-block {
       transform: translate(-50%, 0);

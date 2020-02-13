@@ -49,6 +49,7 @@ const useTeacherCoursesStore = () => React.useState(null);
 const useSubjectsStore = () => React.useState(null);
 const useTeachersStore = () => React.useState(null);
 const useLessonsStore = () => React.useState({});
+const useTeacherHomeworksStore = () => React.useState({});
 const useWebinarsStore = () => React.useState({});
 const useParticipantsStore = () => React.useState({});
 const useAdminWebinarsStore = () => React.useState({});
@@ -64,6 +65,7 @@ function useStoreData() {
     const [webinars, setWebinars] = useWebinarsStore();
     const [adminWebinars, setAdminWebinars] = useAdminWebinarsStore();
     const [participants, setParticipants] = useParticipantsStore();
+    const [teacherHomeworks, setTeacherHomeworks] = useTeacherHomeworksStore();
     return {
         data: {
             shopCourses,
@@ -75,7 +77,8 @@ function useStoreData() {
             adminWebinars,
             participants,
             adminCourses,
-            teacherCourses
+            teacherCourses,
+            teacherHomeworks
         },
         setters: {
             setShopCourses,
@@ -87,7 +90,8 @@ function useStoreData() {
             setAdminWebinars,
             setParticipants,
             setAdminCourses,
-            setTeacherCourses
+            setTeacherCourses,
+            setTeacherHomeworks
         }
     }
 }
@@ -488,6 +492,57 @@ export function useLesson(courseId, lessonId) {
         error: lessons && !lesson ? true : error,
         reload
     }
+}
+
+export function useTeacherHomeworks(lessonId) {
+    const {user, data: {teacherHomeworks}, setters: {setTeacherHomeworks}} = useContext(StoreContext);
+    const [error, setError] = React.useState(null);
+    const fetchHomeworks = useCallback(async () => {
+        if (requests.teacherHomeworks && requests.teacherHomeworks[lessonId])
+            return requests.teacherHomeworks[lessonId];
+        const request = APIRequest.get(`/lessons/${lessonId}/homeworks`);
+        (requests.teacherHomeworks || (requests.teacherHomeworks = {}))[lessonId] = request;
+        try {
+            if (error)
+                setError(null);
+            const homeworks = await request;
+            console.log('set homeworks', homeworks);
+            setTeacherHomeworks(loadedHomeworks => ({...loadedHomeworks, [lessonId]: homeworks}));
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+        finally {
+            delete requests.teacherHomeworks[lessonId];
+        }
+        return request;
+    }, [error, lessonId]);
+
+    const isAllowed = useCheckPermissions(PERMISSIONS.HOMEWORK_CHECK);
+    React.useEffect(() => {
+        if (user && isAllowed === true) {
+            if (!(teacherHomeworks[lessonId] || (requests.teacherHomeworks && requests.teacherHomeworks[lessonId]) || error)) {
+                fetchHomeworks();
+            }
+        }
+    }, [user, isAllowed, teacherHomeworks, lessonId, error]);
+
+    return {homeworks: isAllowed === false ? false : teacherHomeworks[lessonId], error, reload: fetchHomeworks};
+}
+
+export function useRevokeTeacherHomeworks(lessonId) {
+    const {setters: {setTeacherHomeworks}} = useContext(StoreContext);
+
+    return useCallback((responseHomework) => {
+        const {pupil: {id: studentId}, mark, comment} = responseHomework;
+        setTeacherHomeworks(({[lessonId]: lessonHomeworks, ...loadedHomeworks}) => {
+            const lessonIndex = _.findIndex(lessonHomeworks, {pupil: {id: studentId}});
+            const homework = lessonHomeworks[lessonIndex];
+            const newHomeworks = [...lessonHomeworks];
+            newHomeworks[lessonIndex] = {...homework, mark, comment};
+            return {[lessonId]: newHomeworks, ...loadedHomeworks};
+        });
+    }, [setTeacherHomeworks, lessonId]);
 }
 
 export function useAdminLessons(courseId) {

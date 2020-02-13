@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import classnames from 'classnames';
 
 export const TooltipPositions = {
     top: 'pos-top',
@@ -17,7 +18,7 @@ const Tooltip = (props) => {
     if (!content)
         return child;
     return React.cloneElement(child, {
-        className: (child.props.className ? child.props.className + ' tooltip ' : 'tooltip ') + (position || ''),
+        className: classnames(child.props.className, 'tooltip', position),
         children: (
             <Fragment>
                 {child.props.children}

@@ -77,21 +77,38 @@ const transformLesson = ({hometask, video_link, image_link, is_locked: locked, a
     }) : hometask
 });
 
-const transformUser = ({account_id: id, vk_info: {photo_max: photo, first_name, last_name, ...vk_info}, instagram, ...user}) => ({
-    id,
-    ...user,
-    vk_info: {
-        ...vk_info,
-        photo,
-        first_name,
-        last_name,
-        full_name: `${first_name} ${last_name}`
-    },
-    contacts: {
-        ig: instagram,
-        vk: `https://vk.com/id${id}`
+const transformUser = ({account_id: id, vk_info, instagram, ...user}) => {
+    const {photo_max: photo, first_name, last_name, ...info} = vk_info || {};
+    return ({
+        id,
+        ...user,
+        vk_info: vk_info ? {
+            ...info,
+            photo,
+            first_name,
+            last_name,
+            full_name: `${first_name} ${last_name}`
+        } : undefined,
+        contacts: {
+            ig: instagram,
+            vk: `https://vk.com/id${id}`
+        }
+    });
+};
+
+const transformHomework = ({file_info, pupil, date, ...rest}) => (
+    {
+        ...rest,
+        date: new Date(date),
+        files: file_info ? [
+            {
+                ...file_info,
+                file_link: `${API_ROOT}${file_info.file_link}?disp=attachment`
+            }
+        ] : undefined,
+        pupil: pupil ? transformUser(pupil) : pupil
     }
-});
+);
 
 //Interceptors
 const transformData = (response) => {
@@ -120,20 +137,12 @@ const transformData = (response) => {
             else
                 return transformLesson(data);
         }
+        case /\/lessons\/(\w*)\/homeworks$/.test(url.pathname): {
+            console.log(data);
+            return data.map(transformHomework);
+        }
         case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname): {
-            const {file_info: {file_id, file_name, file_link}, date:dateTime, ...rest} = data;
-            const date = new Date();
-            return {
-                ...rest,
-                date,
-                files: [
-                    {
-                        file_name,
-                        file_id,
-                        file_link: `${API_ROOT}${file_link}?disp=attachment`
-                    }
-                ]
-            };
+            return transformHomework(data);
         }
         case url.pathname === '/courses/schedule/person':
         case /\/courses\/\w*\/schedule\/person$/.test(url.pathname): {

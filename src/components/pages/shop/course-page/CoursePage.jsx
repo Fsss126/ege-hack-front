@@ -24,11 +24,10 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
             selectable={isEditing}
             locked={false}
             key={lesson.id}
-            link={`/courses/${courseId}/${lesson.id}/edit/`}>
-            {isEditing
+            link={`/courses/${courseId}/${lesson.id}/edit/`}
+            action={isEditing
                 ? <Button>Изменить</Button>
-                : null}
-        </Lesson>
+                : null}/>
     ), [isEditing, courseId]);
     if (course && teachers && lessons) {
         return (

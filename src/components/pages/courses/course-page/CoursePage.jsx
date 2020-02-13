@@ -21,11 +21,10 @@ const CoursePage = ({path, match, location, ...props}) => {
                 locked={locked}
                 selectable={!locked}
                 key={id}
-                {...props}>
-                {/*<div className="list__item-action-info">{renderDate(date, renderDate.shortDate)}</div>*/}
-                {!locked
+                action={!locked
                     ? <Button>Изучать</Button>
                     : <Button active={false}>Скоро</Button>}
+                {...props}>
             </Lesson>
         );
     };

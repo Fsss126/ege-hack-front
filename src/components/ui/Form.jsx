@@ -172,7 +172,8 @@ const Form = (props, ref) => {
         revokeRelatedData,
         blockNavigation=true,
         cancelLink,
-        withNestedForms=false
+        withNestedForms=false,
+        onCancelClick
     } = props;
 
     const messagePopupRef = React.useRef(null);
@@ -219,12 +220,21 @@ const Form = (props, ref) => {
             {title && <h3 className="form__title">{title}</h3>}
             {children}
             <div className="form__action-container btn-container text-right">
-                {cancelLink && <Button
-                    tag={Link}
-                    neutral={true}
-                    to={cancelLink}>
-                    Отменить
-                </Button>}
+                {cancelLink && (
+                    <Button
+                        tag={Link}
+                        neutral={true}
+                        to={cancelLink}>
+                        Отменить
+                    </Button>
+                )}
+                {onCancelClick && (
+                    <Button
+                        neutral={true}
+                        onClick={onCancelClick}>
+                        Отменить
+                    </Button>
+                )}
                 {' '}
                 <Button
                     active={isValid}

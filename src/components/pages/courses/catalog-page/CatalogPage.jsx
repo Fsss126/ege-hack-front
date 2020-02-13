@@ -17,11 +17,10 @@ const CatalogPage = ({location}) => {
             selectable
             online={false}
             key={course.id}
-            {...renderProps}>
-            {course.status === LEARNING_STATUS.learning
+            action={course.status === LEARNING_STATUS.learning
                 ? <Button className="course__select-btn">Изучать</Button>
                 : <Button className="course__select-btn" active={false}>Пройден</Button>}
-        </Course>
+            {...renderProps}/>
     ), []);
     const isLoaded = !!(courses && subjects && webinars);
     return (

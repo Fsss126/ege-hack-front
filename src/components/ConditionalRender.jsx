@@ -3,16 +3,21 @@ import {useUser} from "store";
 
 export function checkPermissions(userInfo, requiredPermissions, requiredRoles, fullMatch = true) {
     const {permissions, roles} = userInfo;
+    if (typeof requiredPermissions === 'string')
+        requiredPermissions = [requiredPermissions];
+    if (typeof requiredRoles === 'string')
+        requiredRoles = [requiredRoles];
+
     if (requiredPermissions) {
         if (!(fullMatch
-            ? _.includes(permissions, requiredPermissions)
-            : _.intersection(permissions, requiredPermissions).length !== 0))
+            ? _.difference(requiredPermissions, permissions).length === 0
+            : _.intersection(requiredPermissions, permissions).length !== 0))
             return false;
     }
     if (requiredRoles) {
         if (!(fullMatch
-            ? _.includes(roles, requiredRoles)
-            : _.intersection(roles, requiredRoles).length !== 0))
+            ? _.difference(requiredRoles, roles).length === 0
+            : _.intersection(requiredRoles, roles).length !== 0))
             return false;
     }
     return true;

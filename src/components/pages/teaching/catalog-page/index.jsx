@@ -7,7 +7,7 @@ const CoursesPage = (props) => {
     const {path} = props;
     const header = (
         <div className="layout__content-block tab-nav-container">
-            <h2>Курсы</h2>
+            <h2>Преподавание</h2>
             <TabNav>
                 <TabNavLink to={`${path}/list/`}>Список</TabNavLink>
                 <TabNavLink to={`${path}/calendar/`} disabled>Календарь</TabNavLink>

@@ -6,8 +6,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/common/HomeworkAssignment.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/AssignmentPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/Homework.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/HomeworkForm.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CourseCatalog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Lesson.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Lesson.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/ListItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/ListItem.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/course-page/lessons/LessonsPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/course-page/participants/ParticipantsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/HomeworksPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/course-page/webinars/WebinarsPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Form.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Form.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Tooltip.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Tooltip.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/helpers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_fonts.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_fonts.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_tooltip.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_tooltip.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,8 +69,8 @@
   </component>
   <component name="GithubProjectSettings">
     <option name="CREATE_PULL_REQUEST_DEFAULT_BRANCH" value="master" />
-    <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_USER" value="Fsss126" />
-    <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_NAME" value="ege-hack-front" />
+    <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_USER" value="plotnikovart" />
+    <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_NAME" value="EGEhack-platform-front" />
   </component>
   <component name="GithubPullRequestsUISettings">
     <option name="hiddenUrls">
@@ -55,7 +91,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/node_modules/react-router-dom/package.json&#10;true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/pages/teaching" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/pages/teaching/lesson-page" />
     <property name="list.type.of.created.stylesheet" value="SCSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -73,19 +109,19 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/pages/teaching/lesson-page" />
+      <recent name="$PROJECT_DIR$/src/components/pages/teaching/course-page" />
+      <recent name="$PROJECT_DIR$/src/components/pages/teaching" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
+      <recent name="$PROJECT_DIR$/src/fonts" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/pages/admin/course-page/participants" />
       <recent name="$PROJECT_DIR$/src/components/pages/admin/course-page" />
       <recent name="$PROJECT_DIR$/src/components/pages/admin/webinars" />
       <recent name="$PROJECT_DIR$/src/components/pages/shop" />
       <recent name="$PROJECT_DIR$/src/components" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/components/pages/teaching" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
-      <recent name="$PROJECT_DIR$/src/fonts" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
-      <recent name="$PROJECT_DIR$/src/components/ui" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start-custom-post-mac">
@@ -163,8 +199,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.build-prod" />
         <item itemvalue="npm.start-custom-post-mac" />
+        <item itemvalue="npm.build-prod" />
         <item itemvalue="npm.deploy" />
         <item itemvalue="npm.build" />
         <item itemvalue="npm.start-custom-port" />
@@ -502,7 +538,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580979399036</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Weird as shit URL bug fix">
+      <created>1581445434263</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1581445434263</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -564,11 +607,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1579963154011" />
-    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1580947533388">
+    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1581515693527">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580947533388" />
-    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
+    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1581515693527" />
     <state x="0" y="52" key="CommitChangelistDialog2" timestamp="1580979398892">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -590,33 +633,34 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="0" y="61" key="FileDocumentManager.FileCacheConflict/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770518579" />
-    <state x="475" y="324" key="Github.CreatePullRequestDialog" timestamp="1580179636246">
+    <state x="475" y="324" key="Github.CreatePullRequestDialog" timestamp="1581445723321">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="475" y="324" key="Github.CreatePullRequestDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580179636246" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1581443084072">
+    <state x="475" y="324" key="Github.CreatePullRequestDialog/0.0.1440.900@0.0.1440.900" timestamp="1581445723321" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1581515693559">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343134" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581443084072" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581515693559" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1581443084070">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1581515693558">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343132" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581443084070" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581515693558" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1581443084070">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1581515693558">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343131" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581443084070" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581515693558" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1581443084071">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1581515693559">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580946343133" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581443084071" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581515693559" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1580770480909">
       <screen x="0" y="0" width="1440" height="900" />
@@ -648,6 +692,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="462" y="301" key="cloudConfig.PluginsDialog/0.0.1440.900@0.0.1440.900" timestamp="1575553677863" />
+    <state x="164" y="189" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1581445715360">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="164" y="189" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.0.1440.900@0.0.1440.900" timestamp="1581445715360" />
     <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1578350915833">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -662,11 +710,11 @@
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580770460048" />
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="523" y="175" width="837" height="540" key="find.popup" timestamp="1580919423263">
+    <state x="430" y="161" width="837" height="540" key="find.popup" timestamp="1581629325761">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="430" y="161" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1580774187469" />
-    <state x="523" y="175" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1580919423263" />
+    <state x="430" y="161" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1581629325761" />
+    <state x="523" y="175" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1581533703783" />
     <state x="466" y="170" key="git4idea.branch.GitSmartOperationDialog" timestamp="1581266388505">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

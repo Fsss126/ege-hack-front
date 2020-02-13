@@ -3,6 +3,7 @@ import {File} from "components/ui/input";
 import VideoPlayer from "components/common/VideoPlayer";
 import {renderDate} from "definitions/helpers";
 import HomeworkLoader from "./HomeworkLoader";
+import HomeworkAssignment from "../../../common/HomeworkAssignment";
 
 const LessonView = ({lesson: {id, name, image_link: cover, video_link: video, description, assignment, attachments}, homework}) => {
     return (
@@ -27,22 +28,12 @@ const LessonView = ({lesson: {id, name, image_link: cover, video_link: video, de
             {assignment && (
                 <div className="block-container hw-container">
                     <h3>Домашнее задание</h3>
-                    <div className="assignment">
-                        {assignment.files && (
-                            <div className="assignment__files file-container">
-                                {assignment.files.map((assignment, i) => (
-                                    <File file={assignment} key={i}/>
-                                ))}
-                            </div>
-                        )}
-                        {assignment.description && <div className="description-text">{assignment.description}</div>}
-                        {assignment.deadline &&
-                        <div className="assignment__deadline">Дедлайн: {renderDate(assignment.deadline, renderDate.date)}</div>}
-                    </div>
+                    <HomeworkAssignment assignment={assignment}/>
                     <HomeworkLoader
                         homework={homework}
                         deadline={assignment.deadline}
                         lessonId={id}/>
+                    {homework && homework.mark && <h4>Оценка: <span className="badge accent align-middle">{homework.mark}</span></h4>}
                 </div>
             )}
         </div>

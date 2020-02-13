@@ -1,7 +1,7 @@
 import React, {useCallback} from "react";
 import classnames from 'classnames';
 import {Link} from "react-router-dom";
-import {ADMIN_ROLES, PERMISSIONS} from "definitions/constants";
+import {PERMISSIONS} from "definitions/constants";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import Page, {PageContent} from "components/Page";
 import Catalog from "components/common/Catalog";
@@ -13,7 +13,6 @@ import PosterCover from "components/common/PosterCover";
 import Countdown from "react-countdown-now";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteWebinar} from "store";
-import {PermissionsDeniedErrorPage} from "../../../../ErrorPage";
 
 const filterBy = {
     search: true,
@@ -21,7 +20,7 @@ const filterBy = {
     online: false
 };
 
-const filter = (lesson, {subject, online, search}) => {
+const filter = (lesson, {search}) => {
     const name = lesson.name.toLowerCase().replace(/\s/g, '');
     const searchKey = search.toLowerCase().replace(/\s/g, '');
     return search ? name.includes(searchKey) : true
@@ -83,8 +82,10 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
             onDelete(courseId, id, webinarSchedule);
         };
         return (
-            <Webinar key={id} webinar={webinar} {...rest}>
-                {canEdit && (
+            <Webinar
+                key={id}
+                webinar={webinar}
+                action={canEdit && (
                     <DropdownMenu
                         content={<DropdownIconButton className="icon-ellipsis"/>}>
                         <DropdownMenuOption
@@ -97,7 +98,7 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
                         </DropdownMenuOption>
                     </DropdownMenu>
                 )}
-            </Webinar>
+                {...rest}/>
         )
     }, [courseLink, canEdit, webinarSchedule, courseId, onDelete]);
     const title = course && `Вебинары курса ${course.name}`;
@@ -130,7 +131,7 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
                         <Catalog.Catalog
                             className="webinars-list"
                             emptyPlaceholder="Нет вебинаров"
-                            noMatchplaceholder="Нет совпадающих вебинаров"
+                            noMatchPlaceholder="Нет совпадающих вебинаров"
                             adaptive={false}
                             plain
                             renderItem={renderWebinar}/>

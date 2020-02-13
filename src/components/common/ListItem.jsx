@@ -7,15 +7,17 @@ import Link from "components/ui/Link";
 export default function ListItem(props) {
     const {
         preview, title, subtitle, description, item, selectable,
-        adaptive,
         plain,
         className,
-        children: action,
+        action,
         link,
+        truncate = true,
         onClick: clickCallback,
         onActionClick: actionCallback,
         noOnClickOnAction = false,
-        callbackProps} = props;
+        callbackProps,
+        children
+    } = props;
     const [descriptionRef, isFontLoaded] = useTruncate(description);
     const onClick = React.useCallback((event) => {
         const clicked = selectable && !((actionCallback || noOnClickOnAction) && event.target.closest('.list__item-action'));
@@ -42,11 +44,13 @@ export default function ListItem(props) {
                     {description && (
                         <div className="description-container font-size-xs">
                             <div className="description-text">
-                                {isFontLoaded ? (
-                                    <Truncate lines={2} ref={descriptionRef}>
-                                        {description}
-                                    </Truncate>
-                                ) : null}
+                                {truncate ? (
+                                    isFontLoaded ? (
+                                        <Truncate lines={2} ref={descriptionRef}>
+                                            {description}
+                                        </Truncate>
+                                    ) : null
+                                ) : description}
                             </div>
                         </div>
                     )}
@@ -72,6 +76,7 @@ export default function ListItem(props) {
                 to={link}
                 onClick={onClick}>
                 {content}
+                {children}
             </Link>
         );
     }
@@ -79,6 +84,7 @@ export default function ListItem(props) {
         return (
             <div className={joinedClassname} onClick={onClick}>
                 {content}
+                {children}
             </div>
         );
     }

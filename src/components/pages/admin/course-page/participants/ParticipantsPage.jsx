@@ -6,8 +6,7 @@ import CoverImage from "components/common/CoverImage";
 import Catalog from "components/common/Catalog";
 import {Link} from "react-router-dom";
 import Button from "components/ui/Button";
-import {useCheckPermissions} from "../../../../ConditionalRender";
-import {PermissionsDeniedErrorPage} from "../../../../ErrorPage";
+import {useCheckPermissions} from "components/ConditionalRender";
 
 const filterBy = {
     search: true,

@@ -257,6 +257,7 @@ body {
     transition: background-color .3s;
     border-radius: 4px;
     overflow: hidden;
+    cursor: pointer;
   }
 
   &:hover, &:focus {
@@ -961,11 +962,6 @@ header {
       }
     }
     .hw-container {
-      .assignment {
-        .assignment__deadline {
-          padding-top: 4px;
-        }
-      }
       .submission {
         margin-top: 16px;
       }
@@ -993,6 +989,13 @@ header {
           flex-basis: 180px;
         }
       }
+    }
+  }
+
+  .assignment {
+    cursor: default;
+    .assignment__deadline {
+      padding-top: 4px;
     }
   }
 
@@ -1225,6 +1228,29 @@ header {
   .admin-page {
     .cover {
       opacity: 1;
+    }
+  }
+
+  .teaching-page {
+    &.admin-page--lessons {
+      .video-class--disabled {
+        .cover {
+          opacity: 0.4;
+        }
+      }
+    }
+  }
+  .teaching-page--homeworks {
+    .homework {
+      .homework-form {
+        margin-top: 16px;
+      }
+
+      &.homework--assessing {
+        .description-container {
+          display: none;
+        }
+      }
     }
   }
 }
