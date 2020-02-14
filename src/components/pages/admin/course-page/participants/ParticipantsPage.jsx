@@ -7,6 +7,8 @@ import Catalog from "components/common/Catalog";
 import {Link} from "react-router-dom";
 import Button from "components/ui/Button";
 import {useCheckPermissions} from "components/ConditionalRender";
+import Tooltip from "components/ui/Tooltip";
+import {renderDate} from "../../../../../definitions/helpers";
 
 const filterBy = {
     search: true,
@@ -26,13 +28,16 @@ const ParticipantsPage = (props) => {
 
     const canEdit = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
 
-    const renderStudent = useCallback((user, renderProps) => {
+    const renderStudent = useCallback((user, {link, ...renderProps}) => {
         const {
             id,
             vk_info: {
-            full_name,
-            photo,
-        }, contacts: {vk}} = user;
+                full_name,
+                photo,
+            },
+            contacts: {vk},
+            join_date_time
+        } = user;
         return (
             <ListItem
                 key={id}
@@ -43,8 +48,15 @@ const ParticipantsPage = (props) => {
                 preview={(
                     <CoverImage src={photo} className="course__cover" round/>
                 )}
-                {...renderProps}
-                link={vk}/>
+                link={vk}
+                action={
+                    <Tooltip
+                        content={`Присоединился ${renderDate(join_date_time, renderDate.dateWithYear)}`}
+                        position="left">
+                        <i className="icon-info"/>
+                    </Tooltip>
+                }
+                {...renderProps}/>
         );
     }, []);
     const title = course && `Ученики курса ${course.name}`;

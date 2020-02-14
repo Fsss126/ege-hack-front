@@ -10,6 +10,8 @@ import Form, {
     useFormValidityChecker
 } from "components/ui/Form";
 import {useRevokeWebinars} from "store";
+import {renderDate} from "../../../../../definitions/helpers";
+import Tooltip from "../../../../ui/Tooltip";
 
 const INITIAL_FORM_DATA = {
     click_meeting_link: '',
@@ -70,11 +72,12 @@ const WebinarsForm = (props) => {
             return ({
                 image: image_link ? [{file_id: image_link.split('/').pop(), file_link: image_link}] : undefined,
                 click_meeting_link: click_meeting_link || '',
-                webinars: webinars.map(({date_start, duration, name, description}) => ({
+                webinars: webinars.map(({date_start, duration, name, description, id}) => ({
                     date_start,
                     duration,
                     name,
-                    description: description || ''
+                    description: description || '',
+                    id
                 }))
             })
         }
@@ -171,7 +174,7 @@ const WebinarsForm = (props) => {
                                     value={description}
                                     onChange={onInputChange}/>
                             </div>
-                            <div className="col start-date-input-container">
+                            <div className="col-12 col-md-6 col-lg start-date-input-container">
                                 <Input.DateInput
                                     value={date_start}
                                     required
@@ -184,7 +187,7 @@ const WebinarsForm = (props) => {
                                     name={`webinars[${i}].date_start`}
                                     onChange={onInputChange}/>
                             </div>
-                            <div className="col">
+                            <div className="col-12 col-md-6 col-lg">
                                 <Input.TimeInput
                                     name={`webinars[${i}].date_start`}
                                     required
@@ -193,7 +196,7 @@ const WebinarsForm = (props) => {
                                     value={date_start}
                                     onChange={onInputChange}/>
                             </div>
-                            <div className="col">
+                            <div className="col-12 col-md-6 col-lg d-flex align-items-center">
                                 <Input.Input
                                     name={`webinars[${i}].duration`}
                                     type="number"
@@ -201,6 +204,11 @@ const WebinarsForm = (props) => {
                                     placeholder="Длительность"
                                     value={duration}
                                     onChange={onInputChange}/>
+                                <Tooltip
+                                    content={`В минутах`}
+                                    position="left">
+                                    <i className="icon-info" style={{paddingLeft: '12px'}}/>
+                                </Tooltip>
                             </div>
                         </FieldsContainer>
                     </FormElement>

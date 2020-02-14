@@ -120,7 +120,10 @@ const transformData = (response) => {
         case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):
             return transformUser(data);
         case /\/courses\/(\w*)\/participants$/.test(url.pathname):
-            return data.map(transformUser);
+            return data.map(participant => ({
+                ...transformUser(participant),
+                join_date_time: new Date(participant.join_date_time)
+            }));
         case /\/courses(\/\w*)?$/.test(url.pathname): {
             if (config.method === 'get') {
                 return data.map((course) => ({
@@ -141,7 +144,8 @@ const transformData = (response) => {
             console.log(data);
             return data.map(transformHomework);
         }
-        case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname): {
+        case /\/lessons\/(\w*)\/homeworks\/pupil/.test(url.pathname): {
+            if (config.method === 'get' || config.method === 'put' || config.method === 'patch')
             return transformHomework(data);
         }
         case url.pathname === '/courses/schedule/person':
