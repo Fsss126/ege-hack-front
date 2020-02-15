@@ -163,6 +163,7 @@ const Form = (props, ref) => {
         className,
         children,
         submitButtonText = 'Сохранить',
+        cancelButtonText='Отменить',
         isValid,
         autocomplete="off",
         onSubmit,
@@ -172,8 +173,8 @@ const Form = (props, ref) => {
         revokeRelatedData,
         blockNavigation=true,
         cancelLink,
-        withNestedForms=false,
-        onCancelClick
+        onCancelClick,
+        withNestedForms=false
     } = props;
 
     const messagePopupRef = React.useRef(null);
@@ -189,7 +190,7 @@ const Form = (props, ref) => {
             });
         };
         revokeRelatedData && revokeRelatedData(response);
-        onSubmitted(response, showSuccessMessage, reset);
+        onSubmitted && onSubmitted(response, showSuccessMessage, reset);
     }, [revokeRelatedData, onSubmitted, reset]);
 
     const handleError = React.useCallback((error, reloadCallback) => {
@@ -202,7 +203,7 @@ const Form = (props, ref) => {
                 actions
             });
         };
-        onError(error, showErrorMessage, reloadCallback);
+        onError && onError(error, showErrorMessage, reloadCallback);
     }, [onError]);
 
     const {submitting, handleSubmit, hasChanged, onChange} = useFormState(onSubmit, handleSubmitted, handleError);
@@ -225,14 +226,14 @@ const Form = (props, ref) => {
                         tag={Link}
                         neutral={true}
                         to={cancelLink}>
-                        Отменить
+                        {cancelButtonText}
                     </Button>
                 )}
                 {onCancelClick && (
                     <Button
                         neutral={true}
                         onClick={onCancelClick}>
-                        Отменить
+                        {cancelButtonText}
                     </Button>
                 )}
                 {' '}

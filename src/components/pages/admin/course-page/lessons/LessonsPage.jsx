@@ -30,10 +30,10 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
     const onDelete = useDeleteLesson();
 
     const renderLesson = useCallback((lesson, {link, ...rest}) => {
-        const {id} = lesson;
-        const lessonLink = `${path}/${courseId}/${link}`;
+        const {id, course_id} = lesson;
+        const lessonLink = `${path}/${course_id}/${link}`;
 
-        const deleteCallback = () => { onDelete(courseId, id); };
+        const deleteCallback = () => { onDelete(course_id, id); };
         return render(lesson, {
             ...rest,
             link: lessonLink,
@@ -42,7 +42,7 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
                     content={<DropdownIconButton className="icon-ellipsis"/>}>
                     <DropdownMenuOption
                         tag={Link}
-                        to={`${lessonLink}edit/`}>
+                        to={`/admin/${course_id}/${link}edit/`}>
                         <i className="far fa-edit"/>Изменить
                     </DropdownMenuOption>
                     <DropdownMenuOption onClick={deleteCallback}>
@@ -51,7 +51,7 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
                 </DropdownMenu>
             )
         });
-    }, [path, courseId, canEdit, onDelete, render]);
+    }, [path, canEdit, onDelete, render]);
     const title = course && `Уроки курса ${course.name}`;
     return (
         <Page

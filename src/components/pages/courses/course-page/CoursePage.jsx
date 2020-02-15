@@ -13,7 +13,7 @@ const CoursePage = ({path, match, location, ...props}) => {
     const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useCourseWebinars(courseId);
     // const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
-    const renderLesson = (lesson, props) => {
+    const renderLesson = (lesson, {link, ...props}) => {
         const {date, id, locked} = lesson;
         return (
             <Lesson
@@ -24,6 +24,7 @@ const CoursePage = ({path, match, location, ...props}) => {
                 action={!locked
                     ? <Button>Изучать</Button>
                     : <Button active={false}>Скоро</Button>}
+                link={locked ? undefined : link}
                 {...props}>
             </Lesson>
         );

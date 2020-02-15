@@ -16,7 +16,7 @@ const UserProfile = ({first_name, last_name, photo, contacts, about, role}) => {
                     {fullName ? <h2>{fullName}</h2> : <h2 className="ph-item"><div className="ph-text"/></h2>}
                     {role && <div className="font-size-sm">{role}</div>}
                     {contacts && <Contacts contacts={contacts}/>}
-                    <div className="description-text font-size-sm">{about}</div>
+                    <div className="description-text font-size-sm align-self-lg-start">{about}</div>
                 </div>
             </div>
         </React.Fragment>

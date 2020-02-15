@@ -4,8 +4,6 @@ import CourseOverview from "components/common/CourseOverview";
 import CoursePrice from "./CoursePrice";
 import Lesson from "components/common/Lesson";
 import {useTeachers, useLessons, useDiscount, useShopCourse} from "store";
-import Button from "components/ui/Button";
-import {useToggle} from "hooks/common";
 import {NotFoundErrorPage} from "components/ErrorPage";
 
 const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, path: root, location, match}) => {
@@ -17,18 +15,19 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
     const {discount, error: errorLoadingDiscount, retry: reloadDiscount} = useDiscount(courseId);
     const isSelected = selectedCourses.has(course);
 
-    const [isEditing, toggleEditing] = useToggle(false);
-    const renderLesson = useCallback((lesson) => (
-        <Lesson
-            lesson={lesson}
-            selectable={isEditing}
-            locked={false}
-            key={lesson.id}
-            link={`/courses/${courseId}/${lesson.id}/edit/`}
-            action={isEditing
-                ? <Button>Изменить</Button>
-                : null}/>
-    ), [isEditing, courseId]);
+    const renderLesson = useCallback((lesson) => {
+        const {id, locked} = lesson;
+        const isSelectable = course && course.purchased;
+        const link = isSelectable ? `/courses/${courseId}/${id}` : undefined;
+        return (
+            <Lesson
+                lesson={lesson}
+                selectable={isSelectable && !locked}
+                locked={isSelectable ? locked : false}
+                link={link}
+                key={id}/>
+        );
+    }, [course, courseId]);
     if (course && teachers && lessons) {
         return (
             <CourseOverview.Body
@@ -39,18 +38,16 @@ const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesT
                 location={location}>
                 <PageContent parentSection={{name: "Магазин курсов"}}>
                     <CourseOverview.Description/>
-                    {!isEditing && (
-                        <CoursePrice
-                            isSelected={isSelected}
-                            discount={discount}
-                            onSelect={onCourseSelect}
-                            error={error}
-                            retry={reloadDiscount}/>
-                    )}
+                    <CoursePrice
+                        isSelected={isSelected}
+                        discount={discount}
+                        onSelect={onCourseSelect}
+                        error={error}
+                        retry={reloadDiscount}/>
                     <CourseOverview.Teachers/>
                     <CourseOverview.Lessons renderLesson={renderLesson}/>
                 </PageContent>
-                {!isEditing && selectedCoursesTab}
+                {selectedCoursesTab}
             </CourseOverview.Body>
         );
     }

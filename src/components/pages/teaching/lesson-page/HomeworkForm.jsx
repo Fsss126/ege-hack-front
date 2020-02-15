@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import APIRequest from "api";
 import * as Input from "components/ui/input";
 import Form, {FieldsContainer, useForm, useFormValidityChecker} from "components/ui/Form";
@@ -54,17 +54,19 @@ const HomeworkForm = (props) => {
         return createRequest(getRequestData(formData));
     }, [formData, createRequest]);
 
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const onSubmitted = useCallback((response, showSuccessMessage, reset) => {
-        showSuccessMessage("Изменения сохранены", [
-            {
-                text: 'Ок'
-            },
-            {
-                text: 'Продолжить',
-                action: cancelAssess
-            }
-        ]);
-    }, [cancelAssess]);
+        setIsSubmitted(true);
+        // showSuccessMessage("Изменения сохранены", [
+        //     {
+        //         text: 'Ок'
+        //     },
+        //     {
+        //         text: 'Продолжить',
+        //         action: cancelAssess
+        //     }
+        // ]);
+    }, []);
 
     const onError = useCallback((error, showErrorMessage, reloadCallback) => {
         showErrorMessage("Ошибка при выполнении запроса", [
@@ -89,7 +91,8 @@ const HomeworkForm = (props) => {
             onSubmitted={onSubmitted}
             revokeRelatedData={revokeHomeworks}
             onError={onError}
-            onCancelClick={cancelAssess}>
+            onCancelClick={cancelAssess}
+            cancelButtonText={isSubmitted ? 'Закрыть' : 'Отменить'}>
             <FieldsContainer>
                 <Input.Input
                     name="mark"

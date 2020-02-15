@@ -595,11 +595,12 @@ export function useParticipants(courseId) {
 }
 
 export function useRevokeParticipants(courseId) {
-    const {setters: {setParticipants}} = useContext(StoreContext);
+    const {setters: {setParticipants, setUserCourses}} = useContext(StoreContext);
 
     return useCallback((responseParticipants) => {
         console.log('response', responseParticipants);
         setParticipants((loadedParticipants) => ({...loadedParticipants, [courseId]: responseParticipants}));
+        setUserCourses(null);
     }, [setParticipants, courseId]);
 }
 

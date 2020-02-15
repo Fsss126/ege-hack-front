@@ -34,6 +34,7 @@ const LessonView = ({lesson: {id, name, image_link: cover, video_link: video, de
                         deadline={assignment.deadline}
                         lessonId={id}/>
                     {homework && homework.mark && <h4>Оценка: <span className="badge accent align-middle">{homework.mark}</span></h4>}
+                    {homework && homework.comment && <div className="description-text">{homework.comment}</div>}
                 </div>
             )}
         </div>

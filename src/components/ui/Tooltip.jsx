@@ -18,7 +18,7 @@ const Tooltip = (props) => {
     if (!content)
         return child;
     return React.cloneElement(child, {
-        className: classnames(child.props.className, 'tooltip', position),
+        className: classnames(child.props.className, 'tooltip', position && `pos-${position}`),
         children: (
             <Fragment>
                 {child.props.children}

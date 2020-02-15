@@ -14,18 +14,19 @@ import LessonsPage from "./../../admin/course-page/lessons/LessonsPage";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {PERMISSIONS} from "definitions/constants";
-import Lesson from "../../../common/Lesson";
+import Lesson from "components/common/Lesson";
 
-const renderLesson = (lesson, {link: lessonLink, ...rest}) => {
-    const {id, locked} = lesson;
+const renderLesson = (lesson, {link, ...rest}) => {
+    const {id, locked, assignment} = lesson;
+    const isSelectable = !!assignment;
     return (
         <Lesson
             lesson={lesson}
             locked={locked}
-            selectable={!!lesson.assignment}
+            selectable={isSelectable}
             key={id}
             noOnClickOnAction
-            link={lessonLink}
+            link={isSelectable ? link : undefined}
             {...rest}/>
     )
 };

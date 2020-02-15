@@ -21,7 +21,7 @@ export default function Lesson({lesson, locked=false, selectable, link, ...props
                     watchProgress={!locked && watchProgress}/>
             )}
             key={lesson.id}
-            link={locked ? undefined : link}
+            link={link}
             selectable={selectable}
             {...props}/>
     );

@@ -15,9 +15,11 @@ const Homework = (props) => {
         pupil: {
             id,
             vk_info: {
-                full_name,
+                first_name,
+                last_name,
                 photo,
-            }
+            },
+            contacts: {vk},
         }
     } = homework;
     const [{file_name: name, downloadName, file_link: url}] = files || [{}];
@@ -39,17 +41,19 @@ const Homework = (props) => {
     return (
         <ListItem
             key={id}
+            link={isAssessing ? undefined : vk}
+            selectable={!isAssessing}
+            noOnClickOnAction
             truncate={false}
             item={homework}
             className={classnames('user', 'homework', {
                 'homework--assessing': isAssessing
             })}
-            title={full_name}
-            selectable={false}
+            title={`${last_name} ${first_name}`}
             preview={(
                 <CoverImage src={photo} className="course__cover" round/>
             )}
-            description={files ? (mark ? <span>Оценка: <span className="badge">{mark}</span></span> : 'Нет оценки') :  'Нет работы'}
+            description={files ? (mark ? <span>Оценка: <span className="badge accent">{mark}</span></span> : <span className="badge">Нет оценки</span>) :  'Нет работы'}
             action={files && (
                 <DropdownMenu
                     content={<DropdownIconButton className="icon-ellipsis"/>}>

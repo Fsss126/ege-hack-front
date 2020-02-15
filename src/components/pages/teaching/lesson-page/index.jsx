@@ -24,7 +24,7 @@ const LessonPage = (props) => {
             <h2>{lesson.name}</h2>
             <TabNav>
                 <TabNavLink to={`${match.url}/homeworks/`}>
-                    Работы {homeworks && <span className="badge">{homeworks.length}</span>}
+                    Работы {homeworks && <span className="badge">{homeworks.filter(homework => !!homework.files).length}</span>}
                 </TabNavLink>
                 <TabNavLink to={`${match.url}/assignment/`}>
                     Задание
