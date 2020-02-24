@@ -97,7 +97,7 @@ const transformUser = ({account_id: id, vk_info, instagram, ...user}) => {
         } : undefined,
         contacts: {
             ig: instagram,
-            vk: `https://vk.com/id${id}`
+            vk: `https://vk.com/id${vk_info.id}`
         }
     });
 };
@@ -121,6 +121,8 @@ const transformData = (response) => {
     const {config, data} = response;
     const url = getUrl(config);
     switch (true) {
+        case url.pathname === '/accounts/info':
+            return transformUser(data);
         case url.pathname === '/accounts/teachers':
             return data.map(transformUser);
         case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):

@@ -36,8 +36,8 @@ const Header = (props) => {
                                         )}
                                         {userInfo ? (
                                             <div className="nav-btn">
-                                                {userInfo.vk_info.photo_max ?
-                                                    <CoverImage src={userInfo.vk_info.photo_max} round square/>
+                                                {userInfo.vk_info.photo ?
+                                                    <CoverImage src={userInfo.vk_info.photo} round square/>
                                                     : <i className="icon-profile"/>}
                                             </div>
                                         ) : (

@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useCallback, useRef} from "react";
 import Auth from 'definitions/auth';
 import Popup, {APPEAR_ANIMATION} from "components/ui/Popup";
 import {Input} from "components/ui/input";
@@ -8,14 +8,6 @@ import APIRequest from "api";
 import {useUser} from "../../../store";
 
 const LOCAL_STORAGE_KEY = 'ege-hack-email';
-
-function getRequestData(email, selectedCourses) {
-    return {
-        courses_ids: [...selectedCourses].map(({id}) => id),
-        vk_address: Auth.getCredentials().user.href,
-        email
-    };
-}
 
 function createLinkRequest(requestData) {
     return APIRequest.post('/payments/form/tinkoff/link', requestData);
@@ -33,6 +25,16 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
     } = useForm(state => ({
         email: userInfo && userInfo.email ? userInfo.email : localStorage.getItem(LOCAL_STORAGE_KEY) || ''
     }), checkValidity);
+
+    const getRequestData = useCallback((email, selectedCourses) => {
+        if (!userInfo)
+            return;
+        return {
+            courses_ids: [...selectedCourses].map(({id}) => id),
+            vk_address: userInfo.contacts.vk,
+            email
+        };
+    }, [userInfo]);
 
     const {
         email
