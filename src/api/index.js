@@ -190,11 +190,6 @@ const transformError = (error) => {
         throw error;
     const {config} = error.toJSON();
     const url = getUrl(config);
-    if (/\/login/.test(url.pathname)) {
-        return {
-            "access_token": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNTQ3OTI0MzksImVtYWlsIjoicHBwQG1haWwucnUifQ.HC1Uk6fpaXDm8xbBfpSbs4fE9uhcczk4Mxa-kDhEOuA'
-        }
-    }
     if (config.method !== 'get')
         throw error;
     if (error.response && error.response.status === 404) {

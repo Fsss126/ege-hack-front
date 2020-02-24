@@ -1,5 +1,6 @@
 /*global VK*/
 import APIRequest from "api";
+import {getAppUrl} from "./helpers";
 
 const LOCAL_STORAGE_KEY = 'ege-hack-user-data';
 const VK_APP_ID = process.env.REACT_APP_VK_APP_ID;
@@ -36,10 +37,11 @@ class Auth {
         let credentials;
         try {
             credentials = getCredentialsFromStorage();
+            this.setCredentials(credentials);
         } catch (e) {
             console.log('error retrieving credentials from local storage');
+            this.setCredentials(null);
         }
-        this.setCredentials(credentials);
     }
 
     setCredentials(user) {
