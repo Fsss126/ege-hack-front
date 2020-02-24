@@ -6,11 +6,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/GenericFileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/GenericFileInput.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,19 +63,19 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/components/pages/shop" />
-      <recent name="$PROJECT_DIR$/src/components" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
-      <recent name="$PROJECT_DIR$/src/components/ui/input/file-input" />
-      <recent name="$PROJECT_DIR$/src/components/ui/input" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
       <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
       <recent name="$PROJECT_DIR$/src/components/ui" />
       <recent name="$PROJECT_DIR$/src/sass" />
       <recent name="$PROJECT_DIR$/src/components/ui/file-input/image" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/pages/shop" />
+      <recent name="$PROJECT_DIR$/src/components" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
+      <recent name="$PROJECT_DIR$/src/components/ui/input/file-input" />
+      <recent name="$PROJECT_DIR$/src/components/ui/input" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start-custom-post-mac">
@@ -421,11 +420,24 @@
       <option name="project" value="LOCAL" />
       <updated>1582550348428</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Types; Redux">
+      <created>1582579297337</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1582579297337</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/data/test_data.js" />
+        <option value="$PROJECT_DIR$/src/definitions/constants.js" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -441,7 +453,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Course selection in shop" />
     <MESSAGE value="Files upload and a lot of staff" />
     <MESSAGE value="File upload; Login" />
     <MESSAGE value="Added teachers; Added account page" />
@@ -466,7 +477,8 @@
     <MESSAGE value="Participants form" />
     <MESSAGE value="Purchase" />
     <MESSAGE value="Fixed invalid locale storage credentials scenario" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed invalid locale storage credentials scenario" />
+    <MESSAGE value="Types; Redux" />
+    <option name="LAST_COMMIT_MESSAGE" value="Types; Redux" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Inspections" timestamp="1578065894058">
@@ -498,28 +510,28 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1582553579881">
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1582579558966">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582553579881" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582579558966" />
     <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1579635201238" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1582553579878">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1582579558964">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582553579878" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582579558964" />
     <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1579635201236" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1582553579876">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1582579558963">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582553579876" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582579558963" />
     <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1579635201235" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1582553579879">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1582579558965">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582553579879" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582579558965" />
     <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1579635201237" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1575496047285">
@@ -555,10 +567,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="226" y="132" width="837" height="540" key="find.popup" timestamp="1582552236057">
+    <state x="226" y="132" width="837" height="540" key="find.popup" timestamp="1582579316912">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="226" y="132" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582552236057" />
+    <state x="226" y="132" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582579316912" />
     <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1579636767643" />
   </component>
 </project>
