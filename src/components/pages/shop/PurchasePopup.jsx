@@ -11,7 +11,7 @@ const LOCAL_STORAGE_KEY = 'ege-hack-email';
 function getRequestData(email, selectedCourses) {
     return {
         courses_ids: [...selectedCourses].map(({id}) => id),
-        vk_address: Auth.getUser().user.href,
+        vk_address: Auth.getCredentials().user.href,
         email
     };
 }

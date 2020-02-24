@@ -37,7 +37,7 @@ const getUploadParams = () => {
     // return { url: 'https://httpbin.org/post' };
     return {
         url: `${API_ROOT}/files/`,
-        headers: getAuthHeader(Auth.getUserId(), Auth.getUserPassword())
+        headers: getAuthHeader(Auth.getAccessToken(), Auth.getUserPassword())
     };
 };
 export const allFilesReady = files => files.every(f => isFileReady(f));

@@ -16,6 +16,10 @@ export const getCancelToken = () => {
     }
 };
 
+const getUrl = (config) => {
+    return  new URL(`${config.baseURL}${config.url.replace(config.baseURL, '')}`);
+};
+
 const APIRequest = axios.create({
     baseURL: API_ROOT,
     paramsSerializer: (params) => {
@@ -33,13 +37,15 @@ const APIRequest = axios.create({
 });
 
 APIRequest.interceptors.request.use(function (config) {
+    const url = getUrl(config);
+    if (/\/login/.test(url.pathname))
+        return config;
     try {
         return {
-            auth: {
-                username: Auth.getUserId(),
-                password: Auth.getUserPassword()
-            },
-            ...config
+            ...config,
+            headers: {
+                'Authorization': Auth.getAccessToken()
+            }
         }
     } catch (e) {
         throw new axios.Cancel(e.message);
@@ -113,7 +119,7 @@ const transformHomework = ({file_info, pupil, date, ...rest}) => (
 //Interceptors
 const transformData = (response) => {
     const {config, data} = response;
-    const url = new URL(`${config.baseURL}${config.url.replace(config.baseURL, '')}`);
+    const url = getUrl(config);
     switch (true) {
         case url.pathname === '/accounts/teachers':
             return data.map(transformUser);
@@ -183,9 +189,14 @@ const transformError = (error) => {
     if (!error.toJSON)
         throw error;
     const {config} = error.toJSON();
+    const url = getUrl(config);
+    if (/\/login/.test(url.pathname)) {
+        return {
+            "access_token": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNTQ3OTI0MzksImVtYWlsIjoicHBwQG1haWwucnUifQ.HC1Uk6fpaXDm8xbBfpSbs4fE9uhcczk4Mxa-kDhEOuA'
+        }
+    }
     if (config.method !== 'get')
         throw error;
-    const url = new URL(config.url);
     if (error.response && error.response.status === 404) {
         switch (true) {
             case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):

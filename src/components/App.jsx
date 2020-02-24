@@ -63,7 +63,6 @@ const onLocationChange = (location, args) => {
 
 const DefaultRedirect = () => <Redirect to="/courses"/>;
 
-
 function App() {
     // routing effects
     useForceTrailingSlash();
