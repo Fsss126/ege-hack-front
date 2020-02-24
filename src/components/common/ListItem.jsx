@@ -20,7 +20,6 @@ export default function ListItem(props) {
     } = props;
     const [descriptionRef, isFontLoaded] = useTruncate(description);
     const onClick = React.useCallback((event) => {
-        debugger;
         const clicked = selectable && !((actionCallback || noOnClickOnAction) && event.target.closest('.list__item-action'));
         if (clicked && clickCallback) {
             clickCallback(item, callbackProps);

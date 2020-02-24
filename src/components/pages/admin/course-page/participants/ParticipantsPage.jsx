@@ -80,7 +80,7 @@ const ParticipantsPage = (props) => {
                                 <Button
                                     neutral
                                     tag={Link}
-                                    to={`${path}/${courseId}/participants/edit/`}
+                                    to={`/admin/${courseId}/participants/edit/`}
                                     icon={<i className="icon-add"/>}>
                                     Добавить учеников
                                 </Button>

@@ -571,6 +571,9 @@ header {
       margin-left: -$content-padding-sides;
       margin-right: -$content-padding-sides;
     }
+    &.layout__content-block--transparent {
+      background: none;
+    }
   }
   .layout__content-block~.layout__content-block:not(.layout__content-block--stacked) {
     margin-top: 24px;

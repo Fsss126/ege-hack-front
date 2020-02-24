@@ -72,7 +72,7 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
                                 <Button
                                     neutral
                                     tag={Link}
-                                    to={`${path}/${courseId}/lessons/create/`}
+                                    to={`/admin/${courseId}/lessons/create/`}
                                     icon={<i className="icon-add"/>}>
                                     Добавить урок
                                 </Button>

@@ -141,7 +141,6 @@ const transformData = (response) => {
                 return transformLesson(data);
         }
         case /\/lessons\/(\w*)\/homeworks$/.test(url.pathname): {
-            console.log(data);
             return data.map(transformHomework);
         }
         case /\/lessons\/(\w*)\/homeworks\/pupil/.test(url.pathname): {

@@ -18,9 +18,15 @@ const AssignmentPage = (props) => {
             {isLoaded && (
                 <PageContent parentSection={parentSection}>
                     {header}
-                    <div className="layout__content-block">
-                        <HomeworkAssignment assignment={lesson.assignment}/>
-                    </div>
+                    {lesson && lesson.assignment ? (
+                        <div className="layout__content-block">
+                            <HomeworkAssignment assignment={lesson.assignment}/>
+                        </div>
+                    ) : (
+                        <div className="layout__content-block layout__content-block--transparent">
+                            <div className="text-center font-size-sm">Нет домашнего задания</div>
+                        </div>
+                    )}
                 </PageContent>
             )}
         </Page>
