@@ -10,8 +10,8 @@ export const AuthEventTypes = {
     logout: 'auth.logout'
 };
 
-function setCredentialsToStorage(user) {
-    localStorage.setItem(LOCAL_STORAGE_KEY, user ? JSON.stringify(user) : user);
+function setCredentialsToStorage(credentials) {
+    localStorage.setItem(LOCAL_STORAGE_KEY, credentials ? JSON.stringify(credentials) : credentials);
 }
 
 function getCredentialsFromStorage() {
@@ -77,7 +77,7 @@ class Auth {
             redirect_uri: redirectUrl
         });
         console.info('got credentials', credentials);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(credentials));
+        setCredentialsToStorage(credentials);
         this.setCredentials(credentials);
     };
 

@@ -5,6 +5,7 @@ import {Input} from "components/ui/input";
 import {useForm, useFormValidityChecker} from "components/ui/Form";
 import Form from "components/ui/Form";
 import APIRequest from "api";
+import {useUser} from "../../../store";
 
 const LOCAL_STORAGE_KEY = 'ege-hack-email';
 
@@ -21,6 +22,7 @@ function createLinkRequest(requestData) {
 }
 
 const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
+    const {userInfo} = useUser();
     const formElementRef = useRef(null);
     const checkValidity = useFormValidityChecker(formElementRef, undefined, [opened]);
     const {
@@ -29,7 +31,7 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
         onInputChange,
         reset
     } = useForm(state => ({
-        email: localStorage.getItem(LOCAL_STORAGE_KEY) || ''
+        email: userInfo && userInfo.email ? userInfo.email : localStorage.getItem(LOCAL_STORAGE_KEY) || ''
     }), checkValidity);
 
     const {
