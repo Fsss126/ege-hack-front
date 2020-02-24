@@ -28,9 +28,9 @@ const Header = (props) => {
                             <DropdownMenu
                                 className="user-nav"
                                 content={user !== null ? (
-                                    <div className={`user-nav__info d-flex align-items-center ${user ? '' : 'ph-item'}`}>
-                                        {user ? (
-                                            <div className="user-nav__user-name">{user.user.first_name} {user.user.last_name}</div>
+                                    <div className={`user-nav__info d-flex align-items-center ${userInfo ? '' : 'ph-item'}`}>
+                                        {userInfo ? (
+                                            <div className="user-nav__user-name">{userInfo.vk_info.first_name} {userInfo.vk_info.last_name}</div>
                                         ) : (
                                             <div className="user-nav__user-name ph-text"/>
                                         )}

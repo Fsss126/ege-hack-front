@@ -4,7 +4,7 @@ import Catalog from "./Catalog";
 const CourseCatalog = ({renderCourse, ...otherProps}) => (
     <Catalog.Catalog
         emptyPlaceholder="Нет курсов"
-        noMatchplaceholder="Нет курсов, соответствующих условиям поиска"
+        noMatchPlaceholder="Нет курсов, соответствующих условиям поиска"
         renderItem={renderCourse}
         {...otherProps}/>
 );
@@ -29,11 +29,11 @@ const Body = (props) => {
     )
 };
 
-// const CourseCatalogPage = (props) => (<Catalog.Page BodyComponent={Body} {...props}/>);
+// const HomeworksPage = (props) => (<Catalog.Page BodyComponent={Body} {...props}/>);
 
 export default {
     ...Catalog,
     Catalog: CourseCatalog,
     Body,
-    // Page: CourseCatalogPage
+    // Page: HomeworksPage
 }

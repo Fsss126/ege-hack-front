@@ -1,5 +1,6 @@
 import _ from "lodash";
 import MobileDetect from "mobile-detect";
+import {APP_BASE_URL} from "./constants";
 
 export const daysBetween = (date1, date2) => {
     const one_day = 1000 * 60 * 60 * 24;
@@ -36,6 +37,8 @@ Object.assign(renderDate, {
     }
 });
 
+export const renderRemainingTime = (time) => {};
+
 export const getAuthHeader = (username, password) => ({'Authorization': `Basic ${btoa(username + ":" + password)}`});
 
 export const trimFileExtension = (filename) => filename.replace(/\.[^/.]+$/, "");
@@ -70,3 +73,6 @@ export const renderPrice = (price) => {
     const isIphone = deviceInfo.os() === 'iOS';
     return `${price}${isIphone ? ' руб.' : '₽'}`;
 };
+
+export const getCurrentUrl = () => `${window.location.origin}${window.location.pathname}`;
+export const getAppUrl = (path) => `${window.location.origin}${APP_BASE_URL}${path}`;

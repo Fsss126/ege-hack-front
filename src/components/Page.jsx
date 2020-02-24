@@ -84,11 +84,11 @@ const Page = ({
                   isLoaded = true,
               }) => {
     const [isSideBarOpened, toggleSideBar] = useSideBarState();
-    const {user, userInfo} = useUser();
+    const {credentials, userInfo} = useUser();
 
     const permissionsSatisfied = useCheckPermissions(requiredPermissions, requiredRoles, fullMatch);
     if (checkLogin) {
-        if (user === null) {
+        if (credentials === null) {
             return (
                 <Redirect to={{
                     pathname: '/login/',
@@ -99,14 +99,14 @@ const Page = ({
             return <PermissionsDeniedErrorPage/>;
         }
     }
-    const showContent = (checkLogin ? (requiredPermissions || loadUserInfo ? user && userInfo : !!user) : true) && isLoaded;
+    const showContent = (checkLogin ? (requiredPermissions || loadUserInfo ? credentials && userInfo : !!credentials) : true) && isLoaded;
     return (
         <div className="app">
             {showHeader && (
                 <Header
                     onMenuButtonClick={toggleSideBar}
                     showUserNav={showUserNav}
-                    user={user}
+                    user={credentials}
                     userInfo={userInfo}
                     sidebar={showSidebar}/>
             )}
@@ -118,7 +118,7 @@ const Page = ({
                     <React.Fragment>
                         {showSidebar && (
                             <SideBar
-                                accountRoles={user !== null ? (userInfo ? userInfo.roles : undefined) : null}
+                                accountRoles={credentials !== null ? (userInfo ? userInfo.roles : undefined) : null}
                                 onMenuClose={toggleSideBar}/>
                         )}
                         <div className={classnames('layout__content', className)}>

@@ -25,8 +25,7 @@ const LessonPage = (props) => {
                 selectable={!locked}
                 key={id}
                 link={`../${lesson.id}/`}
-                {...renderProps}>
-            </Lesson>
+                {...renderProps}/>
         );
     };
 

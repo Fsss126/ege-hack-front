@@ -35,8 +35,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
                 key={id}
                 link={courseLink}
                 noOnClickOnAction
-                {...rest}>
-                {canEdit && (
+                action={canEdit && (
                     <DropdownMenu
                         content={<DropdownIconButton className="icon-ellipsis"/>}>
                         <DropdownMenuOption
@@ -61,7 +60,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
                         )}
                     </DropdownMenu>
                 )}
-            </Course>
+                {...rest}/>
         )
     }, [canEdit, onDelete, path]);
     const isLoaded = catalog && subjects;

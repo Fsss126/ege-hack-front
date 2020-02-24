@@ -22,8 +22,7 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCou
                 onActionClick={isEditing || purchased ? null : onCourseSelect}
                 key={course.id}
                 link={isEditing ? `/courses/${course.id}/edit` : link}
-                {...rest}>
-                {isEditing || !purchased ? (
+                action={isEditing || !purchased ? (
                     <React.Fragment>
                         <div className="list__item-action-info">
                             <span className="price">{renderPrice(price)}</span> {
@@ -35,7 +34,7 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCou
                 ) : (
                     <Button style={{minWidth: '115px'}} active={false}>Куплено</Button>
                 )}
-            </Course>
+                {...rest}/>
         )
     }, [selectedCourses, onCourseSelect, isEditing]);
     const isLoaded = catalog && subjects;

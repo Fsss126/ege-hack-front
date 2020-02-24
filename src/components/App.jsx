@@ -3,17 +3,16 @@ import {BrowserRouter as Router, Redirect, Route, Switch, useHistory, useLocatio
 import {APP_BASE_URL} from "definitions/constants";
 import {useRefValue, useToggle} from "hooks/common";
 import GlobalStore from "store";
-
 import Login from "./pages/login";
 import Account from "./pages/account";
 import Teachers from "./pages/teachers";
 import Shop from "./pages/shop";
 import MyCourses from "./pages/courses";
 import Admin from "./pages/admin";
+import Teaching from "./pages/teaching";
+import {NotFoundErrorPage} from "./ErrorPage";
 
 import 'sass/index.scss';
-import ErrorPage from "./ErrorPage";
-import Teaching from "./pages/teaching";
 
 function useLocationChangeEffect(effect) {
     const history = useHistory();
@@ -39,6 +38,7 @@ function useForceTrailingSlash() {
     const history = useHistory();
     const path = location.pathname;
     if (path.slice(-1) !== '/') {
+        console.log(window.location);
         history.replace(path + '/');
     }
 }
@@ -63,7 +63,6 @@ const onLocationChange = (location, args) => {
 
 const DefaultRedirect = () => <Redirect to="/courses"/>;
 
-
 function App() {
     // routing effects
     useForceTrailingSlash();
@@ -84,7 +83,7 @@ function App() {
                 <Route path="/admin" component={Admin}/>
                 <Route path="/teaching" component={Teaching}/>
                 {/*<Route path="/:section" component={Page}/>*/}
-                <Route component={ErrorPage}/>
+                <Route component={NotFoundErrorPage}/>
             </Switch>
         </UIContext.Provider>
     );

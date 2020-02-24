@@ -4,13 +4,10 @@ import UserProfile from "components/common/UserProfile";
 import {useUser} from "store";
 
 const AccountPage = () => {
-    const {user, userInfo} = useUser();
+    const {userInfo} = useUser();
     let photo_max, first_name, last_name;
-    if (user) {
-        ({user: {first_name, last_name}} = user);
-    }
     if (userInfo) {
-        ({vk_info: {photo_max}} = userInfo);
+        ({vk_info: {photo_max, first_name, last_name}} = userInfo);
     }
     return (
         <Page title="Аккаунт" className="account-page" isLoaded={true}>

@@ -274,8 +274,9 @@ label {
   .file__state-indicator {
     margin-left: 8px;
     cursor: pointer;
-    i {
+    i.tooltip {
       display: block;
+      position: static;
     }
   }
 }

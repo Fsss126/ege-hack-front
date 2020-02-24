@@ -10,26 +10,26 @@ const StoreContext = React.createContext(null);
 StoreContext.displayName = 'StoreContext';
 
 function useUserAuth() {
-    const [user, setUser] = React.useState(Auth.getUser());
+    const [credentials, setCredentials] = React.useState(Auth.getCredentials());
     const [userInfo, setUserInfo] = React.useState(null);
 
     React.useEffect(() => {
-        if (!user)
+        if (!credentials)
             return;
         const fetchUserInfo = async () => {
             const userInfo = await Auth.getUserInfo();
             setUserInfo(userInfo);
         };
-        if (user)
+        if (credentials)
             fetchUserInfo();
-    }, [user]);
+    }, [credentials]);
 
     React.useLayoutEffect(() => {
-        const loginCallback = (user, userInfo) => {
-            setUser(user);
+        const loginCallback = (credentials) => {
+            setCredentials(credentials);
         };
         const logoutCallback = () => {
-            setUser(null);
+            setCredentials(null);
         };
         Auth.subscribe(AuthEventTypes.login, loginCallback);
         Auth.subscribe(AuthEventTypes.logout, logoutCallback);
@@ -38,7 +38,7 @@ function useUserAuth() {
             Auth.unsubscribe(AuthEventTypes.logout, logoutCallback);
         }
     }, []);
-    return {user, userInfo};
+    return {credentials: credentials, userInfo};
 }
 
 //TODO: use Redux
@@ -49,6 +49,7 @@ const useTeacherCoursesStore = () => React.useState(null);
 const useSubjectsStore = () => React.useState(null);
 const useTeachersStore = () => React.useState(null);
 const useLessonsStore = () => React.useState({});
+const useTeacherHomeworksStore = () => React.useState({});
 const useWebinarsStore = () => React.useState({});
 const useParticipantsStore = () => React.useState({});
 const useAdminWebinarsStore = () => React.useState({});
@@ -64,6 +65,7 @@ function useStoreData() {
     const [webinars, setWebinars] = useWebinarsStore();
     const [adminWebinars, setAdminWebinars] = useAdminWebinarsStore();
     const [participants, setParticipants] = useParticipantsStore();
+    const [teacherHomeworks, setTeacherHomeworks] = useTeacherHomeworksStore();
     return {
         data: {
             shopCourses,
@@ -75,7 +77,8 @@ function useStoreData() {
             adminWebinars,
             participants,
             adminCourses,
-            teacherCourses
+            teacherCourses,
+            teacherHomeworks
         },
         setters: {
             setShopCourses,
@@ -87,7 +90,8 @@ function useStoreData() {
             setAdminWebinars,
             setParticipants,
             setAdminCourses,
-            setTeacherCourses
+            setTeacherCourses,
+            setTeacherHomeworks
         }
     }
 }
@@ -95,12 +99,12 @@ function useStoreData() {
 const requests = {};
 
 export function useUser() {
-    const {user, userInfo} = useContext(StoreContext);
-    return {user, userInfo};
+    const {credentials, userInfo} = useContext(StoreContext);
+    return {credentials, userInfo};
 }
 
 export function useSubjects() {
-    const {user, data: {subjects}, setters: {setSubjects}} = useContext(StoreContext);
+    const {credentials, data: {subjects}, setters: {setSubjects}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchSubjects = useCallback(async () => {
         if (requests.subjects)
@@ -123,16 +127,16 @@ export function useSubjects() {
     }, [error]);
 
     React.useEffect(() => {
-        if (user && !(subjects || requests.subjects || error)) {
+        if (credentials && !(subjects || requests.subjects || error)) {
             fetchSubjects();
         }
-    }, [user, subjects, error]);
+    }, [credentials, subjects, error]);
 
     return {subjects, error, reload: fetchSubjects};
 }
 
 export function useDiscount(selectedCourses) {
-    const {user} = useUser();
+    const {credentials} = useUser();
     const [discount, setDiscount] = React.useState(null);
     const [error, setError] = React.useState(null);
     const [isLoading, setLoading] = React.useState(true);
@@ -167,15 +171,15 @@ export function useDiscount(selectedCourses) {
     }, [selectedCourses, error]);
 
     React.useEffect(() => {
-        if (user && !(error))
+        if (credentials && !(error))
             fetchDiscount();
-    }, [user, selectedCourses, error]);
+    }, [credentials, selectedCourses, error]);
 
     return {discount, error, reload: fetchDiscount, isLoading};
 }
 
 export function useTeachers() {
-    const {user, data: {teachers}, setters: {setTeachers}} = useContext(StoreContext);
+    const {credentials, data: {teachers}, setters: {setTeachers}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchTeachers = useCallback(async () => {
         if (requests.teachers)
@@ -199,10 +203,10 @@ export function useTeachers() {
     }, [error]);
 
     React.useEffect(() => {
-        if (user && !(teachers || requests.teachers || error)) {
+        if (credentials && !(teachers || requests.teachers || error)) {
             fetchTeachers();
         }
-    }, [user, teachers, error]);
+    }, [credentials, teachers, error]);
 
     return {teachers, error, reload: fetchTeachers};
 }
@@ -218,7 +222,7 @@ export function useTeacher(teacherId) {
 }
 
 export function useShopCatalog() {
-    const {user, data: {shopCourses}, setters: {setShopCourses}} = useContext(StoreContext);
+    const {credentials, data: {shopCourses}, setters: {setShopCourses}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchCatalog = useCallback(async () => {
         if (requests.shopCatalog)
@@ -245,10 +249,10 @@ export function useShopCatalog() {
     }, [error]);
 
     React.useEffect(() => {
-        if (user && !(shopCourses || requests.shopCatalog || error)) {
+        if (credentials && !(shopCourses || requests.shopCatalog || error)) {
             fetchCatalog();
         }
-    }, [user, shopCourses, error]);
+    }, [credentials, shopCourses, error]);
 
     return {catalog: shopCourses, error, reload: fetchCatalog};
 }
@@ -264,7 +268,7 @@ export function useShopCourse(courseId) {
 }
 
 export function useAdminCourses() {
-    const {user, data: {adminCourses}, setters: {setAdminCourses}} = useContext(StoreContext);
+    const {credentials, data: {adminCourses}, setters: {setAdminCourses}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchCatalog = useCallback(async () => {
         if (requests.adminCourses)
@@ -293,11 +297,11 @@ export function useAdminCourses() {
     const isAllowed = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
 
     React.useEffect(() => {
-        if (user && isAllowed === true) {
+        if (credentials && isAllowed === true) {
             if (!(adminCourses || requests.adminCourses || error))
                 fetchCatalog();
         }
-    }, [user, isAllowed, adminCourses, error]);
+    }, [credentials, isAllowed, adminCourses, error]);
 
     return {catalog: isAllowed === false ? false : adminCourses, error, reload: fetchCatalog};
 }
@@ -313,7 +317,7 @@ export function useAdminCourse(courseId) {
 }
 
 export function useTeacherCourses() {
-    const {user, data: {teacherCourses}, setters: {setTeacherCourses}} = useContext(StoreContext);
+    const {credentials, data: {teacherCourses}, setters: {setTeacherCourses}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchCatalog = useCallback(async () => {
         if (requests.teacherCourses)
@@ -335,10 +339,10 @@ export function useTeacherCourses() {
     }, [error]);
 
     React.useEffect(() => {
-        if (user && !(teacherCourses || requests.teacherCourses || error)) {
+        if (credentials && !(teacherCourses || requests.teacherCourses || error)) {
             fetchCatalog();
         }
-    }, [user, teacherCourses, error]);
+    }, [credentials, teacherCourses, error]);
 
     return {catalog: teacherCourses, error, reload: fetchCatalog};
 }
@@ -378,7 +382,7 @@ export function useRevokeCourses() {
 }
 
 export function useUserCourses() {
-    const {user, data: {userCourses}, setters: {setUserCourses}} = useContext(StoreContext);
+    const {credentials, data: {userCourses}, setters: {setUserCourses}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchUserCourses = useCallback(async () => {
         if (requests.userCourses)
@@ -405,10 +409,10 @@ export function useUserCourses() {
     }, [error]);
 
     React.useEffect(() => {
-        if (user && !(userCourses || requests.userCourses || error)) {
+        if (credentials && !(userCourses || requests.userCourses || error)) {
             fetchUserCourses();
         }
-    }, [user, userCourses, error]);
+    }, [credentials, userCourses, error]);
 
     return {courses: userCourses, error, reload: fetchUserCourses};
 }
@@ -425,7 +429,7 @@ export function useUserCourse(courseId) {
 }
 
 export function useLessons(courseId) {
-    const {user, data: {lessons}, setters: {setLessons}} = useContext(StoreContext);
+    const {credentials, data: {lessons}, setters: {setLessons}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchLessons = useCallback(async () => {
         if (requests.lessons && requests.lessons[courseId])
@@ -451,10 +455,10 @@ export function useLessons(courseId) {
     }, [error, courseId]);
 
     React.useEffect(() => {
-        if (user && !(lessons[courseId] || (requests.lessons && requests.lessons[courseId]) || error)) {
+        if (credentials && !(lessons[courseId] || (requests.lessons && requests.lessons[courseId]) || error)) {
             fetchLessons();
         }
-    }, [user, lessons, courseId, error]);
+    }, [credentials, lessons, courseId, error]);
 
     return {lessons: lessons[courseId], error, reload: fetchLessons};
 }
@@ -490,6 +494,57 @@ export function useLesson(courseId, lessonId) {
     }
 }
 
+export function useTeacherHomeworks(lessonId) {
+    const {credentials, data: {teacherHomeworks}, setters: {setTeacherHomeworks}} = useContext(StoreContext);
+    const [error, setError] = React.useState(null);
+    const fetchHomeworks = useCallback(async () => {
+        if (requests.teacherHomeworks && requests.teacherHomeworks[lessonId])
+            return requests.teacherHomeworks[lessonId];
+        const request = APIRequest.get(`/lessons/${lessonId}/homeworks`);
+        (requests.teacherHomeworks || (requests.teacherHomeworks = {}))[lessonId] = request;
+        try {
+            if (error)
+                setError(null);
+            const homeworks = await request;
+            console.log('set homeworks', homeworks);
+            setTeacherHomeworks(loadedHomeworks => ({...loadedHomeworks, [lessonId]: homeworks}));
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+        finally {
+            delete requests.teacherHomeworks[lessonId];
+        }
+        return request;
+    }, [error, lessonId]);
+
+    const isAllowed = useCheckPermissions(PERMISSIONS.HOMEWORK_CHECK);
+    React.useEffect(() => {
+        if (credentials && isAllowed === true) {
+            if (!(teacherHomeworks[lessonId] || (requests.teacherHomeworks && requests.teacherHomeworks[lessonId]) || error)) {
+                fetchHomeworks();
+            }
+        }
+    }, [credentials, isAllowed, teacherHomeworks, lessonId, error]);
+
+    return {homeworks: isAllowed === false ? false : teacherHomeworks[lessonId], error, reload: fetchHomeworks};
+}
+
+export function useRevokeTeacherHomeworks(lessonId) {
+    const {setters: {setTeacherHomeworks}} = useContext(StoreContext);
+
+    return useCallback((responseHomework) => {
+        const {pupil: {id: studentId}, mark, comment} = responseHomework;
+        setTeacherHomeworks(({[lessonId]: lessonHomeworks, ...loadedHomeworks}) => {
+            const lessonIndex = _.findIndex(lessonHomeworks, {pupil: {id: studentId}});
+            const homework = lessonHomeworks[lessonIndex];
+            const newHomeworks = [...lessonHomeworks];
+            newHomeworks[lessonIndex] = {...homework, mark, comment};
+            return {[lessonId]: newHomeworks, ...loadedHomeworks};
+        });
+    }, [setTeacherHomeworks, lessonId]);
+}
+
 export function useAdminLessons(courseId) {
     const {lessons, error, reload} = useLessons(courseId);
     const isAllowed = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
@@ -505,7 +560,7 @@ export function useAdminLesson(courseId, lessonId) {
 }
 
 export function useParticipants(courseId) {
-    const {user, data: {participants}, setters: {setParticipants}} = useContext(StoreContext);
+    const {credentials, data: {participants}, setters: {setParticipants}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchParticipants = useCallback(async () => {
         if (requests.participants && requests.participants[courseId])
@@ -530,26 +585,27 @@ export function useParticipants(courseId) {
 
     const isAllowed = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
     React.useEffect(() => {
-        if (user && isAllowed === true) {
+        if (credentials && isAllowed === true) {
             if (!(participants[courseId] || (requests.participants && requests.participants[courseId]) || error))
                 fetchParticipants();
         }
-    }, [user, isAllowed, participants, courseId, error]);
+    }, [credentials, isAllowed, participants, courseId, error]);
 
     return {participants: isAllowed === false ? false : participants[courseId], error, reload: fetchParticipants};
 }
 
 export function useRevokeParticipants(courseId) {
-    const {setters: {setParticipants}} = useContext(StoreContext);
+    const {setters: {setParticipants, setUserCourses}} = useContext(StoreContext);
 
     return useCallback((responseParticipants) => {
         console.log('response', responseParticipants);
         setParticipants((loadedParticipants) => ({...loadedParticipants, [courseId]: responseParticipants}));
+        setUserCourses(null);
     }, [setParticipants, courseId]);
 }
 
 export function useAdminWebinars(courseId) {
-    const {user, data: {adminWebinars}, setters: {setAdminWebinars}} = useContext(StoreContext);
+    const {credentials, data: {adminWebinars}, setters: {setAdminWebinars}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchWebinars = useCallback(async () => {
         if (requests.adminWebinars && requests.adminWebinars[courseId])
@@ -574,11 +630,11 @@ export function useAdminWebinars(courseId) {
 
     const isAllowed = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
     React.useEffect(() => {
-        if (user && isAllowed === true) {
+        if (credentials && isAllowed === true) {
             if (!(adminWebinars[courseId] || adminWebinars[courseId] === null || (requests.adminWebinars && requests.adminWebinars[courseId]) || error))
                 fetchWebinars();
         }
-    }, [user, isAllowed, adminWebinars, courseId, error]);
+    }, [credentials, isAllowed, adminWebinars, courseId, error]);
 
     return {webinars: isAllowed === false ? false : adminWebinars[courseId], error, reload: fetchWebinars};
 }
@@ -596,7 +652,7 @@ export function useRevokeWebinars(courseId) {
 }
 
 export function useHomework(lessonId) {
-    const {user} = useContext(StoreContext);
+    const {credentials} = useContext(StoreContext);
     const [homework, setHomework] = React.useState(undefined);
     const [error, setError] = React.useState(null);
     const fetchHomework = useCallback(async () => {
@@ -621,16 +677,16 @@ export function useHomework(lessonId) {
     }, [error, lessonId]);
 
     React.useEffect(() => {
-        if (user && !(homework || homework === null || (requests.homework && requests.homework[lessonId]) || error)) {
+        if (credentials && !(homework || homework === null || (requests.homework && requests.homework[lessonId]) || error)) {
             fetchHomework();
         }
-    }, [user, homework, lessonId, error]);
+    }, [credentials, homework, lessonId, error]);
 
     return {homework, error, reload: fetchHomework};
 }
 
 export function useUpcomingWebinars() {
-    const {user, data: {webinars}, setters: {setWebinars}} = useContext(StoreContext);
+    const {credentials, data: {webinars}, setters: {setWebinars}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchWebinars = useCallback(async () => {
         if (requests.webinars && requests.webinars.upcoming)
@@ -654,16 +710,16 @@ export function useUpcomingWebinars() {
     }, [error]);
 
     React.useEffect(() => {
-        if (user && !(webinars.upcoming || (requests.webinars && requests.webinars.upcoming) || error)) {
+        if (credentials && !(webinars.upcoming || (requests.webinars && requests.webinars.upcoming) || error)) {
             fetchWebinars();
         }
-    }, [user, webinars, error]);
+    }, [credentials, webinars, error]);
 
     return {webinars: webinars.upcoming, error, reload: fetchWebinars};
 }
 
 export function useCourseWebinars(courseId) {
-    const {user, data: {webinars}, setters: {setWebinars}} = useContext(StoreContext);
+    const {credentials, data: {webinars}, setters: {setWebinars}} = useContext(StoreContext);
     const [error, setError] = React.useState(null);
     const fetchWebinars = useCallback(async () => {
         if (requests.webinars && requests.webinars[courseId])
@@ -687,10 +743,10 @@ export function useCourseWebinars(courseId) {
     }, [error, courseId]);
 
     React.useEffect(() => {
-        if (user && !(webinars[courseId] || (requests.webinars && requests.webinars[courseId]) || error)) {
+        if (credentials && !(webinars[courseId] || (requests.webinars && requests.webinars[courseId]) || error)) {
             fetchWebinars();
         }
-    }, [user, webinars, courseId, error]);
+    }, [credentials, webinars, courseId, error]);
 
     return {webinars: webinars[courseId], error, reload: fetchWebinars};
 }
@@ -774,10 +830,10 @@ export function useDeleteWebinar(redirectUrl, onDelete, onError) {
 }
 
 const GlobalStore = ({children}) => {
-    const {user, userInfo} = useUserAuth();
+    const {credentials, userInfo} = useUserAuth();
     const data = useStoreData();
     return (
-        <StoreContext.Provider value={{user, userInfo, ...data}}>
+        <StoreContext.Provider value={{credentials, userInfo, ...data}}>
             {children}
         </StoreContext.Provider>
     )

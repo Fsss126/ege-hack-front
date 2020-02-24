@@ -2,13 +2,8 @@ import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
-import Button from "components/ui/Button";
-import {useAdminCourses, useSubjects, useTeacherCourses} from "store";
-import {Link} from "react-router-dom";
-import {ADMIN_ROLES, PERMISSIONS, TEACHER_ROLES} from "definitions/constants";
-import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
-import {useCheckPermissions} from "components/ConditionalRender";
-import {useDeleteCourse} from "store";
+import {useSubjects, useTeacherCourses} from "store";
+import {PERMISSIONS} from "definitions/constants";
 
 const filterBy = {
     search: true,
@@ -39,8 +34,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
         <Page
             isLoaded={isLoaded}
             loadUserInfo
-            requiredRoles={TEACHER_ROLES}
-            fullMatch={false}
+            requiredPermissions={PERMISSIONS.HOMEWORK_CHECK}
             className="admin-page admin-page--courses"
             title="Проверка работ"
             location={location}>

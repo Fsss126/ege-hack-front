@@ -14,7 +14,22 @@ import WebinarsPage from "./webinars/WebinarsPage";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {PERMISSIONS} from "definitions/constants";
+import Lesson from "components/common/Lesson";
 
+const renderLesson = (lesson, {link: lessonLink, ...rest}) => {
+    const {id, locked} = lesson;
+    const link = `${lessonLink}edit/`;
+    return (
+        <Lesson
+            lesson={lesson}
+            locked={locked}
+            selectable={true}
+            key={id}
+            noOnClickOnAction
+            link={link}
+            {...rest}/>
+    )
+};
 
 const CoursePage = (props) => {
     const {path: root, match} = props;
@@ -102,6 +117,8 @@ const CoursePage = (props) => {
             )}/>
             <Route path={`${match.path}/lessons`} render={props => (
                 <LessonsPage
+                    requiredPermissions={PERMISSIONS.LESSON_EDIT}
+                    renderLesson={renderLesson}
                     course={course}
                     lessons={lessons}
                     isLoaded={isLoaded}
@@ -122,7 +139,7 @@ const CoursePage = (props) => {
                     {header}
                 </WebinarsPage>
             )}/>
-            <Route render={() => <Redirect to={`${match.url}/lessons/`}/>}/>
+            <Route render={() => <Redirect to={`${root}/${courseId}/lessons/`}/>}/>
         </Switch>
     )
 };

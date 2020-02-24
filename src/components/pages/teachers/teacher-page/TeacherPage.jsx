@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import _ from "lodash";
 import Page, {PageContent} from "components/Page";
 import {NotFoundErrorPage} from "components/ErrorPage";
@@ -24,14 +24,17 @@ const TeacherPage = (props) => {
                 course={course}
                 selectable
                 key={course.id}
-                link={`/shop/${link}`}>
-                <div className="list__item-action-info">
-                    <span className="price">{renderPrice(price)}</span> {
-                    discount && <span className="discount font-size-xs">{renderPrice(discount + price)}</span>
-                }
-                </div>
-                <Button style={{minWidth: '110px'}}>Открыть</Button>
-            </Course>
+                link={`/shop/${link}`}
+                action={
+                    <Fragment>
+                        <div className="list__item-action-info">
+                            <span className="price">{renderPrice(price)}</span> {
+                            discount && <span className="discount font-size-xs">{renderPrice(discount + price)}</span>
+                        }
+                        </div>
+                        <Button style={{minWidth: '110px'}}>Открыть</Button>
+                    </Fragment>
+                }/>
         )
     }, []);
 

@@ -57,8 +57,6 @@ export default class SideBar extends React.Component{
                                     <div className="layout__sidebar-menu-section">
                                         <NavLink className="layout__sidebar-menu-link" to="/teaching/">
                                             <span>Проверка работ</span>
-                                            {' '}
-                                            <span className="badge accent">Скоро</span>
                                         </NavLink>
                                         <NavLink className="layout__sidebar-menu-link" to="/student-performance/" disabled>
                                             <span>Журнал успеваемости</span>

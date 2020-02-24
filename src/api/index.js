@@ -16,6 +16,10 @@ export const getCancelToken = () => {
     }
 };
 
+const getUrl = (config) => {
+    return  new URL(`${config.baseURL}${config.url.replace(config.baseURL, '')}`);
+};
+
 const APIRequest = axios.create({
     baseURL: API_ROOT,
     paramsSerializer: (params) => {
@@ -33,13 +37,15 @@ const APIRequest = axios.create({
 });
 
 APIRequest.interceptors.request.use(function (config) {
+    const url = getUrl(config);
+    if (/\/login/.test(url.pathname))
+        return config;
     try {
         return {
-            auth: {
-                username: Auth.getUserId(),
-                password: Auth.getUserPassword()
-            },
-            ...config
+            ...config,
+            headers: {
+                'Authorization': Auth.getAccessToken()
+            }
         }
     } catch (e) {
         throw new axios.Cancel(e.message);
@@ -77,33 +83,53 @@ const transformLesson = ({hometask, video_link, image_link, is_locked: locked, a
     }) : hometask
 });
 
-const transformUser = ({account_id: id, vk_info: {photo_max: photo, first_name, last_name, ...vk_info}, instagram, ...user}) => ({
-    id,
-    ...user,
-    vk_info: {
-        ...vk_info,
-        photo,
-        first_name,
-        last_name,
-        full_name: `${first_name} ${last_name}`
-    },
-    contacts: {
-        ig: instagram,
-        vk: `https://vk.com/id${id}`
+const transformUser = ({account_id: id, vk_info, instagram, ...user}) => {
+    const {photo_max: photo, first_name, last_name, ...info} = vk_info || {};
+    return ({
+        id,
+        ...user,
+        vk_info: vk_info ? {
+            ...info,
+            photo,
+            first_name,
+            last_name,
+            full_name: `${first_name} ${last_name}`
+        } : undefined,
+        contacts: {
+            ig: instagram,
+            vk: `https://vk.com/id${id}`
+        }
+    });
+};
+
+const transformHomework = ({file_info, pupil, date, ...rest}) => (
+    {
+        ...rest,
+        date: new Date(date),
+        files: file_info ? [
+            {
+                ...file_info,
+                file_link: `${API_ROOT}${file_info.file_link}?disp=attachment`
+            }
+        ] : undefined,
+        pupil: pupil ? transformUser(pupil) : pupil
     }
-});
+);
 
 //Interceptors
 const transformData = (response) => {
     const {config, data} = response;
-    const url = new URL(`${config.baseURL}${config.url.replace(config.baseURL, '')}`);
+    const url = getUrl(config);
     switch (true) {
         case url.pathname === '/accounts/teachers':
             return data.map(transformUser);
         case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):
             return transformUser(data);
         case /\/courses\/(\w*)\/participants$/.test(url.pathname):
-            return data.map(transformUser);
+            return data.map(participant => ({
+                ...transformUser(participant),
+                join_date_time: new Date(participant.join_date_time)
+            }));
         case /\/courses(\/\w*)?$/.test(url.pathname): {
             if (config.method === 'get') {
                 return data.map((course) => ({
@@ -120,20 +146,12 @@ const transformData = (response) => {
             else
                 return transformLesson(data);
         }
-        case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname): {
-            const {file_info: {file_id, file_name, file_link}, date:dateTime, ...rest} = data;
-            const date = new Date();
-            return {
-                ...rest,
-                date,
-                files: [
-                    {
-                        file_name,
-                        file_id,
-                        file_link: `${API_ROOT}${file_link}?disp=attachment`
-                    }
-                ]
-            };
+        case /\/lessons\/(\w*)\/homeworks$/.test(url.pathname): {
+            return data.map(transformHomework);
+        }
+        case /\/lessons\/(\w*)\/homeworks\/pupil/.test(url.pathname): {
+            if (config.method === 'get' || config.method === 'put' || config.method === 'patch')
+            return transformHomework(data);
         }
         case url.pathname === '/courses/schedule/person':
         case /\/courses\/\w*\/schedule\/person$/.test(url.pathname): {
@@ -171,9 +189,9 @@ const transformError = (error) => {
     if (!error.toJSON)
         throw error;
     const {config} = error.toJSON();
+    const url = getUrl(config);
     if (config.method !== 'get')
         throw error;
-    const url = new URL(config.url);
     if (error.response && error.response.status === 404) {
         switch (true) {
             case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):

@@ -1,27 +1,50 @@
 import React, {useCallback} from "react";
-import {useAdminCourse, useAdminWebinars, useDeleteCourse, useLessons, useParticipants, useSubjects} from "store";
+import {
+    useShopCourse,
+    useLessons,
+    useDeleteCourse,
+    useParticipants,
+    // useAdminWebinars
+} from "store";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
 import TabNav, {TabNavLink} from "components/common/TabNav";
-import ParticipantsPage from "./participants/ParticipantsPage";
-import LessonsPage from "./lessons/LessonsPage";
-import WebinarsPage from "./webinars/WebinarsPage";
+import ParticipantsPage from "./../../admin/course-page/participants/ParticipantsPage";
+import LessonsPage from "./../../admin/course-page/lessons/LessonsPage";
+// import WebinarsPage from "./../../admin/course-page/webinars/WebinarsPage";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {PERMISSIONS} from "definitions/constants";
+import Lesson from "components/common/Lesson";
 
+const renderLesson = (lesson, {link, ...rest}) => {
+    const {id, locked, assignment} = lesson;
+    const isSelectable = !!assignment;
+    return (
+        <Lesson
+            lesson={lesson}
+            locked={locked}
+            selectable={isSelectable}
+            key={id}
+            noOnClickOnAction
+            link={isSelectable ? link : undefined}
+            {...rest}/>
+    )
+};
 
 const CoursePage = (props) => {
     const {path: root, match} = props;
     const {params: {courseId: param_id}} = match;
     const courseId = parseInt(param_id);
-    const {course, error, retry} = useAdminCourse(courseId);
+    const {course, error, retry} = useShopCourse(courseId);
     const {participants, error: errorLoadingParticipants, reload: reloadParticipants} = useParticipants(courseId);
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
-    const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
+    // const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
+    const isLoaded = !!(course !== undefined && participants !== undefined && lessons !== undefined);
 
-    const isLoaded = !!(course && participants && lessons && webinars);
-
-    const canEdit = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
+    const canEditCourse = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
+    // const canEditLessons = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
+    // const canEditParticipants = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
+    // const canEditWebinars = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
 
     const parentPage = `${root}/`;
     const onDelete = useDeleteCourse(parentPage);
@@ -34,7 +57,7 @@ const CoursePage = (props) => {
         <div className="layout__content-block tab-nav-container">
             <div className="title-with-menu">
                 <div className="title-with-menu__action">
-                    {canEdit && (
+                    {canEditCourse && (
                         <DropdownMenu
                             content={<DropdownIconButton className="icon-ellipsis"/>}>
                             <DropdownMenuOption
@@ -60,9 +83,15 @@ const CoursePage = (props) => {
                 </div>
             </div>
             <TabNav>
-                <TabNavLink to={`${match.url}/lessons/`}>Уроки <span className="badge">{lessons.length}</span></TabNavLink>
-                <TabNavLink to={`${match.url}/participants/`}>Ученики <span className="badge">{participants.length}</span></TabNavLink>
-                <TabNavLink to={`${match.url}/webinars/`}>Вебинары <span className="badge">{webinars.webinars.length}</span></TabNavLink>
+                <TabNavLink to={`${match.url}/lessons/`} disabled={lessons === false}>
+                    Уроки {lessons && <span className="badge">{lessons.length}</span>}
+                </TabNavLink>
+                <TabNavLink to={`${match.url}/participants/`} disabled={participants === false}>
+                    Ученики {participants && <span className="badge">{participants.length}</span>}
+                </TabNavLink>
+                {/*<TabNavLink to={`${match.url}/webinars/`} disabled={webinars === false}>*/}
+                {/*    Вебинары {webinars && <span className="badge">{webinars.webinars.length}</span>}*/}
+                {/*</TabNavLink>*/}
                 <TabNavLink to={`${match.url}/teachers/`} disabled>Преподаватели</TabNavLink>
                 <TabNavLink to={`${match.url}/teachers/`} disabled>Календарь</TabNavLink>
             </TabNav>
@@ -88,6 +117,8 @@ const CoursePage = (props) => {
             )}/>
             <Route path={`${match.path}/lessons`} render={props => (
                 <LessonsPage
+                    className="teaching-page"
+                    renderLesson={renderLesson}
                     course={course}
                     lessons={lessons}
                     isLoaded={isLoaded}
@@ -97,18 +128,18 @@ const CoursePage = (props) => {
                     {header}
                 </LessonsPage>
             )}/>
-            <Route path={`${match.path}/webinars`} render={props => (
-                <WebinarsPage
-                    course={course}
-                    webinars={webinars}
-                    isLoaded={isLoaded}
-                    path={root}
-                    parentSection={parentSection}
-                    {...props}>
-                    {header}
-                </WebinarsPage>
-            )}/>
-            <Route render={() => <Redirect to={`${match.url}/lessons/`}/>}/>
+            {/*<Route path={`${match.path}/webinars`} render={props => (*/}
+            {/*    <WebinarsPage*/}
+            {/*        course={course}*/}
+            {/*        webinars={webinars}*/}
+            {/*        isLoaded={isLoaded}*/}
+            {/*        path={root}*/}
+            {/*        parentSection={parentSection}*/}
+            {/*        {...props}>*/}
+            {/*        {header}*/}
+            {/*    </WebinarsPage>*/}
+            {/*)}/>*/}
+            <Route render={() => <Redirect to={`${root}/${courseId}/lessons/`}/>}/>
         </Switch>
     )
 };

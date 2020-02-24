@@ -163,6 +163,7 @@ const Form = (props, ref) => {
         className,
         children,
         submitButtonText = 'Сохранить',
+        cancelButtonText='Отменить',
         isValid,
         autocomplete="off",
         onSubmit,
@@ -172,6 +173,7 @@ const Form = (props, ref) => {
         revokeRelatedData,
         blockNavigation=true,
         cancelLink,
+        onCancelClick,
         withNestedForms=false
     } = props;
 
@@ -188,7 +190,7 @@ const Form = (props, ref) => {
             });
         };
         revokeRelatedData && revokeRelatedData(response);
-        onSubmitted(response, showSuccessMessage, reset);
+        onSubmitted && onSubmitted(response, showSuccessMessage, reset);
     }, [revokeRelatedData, onSubmitted, reset]);
 
     const handleError = React.useCallback((error, reloadCallback) => {
@@ -201,7 +203,7 @@ const Form = (props, ref) => {
                 actions
             });
         };
-        onError(error, showErrorMessage, reloadCallback);
+        onError && onError(error, showErrorMessage, reloadCallback);
     }, [onError]);
 
     const {submitting, handleSubmit, hasChanged, onChange} = useFormState(onSubmit, handleSubmitted, handleError);
@@ -219,12 +221,21 @@ const Form = (props, ref) => {
             {title && <h3 className="form__title">{title}</h3>}
             {children}
             <div className="form__action-container btn-container text-right">
-                {cancelLink && <Button
-                    tag={Link}
-                    neutral={true}
-                    to={cancelLink}>
-                    Отменить
-                </Button>}
+                {cancelLink && (
+                    <Button
+                        tag={Link}
+                        neutral={true}
+                        to={cancelLink}>
+                        {cancelButtonText}
+                    </Button>
+                )}
+                {onCancelClick && (
+                    <Button
+                        neutral={true}
+                        onClick={onCancelClick}>
+                        {cancelButtonText}
+                    </Button>
+                )}
                 {' '}
                 <Button
                     active={isValid}

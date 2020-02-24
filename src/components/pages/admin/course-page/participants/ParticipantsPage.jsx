@@ -6,8 +6,9 @@ import CoverImage from "components/common/CoverImage";
 import Catalog from "components/common/Catalog";
 import {Link} from "react-router-dom";
 import Button from "components/ui/Button";
-import {useCheckPermissions} from "../../../../ConditionalRender";
-import {PermissionsDeniedErrorPage} from "../../../../ErrorPage";
+import {useCheckPermissions} from "components/ConditionalRender";
+import Tooltip from "components/ui/Tooltip";
+import {renderDate} from "../../../../../definitions/helpers";
 
 const filterBy = {
     search: true,
@@ -27,25 +28,37 @@ const ParticipantsPage = (props) => {
 
     const canEdit = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
 
-    const renderStudent = useCallback((user, renderProps) => {
+    const renderStudent = useCallback((user, {link, ...renderProps}) => {
         const {
             id,
             vk_info: {
-            full_name,
-            photo,
-        }, contacts: {vk}} = user;
+                first_name,
+                last_name,
+                photo,
+            },
+            contacts: {vk},
+            join_date_time
+        } = user;
         return (
             <ListItem
                 key={id}
                 item={user}
                 className="user"
-                title={full_name}
+                title={`${last_name} ${first_name}`}
                 selectable
+                noOnClickOnAction
                 preview={(
                     <CoverImage src={photo} className="course__cover" round/>
                 )}
-                {...renderProps}
-                link={vk}/>
+                link={vk}
+                action={
+                    <Tooltip
+                        content={`Присоединился ${renderDate(join_date_time, renderDate.dateWithYear)}`}
+                        position="left">
+                        <i className="icon-info"/>
+                    </Tooltip>
+                }
+                {...renderProps}/>
         );
     }, []);
     const title = course && `Ученики курса ${course.name}`;
@@ -67,7 +80,7 @@ const ParticipantsPage = (props) => {
                                 <Button
                                     neutral
                                     tag={Link}
-                                    to={`${path}/${courseId}/participants/edit/`}
+                                    to={`/admin/${courseId}/participants/edit/`}
                                     icon={<i className="icon-add"/>}>
                                     Добавить учеников
                                 </Button>
