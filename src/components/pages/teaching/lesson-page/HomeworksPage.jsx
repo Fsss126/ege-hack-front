@@ -1,11 +1,8 @@
 import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
-import {ADMIN_ROLES, PERMISSIONS} from "definitions/constants";
-import ListItem from "components/common/ListItem";
-import CoverImage from "components/common/CoverImage";
 import Catalog from "components/common/Catalog";
-import {File} from "../../../ui/input/file-input";
 import Homework from "./Homework";
+import {Permissions} from "types/common";
 
 const filterBy = {
     search: true,
@@ -31,7 +28,7 @@ const HomeworksPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={PERMISSIONS.HOMEWORK_CHECK}
+            requiredPermissions={Permissions.HOMEWORK_CHECK}
             className="admin-page teaching-page--homeworks"
             title={title}
             location={location}>

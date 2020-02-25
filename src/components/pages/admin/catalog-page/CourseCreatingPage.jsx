@@ -1,9 +1,9 @@
 import React from "react";
 import Page, {PageContent} from "components/Page";
 import {useSubjects, useTeachers} from "store";
-import {PERMISSIONS} from "definitions/constants";
 import APIRequest from "api";
 import CourseForm from "./CourseForm";
+import {Permissions} from "types/common";
 
 const createRequest = (requestData) => APIRequest.post('/courses', requestData);
 
@@ -31,7 +31,7 @@ const CourseCreatingPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={PERMISSIONS.COURSE_EDIT}
+            requiredPermissions={Permissions.COURSE_EDIT}
             className="course-form-page"
             title="Создание курса"
             location={location}>

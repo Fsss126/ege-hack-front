@@ -1,6 +1,5 @@
 import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
-import {ADMIN_ROLES, PERMISSIONS} from "definitions/constants";
 import ListItem from "components/common/ListItem";
 import CoverImage from "components/common/CoverImage";
 import Catalog from "components/common/Catalog";
@@ -8,7 +7,8 @@ import {Link} from "react-router-dom";
 import Button from "components/ui/Button";
 import {useCheckPermissions} from "components/ConditionalRender";
 import Tooltip from "components/ui/Tooltip";
-import {renderDate} from "../../../../../definitions/helpers";
+import {renderDate} from "definitions/helpers";
+import {Permissions} from "types/common";
 
 const filterBy = {
     search: true,
@@ -26,7 +26,7 @@ const ParticipantsPage = (props) => {
     const {match: {params: {courseId: param_course}}, location, participants, course, isLoaded, children: header, parentSection, path} = props;
     const courseId = parseInt(param_course);
 
-    const canEdit = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
+    const canEdit = useCheckPermissions(Permissions.PARTICIPANT_MANAGEMENT);
 
     const renderStudent = useCallback((user, {link, ...renderProps}) => {
         const {
@@ -65,7 +65,7 @@ const ParticipantsPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={PERMISSIONS.PARTICIPANT_MANAGEMENT}
+            requiredPermissions={Permissions.PARTICIPANT_MANAGEMENT}
             className="admin-page admin-page--participants"
             title={title}
             location={location}>

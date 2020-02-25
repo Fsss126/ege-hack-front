@@ -1,7 +1,6 @@
 import React, {useCallback} from "react";
 import classnames from 'classnames';
 import {Link} from "react-router-dom";
-import {PERMISSIONS} from "definitions/constants";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import Page, {PageContent} from "components/Page";
 import Catalog from "components/common/Catalog";
@@ -13,6 +12,7 @@ import PosterCover from "components/common/PosterCover";
 import Countdown from "react-countdown-now";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteWebinar} from "store";
+import {Permissions} from "types/common";
 
 const filterBy = {
     search: true,
@@ -74,7 +74,7 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
 
     const onDelete = useDeleteWebinar();
 
-    const canEdit = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
+    const canEdit = useCheckPermissions(Permissions.WEBINAR_EDIT);
     const courseLink = `${path}/${courseId}`;
     const renderWebinar = useCallback((webinar, {link, ...rest}) => {
         const {id} = webinar;
@@ -106,7 +106,7 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
         <Page
             isLoaded={isLoaded}
             loadUserInfo
-            requiredPermissions={PERMISSIONS.WEBINAR_EDIT}
+            requiredPermissions={Permissions.WEBINAR_EDIT}
             className="admin-page admin-page--webinars"
             title={title}
             location={location}>

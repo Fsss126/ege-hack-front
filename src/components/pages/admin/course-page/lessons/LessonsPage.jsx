@@ -1,13 +1,13 @@
 import React, {useCallback} from "react";
 import classnames from 'classnames';
 import {Link} from "react-router-dom";
-import {PERMISSIONS} from "definitions/constants";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import Page, {PageContent} from "components/Page";
 import Catalog from "components/common/Catalog";
 import Button from "components/ui/Button";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteLesson} from "store";
+import {Permissions} from "types/common";
 
 const filterBy = {
     search: true,
@@ -25,7 +25,7 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
     const {params: {courseId: param_id}} = match;
     const courseId = parseInt(param_id);
 
-    const canEdit = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
+    const canEdit = useCheckPermissions(Permissions.LESSON_EDIT);
 
     const onDelete = useDeleteLesson();
 

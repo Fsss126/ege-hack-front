@@ -13,8 +13,8 @@ import LessonsPage from "./../../admin/course-page/lessons/LessonsPage";
 // import WebinarsPage from "./../../admin/course-page/webinars/WebinarsPage";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
-import {PERMISSIONS} from "definitions/constants";
 import Lesson from "components/common/Lesson";
+import {Permissions} from "../../../../types/common";
 
 const renderLesson = (lesson, {link, ...rest}) => {
     const {id, locked, assignment} = lesson;
@@ -41,10 +41,10 @@ const CoursePage = (props) => {
     // const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
     const isLoaded = !!(course !== undefined && participants !== undefined && lessons !== undefined);
 
-    const canEditCourse = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
-    // const canEditLessons = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
-    // const canEditParticipants = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
-    // const canEditWebinars = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
+    const canEditCourse = useCheckPermissions(Permissions.COURSE_EDIT);
+    // const canEditLessons = useCheckPermissions(Permissions.LESSON_EDIT);
+    // const canEditParticipants = useCheckPermissions(Permissions.PARTICIPANT_MANAGEMENT);
+    // const canEditWebinars = useCheckPermissions(Permissions.WEBINAR_EDIT);
 
     const parentPage = `${root}/`;
     const onDelete = useDeleteCourse(parentPage);

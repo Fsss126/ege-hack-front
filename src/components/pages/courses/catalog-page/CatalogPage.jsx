@@ -3,9 +3,9 @@ import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import Page, {PageContent} from "components/Page";
-import {LEARNING_STATUS} from "definitions/constants";
 import {useSubjects, useUpcomingWebinars, useUserCourses} from "store";
 import WebinarSchedule from "components/common/WebinarSchedule";
+import {LearningStatus} from "types/common";
 
 const CatalogPage = ({location}) => {
     const {courses, error, retry} = useUserCourses();
@@ -17,7 +17,7 @@ const CatalogPage = ({location}) => {
             selectable
             online={false}
             key={course.id}
-            action={course.status === LEARNING_STATUS.learning
+            action={course.status === LearningStatus.LEARNING
                 ? <Button className="course__select-btn">Изучать</Button>
                 : <Button className="course__select-btn" active={false}>Пройден</Button>}
             {...renderProps}/>

@@ -5,10 +5,11 @@ import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import {useAdminCourses, useSubjects} from "store";
 import {Link} from "react-router-dom";
-import {ADMIN_ROLES, PERMISSIONS} from "definitions/constants";
+import {ADMIN_ROLES} from "definitions/constants";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteCourse} from "store";
+import {Permissions} from "../../../../types/common";
 
 const filterBy = {
     search: true,
@@ -22,7 +23,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
 
     const onDelete = useDeleteCourse();
 
-    const canEdit = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
+    const canEdit = useCheckPermissions(Permissions.COURSE_EDIT);
 
     const renderCourse = useCallback((course, {link, ...rest}) => {
         const {id, hide_from_market} = course;

@@ -1,8 +1,7 @@
 import React from "react";
 import Page, {PageContent} from "components/Page";
-import {PERMISSIONS} from "definitions/constants";
 import HomeworkAssignment from "components/common/HomeworkAssignment";
-
+import {Permissions} from "types/common";
 
 const AssignmentPage = (props) => {
     const {location, lesson, isLoaded, children: header, parentSection} = props;
@@ -11,7 +10,7 @@ const AssignmentPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={PERMISSIONS.HOMEWORK_CHECK}
+            requiredPermissions={Permissions.HOMEWORK_CHECK}
             className="admin-page admin-page--participants"
             title={title}
             location={location}>

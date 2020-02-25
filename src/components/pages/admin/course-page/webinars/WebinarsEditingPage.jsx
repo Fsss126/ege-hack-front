@@ -1,9 +1,9 @@
 import React, {useCallback} from "react";
-import {PERMISSIONS} from "definitions/constants";
 import {useAdminCourse, useAdminWebinars} from "store";
 import APIRequest from "api";
 import Page, {PageContent} from "components/Page";
 import WebinarsForm from "./WebinarsForm";
+import {Permissions} from "types/common";
 
 const WebinarsEditingPage = (props) => {
     const {match: {params: {courseId: param_course}}, location} = props;
@@ -33,7 +33,7 @@ const WebinarsEditingPage = (props) => {
     const title = webinars === null ? 'Создание графика вебинаров' : 'Изменение графика вебинаров';
     return (
         <Page
-            requiredPermissions={PERMISSIONS.WEBINAR_EDIT}
+            requiredPermissions={Permissions.WEBINAR_EDIT}
             className="lesson-form-page"
             title={title}
             location={location}>

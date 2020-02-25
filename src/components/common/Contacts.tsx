@@ -1,7 +1,12 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import Link from "components/ui/Link";
+import {ContactInfo} from "types/entities";
 
-export default function Contacts({contacts: {vk, fb, ok, ig}}) {
+interface ContactsProps {
+    contacts: ContactInfo;
+}
+
+const Contacts: FunctionComponent<ContactsProps> = ({contacts: {vk, fb, ok, ig}}) => {
     return (
         <div className="social-media font-light-grey">
             {vk && <Link to={vk} className="social-media__link"><i className="fab fa-vk vk"/></Link>}
@@ -10,4 +15,6 @@ export default function Contacts({contacts: {vk, fb, ok, ig}}) {
             {ig && <Link to={ig} className="social-media__link"><i className="fab fa-instagram ig"/></Link>}
         </div>
     );
-}
+};
+
+export default Contacts;

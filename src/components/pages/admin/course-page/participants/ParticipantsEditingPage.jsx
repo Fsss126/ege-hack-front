@@ -1,10 +1,10 @@
 import React from "react";
 import APIRequest from "api";
 import Page, {PageContent} from "components/Page";
-import {PERMISSIONS} from "definitions/constants";
 import * as Input from "components/ui/input";
 import Form, {useForm} from "components/ui/Form";
 import {useRevokeParticipants} from "store";
+import {Permissions} from "types/common";
 
 const INITIAL_FORM_DATA = {
     accounts: ''
@@ -67,7 +67,7 @@ const ParticipantsEditingPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={PERMISSIONS.PARTICIPANT_MANAGEMENT}
+            requiredPermissions={Permissions.PARTICIPANT_MANAGEMENT}
             className="participants-form-page"
             title="Добавление учеников"
             location={location}>

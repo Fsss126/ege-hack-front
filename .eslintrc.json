@@ -5,10 +5,11 @@
   "globals": {
     "VK": true
   },
+  "extends": ["plugin:@typescript-eslint/recommended"],
   "plugins": [
     "react-hooks"
   ],
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
@@ -17,6 +18,7 @@
   },
   "rules": {
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "@typescript-eslint/camelcase": "off"
   }
 }

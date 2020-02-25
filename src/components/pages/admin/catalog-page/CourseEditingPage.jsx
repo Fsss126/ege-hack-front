@@ -1,9 +1,9 @@
 import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import {useAdminCourse, useSubjects, useTeachers} from "store";
-import {PERMISSIONS} from "definitions/constants";
 import APIRequest from "api";
 import CourseForm from "./CourseForm";
+import {Permissions} from "types/common";
 
 const CourseEditingPage = (props) => {
     const {match: {params: {courseId: param_course}}, location} = props;
@@ -33,7 +33,7 @@ const CourseEditingPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={PERMISSIONS.COURSE_EDIT}
+            requiredPermissions={Permissions.COURSE_EDIT}
             className="course-form-page"
             title="Изменение курса"
             location={location}>

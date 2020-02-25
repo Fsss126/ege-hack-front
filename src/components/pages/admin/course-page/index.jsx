@@ -13,7 +13,6 @@ import LessonsPage from "./lessons/LessonsPage";
 import WebinarsPage from "./webinars/WebinarsPage";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
-import {PERMISSIONS} from "definitions/constants";
 import Lesson from "components/common/Lesson";
 
 const renderLesson = (lesson, {link: lessonLink, ...rest}) => {
@@ -41,10 +40,10 @@ const CoursePage = (props) => {
     const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
     const isLoaded = !!(course !== undefined && participants !== undefined && lessons !== undefined && webinars !== undefined);
 
-    const canEditCourse = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
-    // const canEditLessons = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
-    // const canEditParticipants = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
-    // const canEditWebinars = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
+    const canEditCourse = useCheckPermissions(Permissions.COURSE_EDIT);
+    // const canEditLessons = useCheckPermissions(Permissions.LESSON_EDIT);
+    // const canEditParticipants = useCheckPermissions(Permissions.PARTICIPANT_MANAGEMENT);
+    // const canEditWebinars = useCheckPermissions(Permissions.WEBINAR_EDIT);
 
     const parentPage = `${root}/`;
     const onDelete = useDeleteCourse(parentPage);
@@ -117,7 +116,7 @@ const CoursePage = (props) => {
             )}/>
             <Route path={`${match.path}/lessons`} render={props => (
                 <LessonsPage
-                    requiredPermissions={PERMISSIONS.LESSON_EDIT}
+                    requiredPermissions={Permissions.LESSON_EDIT}
                     renderLesson={renderLesson}
                     course={course}
                     lessons={lessons}

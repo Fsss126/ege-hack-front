@@ -1,49 +1,52 @@
 import {LoremIpsum} from "lorem-ipsum";
 import _ from "lodash";
-import {LEARNING_STATUS} from "definitions/constants";
 import {API_ROOT} from "api";
-
 import poster from "img/dummy_poster.jpg";
 import pic from "img/dummy-pic.jpg";
+import {AccountRoles, LearningStatus} from "types/common";
+import {
+    CourseInfo,
+    HomeworkInfo,
+    LessonInfo,
+    PersonWebinar,
+    SubjectInfo,
+    TeacherInfo,
+    UserCourseInfo,
+    UserInfo
+} from "types/entities";
 
 const lorem = new LoremIpsum();
 
-function getDate(daysForward) {
+function getDate(daysForward: number) {
     const date = new Date();
     date.setDate(date.getDate() + daysForward);
     return date;
 }
 
-export const ACCOUNT_INFO = {
+export const ACCOUNT_INFO: UserInfo = {
     id: 154792439,
     roles: [
-        "PUPIL",
-        "TEACHER"
+        AccountRoles.PUPIL,
+        AccountRoles.TEACHER
     ],
     permissions: [],
     vk_info: {
         id: 154792439,
         first_name: "Alexandra",
         last_name: "Petrova",
-        photo_max: poster,
+        photo: poster,
+        full_name: "Alexandra Petrova"
     },
     pupil: {
         account_id: 154792439
     },
     teacher: {
-        account_id: 154792439,
-        subjects: [
-            {
-                id: 1,
-                name: "Математика",
-                description: "Лучший предмет",
-                image_link: "/files/asdsadasda.jpg"
-            }
-        ]
-    }
+        account_id: 154792439
+    },
+    contacts: {}
 };
 
-export const SUBJECTS = [
+export const SUBJECTS: SubjectInfo[] = [
     // { id: 'russian', name: 'Русский язык' },
     // { id: 'literature', name: 'Литература' },
     // { id: 'math', name: 'Математика' },
@@ -74,16 +77,17 @@ export const SUBJECTS = [
     { id: 13, name: 'Французский язык' },
     { id: 14, name: 'Китайский язык' },
     { id: 15, name: 'Испанский язык' }
-];
+].map(subj => ({...subj, image_link: ''}));
 
-export const TEACHERS = [
+export const TEACHERS: TeacherInfo[] = [
     {
         id: 154792439,
         vk_info: {
             id: 154792439,
             first_name: "Alexandra",
             last_name: "Petrova",
-            photo_max: poster,
+            full_name: "Alexandra Petrova",
+            photo: poster,
         },
         subjects: [
             {
@@ -92,7 +96,8 @@ export const TEACHERS = [
                 description: "Лучший предмет",
                 image_link: "/files/asdsadasda.jpg"
             }
-        ]
+        ],
+        contacts: {}
     },
     {
         id: 1,
@@ -100,7 +105,8 @@ export const TEACHERS = [
             id: 1,
             first_name: 'Елена',
             last_name: 'Черткова',
-            photo_max: poster,
+            full_name: 'Черткова',
+            photo: poster,
         },
         subjects: SUBJECTS.slice(0,2),
         contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
@@ -112,7 +118,8 @@ export const TEACHERS = [
             id: 2,
             first_name: 'Сергей',
             last_name: 'Авдошин',
-            photo_max: poster,
+            full_name: 'Авдошин',
+            photo: poster,
         },
         subjects: [SUBJECTS[3]],
         contacts: {vk: '/', fb: '/', ok: '/', ig: '/'},
@@ -120,7 +127,7 @@ export const TEACHERS = [
     }
 ];
 
-export const COURSES = SUBJECTS.slice(0, 5).map((subject, i) => ({
+export const COURSES: CourseInfo[] = SUBJECTS.slice(0, 5).map((subject, i) => ({
     name: `${subject.name}. Мастер группа. Апрель.`,
     id: i,
     subject_id: subject.id,
@@ -130,12 +137,15 @@ export const COURSES = SUBJECTS.slice(0, 5).map((subject, i) => ({
     date_end: getDate(7 + i),
     // totalHours: 80,
     description: lorem.generateParagraphs(1),
-    teacher_ids: i <= 2 ? [TEACHERS[0].id] : TEACHERS.map(({id}) => id)
+    teacher_ids: i <= 2 ? [TEACHERS[0].id] : TEACHERS.map(({id}) => id),
+    hide_from_market: false,
+    price: 1
 }));
 
-export const LESSONS = _.times(4, (j) => {
+export const LESSONS: LessonInfo[] = _.times(4, (j) => {
     const locked = -2 + j > 0;
     return ({
+        course_id: j,
         num: j + 1,
         id: j,
         // date: getDate(-4 + i + j),
@@ -144,11 +154,12 @@ export const LESSONS = _.times(4, (j) => {
         image_link: poster,
         video_link: '375255364',
         locked,
+        attachments: [],
         assignment: {
             description: lorem.generateParagraphs(1),
             files: [
-                {name: "Задание", id: 0, url: "/robots.txt"},
-                {name: "Дополнительное задание", id: 1, url: "/robots.txt"}
+                {file_name: "Задание", file_id: '0', file_link: "/robots.txt"},
+                {file_name: "Дополнительное задание", file_id: '1', file_link: "/robots.txt"}
             ],
             deadline:  getDate(7)
         },
@@ -156,41 +167,40 @@ export const LESSONS = _.times(4, (j) => {
     });
 });
 
-export const HOMEWORK = {
+export const HOMEWORK: HomeworkInfo = {
     comment: "Очень плохо",
     date: new Date(),
     files: [
         {
-            original_file_name: 'Стыд.jpg',
-            id_file_name: '51657ffc-fc8f-11e9-a562-0338e4bfa1ca.jpg',
+            file_name: 'Стыд.jpg',
+            file_id: '51657ffc-fc8f-11e9-a562-0338e4bfa1ca.jpg',
             file_link: `${API_ROOT}/files/51657ffc-fc8f-11e9-a562-0338e4bfa1ca.jpg?disp=attachment`
         }
     ],
     lesson_id: 0,
-    mark: 4,
-    pupil_id: 0
+    mark: 4
 };
 
-export const SHOP_CATALOG = COURSES.map((course, i) => ({...course, price: 2500, discount: i === 0 ? 1000 : undefined}));
+export const SHOP_CATALOG: CourseInfo[] = COURSES.map((course, i) => ({...course, price: 2500, discount: i === 0 ? 1000 : undefined}));
 
-export const MY_COURSES = COURSES.slice(0, 3).map((course, i) => ({
+export const MY_COURSES: UserCourseInfo[] = COURSES.slice(0, 3).map((course, i) => ({
     ...course,
-    status: i <= 1 ? LEARNING_STATUS.finished : LEARNING_STATUS.learning
+    status: i <= 1 ? LearningStatus.FINISHED : LearningStatus.LEARNING
 }));
 
-export const WEBINAR_SCHEDULE = COURSES.slice(0, 3).map(({id, name, subject_id}, i) => ({
+export const WEBINAR_SCHEDULE: PersonWebinar[] = COURSES.slice(0, 3).map(({id, name, subject_id}, i) => ({
     subject_id,
     subject_name: SUBJECTS[subject_id - 1].name,
     course_id: id,
     course_name: name,
+    image_link: pic,
     id: i,
     name: "Играю в майнкрафт",
     description: "Скидывайте ваши донаты",
     date_start: getDate(i),
     duration: 60*2,
     date_end: new Date(getDate(1 + i).getTime() + 60*2 * 1000 * 60),
-    image_link: pic
 }));
 
-export const TEST_ID = 1;
-export const TEST_HASH = '2d01669a3c8cda169545b4f7b607efb3';
+// export const TEST_ID = 1;
+// export const TEST_HASH = '2d01669a3c8cda169545b4f7b607efb3';

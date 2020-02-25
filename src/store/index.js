@@ -4,7 +4,7 @@ import APIRequest, {getCancelToken} from "api";
 import _ from "lodash";
 import {useHistory} from "react-router-dom";
 import {useCheckPermissions} from "../components/ConditionalRender";
-import {PERMISSIONS} from "../definitions/constants";
+import {Permissions} from "types/common";
 
 const StoreContext = React.createContext(null);
 StoreContext.displayName = 'StoreContext';
@@ -115,6 +115,7 @@ export function useSubjects() {
             if (error)
                 setError(null);
             const subjects = await request;
+            console.log('set subjects', subjects);
             setSubjects(subjects);
         } catch (e) {
             console.error(e);
@@ -294,7 +295,7 @@ export function useAdminCourses() {
         return request;
     }, [error]);
 
-    const isAllowed = useCheckPermissions(PERMISSIONS.COURSE_EDIT);
+    const isAllowed = useCheckPermissions(Permissions.COURSE_EDIT);
 
     React.useEffect(() => {
         if (credentials && isAllowed === true) {
@@ -518,7 +519,7 @@ export function useTeacherHomeworks(lessonId) {
         return request;
     }, [error, lessonId]);
 
-    const isAllowed = useCheckPermissions(PERMISSIONS.HOMEWORK_CHECK);
+    const isAllowed = useCheckPermissions(Permissions.HOMEWORK_CHECK);
     React.useEffect(() => {
         if (credentials && isAllowed === true) {
             if (!(teacherHomeworks[lessonId] || (requests.teacherHomeworks && requests.teacherHomeworks[lessonId]) || error)) {
@@ -547,14 +548,14 @@ export function useRevokeTeacherHomeworks(lessonId) {
 
 export function useAdminLessons(courseId) {
     const {lessons, error, reload} = useLessons(courseId);
-    const isAllowed = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
+    const isAllowed = useCheckPermissions(Permissions.LESSON_EDIT);
 
     return {lessons: isAllowed === false ? false : lessons, error, reload};
 }
 
 export function useAdminLesson(courseId, lessonId) {
     const {lesson, error, reload} = useLesson(courseId, lessonId);
-    const isAllowed = useCheckPermissions(PERMISSIONS.LESSON_EDIT);
+    const isAllowed = useCheckPermissions(Permissions.LESSON_EDIT);
 
     return {lesson: isAllowed === false ? false : lesson, error, reload};
 }
@@ -583,7 +584,7 @@ export function useParticipants(courseId) {
         return request;
     }, [error, courseId]);
 
-    const isAllowed = useCheckPermissions(PERMISSIONS.PARTICIPANT_MANAGEMENT);
+    const isAllowed = useCheckPermissions(Permissions.PARTICIPANT_MANAGEMENT);
     React.useEffect(() => {
         if (credentials && isAllowed === true) {
             if (!(participants[courseId] || (requests.participants && requests.participants[courseId]) || error))
@@ -628,7 +629,7 @@ export function useAdminWebinars(courseId) {
         return request;
     }, [error, courseId]);
 
-    const isAllowed = useCheckPermissions(PERMISSIONS.WEBINAR_EDIT);
+    const isAllowed = useCheckPermissions(Permissions.WEBINAR_EDIT);
     React.useEffect(() => {
         if (credentials && isAllowed === true) {
             if (!(adminWebinars[courseId] || adminWebinars[courseId] === null || (requests.adminWebinars && requests.adminWebinars[courseId]) || error))

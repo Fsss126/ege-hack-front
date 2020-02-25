@@ -3,7 +3,7 @@ import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import {useSubjects, useTeacherCourses} from "store";
-import {PERMISSIONS} from "definitions/constants";
+import {Permissions} from "types/common";
 
 const filterBy = {
     search: true,
@@ -34,7 +34,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
         <Page
             isLoaded={isLoaded}
             loadUserInfo
-            requiredPermissions={PERMISSIONS.HOMEWORK_CHECK}
+            requiredPermissions={Permissions.HOMEWORK_CHECK}
             className="admin-page admin-page--courses"
             title="Проверка работ"
             location={location}>

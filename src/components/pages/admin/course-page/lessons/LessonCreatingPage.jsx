@@ -2,7 +2,7 @@ import React from "react";
 import APIRequest from "api";
 import LessonForm from "./LessonForm";
 import Page, {PageContent} from "components/Page";
-import {PERMISSIONS} from "definitions/constants";
+import {Permissions} from "types/common";
 
 const createRequest = (requestData) => APIRequest.post('/lessons', requestData);
 
@@ -29,7 +29,7 @@ const LessonCreatingPage = (props) => {
     const isLoaded = true;
     return (
         <Page
-            requiredPermissions={PERMISSIONS.LESSON_EDIT}
+            requiredPermissions={Permissions.LESSON_EDIT}
             className="lesson-form-page"
             title="Создание урока"
             location={location}>
