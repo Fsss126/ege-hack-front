@@ -1,7 +1,7 @@
 import React from "react";
 import {
     useLesson, useShopCourse,
-    useTeacherHomeworks
+    useHomeworks
 } from "store/selectors";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
 import TabNav, {TabNavLink} from "components/common/TabNav";
@@ -16,7 +16,7 @@ const LessonPage = (props) => {
 
     const {lesson, error, reload} = useLesson(courseId, lessonId);
     const {course, error: errorLoadingCourse, reload: reloadCourse} = useShopCourse(courseId);
-    const {homeworks, error: errorLoadingHomeworks, reload: reloadHomeworks} = useTeacherHomeworks(lessonId);
+    const {homeworks, error: errorLoadingHomeworks, reload: reloadHomeworks} = useHomeworks(lessonId);
     const isLoaded = !!(lesson && homeworks && courseId);
 
     const header = isLoaded && (
