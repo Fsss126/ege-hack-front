@@ -3,12 +3,12 @@ import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
-import {useAdminCourses, useSubjects} from "store";
+import {useAdminCourses, useSubjects} from "store/selectors";
 import {Link} from "react-router-dom";
 import {ADMIN_ROLES} from "definitions/constants";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
-import {useDeleteCourse} from "store";
+import {useDeleteCourse} from "store/selectors";
 import {Permissions} from "../../../../types/common";
 
 const filterBy = {
@@ -64,7 +64,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
                 {...rest}/>
         )
     }, [canEdit, onDelete, path]);
-    const isLoaded = catalog && subjects;
+    const isLoaded = !!(catalog && subjects);
     return (
         <Page
             isLoaded={isLoaded}

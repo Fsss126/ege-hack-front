@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useContext, ReactElement} from 'react';
 import {BrowserRouter as Router, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import {APP_BASE_URL} from "definitions/constants";
 import {useRefValue, useToggle} from "hooks/common";
-import GlobalStore from "store";
+import {useUserAuth} from "store/selectors";
 import Login from "./pages/login";
 import Account from "./pages/account";
 import Teachers from "./pages/teachers";
@@ -13,8 +13,11 @@ import Teaching from "./pages/teaching";
 import {NotFoundErrorPage} from "./ErrorPage";
 
 import 'sass/index.scss';
+import {createAppStore} from "../store/store";
+import {Provider} from "react-redux";
+import {LocationListener, Location} from "history";
 
-function useLocationChangeEffect(effect) {
+function useLocationChangeEffect(effect: LocationListener) {
     const history = useHistory();
     React.useEffect(() => {
         return history.listen(effect);
@@ -43,7 +46,7 @@ function useForceTrailingSlash() {
     }
 }
 
-const UIContext = React.createContext(null);
+const UIContext = React.createContext<any>(null);
 UIContext.displayName = 'UIContext';
 
 function useUIState() {
@@ -53,18 +56,19 @@ function useUIState() {
 }
 
 export function useSideBarState() {
-    const {sidebar} = React.useContext(UIContext);
+    const {sidebar} = useContext<any>(UIContext);
     return sidebar;
 }
 
-const onLocationChange = (location, args) => {
-    console.log(`- - - location: '${location.pathname}'`, args);
+const onLocationChange = (location: Location) => {
+    console.log(`- - - location: '${location.pathname}'`);
 };
 
-const DefaultRedirect = () => <Redirect to="/courses"/>;
+const DefaultRedirect = (): ReactElement => <Redirect to="/courses"/>;
 
-function App() {
+function App(): ReactElement {
     // routing effects
+    useUserAuth();
     useForceTrailingSlash();
     useScrollToTop();
     useLocationChangeEffect(onLocationChange);
@@ -89,10 +93,12 @@ function App() {
     );
 }
 
-export default () => (
-    <Router basename={APP_BASE_URL}>
-        <GlobalStore>
+const store = createAppStore();
+
+export default (): ReactElement => (
+    <Provider store={store}>
+        <Router basename={APP_BASE_URL}>
             <App/>
-        </GlobalStore>
-    </Router>
+        </Router>
+    </Provider>
 );

@@ -2,7 +2,7 @@ import React from "react";
 import {
     useLesson, useShopCourse,
     useTeacherHomeworks
-} from "store";
+} from "store/selectors";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
 import TabNav, {TabNavLink} from "components/common/TabNav";
 import HomeworksPage from "./HomeworksPage";

@@ -1,7 +1,7 @@
 import React from "react";
 import Page, {PageContent} from "components/Page";
 import UserProfile from "components/common/UserProfile";
-import {useUser} from "store";
+import {useUser} from "store/selectors";
 
 const AccountPage = () => {
     const {userInfo} = useUser();

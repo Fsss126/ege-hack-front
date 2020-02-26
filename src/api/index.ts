@@ -152,7 +152,7 @@ const transformHomework =
                     file_link: `${API_ROOT}${file_info.file_link}?disp=attachment`
                 }
             ] : undefined,
-            pupil: pupil ? transformUser(pupil) : pupil
+            pupil: transformUser(pupil)
         }
     );
 

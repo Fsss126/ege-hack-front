@@ -9,7 +9,7 @@ import Form, {
     useForm,
     useFormValidityChecker
 } from "components/ui/Form";
-import {useRevokeWebinars} from "store";
+import {useRevokeWebinars} from "store/selectors";
 import {renderDate} from "../../../../../definitions/helpers";
 import Tooltip from "../../../../ui/Tooltip";
 
@@ -50,7 +50,7 @@ const WebinarsForm = (props) => {
             return formData.image && !!formData.image[0];
         }
         if (name === 'webinars') {
-            for (let webinar of formData.webinars) {
+            for (const webinar of formData.webinars) {
                 if (!(webinar.name && webinar.duration && webinar.date_start))
                     return false;
             }

@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import {Helmet} from "react-helmet";
 import Sticky from 'react-sticky-el';
 import {Link, Redirect} from "react-router-dom";
-import {useUser} from "../store";
+import {useUser} from "../store/selectors";
 import Header from "./Header";
 import {CSSTransition} from "react-transition-group";
 import SideBar from "./SideBar";

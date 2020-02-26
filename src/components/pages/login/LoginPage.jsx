@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import Page from "components/Page";
 import Auth from "definitions/auth";
-import {useUser} from "store";
+import {useUser} from "store/selectors";
 import {Redirect} from "react-router-dom";
 import {DEFAULT_LOGIN_REDIRECT} from "definitions/constants";
 import {getAppUrl, getCurrentUrl} from "definitions/helpers";

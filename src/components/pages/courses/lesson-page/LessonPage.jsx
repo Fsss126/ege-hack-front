@@ -5,7 +5,7 @@ import {NotFoundErrorPage} from "components/ErrorPage";
 import Lesson from "components/common/Lesson";
 import List from "components/common/List";
 import LessonView from "./LessonView";
-import {useHomework, useLessons, useUserCourses} from "store";
+import {useHomework, useLessons, useUserCourses} from "store/selectors";
 
 const LessonPage = (props) => {
     const {match: {params: {courseId: param_course, lessonId: param_lesson}}, location} = props;

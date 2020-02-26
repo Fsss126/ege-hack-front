@@ -6,7 +6,7 @@ import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import UserProfile from "components/common/UserProfile";
-import {useShopCatalog, useSubjects, useTeacher} from "store";
+import {useShopCatalog, useSubjects, useTeacher} from "store/selectors";
 import {renderPrice} from "definitions/helpers";
 
 const TeacherPage = (props) => {

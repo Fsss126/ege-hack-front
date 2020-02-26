@@ -81,7 +81,7 @@ export interface LessonInfo extends Omit<LessonDtoResp, 'is_locked' | 'hometask'
 export interface HomeworkInfo extends Omit<HomeworkDtoResp, 'date' | 'file_info' | 'pupil'>{
     date?: Date;
     files?: FileInfo[];
-    pupil?: PupilInfo;
+    pupil: PupilInfo;
 }
 
 export type DiscountInfo = DiscountMessage;

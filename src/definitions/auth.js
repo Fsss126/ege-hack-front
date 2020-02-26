@@ -46,7 +46,7 @@ class Auth {
 
     setCredentials(user) {
         this.credentials = user;
-        for(let handler of (this.eventHandlers[AuthEventTypes.login] || []))
+        for(const handler of (this.eventHandlers[AuthEventTypes.login] || []))
             handler(this.credentials);
     }
 
@@ -66,7 +66,7 @@ class Auth {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
         this.credentials = null;
         this.userInfo = null;
-        for(let handler of (this.eventHandlers[AuthEventTypes.logout] || []))
+        for(const handler of (this.eventHandlers[AuthEventTypes.logout] || []))
             handler();
     };
 
@@ -99,7 +99,7 @@ class Auth {
         return this.credentials;
     }
 
-    async getUserInfo() {
+    getUserInfo = async () => {
         if (this.userInfo)
             return this.userInfo;
         try {
@@ -108,6 +108,7 @@ class Auth {
         catch (e) {
             console.error(e);
             this.userInfo = null;
+            return e;
         }
         return this.userInfo;
     }

@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 import APIRequest from "api";
 import LessonForm from "./LessonForm";
 import Page, {PageContent} from "components/Page";
-import {useLesson} from "store";
+import {useLesson} from "store/selectors";
 import {Permissions} from "types/common";
 
 const LessonEditingPage = (props) => {

@@ -3,7 +3,7 @@ import APIRequest from "api";
 import Page, {PageContent} from "components/Page";
 import * as Input from "components/ui/input";
 import Form, {useForm} from "components/ui/Form";
-import {useRevokeParticipants} from "store";
+import {useRevokeParticipants} from "store/selectors";
 import {Permissions} from "types/common";
 
 const INITIAL_FORM_DATA = {

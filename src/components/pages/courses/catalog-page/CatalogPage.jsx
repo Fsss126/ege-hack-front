@@ -3,7 +3,7 @@ import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import Page, {PageContent} from "components/Page";
-import {useSubjects, useUpcomingWebinars, useUserCourses} from "store";
+import {useSubjects, useUpcomingWebinars, useUserCourses} from "store/selectors";
 import WebinarSchedule from "components/common/WebinarSchedule";
 import {LearningStatus} from "types/common";
 

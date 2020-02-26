@@ -1,7 +1,7 @@
 import React from "react";
 import Page, {PageContent} from "components/Page";
 import TeachersCatalog from "./TeachersCatalog";
-import {useSubjects, useTeachers} from "store";
+import {useSubjects, useTeachers} from "store/selectors";
 
 const TeachersCatalogPage = ({location}) => {
     const {teachers, error, retry} = useTeachers();

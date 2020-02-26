@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
-import {useSubjects, useTeacherCourses} from "store";
+import {useSubjects, useTeacherCourses} from "store/selectors";
 import {Permissions} from "types/common";
 
 const filterBy = {
@@ -29,7 +29,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
             </Course>
         )
     }, [path]);
-    const isLoaded = catalog && subjects;
+    const isLoaded = !!(catalog && subjects);
     return (
         <Page
             isLoaded={isLoaded}

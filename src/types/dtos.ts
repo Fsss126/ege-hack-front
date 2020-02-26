@@ -160,7 +160,7 @@ export interface HomeworkDtoResp extends HomeworkAssessmentDtoReq {
     date?: number;
     file_info?: FileInfo;
     lesson_id: number;
-    pupil?: PupilDtoResp;
+    pupil: PupilDtoResp;
 }
 
 export interface HomeworkDtoReq {

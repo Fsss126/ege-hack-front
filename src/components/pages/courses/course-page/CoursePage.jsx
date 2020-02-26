@@ -3,7 +3,7 @@ import Page, {PageContent} from "components/Page";
 import CourseOverview from "components/common/CourseOverview";
 import Lesson from "components/common/Lesson";
 import Button from "components/ui/Button";
-import {useCourseWebinars, useLessons, useUserCourse} from "store";
+import {useCourseWebinars, useLessons, useUserCourse} from "store/selectors";
 import WebinarSchedule from "components/common/WebinarSchedule";
 
 const CoursePage = ({path, match, location, ...props}) => {

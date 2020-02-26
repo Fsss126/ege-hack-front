@@ -5,7 +5,7 @@ import {
     useAdminWebinars,
     useDeleteCourse,
     useParticipants
-} from "store";
+} from "store/selectors";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
 import TabNav, {TabNavLink} from "components/common/TabNav";
 import ParticipantsPage from "./participants/ParticipantsPage";

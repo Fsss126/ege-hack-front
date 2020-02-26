@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {useUser} from "store";
+import {useUser} from "store/selectors";
 
 export function checkPermissions(userInfo, requiredPermissions, requiredRoles, fullMatch = true) {
     const {permissions, roles} = userInfo;

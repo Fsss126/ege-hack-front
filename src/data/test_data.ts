@@ -178,7 +178,8 @@ export const HOMEWORK: HomeworkInfo = {
         }
     ],
     lesson_id: 0,
-    mark: 4
+    mark: 4,
+    pupil: ACCOUNT_INFO
 };
 
 export const SHOP_CATALOG: CourseInfo[] = COURSES.map((course, i) => ({...course, price: 2500, discount: i === 0 ? 1000 : undefined}));

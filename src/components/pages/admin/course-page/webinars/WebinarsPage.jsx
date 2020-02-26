@@ -11,7 +11,7 @@ import {useWebinar, WEBINAR_STATE} from "components/common/WebinarSchedule";
 import PosterCover from "components/common/PosterCover";
 import Countdown from "react-countdown-now";
 import {useCheckPermissions} from "components/ConditionalRender";
-import {useDeleteWebinar} from "store";
+import {useDeleteWebinar} from "store/selectors";
 import {Permissions} from "types/common";
 
 const filterBy = {

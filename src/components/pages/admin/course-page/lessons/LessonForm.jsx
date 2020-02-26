@@ -3,7 +3,7 @@ import _ from "lodash";
 import * as Input from "components/ui/input";
 import Form, {FieldsContainer, useForm, useFormValidityChecker} from "components/ui/Form";
 import {FileInput} from "components/ui/input";
-import {useRevokeLessons} from "store";
+import {useRevokeLessons} from "store/selectors";
 
 const INITIAL_FORM_DATA = {
     name: '',

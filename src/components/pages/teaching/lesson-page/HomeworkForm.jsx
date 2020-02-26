@@ -2,7 +2,7 @@ import React, {useCallback, useRef, useState} from "react";
 import APIRequest from "api";
 import * as Input from "components/ui/input";
 import Form, {FieldsContainer, useForm, useFormValidityChecker} from "components/ui/Form";
-import { useRevokeTeacherHomeworks} from "store";
+import { useRevokeTeacherHomeworks} from "store/selectors";
 
 const INITIAL_FORM_DATA = {
     mark: '',

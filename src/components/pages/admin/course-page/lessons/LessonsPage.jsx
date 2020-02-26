@@ -6,7 +6,7 @@ import Page, {PageContent} from "components/Page";
 import Catalog from "components/common/Catalog";
 import Button from "components/ui/Button";
 import {useCheckPermissions} from "components/ConditionalRender";
-import {useDeleteLesson} from "store";
+import {useDeleteLesson} from "store/selectors";
 import {Permissions} from "types/common";
 
 const filterBy = {

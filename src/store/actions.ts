@@ -1,10 +1,57 @@
+import {AxiosError} from "axios";
+import {
+    CourseInfo,
+    CourseParticipantInfo, HomeworkInfo,
+    LessonInfo, SubjectInfo,
+    TeacherInfo,
+    UserCourseInfo,
+    UserInfo,
+    WebinarInfo, WebinarScheduleInfo
+} from "types/entities";
+
 export enum ActionType {
+    LOG_IN = 'LOG_IN',
+    LOG_IN_REQUEST = 'LOG_IN_ERROR',
     LOG_IN_SUCCESS = 'LOG_IN_SUCCESS',
     LOG_IN_ERROR = 'LOG_IN_ERROR',
     LOG_OUT = 'LOG_OUT',
-    FETCH_USER_INFO = 'FETCH_USER_INFO',
-    USER_INFO_SUCCESS = 'USER_INFO_SUCCESS',
-    USER_INFO_ERROR = 'USER_INFO_ERROR'
+    USER_INFO_FETCH = 'USER_INFO_FETCH',
+    USER_INFO_FETCHED = 'USER_INFO_FETCHED',
+    SHOP_COURSES_FETCH = 'SHOP_COURSES_FETCH',
+    SHOP_COURSES_FETCHED = 'SHOP_COURSES_FETCHED',
+    USER_COURSES_FETCH = 'USER_COURSES_FETCH',
+    USER_COURSES_FETCHED = 'USER_COURSES_FETCHED',
+    SUBJECTS_FETCH = 'SUBJECTS_FETCH',
+    SUBJECTS_FETCHED = 'SUBJECTS_FETCHED',
+    TEACHERS_FETCH = 'TEACHERS_FETCH',
+    TEACHERS_FETCHED = 'TEACHERS_FETCHED',
+    LESSONS_FETCH = 'LESSONS_FETCH',
+    LESSONS_FETCHED = 'LESSONS_FETCHED',
+    LESSONS_REVOKE = 'LESSONS_REVOKE',
+    LESSON_DELETE_REQUEST = 'LESSON_DELETE_REQUEST',
+    LESSON_DELETE = 'LESSON_DELETE',
+    COURSE_WEBINARS_FETCH = 'COURSE_WEBINARS_FETCH',
+    COURSE_WEBINARS_FETCHED = 'COURSE_WEBINARS_FETCHED',
+    UPCOMING_WEBINARS_FETCH = 'UPCOMING_WEBINARS_FETCH',
+    UPCOMING_WEBINARS_FETCHED = 'UPCOMING_WEBINARS_FETCHED',
+    PARTICIPANTS_FETCH = 'PARTICIPANTS_FETCH',
+    PARTICIPANTS_FETCHED = 'PARTICIPANTS_FETCHED',
+    PARTICIPANTS_REVOKE = 'PARTICIPANTS_REVOKE',
+    ADMIN_COURSES_FETCH = 'ADMIN_COURSES_FETCH',
+    ADMIN_COURSES_FETCHED = 'ADMIN_COURSES_FETCHED',
+    ADMIN_WEBINARS_FETCH = 'ADMIN_WEBINARS_FETCH',
+    ADMIN_WEBINARS_FETCHED = 'ADMIN_WEBINARS_FETCHED',
+    TEACHER_COURSES_FETCH = 'TEACHER_COURSES_FETCH',
+    TEACHER_COURSES_FETCHED = 'TEACHER_COURSES_FETCHED',
+    HOMEWORKS_FETCH = 'HOMEWORKS_FETCH',
+    HOMEWORKS_FETCHED = 'HOMEWORKS_FETCHED',
+    HOMEWORKS_REVOKE = 'HOMEWORKS_REVOKE',
+    COURSES_REVOKE = 'COURSES_REVOKE',
+    COURSE_DELETE_REQUEST = 'COURSE_DELETE_REQUEST',
+    COURSE_DELETE = 'COURSE_DELETE',
+    WEBINARS_REVOKE = 'WEBINARS_REVOKE',
+    WEBINAR_DELETE_REQUEST = 'WEBINAR_DELETE_REQUEST',
+    WEBINAR_DELETE = 'WEBINAR_DELETE',
 }
 
 interface Credentials {
@@ -12,10 +59,107 @@ interface Credentials {
     refresh_token: string;
 }
 
+export type LoginAction = { type: ActionType.LOG_IN };
+export type LoginRequestAction = { type: ActionType.LOG_IN_REQUEST };
+export type LoginSuccessAction = { type: ActionType.LOG_IN_SUCCESS; credentials: Credentials};
+export type LoginErrorAction = { type: ActionType.LOG_IN_ERROR; error: AxiosError };
+export type LogoutAction = { type: ActionType.LOG_OUT };
+export type UserInfoFetchAction = { type: ActionType.USER_INFO_FETCH };
+export type UserInfoFetchedAction = { type: ActionType.USER_INFO_FETCHED; userInfo: UserInfo | AxiosError };
+export type ShopCoursesFetchAction = { type: ActionType.SHOP_COURSES_FETCH };
+export type AdminCoursesFetchAction = { type: ActionType.ADMIN_COURSES_FETCH };
+export type TeacherCoursesFetchAction = { type: ActionType.TEACHER_COURSES_FETCH };
+export type ShopCoursesFetchedAction = { type: ActionType.SHOP_COURSES_FETCHED; courses: CourseInfo[] | AxiosError };
+export type AdminCoursesFetchedAction = { type: ActionType.ADMIN_COURSES_FETCHED; courses: CourseInfo[] | AxiosError };
+export type TeacherCoursesFetchedAction = { type: ActionType.TEACHER_COURSES_FETCHED; courses: CourseInfo[] | AxiosError };
+export type UserCoursesFetchAction = { type: ActionType.USER_COURSES_FETCH };
+export type UserCoursesFetchedAction = { type: ActionType.USER_COURSES_FETCHED; courses: UserCourseInfo[] | AxiosError };
+export type SubjectsFetchAction = { type: ActionType.SUBJECTS_FETCH };
+export type SubjectsFetchedAction = { type: ActionType.SUBJECTS_FETCHED; subjects: SubjectInfo[] | AxiosError };
+export type TeachersFetchAction = { type: ActionType.TEACHERS_FETCH };
+export type TeachersFetchedAction = { type: ActionType.TEACHERS_FETCHED; teachers: TeacherInfo[] | AxiosError };
+export type LessonsFetchAction = { type: ActionType.LESSONS_FETCH; courseId: number };
+export type LessonsFetchedAction = { type: ActionType.LESSONS_FETCHED; courseId: number; lessons: LessonInfo[] | AxiosError };
+export type CourseWebinarsFetchAction = { type: ActionType.COURSE_WEBINARS_FETCH; courseId: number };
+export type CourseWebinarsFetchedAction = { type: ActionType.COURSE_WEBINARS_FETCHED; courseId: number; webinars: WebinarInfo[] | AxiosError };
+export type UpcomingWebinarsFetchAction = { type: ActionType.UPCOMING_WEBINARS_FETCH };
+export type UpcomingWebinarsFetchedAction = { type: ActionType.UPCOMING_WEBINARS_FETCHED; webinars: WebinarInfo[] | AxiosError };
+export type ParticipantsFetchAction = { type: ActionType.PARTICIPANTS_FETCH; courseId: number };
+export type ParticipantsFetchedAction = { type: ActionType.PARTICIPANTS_FETCHED; courseId: number; participants: CourseParticipantInfo[] | AxiosError };
+export type AdminWebinarsFetchAction = { type: ActionType.ADMIN_WEBINARS_FETCH; courseId: number };
+export type AdminWebinarsFetchedAction = { type: ActionType.ADMIN_WEBINARS_FETCHED; courseId: number; webinars: WebinarScheduleInfo | AxiosError };
+export type HomeworksFetchAction = { type: ActionType.HOMEWORKS_FETCH; lessonId: number };
+export type HomeworksFetchedAction = { type: ActionType.HOMEWORKS_FETCHED; lessonId: number; homeworks: HomeworkInfo[] | AxiosError };
+export type LessonRevokeAction = { type: ActionType.LESSONS_REVOKE; courseId: number; responseLesson: LessonInfo};
+export type LessonDeleteRequestAction = {
+    type: ActionType.LESSON_DELETE_REQUEST;
+    courseId: number;
+    lessonId: number;
+    onDelete?: (courseId: number, lessonId: number) => void;
+    onError?: (courseId: number, lessonId: number, error: AxiosError) => void;
+};
+export type LessonDeleteAction = { type: ActionType.LESSON_DELETE; courseId: number; lessonId: number }
+export type ParticipantsRevokeAction = { type: ActionType.PARTICIPANTS_REVOKE; courseId: number; responseParticipants: CourseParticipantInfo[]};
+export type HomeworksRevokeAction = { type: ActionType.HOMEWORKS_REVOKE; lessonId: number; responseHomework: HomeworkInfo};
+export type CoursesRevokeAction = { type: ActionType.COURSES_REVOKE; responseCourse: CourseInfo};
+export type CourseDeleteRequestAction = {
+    type: ActionType.COURSE_DELETE_REQUEST;
+    courseId: number;
+    onDelete?: (courseId: number) => void;
+    onError?: (courseId: number, error: AxiosError) => void;
+};
+export type CourseDeleteAction = { type: ActionType.COURSE_DELETE; courseId: number };
+export type WebinarsRevokeAction = { type: ActionType.WEBINARS_REVOKE; courseId: number; responseWebinars: WebinarScheduleInfo};
+export type WebinarDeleteRequestAction = {
+    type: ActionType.WEBINAR_DELETE_REQUEST;
+    courseId: number; webinarId: number;
+    webinarsSchedule: WebinarScheduleInfo;
+    onDelete?: (courseId: number, webinarId: number) => void;
+    onError?: (courseId: number, webinarId: number, error: AxiosError) => void;
+};
+export type WebinarDeleteAction = { type: ActionType.WEBINAR_DELETE; courseId: number; webinarId: number; responseWebinars: WebinarScheduleInfo };
+
 export type Action = { type: ActionType } & (
-    | { type: ActionType.LOG_IN_SUCCESS; credentials: Credentials}
-    | { type: ActionType.LOG_IN_ERROR }
-    | { type: ActionType.LOG_OUT }
-    | { type: ActionType.FETCH_USER_INFO }
-    | { type: ActionType.USER_INFO_SUCCESS }
+    | LoginAction
+    | LoginRequestAction
+    | LoginSuccessAction
+    | LoginErrorAction
+    | LogoutAction
+    | UserInfoFetchAction
+    | UserInfoFetchedAction
+    | ShopCoursesFetchAction
+    | ShopCoursesFetchedAction
+    | AdminCoursesFetchAction
+    | AdminCoursesFetchedAction
+    | TeacherCoursesFetchAction
+    | TeacherCoursesFetchedAction
+    | UserCoursesFetchAction
+    | UserCoursesFetchedAction
+    | SubjectsFetchAction
+    | SubjectsFetchedAction
+    | TeachersFetchAction
+    | TeachersFetchedAction
+    | LessonsFetchAction
+    | LessonsFetchedAction
+    | CourseWebinarsFetchAction
+    | CourseWebinarsFetchedAction
+    | UpcomingWebinarsFetchAction
+    | UpcomingWebinarsFetchedAction
+    | ParticipantsFetchAction
+    | ParticipantsFetchedAction
+    | AdminWebinarsFetchAction
+    | AdminWebinarsFetchedAction
+    | HomeworksFetchAction
+    | HomeworksFetchedAction
+    | LessonRevokeAction
+    | LessonDeleteRequestAction
+    | LessonDeleteAction
+    | ParticipantsRevokeAction
+    | HomeworksRevokeAction
+    | CoursesRevokeAction
+    | CourseDeleteRequestAction
+    | CourseDeleteAction
+    | WebinarsRevokeAction
+    | WebinarDeleteRequestAction
+    | WebinarDeleteAction
     );
