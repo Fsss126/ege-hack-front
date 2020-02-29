@@ -3,7 +3,7 @@ import APIRequest from "api";
 import LessonForm from "./LessonForm";
 import Page, {PageContent} from "components/Page";
 import {useLesson} from "store/selectors";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const LessonEditingPage = (props) => {
     const {match: {params: {courseId: param_course, lessonId: param_lesson}}, location} = props;
@@ -32,7 +32,7 @@ const LessonEditingPage = (props) => {
     const isLoaded = !!lesson;
     return (
         <Page
-            requiredPermissions={Permissions.LESSON_EDIT}
+            requiredPermissions={Permission.LESSON_EDIT}
             className="lesson-form-page"
             title="Изменение урока"
             location={location}>

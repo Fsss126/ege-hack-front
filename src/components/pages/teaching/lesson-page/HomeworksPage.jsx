@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import Catalog from "components/common/Catalog";
 import Homework from "./Homework";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const filterBy = {
     search: true,
@@ -28,7 +28,7 @@ const HomeworksPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={Permissions.HOMEWORK_CHECK}
+            requiredPermissions={Permission.HOMEWORK_CHECK}
             className="admin-page teaching-page--homeworks"
             title={title}
             location={location}>

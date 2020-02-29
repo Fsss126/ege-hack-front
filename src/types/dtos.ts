@@ -1,4 +1,4 @@
-import {AccountRoles, Permissions} from "./common";
+import {AccountRole, Permission} from "./enums";
 
 export interface LoginResp {
     access_token: string;
@@ -62,8 +62,8 @@ export interface AccountDtoReq {
 export interface UserInfoDtoResp {
     id: number;
     email?: string;
-    roles: AccountRoles[];
-    permissions: Permissions[];
+    roles: AccountRole[];
+    permissions: Permission[];
     vk_info: VkUserDto;
     pupil?: PupilDtoReq & { account_id: number };
     teacher?: TeacherDtoReq & { account_id: number };

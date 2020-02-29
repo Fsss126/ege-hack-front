@@ -12,7 +12,7 @@ import PosterCover from "components/common/PosterCover";
 import Countdown from "react-countdown-now";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteWebinar} from "store/selectors";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const filterBy = {
     search: true,
@@ -74,7 +74,7 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
 
     const onDelete = useDeleteWebinar();
 
-    const canEdit = useCheckPermissions(Permissions.WEBINAR_EDIT);
+    const canEdit = useCheckPermissions(Permission.WEBINAR_EDIT);
     const courseLink = `${path}/${courseId}`;
     const renderWebinar = useCallback((webinar, {link, ...rest}) => {
         const {id} = webinar;
@@ -106,7 +106,7 @@ const WebinarsPage = ({location, path, match, children: header, course, webinars
         <Page
             isLoaded={isLoaded}
             loadUserInfo
-            requiredPermissions={Permissions.WEBINAR_EDIT}
+            requiredPermissions={Permission.WEBINAR_EDIT}
             className="admin-page admin-page--webinars"
             title={title}
             location={location}>

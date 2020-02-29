@@ -3,7 +3,7 @@ import Page, {PageContent} from "components/Page";
 import {useAdminCourse, useSubjects, useTeachers} from "store/selectors";
 import APIRequest from "api";
 import CourseForm from "./CourseForm";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const CourseEditingPage = (props) => {
     const {match: {params: {courseId: param_course}}, location} = props;
@@ -29,11 +29,11 @@ const CourseEditingPage = (props) => {
         ]);
     }, [returnLink]);
 
-    const isLoaded = teachers && subjects && course;
+    const isLoaded = !!(teachers && subjects && course);
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={Permissions.COURSE_EDIT}
+            requiredPermissions={Permission.COURSE_EDIT}
             className="course-form-page"
             title="Изменение курса"
             location={location}>

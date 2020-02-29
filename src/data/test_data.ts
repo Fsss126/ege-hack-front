@@ -3,7 +3,7 @@ import _ from "lodash";
 import {API_ROOT} from "api";
 import poster from "img/dummy_poster.jpg";
 import pic from "img/dummy-pic.jpg";
-import {AccountRoles, LearningStatus} from "types/common";
+import {AccountRole, LearningStatus} from "types/enums";
 import {
     CourseInfo,
     HomeworkInfo,
@@ -26,8 +26,8 @@ function getDate(daysForward: number) {
 export const ACCOUNT_INFO: UserInfo = {
     id: 154792439,
     roles: [
-        AccountRoles.PUPIL,
-        AccountRoles.TEACHER
+        AccountRole.PUPIL,
+        AccountRole.TEACHER
     ],
     permissions: [],
     vk_info: {

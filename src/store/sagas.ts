@@ -28,7 +28,7 @@ import {
     UserInfo,
     WebinarInfo, WebinarScheduleInfo
 } from "../types/entities";
-import {AppState} from "./store";
+import {AppState} from "./index";
 import {TakeableChannel} from '@redux-saga/core';
 import APIRequest from "../api";
 

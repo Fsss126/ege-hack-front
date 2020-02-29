@@ -9,7 +9,7 @@ import {ADMIN_ROLES} from "definitions/constants";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteCourse} from "store/selectors";
-import {Permissions} from "../../../../types/common";
+import {Permission} from "../../../../types/enums";
 
 const filterBy = {
     search: true,
@@ -23,7 +23,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
 
     const onDelete = useDeleteCourse();
 
-    const canEdit = useCheckPermissions(Permissions.COURSE_EDIT);
+    const canEdit = useCheckPermissions(Permission.COURSE_EDIT);
 
     const renderCourse = useCallback((course, {link, ...rest}) => {
         const {id, hide_from_market} = course;

@@ -5,7 +5,7 @@ import Button from "components/ui/Button";
 import Page, {PageContent} from "components/Page";
 import {useSubjects, useUpcomingWebinars, useUserCourses} from "store/selectors";
 import WebinarSchedule from "components/common/WebinarSchedule";
-import {LearningStatus} from "types/common";
+import {LearningStatus} from "types/enums";
 
 const CatalogPage = ({location}) => {
     const {courses, error, retry} = useUserCourses();

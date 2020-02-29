@@ -5,7 +5,7 @@
   "globals": {
     "VK": true
   },
-  "extends": ["plugin:@typescript-eslint/recommended"],
+  "extends": ["plugin:react/recommended","plugin:@typescript-eslint/recommended"],
   "plugins": [
     "react-hooks"
   ],
@@ -19,6 +19,8 @@
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "@typescript-eslint/camelcase": "off"
+    "react/prop-types": "off",
+    "@typescript-eslint/camelcase": "off",
+    "react/no-unescaped-entities": "warn"
   }
 }

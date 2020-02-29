@@ -1,9 +1,7 @@
 import React from "react";
-import APIRequest from "api";
 import Form, {FieldsContainer, useForm, useFormValidityChecker} from "components/ui/Form";
 import {useRevokeCourses} from "store/selectors";
 import * as Input from "components/ui/input";
-import _ from "lodash";
 
 const INITIAL_FORM_DATA = {
     name: '',

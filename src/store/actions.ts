@@ -61,7 +61,7 @@ interface Credentials {
 
 export type LoginAction = { type: ActionType.LOG_IN };
 export type LoginRequestAction = { type: ActionType.LOG_IN_REQUEST };
-export type LoginSuccessAction = { type: ActionType.LOG_IN_SUCCESS; credentials: Credentials};
+export type LoginSuccessAction = { type: ActionType.LOG_IN_SUCCESS; credentials: Credentials | null};
 export type LoginErrorAction = { type: ActionType.LOG_IN_ERROR; error: AxiosError };
 export type LogoutAction = { type: ActionType.LOG_OUT };
 export type UserInfoFetchAction = { type: ActionType.USER_INFO_FETCH };

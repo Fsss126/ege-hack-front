@@ -9,7 +9,7 @@ import {
     VkUserDto,
     WebinarDto, WebinarScheduleDtoResp
 } from "./dtos";
-import {LearningStatus} from "./common";
+import {LearningStatus} from "./enums";
 
 export type Credentials = LoginResp;
 

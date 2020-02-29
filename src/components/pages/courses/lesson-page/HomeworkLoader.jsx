@@ -35,7 +35,7 @@ const HomeworkLoader = ({homework, deadline, lessonId}) => {
                 initialFiles={homework ? homework.files : undefined}
                 onChange={onChange}
                 onSubmit={onSubmit}
-                isDisabled={isHomeworkSubmissionClosed}/>
+                disabled={isHomeworkSubmissionClosed}/>
         </div>
     );
 };

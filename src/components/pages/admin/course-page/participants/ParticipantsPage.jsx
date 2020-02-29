@@ -8,7 +8,7 @@ import Button from "components/ui/Button";
 import {useCheckPermissions} from "components/ConditionalRender";
 import Tooltip from "components/ui/Tooltip";
 import {renderDate} from "definitions/helpers";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const filterBy = {
     search: true,
@@ -26,7 +26,7 @@ const ParticipantsPage = (props) => {
     const {match: {params: {courseId: param_course}}, location, participants, course, isLoaded, children: header, parentSection, path} = props;
     const courseId = parseInt(param_course);
 
-    const canEdit = useCheckPermissions(Permissions.PARTICIPANT_MANAGEMENT);
+    const canEdit = useCheckPermissions(Permission.PARTICIPANT_MANAGEMENT);
 
     const renderStudent = useCallback((user, {link, ...renderProps}) => {
         const {
@@ -65,7 +65,7 @@ const ParticipantsPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={Permissions.PARTICIPANT_MANAGEMENT}
+            requiredPermissions={Permission.PARTICIPANT_MANAGEMENT}
             className="admin-page admin-page--participants"
             title={title}
             location={location}>

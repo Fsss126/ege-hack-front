@@ -3,7 +3,7 @@ import Page, {PageContent} from "components/Page";
 import {useSubjects, useTeachers} from "store/selectors";
 import APIRequest from "api";
 import CourseForm from "./CourseForm";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const createRequest = (requestData) => APIRequest.post('/courses', requestData);
 
@@ -27,11 +27,11 @@ const CourseCreatingPage = (props) => {
         ]);
     }, []);
 
-    const isLoaded = teachers && subjects;
+    const isLoaded = !!(teachers && subjects);
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={Permissions.COURSE_EDIT}
+            requiredPermissions={Permission.COURSE_EDIT}
             className="course-form-page"
             title="Создание курса"
             location={location}>

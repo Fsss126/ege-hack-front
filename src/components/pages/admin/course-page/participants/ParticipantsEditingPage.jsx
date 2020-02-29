@@ -4,7 +4,7 @@ import Page, {PageContent} from "components/Page";
 import * as Input from "components/ui/input";
 import Form, {useForm} from "components/ui/Form";
 import {useRevokeParticipants} from "store/selectors";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const INITIAL_FORM_DATA = {
     accounts: ''
@@ -67,7 +67,7 @@ const ParticipantsEditingPage = (props) => {
     return (
         <Page
             isLoaded={isLoaded}
-            requiredPermissions={Permissions.PARTICIPANT_MANAGEMENT}
+            requiredPermissions={Permission.PARTICIPANT_MANAGEMENT}
             className="participants-form-page"
             title="Добавление учеников"
             location={location}>

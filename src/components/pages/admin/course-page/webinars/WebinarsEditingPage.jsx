@@ -3,7 +3,7 @@ import {useAdminCourse, useAdminWebinars} from "store/selectors";
 import APIRequest from "api";
 import Page, {PageContent} from "components/Page";
 import WebinarsForm from "./WebinarsForm";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const WebinarsEditingPage = (props) => {
     const {match: {params: {courseId: param_course}}, location} = props;
@@ -33,7 +33,7 @@ const WebinarsEditingPage = (props) => {
     const title = webinars === null ? 'Создание графика вебинаров' : 'Изменение графика вебинаров';
     return (
         <Page
-            requiredPermissions={Permissions.WEBINAR_EDIT}
+            requiredPermissions={Permission.WEBINAR_EDIT}
             className="lesson-form-page"
             title={title}
             location={location}>

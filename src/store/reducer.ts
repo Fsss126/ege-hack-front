@@ -1,5 +1,5 @@
 import {Reducer} from 'redux';
-import {AppState} from './store';
+import {AppState} from './index';
 import {Action, ActionType} from './actions';
 import Auth from 'definitions/auth';
 import _ from "lodash";

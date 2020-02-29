@@ -7,7 +7,7 @@ import Catalog from "components/common/Catalog";
 import Button from "components/ui/Button";
 import {useCheckPermissions} from "components/ConditionalRender";
 import {useDeleteLesson} from "store/selectors";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 
 const filterBy = {
     search: true,
@@ -25,7 +25,7 @@ const LessonsPage = ({location, path, match, children: header, course, lessons, 
     const {params: {courseId: param_id}} = match;
     const courseId = parseInt(param_id);
 
-    const canEdit = useCheckPermissions(Permissions.LESSON_EDIT);
+    const canEdit = useCheckPermissions(Permission.LESSON_EDIT);
 
     const onDelete = useDeleteLesson();
 

@@ -14,7 +14,7 @@ import LessonsPage from "./../../admin/course-page/lessons/LessonsPage";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
 import Lesson from "components/common/Lesson";
-import {Permissions} from "../../../../types/common";
+import {Permission} from "../../../../types/enums";
 
 const renderLesson = (lesson, {link, ...rest}) => {
     const {id, locked, assignment} = lesson;
@@ -41,7 +41,7 @@ const CoursePage = (props) => {
     // const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
     const isLoaded = !!(course !== undefined && participants !== undefined && lessons !== undefined);
 
-    const canEditCourse = useCheckPermissions(Permissions.COURSE_EDIT);
+    const canEditCourse = useCheckPermissions(Permission.COURSE_EDIT);
     // const canEditLessons = useCheckPermissions(Permissions.LESSON_EDIT);
     // const canEditParticipants = useCheckPermissions(Permissions.PARTICIPANT_MANAGEMENT);
     // const canEditWebinars = useCheckPermissions(Permissions.WEBINAR_EDIT);

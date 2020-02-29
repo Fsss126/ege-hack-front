@@ -4,16 +4,17 @@ import APIRequest, {getCancelToken} from "api";
 import _ from "lodash";
 import {useHistory} from "react-router-dom";
 import {useCheckPermissions} from "../components/ConditionalRender";
-import {Permissions} from "types/common";
+import {Permission} from "types/enums";
 import {useDispatch, useSelector as useSelectorGen} from "react-redux";
 import {
+    Action,
     ActionType,
     CourseDeleteCallback,
     CourseDeleteErrorCallback,
     LessonDeleteCallback,
     LessonDeleteErrorCallback, WebinarDeleteCallback, WebinarDeleteErrorCallback
 } from "./actions";
-import {AppState} from "./store";
+import {AppState} from "./index";
 import {
     CourseInfo, CourseParticipantInfo,
     Credentials,
@@ -25,18 +26,20 @@ import {
     WebinarScheduleInfo
 } from "../types/entities";
 import {AxiosError, Canceler} from "axios";
+import {SimpleCallback} from "types/utility/common";
+import {Dispatch} from "redux";
 
 const useSelector = <TSelected>(selector: (state: AppState) => TSelected, equalityFn?: (left: TSelected, right: TSelected) => boolean): TSelected => (
     useSelectorGen(selector, equalityFn)
 );
 
-export type SimpleCallback = () => void;
+
 
 export function useUserAuth(): void {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<Dispatch<Action>>();
 
     React.useLayoutEffect(() => {
-        const loginCallback = (credentials: Credentials): void => {
+        const loginCallback = (credentials: Credentials | null): void => {
             dispatch({type: ActionType.LOG_IN_SUCCESS, credentials});
         };
         const logoutCallback = (): void => {
@@ -179,7 +182,7 @@ export function useShopCourse(courseId: number): ShopCourseHookResult {
 //TODO: check permissions in sagas
 export type AdminCoursesHookResult = {catalog?: CourseInfo[] | false; error?: AxiosError; reload: SimpleCallback}
 export function useAdminCourses(): AdminCoursesHookResult {
-    const isAllowed = useCheckPermissions(Permissions.COURSE_EDIT);
+    const isAllowed = useCheckPermissions(Permission.COURSE_EDIT);
     const adminCourses = useSelector(({adminCourses}) => adminCourses);
     const dispatch = useDispatch();
     const dispatchFetchAction = useCallback(() => {
@@ -209,7 +212,7 @@ export function useAdminCourse(courseId: number): AdminCourseHookResult {
 
 export type TeacherCoursesHookResult = AdminCoursesHookResult;
 export function useTeacherCourses(): TeacherCoursesHookResult {
-    const isAllowed = useCheckPermissions(Permissions.HOMEWORK_CHECK);
+    const isAllowed = useCheckPermissions(Permission.HOMEWORK_CHECK);
     const teacherCourses = useSelector(({teacherCourses}) => teacherCourses);
     const dispatch = useDispatch();
     const dispatchFetchAction = useCallback(() => {
@@ -312,7 +315,7 @@ export function useLesson(courseId: number, lessonId: number): LessonHookResult 
 
 export type HomeworksHookResult = {homeworks?: HomeworkInfo[] | false; error?: AxiosError; reload: SimpleCallback}
 export function useHomeworks(lessonId: number): HomeworksHookResult {
-    const isAllowed = useCheckPermissions(Permissions.HOMEWORK_CHECK);
+    const isAllowed = useCheckPermissions(Permission.HOMEWORK_CHECK);
     const homeworks = useSelector(({homeworks}) => homeworks[lessonId]);
     const dispatch = useDispatch();
     const dispatchFetchAction = useCallback(() => {
@@ -341,7 +344,7 @@ export function useRevokeHomeworks(lessonId: number): RevokeHomeworksHookResult 
 export type AdminLessonsHookResult = {lessons?: LessonInfo[] | false; error?: AxiosError; reload: SimpleCallback};
 export function useAdminLessons(courseId: number): AdminLessonsHookResult {
     const {lessons, error, reload} = useLessons(courseId);
-    const isAllowed = useCheckPermissions(Permissions.LESSON_EDIT);
+    const isAllowed = useCheckPermissions(Permission.LESSON_EDIT);
 
     return {lessons: !isAllowed ? false : lessons, error, reload};
 }
@@ -349,14 +352,14 @@ export function useAdminLessons(courseId: number): AdminLessonsHookResult {
 export type AdminLessonHookResult = {lesson?: LessonInfo | false; error?: AxiosError | true; reload: SimpleCallback};
 export function useAdminLesson(courseId: number, lessonId: number): AdminLessonHookResult {
     const {lesson, error, reload} = useLesson(courseId, lessonId);
-    const isAllowed = useCheckPermissions(Permissions.LESSON_EDIT);
+    const isAllowed = useCheckPermissions(Permission.LESSON_EDIT);
 
     return {lesson: !isAllowed ? false : lesson, error, reload};
 }
 
 export type ParticipantsHookResult = {participants?: CourseParticipantInfo[] | false; error?: AxiosError | true; reload: SimpleCallback};
 export function useParticipants(courseId: number): ParticipantsHookResult {
-    const isAllowed = useCheckPermissions(Permissions.PARTICIPANT_MANAGEMENT);
+    const isAllowed = useCheckPermissions(Permission.PARTICIPANT_MANAGEMENT);
     const participants = useSelector(({participants}) => participants[courseId]);
     const dispatch = useDispatch();
     const dispatchFetchAction = useCallback(() => {
@@ -384,7 +387,7 @@ export function useRevokeParticipants(courseId: number): RevokeParticipantsHookR
 
 export type AdminWebinarsHookResult = {webinars?: WebinarScheduleInfo | false; error?: AxiosError | true; reload: SimpleCallback};
 export function useAdminWebinars(courseId: number): AdminWebinarsHookResult {
-    const isAllowed = useCheckPermissions(Permissions.WEBINAR_EDIT);
+    const isAllowed = useCheckPermissions(Permission.WEBINAR_EDIT);
     const webinars = useSelector(({adminWebinars}) => adminWebinars[courseId]);
     const dispatch = useDispatch();
     const dispatchFetchAction = useCallback(() => {

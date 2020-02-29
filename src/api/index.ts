@@ -1,7 +1,7 @@
 import Auth from 'definitions/auth';
 import _ from 'lodash';
 import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
-import {LearningStatus} from "../types/common";
+import {LearningStatus} from "../types/enums";
 import {
     AccountDto,
     CourseDtoResp,

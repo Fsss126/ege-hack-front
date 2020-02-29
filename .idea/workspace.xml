@@ -6,11 +6,84 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/alex.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ErrorPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SideBar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ui/ScrollBars.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ui/input/Input.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/declarations/react-times.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/definitions/breakpoints.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/definitions/helpers.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/definitions/mixins.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/utility/common.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/utility/helpers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/HomeworkForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/HomeworkForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ConditionalRender.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ConditionalRender.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ErrorPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SideBar.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/CoverImage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/CoverImage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCreatingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseEditingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonCreatingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonCreatingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonEditingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/HomeworkLoader.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/AssignmentPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/AssignmentPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/HomeworksPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/HomeworksPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Button.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Link.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Link.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Loader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Loader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/LoadingIndicator.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/LoadingIndicator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/ScrollBars.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Tooltip.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Tooltip.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/DateInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/DateInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/Input.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/Select.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/Select.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/TimeInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/TimeInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/File.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/File.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/GenericFileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/GenericFileInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/default/FileInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/default/FileInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/default/InputButton.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/default/InputButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/default/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/default/Layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/default/Preview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/default/Preview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/default/SubmitButton.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/default/SubmitButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/image/ImageInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/image/ImageInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/image/InputPlaceholder.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/image/InputPlaceholder.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/image/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/image/Layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/image/Preview.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/image/Preview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/file-input/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/file-input/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/input/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/input/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/test_data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/test_data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/declarations/defs.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/declarations/defs.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/breakpoints.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/helpers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/mixins.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/common.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/selectors.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/sagas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/sagas.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/common.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/enums.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/dtos.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/dtos.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/entities.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/entities.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,20 +138,21 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
-      <recent name="$PROJECT_DIR$/src/components/ui" />
-      <recent name="$PROJECT_DIR$/src/sass" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/types/utility" />
       <recent name="$PROJECT_DIR$/src/types" />
       <recent name="$PROJECT_DIR$/src/components/pages/shop" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
       <recent name="$PROJECT_DIR$/src/components/ui/input/file-input" />
       <recent name="$PROJECT_DIR$/src/components/ui/input" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
+      <recent name="$PROJECT_DIR$/src/components/ui" />
+      <recent name="$PROJECT_DIR$/src/sass" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start-custom-post-mac">
@@ -175,7 +249,6 @@
         </serviceView>
       </list>
     </option>
-    <option name="showServicesTree" value="false" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -227,7 +300,7 @@
       <workItem from="1579294041201" duration="222000" />
       <workItem from="1579517515853" duration="35679000" />
       <workItem from="1582583601771" duration="56389000" />
-      <workItem from="1582718037842" duration="4414000" />
+      <workItem from="1582718037842" duration="75675000" />
     </task>
     <task id="LOCAL-00001" summary="Initial stage">
       <created>1567014085290</created>
@@ -439,7 +512,21 @@
       <option name="project" value="LOCAL" />
       <updated>1582695050262</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Typed selectors">
+      <created>1582735365063</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1582735365063</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Typed components">
+      <created>1582935344024</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1582935344024</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -459,8 +546,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="File upload; Login" />
-    <MESSAGE value="Added teachers; Added account page" />
     <MESSAGE value="Commit icons and img resources" />
     <MESSAGE value="Added shop and teachers API" />
     <MESSAGE value="Hash routing; Prod and dev env" />
@@ -484,7 +569,10 @@
     <MESSAGE value="Fixed invalid locale storage credentials scenario" />
     <MESSAGE value="Added TS; Typed DTOs; Updated scripts version" />
     <MESSAGE value="Completely switched to redux" />
-    <option name="LAST_COMMIT_MESSAGE" value="Completely switched to redux" />
+    <MESSAGE value="Typed selectors" />
+    <MESSAGE value="Typed components" />
+    <option name="LAST_COMMIT_MESSAGE" value="Typed components" />
+    <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#ESLint" timestamp="1582581731864">
@@ -507,11 +595,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1582583756631" />
-    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1582695049981">
+    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1582936739345">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582550348305" />
-    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1582695049981" />
+    <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582735364903" />
+    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1582936739345" />
     <state x="100" y="55" width="1240" height="845" key="DiffContextDialog" timestamp="1582545579101">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
@@ -524,29 +612,29 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1582735246037">
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1582936706219">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582735246037" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582717223594" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582834565649" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582936706219" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1582735246036">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1582936706217">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582735246036" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1582717223593" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582834565646" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1582936706217" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1582735246035">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1582936706217">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582735246035" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1582717223592" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582834565645" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1582936706216" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1582735246037">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1582936706218">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582735246037" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1582717223594" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582834565648" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1582936706218" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1575496047285">
       <screen x="0" y="0" width="1440" height="900" />
@@ -561,11 +649,19 @@
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582560452638" />
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1575726108474" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1582589348889">
+    <state width="500" height="445" key="SwitcherDM" timestamp="1582858239894">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582550350640" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1582589348889" />
+    <state width="500" height="445" key="SwitcherDM/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582858239894" />
+    <state x="570" y="373" key="VCS.ChangelistChooser" timestamp="1582936729876">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="570" y="373" key="VCS.ChangelistChooser/0.0.1440.900@0.0.1440.900" timestamp="1582936729876" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1582935350819">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582735367912" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1582935350819" />
     <state x="462" y="301" key="cloudConfig.PluginsDialog" timestamp="1575553677863">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -583,10 +679,10 @@
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582554520662" />
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1575496035299" />
-    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1582697481773">
+    <state x="226" y="132" width="837" height="540" key="find.popup" timestamp="1582863399980">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="226" y="132" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582552236057" />
+    <state x="226" y="132" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582863399980" />
     <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1582697481773" />
     <state x="450" y="369" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582558410140">
       <screen x="0" y="0" width="1440" height="900" />

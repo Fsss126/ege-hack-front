@@ -1,7 +1,7 @@
-import React, {useContext, ReactElement} from 'react';
-import {BrowserRouter as Router, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
-import {APP_BASE_URL} from "definitions/constants";
-import {useRefValue, useToggle} from "hooks/common";
+import React, {useContext, ReactElement, useEffect, useCallback, createContext, useRef} from 'react';
+import {LocationListener, Location} from "history";
+import {Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {useToggle} from "hooks/common";
 import {useUserAuth} from "store/selectors";
 import Login from "./pages/login";
 import Account from "./pages/account";
@@ -13,30 +13,27 @@ import Teaching from "./pages/teaching";
 import {NotFoundErrorPage} from "./ErrorPage";
 
 import 'sass/index.scss';
-import {createAppStore} from "../store/store";
-import {Provider} from "react-redux";
-import {LocationListener, Location} from "history";
 
-function useLocationChangeEffect(effect: LocationListener) {
+function useLocationChangeEffect(effect: LocationListener): void {
     const history = useHistory();
-    React.useEffect(() => {
+    useEffect(() => {
         return history.listen(effect);
     }, [history, effect]);
 }
 
-function useScrollToTop() {
-    const [getPrevPath, setPrevPath] = useRefValue(useLocation().pathname);
-    const onLocationChange = React.useCallback((location, action) => {
+function useScrollToTop(): void {
+    const prevPathRef = useRef<string>(useLocation().pathname);
+    const onLocationChange = useCallback((location, action) => {
         console.log('update');
-        if (getPrevPath() !== location.pathname && action !== 'POP') {
+        if (prevPathRef.current !== location.pathname && action !== 'POP') {
             window.scrollTo(0, 0);
         }
-        setPrevPath(location.pathname);
-    }, [getPrevPath, setPrevPath]);
+        prevPathRef.current = location.pathname;
+    }, []);
     useLocationChangeEffect(onLocationChange);
 }
 
-function useForceTrailingSlash() {
+function useForceTrailingSlash(): void {
     const location = useLocation();
     const history = useHistory();
     const path = location.pathname;
@@ -46,21 +43,24 @@ function useForceTrailingSlash() {
     }
 }
 
-const UIContext = React.createContext<any>(null);
+export type UIState = {
+    sidebar: any;
+};
+const UIContext = createContext<UIState>(undefined as any);
 UIContext.displayName = 'UIContext';
 
-function useUIState() {
+function useUIState(): UIState {
     return {
         sidebar: useToggle(false)
     };
 }
 
-export function useSideBarState() {
-    const {sidebar} = useContext<any>(UIContext);
+export function useSideBarState(): UIState['sidebar'] {
+    const {sidebar} = useContext<UIState>(UIContext);
     return sidebar;
 }
 
-const onLocationChange = (location: Location) => {
+const onLocationChange = (location: Location): void => {
     console.log(`- - - location: '${location.pathname}'`);
 };
 
@@ -93,12 +93,4 @@ function App(): ReactElement {
     );
 }
 
-const store = createAppStore();
-
-export default (): ReactElement => (
-    <Provider store={store}>
-        <Router basename={APP_BASE_URL}>
-            <App/>
-        </Router>
-    </Provider>
-);
+export default App;
