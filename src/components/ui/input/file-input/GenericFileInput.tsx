@@ -122,6 +122,9 @@ const getCallbackFiles = (files: IFileWithMeta[], preloadedFiles: FileInfo[]): F
         return _.concat<FileInfo>(preloadedFiles, files.map<FileInfo>(({xhr}) => JSON.parse(xhr!.responseText)));
 };
 
+type defaultDropzoneProps = typeof Dropzone.defaultProps;
+type DropzoneProps = React.Defaultize<IDropzoneProps, defaultDropzoneProps>;
+
 //TODO: check disabled on capturing phase of click
 export type InputChangeCallback = (files: FileInfo[] | undefined, name: string, changed: boolean) => void;
 export type InputSubmitCallback = (files: FileInfo[] | undefined) => Promise<any> | any;
@@ -135,7 +138,7 @@ export type FileInputProps = {
     value?: FileInfo[];
     required: boolean;
     disabled: boolean | (() => boolean);
-} & Omit<IDropzoneProps, 'getUploadParams' | 'onChangeStatus' | 'onSubmit' | 'canCancel' | 'classNames' | 'disabled'>;
+} & Omit<DropzoneProps, 'getUploadParams' | 'onChangeStatus' | 'onSubmit' | 'canCancel' | 'classNames' | 'disabled' | 'initialFiles'>;
 const GenericFileInput = (props: FileInputProps): React.ReactElement => {
     const {
         initialFiles,
@@ -150,14 +153,14 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
         ...otherProps
     } = props;
     let {
-        maxFiles=5,
+        maxFiles,
     } = props;
 
     const [preloadedFiles, setPreloadedFiles] = useState<FileInfo[]>(initialFiles);
 
     const inputFilesRef = useRef<IFileWithMeta[]>([]);
 
-    const onSubmitClick: Required<IDropzoneProps>['onSubmit'] = useCallback((files) => {
+    const onSubmitClick = useCallback((files: IFileWithMeta[]): Promise<any> | any => {
         console.log(files.map(f => f.meta));
         if (onSubmit) {
             const filesToSubmit = getCallbackFiles(files, preloadedFiles);
@@ -172,7 +175,7 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
         }
     }, [changeCallback, onSubmit, preloadedFiles, name]);
 
-    const {submitting, handleSubmit, hasChanged, onChange} = useFormState(onSubmitClick);
+    const {submitting, handleSubmit, hasChanged, onChange} = useFormState<[IFileWithMeta[]], any>(onSubmitClick);
 
     const deletePreloadedFile = useCallback((file: FileInfo) => {
         const newPreloadedFiles = preloadedFiles.filter(item => item !== file);
@@ -187,7 +190,7 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
         changeCallback && changeCallback(getCallbackFiles(files, preloadedFiles), name, true);
     }, [changeCallback, preloadedFiles, name, onChange]);
 
-    maxFiles = preloadedFiles ? maxFiles - preloadedFiles.length : maxFiles;
+    maxFiles = maxFiles ? (preloadedFiles ? maxFiles - preloadedFiles.length : maxFiles) : undefined;
     const isDisabled = typeof disabled === 'function' ? disabled() : disabled;
 
     //reset on null
@@ -232,7 +235,8 @@ GenericFileInput.defaultProps = {
     inputContent: "Загрузить файл",
     maxSizeBytes: 1024 * 1024 * 4,
     required: false,
-    disabled: false
+    disabled: false,
+    maxFiles: 5
 };
 
 export default GenericFileInput;

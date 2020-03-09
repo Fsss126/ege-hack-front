@@ -10,6 +10,7 @@ import SideBar from "./SideBar";
 import {useSideBarState} from "./App";
 import {PermissionsDeniedErrorPage} from "./ErrorPage";
 import {RequiredPermissions, RequiredRoles, useCheckPermissions} from "./ConditionalRender";
+import {RouteComponentProps} from "react-router";
 
 const PageLoadingPlaceholder: React.FC = () => (
     <div className="layout__content">
@@ -100,7 +101,7 @@ export type PageProps = {
     fullMatch: boolean;
     loadUserInfo: boolean;
     isLoaded: boolean;
-}
+} & Pick<RouteComponentProps<any>, 'location'>;
 const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
     const {
         title,
@@ -140,8 +141,8 @@ const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
                 <Header
                     onMenuButtonClick={toggleSideBar}
                     showUserNav={showUserNav}
-                    user={credentials}
-                    userInfo={userInfo}
+                    user={credentials ? (credentials instanceof Error ? null : credentials) : null}
+                    userInfo={userInfo ? (userInfo instanceof Error ? undefined : userInfo) : undefined}
                     sidebar={showSidebar}/>
             )}
             <CSSTransition

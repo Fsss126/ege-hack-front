@@ -5,7 +5,8 @@ import Layout from "./Layout";
 import InputButton from "./InputButton";
 import Preview from "./Preview";
 
-const FileInput: React.FC<FileInputProps> = (props) => {
+type defaultProps = typeof GenericFileInput.defaultProps;
+const FileInput: React.FC<React.Defaultize<FileInputProps, defaultProps>> = (props) => {
     return (
         <GenericFileInput
             SubmitButtonComponent={SubmitButton}

@@ -22,11 +22,11 @@ const classNames = {
 export type DateInputProps = {
     value?: Date;
     name: string;
-    inputProps: React.InputHTMLAttributes<HTMLInputElement>;
+    inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
     dayPickerProps: DayPickerProps;
     required?: boolean;
     onChange?: InputChangeHandler<Date>;
-} & DayPickerInputProps;
+} & Omit<DayPickerInputProps, 'onChange'>;
 const DateInput = forwardRef<DayPickerInput, DateInputProps>((props, forwardedRef) => {
     const {
         dayPickerProps = {},

@@ -93,31 +93,40 @@ export interface CourseParticipantDto extends AccountDto {
     join_date_time: number;
 }
 
-export interface WebinarDto {
-    id: number;
+export interface WebinarDtoCommon {
     name: string;
     description?: string;
     date_start: number;
     duration: number;
 }
 
+export interface WebinarDtoResp extends WebinarDtoCommon {
+    id: number;
+}
+
+export interface WebinarDtoReq extends WebinarDtoCommon {
+    id?: number;
+}
+
 interface WebinarScheduleDtoCommon {
     click_meeting_link:	string;
-    webinars: WebinarDto[];
 }
 
 export interface WebinarScheduleDtoResp extends WebinarScheduleDtoCommon, RespWithImage {
     course_id: number;
+    webinars: WebinarDtoResp[];
 }
 
-export interface WebinarScheduleDtoReq extends WebinarScheduleDtoCommon, ReqWithImage {}
+export interface WebinarScheduleDtoReq extends WebinarScheduleDtoCommon, ReqWithImage {
+    webinars: WebinarDtoReq[];
+}
 
 export interface PersonWebinarDto {
     subject_id: number;
     subject_name: string;
     course_id: number;
     course_name: string;
-    webinar: WebinarDto;
+    webinar: WebinarDtoResp;
     image_link: string;
 }
 
@@ -130,25 +139,32 @@ export interface FileInfo {
 export interface HometaskDtoResp {
     deadline: number;
     description?: string;
-    file_info: FileInfo;
+    file_info?: FileInfo;
+}
+
+export interface HometaskDtoReq {
+    deadline: number;
+    description?: string;
+    file?: string;
 }
 
 export interface LessonDtoCommon {
-    attachments: FileInfo[];
     course_id: number;
     description?: string;
     hometask?: HometaskDtoResp;
-    image_link: string;
     is_locked: boolean;
     name: string;
     num: number;
     video_link?: string;
 }
 
-export interface LessonDtoReq extends LessonDtoCommon, ReqWithImage {}
+export interface LessonDtoReq extends LessonDtoCommon, ReqWithImage {
+    attachments: string[];
+}
 
 export interface LessonDtoResp extends LessonDtoCommon, RespWithImage {
     id: number;
+    attachments: FileInfo[];
 }
 
 export interface HomeworkAssessmentDtoReq {
@@ -180,5 +196,9 @@ export interface LoginVkReq {
 
 export interface AddParticipantsReq {
     accounts: string[];
+}
+
+export interface LinkResp {
+    link: string;
 }
 

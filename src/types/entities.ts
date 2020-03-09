@@ -1,13 +1,20 @@
 import {
     CourseDtoResp,
-    CourseParticipantDto, DiscountMessage, FileInfo, HometaskDtoResp, HomeworkDtoResp, LessonDtoResp,
-    LoginResp, PersonWebinarDto,
+    CourseParticipantDto,
+    DiscountMessage,
+    FileInfo,
+    HometaskDtoResp,
+    HomeworkDtoResp,
+    LessonDtoResp,
+    LoginResp,
+    PersonWebinarDto,
     PupilDtoResp,
     SubjectDtoResp,
     TeacherDtoResp,
     UserInfoDtoResp,
     VkUserDto,
-    WebinarDto, WebinarScheduleDtoResp
+    WebinarDtoResp,
+    WebinarScheduleDtoResp
 } from "./dtos";
 import {LearningStatus} from "./enums";
 
@@ -56,9 +63,10 @@ export interface CourseParticipantInfo extends Omit<CourseParticipantDto, 'accou
     join_date_time: Date;
 }
 
-export interface WebinarInfo extends Omit<WebinarDto, 'date_start'>{
+export interface WebinarInfo extends Omit<WebinarDtoResp, 'date_start'>{
     date_start: Date;
     date_end: Date;
+    image_link: string;
 }
 
 export interface WebinarScheduleInfo extends Omit<WebinarScheduleDtoResp, 'webinars'>{
@@ -76,6 +84,7 @@ export interface AssignmentInfo extends Omit<HometaskDtoResp, 'deadline' | 'file
 export interface LessonInfo extends Omit<LessonDtoResp, 'is_locked' | 'hometask'> {
     locked: LessonDtoResp['is_locked'];
     assignment?: AssignmentInfo;
+    watchProgress?: number;
 }
 
 export interface HomeworkInfo extends Omit<HomeworkDtoResp, 'date' | 'file_info' | 'pupil'>{

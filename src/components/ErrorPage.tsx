@@ -10,10 +10,9 @@ export type ErrorPageRedirectLink = {
 export type ErrorPageProps = {
     errorCode?: number | string;
     message: React.ReactNode;
-    link: ErrorPageRedirectLink;
-}
+} & ErrorPageRedirectLink;
 const ErrorPage: React.withDefaultProps<React.FC<ErrorPageProps>> = (props) => {
-    const {errorCode, message, link: {url, text}} = props;
+    const {errorCode, message, url, text} = props;
     const code = errorCode ? errorCode.toString() : undefined;
     return (
         <Page title={code} className="error-page">
@@ -35,21 +34,20 @@ const ErrorPage: React.withDefaultProps<React.FC<ErrorPageProps>> = (props) => {
     );
 };
 ErrorPage.defaultProps = {
-    link: {
-        url: '/',
-        text: 'На главную'
-    }
+    url: '/',
+    text: 'На главную'
 };
 
 export const PermissionsDeniedErrorPage: React.FC = () => {
     return <ErrorPage errorCode={403} message="Недостаточно прав"/>;
 };
 
-export const NotFoundErrorPage: React.FC<Pick<ErrorPageProps, 'link' | 'message'>> = (props) => {
-    const {message, link} = props;
+export const NotFoundErrorPage: React.FC<Partial<Omit<ErrorPageProps, 'errorCode'>>> = (props) => {
+    const {message, url, text} = props;
     return <ErrorPage
         errorCode={404}
-        link={link}
+        url={url}
+        text={text}
         message={message || 'Похоже, вы потерялись'}/>;
 };
 

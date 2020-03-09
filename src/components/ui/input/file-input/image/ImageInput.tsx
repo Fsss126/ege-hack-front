@@ -4,7 +4,8 @@ import Layout from "./Layout";
 import Preview from "./Preview";
 import InputPlaceholder from "./InputPlaceholder";
 
-const ImageInput: React.FC<FileInputProps> = (props) => {
+type defaultProps = typeof GenericFileInput.defaultProps;
+const ImageInput: React.FC<React.Defaultize<FileInputProps, defaultProps>> = (props) => {
     return (
         <GenericFileInput
             {...props}

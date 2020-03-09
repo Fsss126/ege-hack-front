@@ -1,6 +1,6 @@
 import React, {forwardRef} from 'react';
 import classnames from 'classnames';
-import Scrollbars, {ScrollbarProps} from 'react-custom-scrollbars';
+import {Scrollbars, ScrollbarProps} from 'react-custom-scrollbars';
 
 const renderEmpty: React.FC = () => <div/>;
 
@@ -13,7 +13,7 @@ const renderView: React.FC<React.HTMLAttributes<HTMLDivElement>> = props => (<di
 export type ScrollBarsProps = {
     hideVerticalScrollbar?: boolean;
     hideHorizontalScrollbar?: boolean;
-} & ScrollbarProps;
+} & Omit<ScrollbarProps, 'ref'>;
 const ScrollBars = forwardRef<Scrollbars, ScrollBarsProps>((props, ref) => {
     const {className, hideVerticalScrollbar=false, hideHorizontalScrollbar=false, ...rest} = props;
     return (

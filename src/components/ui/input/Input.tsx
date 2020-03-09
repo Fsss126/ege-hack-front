@@ -22,7 +22,7 @@ export type CheckBoxProps = {
     value: boolean;
     onChange: InputChangeHandler<boolean>;
     label: React.ReactNode;
-    parse: IdentityFunction<boolean>;
+    parse?: IdentityFunction<boolean>;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'>;
 export const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>((props, ref) => {
     const {value, onChange: callback, name, label, parse, ...rest} = props;
@@ -88,7 +88,7 @@ Input.defaultProps = {
 
 export type TextAreaProps = {
     onChange: InputChangeHandler<InputValue, HTMLTextAreaElement>;
-} & React.TextareaHTMLAttributes<HTMLTextAreaElement>
+} & Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
     const {className, onChange: callback, placeholder, required, ...rest} = props;
     const onChange = useChangeHandler<HTMLTextAreaElement>(callback, "value");

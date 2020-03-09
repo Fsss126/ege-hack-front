@@ -1,6 +1,6 @@
 import React, {useCallback, useRef} from "react";
 import Auth from 'definitions/auth';
-import Popup, {APPEAR_ANIMATION} from "components/ui/Popup";
+import Popup, {PopupAnimation} from "components/ui/Popup";
 import {Input} from "components/ui/input";
 import {useForm, useFormValidityChecker} from "components/ui/Form";
 import Form from "components/ui/Form";
@@ -69,7 +69,7 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
             opened={opened}
             close={onCloseClick}
             closeOnBackgroundClick
-            appearAnimation={APPEAR_ANIMATION.BOTTOM}>
+            appearAnimation={PopupAnimation.BOTTOM}>
             <div className="overlay-window container">
                 <div className="row justify-content-end">
                     <div className="col-auto">

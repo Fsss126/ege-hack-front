@@ -7,19 +7,19 @@ import {useToggle} from "hooks/common";
 import 'react-times/css/material/default.css';
 
 export type TimeInputProps = {
-    value: Date;
+    value?: Date;
     name: string;
     onChange?: InputChangeHandler<Date>;
     disabled?: boolean;
     placeholder?: string;
     required?: boolean;
     focused?: boolean;
-} & InputProps;
+} & Omit<InputProps, 'value'>;
 const TimeInput: React.FC<TimeInputProps> = (props) => {
     const {value, name, onChange, disabled, placeholder, focused = false, ...inputProps} = props;
     const [isFocused, toggleFocus] = useToggle(focused);
     const onTimeChange = useCallback(({hour, minute}) => {
-        const time = new Date(value.getTime());
+        const time = new Date((value || new Date()).getTime());
         time.setHours(hour);
         time.setMinutes(minute);
         onChange && onChange(time, name);

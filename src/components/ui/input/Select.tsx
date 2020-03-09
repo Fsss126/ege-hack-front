@@ -7,21 +7,22 @@ import SelectInput, {
 } from 'react-select';
 import { ContainerProps } from 'react-select/src/components/containers';
 import _ from 'lodash';
-import PropTypes from 'prop-types';
 import ScrollBars from "../ScrollBars";
-import {getPlaceholder} from "./Input";
-import {ValueType} from "react-select/src/types";
+import {getPlaceholder, InputChangeHandler} from "./Input";
+import {OptionsType, ValueType} from "react-select/src/types";
 import {assignRef} from "definitions/helpers";
+import {Scrollbars} from "react-custom-scrollbars";
 
-export type OptionShape = { label: string; value: string };
+export type OptionShape<V = any, L extends React.ReactNode = string> = { label: L; value: V };
 
-const DropdownIndicator: React.FC<IndicatorProps<OptionShape>> = (props) => (
+const DropdownIndicator = <T extends OptionShape = OptionShape>(props: IndicatorProps<T>): React.ReactElement => (
     <components.DropdownIndicator {...props}>
         <i className="icon-angle"/>
     </components.DropdownIndicator>
 );
 
-const SelectContainer: React.FC<ContainerProps<OptionShape>> = ({ children, selectProps, hasValue, setValue, ...props }) => {
+const SelectContainer = <T extends OptionShape = OptionShape>(props: ContainerProps<T>): React.ReactElement => {
+    const { children, selectProps, hasValue, setValue, ...rest } = props;
     const onClear = useCallback(() => {setValue(null, 'deselect-option');}, [setValue]);
     return (
         <div className="select">
@@ -29,7 +30,7 @@ const SelectContainer: React.FC<ContainerProps<OptionShape>> = ({ children, sele
                 selectProps={{...selectProps, isClearable: false}}
                 hasValue={hasValue}
                 setValue={setValue}
-                {...props}>
+                {...rest}>
                 {children}
             </components.SelectContainer>
             {selectProps.isClearable && (
@@ -114,13 +115,15 @@ const SelectContainer: React.FC<ContainerProps<OptionShape>> = ({ children, sele
 //     }
 // }
 
-class MenuList extends Component<MenuListComponentProps<OptionShape>> {
-    scrollBar = React.createRef<any>();
+// Scrollbars.prototype.
+class MenuList<T extends OptionShape = OptionShape> extends Component<MenuListComponentProps<T>> {
+    scrollBar = React.createRef<Scrollbars>();
 
     componentDidMount(): void {
         //needed to the select to scroll the list to the selected option
-        if (this.props.innerRef)
-            assignRef(this.props.innerRef, this.scrollBar.current.view);
+        if (this.scrollBar.current)
+            //TODO: investigate why declaration merging not working in this case
+            assignRef(this.props.innerRef, (this.scrollBar.current as any).view);
     }
 
     render(): React.ReactElement {
@@ -140,30 +143,27 @@ class MenuList extends Component<MenuListComponentProps<OptionShape>> {
             </ScrollBars>
         );
     }
-
-    static propTypes = {
-        maxHeight: PropTypes.number.isRequired,
-        children: PropTypes.node.isRequired,
-        innerRef: PropTypes.func.isRequired
-    }
 }
 
-export type SelectProps<OptionType> = {
-    value: Required<SelectInputProps<OptionType>>['options'];
-} & Omit<SelectInputProps<OptionType>, 'options'>;
-export class Select extends React.PureComponent<SelectProps<OptionShape>> {
-    onChange = (option: ValueType<OptionShape>): void => {
+export type SelectProps<V = any, L extends React.ReactNode = string> = {
+    value?: V;
+    callback: InputChangeHandler<V | undefined>;
+    options: OptionsType<OptionShape<V, L>>;
+    name: string;
+} & Omit<SelectInputProps<OptionShape<V, L>>, 'value' | 'onChange' | 'name'>;
+export class Select<V = any, L extends React.ReactNode = string> extends React.PureComponent<SelectProps<V, L>> {
+    onChange = (option: ValueType<OptionShape<V, L>>): void => {
         this.props.callback(option && 'value' in option ? option.value : null, this.props.name);
     };
 
-    render() {
-        const {name, options, value, components, isClearable, isSearchable, placeholder, required, ...selectProps} = this.props;
+    render(): React.ReactElement {
+        const {name, options, value, components, isClearable, isSearchable, placeholder, required, onChange, ...selectProps} = this.props;
         return (
-            <SelectInput<OptionShape>
+            <SelectInput<OptionShape<V, L>>
                 name={name}
                 options={options}
                 maxMenuHeight={200}
-                value={_.find(options, {value: value}) || null}
+                value={_.find(options, {value: value as any})}
                 className='select__container' classNamePrefix='select'
                 onChange={this.onChange}
                 menuPlacement="auto"
@@ -193,18 +193,6 @@ export class Select extends React.PureComponent<SelectProps<OptionShape>> {
             />
         );
     }
-
-    static propTypes = {
-        name: PropTypes.string.isRequired,
-        options: PropTypes.arrayOf(PropTypes.shape({
-            value: PropTypes.any,
-            label: PropTypes.any
-        })).isRequired,
-        callback: PropTypes.func.isRequired,
-        value: PropTypes.any,
-        selectProps: PropTypes.object,
-        components: PropTypes.object
-    };
 
     static defaultProps = {
         isClearable: true,
