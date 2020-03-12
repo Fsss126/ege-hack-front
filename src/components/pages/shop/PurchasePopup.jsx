@@ -16,7 +16,7 @@ function createLinkRequest(requestData) {
 const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
     const {userInfo} = useUser();
     const formElementRef = useRef(null);
-    const checkValidity = useFormValidityChecker(formElementRef, undefined, [opened]);
+    const checkValidity = useFormValidityChecker(formElementRef.current, undefined, [opened]);
     const {
         formData,
         isValid,

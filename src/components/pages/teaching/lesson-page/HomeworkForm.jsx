@@ -23,7 +23,7 @@ const HomeworkForm = (props) => {
 
     const formElementRef = useRef(null);
 
-    const checkValidity = useFormValidityChecker(formElementRef);
+    const checkValidity = useFormValidityChecker(formElementRef.current);
 
     const createRequest = useCallback((requestData) => APIRequest.patch(`/lessons/${lessonId}/homeworks/pupil/${pupilId}`, requestData), [lessonId, pupilId]);
     // const createRequest = useCallback(async (requestData) => ({...homework, ...requestData}), [homework]);
