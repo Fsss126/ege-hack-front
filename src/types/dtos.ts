@@ -202,3 +202,79 @@ export interface LinkResp {
     link: string;
 }
 
+export enum AnswerType {
+    TEXT = 'TEXT',
+    NUMBER = 'NUMBER',
+    FILE = 'FILE'
+}
+export interface CorrectAnswerDto {
+    type: AnswerType;
+    value?: string | number;
+    videoSolution?: string;
+    textSolution?: string;
+}
+
+export interface TaskDtoResp extends Partial<RespWithImage>{
+    id: number;
+    text: string;
+    complexity: number;
+    weight: number;
+    subjectId: number;
+    themeId: number;
+    order: number;
+    answer: CorrectAnswerDto;
+}
+
+export interface ThemeDtoResp {
+    id: number;
+    title: string;
+    subjectId: number;
+    parentThemeId?: number;
+    order: number;
+}
+
+export interface TestDtoResp {
+    id: number;
+    name: string;
+    percentage: number;
+    tasks: TaskDtoResp[];
+}
+
+export enum TestStatus {
+    PASSED = 'PASSED',
+    STARTED = 'STARTED',
+    NOT_STARTED = 'NOT_STARTED',
+}
+
+export interface TestStatusResp {
+    status: TestStatus;
+    percentage: number;
+}
+
+export interface UserAnswerDtoCommon {
+    task_id: number;
+}
+
+export interface UserAnswerDtoReq extends UserAnswerDtoCommon {
+    user_answer: string | number;
+}
+
+export interface UserAnswerDtoResp extends UserAnswerDtoCommon {
+    user_answer: string | number | FileInfo;
+}
+
+export interface StartTestDtoResp {
+    last_task_id: number;
+    answers: UserAnswerDtoResp[];
+}
+
+export interface TestResultAnswerDtoResp extends UserAnswerDtoResp {
+    right_answer: CorrectAnswerDto;
+}
+
+export interface TestResultsDtoResp {
+    percentage: number;
+    answers: TestResultAnswerDtoResp[];
+}
+
+
