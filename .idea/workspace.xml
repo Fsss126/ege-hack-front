@@ -144,10 +144,10 @@
     </configuration>
     <list>
       <item itemvalue="JavaScript Debug.Debug Application" />
-      <item itemvalue="npm.npm start" />
       <item itemvalue="npm.build-prod" />
       <item itemvalue="npm.build" />
       <item itemvalue="npm.deploy" />
+      <item itemvalue="npm.npm start" />
       <item itemvalue="npm.start-custom-port" />
       <item itemvalue="npm.start-custom-post-mac" />
     </list>
@@ -493,11 +493,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578350731245" />
-    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1585141234560">
+    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1585684448347">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1582550348305" />
-    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1585141234560" />
+    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1585684448347" />
     <state x="100" y="55" width="1240" height="845" key="DiffContextDialog" timestamp="1582545579101">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
