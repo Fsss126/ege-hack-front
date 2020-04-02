@@ -9,7 +9,7 @@ import Form, {
     useFormValidityChecker
 } from "components/ui/Form";
 import {FileInput} from "components/ui/input";
-import {useRevokeLessons} from "store/selectors";
+import {useRevokeLessons} from "hooks/selectors";
 import {FileInfo, HometaskDtoReq, LessonDtoReq} from "types/dtos";
 import {LessonInfo} from "types/entities";
 
@@ -42,7 +42,7 @@ function getRequestData(formData: LessonFormData, courseId: number): LessonDtoRe
         num: parseInt(numParam),
         description,
         is_locked,
-        video_link: video_link.split('/').pop(),
+        video_link: video_link.split('/').pop() as string,
         image: (image as FileInfo[])[0].file_id,
         attachments: []
     };
@@ -80,6 +80,13 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
             return true;
         if (name === 'image') {
             return !!(formData.image && formData.image[0]);
+        } else if (name === 'video_link') {
+            try {
+                const url = new URL(formData.video_link);
+                return url.hostname === 'vimeo.com';
+            } catch (e) {
+                return false;
+            }
         }
     });
 
@@ -199,6 +206,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
                     <Input.Input
                         name="video_link"
                         type="text"
+                        required
                         placeholder="Ссылка на видео"
                         value={video_link}
                         onChange={onInputChange}/>

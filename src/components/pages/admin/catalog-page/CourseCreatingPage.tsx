@@ -1,6 +1,6 @@
 import React from "react";
 import Page, {PageContent} from "components/Page";
-import {useSubjects, useTeachers} from "store/selectors";
+import {useSubjects, useTeachers} from "hooks/selectors";
 import APIRequest from "api";
 import CourseForm from "./CourseForm";
 import {Permission} from "types/enums";

@@ -6,7 +6,7 @@ import Form, {
     useForm,
     useFormValidityChecker
 } from "components/ui/Form";
-import {useRevokeCourses} from "store/selectors";
+import {useRevokeCourses} from "hooks/selectors";
 import * as Input from "components/ui/input";
 import {CourseDtoReq, FileInfo} from "types/dtos";
 import {CourseInfo, LessonInfo, SubjectInfo, TeacherInfo} from "types/entities";

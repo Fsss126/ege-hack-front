@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {useUser} from "store/selectors";
+import {useUser} from "hooks/selectors";
 import {UserInfo} from "types/entities";
 import {AccountRole, Permission} from "../types/enums";
 

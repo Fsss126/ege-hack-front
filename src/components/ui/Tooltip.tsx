@@ -2,10 +2,10 @@ import React, {Fragment, ReactElement} from 'react';
 import classnames from 'classnames';
 
 export enum TooltipPosition {
-    top = 'pos-top',
-    right = 'pos-right',
-    left = 'pos-left',
-    bottom = 'pos-bottom'
+    top = 'top',
+    right = 'right',
+    left = 'left',
+    bottom = 'bottom'
 }
 
 export type TooltipProps = {
@@ -27,8 +27,10 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
         children: (
             <Fragment>
                 {child.props.children}
-                <div className="tooltip-arrow"/>
-                <div className="tooltip-block">{content}</div>
+                <div className="tooltip-block">
+                    {content}
+                    <div className="tooltip-arrow"/>
+                </div>
             </Fragment>
         )
     });

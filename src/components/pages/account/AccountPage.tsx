@@ -1,7 +1,7 @@
 import React from "react";
 import Page, {PageContent} from "components/Page";
 import UserProfile from "components/common/UserProfile";
-import {useUser} from "store/selectors";
+import {useUser} from "hooks/selectors";
 import { UserInfo} from "types/entities";
 
 export type AccountPageProps = {

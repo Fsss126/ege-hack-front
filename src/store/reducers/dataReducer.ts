@@ -1,12 +1,41 @@
 import {Reducer} from 'redux';
-import {AppState} from './index';
-import {Action, ActionType} from './actions';
+import {Action, ActionType} from '../actions';
 import Auth from 'definitions/auth';
 import _ from "lodash";
-import {CourseInfo} from "types/entities";
+import {
+    CourseInfo,
+    CourseParticipantInfo,
+    Credentials,
+    HomeworkInfo,
+    LessonInfo,
+    SubjectInfo,
+    TeacherInfo,
+    UserCourseInfo,
+    UserInfo,
+    WebinarInfo, WebinarScheduleInfo
+} from "types/entities";
 import {AxiosError} from "axios";
 
-const defaultState: AppState = {
+export interface DataState {
+    credentials: Credentials | null | AxiosError;
+    userInfo?: UserInfo | AxiosError;
+    shopCourses?: CourseInfo[] | AxiosError;
+    userCourses?: UserCourseInfo[] | AxiosError;
+    subjects?: SubjectInfo[] | AxiosError;
+    teachers?: TeacherInfo[] | AxiosError;
+    lessons: { [courseId: number]: LessonInfo[] | AxiosError };
+    webinars: {
+        [courseId: number]: WebinarInfo[] | AxiosError;
+        upcoming?: WebinarInfo[] | AxiosError;
+    };
+    participants: { [courseId: number]: CourseParticipantInfo[] | AxiosError };
+    adminCourses?: CourseInfo[] | AxiosError;
+    adminWebinars: { [courseId: number]: WebinarScheduleInfo | AxiosError };
+    teacherCourses?: CourseInfo[] | AxiosError;
+    homeworks: { [lessonId: number]: HomeworkInfo[] | AxiosError };
+}
+
+const defaultState: DataState = {
     credentials: Auth.getCredentials(),
     userInfo: undefined,
     shopCourses: undefined,
@@ -22,8 +51,8 @@ const defaultState: AppState = {
     homeworks: {}
 };
 
-//TODO: add data normalization
-export const reducer: Reducer<AppState, Action> = (state = defaultState, action): AppState => {
+//TODO: add utils normalization
+export const dataReducer: Reducer<DataState, Action> = (state = defaultState, action): DataState => {
     switch (action.type) {
         case ActionType.LOG_IN_SUCCESS: {
             const {credentials} = action;

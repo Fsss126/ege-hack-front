@@ -5,7 +5,7 @@ import {Input} from "components/ui/input";
 import {useForm, useFormValidityChecker} from "components/ui/Form";
 import Form from "components/ui/Form";
 import APIRequest from "api";
-import {useUser} from "../../../store/selectors";
+import {useUser} from "../../../hooks/selectors";
 
 const LOCAL_STORAGE_KEY = 'ege-hack-email';
 

@@ -808,3 +808,33 @@ input[type=number] {
   height: 1em;
   border-width: .1em;
 }
+
+.description-text {
+  color: $text-grey;
+  padding-top: 12px;
+  font-size: $font-size-sm;
+  white-space: pre-wrap;
+}
+
+.progress-indicator {
+  cursor: default;
+  user-select: none;
+
+  .description-text {
+    padding: 0 8px 0 0;
+  }
+
+  .progress-circle {
+    border-radius: 50%;
+    stroke-width: 5;
+    width: 24px;
+    height: 24px;
+
+    .progress-circle__bg {
+      stroke: $icon-grey;
+    }
+    .progress-circle__progress {
+      stroke: $accent-orange;
+    }
+  }
+}

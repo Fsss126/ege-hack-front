@@ -2,7 +2,7 @@ import React, {useContext, ReactElement, useEffect, useCallback, createContext, 
 import {LocationListener, Location} from "history";
 import {Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import {useToggle} from "hooks/common";
-import {useUserAuth} from "store/selectors";
+import {useUserAuth} from "hooks/selectors";
 import Login from "./pages/login";
 import Account from "./pages/account";
 import Teachers from "./pages/teachers";

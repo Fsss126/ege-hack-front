@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
-import {useSubjects, useTeacherCourses} from "store/selectors";
+import {useSubjects, useTeacherCourses} from "hooks/selectors";
 import {Permission} from "types/enums";
 
 const filterBy = {

@@ -11,7 +11,7 @@ import {useWebinar, WEBINAR_STATE} from "components/common/WebinarSchedule";
 import PosterCover from "components/common/PosterCover";
 import Countdown, {CountdownRenderProps} from "react-countdown-now";
 import {useCheckPermissions} from "components/ConditionalRender";
-import {useDeleteWebinar} from "store/selectors";
+import {useDeleteWebinar} from "hooks/selectors";
 import {Permission} from "types/enums";
 import {CourseInfo, WebinarInfo, WebinarScheduleInfo} from "types/entities";
 import {RouteComponentProps} from "react-router";

@@ -1,12 +1,16 @@
 import {AxiosError} from "axios";
 import {
     CourseInfo,
-    CourseParticipantInfo, HomeworkInfo,
-    LessonInfo, SubjectInfo,
-    TeacherInfo,
+    CourseParticipantInfo,
+    HomeworkInfo,
+    LessonInfo,
+    SubjectInfo,
+    TeacherInfo, TestInfo,
+    TestStateInfo,
     UserCourseInfo,
     UserInfo,
-    WebinarInfo, WebinarScheduleInfo
+    WebinarInfo,
+    WebinarScheduleInfo
 } from "types/entities";
 
 export enum ActionType {
@@ -52,6 +56,12 @@ export enum ActionType {
     WEBINARS_REVOKE = 'WEBINARS_REVOKE',
     WEBINAR_DELETE_REQUEST = 'WEBINAR_DELETE_REQUEST',
     WEBINAR_DELETE = 'WEBINAR_DELETE',
+    TEST_START_REQUEST = 'TEST_START_REQUEST',
+    TEST_FETCH = 'TEST_FETCH',
+    TEST_FETCHED = 'TEST_FETCHED',
+    TEST_COMPLETE_REQUEST = 'TEST_COMPLETE_REQUEST',
+    TEST_STATE_FETCH = 'TEST_RESULTS_FETCH',
+    TEST_STATE_FETCHED = 'TEST_RESULTS_FETCHED',
 }
 
 interface Credentials {
@@ -124,6 +134,40 @@ export type WebinarDeleteRequestAction = {
     onError?: WebinarDeleteErrorCallback;
 };
 export type WebinarDeleteAction = { type: ActionType.WEBINAR_DELETE; courseId: number; webinarId: number; responseWebinars: WebinarScheduleInfo };
+export type TestStartCallback = (testId: number, testInfo: TestStateInfo) => void;
+export type TestStartErrorCallback = (testId: number, error: AxiosError) => void;
+export type TestStartRequestAction = {
+    type: ActionType.TEST_START_REQUEST;
+    testId: number;
+    onSuccess: TestStartCallback;
+    onError: TestStartErrorCallback;
+};
+export type TestFetchAction = {
+    type: ActionType.TEST_FETCH;
+    testId: number;
+};
+export type TestFetchedAction = {
+    type: ActionType.TEST_FETCHED;
+    testId: number;
+    test: TestInfo | AxiosError;
+};
+export type TestCompleteCallback = (testId: number, results: TestStateInfo) => void;
+export type TestCompleteErrorCallback = (testId: number, error: AxiosError) => void;
+export type TestCompleteRequestAction = {
+    type: ActionType.TEST_COMPLETE_REQUEST;
+    testId: number;
+    onSuccess: TestCompleteCallback;
+    onError: TestCompleteErrorCallback;
+}
+export type TestStateFetchAction = {
+    type: ActionType.TEST_STATE_FETCH;
+    testId: number;
+};
+export type TestStateFetchedAction = {
+    type: ActionType.TEST_STATE_FETCHED;
+    testId: number;
+    state: TestStateInfo | AxiosError;
+};
 
 export type Action = { type: ActionType } & (
     | LoginAction
@@ -168,4 +212,10 @@ export type Action = { type: ActionType } & (
     | WebinarsRevokeAction
     | WebinarDeleteRequestAction
     | WebinarDeleteAction
+    | TestStartRequestAction
+    | TestFetchAction
+    | TestFetchedAction
+    | TestCompleteRequestAction
+    | TestStateFetchAction
+    | TestStateFetchedAction
     );

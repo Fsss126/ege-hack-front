@@ -12,25 +12,41 @@ import {
 } from 'redux-saga/effects'
 import {
     Action,
-    ActionType, AdminWebinarsFetchAction, CourseDeleteRequestAction,
-    CourseWebinarsFetchAction, HomeworksFetchAction,
+    ActionType,
+    AdminWebinarsFetchAction,
+    CourseDeleteRequestAction,
+    CourseWebinarsFetchAction,
+    HomeworksFetchAction,
     LessonDeleteRequestAction,
-    LessonsFetchAction, ParticipantsFetchAction, UpcomingWebinarsFetchAction,
+    LessonsFetchAction,
+    ParticipantsFetchAction,
+    TestCompleteRequestAction,
+    TestFetchAction,
+    TestFetchedAction,
+    TestStateFetchAction,
+    TestStateFetchedAction,
+    TestStartRequestAction,
+    UpcomingWebinarsFetchAction,
     WebinarDeleteRequestAction
 } from "./actions";
 import Auth from 'definitions/auth';
 import {
-    CourseInfo, CourseParticipantInfo, HomeworkInfo,
+    CourseInfo,
+    CourseParticipantInfo,
+    HomeworkInfo,
     LessonInfo,
     SubjectInfo,
     TeacherInfo,
+    TestInfo,
+    TestStateInfo,
     UserCourseInfo,
     UserInfo,
-    WebinarInfo, WebinarScheduleInfo
+    WebinarInfo,
+    WebinarScheduleInfo
 } from "../types/entities";
-import {AppState} from "./index";
 import {TakeableChannel} from '@redux-saga/core';
 import APIRequest from "../api";
+import {AppState} from "./reducers";
 
 const take = (pattern?: ActionPattern<Action>): TakeEffect => takeEffect<Action>(pattern);
 const put = (action: Action): PutEffect<Action> => putEffect<Action>(action);
@@ -299,8 +315,67 @@ function* processWebinarDelete() {
     });
 }
 
+function* fetchTest() {
+    yield* waitForLogin<TestFetchAction>(ActionType.TEST_FETCH, function* (channel) {
+        yield takeLeading(channel, function* (action: TestFetchAction) {
+            const {testId} = action;
+            try {
+                const test: TestInfo = yield call(APIRequest.get, `/knowledge/tests/${testId}/`);
+                yield put({ type: ActionType.TEST_FETCHED, test, testId});
+            }
+            catch (error) {
+                yield put({ type: ActionType.TEST_FETCHED, test: error, testId });
+            }
+        });
+    });
+}
+
+function* fetchTestState() {
+    yield* waitForLogin<TestStateFetchAction>(ActionType.TEST_STATE_FETCH, function* (channel) {
+        yield takeLeading(channel, function* (action: TestStateFetchAction) {
+            const {testId} = action;
+            try {
+                const state: TestStateInfo = yield call(APIRequest.post, `/knowledge/tests/${testId}/state`);
+                yield put({ type: ActionType.TEST_STATE_FETCHED, state, testId});
+            }
+            catch (error) {
+                yield put({ type: ActionType.TEST_STATE_FETCHED, state: error, testId });
+            }
+        });
+    });
+}
+
+function* processTestStart() {
+    yield takeEvery(ActionType.TEST_START_REQUEST, function* (action: TestStartRequestAction) {
+        const {testId, onSuccess, onError} = action;
+        yield put({type: ActionType.TEST_FETCH, testId});
+        yield put({type: ActionType.TEST_STATE_FETCH, testId});
+        const {state}: TestStateFetchedAction = yield take((action: Action) => (action.type === ActionType.TEST_STATE_FETCHED && action.testId === testId));
+        if (state instanceof Error) {
+            if (onError)
+                yield call(onError, testId, state);
+        } else {
+            yield call(onSuccess, testId, state);
+        }
+    });
+}
+
+function* processTestComplete() {
+    yield takeEvery(ActionType.TEST_COMPLETE_REQUEST, function* (action: TestCompleteRequestAction) {
+        const {testId, onSuccess, onError} = action;
+        try {
+            const state = yield call(APIRequest.post, `/knowledge/tests/${testId}/complete`);
+            yield put({type: ActionType.TEST_STATE_FETCHED, testId, state});
+            yield select();
+            yield call(onSuccess, testId, state);
+        } catch (e) {
+            yield call(onError, testId, e);
+        }
+    });
+}
+
 function* init() {
-    const credentials = yield select((state: AppState) => state.credentials);
+    const credentials = yield select((state: AppState) => state.dataReducer.credentials);
     if (credentials) {
         yield put({type: ActionType.LOG_IN});
     }
@@ -321,9 +396,14 @@ export default function* rootSaga() {
     yield spawn(fetchAdminWebinars);
     yield spawn(fetchTeacherCourses);
     yield spawn(fetchHomeworks);
+    yield spawn(fetchTest);
+    yield spawn(fetchTestState);
 
     yield spawn(processCourseDelete);
     yield spawn(processLessonDelete);
     yield spawn(processWebinarDelete);
+
+    yield spawn(processTestStart);
+    yield spawn(processTestComplete);
     yield spawn(init);
 }

@@ -9,7 +9,7 @@ import Form, {
     RevokeRelatedDataCallback,
     useForm
 } from "components/ui/Form";
-import {useRevokeParticipants} from "store/selectors";
+import {useRevokeParticipants} from "hooks/selectors";
 import {Permission} from "types/enums";
 import {AddParticipantsReq} from "types/dtos";
 import {RouteComponentProps} from "react-router";

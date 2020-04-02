@@ -1,4 +1,5 @@
 import {
+    CorrectAnswerDto,
     CourseDtoResp,
     CourseParticipantDto,
     DiscountMessage,
@@ -10,11 +11,15 @@ import {
     PersonWebinarDto,
     PupilDtoResp,
     SubjectDtoResp,
+    TaskDtoResp,
     TeacherDtoResp,
+    TestDtoResp,
+    TestStatusResp,
+    ThemeDtoResp,
     UserInfoDtoResp,
     VkUserDto,
     WebinarDtoResp,
-    WebinarScheduleDtoResp
+    WebinarScheduleDtoResp, AnswerType, TestStatus
 } from "./dtos";
 import {LearningStatus} from "./enums";
 
@@ -81,10 +86,11 @@ export interface AssignmentInfo extends Omit<HometaskDtoResp, 'deadline' | 'file
     files?: FileInfo[];
 }
 
-export interface LessonInfo extends Omit<LessonDtoResp, 'is_locked' | 'hometask'> {
+export interface LessonInfo extends Omit<LessonDtoResp, 'is_locked' | 'hometask' | 'test'> {
     locked: LessonDtoResp['is_locked'];
     assignment?: AssignmentInfo;
     watchProgress?: number;
+    test?: TestStatusInfo;
 }
 
 export interface HomeworkInfo extends Omit<HomeworkDtoResp, 'date' | 'file_info' | 'pupil'>{
@@ -94,3 +100,56 @@ export interface HomeworkInfo extends Omit<HomeworkDtoResp, 'date' | 'file_info'
 }
 
 export type DiscountInfo = DiscountMessage;
+
+export {AnswerType, TestStatus} from './dtos';
+
+export interface TestStatusInfo extends Omit<TestStatusResp, 'deadline' | 'progress'> {
+    deadline?: Date;
+    progress: number;
+}
+
+export type CorrectAnswerInfo = CorrectAnswerDto;
+
+export type TaskInfo = TaskDtoResp;
+
+export type SanitizedTaskInfo = Pick<TaskDtoResp, 'answer' | 'themeId' | 'subjectId'>;
+
+export type ThemeInfo = ThemeDtoResp;
+
+export interface TestInfo extends Omit<TestDtoResp, 'deadline'> {
+    deadline?: Date;
+}
+
+export interface SanitizedTestInfo extends Omit<TestInfo, 'tasks'> {
+    tasks: SanitizedTaskInfo[];
+}
+
+export type UserAnswerInfo = { type: AnswerType } & (
+    | { type: AnswerType.TEXT; value: string }
+    | { type: AnswerType.NUMBER; value: number }
+    | { type: AnswerType.FILE; fileInfo: FileInfo }
+    );
+
+export type TestStateInfo = { status: TestStatus; last_task_id: number; progress: number } & (
+    | ({
+        status: TestStatus.NOT_STARTED | TestStatus.STARTED;
+        answers: {
+            [key: number]: {
+                task_id: number;
+                user_answer: UserAnswerInfo;
+            };
+        };
+    })
+    | ({
+        status: TestStatus.COMPLETED;
+        percentage: number;
+        answers: {
+            [key: number]: {
+                task_id: number;
+                user_answer: UserAnswerInfo;
+                correct_answer: CorrectAnswerDto;
+                is_correct: boolean;
+            };
+        };
+    })
+    );

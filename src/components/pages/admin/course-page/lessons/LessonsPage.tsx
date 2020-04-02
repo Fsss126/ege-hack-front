@@ -6,7 +6,7 @@ import Page, {PageContent, PageParentSection} from "components/Page";
 import Catalog, {CatalogFilter, CatalogItemRenderer} from "components/common/Catalog";
 import Button from "components/ui/Button";
 import {RequiredPermissions, useCheckPermissions} from "components/ConditionalRender";
-import {useDeleteLesson} from "store/selectors";
+import {useDeleteLesson} from "hooks/selectors";
 import {Permission} from "types/enums";
 import {CourseInfo, LessonInfo} from "types/entities";
 import {RouteComponentProps} from "react-router";

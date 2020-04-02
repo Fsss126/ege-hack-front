@@ -1,10 +1,11 @@
 import {LoremIpsum} from "lorem-ipsum";
 import _ from "lodash";
-import {API_ROOT} from "api";
+import {API_ROOT} from "api/index";
 import poster from "img/dummy_poster.jpg";
 import pic from "img/dummy-pic.jpg";
 import {AccountRole, LearningStatus} from "types/enums";
 import {
+    AnswerType,
     CourseInfo,
     HomeworkInfo,
     LessonInfo,
@@ -14,6 +15,7 @@ import {
     UserCourseInfo,
     UserInfo
 } from "types/entities";
+import {TestStateDtoResp, TestDtoResp, TestStatus, TestStatusResp} from "../../types/dtos";
 
 const lorem = new LoremIpsum();
 
@@ -202,6 +204,81 @@ export const WEBINAR_SCHEDULE: PersonWebinar[] = COURSES.slice(0, 3).map(({id, n
     duration: 60*2,
     date_end: new Date(getDate(1 + i).getTime() + 60*2 * 1000 * 60),
 }));
+
+export const TEST: TestDtoResp = {
+    id: 1,
+    name: 'Кто ты из Винкс?',
+    percentage: 100,
+    deadline: new Date(2020, 4, 1, 20).getTime(),
+    tasks: [
+        {
+            id: 0,
+            text: 'Год твоего рождения?',
+            subjectId: 0,
+            themeId: 0,
+            order: 0,
+            answer: {
+                type: AnswerType.NUMBER,
+                value: 2000
+            }
+        },
+        {
+            id: 1,
+            text: 'Какой твой любимый цвет?',
+            subjectId: 0,
+            themeId: 0,
+            order: 1,
+            answer: {
+                type: AnswerType.TEXT,
+            }
+        },
+        {
+            id: 2,
+            text: 'Твой знак зодиака?',
+            subjectId: 0,
+            themeId: 0,
+            order: 1,
+            answer: {
+                type: AnswerType.TEXT,
+            }
+        }
+    ]
+};
+
+export const TEST_STATUS: TestStatusResp = {
+    id: 1,
+    name: 'Кто ты из Винкс?',
+    status: TestStatus.NOT_STARTED,
+    percentage: 0,
+    deadline: TEST.deadline
+};
+
+export const TEST_STATE_NOT_STARTED: TestStateDtoResp = {
+    status: TestStatus.NOT_STARTED,
+    last_task_id: 0,
+    answers: []
+};
+
+export const TEST_STATE_STARTED: TestStateDtoResp = {
+    status: TestStatus.NOT_STARTED,
+    last_task_id: 2,
+    answers: TEST.tasks.slice(0, 2).map(({id, answer}) => ({
+        task_id: id,
+        user_answer: answer
+    }))
+};
+
+export const TEST_STATE_COMPLETED: TestStateDtoResp = {
+    status: TestStatus.COMPLETED,
+    last_task_id: TEST.tasks.length - 1,
+    percentage: 100,
+    answers: TEST.tasks.map(({id, answer}) => ({
+        task_id: id,
+        user_answer: answer,
+        correct_answer: answer,
+        is_correct: true
+    }))
+};
 
 // export const TEST_ID = 1;
 // export const TEST_HASH = '2d01669a3c8cda169545b4f7b607efb3';

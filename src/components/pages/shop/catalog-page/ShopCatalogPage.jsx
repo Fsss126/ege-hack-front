@@ -3,7 +3,7 @@ import Page, {PageContent} from "components/Page";
 import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
-import {useShopCatalog, useSubjects} from "store/selectors";
+import {useShopCatalog, useSubjects} from "hooks/selectors";
 import {useToggle} from "hooks/common";
 import {renderPrice} from "definitions/helpers";
 

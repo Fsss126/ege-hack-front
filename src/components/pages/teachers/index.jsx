@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import {TEACHERS} from "data/test_data";
-import {SHOP_CATALOG} from "data/test_data";
+import {TEACHERS} from "api/mocks/mocks";
+import {SHOP_CATALOG} from "api/mocks/mocks";
 import CatalogPage from "./catalog-page";
 import TeacherPage from "./teacher-page";
 

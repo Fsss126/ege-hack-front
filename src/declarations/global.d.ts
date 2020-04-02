@@ -35,5 +35,12 @@ declare global {
     declare interface HTMLFormControlsCollection {
         [name: string]: HTMLInputElement | undefined;
     }
+
+    declare type TypedAction<TActionModule> = {
+        // tslint:disable-next-line:ban-types
+        [P in keyof TActionModule]: TActionModule[P] extends Function
+            ? ReturnType<TActionModule[P]>
+            : never;
+    }[keyof TActionModule];
 }
 

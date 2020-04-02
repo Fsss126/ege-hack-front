@@ -2,7 +2,7 @@ import React, {Fragment, useState} from 'react';
 import { Switch, Route } from "react-router-dom";
 import ShopCatalogPage from "./catalog-page";
 import CoursePage from "./course-page";
-import {useDiscount} from "../../../store/selectors";
+import {useDiscount} from "../../../hooks/selectors";
 import {useToggle} from "../../../hooks/common";
 import SelectedCoursesTab from "./SelectedCoursesTab";
 import PurchasePopup from "./PurchasePopup";

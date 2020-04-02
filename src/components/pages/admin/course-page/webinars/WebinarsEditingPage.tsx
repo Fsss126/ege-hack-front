@@ -1,5 +1,5 @@
 import React, {useCallback} from "react";
-import {useAdminCourse, useAdminWebinars} from "store/selectors";
+import {useAdminCourse, useAdminWebinars} from "hooks/selectors";
 import APIRequest from "api";
 import Page, {PageContent} from "components/Page";
 import WebinarsForm from "./WebinarsForm";

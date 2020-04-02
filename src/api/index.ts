@@ -9,7 +9,7 @@ import {
     HomeworkDtoResp,
     LessonDtoResp,
     PersonWebinarDto,
-    TeacherDtoResp,
+    TeacherDtoResp, TestDtoResp, TestStateAnswerDto, TestStateDtoResp,
     UserInfoDtoResp,
     WebinarScheduleDtoResp
 } from "../types/dtos";
@@ -19,10 +19,13 @@ import {
     CourseParticipantInfo,
     HomeworkInfo,
     LessonInfo, PersonWebinar,
-    TeacherInfo,
+    TeacherInfo, TestInfo, TestStateInfo,
     UserInfo, WebinarScheduleInfo
 } from "../types/entities";
-// import {handleRequestsWithTestData} from "./test";
+import {TEST_STATUS} from "./mocks/mocks";
+import {mockTestsRequests} from "./mocks";
+import {getUrl} from "./helpers";
+// import {mockRequests} from "./mocks";
 
 export const API_ROOT = process.env.REACT_APP_API_ROOT;
 
@@ -34,10 +37,6 @@ export const getCancelToken = () => {
         token: source.token,
         cancel: source.cancel
     }
-};
-
-const getUrl = (config: AxiosRequestConfig) => {
-    return new URL(`${config.baseURL}${config.url?.replace(config.baseURL || '', '')}`);
 };
 
 const APIRequest = axios.create({
@@ -93,6 +92,7 @@ const transformLesson =
          image_link,
          is_locked: locked,
          attachments,
+         test,
          ...lesson}: LessonDtoResp): LessonInfo => ({
             ...lesson,
             locked,
@@ -104,6 +104,11 @@ const transformLesson =
                         file_id,
                         file_link: `${API_ROOT}${file_link}?disp=attachment`}
                 ))) : [],
+            test: test ? {
+                ...test,
+                deadline: test.deadline ? new Date(test.deadline) : undefined,
+                progress: test.progress || 0,
+            } : undefined,
             assignment: hometask ? ({
                 deadline: new Date(hometask.deadline),
                 description: hometask.description,
@@ -132,7 +137,7 @@ const transformUser = <T extends AccountDto | UserInfoDtoResp, R extends Account
         } : undefined,
         contacts: {
             ig: instagram,
-            vk: `https://vk.com/id${vk_info.id}`
+            vk: vk_info ? `https://vk.com/id${vk_info.id}` : undefined
         }
     });
 };
@@ -155,6 +160,24 @@ const transformHomework =
             pupil: transformUser(pupil)
         }
     );
+
+const transformTest = ({deadline, ...rest}: TestDtoResp): TestInfo => (
+    {
+        deadline: deadline ? new Date(deadline) : undefined,
+        ...rest,
+    }
+);
+
+const transformTestState = ({answers, status, last_task_id, progress, ...rest}: TestStateDtoResp): TestStateInfo => ({
+    answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerDto>>(answers, (result, answer) => {
+        result[answer.task_id] = answer;
+        return result;
+    }, {}) as any,
+    ...rest,
+    last_task_id: last_task_id || 0,
+    progress: progress || 0,
+    status: status as any
+});
 
 //Interceptors
 const transformData = (response: AxiosResponse): AxiosResponse => {
@@ -224,6 +247,13 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
                     ...rest
                 }) as WebinarScheduleInfo;
             }
+            case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
+            case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname): {
+                return transformTestState(data) as TestStateInfo;
+            }
+            case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname): {
+                return transformTest(data) as TestInfo;
+            }
             default:
                 return response.data;
         }
@@ -250,10 +280,13 @@ const transformError = (error: AxiosError) => {
     else
         throw error;
 };
+
+mockTestsRequests(APIRequest);
+
 APIRequest.interceptors.response.use(transformData, transformError);
 
-//returns test data for all failed requests
-// handleRequestsWithTestData(APIRequest);
+//returns mocks for all failed requests
+// mockRequests(APIRequest);
 
 window.APIRequest = APIRequest;
 

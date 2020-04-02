@@ -3,7 +3,7 @@ import Page, {PageContent} from "components/Page";
 import CourseOverview from "components/common/CourseOverview";
 import CoursePrice from "./CoursePrice";
 import Lesson from "components/common/Lesson";
-import {useTeachers, useLessons, useDiscount, useShopCourse} from "store/selectors";
+import {useTeachers, useLessons, useDiscount, useShopCourse} from "hooks/selectors";
 import {NotFoundErrorPage} from "components/ErrorPage";
 
 const CoursePage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, path: root, location, match}) => {

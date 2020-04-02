@@ -606,13 +606,6 @@ header {
     }
   }
 
-  .description-text {
-    color: $text-grey;
-    padding-top: 12px;
-    font-size: $font-size-sm;
-    white-space: pre-wrap;
-  }
-
   .preview-container {
     padding-right: 0;
     .cover {
@@ -1254,6 +1247,14 @@ header {
           display: none;
         }
       }
+    }
+  }
+
+  .test-view {
+    .test-view__title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 }

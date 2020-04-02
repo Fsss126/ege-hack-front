@@ -9,7 +9,7 @@ import Form, {
     useForm,
     useFormValidityChecker
 } from "components/ui/Form";
-import {useRevokeWebinars} from "store/selectors";
+import {useRevokeWebinars} from "hooks/selectors";
 import Tooltip, {TooltipPosition} from "components/ui/Tooltip";
 import {FileInfo, WebinarScheduleDtoReq} from "types/dtos";
 import {WebinarScheduleInfo} from "types/entities";

@@ -155,16 +155,18 @@ export interface LessonDtoCommon {
     is_locked: boolean;
     name: string;
     num: number;
-    video_link?: string;
+    video_link: string;
 }
 
 export interface LessonDtoReq extends LessonDtoCommon, ReqWithImage {
     attachments: string[];
+    test_id?: number;
 }
 
 export interface LessonDtoResp extends LessonDtoCommon, RespWithImage {
     id: number;
     attachments: FileInfo[];
+    test?: TestStatusResp;
 }
 
 export interface HomeworkAssessmentDtoReq {
@@ -217,8 +219,8 @@ export interface CorrectAnswerDto {
 export interface TaskDtoResp extends Partial<RespWithImage>{
     id: number;
     text: string;
-    complexity: number;
-    weight: number;
+    complexity?: number;
+    weight?: number;
     subjectId: number;
     themeId: number;
     order: number;
@@ -236,18 +238,23 @@ export interface ThemeDtoResp {
 export interface TestDtoResp {
     id: number;
     name: string;
+    deadline?: number;
     percentage: number;
     tasks: TaskDtoResp[];
 }
 
 export enum TestStatus {
-    PASSED = 'PASSED',
+    COMPLETED = 'COMPLETED',
     STARTED = 'STARTED',
     NOT_STARTED = 'NOT_STARTED',
 }
 
 export interface TestStatusResp {
+    id: number;
+    name: string;
     status: TestStatus;
+    progress?: number;
+    deadline?: number;
     percentage: number;
 }
 
@@ -263,18 +270,23 @@ export interface UserAnswerDtoResp extends UserAnswerDtoCommon {
     user_answer: string | number | FileInfo;
 }
 
-export interface StartTestDtoResp {
-    last_task_id: number;
-    answers: UserAnswerDtoResp[];
+export interface UserAnswerDto {
+    type: AnswerType;
+    value?: string | number;
+    fileInfo?: FileInfo;
 }
 
-export interface TestResultAnswerDtoResp extends UserAnswerDtoResp {
-    right_answer: CorrectAnswerDto;
+export interface TestStateAnswerDto {
+    task_id: number;
+    user_answer: UserAnswerDto;
+    correct_answer?: CorrectAnswerDto;
+    is_correct?: boolean;
 }
 
-export interface TestResultsDtoResp {
-    percentage: number;
-    answers: TestResultAnswerDtoResp[];
+export interface TestStateDtoResp {
+    status: TestStatus;
+    progress?: number;
+    percentage?: number;
+    last_task_id?: number;
+    answers: TestStateAnswerDto[];
 }
-
-

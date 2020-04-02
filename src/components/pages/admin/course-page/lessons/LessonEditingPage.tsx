@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 import APIRequest from "api";
 import LessonForm from "./LessonForm";
 import Page, {PageContent} from "components/Page";
-import {useLesson} from "store/selectors";
+import {useLesson} from "hooks/selectors";
 import {Permission} from "types/enums";
 import {RouteComponentProps} from "react-router";
 import {LessonDtoReq} from "types/dtos";
