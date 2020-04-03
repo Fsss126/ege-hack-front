@@ -1,6 +1,7 @@
 import React from "react";
 import {
-    useLesson, useShopCourse,
+    useLesson,
+    useTeacherCourse,
     useHomeworks
 } from "hooks/selectors";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
@@ -15,7 +16,7 @@ const LessonPage = (props) => {
     const lessonId = parseInt(param_lesson);
 
     const {lesson, error, reload} = useLesson(courseId, lessonId);
-    const {course, error: errorLoadingCourse, reload: reloadCourse} = useShopCourse(courseId);
+    const {course, error: errorLoadingCourse, reload: reloadCourse} = useTeacherCourse(courseId);
     const {homeworks, error: errorLoadingHomeworks, reload: reloadHomeworks} = useHomeworks(lessonId);
     const isLoaded = !!(lesson && homeworks && courseId);
 

@@ -1,9 +1,9 @@
 import React, {useCallback} from "react";
 import {
-    useShopCourse,
     useLessons,
     useDeleteCourse,
     useParticipants,
+    useTeacherCourse,
     // useAdminWebinars
 } from "hooks/selectors";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
@@ -35,7 +35,7 @@ const CoursePage = (props) => {
     const {path: root, match} = props;
     const {params: {courseId: param_id}} = match;
     const courseId = parseInt(param_id);
-    const {course, error, retry} = useShopCourse(courseId);
+    const {course, error, retry} = useTeacherCourse(courseId);
     const {participants, error: errorLoadingParticipants, reload: reloadParticipants} = useParticipants(courseId);
     const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
     // const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
