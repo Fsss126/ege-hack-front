@@ -18,6 +18,7 @@ type CourseFormData = {
     subject_id?: number;
     teacher_id?: number;
     image?: FileInfo[];
+    spread_sheet_link: string;
     price: string;
     date_start?: Date;
     date_end?: Date;
@@ -30,7 +31,8 @@ const INITIAL_FORM_DATA: CourseFormData = {
     price: '',
     online: false,
     description: '',
-    hide_from_market: true
+    hide_from_market: true,
+    spread_sheet_link: ''
 };
 
 function getRequestData(formData: CourseFormData): CourseDtoReq {
@@ -94,19 +96,22 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
         if (state || !course) {
             return INITIAL_FORM_DATA;
         } else {
-            const {image_link, id, purchased, teacher_ids, hide_from_market, description, price, ...otherData} = course;
+            const {image_link, id, purchased, teacher_ids, hide_from_market, description, price, spread_sheet_link, ...otherData} = course;
             return ({
                 hide_from_market: hide_from_market || false,
                 teacher_id: teacher_ids[0],
                 image: image_link ? [{file_id: image_link.split('/').pop() as string, file_link: image_link, file_name: image_link}] : undefined,
                 description: description || '',
                 price: price.toString(),
+                spread_sheet_link: spread_sheet_link || '',
                 ...otherData
             })
         }
     }, checkValidity);
 
-    const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description, hide_from_market} = formData;
+    console.log('isValid', isValid);
+
+    const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description, hide_from_market, spread_sheet_link} = formData;
 
     const initialImageFile = useMemo(() => (formData.image), []);
 
@@ -239,6 +244,12 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
                         value={!hide_from_market}
                         label="Доступен в магазине"
                         parse={isHiddenFromMarket}
+                        onChange={onInputChange}/>
+                    <Input.Input
+                        name="spread_sheet_link"
+                        type="text"
+                        placeholder="Ссылка на Гугл таблицу"
+                        value={spread_sheet_link}
                         onChange={onInputChange}/>
                 </FieldsContainer>
             </div>

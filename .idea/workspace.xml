@@ -6,64 +6,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="Tests sagas">
-      <change afterPath="$PROJECT_DIR$/src/api/helpers.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/TestView.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/ProgressIndicator.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/declarations/react-redux/index.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/declarations/redux/index.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hooks/selectors.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/reducers/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/reducers/testReducer.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/mocks/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ConditionalRender.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ConditionalRender.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/account/AccountPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/account/AccountPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCatalogPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCreatingPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseCreatingPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseEditingPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseEditingPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/catalog-page/CourseForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonEditingPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonEditingPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/lessons/LessonsPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsEditingPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/webinars/WebinarsPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/CatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/course-page/CoursePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/CoursePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/CourseCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/CourseCatalogPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/HomeworkForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/HomeworkForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Tooltip.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Tooltip.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/test_data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/mocks/mocks.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/declarations/defs.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/declarations/global.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/definitions/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/definitions/auth.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_tooltip.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_tooltip.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/_ui.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/_ui.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sass/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/sass/index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/dataReducer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/sagas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/sagas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/selectors.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/types/dtos.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/dtos.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/entities.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/entities.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,13 +66,6 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/declarations" />
-      <recent name="$PROJECT_DIR$/src/declarations/react-transition-group" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/api/mocks" />
       <recent name="$PROJECT_DIR$/src/hooks" />
@@ -137,6 +77,13 @@
       <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
       <recent name="$PROJECT_DIR$/src/components/ui/input/file-input" />
       <recent name="$PROJECT_DIR$/src/components/ui/input" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/declarations" />
+      <recent name="$PROJECT_DIR$/src/declarations/react-transition-group" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start-custom-post-mac">
@@ -529,6 +476,13 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/components/pages/courses/index.jsx" />
+        <option value="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/index.js" />
+        <option value="$PROJECT_DIR$/src/components/pages/shop/catalog-page/index.js" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -544,7 +498,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Hash routing; Prod and dev env" />
     <MESSAGE value="Lessons" />
     <MESSAGE value="Video player" />
     <MESSAGE value="User courses; Homework upload; Sidebar shimmer" />
@@ -569,7 +522,8 @@
     <MESSAGE value="Typed components" />
     <MESSAGE value="Typed everything" />
     <MESSAGE value="Tests sagas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tests sagas" />
+    <MESSAGE value="Tests WIP" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tests WIP" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -655,6 +609,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="570" y="373" key="VCS.ChangelistChooser/0.0.1440.900@0.0.1440.900" timestamp="1582936729876" />
+    <state x="100" y="100" width="1240" height="700" key="VCS.FileHistoryDialog" timestamp="1585932980452">
+      <screen x="0" y="23" width="1440" height="820" />
+    </state>
+    <state x="100" y="100" width="1240" height="700" key="VCS.FileHistoryDialog/0.23.1440.820@0.23.1440.820" timestamp="1585932980452" />
     <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1583792881256">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -677,11 +635,11 @@
     </state>
     <state x="393" y="172" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1583777846573" />
     <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1585813951353" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1585816435803">
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1585932786133">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1583084993180" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1585816435803" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1585932786133" />
     <state x="73" y="216" key="vcs.ApplyPatchDifferentiatedDialog" timestamp="1585684592014">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

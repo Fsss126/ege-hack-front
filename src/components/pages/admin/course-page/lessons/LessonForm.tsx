@@ -24,6 +24,7 @@ interface LessonFormData {
     hometask_description: string;
     hometask_file?: FileInfo[];
     hometask_deadline?: Date;
+    test_id: string;
 }
 const INITIAL_FORM_DATA: LessonFormData = {
     name: '',
@@ -31,11 +32,12 @@ const INITIAL_FORM_DATA: LessonFormData = {
     video_link: '',
     description: '',
     is_locked: false,
-    hometask_description: ''
+    hometask_description: '',
+    test_id: '',
 };
 
 function getRequestData(formData: LessonFormData, courseId: number): LessonDtoReq {
-    const {name, image, num: numParam, video_link, description, is_locked, attachments, hometask_description, hometask_file, hometask_deadline} = formData;
+    const {name, image, num: numParam, video_link, description, is_locked, attachments, hometask_description, hometask_file, hometask_deadline, test_id} = formData;
     const requestData: LessonDtoReq = {
         course_id: courseId,
         name,
@@ -70,20 +72,22 @@ export type LessonFormProps = {
     cancelLink: FormComponentProps['cancelLink'];
     lesson?: LessonInfo;
 }
+
+// TODO: preload video
 const LessonForm: React.FC<LessonFormProps> = (props) => {
     const {courseId, title, createRequest, onSubmitted, errorMessage, cancelLink} = props;
 
     const formElementRef = useRef<HTMLFormElement>(null);
 
     const checkValidity = useFormValidityChecker<LessonFormData>(formElementRef.current, (name, input, formData) => {
-        if (_.includes(['attachments', 'hometask_description', 'hometask_file', 'hometask_deadline'], name))
+        if (_.includes(['attachments', 'hometask_description', 'hometask_file', 'hometask_deadline', 'test_id'], name))
             return true;
         if (name === 'image') {
             return !!(formData.image && formData.image[0]);
         } else if (name === 'video_link') {
             try {
                 const url = new URL(formData.video_link);
-                return url.hostname === 'vimeo.com';
+                return url.hostname === 'vimeo.com' || url.hostname === 'player.vimeo.com';
             } catch (e) {
                 return false;
             }
@@ -108,6 +112,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
                 locked: is_locked,
                 num,
                 description,
+                test,
                 assignment: {
                     deadline: hometask_deadline,
                     description: hometask_description,
@@ -124,6 +129,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
                 hometask_deadline,
                 hometask_description: hometask_description || '',
                 hometask_file,
+                test_id: test ? test.id.toString() : '',
                 ...otherData
             })
         }

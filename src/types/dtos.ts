@@ -74,6 +74,7 @@ export interface CourseDtoCommon {
     teacher_id: number;
     name: string;
     description?: string;
+    spread_sheet_link?: string;
     price: number;
     date_start: number;
     date_end: number;

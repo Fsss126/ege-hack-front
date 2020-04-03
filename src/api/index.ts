@@ -1,6 +1,6 @@
 import Auth from 'definitions/auth';
 import _ from 'lodash';
-import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 import {LearningStatus} from "../types/enums";
 import {
     AccountDto,
@@ -19,11 +19,10 @@ import {
     CourseParticipantInfo,
     HomeworkInfo,
     LessonInfo, PersonWebinar,
-    TeacherInfo, TestInfo, TestStateInfo,
+    TeacherInfo, TestInfo, TestStateInfo, UserCourseInfo,
     UserInfo, WebinarScheduleInfo
 } from "../types/entities";
-import {TEST_STATUS} from "./mocks/mocks";
-import {mockTestsRequests} from "./mocks";
+// import {mockTestsRequests} from "./mocks";
 import {getUrl} from "./helpers";
 // import {mockRequests} from "./mocks";
 
@@ -198,10 +197,17 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
                 }));
             case /\/courses(\/\w*)?$/.test(url.pathname): {
                 if (config.method === 'get') {
-                    return (data as CourseDtoResp[]).map<CourseInfo>((course) => ({
-                        ...transformCourse(course),
-                        status: config.params && config.params.group === 'PERSON' ? LearningStatus.LEARNING : undefined
-                    }));
+                    return (data as CourseDtoResp[]).map<CourseInfo | UserCourseInfo>((courseData) => {
+                        const courseInfo = transformCourse(courseData);
+                        if (config.params && config.params.group === 'PERSON') {
+                            const userCourseInfo: UserCourseInfo = {
+                                ...courseInfo,
+                                status: LearningStatus.LEARNING
+                            };
+                            return userCourseInfo;
+                        }
+                        return courseInfo;
+                    });
                 } else {
                     return transformCourse(data);
                 }
@@ -281,7 +287,7 @@ const transformError = (error: AxiosError) => {
         throw error;
 };
 
-mockTestsRequests(APIRequest);
+// mockTestsRequests(APIRequest);
 
 APIRequest.interceptors.response.use(transformData, transformError);
 
