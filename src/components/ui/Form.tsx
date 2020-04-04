@@ -59,9 +59,11 @@ export type FormData = {[field: string]: any};
 export type FormValidityChecker<D extends FormData> = (data: D) => boolean;
 export function useFormValidityChecker<D extends FormData>(formElement: HTMLFormElement | null, checkInput?: (name: string, input: HTMLInputElement | undefined, data: D) => boolean | undefined, dependencies=[]): FormValidityChecker<D> {
     return React.useCallback((formData: D) => {
+        console.log('check validity', formElement);
         if (!formElement)
             return false;
         for (const name in formData) {
+            console.log('field', name, formData[name]);
             const input = formElement.elements[name];
             const checkResult = checkInput && checkInput(name, input, formData);
             if (checkResult === false)
@@ -115,7 +117,9 @@ export function useForm<D extends FormData>(initFormData: (data?: D) => D, check
     }, []);
 
     React.useEffect(() => {
+        console.log('check validity');
         if (checkValidity) {
+            console.log(checkValidity(formData));
             setValidity(checkValidity(formData));
         }
         else

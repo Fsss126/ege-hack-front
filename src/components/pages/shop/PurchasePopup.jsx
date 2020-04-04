@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect, useRef} from "react";
-import Auth from 'definitions/auth';
 import Popup, {PopupAnimation} from "components/ui/Popup";
 import {Input} from "components/ui/input";
 import {useForm, useFormValidityChecker} from "components/ui/Form";
 import Form from "components/ui/Form";
 import APIRequest from "api";
-import {useUser} from "../../../hooks/selectors";
+import {useUser} from "hooks/selectors";
+import {useForceUpdate} from "../../../hooks/common";
 
 const LOCAL_STORAGE_KEY = 'ege-hack-email';
 
@@ -16,7 +16,8 @@ function createLinkRequest(requestData) {
 const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
     const {userInfo} = useUser();
     const formElementRef = useRef(null);
-    const checkValidity = useFormValidityChecker(formElementRef.current, undefined, [opened]);
+    const forceUpdate = useForceUpdate();
+    const checkValidity = useFormValidityChecker(formElementRef.current, undefined, [opened, formElementRef.current]);
     const {
         formData,
         isValid,
@@ -41,9 +42,14 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
     } = formData;
 
     useEffect(() => {
-        if (userInfo && !email)
+        forceUpdate();
+    }, [opened]);
+
+    useEffect(() => {
+        if (userInfo && !email) {
             onInputChange(userInfo.email || '', 'email');
-    }, [onInputChange, userInfo]);
+        }
+    }, [opened, onInputChange, userInfo]);
 
     const onSubmit = React.useCallback(() => {
         console.log('submit', email);

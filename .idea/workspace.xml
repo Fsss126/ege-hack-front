@@ -7,8 +7,8 @@
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/lesson-page/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/Form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Form.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +64,13 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/declarations" />
+      <recent name="$PROJECT_DIR$/src/declarations/react-transition-group" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
+      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/api/mocks" />
       <recent name="$PROJECT_DIR$/src/hooks" />
@@ -75,13 +82,6 @@
       <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
       <recent name="$PROJECT_DIR$/src/components/ui/input/file-input" />
       <recent name="$PROJECT_DIR$/src/components/ui/input" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/declarations" />
-      <recent name="$PROJECT_DIR$/src/declarations/react-transition-group" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/lessons" />
-      <recent name="$PROJECT_DIR$/src/components/pages/admin/courses" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start-custom-post-mac">
@@ -150,10 +150,10 @@
     </configuration>
     <list>
       <item itemvalue="JavaScript Debug.Debug Application" />
+      <item itemvalue="npm.npm start" />
       <item itemvalue="npm.build-prod" />
       <item itemvalue="npm.build" />
       <item itemvalue="npm.deploy" />
-      <item itemvalue="npm.npm start" />
       <item itemvalue="npm.start-custom-port" />
       <item itemvalue="npm.start-custom-post-mac" />
     </list>
@@ -476,15 +476,22 @@
       <option name="project" value="LOCAL" />
       <updated>1585933086909</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Fixed spread sheet link submission">
+      <created>1586011149766</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1586011149766</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
     <option name="exactExcludedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/components/pages/courses/index.jsx" />
         <option value="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/index.js" />
+        <option value="$PROJECT_DIR$/src/components/pages/courses/index.jsx" />
         <option value="$PROJECT_DIR$/src/components/pages/shop/catalog-page/index.js" />
       </list>
     </option>
@@ -503,7 +510,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Video player" />
     <MESSAGE value="User courses; Homework upload; Sidebar shimmer" />
     <MESSAGE value="Sidebar fix" />
     <MESSAGE value="Changed auth" />
@@ -528,7 +534,8 @@
     <MESSAGE value="Tests sagas" />
     <MESSAGE value="Tests WIP" />
     <MESSAGE value="Added spread sheet link; Fixed forms" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added spread sheet link; Fixed forms" />
+    <MESSAGE value="Fixed spread sheet link submission" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed spread sheet link submission" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -552,11 +559,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1582583756631" />
-    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1585933086758">
+    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1586011149638">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585784326425" />
-    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1585933086758" />
+    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1586011149638" />
     <state x="100" y="55" width="1240" height="845" key="DiffContextDialog" timestamp="1582545579101">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
@@ -569,34 +576,39 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1585933115888">
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1586011513942">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585780101622" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1585933115888" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1586011513942" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1585933115887">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1586011513937">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585780101621" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1585933115887" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1586011513937" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1585933115887">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1586011513936">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585780101620" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1585933115887" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1586011513936" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1585933115888">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1586011513940">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585780101622" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1585933115888" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1586011513940" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1584802560288">
+    <state x="144" y="79" key="MergeDialog" timestamp="1586011365823">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="144" y="79" key="MergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1586011365823" />
+    <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1586011368627">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1584802560288" />
+    <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1586011368627" />
     <state x="368" y="168" key="RollbackChangesDialog" timestamp="1578521844521">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -618,11 +630,11 @@
       <screen x="0" y="23" width="1440" height="820" />
     </state>
     <state x="100" y="100" width="1240" height="700" key="VCS.FileHistoryDialog/0.23.1440.820@0.23.1440.820" timestamp="1585932980452" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1585933088992">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1586011151299">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1583792881256" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1585933088992" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1586011151299" />
     <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1578350915833">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -640,11 +652,11 @@
     </state>
     <state x="393" y="172" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1583777846573" />
     <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1585813951353" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1585932786133">
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1586011443798">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1583084993180" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1585932786133" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1586011443798" />
     <state x="73" y="216" key="vcs.ApplyPatchDifferentiatedDialog" timestamp="1585684592014">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
