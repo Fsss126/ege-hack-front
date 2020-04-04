@@ -36,7 +36,7 @@ const INITIAL_FORM_DATA: CourseFormData = {
 };
 
 function getRequestData(formData: CourseFormData): CourseDtoReq {
-    const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description, hide_from_market} = formData;
+    const {name, subject_id, teacher_id, image, price, date_start, date_end, online, description, hide_from_market, spread_sheet_link} = formData;
     return {
         name,
         subject_id: subject_id as number,
@@ -47,7 +47,8 @@ function getRequestData(formData: CourseFormData): CourseDtoReq {
         date_end: (date_end as Date).getTime(),
         online,
         description,
-        hide_from_market
+        hide_from_market,
+        spread_sheet_link
     };
 }
 

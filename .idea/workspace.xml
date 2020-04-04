@@ -150,10 +150,10 @@
     </configuration>
     <list>
       <item itemvalue="JavaScript Debug.Debug Application" />
-      <item itemvalue="npm.npm start" />
       <item itemvalue="npm.build-prod" />
       <item itemvalue="npm.build" />
       <item itemvalue="npm.deploy" />
+      <item itemvalue="npm.npm start" />
       <item itemvalue="npm.start-custom-port" />
       <item itemvalue="npm.start-custom-post-mac" />
     </list>
