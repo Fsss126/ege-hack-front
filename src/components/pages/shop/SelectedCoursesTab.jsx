@@ -82,7 +82,7 @@ const SelectedCoursesTab = ({courses, discount: discountInfo, isLoading, error, 
                         </ScrollBars>
                     </div>
                     <Loader
-                        className="col-12 col-md-auto p-0 selected-courses__price-container d-flex"
+                        className="col-12 col-md-auto p-0 selected-courses__price-container d-flex justify-content-end"
                         isLoading={isLoading || !!error}>
                         <div className="layout__bottom-tab-container container d-flex align-items-center justify-content-end">
                             <Button

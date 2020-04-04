@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from "react";
+import React, {useCallback, useEffect, useRef} from "react";
 import Auth from 'definitions/auth';
 import Popup, {PopupAnimation} from "components/ui/Popup";
 import {Input} from "components/ui/input";
@@ -10,7 +10,7 @@ import {useUser} from "../../../hooks/selectors";
 const LOCAL_STORAGE_KEY = 'ege-hack-email';
 
 function createLinkRequest(requestData) {
-    return APIRequest.post('/payments/form/tinkoff/link', requestData);
+    return APIRequest.post('/payments/tinkoff/link', requestData);
 }
 
 const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
@@ -39,6 +39,11 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
     const {
         email
     } = formData;
+
+    useEffect(() => {
+        if (userInfo && !email)
+            onInputChange(userInfo.email || '', 'email');
+    }, [onInputChange, userInfo]);
 
     const onSubmit = React.useCallback(() => {
         console.log('submit', email);
