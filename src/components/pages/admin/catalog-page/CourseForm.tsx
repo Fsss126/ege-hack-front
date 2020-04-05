@@ -254,6 +254,7 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
                         type="text"
                         placeholder="Ссылка на Гугл таблицу"
                         value={spread_sheet_link}
+                        maxLength={1000}
                         onChange={onInputChange}/>
                 </FieldsContainer>
             </div>
