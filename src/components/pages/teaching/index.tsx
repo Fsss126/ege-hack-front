@@ -3,8 +3,9 @@ import { Switch, Route } from "react-router-dom";
 import CatalogPage from "./catalog-page";
 import CoursePage from "./course-page";
 import LessonPage from "./lesson-page";
+import {RouteComponentProps} from "react-router";
 
-const Teaching = ({match}) => {
+const Teaching: React.FC<RouteComponentProps> = ({match}) => {
     return (
         <Switch>
             <Route

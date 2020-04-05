@@ -12,7 +12,7 @@ export interface LessonViewProps {
     homework: HomeworkInfo;
 }
 const LessonView: React.FC<LessonViewProps> = (props) => {
-    const {lesson: {id, name, image_link: cover, video_link: video, description, assignment, attachments, test}, homework} = props;
+    const {lesson: {id, name, image_link: cover, video_link: video, description, assignment, attachments, test, course_id}, homework} = props;
     return (
         <div className="col-12 col-lg layout__content-block lesson-page__current-lesson">
             <div className="block-container video-container">
@@ -47,7 +47,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
             {test && (
                 <div className="block-container hw-container">
                     <h3>Тест</h3>
-                    <TestView test={test}/>
+                    <TestView courseId={course_id} lessonId={id} test={test}/>
                 </div>
             )}
         </div>

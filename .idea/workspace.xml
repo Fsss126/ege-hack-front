@@ -6,8 +6,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56a494b7-3001-4e5e-9453-0752a055d2d0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/types/routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/Form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/Form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Catalog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Catalog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/List.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/List.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/admin/course-page/participants/ParticipantsEditingPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/catalog-page/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/course-page/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/course-page/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/LessonView.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/TestView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/courses/lesson-page/TestView.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/login/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/login/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/PurchasePopup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/ShopCatalogPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/catalog-page/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/course-page/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/course-page/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/shop/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/shop/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/TeachersCatalogPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/catalog-page/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/catalog-page/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/course-page/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/teaching/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/teaching/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/selectors.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +54,13 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="hiddenUrls">
+      <set>
+        <option value="https://github.com/Fsss126/ege-hack-front.git" />
+      </set>
+    </option>
   </component>
   <component name="ProjectId" id="1Q1hXixfBJguYvSqgfr2AUchpd4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -158,11 +187,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.build-prod" />
         <item itemvalue="npm.start-custom-post-mac" />
         <item itemvalue="npm.start-custom-port" />
         <item itemvalue="npm.deploy" />
         <item itemvalue="npm.build" />
-        <item itemvalue="npm.build-prod" />
       </list>
     </recent_temporary>
   </component>
@@ -482,16 +511,22 @@
       <option name="project" value="LOCAL" />
       <updated>1586011149766</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Removed console logging">
+      <created>1586024831583</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1586024831583</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
     <option name="exactExcludedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/index.js" />
         <option value="$PROJECT_DIR$/src/components/pages/courses/index.jsx" />
-        <option value="$PROJECT_DIR$/src/components/pages/shop/catalog-page/index.js" />
+        <option value="$PROJECT_DIR$/src/components/pages/teachers/teacher-page/TeacherPage.jsx" />
       </list>
     </option>
   </component>
@@ -509,7 +544,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="User courses; Homework upload; Sidebar shimmer" />
     <MESSAGE value="Sidebar fix" />
     <MESSAGE value="Changed auth" />
     <MESSAGE value="Fixes; Changed Auth" />
@@ -534,7 +568,8 @@
     <MESSAGE value="Tests WIP" />
     <MESSAGE value="Added spread sheet link; Fixed forms" />
     <MESSAGE value="Fixed spread sheet link submission" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed spread sheet link submission" />
+    <MESSAGE value="Removed console logging" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed console logging" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -558,14 +593,15 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1582583756631" />
-    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1586011149638">
+    <state x="34" y="52" key="CommitChangelistDialog2" timestamp="1586024831439">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="303" y="52" key="CommitChangelistDialog2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585784326425" />
-    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1586011149638" />
-    <state x="100" y="55" width="1240" height="845" key="DiffContextDialog" timestamp="1582545579101">
-      <screen x="0" y="23" width="1440" height="877" />
+    <state x="34" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1586024831439" />
+    <state x="100" y="32" width="1240" height="868" key="DiffContextDialog" timestamp="1586040353404">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="100" y="32" width="1240" height="868" key="DiffContextDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586040353404" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1578958232504" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.820/1440.23.1360.745@0.23.1440.820" timestamp="1579715608559" />
     <state x="100" y="85" width="1240" height="769" key="DiffContextDialog/0.23.1440.820@0.23.1440.820" timestamp="1578487129150" />
@@ -575,42 +611,44 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="507" y="212" key="FileChooserDialogImpl/0.0.1440.900@0.0.1440.900" timestamp="1578351106865" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1586020914802">
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom" timestamp="1586045476507">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585780101622" />
-    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1586020914802" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586045476507" />
+    <state width="1419" height="274" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1586024852115" />
     <state width="1419" height="245" key="GridCell.Tab.0.bottom/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1586020914801">
+    <state width="1419" height="274" key="GridCell.Tab.0.center" timestamp="1586045476506">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585780101621" />
-    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1586020914801" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586045476506" />
+    <state width="1419" height="274" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1586024852114" />
     <state width="1419" height="245" key="GridCell.Tab.0.center/0.23.1440.820@0.23.1440.820" timestamp="1578497785703" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1586020914800">
+    <state width="1419" height="274" key="GridCell.Tab.0.left" timestamp="1586045476504">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585780101620" />
-    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1586020914800" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586045476504" />
+    <state width="1419" height="274" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1586024852113" />
     <state width="1419" height="245" key="GridCell.Tab.0.left/0.23.1440.820@0.23.1440.820" timestamp="1578497785702" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1586020914801">
+    <state width="1419" height="274" key="GridCell.Tab.0.right" timestamp="1586045476507">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1585780101622" />
-    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1586020914801" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586045476507" />
+    <state width="1419" height="274" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1586024852114" />
     <state width="1419" height="245" key="GridCell.Tab.0.right/0.23.1440.820@0.23.1440.820" timestamp="1578497785704" />
-    <state x="144" y="79" key="MergeDialog" timestamp="1586011365823">
+    <state x="144" y="79" key="MergeDialog" timestamp="1586040757195">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="144" y="79" key="MergeDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586040757195" />
     <state x="144" y="79" key="MergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1586011365823" />
     <state x="431" y="173" key="MultipleFileMergeDialog" timestamp="1586011368627">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1584802560288" />
     <state x="431" y="173" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1586011368627" />
-    <state x="368" y="168" key="RollbackChangesDialog" timestamp="1578521844521">
+    <state x="368" y="168" key="RollbackChangesDialog" timestamp="1586040663710">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="368" y="168" key="RollbackChangesDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586040663710" />
     <state x="368" y="168" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1578521844521" />
     <state x="221" y="89" key="SettingsEditor" timestamp="1583259413169">
       <screen x="0" y="0" width="1440" height="900" />
@@ -646,19 +684,20 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="503" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1584802832993" />
-    <state x="301" y="180" width="837" height="540" key="find.popup" timestamp="1586024806159">
+    <state x="393" y="172" width="837" height="540" key="find.popup" timestamp="1586040599746">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="393" y="172" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1583777846573" />
+    <state x="393" y="172" width="837" height="540" key="find.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586040599746" />
     <state x="301" y="180" width="837" height="540" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1586024806159" />
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1586020919818">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1583084993180" />
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1586020919818" />
-    <state x="73" y="216" key="vcs.ApplyPatchDifferentiatedDialog" timestamp="1585684592014">
+    <state x="73" y="216" key="vcs.ApplyPatchDifferentiatedDialog" timestamp="1586040702619">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="73" y="216" key="vcs.ApplyPatchDifferentiatedDialog/0.0.1440.900/1440.0.1360.768@0.0.1440.900" timestamp="1586040702619" />
     <state x="73" y="216" key="vcs.ApplyPatchDifferentiatedDialog/0.0.1440.900@0.0.1440.900" timestamp="1585684592014" />
     <state x="450" y="369" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582558410140">
       <screen x="0" y="0" width="1440" height="900" />

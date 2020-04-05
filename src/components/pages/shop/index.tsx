@@ -2,14 +2,16 @@ import React, {Fragment, useState} from 'react';
 import { Switch, Route } from "react-router-dom";
 import ShopCatalogPage from "./catalog-page";
 import CoursePage from "./course-page";
-import {useDiscount} from "../../../hooks/selectors";
-import {useToggle} from "../../../hooks/common";
+import {useDiscount} from "hooks/selectors";
+import {useToggle} from "hooks/common";
 import SelectedCoursesTab from "./SelectedCoursesTab";
 import PurchasePopup from "./PurchasePopup";
+import {RouteComponentProps} from "react-router";
+import {CourseInfo} from "types/entities";
 
-export default function Shop(props) {
-    const [selectedCourses, setSelectedCourses] = useState(new Set());
-    const {discount, error: errorLoadingDiscount, retry: reloadDiscount, isLoading} = useDiscount(selectedCourses);
+const Shop: React.FC<RouteComponentProps> = (props) => {
+    const [selectedCourses, setSelectedCourses] = useState(new Set<CourseInfo>());
+    const {discount, error: errorLoadingDiscount, reload: reloadDiscount, isLoading} = useDiscount(selectedCourses);
     const onCourseSelect = React.useCallback((course) => {
         setSelectedCourses(selectedCourses => {
             if (selectedCourses.has(course))
@@ -45,7 +47,6 @@ export default function Shop(props) {
                 <Route path={`${match.path}/:id`} render={(props) => (
                     <CoursePage
                         selectedCourses={selectedCourses}
-                        discount={discount}
                         onCourseSelect={onCourseSelect}
                         path={match.path}
                         {...props}>
@@ -55,9 +56,7 @@ export default function Shop(props) {
                 <Route exact path={`${match.path}`} render={(props) => (
                     <ShopCatalogPage
                         selectedCourses={selectedCourses}
-                        discount={discount}
                         onCourseSelect={onCourseSelect}
-                        onCourseDeselect={onCourseDeselect}
                         {...props}>
                         {selectedCoursesTab}
                     </ShopCatalogPage>
@@ -69,4 +68,6 @@ export default function Shop(props) {
                 onCloseClick={togglePopup}/>
         </Fragment>
     )
-}
+};
+
+export default Shop;

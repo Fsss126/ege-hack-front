@@ -4,13 +4,17 @@ import CourseCatalog from "components/common/CourseCatalog";
 import Course from "components/common/Course";
 import Button from "components/ui/Button";
 import {useShopCatalog, useSubjects} from "hooks/selectors";
-import {useToggle} from "hooks/common";
 import {renderPrice} from "definitions/helpers";
+import {CourseInfo} from "types/entities";
+import {RouteComponentProps} from "react-router";
 
-const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, location}) => {
-    const {catalog, error, retry} = useShopCatalog();
-    const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
-    const [isEditing, toggleEditing] = useToggle(false);
+export interface ShopCatalogPageProps extends RouteComponentProps {
+    selectedCourses: Set<CourseInfo>;
+    onCourseSelect: (course: CourseInfo) => void;
+}
+const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({selectedCourses, onCourseSelect, children: selectedCoursesTab, location}) => {
+    const {catalog, error, reload} = useShopCatalog();
+    const {subjects, error: errorLoadingSubjects, reload: reloadSubjects} = useSubjects();
     const renderCourse = useCallback((course, {link, ...rest}) => {
         const isSelected = selectedCourses.has(course);
         const {price, discount, purchased} = course;
@@ -18,26 +22,26 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCou
             <Course
                 course={course}
                 selectable
-                isSelected={isEditing ? false : isSelected}
-                onActionClick={isEditing || purchased ? null : onCourseSelect}
+                isSelected={isSelected}
+                onActionClick={purchased ? null : onCourseSelect}
                 key={course.id}
-                link={isEditing ? `/courses/${course.id}/edit` : link}
-                action={isEditing || !purchased ? (
+                link={link}
+                action={!purchased ? (
                     <React.Fragment>
                         <div className="list__item-action-info">
                             <span className="price">{renderPrice(price)}</span> {
-                            !isEditing && discount && <span className="discount font-size-xs">{renderPrice(discount + price)}</span>
+                            discount && <span className="discount font-size-xs">{renderPrice(discount + price)}</span>
                         }
                         </div>
-                        <Button style={{minWidth: '115px'}}>{isEditing ? 'Изменить' : (isSelected ? 'Выбрано' : 'Купить')}</Button>
+                        <Button style={{minWidth: '115px'}}>{isSelected ? 'Выбрано' : 'Купить'}</Button>
                     </React.Fragment>
                 ) : (
                     <Button style={{minWidth: '115px'}} active={false}>Куплено</Button>
                 )}
                 {...rest}/>
         )
-    }, [selectedCourses, onCourseSelect, isEditing]);
-    const isLoaded = catalog && subjects;
+    }, [selectedCourses, onCourseSelect]);
+    const isLoaded = !!(catalog && subjects);
     return (
         <Page
             isLoaded={isLoaded}
@@ -47,8 +51,8 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCou
             location={location}>
             {isLoaded && (
                 <CourseCatalog.Body
-                    subjects={subjects}
-                    courses={catalog}>
+                    subjects={subjects as any}
+                    courses={catalog as any}>
                     <PageContent>
                         <CourseCatalog.Filter/>
                         <CourseCatalog.Catalog
@@ -56,7 +60,7 @@ const ShopCatalogPage = ({selectedCourses, onCourseSelect, children: selectedCou
                     </PageContent>
                 </CourseCatalog.Body>
             )}
-            {!isEditing && selectedCoursesTab}
+            {selectedCoursesTab}
         </Page>
     );
 };

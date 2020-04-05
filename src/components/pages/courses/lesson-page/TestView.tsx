@@ -7,10 +7,12 @@ import {LoadingIndicator, useLoadingState} from "components/ui/LoadingIndicator"
 import {useStartTest} from "hooks/selectors";
 
 export interface TestStatusProps {
+    courseId: number;
+    lessonId: number;
     test: TestStatusInfo;
 }
 export const TestView: React.FC<TestStatusProps> = (props) => {
-    const {test: {status, id, name, progress}} = props;
+    const {test: {status, id, name, progress}, courseId, lessonId} = props;
     const [isFetchingTest, setIsFetchingTest] = useState<boolean | null>(null);
     const state = useLoadingState(isFetchingTest,  isFetchingTest === false);
     const fetchCallback = useCallback(() => {
@@ -21,7 +23,7 @@ export const TestView: React.FC<TestStatusProps> = (props) => {
 
     const onClick = useCallback(() => {
         setIsFetchingTest(true);
-        startTestCallback(id);
+        startTestCallback(courseId, lessonId, id);
     }, [id, startTestCallback]);
 
     const isCompleted = status === TestStatus.COMPLETED;

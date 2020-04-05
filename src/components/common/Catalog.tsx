@@ -104,7 +104,7 @@ type CatalogOwnRenderProps = {
 export type CatalogItemRenderProps<P extends object = {}> = ListItemRenderProps<P & CatalogOwnRenderProps>;
 export type CatalogItemRenderer<T, P extends object = {}> = ListItemRenderer<T, P & CatalogOwnRenderProps>;
 
-export type CatalogProps<T extends object = any, P extends object = {}> = Omit<ListProps<T, P & CatalogOwnRenderProps>, 'renderProps' | 'children'> & {
+export type CatalogProps<T extends object = any, P extends object = {}> = Omit<React.Defaultize<ListProps<T, P & CatalogOwnRenderProps>, typeof List.defaultProps>, 'renderProps' | 'children'> & {
     emptyPlaceholder: React.ReactNode;
     noMatchPlaceholder: React.ReactNode;
     renderProps?: P;

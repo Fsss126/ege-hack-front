@@ -3,7 +3,7 @@ import {
     useLessons,
     useDeleteCourse,
     useParticipants,
-    useTeacherCourse,
+    useTeacherCourse, useAdminLessons,
     // useAdminWebinars
 } from "hooks/selectors";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
@@ -14,9 +14,12 @@ import LessonsPage from "../../admin/course-page/lessons/LessonsPage";
 import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
 import {useCheckPermissions} from "components/ConditionalRender";
 import Lesson from "components/common/Lesson";
-import {Permission} from "../../../../types/enums";
+import {Permission} from "types/enums";
+import {RouteComponentPropsWithPath} from "types/routes";
+import {LessonInfo} from "types/entities";
+import {CatalogItemRenderer} from "components/common/Catalog";
 
-const renderLesson = (lesson, {link, ...rest}) => {
+const renderLesson: CatalogItemRenderer<LessonInfo> = (lesson, {link, ...rest}) => {
     const {id, locked, assignment} = lesson;
     const isSelectable = !!assignment;
     return (
@@ -31,13 +34,13 @@ const renderLesson = (lesson, {link, ...rest}) => {
     )
 };
 
-const CoursePage = (props) => {
+const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (props) => {
     const {path: root, match} = props;
     const {params: {courseId: param_id}} = match;
     const courseId = parseInt(param_id);
-    const {course, error, retry} = useTeacherCourse(courseId);
+    const {course, error, reload} = useTeacherCourse(courseId);
     const {participants, error: errorLoadingParticipants, reload: reloadParticipants} = useParticipants(courseId);
-    const {lessons, error: errorLoadingLessons, retry: reloadLessons} = useLessons(courseId);
+    const {lessons, error: errorLoadingLessons, reload: reloadLessons} = useAdminLessons(courseId);
     // const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
     const isLoaded = !!(course !== undefined && participants !== undefined && lessons !== undefined);
 
@@ -53,7 +56,7 @@ const CoursePage = (props) => {
     }, [courseId, onDelete]);
 
     const courseLink = `${match.url}/`;
-    const header = isLoaded && (
+    const header = isLoaded && course && (
         <div className="layout__content-block tab-nav-container">
             <div className="title-with-menu">
                 <div className="title-with-menu__action">
@@ -106,8 +109,8 @@ const CoursePage = (props) => {
         <Switch>
             <Route path={`${match.path}/participants`} render={props => (
                 <ParticipantsPage
-                    course={course}
-                    participants={participants}
+                    course={course || undefined}
+                    participants={participants || undefined}
                     isLoaded={isLoaded}
                     path={root}
                     parentSection={parentSection}
@@ -119,8 +122,8 @@ const CoursePage = (props) => {
                 <LessonsPage
                     className="teaching-page"
                     renderLesson={renderLesson}
-                    course={course}
-                    lessons={lessons}
+                    course={course || undefined}
+                    lessons={lessons || undefined}
                     isLoaded={isLoaded}
                     path={root}
                     parentSection={parentSection}

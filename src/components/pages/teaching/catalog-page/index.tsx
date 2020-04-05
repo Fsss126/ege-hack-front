@@ -2,8 +2,9 @@ import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import TabNav, {TabNavLink} from "components/common/TabNav";
 import CourseCatalogPage from "./CourseCatalogPage";
+import {RouteComponentPropsWithPath} from "types/routes";
 
-const CoursesPage = (props) => {
+const CoursesPage: React.FC<RouteComponentPropsWithPath> = (props) => {
     const {path} = props;
     const header = (
         <div className="layout__content-block tab-nav-container">

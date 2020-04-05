@@ -38,8 +38,7 @@ const List = <T extends object = any, P extends object = {}>(props: ListProps<T,
 };
 
 List.defaultProps = {
-    // eslint-disable-next-line react/display-name
-    renderItem: (item: any, props: ListItemRenderProps, index: number): React.ReactElement => <ListItem {...item} {...props} key={index}/>,
+    // renderItem: (item: any, props: ListItemRenderProps, index: number): React.ReactElement => <ListItem {...item} {...props} key={index}/>,
     renderProps: {},
     plain: false
 };

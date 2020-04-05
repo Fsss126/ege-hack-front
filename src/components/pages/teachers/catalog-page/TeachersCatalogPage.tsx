@@ -2,11 +2,12 @@ import React from "react";
 import Page, {PageContent} from "components/Page";
 import TeachersCatalog from "./TeachersCatalog";
 import {useSubjects, useTeachers} from "hooks/selectors";
+import {RouteComponentProps} from "react-router";
 
-const TeachersCatalogPage = ({location}) => {
-    const {teachers, error, retry} = useTeachers();
-    const {subjects, error: errorLoadingSubjects, retry: reloadSubjects} = useSubjects();
-    const isLoaded = teachers && subjects;
+const TeachersCatalogPage: React.FC<RouteComponentProps> = ({location}) => {
+    const {teachers, error, reload} = useTeachers();
+    const {subjects, error: errorLoadingSubjects, reload: reloadSubjects} = useSubjects();
+    const isLoaded = !!(teachers && subjects);
     return (
         <Page
             isLoaded={isLoaded}

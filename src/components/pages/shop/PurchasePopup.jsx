@@ -31,7 +31,7 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
         if (!userInfo)
             return;
         return {
-            courses_ids: [...selectedCourses].map(({id}) => id),
+            courses: [...selectedCourses].map(({id}) => id),
             vk_address: userInfo.contacts.vk,
             email
         };

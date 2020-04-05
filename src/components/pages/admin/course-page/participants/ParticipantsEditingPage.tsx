@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useRef} from "react";
 import APIRequest from "api";
 import Page, {PageContent} from "components/Page";
 import * as Input from "components/ui/input";
@@ -7,7 +7,7 @@ import Form, {
     FormSubmitHandler,
     FormSubmittedHandler,
     RevokeRelatedDataCallback,
-    useForm
+    useForm, useFormValidityChecker
 } from "components/ui/Form";
 import {useRevokeParticipants} from "hooks/selectors";
 import {Permission} from "types/enums";
@@ -39,12 +39,17 @@ const ParticipantsEditingPage: React.FC<RouteComponentProps<{courseId: string}>>
     const createRequest = useCallback((requestData: AddParticipantsReq) => {
         return APIRequest.post(`/courses/${courseId}/participants`, requestData) as unknown as Promise<CourseParticipantInfo[]>;
         }, [courseId]);
+
+    const formElementRef = useRef<HTMLFormElement>(null);
+
+    const checkValidity = useFormValidityChecker<ParticipantsFormData>(formElementRef.current);
+
     const {
         formData,
         isValid,
         onInputChange,
         reset
-    } = useForm<ParticipantsFormData>(() => INITIAL_FORM_DATA);
+    } = useForm<ParticipantsFormData>(() => INITIAL_FORM_DATA, checkValidity);
     const {accounts} = formData;
 
     const onSubmit = useCallback<FormSubmitHandler<[undefined], Promise<CourseParticipantInfo[]>>>(() => {
@@ -90,6 +95,7 @@ const ParticipantsEditingPage: React.FC<RouteComponentProps<{courseId: string}>>
                 <PageContent>
                     <div className="layout__content-block">
                         <Form<CourseParticipantInfo[]>
+                            ref={formElementRef}
                             title="Добавление учеников"
                             className="course-form container p-0"
                             isValid={isValid}

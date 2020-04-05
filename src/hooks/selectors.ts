@@ -26,7 +26,7 @@ import {
     HomeworkInfo,
     LessonInfo,
     SubjectInfo,
-    TeacherInfo,
+    TeacherInfo, TestStateInfo,
     TestStatus,
     WebinarInfo,
     WebinarScheduleInfo
@@ -584,22 +584,25 @@ export function useDeleteWebinar(redirectUrl?: string, onDelete?: WebinarDeleteC
     }, [dispatch, deleteCallback, onError]);
 }
 
-export type StartTestHookResult = (testId: number) => void;
+export type StartTestHookResult = (courseId: number, lessonId: number, testId: number) => void;
 
-export function useStartTest(onTestStart: TestStartCallback, onError: TestStartErrorCallback): StartTestHookResult {
+export function useStartTest(onSuccessCallback: TestStartCallback, onError: TestStartErrorCallback): StartTestHookResult {
     const dispatch = useDispatch<Dispatch<Action>>();
     const history = useHistory();
 
-    const onSuccess: TestStartCallback = useCallback((testId, testInfo) => {
-        const {last_task_id, status} = testInfo;
-        const testUrl = `/test/${testId}`;
+    const onTestStart = useCallback((courseId: number, lessonId: number, testId: number, testState: TestStateInfo) => {
+        const {last_task_id, status} = testState;
+        const testUrl = `/courses/${courseId}/${lessonId}/test/${testId}`;
         const isCompleted = status === TestStatus.COMPLETED;
 
-        onTestStart(testId, testInfo);
+        onSuccessCallback(testId, testState);
         history.push(isCompleted ? `${testUrl}/results/` : `${testUrl}/${last_task_id}/`);
-    }, [history, onTestStart]);
+    }, [history, onSuccessCallback]);
 
-    return useCallback((testId) => {
+    return useCallback((courseId, lessonId, testId) => {
+        const onSuccess: TestStartCallback = (testId, testState)  => {
+          onTestStart(courseId, lessonId, testId, testState);
+        };
         dispatch({type: ActionType.TEST_START_REQUEST, testId, onSuccess, onError});
-    }, [dispatch, onSuccess, onError]);
+    }, [dispatch, onTestStart, onError]);
 }
