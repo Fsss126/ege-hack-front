@@ -32,7 +32,10 @@ const INITIAL_FORM_DATA: CourseFormData = {
     online: false,
     description: '',
     hide_from_market: true,
-    spread_sheet_link: ''
+    spread_sheet_link: '',
+    date_start: undefined,
+    date_end: undefined,
+    image: undefined,
 };
 
 function getRequestData(formData: CourseFormData): CourseDtoReq {

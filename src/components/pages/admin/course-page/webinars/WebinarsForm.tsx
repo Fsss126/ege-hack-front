@@ -28,13 +28,15 @@ type WebinarsFormData = {
 }
 const INITIAL_FORM_DATA: WebinarsFormData = {
     click_meeting_link: '',
+    image: undefined,
     webinars: []
 };
 
 const INITIAL_WEBINAR_DATA: WebinarData = {
     name: '',
     description: '',
-    duration: ''
+    duration: '',
+    date_start: undefined,
 };
 
 function getRequestData(formData: WebinarsFormData): WebinarScheduleDtoReq {

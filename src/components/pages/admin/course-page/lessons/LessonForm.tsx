@@ -34,6 +34,10 @@ const INITIAL_FORM_DATA: LessonFormData = {
     is_locked: false,
     hometask_description: '',
     test_id: '',
+    image: undefined,
+    attachments: undefined,
+    hometask_file: undefined,
+    hometask_deadline: undefined,
 };
 
 function getRequestData(formData: LessonFormData, courseId: number): LessonDtoReq {
