@@ -1,5 +1,7 @@
-import {AxiosRequestConfig} from "axios";
+import {AxiosRequestConfig} from 'axios';
 
 export const getUrl = (config: AxiosRequestConfig) => {
-    return new URL(`${config.baseURL}${config.url?.replace(config.baseURL || '', '')}`);
+  return new URL(
+    `${config.baseURL}${config.url?.replace(config.baseURL || '', '')}`,
+  );
 };

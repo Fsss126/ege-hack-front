@@ -1,0 +1,28 @@
+{
+  "extends": ["tslint:latest", "tslint-react", "tslint-config-prettier"],
+  "rules": {
+    "quotemark": [true, "single", "jsx-double"],
+    "no-console": false,
+    "member-ordering": false,
+    "no-submodule-imports": false,
+    "no-shadowed-variable": false,
+    "no-empty-interface": false,
+    "jsx-no-multiline-js": false,
+    "jsx-boolean-value": false,
+    "no-object-literal-type-assertion": false,
+    "only-arrow-functions": [
+      true,
+      "allow-declarations",
+      "allow-named-functions"
+    ],
+    "jsx-no-lambda": true,
+    "no-debugger": false,
+    "prefer-conditional-expression": false,
+    "object-literal-key-quotes": false,
+    "no-implicit-dependencies": false,
+    "variable-name": {
+      "options": ["allow-leading-underscore", "allow-pascal-case"]
+    },
+    "array-type": false
+  }
+}

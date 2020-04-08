@@ -1,173 +1,227 @@
+import * as Input from 'components/ui/input';
 import React, {useCallback, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
-import List, {ListItemRenderer, ListItemRenderProps, ListProps} from "./List";
-import * as Input from "components/ui/input";
-import {InputChangeHandler} from "../ui/input/Input";
-import {OptionShape} from "../ui/input/Select";
+
+import {InputChangeHandler} from '../ui/input/Input';
+import {OptionShape} from '../ui/input/Select';
+import List, {ListItemRenderer, ListItemRenderProps, ListProps} from './List';
 
 export type CatalogContextState = FilterParams & {
-    options?: OptionShape<number>[];
-    items: any[];
-    totalItems: number;
-}
-export const CatalogContext = React.createContext<CatalogContextState>(undefined as any);
+  options?: OptionShape<number>[];
+  items: any[];
+  totalItems: number;
+};
+
+export const CatalogContext = React.createContext<CatalogContextState>(
+  undefined as any,
+);
 CatalogContext.displayName = 'CatalogContext';
 
 export type FilterParams = {
-    subject: number | null;
-    online: boolean;
-    search: string;
-}
+  subject: number | null;
+  online: boolean;
+  search: string;
+};
+
 export function useFilterParams(): FilterParams {
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
-    const subject = parseInt(params.get('subject') || '') || null;
-    const online = params.get('online') === 'true';
-    const search = params.get('search') || '';
-    return useMemo(() => ({subject, online, search}), [subject, online, search]);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const subject = parseInt(params.get('subject') || '') || null;
+  const online = params.get('online') === 'true';
+  const search = params.get('search') || '';
+
+  return useMemo(() => ({subject, online, search}), [subject, online, search]);
 }
 
 export function useFilterCallback(): InputChangeHandler<any> {
-    const location = useLocation();
-    const history = useHistory();
-    return useCallback((value: any, name: string) => {
-        const params = new URLSearchParams(location.search);
-        if (value)
-            params.set(name, value);
-        else
-            params.delete(name);
-        // setSubject(option);
-        history.push({
-            pathname: location.pathname,
-            search: `?${params}`
-        });
-    }, [location, history]);
+  const location = useLocation();
+  const history = useHistory();
+
+  return useCallback(
+    (value: any, name: string) => {
+      const params = new URLSearchParams(location.search);
+
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      // setSubject(option);
+      history.push({
+        pathname: location.pathname,
+        search: `?${params}`,
+      });
+    },
+    [location, history],
+  );
 }
 
 export type FilterProps = {
-    filterBy?: {
-        subject: boolean;
-        online: boolean;
-        search: boolean;
-    };
-    children?: React.ReactNode;
-}
+  filterBy?: {
+    subject: boolean;
+    online: boolean;
+    search: boolean;
+  };
+  children?: React.ReactNode;
+};
 const Filter: React.FC<FilterProps> = (props) => {
-    const {filterBy: {subject:filterBySubject = true, online:filterByOnline = true, search = false} = {}, children} = props;
-    const {options, subject, online, search: searchKey} = React.useContext(CatalogContext);
-    const onChange = useFilterCallback();
-    return (
-        <div className="layout__content-block catalog__filters">
-            <div className="container p-0">
-                <div className="row align-items-center">
-                    {filterBySubject && options && (
-                        <div className="catalog__filter-container subject-select-container col-auto align-items-center">
-                            <Input.Select
-                                name="subject"
-                                options={options}
-                                value={subject}
-                                placeholder='Предмет'
-                                callback={onChange}/>
-                        </div>
-                    )}
-                    {filterByOnline && (
-                        <div className="catalog__filter-container online-checkbox-container col-auto align-items-center">
-                            <Input.CheckBox
-                                name="online"
-                                value={online}
-                                label="Онлайн"
-                                onChange={onChange}/>
-                        </div>
-                    )}
-                    {search && (
-                        <div className="catalog__filter-container search-input-container col-auto align-items-center">
-                            <div className="search-input">
-                                <Input.Input
-                                    name="search"
-                                    placeholder="Поиск"
-                                    autoComplete="off"
-                                    value={searchKey}
-                                    onChange={onChange}/>
-                            </div>
-                        </div>
-                    )}
-                    {children}
-                </div>
+  const {
+    filterBy: {
+      subject: filterBySubject = true,
+      online: filterByOnline = true,
+      search = false,
+    } = {},
+    children,
+  } = props;
+  const {options, subject, online, search: searchKey} = React.useContext(
+    CatalogContext,
+  );
+  const onChange = useFilterCallback();
+
+  return (
+    <div className="layout__content-block catalog__filters">
+      <div className="container p-0">
+        <div className="row align-items-center">
+          {filterBySubject && options && (
+            <div className="catalog__filter-container subject-select-container col-auto align-items-center">
+              <Input.Select
+                name="subject"
+                options={options}
+                value={subject}
+                placeholder="Предмет"
+                callback={onChange}
+              />
             </div>
+          )}
+          {filterByOnline && (
+            <div className="catalog__filter-container online-checkbox-container col-auto align-items-center">
+              <Input.CheckBox
+                name="online"
+                value={online}
+                label="Онлайн"
+                onChange={onChange}
+              />
+            </div>
+          )}
+          {search && (
+            <div className="catalog__filter-container search-input-container col-auto align-items-center">
+              <div className="search-input">
+                <Input.Input
+                  name="search"
+                  placeholder="Поиск"
+                  autoComplete="off"
+                  value={searchKey}
+                  onChange={onChange}
+                />
+              </div>
+            </div>
+          )}
+          {children}
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 type CatalogOwnRenderProps = {
-    link: string;
+  link: string;
 };
-export type CatalogItemRenderProps<P extends object = {}> = ListItemRenderProps<P & CatalogOwnRenderProps>;
-export type CatalogItemRenderer<T, P extends object = {}> = ListItemRenderer<T, P & CatalogOwnRenderProps>;
+export type CatalogItemRenderProps<P extends object = {}> = ListItemRenderProps<
+  P & CatalogOwnRenderProps
+>;
 
-export type CatalogProps<T extends object = any, P extends object = {}> = Omit<React.Defaultize<ListProps<T, P & CatalogOwnRenderProps>, typeof List.defaultProps>, 'renderProps' | 'children'> & {
-    emptyPlaceholder: React.ReactNode;
-    noMatchPlaceholder: React.ReactNode;
-    renderProps?: P;
+export type CatalogItemRenderer<T, P extends object = {}> = ListItemRenderer<
+  T,
+  P & CatalogOwnRenderProps
+>;
+
+export type CatalogProps<T extends object = any, P extends object = {}> = Omit<
+  React.Defaultize<
+    ListProps<T, P & CatalogOwnRenderProps>,
+    typeof List.defaultProps
+  >,
+  'renderProps' | 'children'
+> & {
+  emptyPlaceholder: React.ReactNode;
+  noMatchPlaceholder: React.ReactNode;
+  renderProps?: P;
 };
-const Catalog = <T extends object = any, P extends object = {}>(props: CatalogProps<T, P>): React.ReactElement => {
-    const {renderItem: renderFunc, emptyPlaceholder, noMatchPlaceholder, renderProps, ...listProps} = props;
-    const {items, totalItems} = React.useContext(CatalogContext);
-    const renderItem = React.useCallback((item, renderProps, index) => {
-        return renderFunc(item, {link: `${item.id}/`, ...renderProps}, index);
-    }, [renderFunc]);
-    return (
-        <div className="layout__content-block catalog__catalog">
-            {items.length > 0 ? (
-                <List
-                    {...listProps}
-                    renderProps={renderProps}
-                    renderItem={renderItem}>
-                    {items}
-                </List>
-            ) : (
-                totalItems === 0 ? (
-                    <div className="catalog__empty-catalog-fallback-message text-center font-size-sm">
-                        {emptyPlaceholder}
-                    </div>
-                    ) : (
-                    <div className="catalog__empty-catalog-fallback-message text-center font-size-sm">
-                        {noMatchPlaceholder}
-                    </div>
-                    )
-            )}
+const Catalog = <T extends object = any, P extends object = {}>(
+  props: CatalogProps<T, P>,
+): React.ReactElement => {
+  const {
+    renderItem: renderFunc,
+    emptyPlaceholder,
+    noMatchPlaceholder,
+    renderProps,
+    ...listProps
+  } = props;
+  const {items, totalItems} = React.useContext(CatalogContext);
+  const renderItem = React.useCallback(
+    (item, renderProps, index) => {
+      return renderFunc(item, {link: `${item.id}/`, ...renderProps}, index);
+    },
+    [renderFunc],
+  );
+
+  return (
+    <div className="layout__content-block catalog__catalog">
+      {items.length > 0 ? (
+        <List {...listProps} renderProps={renderProps} renderItem={renderItem}>
+          {items}
+        </List>
+      ) : totalItems === 0 ? (
+        <div className="catalog__empty-catalog-fallback-message text-center font-size-sm">
+          {emptyPlaceholder}
         </div>
-    );
+      ) : (
+        <div className="catalog__empty-catalog-fallback-message text-center font-size-sm">
+          {noMatchPlaceholder}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export type CatalogFilter<T> = (item: T, filterParams: FilterParams) => boolean;
+
 export type CatalogBodyProps<T extends object = any> = {
-    options?: OptionShape<number>[];
-    items: T[];
-    children?: React.ReactNode;
-    filter: CatalogFilter<T>;
-}
-const Body = <T extends object = any>(props: CatalogBodyProps<T>): React.ReactElement => {
-    const {options, filter, items, children} = props;
-    const filterParams = useFilterParams();
-    const matchingItems = useMemo(() =>
-        items.filter(item => filter(item, filterParams)), [items, filter, filterParams]);
-    const totalItems = items.length;
-    const {subject, online, search} = filterParams;
-    return (
-        <CatalogContext.Provider
-            value={{
-                options, subject, online, search, items: matchingItems, totalItems
-            }}>
-            <div className="catalog">
-                {children}
-            </div>
-        </CatalogContext.Provider>
-    );
+  options?: OptionShape<number>[];
+  items: T[];
+  children?: React.ReactNode;
+  filter: CatalogFilter<T>;
+};
+const Body = <T extends object = any>(
+  props: CatalogBodyProps<T>,
+): React.ReactElement => {
+  const {options, filter, items, children} = props;
+  const filterParams = useFilterParams();
+  const matchingItems = useMemo(
+    () => items.filter((item) => filter(item, filterParams)),
+    [items, filter, filterParams],
+  );
+  const totalItems = items.length;
+  const {subject, online, search} = filterParams;
+
+  return (
+    <CatalogContext.Provider
+      value={{
+        options,
+        subject,
+        online,
+        search,
+        items: matchingItems,
+        totalItems,
+      }}
+    >
+      <div className="catalog">{children}</div>
+    </CatalogContext.Provider>
+  );
 };
 
 export default {
-    Filter,
-    Catalog,
-    Body,
-    // Page: CatalogPage
+  Filter,
+  Catalog,
+  Body,
+  // Page: CatalogPage
 };

@@ -5,23 +5,64 @@
   "globals": {
     "VK": true
   },
-  "extends": ["plugin:react/recommended","plugin:@typescript-eslint/recommended"],
+  "extends": ["plugin:react/recommended","plugin:@typescript-eslint/recommended", "prettier", ".eslintrc.safe-autofix.json"],
   "plugins": [
-    "react-hooks"
+    "react-hooks",
+    "import",
+    "fp",
+    "typescript-sort-keys",
+    "@typescript-eslint"
   ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",
     "@typescript-eslint/camelcase": "off",
     "react/no-unescaped-entities": "warn",
-    "react/no-find-dom-node": "off"
+    "react/no-find-dom-node": "off",
+    "curly": "error",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["*.ts", "*.tsx"]
+      }
+    ],
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": "let",
+        "next": "return"
+      },
+      {
+        "blankLine": "always",
+        "prev": "const",
+        "next": "return"
+      },
+      {
+        "blankLine": "always",
+        "prev": "let",
+        "next": "if"
+      },
+      {
+        "blankLine": "always",
+        "prev": "const",
+        "next": "if"
+      },
+      {
+        "blankLine": "always",
+        "prev": "export",
+        "next": "export"
+      }
+    ],
+    "require-yield": "warn",
+    "no-console": "warn",
+    "import/first": "error",
+    "import/no-extraneous-dependencies": "error",
+    "@typescript-eslint/no-use-before-define": ["error", {
+      "functions": false
+    }],
+    "@typescript-eslint/unbound-method": "error",
+    "@typescript-eslint/explicit-function-return-type": "off"
   }
 }

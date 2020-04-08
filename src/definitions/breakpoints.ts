@@ -3,5 +3,5 @@ export enum BREAKPOINTS {
   S = 576,
   M = 768,
   L = 992,
-  XL = 1200
+  XL = 1200,
 }

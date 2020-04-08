@@ -1,5 +1,5 @@
-import {CSSTransition} from "react-transition-group";
 import ReactDOM from 'react-dom';
+import {CSSTransition} from 'react-transition-group';
 
 //hack to get context because lib doesn't export it properly and import doesn't work
 // const TransitionGroupContext = Transition.contextType;
@@ -107,19 +107,23 @@ import ReactDOM from 'react-dom';
 // };
 
 class StableCSSTransition extends CSSTransition {
-    type: any = null;
-    phase: any = null;
+  type: any = null;
+  phase: any = null;
 
-    addClass(node: any, type: any, phase: any) {
-        super.addClass(node, type, phase);
-        this.type = type;
-        this.phase = phase;
-    }
+  addClass(node: any, type: any, phase: any) {
+    super.addClass(node, type, phase);
+    this.type = type;
+    this.phase = phase;
+  }
 
-    componentDidUpdate() {
-        if (this.appliedClasses[this.type] && this.appliedClasses[this.type][this.phase])
-            super.addClass(ReactDOM.findDOMNode(this), this.type, this.phase);
+  componentDidUpdate() {
+    if (
+      this.appliedClasses[this.type] &&
+      this.appliedClasses[this.type][this.phase]
+    ) {
+      super.addClass(ReactDOM.findDOMNode(this), this.type, this.phase);
     }
+  }
 }
 
 export default StableCSSTransition;

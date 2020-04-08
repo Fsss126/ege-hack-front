@@ -1,11 +1,14 @@
-import React, {forwardRef} from "react";
 import classnames from 'classnames';
-import ScrollBars, {ScrollBarsProps} from "../ui/ScrollBars";
-import Scrollbars from "react-custom-scrollbars";
+import React, {forwardRef} from 'react';
+import Scrollbars from 'react-custom-scrollbars';
+
+import ScrollBars, {ScrollBarsProps} from '../ui/ScrollBars';
 
 export type ButtonContainerProps = ScrollBarsProps;
-const ButtonContainer = forwardRef<Scrollbars, ButtonContainerProps>((props, ref) => {
+const ButtonContainer = forwardRef<Scrollbars, ButtonContainerProps>(
+  (props, ref) => {
     const {children, className, ...scrollbarProps} = props;
+
     // const location = useLocation();
     // const scrollBarsRef = useRef(null);
     // const shadowRightRef = useRef(null);
@@ -20,29 +23,31 @@ const ButtonContainer = forwardRef<Scrollbars, ButtonContainerProps>((props, ref
     //     else shadowRight.style.opacity = 1;
     // }, []);
     return (
-        <div className={classnames('btn-container', className)}>
-            {/*<div className="shadow">*/}
-            {/*    <div className="left"/>*/}
-            {/*    <div className="right" ref={shadowRightRef}/>*/}
-            {/*</div>*/}
-            <ScrollBars
-                ref={ref}
-                // onScroll={onScroll}
-                autoHeight
-                autoHeightMax="unset"
-                hideVerticalScrollbar
-                hideHorizontalScrollbar
-                hideTracksWhenNotNeeded
-                style={{height: '100%'}}
-                className="scrollbars"
-                {...scrollbarProps}>
-                <div className="scroll-btn-container__inner-container">
-                    {children}
-                </div>
-            </ScrollBars>
-        </div>
+      <div className={classnames('btn-container', className)}>
+        {/*<div className="shadow">*/}
+        {/*    <div className="left"/>*/}
+        {/*    <div className="right" ref={shadowRightRef}/>*/}
+        {/*</div>*/}
+        <ScrollBars
+          ref={ref}
+          // onScroll={onScroll}
+          autoHeight
+          autoHeightMax="unset"
+          hideVerticalScrollbar
+          hideHorizontalScrollbar
+          hideTracksWhenNotNeeded
+          style={{height: '100%'}}
+          className="scrollbars"
+          {...scrollbarProps}
+        >
+          <div className="scroll-btn-container__inner-container">
+            {children}
+          </div>
+        </ScrollBars>
+      </div>
     );
-});
+  },
+);
 ButtonContainer.displayName = 'ButtonContainer';
 
 export default ButtonContainer;

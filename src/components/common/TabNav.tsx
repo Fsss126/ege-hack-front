@@ -1,11 +1,15 @@
-import React from "react";
 import classnames from 'classnames';
-import {NavLink, NavLinkProps} from "../ui/Link";
-import ButtonContainer, {ButtonContainerProps} from "./ButtonContainer";
+import React from 'react';
+
+import {NavLink, NavLinkProps} from '../ui/Link';
+import ButtonContainer, {ButtonContainerProps} from './ButtonContainer';
 
 export const TabNavLink: React.FC<NavLinkProps> = (props) => {
-    const {className, ...rest} = props;
-    return <NavLink className={classnames('tab-nav__nav-link', className)} {...rest}/>
+  const {className, ...rest} = props;
+
+  return (
+    <NavLink className={classnames('tab-nav__nav-link', className)} {...rest} />
+  );
 };
 
 // window.scroll({
@@ -16,10 +20,11 @@ export const TabNavLink: React.FC<NavLinkProps> = (props) => {
 
 //TODO: scroll to active element
 const TabNav: React.FC<ButtonContainerProps> = (props) => {
-    const {className, ...rest} = props;
-    return (
-        <ButtonContainer className={classnames('tab-nav', className)} {...rest}/>
-    );
+  const {className, ...rest} = props;
+
+  return (
+    <ButtonContainer className={classnames('tab-nav', className)} {...rest} />
+  );
 };
 
 export default TabNav;

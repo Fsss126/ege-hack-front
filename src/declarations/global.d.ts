@@ -1,6 +1,5 @@
-import {AxiosInstance} from "axios";
+import { AxiosInstance } from "axios";
 import {Includes, InsertAfterEach} from "definitions/mixins";
-import React, {Component} from "react";
 
 declare global {
     declare interface Window {
