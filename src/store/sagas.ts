@@ -27,7 +27,7 @@ import {
     TestStateFetchedAction,
     TestStartRequestAction,
     UpcomingWebinarsFetchAction,
-    WebinarDeleteRequestAction
+    WebinarDeleteRequestAction, ParticipantDeleteRequestAction
 } from "./actions";
 import Auth from 'definitions/auth';
 import {
@@ -273,6 +273,22 @@ function* processLessonDelete() {
     });
 }
 
+function* processParticipantDelete() {
+    yield takeEvery(ActionType.PARTICIPANTS_DELETE_REQUEST, function* (action: ParticipantDeleteRequestAction) {
+        const {courseId, userId, onDelete, onError} = action;
+        try {
+            yield call(APIRequest.delete, `courses/${courseId}/participants/${userId}`);
+            if (onDelete)
+                yield call(onDelete, courseId, userId);
+            yield put({ type: ActionType.PARTICIPANTS_DELETE, courseId, userId});
+        }
+        catch (error) {
+            if (onError)
+                yield call(onError, courseId, userId, error);
+        }
+    });
+}
+
 function* processCourseDelete() {
     yield takeEvery(ActionType.COURSE_DELETE_REQUEST, function* (action: CourseDeleteRequestAction) {
         const {courseId, onDelete, onError} = action;
@@ -401,6 +417,7 @@ export default function* rootSaga() {
 
     yield spawn(processCourseDelete);
     yield spawn(processLessonDelete);
+    yield spawn(processParticipantDelete);
     yield spawn(processWebinarDelete);
 
     yield spawn(processTestStart);

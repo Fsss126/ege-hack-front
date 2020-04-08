@@ -217,6 +217,19 @@ export const dataReducer: Reducer<DataState, Action> = (state = defaultState, ac
                 userCourses: undefined
             };
         }
+        case ActionType.PARTICIPANTS_DELETE: {
+            const {courseId, userId} = action;
+            const {participants: {[courseId]: courseParticipants, ...loadedParticipants}} = state;
+            if (courseParticipants instanceof Error)
+                return state;
+            return {
+                ...state,
+                participants: {
+                    ...loadedParticipants,
+                    [courseId]: courseParticipants.filter(({id}) => id !== userId)
+                }
+            };
+        }
         case ActionType.HOMEWORKS_REVOKE: {
             const {lessonId, responseHomework} = action;
             const {pupil: {id: studentId}, mark, comment} = responseHomework;

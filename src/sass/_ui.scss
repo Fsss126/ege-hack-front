@@ -816,6 +816,10 @@ input[type=number] {
   white-space: pre-wrap;
 }
 
+.icon-grey {
+  color: $icon-grey;
+}
+
 .progress-indicator {
   cursor: default;
   user-select: none;

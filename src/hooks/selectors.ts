@@ -568,6 +568,14 @@ export function useDeleteLesson(redirectUrl?: string, onDelete?: LessonDeleteCal
     }, [dispatch, deleteCallback, onError]);
 }
 
+export function useDeleteParticipant(onDelete?: LessonDeleteCallback, onError?: LessonDeleteErrorCallback) {
+    const dispatch = useDispatch();
+
+    return useCallback((courseId, userId) => {
+        dispatch({type: ActionType.PARTICIPANTS_DELETE_REQUEST, courseId, userId, onDelete, onError});
+    }, [dispatch, onDelete, onError]);
+}
+
 export type DeleteWebinarHookResult = (courseId: number, webinarId: number, webinarsSchedule: WebinarScheduleInfo) => void;
 
 export function useDeleteWebinar(redirectUrl?: string, onDelete?: WebinarDeleteCallback, onError?: WebinarDeleteErrorCallback): DeleteWebinarHookResult {

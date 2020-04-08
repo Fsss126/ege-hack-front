@@ -40,6 +40,8 @@ export enum ActionType {
     UPCOMING_WEBINARS_FETCHED = 'UPCOMING_WEBINARS_FETCHED',
     PARTICIPANTS_FETCH = 'PARTICIPANTS_FETCH',
     PARTICIPANTS_FETCHED = 'PARTICIPANTS_FETCHED',
+    PARTICIPANTS_DELETE_REQUEST = 'PARTICIPANTS_DELETE_REQUEST',
+    PARTICIPANTS_DELETE = 'PARTICIPANTS_DELETE',
     PARTICIPANTS_REVOKE = 'PARTICIPANTS_REVOKE',
     ADMIN_COURSES_FETCH = 'ADMIN_COURSES_FETCH',
     ADMIN_COURSES_FETCHED = 'ADMIN_COURSES_FETCHED',
@@ -74,32 +76,48 @@ export type LoginRequestAction = { type: ActionType.LOG_IN_REQUEST };
 export type LoginSuccessAction = { type: ActionType.LOG_IN_SUCCESS; credentials: Credentials | null};
 export type LoginErrorAction = { type: ActionType.LOG_IN_ERROR; error: AxiosError };
 export type LogoutAction = { type: ActionType.LOG_OUT };
+
 export type UserInfoFetchAction = { type: ActionType.USER_INFO_FETCH };
 export type UserInfoFetchedAction = { type: ActionType.USER_INFO_FETCHED; userInfo: UserInfo | AxiosError };
+
 export type ShopCoursesFetchAction = { type: ActionType.SHOP_COURSES_FETCH };
-export type AdminCoursesFetchAction = { type: ActionType.ADMIN_COURSES_FETCH };
-export type TeacherCoursesFetchAction = { type: ActionType.TEACHER_COURSES_FETCH };
 export type ShopCoursesFetchedAction = { type: ActionType.SHOP_COURSES_FETCHED; courses: CourseInfo[] | AxiosError };
+
+export type AdminCoursesFetchAction = { type: ActionType.ADMIN_COURSES_FETCH };
 export type AdminCoursesFetchedAction = { type: ActionType.ADMIN_COURSES_FETCHED; courses: CourseInfo[] | AxiosError };
+
+export type TeacherCoursesFetchAction = { type: ActionType.TEACHER_COURSES_FETCH };
 export type TeacherCoursesFetchedAction = { type: ActionType.TEACHER_COURSES_FETCHED; courses: CourseInfo[] | AxiosError };
+
 export type UserCoursesFetchAction = { type: ActionType.USER_COURSES_FETCH };
 export type UserCoursesFetchedAction = { type: ActionType.USER_COURSES_FETCHED; courses: UserCourseInfo[] | AxiosError };
+
 export type SubjectsFetchAction = { type: ActionType.SUBJECTS_FETCH };
 export type SubjectsFetchedAction = { type: ActionType.SUBJECTS_FETCHED; subjects: SubjectInfo[] | AxiosError };
+
 export type TeachersFetchAction = { type: ActionType.TEACHERS_FETCH };
 export type TeachersFetchedAction = { type: ActionType.TEACHERS_FETCHED; teachers: TeacherInfo[] | AxiosError };
+
 export type LessonsFetchAction = { type: ActionType.LESSONS_FETCH; courseId: number };
 export type LessonsFetchedAction = { type: ActionType.LESSONS_FETCHED; courseId: number; lessons: LessonInfo[] | AxiosError };
+
 export type CourseWebinarsFetchAction = { type: ActionType.COURSE_WEBINARS_FETCH; courseId: number };
 export type CourseWebinarsFetchedAction = { type: ActionType.COURSE_WEBINARS_FETCHED; courseId: number; webinars: WebinarInfo[] | AxiosError };
+
 export type UpcomingWebinarsFetchAction = { type: ActionType.UPCOMING_WEBINARS_FETCH };
 export type UpcomingWebinarsFetchedAction = { type: ActionType.UPCOMING_WEBINARS_FETCHED; webinars: WebinarInfo[] | AxiosError };
+
 export type ParticipantsFetchAction = { type: ActionType.PARTICIPANTS_FETCH; courseId: number };
 export type ParticipantsFetchedAction = { type: ActionType.PARTICIPANTS_FETCHED; courseId: number; participants: CourseParticipantInfo[] | AxiosError };
+
 export type AdminWebinarsFetchAction = { type: ActionType.ADMIN_WEBINARS_FETCH; courseId: number };
 export type AdminWebinarsFetchedAction = { type: ActionType.ADMIN_WEBINARS_FETCHED; courseId: number; webinars: WebinarScheduleInfo | AxiosError };
+
 export type HomeworksFetchAction = { type: ActionType.HOMEWORKS_FETCH; lessonId: number };
 export type HomeworksFetchedAction = { type: ActionType.HOMEWORKS_FETCHED; lessonId: number; homeworks: HomeworkInfo[] | AxiosError };
+
+export type HomeworksRevokeAction = { type: ActionType.HOMEWORKS_REVOKE; lessonId: number; responseHomework: HomeworkInfo};
+
 export type LessonRevokeAction = { type: ActionType.LESSONS_REVOKE; courseId: number; responseLesson: LessonInfo};
 export type LessonDeleteCallback = (courseId: number, lessonId: number) => void;
 export type LessonDeleteErrorCallback = (courseId: number, lessonId: number, error: AxiosError) => void;
@@ -111,8 +129,19 @@ export type LessonDeleteRequestAction = {
     onError?: LessonDeleteErrorCallback;
 };
 export type LessonDeleteAction = { type: ActionType.LESSON_DELETE; courseId: number; lessonId: number }
+
 export type ParticipantsRevokeAction = { type: ActionType.PARTICIPANTS_REVOKE; courseId: number; responseParticipants: CourseParticipantInfo[]};
-export type HomeworksRevokeAction = { type: ActionType.HOMEWORKS_REVOKE; lessonId: number; responseHomework: HomeworkInfo};
+export type ParticipantDeleteCallback = (courseId: number, userId: number) => void;
+export type ParticipantDeleteErrorCallback = (courseId: number, userId: number, error: AxiosError) => void;
+export type ParticipantDeleteRequestAction = {
+    type: ActionType.PARTICIPANTS_DELETE_REQUEST;
+    courseId: number;
+    userId: number;
+    onDelete?: ParticipantDeleteCallback;
+    onError?: ParticipantDeleteErrorCallback;
+};
+export type ParticipantDeleteAction = { type: ActionType.PARTICIPANTS_DELETE; courseId: number; userId: number }
+
 export type CoursesRevokeAction = { type: ActionType.COURSES_REVOKE; responseCourse: CourseInfo};
 export type CourseDeleteCallback = (courseId: number) => void;
 export type CourseDeleteErrorCallback = (courseId: number, error: AxiosError) => void;
@@ -123,6 +152,7 @@ export type CourseDeleteRequestAction = {
     onError?: CourseDeleteErrorCallback;
 };
 export type CourseDeleteAction = { type: ActionType.COURSE_DELETE; courseId: number };
+
 export type WebinarsRevokeAction = { type: ActionType.WEBINARS_REVOKE; courseId: number; responseWebinars: WebinarScheduleInfo};
 export type WebinarDeleteCallback = (courseId: number, webinarId: number) => void;
 export type WebinarDeleteErrorCallback = (courseId: number, webinarId: number, error: AxiosError) => void;
@@ -134,6 +164,7 @@ export type WebinarDeleteRequestAction = {
     onError?: WebinarDeleteErrorCallback;
 };
 export type WebinarDeleteAction = { type: ActionType.WEBINAR_DELETE; courseId: number; webinarId: number; responseWebinars: WebinarScheduleInfo };
+
 export type TestStartCallback = (testId: number, testInfo: TestStateInfo) => void;
 export type TestStartErrorCallback = (testId: number, error: AxiosError) => void;
 export type TestStartRequestAction = {
@@ -205,6 +236,8 @@ export type Action = { type: ActionType } & (
     | LessonDeleteRequestAction
     | LessonDeleteAction
     | ParticipantsRevokeAction
+    | ParticipantDeleteRequestAction
+    | ParticipantDeleteAction
     | HomeworksRevokeAction
     | CoursesRevokeAction
     | CourseDeleteRequestAction

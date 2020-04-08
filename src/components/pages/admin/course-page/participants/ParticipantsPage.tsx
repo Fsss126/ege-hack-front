@@ -11,6 +11,8 @@ import {renderDate} from "definitions/helpers";
 import {Permission} from "types/enums";
 import {CourseInfo, CourseParticipantInfo} from "types/entities";
 import {RouteComponentProps} from "react-router";
+import DropdownMenu, {DropdownIconButton, DropdownMenuOption} from "components/common/DropdownMenu";
+import {useDeleteParticipant} from "hooks/selectors";
 
 const filterBy = {
     search: true,
@@ -38,6 +40,8 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
 
     const canEdit = useCheckPermissions(Permission.PARTICIPANT_MANAGEMENT);
 
+    const onDelete = useDeleteParticipant();
+
     const renderStudent: CatalogItemRenderer<CourseParticipantInfo> = useCallback((user, {link, ...renderProps}) => {
         const {
             id,
@@ -49,6 +53,29 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
             contacts: {vk},
             join_date_time
         } = user;
+        const deleteCallback = (): void => { onDelete(courseId, id); };
+        const tooltip = (
+            <Tooltip
+                content={`Присоединился ${renderDate(join_date_time, renderDate.dateWithYear)}`}
+                position={TooltipPosition.left}>
+                <i className="icon-info icon-grey d-block"/>
+            </Tooltip>
+        );
+        const action = canEdit ? (
+            <div className="row align-items-center">
+                <div className="col-auto">
+                    {tooltip}
+                </div>
+                <div className="col-auto">
+                    <DropdownMenu
+                        content={<DropdownIconButton className="icon-ellipsis"/>}>
+                        <DropdownMenuOption onClick={deleteCallback}>
+                            <i className="icon-close"/>Удалить
+                        </DropdownMenuOption>
+                    </DropdownMenu>
+                </div>
+            </div>
+        ) : tooltip;
         return (
             <ListItem
                 key={id}
@@ -62,15 +89,11 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
                 )}
                 link={vk}
                 action={
-                    <Tooltip
-                        content={`Присоединился ${renderDate(join_date_time, renderDate.dateWithYear)}`}
-                        position={TooltipPosition.left}>
-                        <i className="icon-info"/>
-                    </Tooltip>
+                    action
                 }
                 {...renderProps}/>
         );
-    }, []);
+    }, [canEdit, courseId]);
     const title = course && `Ученики курса ${course.name}`;
     return (
         <Page
