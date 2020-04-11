@@ -68,7 +68,7 @@ export function useUpdateEffect(
     if (!isInitialMount.current) {
       effect();
     }
-  }, [effect]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     isInitialMount.current = false;
