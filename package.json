@@ -61,7 +61,8 @@
     "start": "react-scripts start",
     "start-custom-port-win": "set PORT=80 && react-scripts start",
     "start-custom-post-mac": "sudo PORT=80 npm run start",
-    "build-prod": "react-scripts build",
+    "build:prod": "react-scripts build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build",
@@ -82,6 +83,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.6.1",
     "@typescript-eslint/parser": "2.6.1",
+    "env-cmd": "^10.1.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-formatter-friendly": "^7.0.0",
     "eslint-plugin-fp": "^2.3.0",
