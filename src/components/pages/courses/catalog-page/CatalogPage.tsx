@@ -10,18 +10,20 @@ import {
 } from 'hooks/selectors';
 import React from 'react';
 import {LearningStatus} from 'types/enums';
+import {RouteComponentPropsWithPath} from 'types/routes';
 
-const CatalogPage = ({location}) => {
-  const {courses, error, retry} = useUserCourses();
+const CatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
+  const {location} = props;
+  const {courses, error, reload} = useUserCourses();
   const {
     subjects,
     error: errorLoadingSubjects,
-    retry: reloadSubjects,
+    reload: reloadSubjects,
   } = useSubjects();
   const {
     webinars,
     error: errorLoadingWebinars,
-    retry: reloadWebinars,
+    reload: reloadWebinars,
   } = useUpcomingWebinars();
   const renderCourse = React.useCallback(
     (course, renderProps) => (
@@ -53,7 +55,7 @@ const CatalogPage = ({location}) => {
       location={location}
       title="Мои курсы"
     >
-      {isLoaded && (
+      {!!(courses && subjects && webinars) && (
         <CourseCatalog.Body courses={courses} subjects={subjects}>
           <PageContent>
             <CourseCatalog.Filter />

@@ -3,6 +3,7 @@ import React from 'react';
 export interface ProgressIndicatorProps {
   progress: number;
 }
+
 const ProgressIcon: React.FC<ProgressIndicatorProps> = (props) => {
   const {progress} = props;
 
@@ -36,11 +37,13 @@ const ProgressIcon: React.FC<ProgressIndicatorProps> = (props) => {
 };
 
 export const ProgressIndicator: React.FC<ProgressIndicatorProps> = (props) => {
-  const {progress} = props;
+  const {progress, children} = props;
 
   return (
     <div className="progress-indicator d-flex align-items-center">
-      <div className="description-text">Пройдено {progress}%</div>
+      <div className="description-text">
+        {children ? children : `Пройдено ${progress}%`}
+      </div>
       <ProgressIcon progress={progress} />
     </div>
   );

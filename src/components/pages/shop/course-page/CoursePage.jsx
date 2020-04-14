@@ -86,7 +86,7 @@ const CoursePage = ({
       </CourseOverview.Body>
     );
   } else if (error) {
-    return <NotFoundErrorPage message="Курс не найден" link={{url: root}} />;
+    return <NotFoundErrorPage message="Курс не найден" url={root} />;
   } else {
     return <Page isLoaded={false} location={location} />;
   }

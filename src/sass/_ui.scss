@@ -3,6 +3,7 @@
 @import "~bootstrap/scss/spinners";
 @import "~bootstrap/scss/utilities";
 @import "~bootstrap/scss/forms";
+@import "~react-day-picker/lib/style";
 @import "fonts";
 @import "variables";
 @import "animations";
@@ -101,6 +102,10 @@ label {
     text-align: center;
     white-space: nowrap;
     padding: 4px 16px;
+
+    &:before {
+      content: attr(data-content);
+    }
   }
   .btn__before, .btn__after {
     display: flex;

@@ -129,10 +129,14 @@ export type CorrectAnswerInfo = CorrectAnswerDto;
 
 export type TaskInfo = TaskDtoResp;
 
-export type SanitizedTaskInfo = Pick<
-  TaskDtoResp,
-  'answer' | 'themeId' | 'subjectId'
->;
+export interface SanitizedTaskAnswer {
+  type: AnswerType;
+}
+
+export interface SanitizedTaskInfo
+  extends Omit<TaskDtoResp, 'answer' | 'themeId' | 'subjectId'> {
+  answer: SanitizedTaskAnswer;
+}
 
 export type ThemeInfo = ThemeDtoResp;
 
@@ -147,7 +151,7 @@ export interface SanitizedTestInfo extends Omit<TestInfo, 'tasks'> {
 export type UserAnswerInfo = {type: AnswerType} & (
   | {type: AnswerType.TEXT; value: string}
   | {type: AnswerType.NUMBER; value: number}
-  | {type: AnswerType.FILE; fileInfo: FileInfo}
+  | {type: AnswerType.FILE; value: FileInfo}
 );
 
 export type TestStateInfo = {

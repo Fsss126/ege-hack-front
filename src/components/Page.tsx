@@ -54,7 +54,7 @@ PageLink.defaultProps = {
 };
 
 export type PageParentSection = {
-  url: string;
+  url?: string;
   name: string;
 };
 

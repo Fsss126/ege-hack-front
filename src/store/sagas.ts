@@ -21,13 +21,13 @@ import {
   CourseParticipantInfo,
   HomeworkInfo,
   LessonInfo,
+  PersonWebinar,
   SubjectInfo,
   TeacherInfo,
   TestInfo,
   TestStateInfo,
   UserCourseInfo,
   UserInfo,
-  WebinarInfo,
   WebinarScheduleInfo,
 } from '../types/entities';
 import {
@@ -174,7 +174,7 @@ function* fetchCourseWebinars() {
       yield takeLeading(channel, function* (action: CourseWebinarsFetchAction) {
         const {courseId} = action;
         try {
-          const webinars: WebinarInfo[] = yield call(
+          const webinars: PersonWebinar[] = yield call(
             APIRequest.get,
             `/courses/${courseId}/schedule/person`,
           );
@@ -203,7 +203,7 @@ function* fetchUpcomingWebinars() {
         action: UpcomingWebinarsFetchAction,
       ) {
         try {
-          const webinars: WebinarInfo[] = yield call(
+          const webinars: PersonWebinar[] = yield call(
             APIRequest.get,
             '/courses/schedule/person',
           );

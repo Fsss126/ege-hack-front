@@ -1,12 +1,11 @@
 import 'moment/locale/ru';
-import 'react-day-picker/lib/style.css';
 
+import {assignRef} from 'definitions/helpers';
 import React, {forwardRef, useCallback, useEffect, useRef} from 'react';
 import {DayPickerInputProps, DayPickerProps} from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import MomentLocaleUtils from 'react-day-picker/moment';
 
-import {assignRef} from '../../../definitions/helpers';
 import {Input, InputChangeHandler} from './Input';
 
 const localeProps = {

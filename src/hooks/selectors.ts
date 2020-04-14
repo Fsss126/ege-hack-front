@@ -1,15 +1,31 @@
 import APIRequest, {getCancelToken} from 'api';
 import {AxiosError, Canceler} from 'axios';
+import {useCheckPermissions} from 'components/ConditionalRender';
 import Auth, {AuthEventTypes} from 'definitions/auth';
 import _ from 'lodash';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector as useSelectorGen} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
+import {
+  selectAdminCourses,
+  selectAdminWebinars,
+  selectHomeworks,
+  selectLessons,
+  selectParticipants,
+  selectShopCourses,
+  selectSubjects,
+  selectTeacherCourses,
+  selectTest,
+  selectTestState,
+  selectUpcomingWebinars,
+  selectUser,
+  selectUserCourses,
+  selectWebinars,
+} from 'store/selectors';
 import {Permission} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
 
-import {useCheckPermissions} from '../components/ConditionalRender';
 import {
   Action,
   ActionType,
@@ -24,28 +40,18 @@ import {
 } from '../store/actions';
 import {AppState} from '../store/reducers';
 import {
-  selectAdminCourses,
-  selectAdminWebinars,
-  selectHomeworks,
-  selectLessons,
-  selectParticipants,
-  selectShopCourses,
-  selectSubjects,
-  selectTeacherCourses,
-  selectUpcomingWebinars,
-  selectUser,
-  selectUserCourses,
-  selectWebinars,
-} from '../store/selectors';
-import {
   CourseInfo,
   CourseParticipantInfo,
   Credentials,
   DiscountInfo,
   HomeworkInfo,
   LessonInfo,
+  PersonWebinar,
+  SanitizedTaskInfo,
+  SanitizedTestInfo,
   SubjectInfo,
   TeacherInfo,
+  TestInfo,
   TestStateInfo,
   TestStatus,
   WebinarInfo,
@@ -649,7 +655,7 @@ export function useHomework(lessonId: number): HomeworkHookResult {
 }
 
 export type UpcomingWebinarsHookResult = {
-  webinars?: WebinarInfo[] | false;
+  webinars?: PersonWebinar[] | false;
   error?: AxiosError;
   reload: SimpleCallback;
 };
@@ -670,7 +676,11 @@ export function useUpcomingWebinars(): UpcomingWebinarsHookResult {
     : {webinars, reload: dispatchFetchAction};
 }
 
-export type CourseWebinarsHookResult = UpcomingWebinarsHookResult;
+export type CourseWebinarsHookResult = {
+  webinars?: PersonWebinar[] | false;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
 
 export function useCourseWebinars(courseId: number): CourseWebinarsHookResult {
   const webinars = useSelector(selectWebinars)[courseId];
@@ -867,4 +877,70 @@ export function useStartTest(
     },
     [dispatch, onTestStart, onError],
   );
+}
+
+export type TestHookResult = {
+  test?: SanitizedTestInfo;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useTest(testId: number): TestHookResult {
+  const test = useSelector(selectTest);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.TEST_FETCH, testId});
+  }, [testId, dispatch]);
+  useEffect(() => {
+    if (!test) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, test]);
+  return test instanceof Error
+    ? {error: test, reload: dispatchFetchAction}
+    : {test, reload: dispatchFetchAction};
+}
+
+export type TestTaskHookResult = {
+  task?: SanitizedTaskInfo;
+  error?: AxiosError | true;
+  reload: SimpleCallback;
+};
+
+export function useTestTask(
+  testId: number,
+  taskId: number,
+): TestTaskHookResult {
+  const {test, error, reload} = useTest(testId);
+  const task = test
+    ? _.find<SanitizedTaskInfo>(test.tasks, {id: taskId})
+    : undefined;
+
+  return {
+    task,
+    error: test && !task ? true : error,
+    reload,
+  };
+}
+
+export type TestStateHookResult = {
+  state?: TestStateInfo;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useTestState(testId: number): TestStateHookResult {
+  const state = useSelector(selectTestState);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.TEST_STATE_FETCH, testId});
+  }, [testId, dispatch]);
+  useEffect(() => {
+    if (!state) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, state]);
+  return state instanceof Error
+    ? {error: state, reload: dispatchFetchAction}
+    : {state, reload: dispatchFetchAction};
 }

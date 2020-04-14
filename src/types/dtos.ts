@@ -279,7 +279,7 @@ export interface UserAnswerDtoResp extends UserAnswerDtoCommon {
 export interface UserAnswerDto {
   type: AnswerType;
   value?: string | number;
-  fileInfo?: FileInfo;
+  file_info?: FileInfo;
 }
 
 export interface TestStateAnswerDto {

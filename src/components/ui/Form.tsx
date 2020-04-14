@@ -27,6 +27,10 @@ export type FormSubmitHandler<
   R extends Promise<any> | void = void
 > = (...args: A) => R;
 
+export type FormSubmittedHandler<R> = (response: R) => void;
+
+export type FormErrorHandler<E> = (response: E, retry: SimpleCallback) => void;
+
 export type FormStateHookResult<
   A extends Array<any>,
   R,
@@ -40,8 +44,8 @@ export type FormStateHookResult<
 
 export function useFormState<A extends Array<any>, R, E extends Error = Error>(
   callback: FormSubmitHandler<A, Promise<R> | void>,
-  onSubmitted?: (result: R) => void,
-  onError?: (error: E, retry: SimpleCallback) => void,
+  onSubmitted?: FormSubmittedHandler<R>,
+  onError?: FormErrorHandler<E>,
 ): FormStateHookResult<A, R, E> {
   const [hasChanged, setChanged] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean | null>(null);
@@ -54,7 +58,7 @@ export function useFormState<A extends Array<any>, R, E extends Error = Error>(
     (...params: A) => {
       const returnValue = callback(...params);
 
-      if (returnValue) {
+      if (returnValue instanceof Promise) {
         (async (params: A, returnValue: Promise<R>) => {
           setSubmitting(true);
           try {
@@ -168,7 +172,6 @@ export function useForm<D extends FormData>(
 
   React.useEffect(() => {
     if (checkValidity) {
-      console.log(checkValidity(formData));
       setValidity(checkValidity(formData));
     } else {
       setValidity(false);
@@ -183,99 +186,6 @@ export function useForm<D extends FormData>(
   };
 }
 
-export type FieldsContainer = {
-  children: React.ReactNode;
-  className?: string;
-};
-
-export const FieldsContainer: React.FC<FieldsContainer> = (props) => {
-  const {children, className} = props;
-
-  return (
-    <div className={classnames('form__fields', className)}>{children}</div>
-  );
-};
-
-export type FormElementProps = {
-  index: number;
-  name: string;
-  className?: string;
-  onChange: InputChangeHandler<any>;
-  deletable: boolean;
-  children: React.ReactNode;
-};
-
-export const FormElement: React.withDefaultProps<React.FC<FormElementProps>> = (
-  props,
-) => {
-  const {index, name, className, onChange, deletable, children} = props;
-  const onDelete = useCallback(() => {
-    onChange && onChange(null, `${name}[${index}]`);
-  }, [name, index, onChange]);
-
-  return (
-    <div className={classnames('form-entity', className)}>
-      {deletable && (
-        <div className="form-entity__delete-btn-container">
-          <i className="icon-close" onClick={onDelete} />
-        </div>
-      )}
-      {children}
-    </div>
-  );
-};
-FormElement.defaultProps = {
-  deletable: true,
-};
-
-export type FormElementGroupProps<E> = {
-  name: string;
-  onChange: InputChangeHandler<E>;
-  elements: E[];
-  renderElement: (element: E, i: number) => React.ReactElement;
-  maxElements?: number;
-  initialElementData: E;
-  addBtnText: string;
-};
-
-export const FormElementGroup = <E extends {}>(
-  props: FormElementGroupProps<E>,
-): React.ReactElement => {
-  const {
-    name,
-    onChange,
-    elements,
-    renderElement,
-    maxElements,
-    initialElementData,
-    addBtnText,
-  } = props;
-  const elementsCount = elements.length;
-  const onAdd = useCallback(() => {
-    onChange &&
-      onChange(_.cloneDeep(initialElementData), `${name}[${elementsCount}]`);
-  }, [name, elementsCount, initialElementData, onChange]);
-
-  return (
-    <div className="form-entities-group">
-      {elements.map((element, i) => renderElement(element, i))}
-      <div className="form-entities-group__add-btn-container">
-        <Button
-          neutral
-          active={maxElements ? elementsCount < maxElements : true}
-          icon={<i className="icon-add" />}
-          onClick={onAdd}
-        >
-          {addBtnText}
-        </Button>
-      </div>
-    </div>
-  );
-};
-FormElementGroup.defaultProps = {
-  addBtnText: 'Добавить элемент',
-};
-
 export type ShowSuccessMessageCallback = (
   message: string,
   actions: MessageAction[],
@@ -287,19 +197,82 @@ export type ShowErrorMessageCallback = (
   actions: MessageAction[],
 ) => void;
 
-export type FormSubmittedHandler<R> = (
+export type SubmittedHandler<R> = (
   response: R,
   showSuccessMessage: ShowSuccessMessageCallback,
   reset: SimpleCallback,
 ) => void;
 
-export type FormErrorHandler<E extends Error = AxiosError> = (
+export type ErrorHandler<E extends Error = AxiosError> = (
   error: E,
   showErrorMessage: ShowErrorMessageCallback,
   reloadCallback: SimpleCallback,
 ) => void;
 
 export type RevokeRelatedDataCallback<R> = (response: R) => void;
+
+export interface FormHandleSubmittedHookParams<R> {
+  onSubmitted: SubmittedHandler<R>;
+  revokeRelatedData?: RevokeRelatedDataCallback<R>;
+  reset: SimpleCallback;
+  messagePopup: MessagePopup | null;
+}
+
+export function useFormHandleSubmitted<R>(
+  params: FormHandleSubmittedHookParams<R>,
+): FormSubmittedHandler<R> {
+  const {onSubmitted, revokeRelatedData, reset, messagePopup} = params;
+
+  return useCallback(
+    (response: R) => {
+      const showSuccessMessage: ShowSuccessMessageCallback = (
+        message,
+        actions,
+        modal = true,
+      ) => {
+        if (messagePopup) {
+          messagePopup.showMessage({
+            message,
+            success: true,
+            modal,
+            actions,
+          });
+        }
+      };
+      revokeRelatedData && revokeRelatedData(response);
+      onSubmitted && onSubmitted(response, showSuccessMessage, reset);
+    },
+    [revokeRelatedData, onSubmitted, reset, messagePopup],
+  );
+}
+
+export interface FormHandleErrorHookParams<E extends Error = AxiosError> {
+  onError: ErrorHandler<E>;
+  messagePopup: MessagePopup | null;
+}
+
+export function useFormHandleError<E extends Error = AxiosError>(
+  params: FormHandleErrorHookParams<E>,
+): FormErrorHandler<E> {
+  const {messagePopup, onError} = params;
+
+  return React.useCallback(
+    (error: E, reloadCallback: SimpleCallback) => {
+      const showErrorMessage: ShowErrorMessageCallback = (message, actions) => {
+        if (messagePopup) {
+          messagePopup.showMessage({
+            message,
+            error: true,
+            modal: true,
+            actions,
+          });
+        }
+      };
+      onError && onError(error, showErrorMessage, reloadCallback);
+    },
+    [onError, messagePopup],
+  );
+}
 
 export type FormProps<R, E extends Error = AxiosError> = {
   title?: string;
@@ -311,8 +284,8 @@ export type FormProps<R, E extends Error = AxiosError> = {
   isValid: boolean;
   autocomplete?: string;
   onSubmit: FormSubmitHandler<[undefined], Promise<R>>;
-  onSubmitted: FormSubmittedHandler<R>;
-  onError: FormErrorHandler<E>;
+  onSubmitted: SubmittedHandler<R>;
+  onError: ErrorHandler<E>;
   reset: SimpleCallback;
   revokeRelatedData?: RevokeRelatedDataCallback<R>;
   blockNavigation?: boolean;
@@ -345,47 +318,19 @@ const Form = <R, E extends Error = AxiosError>(
   } = props;
 
   const messagePopupRef = useRef<MessagePopup>(null);
+  const messagePopup = messagePopupRef.current;
 
-  const handleSubmitted = React.useCallback(
-    (response: R) => {
-      const messagePopup = messagePopupRef.current;
-      const showSuccessMessage: ShowSuccessMessageCallback = (
-        message,
-        actions,
-        modal = true,
-      ) => {
-        if (messagePopup) {
-          messagePopup.showMessage({
-            message,
-            success: true,
-            modal,
-            actions,
-          });
-        }
-      };
-      revokeRelatedData && revokeRelatedData(response);
-      onSubmitted && onSubmitted(response, showSuccessMessage, reset);
-    },
-    [revokeRelatedData, onSubmitted, reset],
-  );
+  const handleSubmitted = useFormHandleSubmitted({
+    onSubmitted,
+    revokeRelatedData,
+    reset,
+    messagePopup,
+  });
 
-  const handleError = React.useCallback(
-    (error: E, reloadCallback: SimpleCallback) => {
-      const messagePopup = messagePopupRef.current;
-      const showErrorMessage: ShowErrorMessageCallback = (message, actions) => {
-        if (messagePopup) {
-          messagePopup.showMessage({
-            message,
-            error: true,
-            modal: true,
-            actions,
-          });
-        }
-      };
-      onError && onError(error, showErrorMessage, reloadCallback);
-    },
-    [onError],
-  );
+  const handleError = useFormHandleError({
+    onError,
+    messagePopup,
+  });
 
   const {submitting, handleSubmit, hasChanged, onChange} = useFormState<
     [undefined],

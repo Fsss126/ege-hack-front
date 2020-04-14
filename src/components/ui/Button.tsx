@@ -15,6 +15,7 @@ export type ButtonProps<
   onClick?: SimpleCallback;
   tag: T;
   className?: string;
+  dataAttribute?: boolean;
 } & React.ComponentProps<T>;
 
 const Button = <T extends React.ElementType>(
@@ -35,6 +36,7 @@ const Button = <T extends React.ElementType>(
     iconAction,
     tag: Tag,
     onClick,
+    dataAttribute,
     ...rest
   } = props;
   const joinedClassname = classnames(
@@ -58,8 +60,12 @@ const Button = <T extends React.ElementType>(
             {icon}
           </div>
         )}
-        <span className="btn__name" onClick={active ? onClick : undefined}>
-          {children}
+        <span
+          className="btn__name"
+          onClick={active ? onClick : undefined}
+          data-content={dataAttribute ? children : undefined}
+        >
+          {!dataAttribute && children}
         </span>
       </span>
       <CSSTransition

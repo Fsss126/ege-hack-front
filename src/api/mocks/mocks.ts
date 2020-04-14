@@ -229,6 +229,7 @@ export const TEST: TestDtoResp = {
   tasks: [
     {
       id: 0,
+      image_link: '/files/3464f188-47fd-11ea-a7f3-c7dbce9db8e5',
       text: 'Год твоего рождения?',
       subjectId: 0,
       themeId: 0,
@@ -240,6 +241,7 @@ export const TEST: TestDtoResp = {
     },
     {
       id: 1,
+      image_link: '/files/e1339082-1455-11ea-9d4a-2b3e25df3362',
       text: 'Какой твой любимый цвет?',
       subjectId: 0,
       themeId: 0,
@@ -255,7 +257,7 @@ export const TEST: TestDtoResp = {
       themeId: 0,
       order: 1,
       answer: {
-        type: AnswerType.TEXT,
+        type: AnswerType.FILE,
       },
     },
   ],

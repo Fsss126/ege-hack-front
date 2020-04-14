@@ -1,12 +1,12 @@
 import Form, {
-  FieldsContainer,
-  FormErrorHandler,
+  ErrorHandler,
   FormProps,
   FormSubmitHandler,
-  FormSubmittedHandler,
+  SubmittedHandler,
   useForm,
   useFormValidityChecker,
 } from 'components/ui/Form';
+import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {FileInput} from 'components/ui/input';
 import {useRevokeLessons} from 'hooks/selectors';
@@ -90,7 +90,7 @@ export type LessonFormProps = {
   courseId: number;
   title?: string;
   createRequest: (data: LessonDtoReq) => Promise<LessonInfo>;
-  onSubmitted: FormSubmittedHandler<LessonInfo>;
+  onSubmitted: SubmittedHandler<LessonInfo>;
   errorMessage: string;
   cancelLink: FormComponentProps['cancelLink'];
   lesson?: LessonInfo;
@@ -203,18 +203,18 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
     hometask_deadline,
   } = formData;
 
-  const initialImageFile = useMemo(() => formData.image, [formData.image]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialImageFile = useMemo(() => formData.image, []);
 
   const revokeLessons = useRevokeLessons(courseId);
 
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<LessonInfo>>
   >(() => {
-    console.log('submit', formData);
     return createRequest(getRequestData(formData, courseId));
   }, [formData, courseId, createRequest]);
 
-  const onError = useCallback<FormErrorHandler>(
+  const onError = useCallback<ErrorHandler>(
     (error, showErrorMessage, reloadCallback) => {
       showErrorMessage(errorMessage, [
         {

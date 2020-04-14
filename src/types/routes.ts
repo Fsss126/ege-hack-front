@@ -5,3 +5,19 @@ export interface RouteComponentPropsWithPath<
 > extends RouteComponentProps<Params> {
   path: string;
 }
+
+export interface CoursePageParams {
+  courseId: string;
+}
+
+export interface LessonPageParams extends CoursePageParams {
+  lessonId: string;
+}
+
+export interface TestPageParams extends LessonPageParams {
+  testId: string;
+}
+
+export interface TestTaskPageParams extends TestPageParams {
+  taskId: string;
+}

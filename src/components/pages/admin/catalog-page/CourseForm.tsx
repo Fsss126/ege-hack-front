@@ -1,19 +1,20 @@
+/* eslint-disable  no-restricted-globals */
 import Form, {
-  FieldsContainer,
-  FormErrorHandler,
+  ErrorHandler,
   FormProps,
   FormSubmitHandler,
-  FormSubmittedHandler,
+  SubmittedHandler,
   useForm,
   useFormValidityChecker,
 } from 'components/ui/Form';
+import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {OptionShape} from 'components/ui/input/Select';
 import {useRevokeCourses} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import {CourseDtoReq, FileInfo} from 'types/dtos';
-import {CourseInfo, LessonInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 
 type CourseFormData = {
   name: string;
@@ -79,7 +80,7 @@ export type CourseFormProps = {
   teachers: TeacherInfo[];
   title?: string;
   createRequest: (data: CourseDtoReq) => Promise<CourseInfo>;
-  onSubmitted: FormSubmittedHandler<CourseInfo>;
+  onSubmitted: SubmittedHandler<CourseInfo>;
   errorMessage: string;
   cancelLink: FormComponentProps['cancelLink'];
   course?: CourseInfo;
@@ -178,7 +179,8 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
     spread_sheet_link,
   } = formData;
 
-  const initialImageFile = useMemo(() => formData.image, [formData.image]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialImageFile = useMemo(() => formData.image, []);
 
   const from = date_start,
     to = date_end;
@@ -196,7 +198,7 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
 
   const revokeShopCatalog = useRevokeCourses();
 
-  const onError = useCallback<FormErrorHandler>(
+  const onError = useCallback<ErrorHandler>(
     (error, showErrorMessage, reloadCallback) => {
       showErrorMessage(errorMessage, [
         {
@@ -209,6 +211,11 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
       ]);
     },
     [errorMessage],
+  );
+
+  const onStartDateSelect = useCallback(
+    () => dateEndInputRef.current?.getInput().focus(),
+    [],
   );
 
   return (
@@ -289,7 +296,7 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
                   disabledDays: to ? {after: to} : undefined,
                   toMonth: to,
                   modifiers,
-                  onDayClick: () => dateEndInputRef.current?.getInput().focus(),
+                  onDayClick: onStartDateSelect,
                 }}
                 name="date_start"
                 onChange={onInputChange}

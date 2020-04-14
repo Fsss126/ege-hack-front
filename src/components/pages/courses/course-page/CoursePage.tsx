@@ -1,4 +1,4 @@
-import CourseOverview from 'components/common/CourseOverview';
+import CourseOverview, {LessonRenderer} from 'components/common/CourseOverview';
 import Lesson from 'components/common/Lesson';
 import WebinarSchedule from 'components/common/WebinarSchedule';
 import Page, {PageContent} from 'components/Page';
@@ -10,17 +10,23 @@ import {
   useUserCourse,
 } from 'hooks/selectors';
 import React from 'react';
+import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
 
-const CoursePage = ({path, match, location, ...props}) => {
+const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
+  path,
+  match,
+  location,
+  history,
+}) => {
   const {
-    params: {id: param_id},
+    params: {courseId: param_id},
   } = match;
   const courseId = parseInt(param_id);
-  const {course, error, retry} = useUserCourse(courseId);
+  const {course, error, reload} = useUserCourse(courseId);
   const {
     webinars,
     error: errorLoadingWebinars,
-    retry: reloadWebinars,
+    reload: reloadWebinars,
   } = useCourseWebinars(courseId);
   const {
     teachers,
@@ -30,10 +36,10 @@ const CoursePage = ({path, match, location, ...props}) => {
   const {
     lessons,
     error: errorLoadingLessons,
-    retry: reloadLessons,
+    reload: reloadLessons,
   } = useLessons(courseId);
-  const renderLesson = (lesson, {link, ...props}) => {
-    const {date, id, locked} = lesson;
+  const renderLesson: LessonRenderer = (lesson, {link, ...props}) => {
+    const {id, locked} = lesson;
 
     return (
       <Lesson
@@ -50,13 +56,15 @@ const CoursePage = ({path, match, location, ...props}) => {
         }
         link={locked ? undefined : link}
         {...props}
-      ></Lesson>
+      />
     );
   };
 
   if (course && lessons && teachers && webinars) {
     return (
       <CourseOverview.Body
+        match={match}
+        history={history}
         path={path}
         course={course}
         lessons={lessons}
@@ -65,7 +73,7 @@ const CoursePage = ({path, match, location, ...props}) => {
       >
         <PageContent parentSection={{name: 'Мои курсы'}}>
           <CourseOverview.Title />
-          <WebinarSchedule schedule={webinars} courseId={courseId} />
+          <WebinarSchedule schedule={webinars} />
           <CourseOverview.Lessons renderLesson={renderLesson} />
         </PageContent>
       </CourseOverview.Body>

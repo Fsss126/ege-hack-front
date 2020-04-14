@@ -81,11 +81,13 @@ export function useForceUpdate(): SimpleCallback {
   return update;
 }
 
-export function useToggle(initialState: boolean): [boolean, SimpleCallback] {
+export function useToggle(
+  initialState: boolean,
+): [boolean, SimpleCallback, (isOn: boolean) => void] {
   const [isOn, toggle] = useState<boolean>(initialState);
   const toggleSideBar = React.useCallback(() => {
     toggle((opened) => !opened);
   }, []);
 
-  return [isOn, toggleSideBar];
+  return [isOn, toggleSideBar, toggle];
 }

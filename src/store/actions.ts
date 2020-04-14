@@ -4,13 +4,13 @@ import {
   CourseParticipantInfo,
   HomeworkInfo,
   LessonInfo,
+  PersonWebinar,
   SubjectInfo,
   TeacherInfo,
   TestInfo,
   TestStateInfo,
   UserCourseInfo,
   UserInfo,
-  WebinarInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 
@@ -158,7 +158,7 @@ export type CourseWebinarsFetchAction = {
 export type CourseWebinarsFetchedAction = {
   type: ActionType.COURSE_WEBINARS_FETCHED;
   courseId: number;
-  webinars: WebinarInfo[] | AxiosError;
+  webinars: PersonWebinar[] | AxiosError;
 };
 
 export type UpcomingWebinarsFetchAction = {
@@ -167,7 +167,7 @@ export type UpcomingWebinarsFetchAction = {
 
 export type UpcomingWebinarsFetchedAction = {
   type: ActionType.UPCOMING_WEBINARS_FETCHED;
-  webinars: WebinarInfo[] | AxiosError;
+  webinars: PersonWebinar[] | AxiosError;
 };
 
 export type ParticipantsFetchAction = {

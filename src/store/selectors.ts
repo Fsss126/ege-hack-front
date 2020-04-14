@@ -38,3 +38,7 @@ export const selectWebinars = (state: AppState) =>
 
 export const selectUpcomingWebinars = (state: AppState) =>
   selectWebinars(state).upcoming;
+
+export const selectTest = (state: AppState) => state.testReducer.test;
+
+export const selectTestState = (state: AppState) => state.testReducer.state;

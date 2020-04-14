@@ -4,8 +4,10 @@ import _ from 'lodash';
 
 import {
   AccountDto,
+  CorrectAnswerDto,
   CourseDtoResp,
   CourseParticipantDto,
+  FileInfo,
   HomeworkDtoResp,
   LessonDtoResp,
   PersonWebinarDto,
@@ -13,11 +15,13 @@ import {
   TestDtoResp,
   TestStateAnswerDto,
   TestStateDtoResp,
+  UserAnswerDto,
   UserInfoDtoResp,
   WebinarScheduleDtoResp,
 } from '../types/dtos';
 import {
   AccountInfo,
+  CorrectAnswerInfo,
   CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
@@ -26,13 +30,14 @@ import {
   TeacherInfo,
   TestInfo,
   TestStateInfo,
+  UserAnswerInfo,
   UserCourseInfo,
   UserInfo,
   WebinarScheduleInfo,
 } from '../types/entities';
 import {LearningStatus} from '../types/enums';
-// import {mockTestsRequests} from "./mocks";
 import {getUrl} from './helpers';
+import {mockTestsRequests} from './mocks';
 // import {mockRequests} from "./mocks";
 
 export const API_ROOT = process.env.REACT_APP_API_ROOT;
@@ -83,6 +88,19 @@ APIRequest.interceptors.request.use(function (config) {
   }
 });
 
+const getVideoLink = (videoId: string) =>
+  `https://player.vimeo.com/video/${videoId}`;
+const getImageLink = (imagePath: string) => `${API_ROOT}${imagePath}`;
+
+const transformFileInfo = (file: FileInfo): FileInfo => {
+  const {file_link} = file;
+
+  return {
+    ...file,
+    file_link: `${API_ROOT}${file_link}?disp=attachment`,
+  };
+};
+
 const transformCourse = ({
   date_start,
   date_end,
@@ -108,15 +126,9 @@ const transformLesson = ({
 }: LessonDtoResp): LessonInfo => ({
   ...lesson,
   locked,
-  image_link: `${API_ROOT}${image_link}`,
-  video_link: `https://player.vimeo.com/video/${video_link}`,
-  attachments: attachments
-    ? attachments.map(({file_name, file_link, file_id}) => ({
-        file_name,
-        file_id,
-        file_link: `${API_ROOT}${file_link}?disp=attachment`,
-      }))
-    : [],
+  image_link: getImageLink(image_link),
+  video_link: getVideoLink(video_link),
+  attachments: attachments ? attachments.map(transformFileInfo) : [],
   test: test
     ? {
         ...test,
@@ -129,13 +141,7 @@ const transformLesson = ({
         deadline: new Date(hometask.deadline),
         description: hometask.description,
         files: hometask.file_info
-          ? [
-              {
-                ...hometask.file_info,
-                // downloadName: hometask.file_info.file_name,
-                file_link: `${API_ROOT}${hometask.file_info.file_link}?disp=attachment`,
-              },
-            ]
+          ? [transformFileInfo(hometask.file_info)]
           : undefined,
       }
     : hometask,
@@ -177,21 +183,44 @@ const transformHomework = ({
 }: HomeworkDtoResp): HomeworkInfo => ({
   ...rest,
   date: date ? new Date(date) : undefined,
-  files: file_info
-    ? [
-        {
-          ...file_info,
-          file_link: `${API_ROOT}${file_info.file_link}?disp=attachment`,
-        },
-      ]
-    : undefined,
+  files: file_info ? [transformFileInfo(file_info)] : undefined,
   pupil: transformUser(pupil),
 });
 
-const transformTest = ({deadline, ...rest}: TestDtoResp): TestInfo => ({
+const transformCorrectAnswer = (
+  answer: CorrectAnswerDto,
+): CorrectAnswerInfo => {
+  const {videoSolution} = answer;
+
+  return {
+    ...answer,
+    videoSolution: videoSolution ? getVideoLink(videoSolution) : videoSolution,
+  };
+};
+
+const transformTest = ({deadline, tasks, ...rest}: TestDtoResp): TestInfo => ({
   deadline: deadline ? new Date(deadline) : undefined,
+  tasks: _.sortBy(tasks, 'order').map((task, i) => {
+    const {image_link, answer} = task;
+
+    return {
+      ...task,
+      order: i,
+      image_link: image_link ? getImageLink(image_link) : image_link,
+      answer: transformCorrectAnswer(answer),
+    };
+  }),
   ...rest,
 });
+
+const transformUserAnswer = (answer: UserAnswerDto): UserAnswerInfo => {
+  const {type, value, file_info} = answer;
+
+  return {
+    type,
+    value: file_info ? transformFileInfo(file_info) : value,
+  } as UserAnswerInfo;
+};
 
 const transformTestState = ({
   answers,
@@ -203,7 +232,14 @@ const transformTestState = ({
   answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerDto>>(
     answers,
     (result, answer) => {
-      result[answer.task_id] = answer;
+      const {user_answer, correct_answer} = answer;
+      result[answer.task_id] = {
+        ...answer,
+        user_answer: transformUserAnswer(user_answer),
+        correct_answer: correct_answer
+          ? transformCorrectAnswer(correct_answer)
+          : correct_answer,
+      };
       return result;
     },
     {},
@@ -324,7 +360,7 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
       case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname): {
         return transformTestState(data) as TestStateInfo;
       }
-      case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname): {
+      case /\/knowledge\/tests\/(.*)$/.test(url.pathname): {
         return transformTest(data) as TestInfo;
       }
       default:
@@ -358,7 +394,7 @@ const transformError = (error: AxiosError) => {
   }
 };
 
-// mockTestsRequests(APIRequest);
+mockTestsRequests(APIRequest);
 
 APIRequest.interceptors.response.use(transformData, transformError);
 

@@ -12,7 +12,7 @@ const Layout: React.FC<ILayoutProps> = (props) => {
     preloadedFiles,
     deletePreloadedFile,
     disabled,
-    filesName = 'Загруженные файлы',
+    filesName,
   } = React.useContext(FileInputContext);
   const {ref} = dropzoneProps;
 

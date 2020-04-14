@@ -1,10 +1,10 @@
 import APIRequest from 'api';
 import Page, {PageContent} from 'components/Page';
 import Form, {
-  FormErrorHandler,
+  ErrorHandler,
   FormSubmitHandler,
-  FormSubmittedHandler,
   RevokeRelatedDataCallback,
+  SubmittedHandler,
   useForm,
   useFormValidityChecker,
 } from 'components/ui/Form';
@@ -73,21 +73,22 @@ const ParticipantsEditingPage: React.FC<RouteComponentProps<{
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 
-  const onSubmitted = useCallback<
-    FormSubmittedHandler<CourseParticipantInfo[]>
-  >((response, showSuccessMessage, reset) => {
-    showSuccessMessage('Изменения сохранены', [
-      {
-        text: 'Ок',
-      },
-      {
-        text: 'Вернуться к ученикам',
-        url: returnLink,
-      },
-    ]);
-  }, []);
+  const onSubmitted = useCallback<SubmittedHandler<CourseParticipantInfo[]>>(
+    (response, showSuccessMessage, reset) => {
+      showSuccessMessage('Изменения сохранены', [
+        {
+          text: 'Ок',
+        },
+        {
+          text: 'Вернуться к ученикам',
+          url: returnLink,
+        },
+      ]);
+    },
+    [],
+  );
 
-  const onError = React.useCallback<FormErrorHandler>(
+  const onError = React.useCallback<ErrorHandler>(
     (error, showErrorMessage, reloadCallback) => {
       showErrorMessage('Ошибка при выполнении запроса', [
         {

@@ -105,9 +105,7 @@ const TeacherPage = (props) => {
       </Page>
     );
   } else if (error) {
-    return (
-      <NotFoundErrorPage message="Преподаватель не найден" link={{url: root}} />
-    );
+    return <NotFoundErrorPage message="Преподаватель не найден" url={root} />;
   } else {
     return <Page isLoaded={false} location={location} />;
   }

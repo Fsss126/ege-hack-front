@@ -1,19 +1,24 @@
 import APIRequest from 'api';
-import Form, {
-  FieldsContainer,
-  useForm,
-  useFormValidityChecker,
-} from 'components/ui/Form';
+import Form, {useForm, useFormValidityChecker} from 'components/ui/Form';
+import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {useRevokeHomeworks} from 'hooks/selectors';
 import React, {useCallback, useRef, useState} from 'react';
+import {HomeworkAssessmentDtoReq} from 'types/dtos';
+import {HomeworkInfo} from 'types/entities';
+import {SimpleCallback} from 'types/utility/common';
 
-const INITIAL_FORM_DATA = {
+interface HomeworkData {
+  mark: string;
+  comment: string;
+}
+
+const INITIAL_FORM_DATA: HomeworkData = {
   mark: '',
   comment: '',
 };
 
-function getRequestData(formData) {
+function getRequestData(formData: HomeworkData): HomeworkAssessmentDtoReq {
   const {mark, comment} = formData;
 
   return {
@@ -22,19 +27,26 @@ function getRequestData(formData) {
   };
 }
 
-const HomeworkForm = (props) => {
+interface HomeworkFormProps {
+  homework: HomeworkInfo;
+  cancelAssess: SimpleCallback;
+}
+
+const HomeworkForm: React.FC<HomeworkFormProps> = (props) => {
   const {homework, cancelAssess} = props;
   const {
     pupil: {id: pupilId},
     lesson_id: lessonId,
   } = homework;
 
-  const formElementRef = useRef(null);
+  const formElementRef = useRef<HTMLFormElement>(null);
 
-  const checkValidity = useFormValidityChecker(formElementRef.current);
+  const checkValidity = useFormValidityChecker<HomeworkData>(
+    formElementRef.current,
+  );
 
   const createRequest = useCallback(
-    (requestData) =>
+    (requestData: HomeworkAssessmentDtoReq): Promise<HomeworkInfo> =>
       APIRequest.patch(
         `/lessons/${lessonId}/homeworks/pupil/${pupilId}`,
         requestData,
@@ -51,14 +63,13 @@ const HomeworkForm = (props) => {
 
       return {
         comment: comment || '',
-        mark: mark || '',
+        mark: mark?.toString() || '',
       };
     }
   }, checkValidity);
   const {mark, comment} = formData;
 
   const onSubmit = useCallback(() => {
-    console.log('submit', formData);
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 
@@ -91,7 +102,7 @@ const HomeworkForm = (props) => {
   const revokeHomeworks = useRevokeHomeworks(lessonId);
 
   return (
-    <Form
+    <Form<HomeworkInfo>
       ref={formElementRef}
       className="homework-form container p-0"
       isValid={isValid}

@@ -21,7 +21,7 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
   const checkValidity = useFormValidityChecker(
     formElementRef.current,
     undefined,
-    [opened, formElementRef.current],
+    [opened],
   );
   const {formData, isValid, onInputChange, reset} = useForm(
     (state) => ({

@@ -1,14 +1,17 @@
 import Lesson from 'components/common/Lesson';
-import List from 'components/common/List';
+import List, {ListItemRenderer} from 'components/common/List';
 import {NotFoundErrorPage} from 'components/ErrorPage';
 import Page, {PageContent} from 'components/Page';
 import {useHomework, useLessons, useUserCourses} from 'hooks/selectors';
 import _ from 'lodash';
 import React from 'react';
+import {RouteComponentProps} from 'react-router';
+import {LessonInfo} from 'types/entities';
+import {LessonPageParams} from 'types/routes';
 
 import LessonView from './LessonView';
 
-const LessonPage = (props) => {
+const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
   const {
     match: {
       params: {courseId: param_course, lessonId: param_lesson},
@@ -18,19 +21,19 @@ const LessonPage = (props) => {
   const courseId = parseInt(param_course);
   const lessonId = parseInt(param_lesson);
 
-  const {courses, error, retry} = useUserCourses();
+  const {courses, error, reload} = useUserCourses();
   // const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
   const {
     lessons,
     error: errorLoadingLessons,
-    retry: reloadLessons,
+    reload: reloadLessons,
   } = useLessons(courseId);
   const {
     homework,
     error: errorLoadingHomework,
-    retry: reloadHomework,
+    reload: reloadHomework,
   } = useHomework(lessonId);
-  const renderLesson = (lesson, renderProps) => {
+  const renderLesson: ListItemRenderer<LessonInfo> = (lesson, renderProps) => {
     const {id, locked} = lesson;
 
     return (
@@ -49,8 +52,8 @@ const LessonPage = (props) => {
     const course = _.find(courses, {id: courseId});
     const selectedLesson = (course && _.find(lessons, {id: lessonId})) || null;
 
-    if (selectedLesson && !selectedLesson.locked) {
-      let nextVideo = lessons[selectedLesson.num];
+    if (course && selectedLesson && !selectedLesson.locked) {
+      let nextVideo: LessonInfo | null = lessons[selectedLesson.num];
 
       if (!nextVideo || nextVideo.locked) {
         nextVideo = null;

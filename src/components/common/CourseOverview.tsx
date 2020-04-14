@@ -139,8 +139,13 @@ const Teachers: React.FC = () => {
   );
 };
 
+export type LessonRenderer = ListProps<
+  LessonInfo,
+  {link: string}
+>['renderItem'];
+
 export type LessonsProps = {
-  renderLesson: ListProps<LessonInfo, {link: string}>['renderItem'];
+  renderLesson: LessonRenderer;
 };
 const Lessons: React.FC<LessonsProps> = (props) => {
   const {renderLesson: renderFunc} = props;

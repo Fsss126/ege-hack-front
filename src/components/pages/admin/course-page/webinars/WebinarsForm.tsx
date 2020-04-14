@@ -1,14 +1,16 @@
 import Form, {
-  FieldsContainer,
-  FormElement,
-  FormElementGroup,
-  FormErrorHandler,
+  ErrorHandler,
   FormProps,
   FormSubmitHandler,
-  FormSubmittedHandler,
+  SubmittedHandler,
   useForm,
   useFormValidityChecker,
 } from 'components/ui/Form';
+import FieldsContainer from 'components/ui/form/FieldsContainer';
+import {
+  FormElement,
+  FormElementGroup,
+} from 'components/ui/form/FormElementGroup';
 import * as Input from 'components/ui/input';
 import Tooltip, {TooltipPosition} from 'components/ui/Tooltip';
 import {useRevokeWebinars} from 'hooks/selectors';
@@ -61,7 +63,7 @@ export type WebinarsFormProps = {
   courseId: number;
   title?: string;
   createRequest: (data: WebinarScheduleDtoReq) => Promise<WebinarScheduleInfo>;
-  onSubmitted: FormSubmittedHandler<WebinarScheduleInfo>;
+  onSubmitted: SubmittedHandler<WebinarScheduleInfo>;
   errorMessage: string;
   cancelLink: FormComponentProps['cancelLink'];
   webinars?: WebinarScheduleInfo;
@@ -132,7 +134,8 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
 
   const {image, click_meeting_link, webinars} = formData;
 
-  const initialImageFile = useMemo(() => formData.image, [formData.image]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialImageFile = useMemo(() => formData.image, []);
 
   const revokeWebinars = useRevokeWebinars(courseId);
 
@@ -143,7 +146,7 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 
-  const onError = useCallback<FormErrorHandler>(
+  const onError = useCallback<ErrorHandler>(
     (error, showErrorMessage, reloadCallback) => {
       showErrorMessage(errorMessage, [
         {

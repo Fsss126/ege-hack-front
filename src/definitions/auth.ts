@@ -2,7 +2,7 @@ import APIRequest from 'api';
 import {Credentials, UserInfo} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
-const LOCAL_STORAGE_KEY = 'ege-hack-user-utils';
+const LOCAL_STORAGE_KEY = 'ege-hack-userInfo-utils';
 const VK_APP_ID = process.env.REACT_APP_VK_APP_ID;
 
 export enum AuthEventTypes {

@@ -8,6 +8,7 @@ import {
   Credentials,
   HomeworkInfo,
   LessonInfo,
+  PersonWebinar,
   SubjectInfo,
   TeacherInfo,
   UserCourseInfo,
@@ -27,8 +28,8 @@ export interface DataState {
   teachers?: TeacherInfo[] | AxiosError;
   lessons: {[courseId: number]: LessonInfo[] | AxiosError};
   webinars: {
-    [courseId: number]: WebinarInfo[] | AxiosError;
-    upcoming?: WebinarInfo[] | AxiosError;
+    [courseId: number]: PersonWebinar[] | AxiosError;
+    upcoming?: PersonWebinar[] | AxiosError;
   };
   participants: {[courseId: number]: CourseParticipantInfo[] | AxiosError};
   adminCourses?: CourseInfo[] | AxiosError;

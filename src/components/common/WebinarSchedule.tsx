@@ -210,12 +210,10 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
 
 export type WebinarScheduleProps = {
   schedule: PersonWebinar[];
-  courseId: number;
 };
-const WebinarSchedule: React.FC<WebinarScheduleProps> = ({
-  schedule,
-  courseId,
-}) => {
+const WebinarSchedule: React.FC<WebinarScheduleProps> = (props) => {
+  const {schedule} = props;
+
   if (schedule.length === 0) {
     return null;
   }
@@ -232,7 +230,11 @@ const WebinarSchedule: React.FC<WebinarScheduleProps> = ({
       >
         <div className="d-flex flex-nowrap">
           {schedule.map((webinar) => (
-            <Webinar webinar={webinar} courseId={courseId} key={webinar.id} />
+            <Webinar
+              webinar={webinar}
+              courseId={webinar.course_id}
+              key={webinar.id}
+            />
           ))}
         </div>
       </ScrollBars>
