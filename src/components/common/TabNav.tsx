@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 import {NavLink, NavLinkProps} from '../ui/Link';
@@ -8,7 +8,7 @@ export const TabNavLink: React.FC<NavLinkProps> = (props) => {
   const {className, ...rest} = props;
 
   return (
-    <NavLink className={classnames('tab-nav__nav-link', className)} {...rest} />
+    <NavLink className={classNames('tab-nav__nav-link', className)} {...rest} />
   );
 };
 
@@ -23,7 +23,7 @@ const TabNav: React.FC<ButtonContainerProps> = (props) => {
   const {className, ...rest} = props;
 
   return (
-    <ButtonContainer className={classnames('tab-nav', className)} {...rest} />
+    <ButtonContainer className={classNames('tab-nav', className)} {...rest} />
   );
 };
 

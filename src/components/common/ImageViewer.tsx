@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {useToggle} from 'hooks/common';
 import React, {useCallback} from 'react';
 
@@ -21,14 +21,14 @@ const ImageWrapper: React.FC<ImageWrapperProps> = (props) => {
 
   return (
     <div
-      className={classnames(className, 'image-viewer__image-wrapper', {
+      className={classNames(className, 'image-viewer__image-wrapper', {
         'image-viewer__expanded': expanded,
         'image-viewer__collapsed': !expanded,
       })}
     >
       <img className="image-viewer__image" src={image} {...rest} />
       <div
-        className={classnames('image-viewer__expand-button', {
+        className={classNames('image-viewer__expand-button', {
           'icon-collapse': expanded,
           'icon-expand': !expanded,
         })}
@@ -64,7 +64,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = (props) => {
         onIconClick={toggleIsExpanded}
         expanded={false}
         image={image}
-        className={classnames(className, {
+        className={classNames(className, {
           invisible: isExpanded,
         })}
       />
@@ -72,7 +72,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = (props) => {
         <ImageWrapper
           onClick={handleToggleFullSize}
           onIconClick={close}
-          className={classnames({
+          className={classNames({
             'image-viewer__full-size': isFullSize,
           })}
           expanded={true}

@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import Catalog, {
   CatalogFilter,
   CatalogItemRenderer,
@@ -84,7 +84,7 @@ const Webinar: React.FC<WebinarProps> = (props) => {
       preview={
         <PosterCover
           cover={image_link}
-          className={classnames(
+          className={classNames(
             'webinar-cover',
             state !== WEBINAR_STATE.ENDED && {
               locked: !isUnlocked,

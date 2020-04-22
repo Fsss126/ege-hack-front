@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {daysBetween} from 'definitions/helpers';
 import React from 'react';
 import {CourseInfo} from 'types/entities';
@@ -36,7 +36,7 @@ const Course = <P extends any = undefined>(
   return (
     <ListItem<CourseInfo, P>
       item={course}
-      className={classnames('course', {
+      className={classNames('course', {
         'course-selected': isSelected,
       })}
       title={name}

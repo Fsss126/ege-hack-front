@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 export type DropdownMenuOptionProps<
@@ -15,7 +15,7 @@ export const DropdownMenuOption = <T extends React.ElementType>(
   const {tag: Tag = 'div', children, className, ...rest} = props;
 
   return (
-    <Tag className={classnames('dropdown__menu-option', className)} {...rest}>
+    <Tag className={classNames('dropdown__menu-option', className)} {...rest}>
       {children}
     </Tag>
   );
@@ -34,7 +34,7 @@ export const DropdownIconButton: React.FC<DropdownIconButtonProps> = (
   const {className, ...rest} = props;
 
   return (
-    <i className={classnames('dropdown__icon-btn', className)} {...rest} />
+    <i className={classNames('dropdown__icon-btn', className)} {...rest} />
   );
 };
 
@@ -47,7 +47,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = (props) => {
   const {content, className, children: options} = props;
 
   return (
-    <div className={classnames('dropdown', className)}>
+    <div className={classNames('dropdown', className)}>
       {content}
       <div className="dropdown__menu-container">
         <div className="dropdown__menu overlay-window">{options}</div>

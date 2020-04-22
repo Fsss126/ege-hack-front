@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 export type FieldsContainer = {
@@ -10,7 +10,7 @@ const FieldsContainer: React.FC<FieldsContainer> = (props) => {
   const {children, className} = props;
 
   return (
-    <div className={classnames('form__fields', className)}>{children}</div>
+    <div className={classNames('form__fields', className)}>{children}</div>
   );
 };
 

@@ -113,9 +113,6 @@
 .icon-bars:before {
   content: "\1f302";
 }
-.icon-angle:before {
-  content: "\e901";
-}
 .icon-check:before {
   content: "\e902";
 }
@@ -124,6 +121,22 @@
 }
 .icon-profile:before {
   content: "\e90c";
+}
+
+.icon-angle-down:before {
+  content: "\e901";
+}
+.icon-angle-top:before {
+  content: "\e901";
+  transform: rotate(180deg);
+}
+.icon-angle-left:before {
+  content: "\e901";
+  transform: rotate(90deg);
+}
+.icon-angle-right:before {
+  content: "\e901";
+  transform: rotate(-90deg);
 }
 
 .icon-upload:before {

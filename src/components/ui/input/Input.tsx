@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, {forwardRef, useCallback} from 'react';
 import {IdentityFunction} from 'types/utility/helpers';
 
@@ -127,7 +127,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <input
       ref={ref}
-      className={classnames('input', className)}
+      className={classNames('input', className)}
       required={required}
       placeholder={
         placeholder ? getPlaceholder(placeholder, required) : undefined
@@ -165,7 +165,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <textarea
         ref={ref}
-        className={classnames('input', className)}
+        className={classNames('input', className)}
         onChange={onChange}
         required={required}
         placeholder={

@@ -1,5 +1,5 @@
 import APIRequest from 'api';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import ScrollBars from 'components/ui/ScrollBars';
 import React, {useCallback, useEffect, useState} from 'react';
 import Countdown, {CountdownTimeDelta} from 'react-countdown-now';
@@ -171,7 +171,7 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
   return (
     <div
       onClick={onClick}
-      className={classnames('webinar-schedule__webinar', 'd-flex', {
+      className={classNames('webinar-schedule__webinar', 'd-flex', {
         'webinar-schedule__webinar-locked': !isUnlocked,
       })}
     >

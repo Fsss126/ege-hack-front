@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Button from 'components/ui/Button';
 import {
   LoadingIndicator,
@@ -16,11 +17,7 @@ export interface TestStatusProps {
 }
 
 export const TestView: React.FC<TestStatusProps> = (props) => {
-  const {
-    test: {status, id, name, progress},
-    courseId,
-    lessonId,
-  } = props;
+  const {test, courseId, lessonId} = props;
   const [isFetchingTest, setIsFetchingTest] = useState<boolean | null>(null);
   const state = useLoadingState(isFetchingTest, isFetchingTest === false);
   const fetchCallback = useCallback(() => {
@@ -29,37 +26,69 @@ export const TestView: React.FC<TestStatusProps> = (props) => {
 
   const startTestCallback = useStartTest(fetchCallback, fetchCallback);
 
+  const {status, id, name} = test;
+
   const onClick = useCallback(() => {
     setIsFetchingTest(true);
     startTestCallback(courseId, lessonId, id);
   }, [courseId, id, lessonId, startTestCallback]);
 
-  const isCompleted = status === TestStatus.COMPLETED;
-  const isStarted = status === TestStatus.STARTED;
+  if (test.status === TestStatus.COMPLETED) {
+    const {percentage, passed} = test;
 
-  return (
-    <div className="test-view container p-0">
-      <div className="row align-items-center">
-        <div className="col">
-          <div className="test-view__title">{name}</div>
-        </div>
-        <div className="col-auto">
-          {!isCompleted && <ProgressIndicator progress={progress} />}
-        </div>
-        <div className="col-auto">
-          <Button
-            neutral={status === TestStatus.COMPLETED}
-            icon={<LoadingIndicator state={state} />}
-            onClick={onClick}
-          >
-            {isCompleted
-              ? 'Смотреть результаты'
-              : isStarted
-              ? 'Продолжить'
-              : 'Начать тест'}
-          </Button>
+    return (
+      <div className="test-view container p-0">
+        <div className="row align-items-center">
+          <div className="col">
+            <div className="test-view__title">{name}</div>
+          </div>
+          <div className="col-auto">
+            <ProgressIndicator
+              className={classNames('test-result', {
+                'test-result--passed': passed,
+                'test-result--failed': !passed,
+              })}
+              progress={percentage}
+            >
+              Результат {percentage * 100}%
+            </ProgressIndicator>
+          </div>
+          <div className="col-auto">
+            <Button
+              neutral
+              icon={<LoadingIndicator state={state} />}
+              onClick={onClick}
+            >
+              Смотреть результаты
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    const {progress} = test;
+    const isStarted = status === TestStatus.STARTED;
+
+    return (
+      <div className="test-view container p-0">
+        <div className="row align-items-center">
+          <div className="col">
+            <div className="test-view__title">{name}</div>
+          </div>
+          <div className="col-auto">
+            {isStarted && (
+              <ProgressIndicator progress={progress}>
+                Пройдено {progress * 100}%
+              </ProgressIndicator>
+            )}
+          </div>
+          <div className="col-auto">
+            <Button icon={<LoadingIndicator state={state} />} onClick={onClick}>
+              {isStarted ? 'Продолжить' : 'Начать тест'}
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };

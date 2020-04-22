@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -10,7 +10,7 @@ export type LoaderProps = {
 const Loader: React.FC<LoaderProps> = ({children, isLoading, className}) => {
   return (
     <div
-      className={classnames('loader', className, {
+      className={classNames('loader', className, {
         loading: isLoading,
       })}
     >

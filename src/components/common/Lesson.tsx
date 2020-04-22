@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 import {LessonInfo} from 'types/entities';
 
@@ -21,7 +21,7 @@ const Lesson = <P extends any = undefined>(
   return (
     <ListItem<LessonInfo, P>
       item={lesson}
-      className={classnames('video-class', {
+      className={classNames('video-class', {
         'video-class--disabled': !selectable,
       })}
       title={name}

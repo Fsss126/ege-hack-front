@@ -226,7 +226,7 @@ export interface TaskDtoResp extends Partial<RespWithImage> {
   id: number;
   text: string;
   complexity?: number;
-  weight?: number;
+  weight: number;
   subjectId: number;
   themeId: number;
   order: number;
@@ -261,7 +261,8 @@ export interface TestStatusResp {
   status: TestStatus;
   progress?: number;
   deadline?: number;
-  percentage: number;
+  percentage?: number;
+  passed?: boolean;
 }
 
 export interface UserAnswerDtoCommon {
@@ -293,6 +294,7 @@ export interface TestStateDtoResp {
   status: TestStatus;
   progress?: number;
   percentage?: number;
+  passed?: boolean;
   last_task_id?: number;
   answers: TestStateAnswerDto[];
 }

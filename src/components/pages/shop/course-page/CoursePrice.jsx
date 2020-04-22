@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {CourseOverviewContext} from 'components/common/CourseOverview';
 import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
@@ -32,7 +32,7 @@ const CoursePrice = (props) => {
 
   return (
     <div
-      className={classnames(
+      className={classNames(
         'layout__content-block',
         'layout__content-block--stacked',
         'course-overview__offer',

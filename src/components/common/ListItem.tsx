@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import Link from 'components/ui/Link';
 import {useTruncate} from 'hooks/common';
 import React, {useCallback} from 'react';
@@ -91,7 +91,7 @@ const ListItem = <T extends {} = any, P = undefined>(
   const content = (
     <div className="row align-items-center">
       <div
-        className={classnames(
+        className={classNames(
           'preview-container',
           plain ? 'col-auto' : 'adaptive col-12 col-md-auto',
           {
@@ -132,7 +132,7 @@ const ListItem = <T extends {} = any, P = undefined>(
       )}
     </div>
   );
-  const joinedClassname = classnames(
+  const joinedClassname = classNames(
     'list__item',
     {
       'list__item-selectable': selectable,

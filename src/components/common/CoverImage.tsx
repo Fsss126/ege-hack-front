@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 export type CoverImageProps = {
@@ -16,7 +16,7 @@ const CoverImage: React.withDefaultProps<React.FC<CoverImageProps>> = (
 
   return (
     <div
-      className={classnames('cover', className, {
+      className={classNames('cover', className, {
         'square-cover': square,
         'round-cover': round,
       })}

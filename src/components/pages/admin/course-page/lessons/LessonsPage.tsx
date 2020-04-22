@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import Catalog, {
   CatalogFilter,
   CatalogItemRenderer,
@@ -119,7 +119,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
       isLoaded={isLoaded}
       loadUserInfo
       requiredPermissions={requiredPermissions}
-      className={classnames('admin-page', 'admin-page--lessons', className)}
+      className={classNames('admin-page', 'admin-page--lessons', className)}
       title={title}
       location={location}
     >

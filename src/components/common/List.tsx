@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 export type ListItemRenderProps<P extends object = {}> = P & {
@@ -43,13 +43,13 @@ const List = <T extends object = any, P extends object = {}>(
   const content = renderContent ? renderContent(children, items) : items;
 
   return flex ? (
-    <div className={classnames('list', className)}>
+    <div className={classNames('list', className)}>
       <div className="container p-0 overflow-hidden">
-        <div className={classnames('row', alignment)}>{content}</div>
+        <div className={classNames('row', alignment)}>{content}</div>
       </div>
     </div>
   ) : (
-    <div className={classnames('list', className)}>{content}</div>
+    <div className={classNames('list', className)}>{content}</div>
   );
 };
 

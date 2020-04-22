@@ -4,7 +4,7 @@ import {useTest, useTestState, useTestTask} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentPropsWithPath, TestTaskPageParams} from 'types/routes';
 
-import {TaskViewer} from './TaskViewer';
+import {TaskPageContent} from './TaskPageContent';
 
 export const TaskPage: React.FC<RouteComponentPropsWithPath<
   TestTaskPageParams
@@ -27,10 +27,6 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
     reload: reloadTestState,
   } = useTestState(testId);
 
-  const onSubmitted = useCallback(() => {
-    console.log('submitted');
-  }, []);
-
   if (test && task && state) {
     const {name} = test;
     const {order} = task;
@@ -39,13 +35,13 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
       <Page
         isLoaded={true}
         title={`Вопрос ${order + 1} – ${name}`}
-        className="test-task-page"
+        className="test-page test-task-page"
         location={location}
       >
         <PageContent
           parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
         >
-          <TaskViewer
+          <TaskPageContent
             testId={testId}
             taskId={taskId}
             test={test}

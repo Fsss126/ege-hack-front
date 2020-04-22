@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import CoverImage from 'components/common/CoverImage';
 import DropdownMenu, {
   DropdownIconButton,
@@ -48,7 +48,7 @@ const Homework = (props) => {
       noOnClickOnAction
       truncate={false}
       item={homework}
-      className={classnames('user', 'homework', {
+      className={classNames('user', 'homework', {
         'homework--assessing': isAssessing,
       })}
       title={`${last_name} ${first_name}`}

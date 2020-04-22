@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, {forwardRef} from 'react';
 import {ScrollbarProps, Scrollbars} from 'react-custom-scrollbars';
 
@@ -34,7 +34,7 @@ const ScrollBars = forwardRef<Scrollbars, ScrollBarsProps>((props, ref) => {
 
   return (
     <Scrollbars
-      className={classnames('scrollbars', className)}
+      className={classNames('scrollbars', className)}
       renderTrackVertical={
         hideVerticalScrollbar ? renderEmpty : renderTrackVertical
       }

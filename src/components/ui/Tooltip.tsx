@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, {Fragment, ReactElement} from 'react';
 
 export enum TooltipPosition {
@@ -21,7 +21,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
     return child;
   }
   return React.cloneElement(child, {
-    className: classnames(
+    className: classNames(
       child.props.className,
       'tooltip',
       position && `pos-${position}`,

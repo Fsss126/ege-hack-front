@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import _ from 'lodash';
 import React from 'react';
 import {Link, LinkProps} from 'react-router-dom';
@@ -89,7 +89,7 @@ class MessagePopup extends React.Component<{}, MessagePopupProps> {
 
     return (
       <Popup
-        className={classnames('message-popup', {
+        className={classNames('message-popup', {
           'error-popup': message && message.error,
           large: message && message.message.length > 60,
         })}
@@ -102,7 +102,7 @@ class MessagePopup extends React.Component<{}, MessagePopupProps> {
             <div className="col-auto">
               {message && (
                 <i
-                  className={classnames('close-button', 'icon-close', {
+                  className={classNames('close-button', 'icon-close', {
                     invisible: message.modal,
                   })}
                   onClick={this.close}

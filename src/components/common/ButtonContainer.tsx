@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, {forwardRef} from 'react';
 import Scrollbars from 'react-custom-scrollbars';
 
@@ -23,7 +23,7 @@ const ButtonContainer = forwardRef<Scrollbars, ButtonContainerProps>(
     //     else shadowRight.style.opacity = 1;
     // }, []);
     return (
-      <div className={classnames('btn-container', className)}>
+      <div className={classNames('btn-container', className)}>
         {/*<div className="shadow">*/}
         {/*    <div className="left"/>*/}
         {/*    <div className="right" ref={shadowRightRef}/>*/}

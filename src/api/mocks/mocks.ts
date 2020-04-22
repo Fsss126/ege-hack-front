@@ -1,8 +1,14 @@
-import {API_ROOT} from 'api/index';
+import {API_ROOT} from 'api';
 import poster from 'img/dummy_poster.jpg';
 import pic from 'img/dummy-pic.jpg';
 import _ from 'lodash';
 import {LoremIpsum} from 'lorem-ipsum';
+import {
+  TestDtoResp,
+  TestStateDtoResp,
+  TestStatus,
+  TestStatusResp,
+} from 'types/dtos';
 import {
   AnswerType,
   CourseInfo,
@@ -11,17 +17,13 @@ import {
   PersonWebinar,
   SubjectInfo,
   TeacherInfo,
+  TestStatusInfo,
   UserCourseInfo,
   UserInfo,
 } from 'types/entities';
-import {AccountRole, LearningStatus} from 'types/enums';
+import {AccountRole, LearningStatus, Permission} from 'types/enums';
 
-import {
-  TestDtoResp,
-  TestStateDtoResp,
-  TestStatus,
-  TestStatusResp,
-} from '../../types/dtos';
+import {getVideoLink} from '../transforms';
 
 const lorem = new LoremIpsum();
 
@@ -34,7 +36,7 @@ function getDate(daysForward: number) {
 export const ACCOUNT_INFO: UserInfo = {
   id: 154792439,
   roles: [AccountRole.PUPIL, AccountRole.TEACHER],
-  permissions: [],
+  permissions: [Permission.HOMEWORK_CHECK],
   vk_info: {
     id: 154792439,
     first_name: 'Alexandra',
@@ -147,36 +149,6 @@ export const COURSES: CourseInfo[] = SUBJECTS.slice(0, 5).map((subject, i) => ({
   price: 1,
 }));
 
-export const LESSONS: LessonInfo[] = _.times(4, (j) => {
-  const locked = -2 + j > 0;
-
-  return {
-    course_id: j,
-    num: j + 1,
-    id: j,
-    // date: getDate(-4 + i + j),
-    name: `Занятие ${j + 1}`,
-    description: lorem.generateParagraphs(1),
-    image_link: poster,
-    video_link: '375255364',
-    locked,
-    attachments: [],
-    assignment: {
-      description: lorem.generateParagraphs(1),
-      files: [
-        {file_name: 'Задание', file_id: '0', file_link: '/robots.txt'},
-        {
-          file_name: 'Дополнительное задание',
-          file_id: '1',
-          file_link: '/robots.txt',
-        },
-      ],
-      deadline: getDate(7),
-    },
-    watchProgress: locked ? undefined : 100 - j * 15,
-  };
-});
-
 export const HOMEWORK: HomeworkInfo = {
   comment: 'Очень плохо',
   date: new Date(),
@@ -234,9 +206,13 @@ export const TEST: TestDtoResp = {
       subjectId: 0,
       themeId: 0,
       order: 0,
+      weight: 1,
+      complexity: 5,
       answer: {
         type: AnswerType.NUMBER,
         value: 2000,
+        videoSolution: '375255364',
+        textSolution: 'Используем правило буравчика.',
       },
     },
     {
@@ -246,8 +222,11 @@ export const TEST: TestDtoResp = {
       subjectId: 0,
       themeId: 0,
       order: 1,
+      weight: 1,
+      complexity: 10,
       answer: {
         type: AnswerType.TEXT,
+        value: 'розовый',
       },
     },
     {
@@ -256,6 +235,7 @@ export const TEST: TestDtoResp = {
       subjectId: 0,
       themeId: 0,
       order: 1,
+      weight: 1,
       answer: {
         type: AnswerType.FILE,
       },
@@ -263,17 +243,27 @@ export const TEST: TestDtoResp = {
   ],
 };
 
-export const TEST_STATUS: TestStatusResp = {
+export const TEST_STATUS_NOT_STARTED: TestStatusResp = {
   id: 1,
   name: 'Кто ты из Винкс?',
   status: TestStatus.NOT_STARTED,
-  percentage: 0,
+  progress: 0,
+  deadline: TEST.deadline,
+};
+
+export const TEST_STATUS_COMPLETED: TestStatusResp = {
+  id: 1,
+  name: 'Кто ты из Винкс?',
+  status: TestStatus.COMPLETED,
+  percentage: 1,
+  passed: true,
   deadline: TEST.deadline,
 };
 
 export const TEST_STATE_NOT_STARTED: TestStateDtoResp = {
   status: TestStatus.NOT_STARTED,
   last_task_id: 0,
+  progress: 0,
   answers: [],
 };
 
@@ -289,14 +279,59 @@ export const TEST_STATE_STARTED: TestStateDtoResp = {
 export const TEST_STATE_COMPLETED: TestStateDtoResp = {
   status: TestStatus.COMPLETED,
   last_task_id: TEST.tasks.length - 1,
-  percentage: 100,
-  answers: TEST.tasks.map(({id, answer}) => ({
+  percentage: 0.8,
+  passed: true,
+  answers: TEST.tasks.map(({id, answer}, i) => ({
     task_id: id,
-    user_answer: answer,
+    user_answer:
+      answer.type === AnswerType.FILE
+        ? {
+            type: answer.type,
+            file_info: {
+              file_id: 'eace0c12-7698-11ea-a56a-17a865e9a7a5',
+              file_name: 'add.png',
+              file_link: '/files/eace0c12-7698-11ea-a56a-17a865e9a7a5',
+            },
+          }
+        : answer,
     correct_answer: answer,
-    is_correct: true,
+    is_correct: i !== 0,
   })),
 };
+
+export const LESSONS: LessonInfo[] = _.times(4, (j) => {
+  const locked = -2 + j > 0;
+
+  return {
+    course_id: j,
+    num: j + 1,
+    id: j,
+    date: getDate(-4 + j),
+    name: `Занятие ${j + 1}`,
+    description: lorem.generateParagraphs(1),
+    image_link: poster,
+    video_link: getVideoLink('375255364'),
+    locked,
+    attachments: [],
+    assignment: {
+      description: lorem.generateParagraphs(1),
+      files: [
+        {file_name: 'Задание', file_id: '0', file_link: '/robots.txt'},
+        {
+          file_name: 'Дополнительное задание',
+          file_id: '1',
+          file_link: '/robots.txt',
+        },
+      ],
+      deadline: getDate(7),
+    },
+    watchProgress: locked ? undefined : 100 - j * 15,
+    test: {
+      ...TEST_STATUS_COMPLETED,
+      deadline: new Date(TEST_STATUS_COMPLETED.deadline as any),
+    } as TestStatusInfo,
+  };
+});
 
 // export const TEST_ID = 1;
 // export const TEST_HASH = '2d01669a3c8cda169545b4f7b607efb3';

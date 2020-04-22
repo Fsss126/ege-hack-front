@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {CSSTransition} from 'react-transition-group';
@@ -107,7 +107,7 @@ class Popup extends React.Component<PopupProps, PopupState> {
         mountOnEnter
       >
         <div
-          className={classnames(
+          className={classNames(
             'popup',
             {
               animation: appearAnimation,

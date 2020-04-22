@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import _ from 'lodash';
 import React, {useCallback} from 'react';
 
@@ -23,7 +23,7 @@ export const FormElement: React.withDefaultProps<React.FC<FormElementProps>> = (
   }, [name, index, onChange]);
 
   return (
-    <div className={classnames('form-entity', className)}>
+    <div className={classNames('form-entity', className)}>
       {deletable && (
         <div className="form-entity__delete-btn-container">
           <i className="icon-close" onClick={onDelete} />

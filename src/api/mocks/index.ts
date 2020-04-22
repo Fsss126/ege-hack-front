@@ -9,7 +9,8 @@ import {
   TEST,
   TEST_STATE_COMPLETED,
   TEST_STATE_NOT_STARTED,
-  TEST_STATUS,
+  TEST_STATUS_COMPLETED,
+  TEST_STATUS_NOT_STARTED,
   WEBINAR_SCHEDULE,
 } from 'api/mocks/mocks';
 import {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
@@ -47,8 +48,9 @@ export const mockRequests = (api: AxiosInstance) => {
         return SUBJECTS;
       case url.pathname === '/accounts/teachers':
         return TEACHERS;
-      case url.pathname === '/catalog-page':
+      case url.pathname === '/courses':
         switch (config.params.group) {
+          case 'ALL':
           case 'MARKET':
             return SHOP_CATALOG;
           case 'PERSON':
@@ -56,11 +58,14 @@ export const mockRequests = (api: AxiosInstance) => {
           default:
             throw error;
         }
+      case url.pathname === '/courses/homeworkCheck':
+        return MY_COURSES;
       case url.pathname === '/lessons':
         return LESSONS;
       case /\/lessons\/(.*)\/homeworks\/pupil$/.test(url.pathname):
         return HOMEWORK;
       case url.pathname === '/catalog-page/schedule/person':
+      case /\/courses\/schedule\/person$/.test(url.pathname):
       case /\/courses\/(.*)\/schedule\/person$/.test(url.pathname):
         return WEBINAR_SCHEDULE;
       default:
@@ -79,7 +84,10 @@ export const mockTestsRequests = (api: AxiosInstance) => {
           if (config.method === 'get') {
             return {
               ...response,
-              data: data.map((lesson: any) => ({...lesson, test: TEST_STATUS})),
+              data: data.map((lesson: any) => ({
+                ...lesson,
+                test: TEST_STATUS_NOT_STARTED,
+              })),
             };
           } else {
             return response;
@@ -93,13 +101,12 @@ export const mockTestsRequests = (api: AxiosInstance) => {
         throw error;
       }
       const {config} = error;
-      console.log(config);
       const url = getUrl(config);
       switch (true) {
         case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
           return getMockedResponse(config);
         case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
-          return getMockedResponse(config, TEST_STATE_NOT_STARTED);
+          return getMockedResponse(config, TEST_STATE_COMPLETED);
         case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname):
           return getMockedResponse(config, TEST_STATE_COMPLETED);
         case /\/knowledge\/tests\/(.*)$/.test(url.pathname):

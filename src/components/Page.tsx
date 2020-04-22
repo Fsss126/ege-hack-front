@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {useUser} from 'hooks/selectors';
 import React from 'react';
 import {Helmet} from 'react-helmet';
@@ -38,7 +38,7 @@ export const PageLink: React.withDefaultProps<React.FC<PageLinkProps>> = ({
   ...props
 }) => (
   <Link
-    className={classnames(
+    className={classNames(
       className,
       {
         'arrow-link': arrow,
@@ -70,7 +70,7 @@ export const PageContent: React.FC<PageContentProps> = ({
   parentSection,
 }) => (
   <div
-    className={classnames('layout__content-container', 'container', className)}
+    className={classNames('layout__content-container', 'container', className)}
   >
     {parentSection && (
       <PageLink
@@ -218,7 +218,7 @@ const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
                 onMenuClose={toggleSideBar}
               />
             )}
-            <div className={classnames('layout__content', className)}>
+            <div className={classNames('layout__content', className)}>
               {title && (
                 <Helmet>
                   <title>{title} – ЕГЭ HACK</title>

@@ -119,11 +119,22 @@ export type DiscountInfo = DiscountMessage;
 
 export {AnswerType, TestStatus} from './dtos';
 
-export interface TestStatusInfo
-  extends Omit<TestStatusResp, 'deadline' | 'progress'> {
+export type TestStatusInfo = {
+  id: number;
+  status: TestStatus;
+  name: string;
   deadline?: Date;
-  progress: number;
-}
+} & (
+  | {
+      status: TestStatus.COMPLETED;
+      percentage: number;
+      passed: number;
+    }
+  | {
+      status: TestStatus.NOT_STARTED | TestStatus.STARTED;
+      progress: number;
+    }
+);
 
 export type CorrectAnswerInfo = CorrectAnswerDto;
 
@@ -154,30 +165,38 @@ export type UserAnswerInfo = {type: AnswerType} & (
   | {type: AnswerType.FILE; value: FileInfo}
 );
 
-export type TestStateInfo = {
+export type AnswerValue = UserAnswerInfo['value'];
+
+export interface TestStateActiveAnswerInfo {
+  task_id: number;
+  user_answer: UserAnswerInfo;
+}
+
+export interface TestStatePassedAnswerInfo extends TestStateActiveAnswerInfo {
+  correct_answer: CorrectAnswerDto;
+  is_correct: boolean;
+}
+
+type CommonTestStateInfo = {
   status: TestStatus;
   last_task_id: number;
   progress: number;
-} & (
-  | {
-      status: TestStatus.NOT_STARTED | TestStatus.STARTED;
-      answers: {
-        [key: number]: {
-          task_id: number;
-          user_answer: UserAnswerInfo;
-        };
-      };
-    }
-  | {
-      status: TestStatus.COMPLETED;
-      percentage: number;
-      answers: {
-        [key: number]: {
-          task_id: number;
-          user_answer: UserAnswerInfo;
-          correct_answer: CorrectAnswerDto;
-          is_correct: boolean;
-        };
-      };
-    }
-);
+};
+
+export interface TestStateActiveInfo extends CommonTestStateInfo {
+  status: TestStatus.NOT_STARTED | TestStatus.STARTED;
+  answers: {
+    [key: number]: TestStateActiveAnswerInfo;
+  };
+}
+
+export interface TestStatePassedInfo extends CommonTestStateInfo {
+  status: TestStatus.COMPLETED;
+  percentage: number;
+  passed: boolean;
+  answers: {
+    [key: number]: TestStatePassedAnswerInfo;
+  };
+}
+
+export type TestStateInfo = TestStateActiveInfo | TestStatePassedInfo;

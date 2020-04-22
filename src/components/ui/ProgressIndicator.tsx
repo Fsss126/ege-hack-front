@@ -1,15 +1,22 @@
+import classNames from 'classnames';
 import React from 'react';
 
-export interface ProgressIndicatorProps {
+export interface ProgressIconProps {
   progress: number;
+  className?: string;
 }
 
-const ProgressIcon: React.FC<ProgressIndicatorProps> = (props) => {
-  const {progress} = props;
+export interface ProgressIndicatorProps extends ProgressIconProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const ProgressIcon: React.FC<ProgressIconProps> = (props) => {
+  const {progress, className} = props;
 
   return (
     <svg
-      className="progress-circle"
+      className={classNames('progress-circle', className)}
       strokeWidth={5}
       x="0px"
       y="0px"
@@ -29,7 +36,7 @@ const ProgressIcon: React.FC<ProgressIndicatorProps> = (props) => {
         cy="18"
         r="16"
         strokeDasharray="100 100"
-        strokeDashoffset={100 - progress}
+        strokeDashoffset={100 - progress * 100}
         transform="rotate(-90 18 18)"
       />
     </svg>
@@ -37,13 +44,18 @@ const ProgressIcon: React.FC<ProgressIndicatorProps> = (props) => {
 };
 
 export const ProgressIndicator: React.FC<ProgressIndicatorProps> = (props) => {
-  const {progress, children} = props;
+  const {progress, children, className} = props;
 
   return (
-    <div className="progress-indicator d-flex align-items-center">
-      <div className="description-text">
-        {children ? children : `Пройдено ${progress}%`}
-      </div>
+    <div
+      className={classNames(
+        'progress-indicator',
+        'd-flex',
+        'align-items-center',
+        className,
+      )}
+    >
+      <div className="description-text">{children}</div>
       <ProgressIcon progress={progress} />
     </div>
   );

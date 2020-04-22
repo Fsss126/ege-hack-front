@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import CoverImage from 'components/common/CoverImage';
 import {BottomTab} from 'components/Page';
 import Button from 'components/ui/Button';

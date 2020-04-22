@@ -23,7 +23,7 @@ const DropdownIndicator = <T extends OptionShape = OptionShape>(
   props: IndicatorProps<T>,
 ): React.ReactElement => (
   <components.DropdownIndicator {...props}>
-    <i className="icon-angle" />
+    <i className="icon-angle-down" />
   </components.DropdownIndicator>
 );
 

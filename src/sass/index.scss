@@ -1264,65 +1264,172 @@ header {
     }
   }
 
+  .test-page {
+    .test__test-title {
+      margin-bottom: 20px;
+    }
+
+    .test-task__badge  {
+      margin-right: 12px;
+
+      &.test-task__correct-badge {
+        background: $success-green;
+      }
+
+      &.test-task__incorrect-badge {
+        background: $error-red;
+      }
+    }
+  }
+
   .test-task-page {
-    .test-task {
-      .test-task__test-title {
-        margin-bottom: 20px;
-      }
-      .test-task__task-title {
+    .test-task__task-title {
 
-      }
-      .test-task__image-container {
-        display: flex;
-        margin-top: 8px;
-        margin-bottom: 24px;
+    }
+    .test-task__task-tooltip {
+      margin-left: 20px;
+    }
+    .test-task__task-tooltip-content {
+      line-height: 18px;
+    }
+    .test-task__image-container {
+      display: flex;
+      margin: 24px 0;
 
-        .test-task__image {
-          display: block;
-          margin: 0 auto;
-          flex-basis: auto;
-          max-height: 470px;
-          max-width: 100%;
-        }
+      .test-task__image {
+        display: block;
+        margin: 0 auto;
+        flex-basis: auto;
+        max-height: 470px;
+        max-width: 100%;
       }
-      .test-task__task-text {
-        margin-top: 8px;
+    }
+    .test-task__task-text {
+      margin-top: 24px;
+    }
+    .test-task__task-answer {
+      margin-top: 16px;
+    }
+    .test-task__input {
+      margin-top: 8px;
+
+      .test-task__input-title {
+        padding-bottom: 16px;
       }
-      .test-task__task-answer {
+    }
+    .test-task__result {
+      .test-task__badge {
+        font-size: 16px;
+      }
+
+      .test-task__result-correct-answer {
         margin-top: 16px;
       }
-      .test-task__input-container {
-        margin-top: 8px;
-      }
-      .test-task__nav {
-        display: flex;
-        flex-wrap: wrap;
 
-        .btn {
-          margin-top: 24px;
-          display: flex;
-          flex-shrink: 0;
+      .test-task__solution {
+        margin-top: 32px;
 
-          &.test-task__nav-prev {
-            margin-right: auto;
-
-            @include media-breakpoint-down(sm) {
-              .btn__name:before {
-                content: 'Назад';
-              }
-            }
+        .test-task__solution-toggle {
+          i {
+            display: inline-block;
+            transition: transform 0.3s;
           }
+        }
 
-          &.test-task__nav-next {
-            margin-left: auto;
+        .test-task__solution-body {
+          max-height: 10000px;
+          transition: max-height .3s;
+          overflow: hidden;
 
-            @include media-breakpoint-down(sm) {
-              .btn__name:before {
-                content: 'Далее';
-              }
+          .test-task__solution-body-inner {
+            margin-top: 16px;
+            padding: 16px 24px;
+            background: $bg-grey;
+            border-radius: 12px;
+            border: 1px solid $border-grey;
+
+            .video-player {
+              margin-top: 10px;
+              margin-bottom: 16px;
             }
           }
         }
+
+        &.test-task__solution--collapsed {
+          .test-task__solution-body {
+            max-height: 0;
+          }
+          .test-task__solution-toggle i {
+            transform: rotate(180deg)
+          }
+        }
+      }
+    }
+
+    .test-task__nav {
+      display: flex;
+      flex-wrap: wrap;
+      @include media-breakpoint-down(sm) {
+        margin: 0 20px;
+      }
+
+      .btn {
+        margin-top: 24px;
+        display: flex;
+        flex-shrink: 0;
+
+        &.test-task__nav-prev {
+          margin-right: auto;
+
+          @include media-breakpoint-down(sm) {
+            .btn__name:before {
+              content: 'Назад';
+            }
+          }
+        }
+
+        &.test-task__nav-next {
+          margin-left: auto;
+
+          @include media-breakpoint-down(sm) {
+            .btn__name:before {
+              content: 'Далее';
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .test-results-page {
+    .test-result {
+      margin-left: 12px;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+
+      &.test-result__high {
+        background: $green;
+      }
+
+      &.test-result__average {
+        background: $orange;
+      }
+
+      &.test-result__low {
+        background: $red;
+      }
+    }
+
+    .test-passage {
+      margin: 20px 0;
+    }
+
+    .test-results {
+      margin-top: 20px;
+
+      .list__item:nth-child(even) {
+        background-color: $bg-grey;
       }
     }
   }
@@ -1332,6 +1439,21 @@ header {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+
+    [class^=col] {
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .progress-indicator.test-result {
+      &.test-result--passed .progress-circle .progress-circle__progress {
+        stroke: $green;
+      }
+
+      &.test-result--failed .progress-circle .progress-circle__progress {
+        stroke: $red;
+      }
     }
   }
 }

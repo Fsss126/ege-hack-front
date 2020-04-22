@@ -11,14 +11,22 @@ import SubmitButton from './SubmitButton';
 type defaultProps = typeof GenericFileInput.defaultProps;
 
 interface FileInputProps
-  extends React.Defaultize<GenericFileInputProps, defaultProps> {}
+  extends React.Defaultize<GenericFileInputProps, defaultProps> {
+  showUploadButtonWhenDisabled: boolean;
+}
 
-const FileInput: React.FC<FileInputProps> = (props) => {
+const FileInput = (props: FileInputProps) => {
+  const {showUploadButtonWhenDisabled, disabled, ...rest} = props;
+  const isDisabled =
+    disabled && typeof disabled === 'function' ? disabled() : disabled;
+
   return (
     <GenericFileInput
       SubmitButtonComponent={SubmitButton}
       LayoutComponent={Layout}
-      InputComponent={InputButton}
+      InputComponent={
+        showUploadButtonWhenDisabled || !isDisabled ? InputButton : null
+      }
       PreviewComponent={Preview}
       {...props}
     />
@@ -26,6 +34,7 @@ const FileInput: React.FC<FileInputProps> = (props) => {
 };
 FileInput.defaultProps = {
   filesName: 'Загруженные файлы',
-};
+  showUploadButtonWhenDisabled: false,
+} as Pick<FileInputProps, 'filesName' | 'showUploadButtonWhenDisabled'>;
 
 export default FileInput;

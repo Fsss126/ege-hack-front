@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 import CoverImage from './CoverImage';
@@ -17,7 +17,7 @@ const VideoCover: React.withDefaultProps<React.FC<VideoCoverProps>> = ({
 }) => (
   <CoverImage
     src={cover}
-    className={classnames('video-cover', className, {
+    className={classNames('video-cover', className, {
       'video-locked': locked,
     })}
   >

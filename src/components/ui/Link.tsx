@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, {useCallback} from 'react';
 import {
   Link as RouterLink,
@@ -27,7 +27,7 @@ export const NavLink: React.FC<NavLinkProps> = ({
 
   return (
     <RouterNavLink
-      className={classnames('nav-link', className, {
+      className={classNames('nav-link', className, {
         disabled,
       })}
       activeClassName="active"

@@ -803,6 +803,7 @@ input[type=number] {
   font-size: 12px;
   padding: 4px;
   border-radius: 6px;
+  line-height: 1;
   &.accent {
     background: $accent-orange;
   }
@@ -832,18 +833,18 @@ input[type=number] {
   .description-text {
     padding: 0 8px 0 0;
   }
+}
 
-  .progress-circle {
-    border-radius: 50%;
-    stroke-width: 5;
-    width: 24px;
-    height: 24px;
+.progress-circle {
+  border-radius: 50%;
+  stroke-width: 5;
+  width: 24px;
+  height: 24px;
 
-    .progress-circle__bg {
-      stroke: $icon-grey;
-    }
-    .progress-circle__progress {
-      stroke: $accent-orange;
-    }
+  .progress-circle__bg {
+    stroke: $icon-grey;
+  }
+  .progress-circle__progress {
+    stroke: $accent-orange;
   }
 }

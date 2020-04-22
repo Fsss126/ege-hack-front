@@ -1,7 +1,6 @@
 import HomeworkAssignment from 'components/common/HomeworkAssignment';
 import VideoPlayer from 'components/common/VideoPlayer';
 import {File} from 'components/ui/input';
-import {renderDate} from 'definitions/helpers';
 import React from 'react';
 import {HomeworkInfo, LessonInfo} from 'types/entities';
 

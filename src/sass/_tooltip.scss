@@ -225,6 +225,7 @@
   pointer-events: none;
   transition: all .18s ease-out .18s;
   position: absolute;
+  cursor: default;
 }
 
 .tooltip .tooltip-block {
@@ -381,4 +382,12 @@
   top: 100%;
   bottom: auto;
   transform: translate(-50%, -10px);
+}
+
+.tooltip {
+  cursor: pointer;
+}
+
+.tooltip-block {
+  cursor: default;
 }

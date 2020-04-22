@@ -1,5 +1,5 @@
 import {AxiosError} from 'axios';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import _ from 'lodash';
 import React, {
   Fragment,
@@ -379,7 +379,7 @@ const Form = <R, E extends Error = AxiosError>(
   );
 
   return withNestedForms ? (
-    <div className={classnames('form', className)}>
+    <div className={classNames('form', className)}>
       <form id={id} ref={ref} onChange={onChange} autoComplete={autocomplete} />
       {content}
     </div>
@@ -388,7 +388,7 @@ const Form = <R, E extends Error = AxiosError>(
       id={id}
       ref={ref}
       onChange={onChange}
-      className={classnames('form', className)}
+      className={classNames('form', className)}
       autoComplete={autocomplete}
     >
       {content}

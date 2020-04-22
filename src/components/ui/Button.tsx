@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, {ReactElement} from 'react';
 import {CSSTransition} from 'react-transition-group';
 import {SimpleCallback} from 'types/utility/common';
@@ -39,7 +39,7 @@ const Button = <T extends React.ElementType>(
     dataAttribute,
     ...rest
   } = props;
-  const joinedClassname = classnames(
+  const joinedClassname = classNames(
     'btn',
     {
       'btn-loading': loading,

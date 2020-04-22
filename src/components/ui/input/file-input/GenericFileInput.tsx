@@ -190,6 +190,8 @@ export type FileInputProps = {
   value?: FileInfo[];
   required: boolean;
   disabled: boolean | (() => boolean);
+  InputComponent?: DropzoneProps['InputComponent'] | null;
+  SubmitButtonComponent?: DropzoneProps['SubmitButtonComponent'] | null;
 } & Omit<
   DropzoneProps,
   | 'getUploadParams'
@@ -199,6 +201,8 @@ export type FileInputProps = {
   | 'classNames'
   | 'disabled'
   | 'initialFiles'
+  | 'InputComponent'
+  | 'SubmitComponent'
 >;
 const GenericFileInput = (props: FileInputProps): React.ReactElement => {
   const {
@@ -211,6 +215,8 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
     name,
     required,
     value,
+    InputComponent,
+    SubmitButtonComponent,
     ...otherProps
   } = props;
   let {maxFiles} = props;
@@ -305,6 +311,8 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
       <Dropzone
         inputContent={inputContent}
         submitButtonContent={'Сохранить'}
+        InputComponent={InputComponent as any}
+        SubmitButtonComponent={SubmitButtonComponent as any}
         {...otherProps}
         getUploadParams={getUploadParams}
         onChangeStatus={handleChangeStatus}
@@ -324,6 +332,14 @@ GenericFileInput.defaultProps = {
   required: false,
   disabled: false,
   maxFiles: 5,
-};
+} as Pick<
+  FileInputProps,
+  | 'initialFiles'
+  | 'inputContent'
+  | 'maxSizeBytes'
+  | 'required'
+  | 'disabled'
+  | 'maxFiles'
+>;
 
 export default GenericFileInput;

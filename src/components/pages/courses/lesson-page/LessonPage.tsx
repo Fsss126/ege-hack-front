@@ -53,7 +53,7 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
     const selectedLesson = (course && _.find(lessons, {id: lessonId})) || null;
 
     if (course && selectedLesson && !selectedLesson.locked) {
-      let nextVideo: LessonInfo | null = lessons[selectedLesson.num];
+      let nextVideo: LessonInfo | null = lessons[selectedLesson.num + 1];
 
       if (!nextVideo || nextVideo.locked) {
         nextVideo = null;

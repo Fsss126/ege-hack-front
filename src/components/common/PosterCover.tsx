@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 import CoverImage, {CoverImageProps} from './CoverImage';
@@ -19,7 +19,7 @@ const PosterCover: React.withDefaultProps<React.FC<PosterCoverProps>> = ({
   <div className="poster-cover-container">
     {online && (
       <div
-        className={classnames('poster-cover__online-badge', 'font-size-xs', {
+        className={classNames('poster-cover__online-badge', 'font-size-xs', {
           'poster-cover__online-text': showOnline,
         })}
       >
@@ -29,7 +29,7 @@ const PosterCover: React.withDefaultProps<React.FC<PosterCoverProps>> = ({
     <CoverImage
       {...rest}
       src={cover}
-      className={classnames('poster-cover', className)}
+      className={classNames('poster-cover', className)}
     />
   </div>
 );
