@@ -1,6 +1,6 @@
 import {AxiosError} from 'axios';
 import {Reducer} from 'redux';
-import {SanitizedTestInfo, TestStateInfo} from 'types/entities';
+import {SanitizedTestInfo, TestStateInfo, TestStatus} from 'types/entities';
 
 import {Action, ActionType} from '../actions';
 
@@ -33,6 +33,37 @@ export const testReducer: Reducer<TestState, Action> = (
       return {
         ...defaultState,
         state,
+      };
+    }
+    case ActionType.TEST_SAVE_ANSWER: {
+      if (
+        !state.test ||
+        state.test instanceof Error ||
+        !state.state ||
+        state.state instanceof Error ||
+        state.state.status === TestStatus.COMPLETED
+      ) {
+        return state;
+      }
+      const {answerInfo, taskId} = action;
+      const {
+        state: {answers},
+        test: {tasks},
+      } = state;
+      const mergedAnswers = {
+        ...answers,
+        [taskId]: answerInfo,
+      };
+      const answersCount = Object.values(mergedAnswers).length;
+      const tasksCount = tasks.length;
+
+      return {
+        ...state,
+        state: {
+          ...state.state,
+          answers: mergedAnswers,
+          progress: answersCount / tasksCount,
+        },
       };
     }
     default:

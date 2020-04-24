@@ -90,7 +90,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
             <DropdownMenu
               content={<DropdownIconButton className="icon-ellipsis" />}
             >
-              <DropdownMenuOption tag={Link} to={`${courseLink}edit/`}>
+              <DropdownMenuOption component={Link} to={`${courseLink}edit/`}>
                 <i className="far fa-edit" />
                 Изменить курс
               </DropdownMenuOption>
@@ -99,7 +99,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
                 Удалить курс
               </DropdownMenuOption>
               {!course.hide_from_market && (
-                <DropdownMenuOption tag={Link} to={`/shop/${courseId}/`}>
+                <DropdownMenuOption component={Link} to={`/shop/${courseId}/`}>
                   <i className="icon-logout" />
                   Открыть в магазине
                 </DropdownMenuOption>
@@ -122,7 +122,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
           Ученики{' '}
           {participants && <span className="badge">{participants.length}</span>}
         </TabNavLink>
-        {/*<TabNavLink to={`${match.url}/webinars/`} disabled={webinars === false}>*/}
+        {/*<TabNavLink navigateTo={`${match.url}/webinars/`} disabled={webinars === false}>*/}
         {/*    Вебинары {webinars && <span className="badge">{webinars.webinars.length}</span>}*/}
         {/*</TabNavLink>*/}
         <TabNavLink to={`${match.url}/teachers/`} disabled>

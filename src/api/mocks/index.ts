@@ -9,11 +9,12 @@ import {
   TEST,
   TEST_STATE_COMPLETED,
   TEST_STATE_NOT_STARTED,
-  TEST_STATUS_COMPLETED,
   TEST_STATUS_NOT_STARTED,
   WEBINAR_SCHEDULE,
 } from 'api/mocks/mocks';
 import {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
+import {AnswerType, TestStateAnswerDto} from 'types/dtos';
+import {SanitizedTaskInfo, TestAnswerValue} from 'types/entities';
 
 import {getUrl} from '../helpers';
 
@@ -74,6 +75,43 @@ export const mockRequests = (api: AxiosInstance) => {
   });
 };
 
+class Queue<T> {
+  private queue: T[] = [];
+
+  public push = (item: T) => this.queue.push(item);
+
+  public pop = () => this.queue.shift();
+}
+
+const mockedTestAnswerResponses = new Queue<TestStateAnswerDto>();
+
+export const addMockedTestAnswerResponses = (
+  task: SanitizedTaskInfo,
+  value: TestAnswerValue,
+) => {
+  const {
+    id,
+    answer: {type},
+  } = task;
+  mockedTestAnswerResponses.push(
+    typeof value === 'object'
+      ? {
+          task_id: id,
+          user_answer: {
+            type: AnswerType.FILE,
+            file_info: value,
+          },
+        }
+      : {
+          task_id: id,
+          user_answer: {
+            type,
+            value: type === AnswerType.NUMBER ? Number(value) : value,
+          },
+        },
+  );
+};
+
 export const mockTestsRequests = (api: AxiosInstance) => {
   api.interceptors.response.use(
     (response) => {
@@ -104,9 +142,14 @@ export const mockTestsRequests = (api: AxiosInstance) => {
       const url = getUrl(config);
       switch (true) {
         case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
-          return getMockedResponse(config);
+          const response = mockedTestAnswerResponses.pop();
+          console.log(response);
+
+          if (response) {
+            return getMockedResponse(config, response);
+          }
         case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
-          return getMockedResponse(config, TEST_STATE_COMPLETED);
+          return getMockedResponse(config, TEST_STATE_NOT_STARTED);
         case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname):
           return getMockedResponse(config, TEST_STATE_COMPLETED);
         case /\/knowledge\/tests\/(.*)$/.test(url.pathname):

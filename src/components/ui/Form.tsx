@@ -51,6 +51,7 @@ export function useFormState<A extends Array<any>, R, E extends Error = Error>(
   const [submitting, setSubmitting] = useState<boolean | null>(null);
 
   const onChange = useCallback(() => {
+    console.log('change');
     setChanged(true);
   }, []);
 
@@ -138,6 +139,7 @@ export function useForm<D extends FormData>(
   const [isValid, setValidity] = useState<boolean>(false);
 
   const onInputChange = React.useCallback((value, name) => {
+    console.log(value, name);
     setFormData((state) => {
       if (/\W/.test(name)) {
         const arrayMatch = name.match(/(.*)\[(.*)\]$/);
@@ -212,7 +214,7 @@ export type ErrorHandler<E extends Error = AxiosError> = (
 export type RevokeRelatedDataCallback<R> = (response: R) => void;
 
 export interface FormHandleSubmittedHookParams<R> {
-  onSubmitted: SubmittedHandler<R>;
+  onSubmitted?: SubmittedHandler<R>;
   revokeRelatedData?: RevokeRelatedDataCallback<R>;
   reset: SimpleCallback;
   messagePopup: MessagePopup | null;
@@ -352,7 +354,7 @@ const Form = <R, E extends Error = AxiosError>(
       {children}
       <div className="form__action-container btn-container text-right">
         {cancelLink && (
-          <Button<typeof Link> tag={Link} neutral={true} to={cancelLink}>
+          <Button<typeof Link> component={Link} neutral={true} to={cancelLink}>
             {cancelButtonText}
           </Button>
         )}

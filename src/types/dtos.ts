@@ -273,11 +273,7 @@ export interface UserAnswerDtoReq extends UserAnswerDtoCommon {
   user_answer: string | number;
 }
 
-export interface UserAnswerDtoResp extends UserAnswerDtoCommon {
-  user_answer: string | number | FileInfo;
-}
-
-export interface UserAnswerDto {
+export interface UserAnswerDtoResp {
   type: AnswerType;
   value?: string | number;
   file_info?: FileInfo;
@@ -285,7 +281,7 @@ export interface UserAnswerDto {
 
 export interface TestStateAnswerDto {
   task_id: number;
-  user_answer: UserAnswerDto;
+  user_answer: UserAnswerDtoResp;
   correct_answer?: CorrectAnswerDto;
   is_correct?: boolean;
 }

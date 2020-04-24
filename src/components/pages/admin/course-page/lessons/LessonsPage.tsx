@@ -94,7 +94,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
               content={<DropdownIconButton className="icon-ellipsis" />}
             >
               <DropdownMenuOption
-                tag={Link}
+                component={Link}
                 to={`/admin/${course_id}/${link}edit/`}
               >
                 <i className="far fa-edit" />
@@ -131,7 +131,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
               <div className="layout__content-block layout__content-block--stacked d-flex">
                 <Button
                   neutral
-                  tag={Link}
+                  component={Link}
                   to={`/admin/${courseId}/lessons/create/`}
                   icon={<i className="icon-add" />}
                 >

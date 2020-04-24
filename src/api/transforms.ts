@@ -10,7 +10,7 @@ import {
   TestDtoResp,
   TestStateAnswerDto,
   TestStateDtoResp,
-  UserAnswerDto,
+  UserAnswerDtoResp,
   UserInfoDtoResp,
 } from '../types/dtos';
 import {
@@ -156,7 +156,9 @@ export const transformTest = ({
   ...rest,
 });
 
-export const transformUserAnswer = (answer: UserAnswerDto): UserAnswerInfo => {
+export const transformUserAnswer = (
+  answer: UserAnswerDtoResp,
+): UserAnswerInfo => {
   const {type, value, file_info} = answer;
 
   return {

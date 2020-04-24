@@ -12,8 +12,7 @@ export type ButtonProps<
   loading: boolean;
   icon?: React.ReactNode;
   iconAction?: SimpleCallback;
-  onClick?: SimpleCallback;
-  tag: T;
+  component: T;
   className?: string;
   dataAttribute?: boolean;
 } & React.ComponentProps<T>;
@@ -34,7 +33,7 @@ const Button = <T extends React.ElementType>(
     loading,
     icon,
     iconAction,
-    tag: Tag,
+    component: Component,
     onClick,
     dataAttribute,
     ...rest
@@ -50,7 +49,7 @@ const Button = <T extends React.ElementType>(
   );
 
   return (
-    <Tag className={joinedClassname} {...rest}>
+    <Component className={joinedClassname} {...rest}>
       <span className="btn__content">
         {icon && (
           <div
@@ -80,14 +79,14 @@ const Button = <T extends React.ElementType>(
           <div className="spinner-border" />
         </div>
       </CSSTransition>
-    </Tag>
+    </Component>
   );
 };
 Button.defaultProps = {
   active: true,
   neutral: false,
   loading: false,
-  tag: 'div',
+  component: 'div',
 };
 
 export default Button;

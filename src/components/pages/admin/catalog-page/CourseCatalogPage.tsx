@@ -59,7 +59,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
               <DropdownMenu
                 content={<DropdownIconButton className="icon-ellipsis" />}
               >
-                <DropdownMenuOption tag={Link} to={`${courseLink}edit/`}>
+                <DropdownMenuOption component={Link} to={`${courseLink}edit/`}>
                   <i className="far fa-edit" />
                   Изменить
                 </DropdownMenuOption>
@@ -68,14 +68,14 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
                   Удалить
                 </DropdownMenuOption>
                 <DropdownMenuOption
-                  tag={Link}
+                  component={Link}
                   to={`${courseLink}lessons/create/`}
                 >
                   <i className="icon-add" />
                   Добавить урок
                 </DropdownMenuOption>
                 {!hide_from_market && (
-                  <DropdownMenuOption tag={Link} to={`/shop/${id}/`}>
+                  <DropdownMenuOption component={Link} to={`/shop/${id}/`}>
                     <i className="icon-logout" />
                     Открыть в магазине
                   </DropdownMenuOption>
@@ -112,7 +112,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
               <div className="layout__content-block layout__content-block--stacked d-flex">
                 <Button
                   neutral
-                  tag={Link}
+                  component={Link}
                   to={`${path}/create/`}
                   icon={<i className="icon-add" />}
                 >

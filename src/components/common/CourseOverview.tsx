@@ -48,7 +48,10 @@ const Description: React.FC = () => {
               <DropdownMenu
                 content={<DropdownIconButton className="icon-ellipsis" />}
               >
-                <DropdownMenuOption tag={Link} to={`/admin/${course.id}/`}>
+                <DropdownMenuOption
+                  component={Link}
+                  to={`/admin/${course.id}/`}
+                >
                   <i className="icon-logout" />
                   Управление курсом
                 </DropdownMenuOption>

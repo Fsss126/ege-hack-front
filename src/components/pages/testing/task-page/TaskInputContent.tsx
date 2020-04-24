@@ -1,5 +1,6 @@
-import APIRequest from 'api';
+import {addMockedTestAnswerResponses} from 'api/mocks';
 import {
+  FormSubmitHandler,
   useForm,
   useFormHandleError,
   useFormHandleSubmitted,
@@ -8,19 +9,21 @@ import {
 } from 'components/ui/Form';
 import {useLoadingState} from 'components/ui/LoadingIndicator';
 import MessagePopup from 'components/ui/MessagePopup';
+import {useCompleteTest, useSaveAnswer} from 'hooks/selectors';
 import React, {useCallback, useRef} from 'react';
-import {FileInfo, UserAnswerDtoReq} from 'types/dtos';
+import {FileInfo} from 'types/dtos';
 import {
   AnswerType,
-  AnswerValue,
   SanitizedTaskInfo,
   SanitizedTestInfo,
+  TestAnswerValue,
   TestStateActiveInfo,
-  UserAnswerInfo,
 } from 'types/entities';
+import {Deferred} from 'utils/promiseHelper';
 
+import NavigationBlocker from '../../../common/NavigationBlocker';
 import {AnswerInput} from './AnswerInput';
-import {TaskNav} from './TaskNav';
+import {LinkClickCallback, TaskNav} from './TaskNav';
 import {TaskPageLayout} from './TaskPageLayout';
 
 interface InputData {
@@ -35,13 +38,16 @@ interface TaskResultContentProps {
   task: SanitizedTaskInfo;
 }
 
-function getRequestData(data: InputData, taskId: number): UserAnswerDtoReq {
+function getValue(data: InputData) {
   const {value} = data;
 
-  return {
-    task_id: taskId,
-    user_answer: value instanceof Array ? value[0]?.file_id : value,
-  };
+  return value instanceof Array ? value[0] : value;
+}
+
+function getRequestData(data: InputData): string {
+  const value = getValue(data);
+
+  return typeof value === 'object' ? value?.file_id : value;
 }
 
 export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
@@ -51,10 +57,13 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
     answers: {[taskId]: answer},
   } = state;
   const {
+    order,
     answer: {type},
   } = task;
+  const tasksCount = test.tasks.length;
+  const isLastTask = order === tasksCount - 1;
 
-  let initialValue: AnswerValue | undefined;
+  let initialValue: TestAnswerValue | undefined;
 
   if (answer) {
     ({
@@ -62,19 +71,13 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
     } = answer);
   }
 
-  const createRequest = useCallback(
-    (requestData: UserAnswerDtoReq): Promise<UserAnswerInfo> =>
-      APIRequest.put(`/knowledge/tests/${testId}/answer`, requestData),
-    [testId],
-  );
-
   const formElementRef = useRef(null);
   const checkValidity = useFormValidityChecker(
     formElementRef.current,
     undefined,
   );
 
-  const {formData, isValid, onInputChange, reset} = useForm<InputData>(
+  const {formData, onInputChange, reset} = useForm<InputData>(
     () =>
       ({
         value:
@@ -82,16 +85,57 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
             ? initialValue
               ? [initialValue]
               : []
-            : initialValue || '',
+            : initialValue
+            ? initialValue.toString()
+            : '',
       } as any),
     checkValidity,
   );
 
   const {value} = formData;
 
-  const onSubmit = useCallback(() => {
-    return createRequest(getRequestData(formData, taskId));
-  }, [createRequest, formData, taskId]);
+  const saveAnswerCallback = useSaveAnswer();
+  const completeCallback = useCompleteTest();
+
+  const onSubmit = useCallback((promise: Promise<any>) => promise, []);
+
+  const submitAnswer = useCallback(
+    (complete: boolean, navigateTo: string) => {
+      const answer = getRequestData(formData);
+      const deferred = new Deferred<any>();
+
+      addMockedTestAnswerResponses(task, getValue(formData));
+
+      saveAnswerCallback({
+        testId,
+        taskId,
+        answer,
+        complete,
+        navigateTo,
+        onSuccess: deferred.resolve,
+        onError: deferred.reject,
+      });
+
+      return deferred.promise;
+    },
+    [formData, saveAnswerCallback, taskId, testId, task],
+  );
+
+  const submitTest = useCallback(
+    (navigateTo: string) => {
+      const deferred = new Deferred<any>();
+
+      completeCallback({
+        testId,
+        navigateTo,
+        onSuccess: deferred.resolve,
+        onError: deferred.reject,
+      });
+
+      return deferred.promise;
+    },
+    [completeCallback, testId],
+  );
 
   const onError = React.useCallback(
     (error, showErrorMessage, reloadCallback) => {
@@ -109,16 +153,11 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
     [],
   );
 
-  const onSubmitted = useCallback(() => {
-    // TODO
-  }, []);
-
   const messagePopupRef = useRef<MessagePopup>(null);
   const messagePopup = messagePopupRef.current;
 
   const handleSubmitted = useFormHandleSubmitted({
     reset,
-    onSubmitted,
     messagePopup,
   });
 
@@ -134,23 +173,60 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
   );
   const loadingState = useLoadingState(submitting, submitting === false);
 
+  const onNextClick: LinkClickCallback = useCallback(
+    (link, event) => {
+      if (!hasChanged) {
+        if (isLastTask) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          handleSubmit(submitTest(link));
+        }
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      handleSubmit(submitAnswer(isLastTask, link));
+    },
+    [handleSubmit, hasChanged, isLastTask, submitAnswer, submitTest],
+  );
+
+  const onPrevClick: LinkClickCallback = useCallback(
+    (link, event) => {
+      if (!hasChanged) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      handleSubmit(submitAnswer(false, link));
+    },
+    [handleSubmit, hasChanged, submitAnswer],
+  );
+
   const nav = (
     <TaskNav
       task={task}
       test={test}
       state={state}
       loadingState={loadingState}
+      onNextClick={onNextClick}
+      onPrevClick={onPrevClick}
     />
   );
 
   return (
     <TaskPageLayout {...layoutProps} testId={testId} taskId={taskId} nav={nav}>
       <AnswerInput
+        ref={formElementRef}
         onInputChange={onInputChange}
         onFormChange={onChange}
         type={type}
         value={value}
       />
+      {hasChanged && <NavigationBlocker blockHistoryChange={false} />}
       <MessagePopup ref={messagePopupRef} />
     </TaskPageLayout>
   );

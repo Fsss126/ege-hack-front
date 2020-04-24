@@ -80,12 +80,15 @@ const Header: React.FC<HeaderProps> = (props) => {
               >
                 {user !== null ? (
                   <div className="user-nav__menu-options">
-                    <DropdownMenuOption<typeof Link> tag={Link} to="/account/">
+                    <DropdownMenuOption<typeof Link>
+                      component={Link}
+                      to="/account/"
+                    >
                       <i className="icon-profile" />
                       Аккаунт
                     </DropdownMenuOption>
                     <DropdownMenuOption<typeof Link>
-                      tag={Link}
+                      component={Link}
                       to="/account/settings/"
                     >
                       <i className="icon-settings" />
@@ -98,7 +101,10 @@ const Header: React.FC<HeaderProps> = (props) => {
                   </div>
                 ) : (
                   <div className="user-nav__menu-options">
-                    <DropdownMenuOption<typeof Link> tag={Link} to="/login/">
+                    <DropdownMenuOption<typeof Link>
+                      component={Link}
+                      to="/login/"
+                    >
                       <i className="icon-login" />
                       Войти
                     </DropdownMenuOption>

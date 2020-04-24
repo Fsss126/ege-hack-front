@@ -33,6 +33,10 @@ import {
   CourseDeleteErrorCallback,
   LessonDeleteCallback,
   LessonDeleteErrorCallback,
+  TestCompleteCallback,
+  TestCompleteErrorCallback,
+  TestSaveAnswerCallback,
+  TestSaveAnswerErrorCallback,
   TestStartCallback,
   TestStartErrorCallback,
   WebinarDeleteCallback,
@@ -831,51 +835,121 @@ export function useDeleteWebinar(
   );
 }
 
-export type StartTestHookResult = (
-  courseId: number,
-  lessonId: number,
-  testId: number,
-) => void;
+export type StartTestHookResult = (params: {
+  courseId: number;
+  lessonId: number;
+  testId: number;
+  onSuccess?: TestStartCallback;
+  onError?: TestStartErrorCallback;
+}) => void;
 
-export function useStartTest(
-  onSuccessCallback: TestStartCallback,
-  onError: TestStartErrorCallback,
-): StartTestHookResult {
+export function useStartTest(): StartTestHookResult {
   const dispatch = useDispatch<Dispatch<Action>>();
   const history = useHistory();
 
-  const onTestStart = useCallback(
-    (
-      courseId: number,
-      lessonId: number,
-      testId: number,
-      testState: TestStateInfo,
-    ) => {
-      const {last_task_id, status} = testState;
-      const testUrl = `/courses/${courseId}/${lessonId}/test/${testId}`;
-      const isCompleted = status === TestStatus.COMPLETED;
-
-      onSuccessCallback(testId, testState);
-      history.push(
-        isCompleted ? `${testUrl}/results/` : `${testUrl}/${last_task_id}/`,
-      );
-    },
-    [history, onSuccessCallback],
-  );
-
   return useCallback(
-    (courseId, lessonId, testId) => {
-      const onSuccess: TestStartCallback = (testId, testState) => {
-        onTestStart(courseId, lessonId, testId, testState);
+    (params) => {
+      const {courseId, lessonId, testId, onSuccess, onError} = params;
+      const onSuccessCallback: TestStartCallback = (testId, testState) => {
+        const {last_task_id, status} = testState;
+        const testUrl = `/courses/${courseId}/${lessonId}/test/${testId}`;
+        const isCompleted = status === TestStatus.COMPLETED;
+
+        if (onSuccess) {
+          onSuccess(testId, testState);
+        }
+
+        history.push(
+          isCompleted ? `${testUrl}/results/` : `${testUrl}/${last_task_id}/`,
+        );
       };
+
       dispatch({
         type: ActionType.TEST_START_REQUEST,
         testId,
-        onSuccess,
+        onSuccess: onSuccessCallback,
         onError,
       });
     },
-    [dispatch, onTestStart, onError],
+    [dispatch, history],
+  );
+}
+
+export type SaveAnswerHookResult = (params: {
+  testId: number;
+  taskId: number;
+  answer: string;
+  complete: boolean;
+  navigateTo: string;
+  onSuccess: TestSaveAnswerCallback;
+  onError: TestSaveAnswerErrorCallback;
+}) => void;
+
+export function useSaveAnswer(): SaveAnswerHookResult {
+  const dispatch = useDispatch<Dispatch<Action>>();
+  const history = useHistory();
+
+  return useCallback(
+    (params) => {
+      const {
+        testId,
+        taskId,
+        answer,
+        complete,
+        navigateTo,
+        onSuccess,
+        onError,
+      } = params;
+      const onSuccessCallback: TestSaveAnswerCallback = (
+        testId,
+        taskId,
+        savedAnswer,
+      ) => {
+        onSuccess(testId, taskId, savedAnswer);
+        history.push(navigateTo);
+      };
+
+      dispatch({
+        type: ActionType.TEST_SAVE_ANSWER_REQUEST,
+        testId,
+        taskId,
+        answer,
+        complete,
+        onSuccess: onSuccessCallback,
+        onError,
+      });
+    },
+    [dispatch, history],
+  );
+}
+
+export type CompleteTestHookResult = (params: {
+  testId: number;
+  navigateTo: string;
+  onSuccess: TestCompleteCallback;
+  onError: TestCompleteErrorCallback;
+}) => void;
+
+export function useCompleteTest(): CompleteTestHookResult {
+  const dispatch = useDispatch<Dispatch<Action>>();
+  const history = useHistory();
+
+  return useCallback(
+    (params) => {
+      const {testId, navigateTo, onSuccess, onError} = params;
+      const onSuccessCallback: TestCompleteCallback = (testId, results) => {
+        onSuccess(testId, results);
+        history.push(navigateTo);
+      };
+
+      dispatch({
+        type: ActionType.TEST_COMPLETE_REQUEST,
+        testId,
+        onSuccess: onSuccessCallback,
+        onError,
+      });
+    },
+    [dispatch, history],
   );
 }
 

@@ -146,7 +146,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
                 content={<DropdownIconButton className="icon-ellipsis" />}
               >
                 <DropdownMenuOption
-                  tag={Link}
+                  component={Link}
                   to={`${courseLink}/webinars/edit/`}
                 >
                   <i className="far fa-edit" />
@@ -184,7 +184,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
               <div className="layout__content-block layout__content-block--stacked d-flex">
                 <Button
                   neutral
-                  tag={Link}
+                  component={Link}
                   to={`${courseLink}/webinars/edit/`}
                   icon={<i className="icon-add" />}
                 >

@@ -22,7 +22,11 @@ const InputButton: React.FC<IInputProps> = (props) => {
   const isActive = files.length < maxFiles && !disabled;
 
   return (
-    <Button tag="label" active={isActive} icon={<i className="icon-add" />}>
+    <Button
+      component="label"
+      active={isActive}
+      icon={<i className="icon-add" />}
+    >
       {content}
       <input
         className={className}

@@ -165,7 +165,7 @@ export type UserAnswerInfo = {type: AnswerType} & (
   | {type: AnswerType.FILE; value: FileInfo}
 );
 
-export type AnswerValue = UserAnswerInfo['value'];
+export type TestAnswerValue = UserAnswerInfo['value'];
 
 export interface TestStateActiveAnswerInfo {
   task_id: number;
@@ -176,6 +176,10 @@ export interface TestStatePassedAnswerInfo extends TestStateActiveAnswerInfo {
   correct_answer: CorrectAnswerDto;
   is_correct: boolean;
 }
+
+export type TestStateAnswerInfo =
+  | TestStateActiveAnswerInfo
+  | TestStatePassedAnswerInfo;
 
 type CommonTestStateInfo = {
   status: TestStatus;

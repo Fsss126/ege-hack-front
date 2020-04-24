@@ -1,7 +1,12 @@
 import React from 'react';
 import {Prompt} from 'react-router-dom';
 
-const NavigationBlocker: React.FC = () => {
+interface NavigationBlockerProps {
+  blockHistoryChange: boolean;
+}
+
+const NavigationBlocker = (props: NavigationBlockerProps) => {
+  const {blockHistoryChange} = props;
   const unloadCallback = React.useCallback((event) => {
     // Cancel the event as stated by the standard.
     event.preventDefault();
@@ -14,9 +19,12 @@ const NavigationBlocker: React.FC = () => {
       window.removeEventListener('beforeunload', unloadCallback);
     };
   }, [unloadCallback]);
-  return (
+  return blockHistoryChange ? (
     <Prompt message="У вас есть несохраненные изменения, покинуть страницу?" />
-  );
+  ) : null;
+};
+NavigationBlocker.defaultProps = {
+  blockHistoryChange: true,
 };
 
 export default NavigationBlocker;

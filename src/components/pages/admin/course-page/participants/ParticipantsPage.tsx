@@ -138,7 +138,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
               <div className="layout__content-block layout__content-block--stacked d-flex">
                 <Button
                   neutral
-                  tag={Link}
+                  component={Link}
                   to={`/admin/${courseId}/participants/edit/`}
                   icon={<i className="icon-add" />}
                 >
@@ -152,8 +152,8 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
               {/*        <DropdownIconButton className="icon-ellipsis"/>*/}
               {/*    )}>*/}
               {/*        <DropdownMenuOption*/}
-              {/*            tag={Link}*/}
-              {/*            to={`/catalog-page/${courseId}/participants/edit/`}>*/}
+              {/*            component={Link}*/}
+              {/*            navigateTo={`/catalog-page/${courseId}/participants/edit/`}>*/}
               {/*            <i className="icon-add"/>Добавить учеников*/}
               {/*        </DropdownMenuOption>*/}
               {/*    </DropdownMenu>*/}

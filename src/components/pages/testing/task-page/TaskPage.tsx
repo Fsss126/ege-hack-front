@@ -42,6 +42,7 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
           parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
         >
           <TaskPageContent
+            key={location.pathname}
             testId={testId}
             taskId={taskId}
             test={test}

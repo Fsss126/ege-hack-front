@@ -5,24 +5,27 @@ export type DropdownMenuOptionProps<
   T extends React.ElementType = React.ElementType<JSX.IntrinsicElements['div']>
 > = {
   children?: React.ReactNode;
-  tag: T;
+  component: T;
   className?: string;
 } & React.ComponentProps<T>;
 
 export const DropdownMenuOption = <T extends React.ElementType>(
   props: DropdownMenuOptionProps<T>,
 ): React.ReactElement => {
-  const {tag: Tag = 'div', children, className, ...rest} = props;
+  const {component: Component = 'div', children, className, ...rest} = props;
 
   return (
-    <Tag className={classNames('dropdown__menu-option', className)} {...rest}>
+    <Component
+      className={classNames('dropdown__menu-option', className)}
+      {...rest}
+    >
       {children}
-    </Tag>
+    </Component>
   );
 };
 DropdownMenuOption.defaultProps = {
-  tag: 'div',
-};
+  component: 'div',
+} as Pick<DropdownMenuOptionProps, 'component'>;
 
 export type DropdownIconButtonProps = {
   className?: string;

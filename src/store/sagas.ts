@@ -16,6 +16,7 @@ import {
 } from 'redux-saga/effects';
 
 import APIRequest from '../api';
+import {UserAnswerDtoReq} from '../types/dtos';
 import {
   CourseInfo,
   CourseParticipantInfo,
@@ -44,6 +45,7 @@ import {
   TestCompleteRequestAction,
   TestFetchAction,
   TestFetchedAction,
+  TestSaveAnswerRequestAction,
   TestStartRequestAction,
   TestStateFetchAction,
   TestStateFetchedAction,
@@ -499,7 +501,9 @@ function* processTestStart() {
         yield call(onError, testId, state);
       }
     } else {
-      yield call(onSuccess, testId, state);
+      if (onSuccess) {
+        yield call(onSuccess, testId, state);
+      }
     }
   });
 }
@@ -516,9 +520,67 @@ function* processTestComplete() {
       );
       yield put({type: ActionType.TEST_STATE_FETCHED, testId, state});
       yield select();
-      yield call(onSuccess, testId, state);
+
+      if (onSuccess) {
+        yield call(onSuccess, testId, state);
+      }
     } catch (e) {
-      yield call(onError, testId, e);
+      if (onError) {
+        yield call(onError, testId, e);
+      }
+    }
+  });
+}
+
+function* processTestSaveAnswer() {
+  yield takeEvery(ActionType.TEST_SAVE_ANSWER_REQUEST, function* (
+    action: TestSaveAnswerRequestAction,
+  ) {
+    const {testId, taskId, answer, complete, onSuccess, onError} = action;
+
+    const requestData: UserAnswerDtoReq = {
+      task_id: taskId,
+      user_answer: answer,
+    };
+
+    try {
+      const answerInfo = yield call(
+        APIRequest.put,
+        `/knowledge/tests/${testId}/answer`,
+        requestData,
+      );
+      yield put({
+        type: ActionType.TEST_SAVE_ANSWER,
+        taskId,
+        testId,
+        answerInfo,
+      });
+      yield select();
+
+      if (complete) {
+        yield put({
+          type: ActionType.TEST_COMPLETE_REQUEST,
+          testId,
+          onSuccess: () => {
+            if (onSuccess) {
+              onSuccess(testId, taskId, answerInfo);
+            }
+          },
+          onError: (testId, error) => {
+            if (onError) {
+              onError(testId, taskId, error);
+            }
+          },
+        });
+      }
+
+      if (onSuccess) {
+        yield call(onSuccess, testId, taskId, answerInfo);
+      }
+    } catch (e) {
+      if (onError) {
+        yield call(onError, testId, taskId, e);
+      }
     }
   });
 }
@@ -558,5 +620,6 @@ export default function* rootSaga() {
 
   yield spawn(processTestStart);
   yield spawn(processTestComplete);
+  yield spawn(processTestSaveAnswer);
   yield spawn(init);
 }

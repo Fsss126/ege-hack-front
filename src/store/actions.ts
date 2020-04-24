@@ -8,7 +8,9 @@ import {
   SubjectInfo,
   TeacherInfo,
   TestInfo,
+  TestStateAnswerInfo,
   TestStateInfo,
+  TestStatePassedInfo,
   UserCourseInfo,
   UserInfo,
   WebinarScheduleInfo,
@@ -65,6 +67,8 @@ export enum ActionType {
   TEST_COMPLETE_REQUEST = 'TEST_COMPLETE_REQUEST',
   TEST_STATE_FETCH = 'TEST_RESULTS_FETCH',
   TEST_STATE_FETCHED = 'TEST_RESULTS_FETCHED',
+  TEST_SAVE_ANSWER_REQUEST = 'TEST_SAVE_ANSWER_REQUEST',
+  TEST_SAVE_ANSWER = 'TEST_SAVE_ANSWER',
 }
 
 interface Credentials {
@@ -338,8 +342,8 @@ export type TestStartErrorCallback = (
 export type TestStartRequestAction = {
   type: ActionType.TEST_START_REQUEST;
   testId: number;
-  onSuccess: TestStartCallback;
-  onError: TestStartErrorCallback;
+  onSuccess?: TestStartCallback;
+  onError?: TestStartErrorCallback;
 };
 
 export type TestFetchAction = {
@@ -355,7 +359,7 @@ export type TestFetchedAction = {
 
 export type TestCompleteCallback = (
   testId: number,
-  results: TestStateInfo,
+  results: TestStatePassedInfo,
 ) => void;
 
 export type TestCompleteErrorCallback = (
@@ -366,8 +370,8 @@ export type TestCompleteErrorCallback = (
 export type TestCompleteRequestAction = {
   type: ActionType.TEST_COMPLETE_REQUEST;
   testId: number;
-  onSuccess: TestCompleteCallback;
-  onError: TestCompleteErrorCallback;
+  onSuccess?: TestCompleteCallback;
+  onError?: TestCompleteErrorCallback;
 };
 
 export type TestStateFetchAction = {
@@ -379,6 +383,35 @@ export type TestStateFetchedAction = {
   type: ActionType.TEST_STATE_FETCHED;
   testId: number;
   state: TestStateInfo | AxiosError;
+};
+
+export type TestSaveAnswerCallback = (
+  testId: number,
+  taskId: number,
+  savedAnswer: TestStateAnswerInfo,
+) => void;
+
+export type TestSaveAnswerErrorCallback = (
+  testId: number,
+  taskId: number,
+  error: AxiosError,
+) => void;
+
+export type TestSaveAnswerRequestAction = {
+  type: ActionType.TEST_SAVE_ANSWER_REQUEST;
+  testId: number;
+  taskId: number;
+  answer: string;
+  complete: boolean;
+  onSuccess?: TestSaveAnswerCallback;
+  onError?: TestSaveAnswerErrorCallback;
+};
+
+export type TestSaveAnswerAction = {
+  type: ActionType.TEST_SAVE_ANSWER;
+  testId: number;
+  taskId: number;
+  answerInfo: TestStateAnswerInfo;
 };
 
 export type Action = {type: ActionType} & (
@@ -432,4 +465,6 @@ export type Action = {type: ActionType} & (
   | TestCompleteRequestAction
   | TestStateFetchAction
   | TestStateFetchedAction
+  | TestSaveAnswerRequestAction
+  | TestSaveAnswerAction
 );

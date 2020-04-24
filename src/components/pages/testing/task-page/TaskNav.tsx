@@ -1,27 +1,39 @@
 import Button from 'components/ui/Button';
 import Link from 'components/ui/Link';
 import {LOADING_STATE, LoadingIndicator} from 'components/ui/LoadingIndicator';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   SanitizedTaskInfo,
   SanitizedTestInfo,
   TestStateInfo,
   TestStatus,
 } from 'types/entities';
-import {SimpleCallback} from 'types/utility/common';
+
+export type LinkClickCallback = (
+  link: string,
+  event: React.MouseEvent<HTMLAnchorElement>,
+) => void;
 
 type TaskNavProps = {
   task: SanitizedTaskInfo;
   test: SanitizedTestInfo;
   state: TestStateInfo;
-  onNextClick?: SimpleCallback;
-  onPrevClick?: SimpleCallback;
+  onNextClick?: LinkClickCallback;
+  onPrevClick?: LinkClickCallback;
   loadingState?: LOADING_STATE;
-  to?: string;
+  navigateTo?: string;
 };
 
 export const TaskNav: React.FC<TaskNavProps> = (props) => {
-  const {test, state, task, onNextClick, onPrevClick, loadingState, to} = props;
+  const {
+    test,
+    state,
+    task,
+    onNextClick,
+    onPrevClick,
+    loadingState,
+    navigateTo,
+  } = props;
 
   const {order} = task;
   const {status} = state;
@@ -33,6 +45,24 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
   const next = isLastTask ? '../results/' : `../${test.tasks[order + 1].id}`;
   const prev = isFirstTask ? null : `../${test.tasks[order - 1].id}`;
 
+  const nextClickCallback: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+    (event) => {
+      if (onNextClick) {
+        onNextClick(next, event);
+      }
+    },
+    [next, onNextClick],
+  );
+
+  const prevClickCallback: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+    (event) => {
+      if (prev && onPrevClick) {
+        onPrevClick(prev, event);
+      }
+    },
+    [prev, onPrevClick],
+  );
+
   return (
     <div className="test-task__nav">
       {prev && (
@@ -40,12 +70,12 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
           neutral
           dataAttribute
           className="test-task__nav-prev"
-          tag={Link}
+          component={Link}
           to={prev}
-          onClick={onPrevClick}
+          onClick={prevClickCallback}
           icon={
             loadingState &&
-            to === prev &&
+            navigateTo === prev &&
             loadingState !== LOADING_STATE.DONE && (
               <LoadingIndicator state={loadingState} />
             )
@@ -57,12 +87,12 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
       <Button<typeof Link>
         dataAttribute
         className="test-task__nav-next"
-        tag={Link}
+        component={Link}
         to={next}
-        onClick={onNextClick}
+        onClick={nextClickCallback}
         icon={
           loadingState &&
-          to === next &&
+          navigateTo === next &&
           loadingState !== LOADING_STATE.DONE && (
             <LoadingIndicator state={loadingState} />
           )

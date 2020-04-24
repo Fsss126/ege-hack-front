@@ -20,7 +20,8 @@ type CommonFileProps = {
   errorMessage?: string;
 };
 
-export type FileProps = CommonFileProps & Omit<ButtonProps, 'loading'>;
+export type FileProps = CommonFileProps &
+  Omit<React.Defaultize<ButtonProps, typeof Button.defaultProps>, 'loading'>;
 
 const DefaultFileProps: Partial<FileProps> = {
   rejected: false,

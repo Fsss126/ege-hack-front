@@ -30,7 +30,7 @@ const ErrorPage: React.withDefaultProps<React.FC<ErrorPageProps>> = (props) => {
             : code)}
       </div>
       <div className="error-page__error-message">{message}</div>
-      <Button<typeof Link> tag={Link} to={url} replace>
+      <Button<typeof Link> component={Link} to={url} replace>
         {text}
       </Button>
     </Page>

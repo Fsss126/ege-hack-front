@@ -24,14 +24,20 @@ export const TestView: React.FC<TestStatusProps> = (props) => {
     setIsFetchingTest(false);
   }, []);
 
-  const startTestCallback = useStartTest(fetchCallback, fetchCallback);
+  const startTestCallback = useStartTest();
 
   const {status, id, name} = test;
 
   const onClick = useCallback(() => {
     setIsFetchingTest(true);
-    startTestCallback(courseId, lessonId, id);
-  }, [courseId, id, lessonId, startTestCallback]);
+    startTestCallback({
+      courseId,
+      lessonId,
+      testId: id,
+      onSuccess: fetchCallback,
+      onError: fetchCallback,
+    });
+  }, [courseId, fetchCallback, id, lessonId, startTestCallback]);
 
   if (test.status === TestStatus.COMPLETED) {
     const {percentage, passed} = test;

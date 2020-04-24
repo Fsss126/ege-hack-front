@@ -8,6 +8,7 @@ import {
   LessonDtoResp,
   PersonWebinarDto,
   TeacherDtoResp,
+  TestStateAnswerDto,
   UserInfoDtoResp,
   WebinarScheduleDtoResp,
 } from 'types/dtos';
@@ -19,7 +20,9 @@ import {
   PersonWebinar,
   TeacherInfo,
   TestInfo,
+  TestStateAnswerInfo,
   TestStateInfo,
+  UserAnswerInfo,
   UserCourseInfo,
   UserInfo,
   WebinarScheduleInfo,
@@ -36,6 +39,7 @@ import {
   transformTest,
   transformTestState,
   transformUser,
+  transformUserAnswer,
 } from './transforms';
 
 export const API_ROOT = process.env.REACT_APP_API_ROOT;
@@ -193,6 +197,13 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
           ...rest,
         } as WebinarScheduleInfo;
       }
+      case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
+        const {user_answer, ...rest} = data as TestStateAnswerDto;
+
+        return {
+          ...rest,
+          user_answer: transformUserAnswer(user_answer),
+        } as TestStateAnswerInfo;
       case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
       case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname): {
         return transformTestState(data) as TestStateInfo;

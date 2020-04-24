@@ -43,7 +43,7 @@ class ActionButton extends React.Component<ActionButtonProps> {
     if ('url' in this.props) {
       return (
         <Button<typeof Link>
-          tag={Link}
+          component={Link}
           to={this.props.url as any}
           className={accent ? 'action accent' : 'action'}
           onClick={this.onClick}
