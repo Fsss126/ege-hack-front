@@ -54,7 +54,7 @@ const defaultState: DataState = {
   homeworks: {},
 };
 
-//TODO: add utils normalization
+// TODO: add utils normalization
 export const dataReducer: Reducer<DataState, Action> = (
   state = defaultState,
   action,
@@ -206,18 +206,19 @@ export const dataReducer: Reducer<DataState, Action> = (
         return state;
       }
       const lessonIndex = _.findIndex(courseLessons, {id: responseLesson.id});
-      const newLessons = [...courseLessons];
+      let newLessons = [...courseLessons];
 
       if (lessonIndex !== -1) {
         const prevLesson = courseLessons[lessonIndex];
-        const newLessons = [...courseLessons];
-        newLessons[lessonIndex] = {...prevLesson, ...responseLesson};
+        const mergedLesson = {...prevLesson, ...responseLesson};
+        newLessons[lessonIndex] = mergedLesson;
+        newLessons = _.sortBy(newLessons, 'num');
       } else {
         newLessons.push(responseLesson);
       }
       return {
         ...state,
-        lessons: {[courseId]: newLessons, ...loadedLessons},
+        lessons: {...loadedLessons, [courseId]: newLessons},
       };
     }
     case ActionType.LESSON_DELETE: {

@@ -8,12 +8,13 @@ import Form, {
 } from 'components/ui/Form';
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
-import {FileInput} from 'components/ui/input';
 import {useRevokeLessons} from 'hooks/selectors';
 import _ from 'lodash';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {FileInfo, HometaskDtoReq, LessonDtoReq} from 'types/dtos';
 import {LessonInfo} from 'types/entities';
+
+import VideoPlayer from '../../../../common/VideoPlayer';
 
 interface LessonFormData {
   name: string;
@@ -75,7 +76,10 @@ function getRequestData(
       description: hometask_description,
       deadline: (hometask_deadline as Date).getTime(),
     };
-    hometask_file && (hometask.file = hometask_file[0].file_id);
+
+    if (hometask_file) {
+      hometask.file = hometask_file[0].file_id;
+    }
     requestData.hometask = hometask;
   }
   if (attachments) {
@@ -273,14 +277,6 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
             value={num}
             onChange={onInputChange}
           />
-          <Input.Input
-            name="video_link"
-            type="text"
-            required
-            placeholder="Ссылка на видео"
-            value={video_link}
-            onChange={onInputChange}
-          />
           <Input.TextArea
             name="description"
             placeholder="Описание"
@@ -297,7 +293,20 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
       </div>
       <div className="row">
         <div className="col-12">
-          <FileInput
+          <Input.Input
+            name="video_link"
+            type="text"
+            required
+            placeholder="Ссылка на видео"
+            value={video_link}
+            onChange={onInputChange}
+          />
+          {video_link && <VideoPlayer video_link={video_link} />}
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12">
+          <Input.FileInput
             name="attachments"
             filesName="Материалы к уроку"
             value={attachments}
@@ -345,7 +354,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
           />
         </div>
         <div className="col-12">
-          <FileInput
+          <Input.FileInput
             name="hometask_file"
             filesName={null}
             value={hometask_file}

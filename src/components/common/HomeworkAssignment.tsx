@@ -21,7 +21,7 @@ const HomeworkAssignment: React.withDefaultProps<React.FC<
       </div>
     )}
     {assignment.description && (
-      <div className="description-text">{assignment.description}</div>
+      <div className="description-block">{assignment.description}</div>
     )}
     {assignment.deadline && (
       <div className="assignment__deadline">

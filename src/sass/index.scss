@@ -731,7 +731,7 @@ header {
           flex: 1;
           min-height: 0;
           color: $text-grey;
-          .description-text {
+          .description-block {
             flex: 1;
             overflow: visible;
             font-size: 12px;
@@ -748,7 +748,7 @@ header {
         .list__item-description-inner {
           @include absolutePos;
         }
-        .description-text {
+        .description-block {
           padding-top: 0;
         }
       }
@@ -1069,7 +1069,7 @@ header {
     .social-media {
       margin-top: 16px;
     }
-    .description-text {
+    .description-block {
       padding-bottom: 16px;
     }
   }

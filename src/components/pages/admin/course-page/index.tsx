@@ -1,4 +1,3 @@
-import {CatalogItemRenderer} from 'components/common/Catalog';
 import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
@@ -14,10 +13,9 @@ import {
   useParticipants,
 } from 'hooks/selectors';
 import React, {useCallback} from 'react';
-import {RouteComponentProps} from 'react-router';
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
-import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {RouteComponentPropsWithPath} from 'types/routes';
 
 import LessonsPage, {LessonRenderer} from './lessons/LessonsPage';
 import ParticipantsPage from './participants/ParticipantsPage';
@@ -40,9 +38,7 @@ const renderLesson: LessonRenderer = (lesson, {link: lessonLink, ...rest}) => {
   );
 };
 
-export type CoursePageProps = RouteComponentProps<{courseId: string}> & {
-  path: string;
-};
+export type CoursePageProps = RouteComponentPropsWithPath<{courseId: string}>;
 const CoursePage: React.FC<CoursePageProps> = (props) => {
   const {path: root, match} = props;
   const {

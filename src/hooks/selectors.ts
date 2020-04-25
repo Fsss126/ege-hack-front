@@ -263,7 +263,7 @@ export function useShopCourse(courseId: number): ShopCourseHookResult {
   };
 }
 
-//TODO: check permissions in sagas
+// TODO: check permissions in sagas
 export type AdminCoursesHookResult = {
   catalog?: CourseInfo[] | false;
   error?: AxiosError;
@@ -378,7 +378,7 @@ export function useUserCourses(): UserCoursesHookResult {
     : {courses: userCourses, reload: dispatchFetchAction};
 }
 
-//TODO: add separe API query
+// TODO: add separe API query
 export type UserCourseHookResult = ShopCourseHookResult;
 
 export function useUserCourse(courseId: number): UserCourseHookResult {
@@ -630,7 +630,6 @@ export function useHomework(lessonId: number): HomeworkHookResult {
         setError(undefined);
       }
       const homework: HomeworkInfo = (await request) as any;
-      console.log('set homework', homework);
       setHomework(homework);
     } catch (e) {
       console.error(e);
@@ -708,7 +707,9 @@ function useRedirect(redirectUrl?: string): RedirectHookResult {
   const history = useHistory();
 
   return useCallback(() => {
-    redirectUrl && history.replace(redirectUrl);
+    if (redirectUrl) {
+      history.replace(redirectUrl);
+    }
   }, [history, redirectUrl]);
 }
 
@@ -725,7 +726,9 @@ export function useDeleteCourse(
   const deleteCallback = useCallback(
     (courseId) => {
       redirectIfSupplied();
-      onDelete && onDelete(courseId);
+      if (onDelete) {
+        onDelete(courseId);
+      }
     },
     [redirectIfSupplied, onDelete],
   );
@@ -735,7 +738,7 @@ export function useDeleteCourse(
       dispatch({
         type: ActionType.COURSE_DELETE_REQUEST,
         courseId,
-        deleteCallback,
+        onDelete: deleteCallback,
         onError,
       });
     },
@@ -759,7 +762,9 @@ export function useDeleteLesson(
   const deleteCallback = useCallback(
     (courseId, lessonId) => {
       redirectIfSupplied();
-      onDelete && onDelete(courseId, lessonId);
+      if (onDelete) {
+        onDelete(courseId, lessonId);
+      }
     },
     [redirectIfSupplied, onDelete],
   );
@@ -770,7 +775,7 @@ export function useDeleteLesson(
         type: ActionType.LESSON_DELETE_REQUEST,
         courseId,
         lessonId,
-        deleteCallback,
+        onDelete: deleteCallback,
         onError,
       });
     },
@@ -815,7 +820,9 @@ export function useDeleteWebinar(
   const deleteCallback = useCallback(
     (courseId, lessonId) => {
       redirectIfSupplied();
-      onDelete && onDelete(courseId, lessonId);
+      if (onDelete) {
+        onDelete(courseId, lessonId);
+      }
     },
     [redirectIfSupplied, onDelete],
   );
@@ -827,7 +834,7 @@ export function useDeleteWebinar(
         courseId,
         webinarId,
         webinarsSchedule,
-        deleteCallback,
+        onDelete: deleteCallback,
         onError,
       });
     },

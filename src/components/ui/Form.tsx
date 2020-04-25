@@ -51,7 +51,6 @@ export function useFormState<A extends Array<any>, R, E extends Error = Error>(
   const [submitting, setSubmitting] = useState<boolean | null>(null);
 
   const onChange = useCallback(() => {
-    console.log('change');
     setChanged(true);
   }, []);
 
@@ -65,10 +64,14 @@ export function useFormState<A extends Array<any>, R, E extends Error = Error>(
           try {
             const result = await returnValue;
             setChanged(false);
-            onSubmitted && onSubmitted(result);
+            if (onSubmitted) {
+              onSubmitted(result);
+            }
           } catch (e) {
             console.error(e);
-            onError && onError(e, () => handleSubmit(...params));
+            if (onError) {
+              onError(e, () => handleSubmit(...params));
+            }
           } finally {
             setSubmitting(false);
           }
@@ -139,7 +142,6 @@ export function useForm<D extends FormData>(
   const [isValid, setValidity] = useState<boolean>(false);
 
   const onInputChange = React.useCallback((value, name) => {
-    console.log(value, name);
     setFormData((state) => {
       if (/\W/.test(name)) {
         const arrayMatch = name.match(/(.*)\[(.*)\]$/);
@@ -241,8 +243,13 @@ export function useFormHandleSubmitted<R>(
           });
         }
       };
-      revokeRelatedData && revokeRelatedData(response);
-      onSubmitted && onSubmitted(response, showSuccessMessage, reset);
+
+      if (revokeRelatedData) {
+        revokeRelatedData(response);
+      }
+      if (onSubmitted) {
+        onSubmitted(response, showSuccessMessage, reset);
+      }
     },
     [revokeRelatedData, onSubmitted, reset, messagePopup],
   );
@@ -270,7 +277,10 @@ export function useFormHandleError<E extends Error = AxiosError>(
           });
         }
       };
-      onError && onError(error, showErrorMessage, reloadCallback);
+
+      if (onError) {
+        onError(error, showErrorMessage, reloadCallback);
+      }
     },
     [onError, messagePopup],
   );

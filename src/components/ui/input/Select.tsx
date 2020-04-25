@@ -1,3 +1,4 @@
+/* tslint:disable:max-classes-per-file */
 import {assignRef} from 'definitions/helpers';
 import _ from 'lodash';
 import React, {Component, useCallback} from 'react';
@@ -13,6 +14,7 @@ import {OptionsType, ValueType} from 'react-select/src/types';
 
 import ScrollBars from '../ScrollBars';
 import {getPlaceholder, InputChangeHandler} from './Input';
+import {InputContainer} from './InputContainer';
 
 export type OptionShape<V = any, L extends React.ReactNode = string> = {
   label: L;
@@ -139,9 +141,9 @@ class MenuList<T extends OptionShape = OptionShape> extends Component<
   scrollBar = React.createRef<Scrollbars>();
 
   componentDidMount(): void {
-    //needed to the select to scroll the list to the selected option
+    // needed to the select to scroll the list to the selected option
     if (this.scrollBar.current) {
-      //TODO: investigate why declaration merging not working in this case
+      // TODO: investigate why declaration merging not working in this case
       assignRef(this.props.innerRef, (this.scrollBar.current as any).view);
     }
   }
@@ -169,18 +171,27 @@ export type SelectProps<V = any, L extends React.ReactNode = string> = {
   callback: InputChangeHandler<V | undefined>;
   options: OptionsType<OptionShape<V, L>>;
   name: string;
+  withContainer?: boolean;
 } & Omit<SelectInputProps<OptionShape<V, L>>, 'value' | 'onChange' | 'name'>;
 
 export class Select<
   V = any,
   L extends React.ReactNode = string
 > extends React.PureComponent<SelectProps<V, L>> {
+  static defaultProps = {
+    isClearable: true,
+    isSearchable: true,
+    withContainer: true,
+  };
+
   onChange = (option: ValueType<OptionShape<V, L>>): void => {
     this.props.callback(
       option && 'value' in option ? option.value : null,
       this.props.name,
     );
   };
+
+  private renderNoOptions = () => 'Нет опций';
 
   render(): React.ReactElement {
     const {
@@ -193,10 +204,13 @@ export class Select<
       placeholder,
       required,
       onChange,
+      withContainer,
       ...selectProps
     } = this.props;
 
-    return (
+    const formattedPlaceholder = getPlaceholder(placeholder, required);
+
+    const select = (
       <SelectInput<OptionShape<V, L>>
         name={name}
         options={options}
@@ -206,7 +220,7 @@ export class Select<
         classNamePrefix="select"
         onChange={this.onChange}
         menuPlacement="auto"
-        noOptionsMessage={() => 'Нет опций'}
+        noOptionsMessage={this.renderNoOptions}
         menuShouldScrollIntoView
         captureMenuScroll={false}
         components={
@@ -224,19 +238,22 @@ export class Select<
               }
         }
         styles={{
-          //removes default styles from option elements
+          // removes default styles from option elements
           option: () => ({}),
         }}
         isClearable={isClearable}
         isSearchable={isSearchable}
-        placeholder={getPlaceholder(placeholder, required)}
+        placeholder={withContainer ? 'Не выбрано' : formattedPlaceholder}
         {...selectProps}
       />
     );
-  }
 
-  static defaultProps = {
-    isClearable: true,
-    isSearchable: true,
-  };
+    return withContainer ? (
+      <InputContainer placeholder={placeholder} required={required}>
+        {select}
+      </InputContainer>
+    ) : (
+      select
+    );
+  }
 }

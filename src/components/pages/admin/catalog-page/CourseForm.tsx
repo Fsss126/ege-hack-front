@@ -163,8 +163,6 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
     checkValidity,
   );
 
-  console.log('isValid', isValid);
-
   const {
     name,
     subject_id,
@@ -182,8 +180,8 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialImageFile = useMemo(() => formData.image, []);
 
-  const from = date_start,
-    to = date_end;
+  const from = date_start;
+  const to = date_end;
   const modifiers = {start: from, end: to};
 
   // const dateStartInputRef = React.useRef(null);

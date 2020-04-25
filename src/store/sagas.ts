@@ -148,7 +148,7 @@ function* fetchTeachers() {
   });
 }
 
-//TODO: handle take leading properly
+// TODO: handle take leading properly
 function* fetchLessons() {
   yield* waitForLogin<LessonsFetchAction>(ActionType.LESSONS_FETCH, function* (
     channel,

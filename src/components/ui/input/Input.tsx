@@ -2,6 +2,8 @@ import classNames from 'classnames';
 import React, {forwardRef, useCallback} from 'react';
 import {IdentityFunction} from 'types/utility/helpers';
 
+import {InputContainer} from './InputContainer';
+
 export interface InputChangeHandler<T, E = HTMLInputElement> {
   <T, E = HTMLInputElement>(
     value: T,
@@ -102,6 +104,7 @@ export type InputProps = {
   format?: IdentityFunction<InputValue>;
   parse?: IdentityFunction<InputValue>;
   onChange?: InputChangeHandler<InputValue>;
+  withContainer?: boolean;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>;
 
 export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
@@ -114,6 +117,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     parse,
     placeholder,
     required,
+    withContainer,
     ...rest
   } = props;
   // if (type === "price") {
@@ -124,31 +128,43 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     ? useChangeHandler(callback, 'value', parse)
     : undefined;
 
-  return (
+  const input = (
     <input
       ref={ref}
       className={classNames('input', className)}
       required={required}
-      placeholder={
-        placeholder ? getPlaceholder(placeholder, required) : undefined
-      }
       value={format ? format(value) : value}
       onChange={onChange}
       type={type === 'number' || type === 'price' ? 'text' : type}
       onKeyPress={
         type === 'number' || type === 'price' ? onNumberKeyPress : undefined
       }
+      placeholder={
+        placeholder && !withContainer
+          ? getPlaceholder(placeholder, required)
+          : undefined
+      }
       {...rest}
     />
+  );
+
+  return withContainer ? (
+    <InputContainer placeholder={placeholder} required={required}>
+      {input}
+    </InputContainer>
+  ) : (
+    input
   );
 });
 Input.displayName = 'Input';
 Input.defaultProps = {
   maxLength: 50,
+  withContainer: true,
 };
 
 export type TextAreaProps = {
   onChange: InputChangeHandler<InputValue, HTMLTextAreaElement>;
+  withContainer?: boolean;
 } & Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>;
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -158,22 +174,31 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       onChange: callback,
       placeholder,
       required,
+      withContainer,
       ...rest
     } = props;
     const onChange = useChangeHandler<HTMLTextAreaElement>(callback, 'value');
 
-    return (
+    const textarea = (
       <textarea
         ref={ref}
         className={classNames('input', className)}
         onChange={onChange}
         required={required}
-        placeholder={
-          placeholder ? getPlaceholder(placeholder, required) : undefined
-        }
         {...rest}
       />
+    );
+
+    return withContainer ? (
+      <InputContainer placeholder={placeholder} required={required}>
+        {textarea}
+      </InputContainer>
+    ) : (
+      textarea
     );
   },
 );
 TextArea.displayName = 'TextArea';
+TextArea.defaultProps = {
+  withContainer: true,
+};

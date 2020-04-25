@@ -75,7 +75,7 @@ export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
   const icon =
     (state === LOADING_STATE.LOADED && 'spinner-border') ||
     (state === LOADING_STATE.SUCCESS && 'icon-check') ||
-    (state === LOADING_STATE.ERROR && 'icon-retry') ||
+    (state === LOADING_STATE.ERROR && 'icon-reload') ||
     (state === LOADING_STATE.REJECTED && 'icon-alert') ||
     'spinner-border';
 

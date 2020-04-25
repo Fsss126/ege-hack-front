@@ -63,7 +63,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
             </div>
           </div>
           {isCompleted && (
-            <div className="row description-text">
+            <div className="row description-block">
               <div className="col-auto">
                 <i className="icon-info icon-grey" />
               </div>

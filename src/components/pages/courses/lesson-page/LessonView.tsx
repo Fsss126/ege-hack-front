@@ -34,7 +34,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       </div>
       <div className="block-container description-container">
         <h2>{name}</h2>
-        <div className="description-text">{description}</div>
+        <div className="description-block">{description}</div>
       </div>
       {attachments && attachments.length > 0 && (
         <div className="block-container attachment-container">
@@ -62,7 +62,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
             </h4>
           )}
           {homework && homework.comment && (
-            <div className="description-text">{homework.comment}</div>
+            <div className="description-block">{homework.comment}</div>
           )}
         </div>
       )}

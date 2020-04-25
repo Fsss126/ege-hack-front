@@ -196,6 +196,14 @@ label {
   //}
 }
 
+.input-container {
+  .input-container__title {
+    color: $text-grey;
+    font-size: $font-size-sm;
+    padding-bottom: 12px;
+  }
+}
+
 .file {
   display: flex;
   align-items: center;
@@ -713,7 +721,11 @@ input[type=number] {
   }
   .form__fields {
     &>*~* {
-      margin-top: 16px;
+      margin-top: 20px;
+    }
+
+    textarea {
+      min-height: 160px;
     }
   }
   .form-entity {
@@ -817,9 +829,14 @@ input[type=number] {
 
 .description-text {
   color: $text-grey;
-  padding-top: 12px;
+  font-size: $font-size-sm;
+}
+
+.description-block {
+  color: $text-grey;
   font-size: $font-size-sm;
   white-space: pre-wrap;
+  padding-top: 12px;
 }
 
 .icon-grey {
@@ -830,7 +847,7 @@ input[type=number] {
   cursor: default;
   user-select: none;
 
-  .description-text {
+  .description-block {
     padding: 0 8px 0 0;
   }
 }

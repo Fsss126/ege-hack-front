@@ -55,7 +55,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = (props) => {
         className,
       )}
     >
-      <div className="description-text">{children}</div>
+      <div className="description-block">{children}</div>
       <ProgressIcon progress={progress} />
     </div>
   );

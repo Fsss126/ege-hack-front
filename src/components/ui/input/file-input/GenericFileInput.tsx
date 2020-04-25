@@ -169,7 +169,7 @@ const getCallbackFiles = (
 type defaultDropzoneProps = typeof Dropzone.defaultProps;
 type DropzoneProps = React.Defaultize<IDropzoneProps, defaultDropzoneProps>;
 
-//TODO: check disabled on capturing phase of click
+// TODO: check disabled on capturing phase of click
 export type InputChangeCallback = (
   files: FileInfo[] | undefined,
   name: string,
@@ -229,7 +229,6 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
 
   const onSubmitClick = useCallback(
     (files: IFileWithMeta[]): Promise<any> | any => {
-      console.log(files.map((f) => f.meta));
       if (onSubmit) {
         const filesToSubmit = getCallbackFiles(files, preloadedFiles);
         const returnValue = onSubmit(filesToSubmit);
@@ -237,7 +236,9 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
         if (returnValue instanceof Promise) {
           (async () => {
             await returnValue;
-            changeCallback && changeCallback(filesToSubmit, name, false);
+            if (changeCallback) {
+              changeCallback(filesToSubmit, name, false);
+            }
           })();
         }
         return returnValue;
@@ -256,12 +257,13 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
       const newPreloadedFiles = preloadedFiles.filter((item) => item !== file);
       onChange();
       setPreloadedFiles(newPreloadedFiles);
-      changeCallback &&
+      if (changeCallback) {
         changeCallback(
           getCallbackFiles(inputFilesRef.current, newPreloadedFiles),
           name,
           true,
         );
+      }
     },
     [preloadedFiles, changeCallback, name, onChange],
   );
@@ -272,8 +274,9 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
     (file, status, files) => {
       onChange();
       inputFilesRef.current = files;
-      changeCallback &&
+      if (changeCallback) {
         changeCallback(getCallbackFiles(files, preloadedFiles), name, true);
+      }
     },
     [changeCallback, preloadedFiles, name, onChange],
   );
@@ -285,7 +288,7 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
     : undefined;
   const isDisabled = typeof disabled === 'function' ? disabled() : disabled;
 
-  //reset on null
+  // reset on null
   useEffect(() => {
     if (value === null) {
       for (const file of inputFilesRef.current) {

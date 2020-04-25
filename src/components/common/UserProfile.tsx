@@ -40,7 +40,7 @@ const UserProfile: React.FC<UserProfileProps> = (props) => {
           )}
           {role && <div className="font-size-sm">{role}</div>}
           {contacts && <Contacts contacts={contacts} />}
-          <div className="description-text font-size-sm align-self-lg-start">
+          <div className="description-block font-size-sm align-self-lg-start">
             {about}
           </div>
         </div>
