@@ -65,7 +65,7 @@ export const Results = (props: ResultsProps) => {
         <ExpandableContainer
           className="test-task__solution"
           toggleText="Решение"
-          initiallyExpanded={isCorrect}
+          initiallyExpanded={!isCorrect}
         >
           {videoSolution && <VideoPlayer video_link={videoSolution} />}
           {textSolution && (

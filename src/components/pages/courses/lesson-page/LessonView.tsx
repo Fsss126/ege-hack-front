@@ -5,7 +5,7 @@ import React from 'react';
 import {HomeworkInfo, LessonInfo} from 'types/entities';
 
 import HomeworkLoader from './HomeworkLoader';
-import {TestView} from './TestView';
+import {TestAssignment} from './TestAssignment';
 
 export interface LessonViewProps {
   lesson: LessonInfo;
@@ -69,7 +69,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       {test && (
         <div className="block-container hw-container">
           <h3>Тест</h3>
-          <TestView courseId={course_id} lessonId={id} test={test} />
+          <TestAssignment courseId={course_id} lessonId={id} test={test} />
         </div>
       )}
     </div>
