@@ -20,9 +20,10 @@ export const renderThumbHorizontal: React.FC<React.HTMLAttributes<
   HTMLDivElement
 >> = (props) => <div {...props} className="thumb thumb-horizontal" />;
 
-export const renderView: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
-  props,
-) => <div {...props} className="scrollbars__scroll-base" />;
+export const renderView: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  style,
+  ...props
+}) => <div {...props} className="scrollbars__scroll-base" />;
 
 export type ScrollBarsProps = {
   hideVerticalScrollbar?: boolean;
