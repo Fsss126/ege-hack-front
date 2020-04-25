@@ -1,18 +1,28 @@
-import classNames from 'classnames';
+import {AxiosError} from 'axios';
 import CoverImage from 'components/common/CoverImage';
 import {BottomTab} from 'components/Page';
 import Button from 'components/ui/Button';
-import ScrollBars from 'components/ui/ScrollBars';
+import Loader from 'components/ui/Loader';
+import ScrollBars, {renderView as DefaultView} from 'components/ui/ScrollBars';
 import {renderPrice} from 'definitions/helpers';
 import {useTruncate} from 'hooks/common';
 import _ from 'lodash';
 import React from 'react';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import Truncate from 'react-truncate';
+import Truncate, {TruncateProps} from 'react-truncate';
+import {CourseInfo, DiscountInfo} from 'types/entities';
+import {SimpleCallback} from 'types/utility/common';
 
-import Loader from '../../ui/Loader';
+export type CourseDeselectCallback = (course: CourseInfo) => void;
 
-const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
+interface SelectedCourseProps {
+  course: CourseInfo;
+  onCourseDeselect: CourseDeselectCallback;
+  onTruncate: TruncateProps['onTruncate'];
+}
+
+const SelectedCourse = (props: SelectedCourseProps) => {
+  const {course, onCourseDeselect, onTruncate} = props;
   const {name} = course;
   const [descriptionRef] = useTruncate(name);
   const onDeselectClick = React.useCallback(() => {
@@ -42,36 +52,44 @@ const SelectedCourse = ({course, onCourseDeselect, onTruncate}) => {
   );
 };
 
-const renderView = ({style, ...props}) => (
+const renderView: typeof DefaultView = ({style, ...props}) => (
   <div
-    style={{...style, height: `calc(100% + ${style.minHeight}px)`}}
     {...props}
+    style={
+      style ? {...style, height: `calc(100% + ${style.minHeight}px)`} : style
+    }
   />
 );
 
-const SelectedCoursesTab = ({
-  courses,
-  discount: discountInfo,
-  isLoading,
-  error,
-  retry,
-  onCourseDeselect,
-  onPurchaseClick,
-}) => {
-  let price, discount, message;
-  const fullPrice = _.sumBy(courses, 'price');
+interface SelectedCoursesTabProps {
+  courses: CourseInfo[];
+  discount?: DiscountInfo;
+  isLoading: boolean;
+  error?: AxiosError;
+  retry: SimpleCallback;
+  onCourseDeselect: CourseDeselectCallback;
+  onPurchaseClick: SimpleCallback;
+}
 
-  if (discountInfo) {
-    price = discountInfo.discounted_price;
-    discount = fullPrice - discountInfo.discounted_price;
-    message = discountInfo.message;
-  }
-  // const discount = _.sumBy(catalog-page, 'discount');
+const SelectedCoursesTab = (props: SelectedCoursesTabProps) => {
+  const {
+    courses,
+    discount: discountInfo,
+    isLoading,
+    error,
+    onCourseDeselect,
+    onPurchaseClick,
+  } = props;
+  const {discounted_price: price, message} = discountInfo || {};
+  const fullPrice = _.sumBy(courses, 'price');
+  const discount = price && !isLoading ? fullPrice - price : undefined;
+
   React.useEffect(() => {
     if (window.dispatchEvent) {
       window.dispatchEvent(new CustomEvent('scroll'));
     }
   });
+
   return (
     <BottomTab
       className={`selected-courses ${courses.length === 0 ? 'hidden' : ''}`}
@@ -122,11 +140,13 @@ const SelectedCoursesTab = ({
                 Оплатить
               </Button>
               <div className="price selected-courses__price container">
-                {discount > 0 && (
-                  <div className="discount font-size-sm d-inline-block d-md-block">
-                    {renderPrice(price + discount)}
-                  </div>
-                )}
+                {discount !== undefined &&
+                  price !== undefined &&
+                  discount > 0 && (
+                    <div className="discount font-size-sm d-inline-block d-md-block">
+                      {renderPrice(price + discount)}
+                    </div>
+                  )}
                 <div className="price font-size-lg d-inline-block d-md-block">
                   {renderPrice(price || fullPrice)}
                 </div>

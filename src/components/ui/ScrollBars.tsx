@@ -4,21 +4,25 @@ import {ScrollbarProps, Scrollbars} from 'react-custom-scrollbars';
 
 const renderEmpty: React.FC = () => <div />;
 
-const renderTrackVertical: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
+export const renderTrackVertical: React.FC<React.HTMLAttributes<
+  HTMLDivElement
+>> = (props) => <div {...props} className="track track-vertical" />;
+
+export const renderThumbVertical: React.FC<React.HTMLAttributes<
+  HTMLDivElement
+>> = (props) => <div {...props} className="thumb thumb-vertical" />;
+
+export const renderTrackHorizontal: React.FC<React.HTMLAttributes<
+  HTMLDivElement
+>> = (props) => <div {...props} className="track track-horizontal" />;
+
+export const renderThumbHorizontal: React.FC<React.HTMLAttributes<
+  HTMLDivElement
+>> = (props) => <div {...props} className="thumb thumb-horizontal" />;
+
+export const renderView: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
   props,
-) => <div {...props} className="track track-vertical" />;
-const renderThumbVertical: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
-  props,
-) => <div {...props} className="thumb thumb-vertical" />;
-const renderTrackHorizontal: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
-  props,
-) => <div {...props} className="track track-horizontal" />;
-const renderThumbHorizontal: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
-  props,
-) => <div {...props} className="thumb thumb-horizontal" />;
-const renderView: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => (
-  <div {...props} className="scrollbars-scroll-base" />
-);
+) => <div {...props} className="scrollbars__scroll-base" />;
 
 export type ScrollBarsProps = {
   hideVerticalScrollbar?: boolean;

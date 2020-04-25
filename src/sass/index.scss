@@ -408,6 +408,7 @@ header {
   }
 
   .layout__content {
+    overflow-x: hidden;
     flex-grow: 1;
     position: relative;
     max-width: 100%;
@@ -1208,6 +1209,14 @@ header {
 
   .tab-nav-container {
     padding-bottom: 0;
+    &.layout__content-block {
+      .tab-nav {
+        margin: 0 -22px;
+        .scroll-btn-container__inner-container {
+          padding: 0 22px;
+        }
+      }
+    }
   }
 
   .title-with-menu {

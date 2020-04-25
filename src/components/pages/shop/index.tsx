@@ -1,6 +1,6 @@
 import {useToggle} from 'hooks/common';
 import {useDiscount} from 'hooks/selectors';
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useCallback, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {Route, Switch} from 'react-router-dom';
 import {CourseInfo} from 'types/entities';
@@ -18,7 +18,7 @@ const Shop: React.FC<RouteComponentProps> = (props) => {
     reload: reloadDiscount,
     isLoading,
   } = useDiscount(selectedCourses);
-  const onCourseSelect = React.useCallback((course) => {
+  const onCourseSelect = useCallback((course) => {
     setSelectedCourses((selectedCourses) => {
       if (selectedCourses.has(course)) {
         return selectedCourses;
@@ -28,7 +28,7 @@ const Shop: React.FC<RouteComponentProps> = (props) => {
       return selectedCourses;
     });
   }, []);
-  const onCourseDeselect = React.useCallback((course) => {
+  const onCourseDeselect = useCallback((course) => {
     setSelectedCourses((selectedCourses) => {
       selectedCourses = new Set(selectedCourses);
       selectedCourses.delete(course);

@@ -41,22 +41,21 @@ type WebinarProps = Omit<
 > & {
   webinar: WebinarInfo;
 };
-const Webinar: React.FC<WebinarProps> = (props) => {
+const Webinar = (props: WebinarProps): React.ReactElement => {
   const {webinar, ...rest} = props;
   const {id, image_link, name, date_start} = webinar;
   const {state, isUnlocked, onTick, onWebinarStart} = useWebinar(webinar);
 
   const renderCountdown = (remainingTime: CountdownRenderProps) => {
     const {
-      formatted: {days, hours, minutes, seconds},
-      completed,
+      formatted: {days, hours, minutes},
     } = remainingTime;
     const stateText =
       state === WEBINAR_STATE.ENDED
         ? 'Завершен'
         : state === WEBINAR_STATE.AIRING
         ? 'В эфире'
-        : `Осталось ${days}:${hours}:${minutes}:${{seconds}}`;
+        : `До начала ${days} дней ${hours} часов ${minutes} минут`;
 
     return (
       <div title={stateText}>
@@ -133,22 +132,23 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
     (webinar, {link, ...rest}) => {
       const {id} = webinar;
       const deleteCallback = (): void => {
-        webinarSchedule && onDelete(courseId, id, webinarSchedule);
+        if (webinarSchedule) {
+          onDelete(courseId, id, webinarSchedule);
+        }
       };
+      const editLink = `${courseLink}/webinars/edit/`;
 
       return (
         <Webinar
           key={id}
           webinar={webinar}
+          link={editLink}
           action={
             canEdit ? (
               <DropdownMenu
                 content={<DropdownIconButton className="icon-ellipsis" />}
               >
-                <DropdownMenuOption
-                  component={Link}
-                  to={`${courseLink}/webinars/edit/`}
-                >
+                <DropdownMenuOption component={Link} to={editLink}>
                   <i className="far fa-edit" />
                   Изменить
                 </DropdownMenuOption>

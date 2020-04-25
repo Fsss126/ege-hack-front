@@ -767,6 +767,12 @@ input[type=number] {
   }
 }
 
+.scrollbars {
+  .scrollbars__scroll-base {
+    display: flex;
+  }
+}
+
 .scroll-btn-container {
   display: flex;
   margin-left: -15px;
@@ -795,16 +801,6 @@ input[type=number] {
     flex-wrap: nowrap;
     padding-left: 15px;
     padding-right: 15px;
-  }
-
-  .scrollbars-scroll-base {
-    display: flex;
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    /* Hide scrollbar for IE and Edge */
-    -ms-overflow-style: none;
   }
 }
 

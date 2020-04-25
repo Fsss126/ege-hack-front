@@ -27,6 +27,7 @@
     "forin": false,
     "jsx-no-lambda": {
       "severity": "warning"
-    }
+    },
+    "no-this-assignment": false
   }
 }
