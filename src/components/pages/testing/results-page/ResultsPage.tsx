@@ -10,6 +10,7 @@ import {TestStatePassedAnswerInfo} from 'types/entities';
 import {RouteComponentPropsWithPath, TestPageParams} from 'types/routes';
 
 import {CorrectBadge, IncorrectBadge} from '../task-page/Results';
+import {ResultBar} from './ResultBar';
 
 export const ResultsPage: React.FC<RouteComponentPropsWithPath<
   TestPageParams
@@ -85,24 +86,10 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
         >
           <div className="layout__content-block">
             <h2 className="test__test-title">{name}</h2>
-            <h1>
-              Результат:
-              <span
-                className={classNames(
-                  'test-result',
-                  passed
-                    ? percentage - minPercentage > (1 - minPercentage) / 2
-                      ? 'test-result__high'
-                      : 'test-result__average'
-                    : 'test-result__low',
-                )}
-              >
-                {percentage * 100}%
-              </span>
-            </h1>
             <h3 className="test-passage">
               {passed ? 'Тест пройден' : 'Тест не пройден'}
             </h3>
+            <ResultBar percentage={percentage} minPercentage={minPercentage} />
             <div className="tasks-count">
               Вопросов: {correctCount}/{tasksCount}
             </div>

@@ -15,14 +15,19 @@
       "allow-declarations",
       "allow-named-functions"
     ],
-    "jsx-no-lambda": true,
     "no-debugger": false,
     "prefer-conditional-expression": false,
     "object-literal-key-quotes": false,
     "no-implicit-dependencies": false,
     "variable-name": {
-      "options": ["allow-leading-underscore", "allow-pascal-case"]
+      "options": ["allow-leading-underscore", "allow-pascal-case", "allow-snake-case"]
     },
-    "array-type": false
+    "array-type": false,
+    "radix": false,
+    "forin": false,
+    "jsx-no-lambda": {
+      "severity": "warning"
+    },
+    "no-this-assignment": false
   }
 }

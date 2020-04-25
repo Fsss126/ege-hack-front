@@ -85,6 +85,7 @@ const Filter: React.FC<FilterProps> = (props) => {
           {filterBySubject && options && (
             <div className="catalog__filter-container subject-select-container col-auto align-items-center">
               <Input.Select
+                withContainer={false}
                 name="subject"
                 options={options}
                 value={subject}
@@ -107,6 +108,7 @@ const Filter: React.FC<FilterProps> = (props) => {
             <div className="catalog__filter-container search-input-container col-auto align-items-center">
               <div className="search-input">
                 <Input.Input
+                  withContainer={false}
                   name="search"
                   placeholder="Поиск"
                   autoComplete="off"

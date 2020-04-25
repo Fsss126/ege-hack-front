@@ -1,3 +1,4 @@
+import {ExpandableContainer} from 'components/common/ExpandableContainer';
 import HomeworkAssignment from 'components/common/HomeworkAssignment';
 import VideoPlayer from 'components/common/VideoPlayer';
 import {File} from 'components/ui/input';
@@ -5,7 +6,7 @@ import React from 'react';
 import {HomeworkInfo, LessonInfo} from 'types/entities';
 
 import HomeworkLoader from './HomeworkLoader';
-import {TestView} from './TestView';
+import {TestAssignment} from './TestAssignment';
 
 export interface LessonViewProps {
   lesson: LessonInfo;
@@ -34,7 +35,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       </div>
       <div className="block-container description-container">
         <h2>{name}</h2>
-        <div className="description-text">{description}</div>
+        <div className="description-block">{description}</div>
       </div>
       {attachments && attachments.length > 0 && (
         <div className="block-container attachment-container">
@@ -55,21 +56,30 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
             deadline={assignment.deadline}
             lessonId={id}
           />
-          {homework && homework.mark && (
-            <h4>
-              Оценка:{' '}
-              <span className="badge accent align-middle">{homework.mark}</span>
-            </h4>
-          )}
-          {homework && homework.comment && (
-            <div className="description-text">{homework.comment}</div>
-          )}
+          <div className="hw-result">
+            {homework && homework.mark && (
+              <h4>
+                Оценка:{' '}
+                <span className="badge accent align-middle">
+                  {homework.mark}
+                </span>
+              </h4>
+            )}
+            {homework && homework.comment && (
+              <ExpandableContainer
+                className="hw-result__comment"
+                toggleText="Комментарий"
+              >
+                {homework.comment}
+              </ExpandableContainer>
+            )}
+          </div>
         </div>
       )}
       {test && (
         <div className="block-container hw-container">
           <h3>Тест</h3>
-          <TestView courseId={course_id} lessonId={id} test={test} />
+          <TestAssignment courseId={course_id} lessonId={id} test={test} />
         </div>
       )}
     </div>

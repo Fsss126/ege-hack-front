@@ -67,7 +67,7 @@ const Teacher: React.FC<TeacherProps> = (props) => {
         {bio && (
           <div className="row">
             <div className="col-12">
-              <div className="description-text">
+              <div className="description-block">
                 {isFontLoaded ? (
                   <Truncate lines={4} ref={descriptionRef}>
                     {about}

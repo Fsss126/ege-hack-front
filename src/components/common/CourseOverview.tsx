@@ -101,7 +101,7 @@ const Description: React.FC = () => {
           {/*        </div>*/}
           {/*    )}*/}
         </div>
-        <div className="description-text font-size-sm">{description}</div>
+        <div className="description-block font-size-sm">{description}</div>
       </div>
     </React.Fragment>
   );

@@ -5,6 +5,7 @@ import {
   useLoadingState,
 } from 'components/ui/LoadingIndicator';
 import {ProgressIndicator} from 'components/ui/ProgressIndicator';
+import {renderDate} from 'definitions/helpers';
 import {useStartTest} from 'hooks/selectors';
 import React, {useCallback, useState} from 'react';
 import {TestStatus} from 'types/dtos';
@@ -16,7 +17,7 @@ export interface TestStatusProps {
   test: TestStatusInfo;
 }
 
-export const TestView: React.FC<TestStatusProps> = (props) => {
+export const TestAssignment: React.FC<TestStatusProps> = (props) => {
   const {test, courseId, lessonId} = props;
   const [isFetchingTest, setIsFetchingTest] = useState<boolean | null>(null);
   const state = useLoadingState(isFetchingTest, isFetchingTest === false);
@@ -26,7 +27,7 @@ export const TestView: React.FC<TestStatusProps> = (props) => {
 
   const startTestCallback = useStartTest();
 
-  const {status, id, name} = test;
+  const {status, id, name, deadline} = test;
 
   const onClick = useCallback(() => {
     setIsFetchingTest(true);
@@ -79,7 +80,7 @@ export const TestView: React.FC<TestStatusProps> = (props) => {
       <div className="test-view container p-0">
         <div className="row align-items-center">
           <div className="col">
-            <div className="test-view__title">{name}</div>
+            <h4 className="test-view__title">{name}</h4>
           </div>
           <div className="col-auto">
             {isStarted && (
@@ -92,6 +93,15 @@ export const TestView: React.FC<TestStatusProps> = (props) => {
             <Button icon={<LoadingIndicator state={state} />} onClick={onClick}>
               {isStarted ? 'Продолжить' : 'Начать тест'}
             </Button>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            {deadline && (
+              <div className="assignment__deadline">
+                Дедлайн: {renderDate(deadline, renderDate.dateWithHour)}
+              </div>
+            )}
           </div>
         </div>
       </div>

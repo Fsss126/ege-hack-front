@@ -1,3 +1,6 @@
+import {getVideoLink} from 'api/transforms';
+import {ExpandableContainer} from 'components/common/ExpandableContainer';
+import VideoPlayer from 'components/common/VideoPlayer';
 import Form, {
   ErrorHandler,
   FormProps,
@@ -8,7 +11,6 @@ import Form, {
 } from 'components/ui/Form';
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
-import {FileInput} from 'components/ui/input';
 import {useRevokeLessons} from 'hooks/selectors';
 import _ from 'lodash';
 import React, {useCallback, useMemo, useRef} from 'react';
@@ -42,6 +44,20 @@ const INITIAL_FORM_DATA: LessonFormData = {
   hometask_deadline: undefined,
 };
 
+function getVideoLinkIsValid(videoLink: string) {
+  try {
+    const url = new URL(videoLink);
+
+    return url.hostname === 'vimeo.com' || url.hostname === 'player.vimeo.com';
+  } catch (e) {
+    return false;
+  }
+}
+
+function getVideoId(videoLink: string) {
+  return videoLink.split('/').pop() as string;
+}
+
 function getRequestData(
   formData: LessonFormData,
   courseId: number,
@@ -65,7 +81,7 @@ function getRequestData(
     num: parseInt(numParam),
     description,
     is_locked,
-    video_link: video_link.split('/').pop() as string,
+    video_link: getVideoId(video_link),
     image: (image as FileInfo[])[0].file_id,
     attachments: [],
   };
@@ -75,7 +91,10 @@ function getRequestData(
       description: hometask_description,
       deadline: (hometask_deadline as Date).getTime(),
     };
-    hometask_file && (hometask.file = hometask_file[0].file_id);
+
+    if (hometask_file) {
+      hometask.file = hometask_file[0].file_id;
+    }
     requestData.hometask = hometask;
   }
   if (attachments) {
@@ -129,15 +148,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
       if (name === 'image') {
         return !!(formData.image && formData.image[0]);
       } else if (name === 'video_link') {
-        try {
-          const url = new URL(formData.video_link);
-
-          return (
-            url.hostname === 'vimeo.com' || url.hostname === 'player.vimeo.com'
-          );
-        } catch (e) {
-          return false;
-        }
+        return getVideoLinkIsValid(formData.video_link);
       }
     },
   );
@@ -205,6 +216,8 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialImageFile = useMemo(() => formData.image, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialVideoLink = useMemo(() => formData.video_link, []);
 
   const revokeLessons = useRevokeLessons(courseId);
 
@@ -273,20 +286,6 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
             value={num}
             onChange={onInputChange}
           />
-          <Input.Input
-            name="video_link"
-            type="text"
-            required
-            placeholder="Ссылка на видео"
-            value={video_link}
-            onChange={onInputChange}
-          />
-          <Input.TextArea
-            name="description"
-            placeholder="Описание"
-            value={description}
-            onChange={onInputChange}
-          />
           <Input.CheckBox
             name="is_locked"
             value={is_locked}
@@ -296,8 +295,35 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
         </FieldsContainer>
       </div>
       <div className="row">
+        <div className="form__fields col-12">
+          <Input.Input
+            name="video_link"
+            type="text"
+            required
+            placeholder="Ссылка на видео"
+            value={video_link}
+            onChange={onInputChange}
+          />
+          {video_link && getVideoLinkIsValid(video_link) && (
+            <ExpandableContainer
+              key={video_link}
+              toggleText="Видео"
+              initiallyExpanded={video_link !== initialVideoLink}
+            >
+              <VideoPlayer video_link={getVideoLink(getVideoId(video_link))} />
+            </ExpandableContainer>
+          )}
+          <Input.TextArea
+            name="description"
+            placeholder="Описание"
+            value={description}
+            onChange={onInputChange}
+          />
+        </div>
+      </div>
+      <div className="row">
         <div className="col-12">
-          <FileInput
+          <Input.FileInput
             name="attachments"
             filesName="Материалы к уроку"
             value={attachments}
@@ -345,7 +371,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
           />
         </div>
         <div className="col-12">
-          <FileInput
+          <Input.FileInput
             name="hometask_file"
             filesName={null}
             value={hometask_file}

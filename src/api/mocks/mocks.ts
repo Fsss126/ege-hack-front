@@ -195,14 +195,15 @@ export const WEBINAR_SCHEDULE: PersonWebinar[] = COURSES.slice(0, 3).map(
 
 export const TEST: TestDtoResp = {
   id: 1,
-  name: 'Кто ты из Винкс?',
-  percentage: 100,
+  name: 'Движение по окружности',
+  percentage: 0.4,
   deadline: new Date(2020, 4, 1, 20).getTime(),
   tasks: [
     {
       id: 0,
-      image_link: '/files/3464f188-47fd-11ea-a7f3-c7dbce9db8e5',
-      text: 'Год твоего рождения?',
+      image_link: '/files/331402b3-86a0-11ea-808a-072fece60c1f',
+      text:
+        'Два велосипедиста совершают кольцевую гонку с одинаковой угловой скоростью. Положения и траектории движения велосипедистов показаны на рисунке. Чему равно отношение линейных скоростей велосипедистов?',
       subjectId: 0,
       themeId: 0,
       order: 0,
@@ -210,50 +211,53 @@ export const TEST: TestDtoResp = {
       complexity: 5,
       answer: {
         type: AnswerType.NUMBER,
-        value: 2000,
-        videoSolution: '375255364',
-        textSolution: 'Используем правило буравчика.',
+        value: 0.5,
       },
     },
     {
       id: 1,
-      image_link: '/files/e1339082-1455-11ea-9d4a-2b3e25df3362',
-      text: 'Какой твой любимый цвет?',
+      text:
+        'Верхнюю точку моста радиусом 100 м автомобиль проходит со скоростью 20 м/с. Чему равно центростремительное ускорение автомобиля? (Ответ дайте в метрах в секунду в квадрате.)',
       subjectId: 0,
       themeId: 0,
       order: 1,
       weight: 1,
-      complexity: 10,
       answer: {
-        type: AnswerType.TEXT,
-        value: 'розовый',
+        type: AnswerType.NUMBER,
+        value: 1,
       },
     },
     {
       id: 2,
-      text: 'Твой знак зодиака?',
+      image_link: '/files/89434342-869f-11ea-808a-072fece60c1f',
+      text:
+        'В схеме на рисунке сопротивление резистора и полное сопротивление реостата равны R, ЭДС батарейки равна Е, её внутреннее сопротивление ничтожно (). Как ведут себя (увеличиваются, уменьшаются, остаются постоянными) показания идеального вольтметра при перемещении движка реостата из крайнего верхнего в крайнее нижнее положение? Ответ поясните, указав, какие физические закономерности Вы использовали для объяснения.',
       subjectId: 0,
       themeId: 0,
-      order: 1,
+      order: 2,
       weight: 1,
+      complexity: 10,
       answer: {
         type: AnswerType.FILE,
+        videoSolution: '375255364',
+        textSolution:
+          'Вольтметр подключают параллельно к тому участку, на котором нужно измерить напряжение. При этом, естественно, часть тока в цепи начинает течь через сам вольтметр. Тем самым вольтметр вносит возмущение в цепь и показывает напряжение, которое отличается от реального (когда вольтметра нет). Идеальным вольтметром называют прибор, который данной проблемой не страдает. То есть он имеет бесконечное собственное сопротивление.',
       },
     },
   ],
 };
 
 export const TEST_STATUS_NOT_STARTED: TestStatusResp = {
-  id: 1,
-  name: 'Кто ты из Винкс?',
+  id: TEST.id,
+  name: TEST.name,
   status: TestStatus.NOT_STARTED,
   progress: 0,
   deadline: TEST.deadline,
 };
 
 export const TEST_STATUS_COMPLETED: TestStatusResp = {
-  id: 1,
-  name: 'Кто ты из Винкс?',
+  id: TEST.id,
+  name: TEST.name,
   status: TestStatus.COMPLETED,
   percentage: 1,
   passed: true,

@@ -52,7 +52,7 @@ export enum WEBINAR_STATE {
   ENDED = 'ENDED',
 }
 
-const UNLOCK_TIME = 1000 * 60 * 5; //opens 5 minutes before start
+const UNLOCK_TIME = 1000 * 60 * 5; // opens 5 minutes before start
 
 type Webinar = PersonWebinar | WebinarInfo;
 
@@ -156,7 +156,7 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
         <span>В</span>
         <span>&nbsp;</span>
         <span>эфире</span>
-      </div> //fixes a big on mobile
+      </div> // fixes a big on mobile
     ) : (
       <div className="countdown">
         <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:

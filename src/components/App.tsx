@@ -38,7 +38,6 @@ function useLocationChangeEffect(effect: LocationListener): void {
 function useScrollToTop(): void {
   const prevPathRef = useRef<string>(useLocation().pathname);
   const onLocationChange = useCallback((location, action) => {
-    console.log('update');
     if (prevPathRef.current !== location.pathname && action !== 'POP') {
       window.scrollTo(0, 0);
     }

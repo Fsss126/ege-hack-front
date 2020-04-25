@@ -68,7 +68,6 @@ export const downloadFile = async (
   url: string,
   name: string,
 ): Promise<void> => {
-  console.log(url, name);
   // IE10+ : (has Blob, but not a[download] or URL)
   if (navigator.msSaveBlob) {
     const blob = await fetch(url).then((r) => r.blob());

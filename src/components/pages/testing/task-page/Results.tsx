@@ -1,8 +1,6 @@
-import classNames from 'classnames';
+import {ExpandableContainer} from 'components/common/ExpandableContainer';
 import VideoPlayer from 'components/common/VideoPlayer';
-import Button from 'components/ui/Button';
 import {File} from 'components/ui/input';
-import {useToggle} from 'hooks/common';
 import React from 'react';
 import {FileInfo} from 'types/dtos';
 import {AnswerType, CorrectAnswerInfo, UserAnswerInfo} from 'types/entities';
@@ -36,8 +34,6 @@ export const Results = (props: ResultsProps) => {
   const isAnswered = value !== undefined;
   const hasSolution = !!(textSolution || videoSolution);
 
-  const [showSolution, toggleShowSolution] = useToggle(isCorrect);
-
   return (
     <div className="test-task__result">
       {(type === AnswerType.TEXT || type === AnswerType.NUMBER) && (
@@ -66,28 +62,16 @@ export const Results = (props: ResultsProps) => {
           <h4>Ответ: Нет решения</h4>
         ))}
       {hasSolution && (
-        <div
-          className={classNames('test-task__solution', {
-            'test-task__solution--collapsed': !showSolution,
-          })}
+        <ExpandableContainer
+          className="test-task__solution"
+          toggleText="Решение"
+          initiallyExpanded={!isCorrect}
         >
-          <Button
-            neutral
-            className="test-task__solution-toggle d-inline-block"
-            onClick={toggleShowSolution}
-            icon={<i className="icon-angle-down" />}
-          >
-            Решение
-          </Button>
-          <div className="test-task__solution-body">
-            <div className="test-task__solution-body-inner">
-              {videoSolution && <VideoPlayer video_link={videoSolution} />}
-              {textSolution && (
-                <div className="test-task__solution-text">{textSolution}</div>
-              )}
-            </div>
-          </div>
-        </div>
+          {videoSolution && <VideoPlayer video_link={videoSolution} />}
+          {textSolution && (
+            <div className="test-task__solution-text">{textSolution}</div>
+          )}
+        </ExpandableContainer>
       )}
     </div>
   );

@@ -69,7 +69,6 @@ const ParticipantsEditingPage: React.FC<RouteComponentProps<{
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<CourseParticipantInfo[]>>
   >(() => {
-    console.log('submit', formData);
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 

@@ -11,7 +11,7 @@ import ListItem from 'components/common/ListItem';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import Page, {PageContent, PageParentSection} from 'components/Page';
 import Button from 'components/ui/Button';
-import Tooltip, {TooltipPosition} from 'components/ui/Tooltip';
+import Tooltip from 'components/ui/Tooltip';
 import {renderDate} from 'definitions/helpers';
 import {useDeleteParticipant} from 'hooks/selectors';
 import React, {useCallback} from 'react';
@@ -80,7 +80,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
             join_date_time,
             renderDate.dateWithYear,
           )}`}
-          position={TooltipPosition.left}
+          position="left"
         >
           <i className="icon-info icon-grey d-block" />
         </Tooltip>

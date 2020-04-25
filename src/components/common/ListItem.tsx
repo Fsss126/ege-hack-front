@@ -107,7 +107,7 @@ const ListItem = <T extends {} = any, P = undefined>(
           {subtitle && <div className="subtitle">{subtitle}</div>}
           {description && (
             <div className="description-container font-size-xs">
-              <div className="description-text">
+              <div className="description-block">
                 {truncate ? (
                   isFontLoaded ? (
                     <Truncate lines={2} ref={descriptionRef}>

@@ -18,15 +18,13 @@ const HomeworkLoader: React.FC<HomeworkLoaderProps> = (props) => {
   );
   const [hasChanges, setChanges] = React.useState(false);
   const onChange = React.useCallback((files, name, changed) => {
-    console.log('files changed', changed, files);
     setChanges(changed);
   }, []);
   const onSubmit: InputSubmitCallback = React.useCallback(
     async (files) => {
-      console.log('files submitted', files);
       const file = files && files[0] ? files[0].file_id : null;
 
-      //TODO: add error alert
+      // TODO: add error alert
       return APIRequest({
         url: `/lessons/${lessonId}/homeworks/pupil`,
         method: file ? 'PUT' : 'DELETE',
@@ -34,7 +32,6 @@ const HomeworkLoader: React.FC<HomeworkLoaderProps> = (props) => {
           file,
         },
       }).then(() => {
-        console.log('loaded');
         setChanges(false);
       });
       // return Promise.resolve();
@@ -53,7 +50,11 @@ const HomeworkLoader: React.FC<HomeworkLoaderProps> = (props) => {
         onChange={onChange}
         onSubmit={onSubmit}
         disabled={isHomeworkSubmissionClosed}
+        filesName="Решение"
       />
+      {isHomeworkSubmissionClosed() && (!homework || !homework.files) && (
+        <div className="description-block">Решение не отправлено</div>
+      )}
     </div>
   );
 };
