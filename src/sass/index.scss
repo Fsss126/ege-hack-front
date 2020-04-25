@@ -970,7 +970,10 @@ header {
       }
     }
     .hw-container {
-      .submission {
+      .badge {
+        font-size: 20px;
+      }
+      .submission, .hw-result, .hw-result__comment {
         margin-top: 16px;
       }
     }

@@ -1,3 +1,4 @@
+import {ExpandableContainer} from 'components/common/ExpandableContainer';
 import HomeworkAssignment from 'components/common/HomeworkAssignment';
 import VideoPlayer from 'components/common/VideoPlayer';
 import {File} from 'components/ui/input';
@@ -55,15 +56,24 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
             deadline={assignment.deadline}
             lessonId={id}
           />
-          {homework && homework.mark && (
-            <h4>
-              Оценка:{' '}
-              <span className="badge accent align-middle">{homework.mark}</span>
-            </h4>
-          )}
-          {homework && homework.comment && (
-            <div className="description-block">{homework.comment}</div>
-          )}
+          <div className="hw-result">
+            {homework && homework.mark && (
+              <h4>
+                Оценка:{' '}
+                <span className="badge accent align-middle">
+                  {homework.mark}
+                </span>
+              </h4>
+            )}
+            {homework && homework.comment && (
+              <ExpandableContainer
+                className="hw-result__comment"
+                toggleText="Комментарий"
+              >
+                {homework.comment}
+              </ExpandableContainer>
+            )}
+          </div>
         </div>
       )}
       {test && (
