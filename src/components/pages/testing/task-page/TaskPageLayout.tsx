@@ -1,6 +1,6 @@
 import {ImageViewer} from 'components/common/ImageViewer';
 import {ProgressIndicator} from 'components/ui/ProgressIndicator';
-import Tooltip, {TooltipPosition} from 'components/ui/Tooltip';
+import Tooltip from 'components/ui/Tooltip';
 import React from 'react';
 import {
   SanitizedTaskInfo,
@@ -49,7 +49,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
                         {weight !== undefined && <div>Вес: {weight}</div>}
                       </div>
                     }
-                    position={TooltipPosition.bottom}
+                    position="bottom"
                   >
                     <i className="test-task__task-tooltip icon-info icon-grey align-middle" />
                   </Tooltip>

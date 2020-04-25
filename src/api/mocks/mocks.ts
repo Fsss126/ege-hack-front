@@ -196,7 +196,7 @@ export const WEBINAR_SCHEDULE: PersonWebinar[] = COURSES.slice(0, 3).map(
 export const TEST: TestDtoResp = {
   id: 1,
   name: 'Движение по окружности',
-  percentage: 100,
+  percentage: 0.4,
   deadline: new Date(2020, 4, 1, 20).getTime(),
   tasks: [
     {

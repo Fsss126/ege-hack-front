@@ -136,7 +136,7 @@
 
 @import "variables";
 
-.tooltip.pos-top:hover .tooltip-block, .tooltip.pos-top:hover .tooltip-arrow, .tooltip.pos-top.is-visible .tooltip-block, .tooltip.pos-top.is-visible .tooltip-arrow {
+.tooltip.pos-top:hover>.tooltip-block, .tooltip.pos-top:hover>.tooltip-block>.tooltip-arrow, .tooltip.pos-top.is-visible>.tooltip-block, .tooltip.pos-top.is-visible>.tooltip-block>.tooltip-arrow {
   transform: translate(-50%);
 }
 
@@ -146,14 +146,14 @@
   transform: translate(-50%,10px);
 }
 
-.tooltip.pos-top .tooltip-block {
+.tooltip.pos-top>.tooltip-block {
   bottom: 100%;
   left: 50%;
   transform: translate(-50%,10px);
   transform-origin: top;
 }
 
-.tooltip:hover .tooltip-block, .tooltip:hover .tooltip-arrow, .tooltip.is-visible .tooltip-block, .tooltip.is-visible .tooltip-arrow {
+.tooltip:hover>.tooltip-block, .tooltip:hover>.tooltip-block>.tooltip-arrow, .tooltip.is-visible>.tooltip-block, .tooltip.is-visible>.tooltip-block>.tooltip-arrow {
   filter: alpha(opacity=100);
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   -moz-opacity: 1;
@@ -194,7 +194,7 @@
   }
 }
 
-.tooltip .tooltip-block, .tooltip .tooltip-arrow {
+.tooltip>.tooltip-block, .tooltip .tooltip-arrow {
   filter: alpha(opacity=0);
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   -moz-opacity: 0;
@@ -205,18 +205,18 @@
   position: absolute;
 }
 
-.tooltip.pos-top .tooltip-block {
+.tooltip.pos-top>.tooltip-block {
   bottom: 100%;
   left: 50%;
   transform: translate(-50%,10px);
   transform-origin: top;
 }
 
-.tooltip.pos-top .tooltip-block {
+.tooltip.pos-top>.tooltip-block {
   margin-bottom: 11px;
 }
 
-.tooltip .tooltip-block, .tooltip .tooltip-arrow {
+.tooltip>.tooltip-block, .tooltip .tooltip-arrow {
   filter: alpha(opacity=0);
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   -moz-opacity: 0;
@@ -228,7 +228,7 @@
   cursor: default;
 }
 
-.tooltip .tooltip-block {
+.tooltip>.tooltip-block {
   font-family: $font-regular;
   font-weight: normal;
   background: white;
@@ -275,7 +275,7 @@
   }
 }
 
-.tooltip.pos-right .tooltip-block {
+.tooltip.pos-right>.tooltip-block {
   margin: 0;
   margin-left: 11px;
   left: 100%;
@@ -308,7 +308,7 @@
   }
 }
 
-.tooltip.pos-left .tooltip-block {
+.tooltip.pos-left>.tooltip-block {
   margin: 0;
   margin-right: 11px;
   left: auto;
@@ -322,26 +322,26 @@
   display: inline-block;
   position: relative;
   &:hover, &.is-visible {
-    .tooltip-arrow, .tooltip-block {
+    .tooltip-arrow,>.tooltip-block {
       transform: translate(-50%, 0);
     }
     &.pos-bottom {
-      .tooltip-arrow, .tooltip-block {
+      .tooltip-arrow,>.tooltip-block {
         transform: translate(-50%, 0);
       }
     }
     &.pos-top {
-      .tooltip-arrow, .tooltip-block {
+      .tooltip-arrow,>.tooltip-block {
         transform: translate(-50%, 0);
       }
     }
     &.pos-right {
-      .tooltip-arrow, .tooltip-block {
+      .tooltip-arrow,>.tooltip-block {
         transform: translate(0, -50%);
       }
     }
     &.pos-left {
-      .tooltip-arrow, .tooltip-block {
+      .tooltip-arrow,>.tooltip-block {
         transform: translate(0, -50%);
       }
     }
@@ -371,10 +371,10 @@
   }
 }
 
-.tooltip.pos-bottom:hover .tooltip-block, .tooltip.pos-bottom.is-visible .tooltip-block {
+.tooltip.pos-bottom:hover>.tooltip-block, .tooltip.pos-bottom.is-visible>.tooltip-block {
   transform: translate(-50%, 0);
 }
-.tooltip.pos-bottom .tooltip-block {
+.tooltip.pos-bottom>.tooltip-block {
   margin: 0;
   margin-top: 11px;
   left: 50%;

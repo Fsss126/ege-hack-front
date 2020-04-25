@@ -244,8 +244,6 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
 
   const modifiers = {start: hometask_deadline, end: hometask_deadline};
 
-  console.log(initialVideoLink, video_link, video_link !== initialVideoLink);
-
   return (
     <Form<LessonInfo>
       title={title}

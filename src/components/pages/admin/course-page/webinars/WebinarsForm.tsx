@@ -12,7 +12,7 @@ import {
   FormElementGroup,
 } from 'components/ui/form/FormElementGroup';
 import * as Input from 'components/ui/input';
-import Tooltip, {TooltipPosition} from 'components/ui/Tooltip';
+import Tooltip from 'components/ui/Tooltip';
 import {useRevokeWebinars} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {FileInfo, WebinarScheduleDtoReq} from 'types/dtos';
@@ -267,7 +267,7 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
                   value={duration}
                   onChange={onInputChange}
                 />
-                <Tooltip content={`В минутах`} position={TooltipPosition.left}>
+                <Tooltip content={`В минутах`} position="left">
                   <i className="icon-info" style={{paddingLeft: '12px'}} />
                 </Tooltip>
               </div>

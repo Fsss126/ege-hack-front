@@ -1,12 +1,7 @@
 import classNames from 'classnames';
-import React, {Fragment, ReactElement} from 'react';
+import React, {Fragment} from 'react';
 
-export enum TooltipPosition {
-  top = 'top',
-  right = 'right',
-  left = 'left',
-  bottom = 'bottom',
-}
+type TooltipPosition = 'top' | 'right' | 'left' | 'bottom';
 
 export type TooltipProps = {
   children: React.ReactElement;

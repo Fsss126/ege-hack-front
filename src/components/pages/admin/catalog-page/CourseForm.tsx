@@ -125,7 +125,6 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
   const {course} = props;
   const {formData, isValid, onInputChange, reset} = useForm<CourseFormData>(
     (state): CourseFormData => {
-      console.log('init', course);
       if (state || !course) {
         return INITIAL_FORM_DATA;
       } else {
