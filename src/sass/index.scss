@@ -263,7 +263,7 @@ body {
       i {
         color: $icon-grey;
         vertical-align: middle;
-        margin-right: 1em;
+        margin-right: 0.8em;
       }
     }
   }
@@ -648,7 +648,7 @@ header {
       background: none;
     }
 
-    &>.scroll-container {
+    & > .scroll-container {
       margin: 0 -#{$content-padding-horizontal};
 
       .scroll-container__inner {
@@ -803,10 +803,6 @@ header {
 
         &:hover {
           background-color: $bg-hover;
-
-          .icon-btn {
-            background: $bg-hover-deep;
-          }
         }
       }
 
@@ -945,7 +941,7 @@ header {
       padding-bottom: 0;
       background: none;
 
-      &>.content-block__title {
+      & > .content-block__title {
 
       }
     }
@@ -1201,11 +1197,12 @@ header {
       margin: 0;
 
       .list__container {
-        &>.row {
+        & > .row {
           margin-right: -8px;
           margin-left: -8px;
         }
       }
+
       .list__item {
         background: none;
         padding: 0 8px;
@@ -1279,11 +1276,11 @@ header {
 
     .scroll-container--with-shadows {
       &:before {
-        background: linear-gradient(90deg, $bg-grey, hsla(0,0%,100%,0));
+        background: linear-gradient(90deg, $bg-grey, hsla(0, 0%, 100%, 0));
       }
 
       &:after {
-        background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, $bg-grey);
+        background: linear-gradient(90deg, hsla(0, 0%, 100%, 0) 0, $bg-grey);
       }
     }
 
@@ -1718,7 +1715,7 @@ header {
         }
 
         &.result-bar__mark--pointer {
-          &>.tooltip-block {
+          & > .tooltip-block {
             cursor: pointer;
           }
         }
@@ -1745,8 +1742,16 @@ header {
     .test-results {
       margin-top: 20px;
 
-      .list__item:nth-child(even) {
-        background-color: $bg-grey;
+      .list__item {
+        &:nth-child(even) {
+          background-color: $bg-grey;
+        }
+
+        &:hover {
+          .icon-btn {
+            background: $bg-hover-deep;
+          }
+        }
       }
     }
   }
