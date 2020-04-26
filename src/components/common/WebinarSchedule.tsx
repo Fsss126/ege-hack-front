@@ -8,6 +8,7 @@ import {PersonWebinar, WebinarInfo} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
 import {ContentBlock} from '../layout/ContentBlock';
+import {PageContent} from '../layout/Page';
 import CoverImage from './CoverImage';
 import ScrollContainer from './ScrollContainer';
 
@@ -220,20 +221,25 @@ const WebinarSchedule: React.FC<WebinarScheduleProps> = (props) => {
     return null;
   }
   return (
-    <ContentBlock className="webinar-schedule" title={title} transparent>
-      <ScrollContainer
-        className="webinar-schedule__list-wrap"
-        withShadows={false}
-      >
-        {schedule.map((webinar) => (
-          <Webinar
-            webinar={webinar}
-            courseId={webinar.course_id}
-            key={webinar.id}
-          />
-        ))}
-      </ScrollContainer>
-    </ContentBlock>
+    <>
+      <PageContent>
+        <ContentBlock title={title} transparent />
+      </PageContent>
+      <ContentBlock className="webinar-schedule" transparent>
+        <ScrollContainer
+          className="webinar-schedule__list-wrap"
+          withShadows={false}
+        >
+          {schedule.map((webinar) => (
+            <Webinar
+              webinar={webinar}
+              courseId={webinar.course_id}
+              key={webinar.id}
+            />
+          ))}
+        </ScrollContainer>
+      </ContentBlock>
+    </>
   );
 };
 
