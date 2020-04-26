@@ -130,7 +130,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
                   neutral
                   component={Link}
                   to={`/admin/${courseId}/lessons/create/`}
-                  icon={<i className="icon-add" />}
+                  after={<i className="icon-add" />}
                 >
                   Добавить урок
                 </Button>

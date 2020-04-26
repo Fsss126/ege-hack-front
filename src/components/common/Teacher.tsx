@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import {useTruncate} from 'hooks/common';
 import React from 'react';
 import {Link, LinkProps} from 'react-router-dom';
@@ -35,7 +36,12 @@ const Teacher: React.FC<TeacherProps> = (props) => {
   return (
     <Link
       to={link}
-      className={`${className} teacher-profile`}
+      className={classNames(
+        'teacher-profile',
+        'd-flex',
+        'align-items-center',
+        className,
+      )}
       onClick={onClick}
     >
       <div className="container p-0">
@@ -48,13 +54,13 @@ const Teacher: React.FC<TeacherProps> = (props) => {
               square
             />
           </div>
-          <div className="col d-flex flex-column justify-content-center teacher-profile__info-container">
+          <div className="col d-flex flex-column justify-content-center overflow-hidden teacher-profile__info-container">
             <div className="teacher-profile__info">
               <h3 className="teacher-profile__name">
                 {first_name} {last_name}
               </h3>
               {bio && (
-                <div className="teacher-profile__subjects font-size-sm">
+                <div className="teacher-profile__subjects description-text font-size-sm">
                   {teacherSubjects
                     .map(({name}, i) => (i === 0 ? name : name.toLowerCase()))
                     .join(', ')}
@@ -64,19 +70,19 @@ const Teacher: React.FC<TeacherProps> = (props) => {
             </div>
           </div>
         </div>
-        {bio && (
-          <div className="row">
-            <div className="col-12">
-              <div className="description-block">
-                {isFontLoaded ? (
-                  <Truncate lines={4} ref={descriptionRef}>
-                    {about}
-                  </Truncate>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        )}
+        {/*{bio && (*/}
+        {/*  <div className="row">*/}
+        {/*    <div className="col-12">*/}
+        {/*      <div className="description-block">*/}
+        {/*        {isFontLoaded ? (*/}
+        {/*          <Truncate lines={4} ref={descriptionRef}>*/}
+        {/*            {about}*/}
+        {/*          </Truncate>*/}
+        {/*        ) : null}*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*)}*/}
       </div>
     </Link>
   );

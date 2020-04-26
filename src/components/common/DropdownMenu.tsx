@@ -37,7 +37,10 @@ export const DropdownIconButton: React.FC<DropdownIconButtonProps> = (
   const {className, ...rest} = props;
 
   return (
-    <i className={classNames('dropdown__icon-btn', className)} {...rest} />
+    <i
+      className={classNames('dropdown__icon-btn icon-btn', className)}
+      {...rest}
+    />
   );
 };
 

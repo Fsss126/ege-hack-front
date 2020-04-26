@@ -73,11 +73,13 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
           component={Link}
           to={prev}
           onClick={prevClickCallback}
-          icon={
+          before={
             loadingState &&
             navigateTo === prev &&
-            loadingState !== LOADING_STATE.DONE && (
+            loadingState !== LOADING_STATE.DONE ? (
               <LoadingIndicator state={loadingState} />
+            ) : (
+              <i className="icon-angle-left" />
             )
           }
         >
@@ -90,11 +92,13 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
         component={Link}
         to={next}
         onClick={nextClickCallback}
-        icon={
+        after={
           loadingState &&
           navigateTo === next &&
-          loadingState !== LOADING_STATE.DONE && (
+          loadingState !== LOADING_STATE.DONE ? (
             <LoadingIndicator state={loadingState} />
+          ) : (
+            <i className="icon-angle-right" />
           )
         }
       >

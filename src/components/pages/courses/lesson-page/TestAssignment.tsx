@@ -63,7 +63,7 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
           <div className="col-auto">
             <Button
               neutral
-              icon={<LoadingIndicator state={state} />}
+              after={<LoadingIndicator state={state} />}
               onClick={onClick}
             >
               Смотреть результаты
@@ -90,7 +90,7 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
             )}
           </div>
           <div className="col-auto">
-            <Button icon={<LoadingIndicator state={state} />} onClick={onClick}>
+            <Button after={<LoadingIndicator state={state} />} onClick={onClick}>
               {isStarted ? 'Продолжить' : 'Начать тест'}
             </Button>
           </div>

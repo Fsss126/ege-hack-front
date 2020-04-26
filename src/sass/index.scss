@@ -268,15 +268,6 @@ body {
     }
   }
 
-  .dropdown__icon-btn {
-    display: block;
-    padding: $icon-btn-padding;
-    border-radius: $icon-btn-border-radius;
-    transition: background-color 0.3s;
-    overflow: hidden;
-    cursor: pointer;
-  }
-
   &:hover,
   &:focus {
     .dropdown__menu-container {
@@ -286,6 +277,20 @@ body {
     .dropdown__icon-btn {
       background: $bg-active;
     }
+  }
+}
+
+.icon-btn {
+  display: block;
+  padding: $icon-btn-padding;
+  border-radius: $icon-btn-border-radius;
+  transition: background-color 0.3s;
+  overflow: hidden;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background: $bg-hover-deep;
   }
 }
 
@@ -497,6 +502,8 @@ header {
   .layout__sidebar-bar {
     .sidebar__nav-btn-container {
       padding-top: 16px;
+      display: flex;
+      font-size: 22px;
     }
 
     .layout__sidebar-content {
@@ -670,6 +677,10 @@ header {
     margin-top: 24px;
   }
 
+  .layout__content-container + .layout__content-container {
+    margin-top: 24px;
+  }
+
   .layout__content-parent-section-link {
     //font-family: $font-medium;
     color: $text-grey;
@@ -792,6 +803,10 @@ header {
 
         &:hover {
           background-color: $bg-hover;
+
+          .icon-btn {
+            background: $bg-hover-deep;
+          }
         }
       }
 
@@ -895,11 +910,13 @@ header {
 
   .teacher-profile {
     background: white;
-    padding: 12px $content-padding-horizontal;
+    padding: 12px $content-padding-horizontal-sm;
+    border-radius: $content-padding-horizontal-sm;
+    border: $border;
     @include selectableCover;
 
     .teacher-profile__photo {
-      width: 80px;
+      width: 68px;
     }
 
     .teacher-profile__name {
@@ -908,9 +925,15 @@ header {
       text-overflow: ellipsis;
     }
 
+    .teacher-profile__info-container {
+      padding-left: $content-padding-horizontal-sm;
+      margin-left: -15px;
+    }
+
     .teacher-profile__subjects {
       margin-top: 4px;
       margin-bottom: 8px;
+      font-family: $font-medium;
     }
   }
 
@@ -1174,11 +1197,21 @@ header {
       width: 100%;
     }
 
-    .list__item {
-      background: none;
-      padding: 0 15px;
-      margin-top: 0 !important;
-      margin-bottom: 16px;
+    .list {
+      margin: 0;
+
+      .list__container {
+        &>.row {
+          margin-right: -8px;
+          margin-left: -8px;
+        }
+      }
+      .list__item {
+        background: none;
+        padding: 0 8px;
+        margin-top: 0 !important;
+        margin-bottom: 16px;
+      }
     }
 
     //.teacher-profile {
@@ -1214,6 +1247,7 @@ header {
 
       .user-profile__avatar {
         background: white;
+        border: $border;
         //margin-bottom: -50%;
       }
     }
@@ -1589,6 +1623,7 @@ header {
       }
 
       .btn {
+        line-height: 30px;
         margin-top: 24px;
         display: flex;
         flex-shrink: 0;
@@ -1658,7 +1693,6 @@ header {
           padding: 0;
           color: inherit;
           font-size: inherit;
-          font-weight: bold;
           text-align: center;
 
           &.pos-top {

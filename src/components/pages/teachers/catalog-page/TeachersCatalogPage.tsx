@@ -24,8 +24,10 @@ const TeachersCatalogPage: React.FC<RouteComponentProps> = ({location}) => {
       {isLoaded && teachers && subjects && (
         <TeachersCatalog.Body subjects={subjects} teachers={teachers}>
           <PageContent>
-            <TeachersCatalog.Filter />
-            <TeachersCatalog.Catalog />
+            <TeachersCatalog.Catalog
+              filter={<TeachersCatalog.Filter />}
+              title="Преподаватели"
+            />
           </PageContent>
         </TeachersCatalog.Body>
       )}

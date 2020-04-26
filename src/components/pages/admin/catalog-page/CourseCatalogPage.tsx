@@ -113,7 +113,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
                   neutral
                   component={Link}
                   to={`${path}/create/`}
-                  icon={<i className="icon-add" />}
+                  after={<i className="icon-add" />}
                 >
                   Добавить курс
                 </Button>

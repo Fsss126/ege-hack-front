@@ -10,7 +10,7 @@ import {
 import {useLoadingState} from 'components/ui/LoadingIndicator';
 import MessagePopup from 'components/ui/MessagePopup';
 import {useCompleteTest, useSaveAnswer} from 'hooks/selectors';
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {FileInfo} from 'types/dtos';
 import {
   AnswerType,
@@ -99,10 +99,16 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
   const onSubmit = useCallback((promise: Promise<any>) => promise, []);
 
+  const [navigateLink, setNavigateLink] = useState<string | undefined>(
+    undefined,
+  );
+
   const submitAnswer = useCallback(
     (complete: boolean, navigateTo: string) => {
       const answer = getRequestData(formData);
       const deferred = new Deferred<any>();
+
+      setNavigateLink(navigateTo);
 
       addMockedTestAnswerResponses(task, getValue(formData));
 
@@ -124,6 +130,8 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
   const submitTest = useCallback(
     (navigateTo: string) => {
       const deferred = new Deferred<any>();
+
+      setNavigateLink(navigateTo);
 
       completeCallback({
         testId,
@@ -214,6 +222,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
       loadingState={loadingState}
       onNextClick={onNextClick}
       onPrevClick={onPrevClick}
+      navigateTo={navigateLink}
     />
   );
 

@@ -45,7 +45,7 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
           noOnClickOnAction
           preview={is_correct ? <CorrectBadge /> : <IncorrectBadge />}
           link={`../${id}`}
-          action={<i className="icon-angle-right" />}
+          action={<i className="icon-btn icon-angle-right" />}
           {...renderProps}
         />
       );

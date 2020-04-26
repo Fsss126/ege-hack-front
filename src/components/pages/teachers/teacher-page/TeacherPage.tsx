@@ -91,16 +91,16 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
         className="teacher-page"
         location={location}
       >
-        <PageContent parentSection={{name: 'Преподаватели'}}>
-          <UserProfile {...profile} />
-          <div className="layout__content-block">
-            <h3>Курсы преподавателя</h3>
-          </div>
-          <CourseCatalog.Body subjects={subjects} courses={teachersCourses}>
-            <CourseCatalog.Filter />
-            <CourseCatalog.Catalog renderCourse={renderCourse} />
-          </CourseCatalog.Body>
-        </PageContent>
+        <CourseCatalog.Body subjects={subjects} courses={teachersCourses}>
+          <PageContent parentSection={{name: 'Преподаватели'}}>
+            <UserProfile {...profile} />
+            <CourseCatalog.Catalog
+              renderCourse={renderCourse}
+              title="Курсы преподавателя"
+              filter={<CourseCatalog.Filter />}
+            />
+          </PageContent>
+        </CourseCatalog.Body>
       </Page>
     );
   } else if (error) {

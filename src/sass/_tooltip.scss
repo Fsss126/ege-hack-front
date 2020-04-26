@@ -229,8 +229,7 @@
 }
 
 .tooltip>.tooltip-block {
-  font-family: $font-regular;
-  font-weight: normal;
+  font-family: $font-medium;
   background: white;
   border-radius: $element-border-radius;
   font-size: 12px;
@@ -251,7 +250,6 @@
   width: max-content;
 
   cursor: default;
-  font-family: $font-medium;
 }
 
 .tooltip.pos-right .tooltip-arrow {

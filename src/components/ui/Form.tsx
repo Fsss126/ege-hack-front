@@ -375,7 +375,7 @@ const Form = <R, E extends Error = AxiosError>(
         )}{' '}
         <Button
           active={isValid}
-          icon={
+          after={
             (hasChanged || state !== LOADING_STATE.DONE) && (
               <LoadingIndicator state={state} />
             )

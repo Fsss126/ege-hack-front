@@ -140,7 +140,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
                   neutral
                   component={Link}
                   to={`/admin/${courseId}/participants/edit/`}
-                  icon={<i className="icon-add" />}
+                  after={<i className="icon-add" />}
                 >
                   Добавить учеников
                 </Button>

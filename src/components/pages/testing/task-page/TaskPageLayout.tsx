@@ -28,6 +28,12 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
   const tasksCount = test.tasks.length;
   const isCompleted = status === TestStatus.COMPLETED;
 
+  let percentage;
+
+  if ('percentage' in state) {
+    percentage = state.percentage;
+  }
+
   const showTaskInfo = !!(weight || complexity);
 
   return (
@@ -57,9 +63,15 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
               </h3>
             </div>
             <div className="col-auto p-0">
-              <ProgressIndicator progress={progress}>
-                Вопрос {order + 1}/{tasksCount}
-              </ProgressIndicator>
+              {percentage !== undefined ? (
+                <ProgressIndicator progress={percentage}>
+                  Результат {percentage * 80}%
+                </ProgressIndicator>
+              ) : (
+                <ProgressIndicator progress={progress}>
+                  Вопрос {order + 1}/{tasksCount}
+                </ProgressIndicator>
+              )}
             </div>
           </div>
           {isCompleted && (

@@ -33,7 +33,7 @@ const SubmitButton: React.FC<ISubmitButtonProps> = (props) => {
       <React.Fragment>
         <Button
           active={!isDisabled}
-          icon={
+          after={
             hasChanged ? (
               <i className="icon-upload" />
             ) : (

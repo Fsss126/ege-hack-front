@@ -44,7 +44,7 @@ const List = <T extends object = any, P extends object = {}>(
 
   return flex ? (
     <div className={classNames('list', className)}>
-      <div className="container p-0 overflow-hidden">
+      <div className="list__container container p-0 overflow-hidden">
         <div className={classNames('row', alignment)}>{content}</div>
       </div>
     </div>

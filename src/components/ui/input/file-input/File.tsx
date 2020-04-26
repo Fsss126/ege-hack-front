@@ -61,14 +61,14 @@ export const File: React.withDefaultProps<React.FC<FileProps>> = (props) => {
       <Button
         neutral
         className="file__btn"
-        icon={
+        after={
           deletable ? (
             <i className="icon-close file__action-btn file__delete-btn animated__action-button" />
           ) : (
             <i className="icon-download file__action-btn file__download-btn animated__action-button" />
           )
         }
-        iconAction={deletable ? onDelete : undefined}
+        afterAction={deletable ? onDelete : undefined}
         onClick={downloadCallback}
         {...buttonProps}
       >

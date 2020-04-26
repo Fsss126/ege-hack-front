@@ -24,7 +24,10 @@ export type TeachersCatalogProps = Omit<
 const TeachersCatalog = (props: TeachersCatalogProps) => {
   const renderTeacher = React.useCallback(
     (teacher, {link, subjects, ...rest}) => (
-      <div className="list__item col-12 col-md-6 d-flex" key={teacher.id}>
+      <div
+        className="teacher-profile-wrap list__item col-12 col-md-6 col-lg-4 d-flex"
+        key={teacher.id}
+      >
         <Teacher
           teacher={teacher}
           subjects={subjects}
@@ -42,7 +45,6 @@ const TeachersCatalog = (props: TeachersCatalogProps) => {
       emptyPlaceholder="Нет преподавателей"
       noMatchPlaceholder="Нет преподавателей, соответствующих условиям поиска"
       flex
-      alignment={'align-items-start'}
       renderItem={renderTeacher}
       {...props}
     />

@@ -186,7 +186,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
                   neutral
                   component={Link}
                   to={`${courseLink}/webinars/edit/`}
-                  icon={<i className="icon-add" />}
+                  after={<i className="icon-add" />}
                 >
                   Добавить вебинар
                 </Button>

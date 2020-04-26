@@ -25,7 +25,7 @@ const InputButton: React.FC<IInputProps> = (props) => {
     <Button
       component="label"
       active={isActive}
-      icon={<i className="icon-add" />}
+      after={<i className="icon-add" />}
     >
       {content}
       <input
