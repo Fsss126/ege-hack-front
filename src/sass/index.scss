@@ -1500,7 +1500,6 @@ header {
     .catalog__filters {
       background: white;
       padding: $content-padding;
-      border-top: none;
       margin-top: 0 !important;
 
       & + .catalog__catalog:not(.catalog__catalog--empty) {

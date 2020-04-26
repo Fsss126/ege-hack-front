@@ -54,7 +54,7 @@ const CourseCatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
         <PageContent>
           <CourseCatalog.Body subjects={subjects} courses={catalog}>
             {header}
-            <CourseCatalog.Filter filterBy={filterBy} />
+            <CourseCatalog.Filter filterBy={filterBy} stacked />
             <CourseCatalog.Catalog plain renderCourse={renderCourse} />
           </CourseCatalog.Body>
         </PageContent>
