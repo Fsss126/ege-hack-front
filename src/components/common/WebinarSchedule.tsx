@@ -229,6 +229,7 @@ const WebinarSchedule: React.FC<WebinarScheduleProps> = (props) => {
         <ScrollContainer
           className="webinar-schedule__list-wrap"
           withShadows={false}
+          fullWidth={true}
         >
           {schedule.map((webinar) => (
             <Webinar

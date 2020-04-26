@@ -3,7 +3,7 @@ import CoverImage from 'components/common/CoverImage';
 import {ADMIN_ROLES} from 'definitions/constants';
 import {renderDate} from 'definitions/helpers';
 import _ from 'lodash';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo, TeacherInfo} from 'types/entities';
@@ -11,13 +11,14 @@ import {CourseInfo, LessonInfo, TeacherInfo} from 'types/entities';
 import ConditionalRenderer from '../ConditionalRender';
 import {ContentBlock} from '../layout/ContentBlock';
 import {NotFoundErrorPage} from '../layout/ErrorPage';
-import Page, {PageLink} from '../layout/Page';
+import Page, {PageContent, PageLink} from '../layout/Page';
 import Catalog, {CatalogProps} from './Catalog';
 import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
 } from './DropdownMenu';
 import List, {ListProps} from './List';
+import ScrollContainer from './ScrollContainer';
 import Teacher from './Teacher';
 
 type CourseOverviewConextState = {
@@ -124,23 +125,37 @@ const Title: React.FC = () => {
 };
 
 const Teachers: React.FC = () => {
-  const {course, teachers} = React.useContext(CourseOverviewContext);
+  const {teachers} = React.useContext(CourseOverviewContext);
 
   return (
-    <ContentBlock title="Преподаватели">
-      <div className="course-overview__teachers container negate-block-padding">
-        <div className="row">
-          {course.teacher_ids.map((id, i) => (
-            <div className="col-12 col-md d-flex p-0" key={i}>
-              <Teacher
-                teacher={_.find(teachers, {id}) as TeacherInfo}
-                link={`/teachers/${id}/`}
-              />
+    <>
+      <PageContent>
+        <ContentBlock title="Преподаватели" transparent />
+      </PageContent>
+      <ContentBlock className="webinar-schedule" transparent>
+        <ScrollContainer
+          className="webinar-schedule__list-wrap"
+          withShadows={false}
+          fullWidth={true}
+        >
+          <div className="course-overview__teachers container">
+            <div className="row flex-nowrap">
+              {teachers.map((teacher) => (
+                <div
+                  className="teacher-profile-wrap col-12 col-md d-flex p-0"
+                  key={teacher.id}
+                >
+                  <Teacher
+                    teacher={teacher}
+                    link={`/teachers/${teacher.id}/`}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-    </ContentBlock>
+          </div>
+        </ScrollContainer>
+      </ContentBlock>
+    </>
   );
 };
 
@@ -186,12 +201,22 @@ const CourseOverview: React.FC<CourseOverviewProps> = (props) => {
   const {
     path: root,
     course,
-    teachers,
+    teachers: passedTeachers,
     lessons,
     children,
     className,
     location,
   } = props;
+
+  const teachers = useMemo(() => {
+    if (!(course && passedTeachers)) {
+      return undefined;
+    }
+
+    return course.teacher_ids.map(
+      (id) => _.find(passedTeachers, {id}) as TeacherInfo,
+    );
+  }, [course, passedTeachers]);
 
   if (course && teachers && lessons) {
     return (

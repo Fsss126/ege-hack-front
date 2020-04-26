@@ -6,10 +6,17 @@ import ScrollBars, {ScrollBarsProps} from '../ui/ScrollBars';
 
 export interface ScrollContainerProps extends ScrollBarsProps {
   withShadows?: boolean;
+  fullWidth?: boolean;
 }
 const ScrollContainer = forwardRef<Scrollbars, ScrollContainerProps>(
   (props, ref) => {
-    const {children, className, withShadows, ...scrollbarProps} = props;
+    const {
+      children,
+      className,
+      withShadows,
+      fullWidth,
+      ...scrollbarProps
+    } = props;
 
     // const location = useLocation();
     // const scrollBarsRef = useRef(null);
@@ -28,6 +35,7 @@ const ScrollContainer = forwardRef<Scrollbars, ScrollContainerProps>(
       <div
         className={classNames('scroll-container', className, {
           'scroll-container--with-shadows': withShadows,
+          'scroll-container--full-width': fullWidth,
         })}
       >
         <ScrollBars

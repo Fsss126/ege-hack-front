@@ -91,7 +91,9 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
               error={errorLoadingDiscount}
               reload={reloadDiscount}
             />
-            <CourseOverview.Teachers />
+          </PageContent>
+          <CourseOverview.Teachers />
+          <PageContent>
             <CourseOverview.Lessons renderLesson={renderLesson} />
           </PageContent>
         </div>

@@ -15,12 +15,7 @@ const TeachersCatalogPage: React.FC<RouteComponentProps> = ({location}) => {
   const isLoaded = !!(teachers && subjects);
 
   return (
-    <Page
-      isLoaded={isLoaded}
-      title="Преподаватели"
-      className="catalog teachers-catalog"
-      location={location}
-    >
+    <Page isLoaded={isLoaded} title="Преподаватели" location={location}>
       {isLoaded && teachers && subjects && (
         <TeachersCatalog.Body subjects={subjects} teachers={teachers}>
           <PageContent>

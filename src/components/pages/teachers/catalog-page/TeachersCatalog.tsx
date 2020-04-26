@@ -42,6 +42,7 @@ const TeachersCatalog = (props: TeachersCatalogProps) => {
 
   return (
     <Catalog.Catalog
+      className="teachers-catalog"
       emptyPlaceholder="Нет преподавателей"
       noMatchPlaceholder="Нет преподавателей, соответствующих условиям поиска"
       flex
