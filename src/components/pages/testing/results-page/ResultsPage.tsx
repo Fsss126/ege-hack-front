@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import List, {ListItemRenderer} from 'components/common/List';
 import ListItem from 'components/common/ListItem';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Redirect} from 'react-router';

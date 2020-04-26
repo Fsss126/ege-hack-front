@@ -216,7 +216,7 @@ body {
 
 .overlay-window {
   background: white;
-  border-radius: 4px;
+  border-radius: $card-border-radius;
   box-shadow: 0 0 0 1px rgba(100, 111, 121, 0.15),
   0 5px 20px 0 rgba(21, 27, 38, 0.08);
 }
@@ -243,13 +243,13 @@ body {
 
     .dropdown__menu {
       @include overflow-hidden;
-      padding: 4px 0;
+      padding: $menu-list-padding;
 
       .dropdown__menu-option {
         @include linkBehavior();
         display: block;
         //margin: 8px 0;
-        padding: 4px 12px;
+        padding: $menu-option-padding;
         cursor: pointer;
         opacity: 1;
         white-space: nowrap;
@@ -263,16 +263,16 @@ body {
       i {
         color: $icon-grey;
         vertical-align: middle;
-        margin-right: 8px;
+        margin-right: 1em;
       }
     }
   }
 
   .dropdown__icon-btn {
     display: block;
-    padding: 4px;
+    padding: $icon-btn-padding;
+    border-radius: $icon-btn-border-radius;
     transition: background-color 0.3s;
-    border-radius: 4px;
     overflow: hidden;
     cursor: pointer;
   }
@@ -515,11 +515,12 @@ header {
         .layout__sidebar-menu-section {
           border-bottom: $border;
           padding: 4px 0;
+          display: flex;
 
           &:first-child {
             padding-top: 0;
 
-            .layout__sidebar-menu-link {
+            .layout__sidebar-menu-link, .prefix-icon {
               padding-top: 0;
             }
           }
@@ -529,9 +530,16 @@ header {
           }
         }
 
-        .layout__sidebar-menu-link {
+        .layout__sidebar-menu-link, .prefix-icon {
           display: block;
           padding: 12px 0;
+        }
+
+        .layout__sidebar-menu-link ~ .layout__sidebar-menu-link {
+          padding-top: 0;
+        }
+
+        .layout__sidebar-menu-link {
           position: relative;
           transition: padding-left 0.3s;
 
@@ -575,10 +583,6 @@ header {
             opacity: 1;
           }
         }
-
-        .layout__sidebar-menu-link ~ .layout__sidebar-menu-link {
-          padding-top: 0;
-        }
       }
 
       .layout__sidebar-footer {
@@ -604,6 +608,14 @@ header {
     background: white;
     padding: $content-padding;
 
+    .content-block__title {
+      margin-bottom: 1em;
+
+      &:not(.catalog__catalog-title) + .list {
+        margin-top: -0.5em;
+      }
+    }
+
     &.layout__content-block--stacked {
       margin-top: 0;
       border-top: 1px solid $border-grey;
@@ -612,8 +624,8 @@ header {
     .negate-block-padding,
     .list {
       width: auto;
-      margin-left: -$content-padding-sides;
-      margin-right: -$content-padding-sides;
+      margin-left: -$content-padding-horizontal;
+      margin-right: -$content-padding-horizontal;
     }
 
     &.layout__content-block--transparent {
@@ -738,18 +750,17 @@ header {
   .list {
     .list__item {
       display: block;
-      background: white;
       padding: $content-padding;
       cursor: default;
       transition: background-color 0.3s;
 
-      &:hover {
-        background-color: $bg-hover;
-      }
-
       &.list__item-selectable {
         cursor: pointer;
         @include selectableCover;
+
+        &:hover {
+          background-color: $bg-hover;
+        }
       }
 
       @mixin absolutePos {
@@ -799,6 +810,9 @@ header {
       }
 
       &.list__item-plain {
+        padding-top: $content-padding-vertical-sm;
+        padding-bottom: $content-padding-vertical-sm;
+
         .list__item-description-inner {
           @include absolutePos;
         }
@@ -821,7 +835,7 @@ header {
     }
 
     @include media-breakpoint-down(sm) {
-      .list__item ~ .list__item:not(.list__item-plain) {
+      .list__item-wrap ~ .list__item-wrap .list__item:not(.list__item-plain) {
         margin-top: 16px;
       }
     }
@@ -848,7 +862,7 @@ header {
 
   .teacher-profile {
     background: white;
-    padding: 12px $content-padding-sides;
+    padding: 12px $content-padding-horizontal;
     @include selectableCover;
 
     .teacher-profile__photo {
@@ -876,11 +890,19 @@ header {
       background: none;
     }
 
+    .list__item-wrap {
+      background: white;
+    }
+
     .catalog__empty-catalog-fallback-message {
       text-align: center;
     }
 
     .catalog__filters {
+      background: none;
+      padding-top: 0;
+      padding-bottom: 0;
+
       .catalog__filter-container ~ .catalog__filter-container {
         padding-left: 0;
       }
@@ -920,6 +942,11 @@ header {
   }
 
   .course-overview {
+    .course-overview__link {
+      display: inline-block;
+      margin-top: 16px;
+    }
+
     .course-overview__summary {
       //margin: 16px 0;
       .course-overview__summary-item {
@@ -948,7 +975,7 @@ header {
     }
 
     .course-overview__teachers {
-      padding-top: calc(#{$content-padding-top} - 8px);
+      padding-top: calc(#{$content-padding-vertical} - 8px);
     }
   }
 
@@ -992,7 +1019,7 @@ header {
 
         .selected-course__description-container {
           width: 120px;
-          padding: 0 $content-padding-sides;
+          padding: 0 $content-padding-horizontal;
         }
       }
     }
@@ -1039,11 +1066,10 @@ header {
       }
     }
 
-    .lesson-page__other-lessons,
-    .lesson-page__current-lesson {
+    .lesson-page__other-lessons {
       &.layout__content-block {
         @include media-breakpoint-up(lg) {
-          padding: 0 15px;
+          padding-top: 0;
         }
       }
     }
@@ -1053,6 +1079,10 @@ header {
 
       &:not(:first-child) {
         margin-top: 32px;
+
+        &.m-lg {
+          margin-top: 55px;
+        }
       }
     }
 
@@ -1173,15 +1203,20 @@ header {
   }
 
   .webinar-schedule {
-    .webinar-schedule__webinar {
+    .webinar {
       cursor: pointer;
-      background: black;
       min-height: 50px;
       flex-basis: 70vw;
       flex-shrink: 0;
-      transition: opacity 0.3s;
 
-      &:hover {
+      .webinar-inner-container {
+        transition: opacity 0.3s;
+        border-radius: $element-border-radius;
+        border: $border;
+        overflow: hidden;
+      }
+
+      &:hover .webinar-inner-container {
         opacity: 0.95;
       }
 
@@ -1193,9 +1228,10 @@ header {
         flex-basis: 400px;
       }
 
-      .webinar-schedule__webinar-status,
-      .webinar-schedule__webinar-countdown {
+      .webinar__status,
+      .webinar__countdown {
         position: relative;
+        z-index: 1;
 
         & > * {
           z-index: 0;
@@ -1216,7 +1252,7 @@ header {
         }
       }
 
-      .webinar-schedule__webinar-countdown {
+      .webinar__countdown {
         color: white;
         font-size: 14px;
 
@@ -1228,16 +1264,20 @@ header {
         }
       }
 
-      &:not(.webinar-schedule__webinar-locked)
-      .webinar-schedule__webinar-countdown:before {
+      &:not(.webinar__locked) .webinar__countdown:before {
         animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
       }
 
-      .webinar-schedule__webinar-poster {
+      .webinar__poster {
         width: 100px;
       }
 
-      .webinar-schedule__webinar-status {
+      .webinar__content {
+        margin: 0 -15px;
+        background: black;
+      }
+
+      .webinar__status {
         color: white;
 
         &:before {
@@ -1248,10 +1288,10 @@ header {
         }
       }
 
-      &.webinar-schedule__webinar-locked {
+      &.webinar__locked {
         cursor: default;
 
-        .webinar-schedule__webinar-status {
+        .webinar__status {
           color: $icon-grey;
 
           &:before {
@@ -1260,14 +1300,14 @@ header {
         }
       }
 
-      & ~ .webinar-schedule__webinar {
+      & ~ .webinar {
         margin-left: 16px;
       }
 
-      .webinar-schedule__webinar-title {
+      .webinar__title {
         color: white;
         font-size: 12px;
-        font-family: $font-light;
+        font-family: $font-medium;
         max-width: 160px;
 
         & > div {
@@ -1327,10 +1367,10 @@ header {
 
     &.layout__content-block {
       .tab-nav {
-        margin: 0 -22px;
+        margin: 0 -#{$content-padding-horizontal};
 
         .scroll-btn-container__inner-container {
-          padding: 0 22px;
+          padding: 0 $content-padding-horizontal;
         }
       }
     }
@@ -1367,6 +1407,14 @@ header {
   .admin-page {
     .cover {
       opacity: 1;
+    }
+
+    .catalog__filters {
+      background: white;
+      padding: $content-padding;
+      & + .catalog__catalog:not(.catalog__catalog--empty) {
+        margin-top: 0;
+      }
     }
   }
 
@@ -1487,6 +1535,10 @@ header {
 
         &.test-task__nav-prev {
           margin-right: auto;
+
+          .btn__name {
+            order: 1;
+          }
 
           @include media-breakpoint-down(sm) {
             .btn__name:before {

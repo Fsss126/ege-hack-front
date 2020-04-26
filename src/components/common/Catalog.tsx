@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import * as Input from 'components/ui/input';
 import React, {useCallback, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -63,6 +64,7 @@ export type FilterProps = {
     search: boolean;
   };
   children?: React.ReactNode;
+  transparent?: boolean;
 };
 const Filter: React.FC<FilterProps> = (props) => {
   const {
@@ -71,6 +73,7 @@ const Filter: React.FC<FilterProps> = (props) => {
       online: filterByOnline = true,
       search = false,
     } = {},
+    transparent,
     children,
   } = props;
   const {options, subject, online, search: searchKey} = React.useContext(
@@ -79,7 +82,11 @@ const Filter: React.FC<FilterProps> = (props) => {
   const onChange = useFilterCallback();
 
   return (
-    <div className="layout__content-block catalog__filters">
+    <div
+      className={classNames('layout__content-block', 'catalog__filters', {
+        'layout__content-block--transparent': transparent,
+      })}
+    >
       <div className="container p-0">
         <div className="row align-items-center">
           {filterBySubject && options && (
@@ -147,6 +154,7 @@ export type CatalogProps<T extends object = any, P extends object = {}> = Omit<
   emptyPlaceholder: React.ReactNode;
   noMatchPlaceholder: React.ReactNode;
   renderProps?: P;
+  title?: React.ReactNode;
 };
 const Catalog = <T extends object = any, P extends object = {}>(
   props: CatalogProps<T, P>,
@@ -156,6 +164,7 @@ const Catalog = <T extends object = any, P extends object = {}>(
     emptyPlaceholder,
     noMatchPlaceholder,
     renderProps,
+    title,
     ...listProps
   } = props;
   const {items, totalItems} = React.useContext(CatalogContext);
@@ -166,9 +175,18 @@ const Catalog = <T extends object = any, P extends object = {}>(
     [renderFunc],
   );
 
+  const isEmpty = items.length === 0;
+
   return (
-    <div className="layout__content-block catalog__catalog">
-      {items.length > 0 ? (
+    <div
+      className={classNames('layout__content-block', 'catalog__catalog', {
+        'catalog__catalog--empty': isEmpty,
+      })}
+    >
+      {title && (
+        <h3 className="content-block__title catalog__catalog-title">{title}</h3>
+      )}
+      {!isEmpty ? (
         <List {...listProps} renderProps={renderProps} renderItem={renderItem}>
           {items}
         </List>
@@ -185,13 +203,13 @@ const Catalog = <T extends object = any, P extends object = {}>(
   );
 };
 
-export type CatalogFilter<T> = (item: T, filterParams: FilterParams) => boolean;
+export type FilterFunc<T> = (item: T, filterParams: FilterParams) => boolean;
 
 export type CatalogBodyProps<T extends object = any> = {
   options?: OptionShape<number>[];
   items: T[];
   children?: React.ReactNode;
-  filter: CatalogFilter<T>;
+  filter: FilterFunc<T>;
 };
 const Body = <T extends object = any>(
   props: CatalogBodyProps<T>,

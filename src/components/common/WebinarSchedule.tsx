@@ -171,30 +171,27 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
   return (
     <div
       onClick={onClick}
-      className={classNames('webinar-schedule__webinar', 'd-flex', {
-        'webinar-schedule__webinar-locked': !isUnlocked,
+      className={classNames('webinar', 'd-flex', {
+        webinar__locked: !isUnlocked,
       })}
     >
-      <div className="container d-flex overflow-hidden">
+      <div className="webinar-inner-container container d-flex">
         <div className="row flex-nowrap flex-grow-1">
-          <div className="col-auto d-flex align-items-center webinar-schedule__webinar-status">
+          <div className="webinar__status col-auto d-flex align-items-center">
             {isUnlocked ? (
               <i className="fas fa-unlock" />
             ) : (
               <i className="fas fa-lock" />
             )}
           </div>
-          <div className="col d-flex flex-shrink-0 p-0">
-            <CoverImage
-              className="webinar-schedule__webinar-poster"
-              src={webinar.image_link}
-            />
-            <div className="webinar-schedule__webinar-title d-flex flex-column justify-content-center p-2">
+          <div className="webinar__content col d-flex flex-shrink-0">
+            <CoverImage className="webinar__poster" src={webinar.image_link} />
+            <div className="webinar__title d-flex flex-column justify-content-center p-2">
               <div>{webinar.subject_name}</div>
               <div>{webinar.name}</div>
             </div>
           </div>
-          <div className="col-auto d-flex align-items-center webinar-schedule__webinar-countdown">
+          <div className="webinar__countdown col-auto d-flex align-items-center">
             <Countdown
               date={webinar.date_start}
               renderer={renderCountdown}
@@ -210,15 +207,17 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
 
 export type WebinarScheduleProps = {
   schedule: PersonWebinar[];
+  title?: React.ReactNode;
 };
 const WebinarSchedule: React.FC<WebinarScheduleProps> = (props) => {
-  const {schedule} = props;
+  const {schedule, title} = props;
 
   if (schedule.length === 0) {
     return null;
   }
   return (
     <div className="layout__content-block webinar-schedule">
+      {title && <h3 className="content-block__title">{title}</h3>}
       <ScrollBars
         autoHeight
         autoHeightMax="unset"

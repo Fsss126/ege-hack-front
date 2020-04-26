@@ -1,9 +1,21 @@
 import HomeworkAssignment from 'components/common/HomeworkAssignment';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent, PageContentProps} from 'components/layout/Page';
+import {HomeworksHookResult} from 'hooks/selectors';
 import React from 'react';
+import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
 
-const AssignmentPage = (props) => {
+interface AssignmentPageProps
+  extends RouteComponentPropsWithPath<LessonPageParams> {
+  homeworks?: HomeworksHookResult['homeworks'];
+  lesson?: LessonInfo;
+  isLoaded: boolean;
+  parentSection: PageContentProps['parentSection'];
+  children: React.ReactNode;
+}
+
+const AssignmentPage: React.FC<AssignmentPageProps> = (props) => {
   const {location, lesson, isLoaded, children: header, parentSection} = props;
 
   const title = lesson && `Задание к уроку ${lesson.name}`;

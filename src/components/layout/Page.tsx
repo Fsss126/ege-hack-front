@@ -7,12 +7,12 @@ import {Link, LinkProps, Redirect, useLocation} from 'react-router-dom';
 import Sticky from 'react-sticky-el';
 import {CSSTransition} from 'react-transition-group';
 
-import {useSideBarState} from './App';
+import {useSideBarState} from '../App';
 import {
   RequiredPermissions,
   RequiredRoles,
   useCheckPermissions,
-} from './ConditionalRender';
+} from '../ConditionalRender';
 import {PermissionsDeniedErrorPage} from './ErrorPage';
 import Header from './Header';
 import SideBar from './SideBar';
@@ -97,7 +97,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({
   </Sticky>
 );
 
-//TODO: Add page error boundary
+// TODO: Add page error boundary
 class PageErrorBoundary extends React.Component {
   state = {
     error: null,
@@ -112,8 +112,8 @@ enum LayoutAnimationClassNames {
   exitActive = 'sidebar-hiding',
 }
 
-//TODO: check error and show popup
-//TODO: parent sections using context
+// TODO: check error and show popup
+// TODO: parent sections using context
 
 export type PageProps = {
   title?: string;

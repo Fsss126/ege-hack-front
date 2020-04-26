@@ -10,6 +10,10 @@ export interface CoursePageParams {
   courseId: string;
 }
 
+export interface TeacherPageParams {
+  id: string;
+}
+
 export interface LessonPageParams extends CoursePageParams {
   lessonId: string;
 }

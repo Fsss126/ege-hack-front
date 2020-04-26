@@ -54,7 +54,7 @@ const Shop: React.FC<RouteComponentProps> = (props) => {
     <Fragment>
       <Switch>
         <Route
-          path={`${match.path}/:id`}
+          path={`${match.path}/:courseId`}
           render={(props) => (
             <CoursePage
               selectedCourses={selectedCourses}

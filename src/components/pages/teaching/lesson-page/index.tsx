@@ -1,12 +1,15 @@
 import TabNav, {TabNavLink} from 'components/common/TabNav';
 import {useHomeworks, useLesson, useTeacherCourse} from 'hooks/selectors';
 import React from 'react';
-import {Link, Redirect, Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
 
 import AssignmentPage from './AssignmentPage';
 import HomeworksPage from './HomeworksPage';
 
-const LessonPage = (props) => {
+const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
+  props,
+) => {
   const {path: root, match} = props;
   const {
     params: {courseId: param_course, lessonId: param_lesson},
@@ -27,7 +30,7 @@ const LessonPage = (props) => {
   } = useHomeworks(lessonId);
   const isLoaded = !!(lesson && homeworks && courseId);
 
-  const header = isLoaded && (
+  const header = isLoaded && lesson && (
     <div className="layout__content-block tab-nav-container">
       <h2>{lesson.name}</h2>
       <TabNav>
@@ -44,10 +47,12 @@ const LessonPage = (props) => {
     </div>
   );
 
-  const parentSection = course && {
-    name: course.name,
-    url: '../../',
-  };
+  const parentSection = course
+    ? {
+        name: course.name,
+        url: '../../',
+      }
+    : undefined;
 
   return (
     <Switch>

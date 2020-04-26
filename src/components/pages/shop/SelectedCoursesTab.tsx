@@ -1,6 +1,6 @@
 import {AxiosError} from 'axios';
 import CoverImage from 'components/common/CoverImage';
-import {BottomTab} from 'components/Page';
+import {BottomTab} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import Loader from 'components/ui/Loader';
 import ScrollBars, {renderView as DefaultView} from 'components/ui/ScrollBars';

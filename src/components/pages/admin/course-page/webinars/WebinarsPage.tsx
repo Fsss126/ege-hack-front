@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import Catalog, {
-  CatalogFilter,
   CatalogItemRenderer,
+  FilterFunc,
 } from 'components/common/Catalog';
 import DropdownMenu, {
   DropdownIconButton,
@@ -11,7 +11,7 @@ import ListItem, {ListItemProps} from 'components/common/ListItem';
 import PosterCover from 'components/common/PosterCover';
 import {useWebinar, WEBINAR_STATE} from 'components/common/WebinarSchedule';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import Page, {PageContent, PageParentSection} from 'components/Page';
+import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderDate} from 'definitions/helpers';
 import {useDeleteWebinar} from 'hooks/selectors';
@@ -28,7 +28,7 @@ const filterBy = {
   online: false,
 };
 
-const filter: CatalogFilter<WebinarInfo> = (lesson, {search}) => {
+const filter: FilterFunc<WebinarInfo> = (lesson, {search}) => {
   const name = lesson.name.toLowerCase().replace(/\s/g, '');
   const searchKey = search.toLowerCase().replace(/\s/g, '');
 

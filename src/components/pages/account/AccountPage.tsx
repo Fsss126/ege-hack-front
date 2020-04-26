@@ -1,5 +1,5 @@
 import UserProfile from 'components/common/UserProfile';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import {useUser} from 'hooks/selectors';
 import React from 'react';
 import {UserInfo} from 'types/entities';

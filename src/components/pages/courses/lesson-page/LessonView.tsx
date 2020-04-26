@@ -39,7 +39,10 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       </div>
       {attachments && attachments.length > 0 && (
         <div className="block-container attachment-container">
-          <h3>Материалы к уроку</h3>
+          <h3>
+            <i className="icon-book prefix-icon" />
+            Материалы к уроку
+          </h3>
           <div className="attachment__files file-container">
             {attachments.map((attachment, i) => (
               <File file={attachment} key={i} />
@@ -48,8 +51,11 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
         </div>
       )}
       {assignment && (
-        <div className="block-container hw-container">
-          <h3>Домашнее задание</h3>
+        <div className="block-container m-lg hw-container">
+          <h3>
+            <i className="icon-assignment prefix-icon" />
+            Домашнее задание
+          </h3>
           <HomeworkAssignment assignment={assignment} />
           <HomeworkLoader
             homework={homework}
@@ -77,8 +83,11 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
         </div>
       )}
       {test && (
-        <div className="block-container hw-container">
-          <h3>Тест</h3>
+        <div className="block-container m-lg test-container">
+          <h3>
+            <i className="icon-checkbox prefix-icon" />
+            Тест
+          </h3>
           <TestAssignment courseId={course_id} lessonId={id} test={test} />
         </div>
       )}

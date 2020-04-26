@@ -101,7 +101,7 @@ export function useFormValidityChecker<D extends FormData>(
     input: HTMLInputElement | undefined,
     data: D,
   ) => boolean | undefined,
-  dependencies = [],
+  dependencies: unknown[] = [],
 ): FormValidityChecker<D> {
   return React.useCallback(
     (formData: D) => {
@@ -123,7 +123,7 @@ export function useFormValidityChecker<D extends FormData>(
       }
       return true;
     },
-    [checkInput, formElement],
+    [checkInput, formElement, ...dependencies],
   );
 }
 

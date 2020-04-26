@@ -1,7 +1,13 @@
-import Catalog from 'components/common/Catalog';
-import Page, {PageContent} from 'components/Page';
+import Catalog, {
+  CatalogItemRenderer,
+  FilterFunc,
+} from 'components/common/Catalog';
+import Page, {PageContent, PageContentProps} from 'components/layout/Page';
+import {HomeworksHookResult} from 'hooks/selectors';
 import React, {useCallback} from 'react';
+import {HomeworkInfo, LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
 
 import Homework from './Homework';
 
@@ -11,7 +17,7 @@ const filterBy = {
   online: false,
 };
 
-const filter = (
+const filter: FilterFunc<HomeworkInfo> = (
   {
     pupil: {
       vk_info: {full_name},
@@ -25,7 +31,16 @@ const filter = (
   return search ? userName.includes(searchKey) : true;
 };
 
-const HomeworksPage = (props) => {
+interface HomeworksPageProps
+  extends RouteComponentPropsWithPath<LessonPageParams> {
+  homeworks?: HomeworksHookResult['homeworks'];
+  lesson?: LessonInfo;
+  isLoaded: boolean;
+  parentSection: PageContentProps['parentSection'];
+  children: React.ReactNode;
+}
+
+const HomeworksPage: React.FC<HomeworksPageProps> = (props) => {
   const {
     match: {
       params: {courseId: param_course, lessonId: param_lesson},
@@ -41,7 +56,7 @@ const HomeworksPage = (props) => {
   const courseId = parseInt(param_course);
   const lessonId = parseInt(param_lesson);
 
-  const renderHomework = useCallback(
+  const renderHomework: CatalogItemRenderer<HomeworkInfo> = useCallback(
     (homework, {link, ...renderProps}) => (
       <Homework key={homework.pupil.id} homework={homework} {...renderProps} />
     ),
@@ -57,16 +72,15 @@ const HomeworksPage = (props) => {
       title={title}
       location={location}
     >
-      {isLoaded && (
+      {isLoaded && homeworks && (
         <Catalog.Body items={homeworks} filter={filter}>
           <PageContent parentSection={parentSection}>
             {header}
-            <Catalog.Filter filterBy={filterBy}></Catalog.Filter>
+            <Catalog.Filter filterBy={filterBy} />
             <Catalog.Catalog
               className="users-list"
               emptyPlaceholder="Нет загруженных работ"
               noMatchPlaceholder="Нет совпадающих работ"
-              adaptive={false}
               plain
               renderItem={renderHomework}
             />

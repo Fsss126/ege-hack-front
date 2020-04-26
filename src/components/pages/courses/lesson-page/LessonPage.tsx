@@ -1,7 +1,7 @@
 import Lesson from 'components/common/Lesson';
 import List, {ListItemRenderer} from 'components/common/List';
-import {NotFoundErrorPage} from 'components/ErrorPage';
-import Page, {PageContent} from 'components/Page';
+import {NotFoundErrorPage} from 'components/layout/ErrorPage';
+import Page, {PageContent} from 'components/layout/Page';
 import {useHomework, useLessons, useUserCourses} from 'hooks/selectors';
 import _ from 'lodash';
 import React from 'react';
@@ -75,11 +75,11 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
           location={location}
         >
           <PageContent parentSection={{name: course.name}}>
-            <div className="layout__content-block">
+            <div className="layout__content-block layout__content-block--transparent">
               <div className="container p-lg-0">
-                <div className="row">
+                <div className="row align-items-start">
                   <LessonView lesson={selectedLesson} homework={homework} />
-                  <div className="col-12 col-lg-auto layout__content-block lesson-page__other-lessons">
+                  <div className="col-12 col-lg-auto layout__content-block layout__content-block--transparent lesson-page__other-lessons">
                     {nextVideo && <h3>Следующее занятие</h3>}
                     {nextVideo && (
                       <List renderItem={renderLesson}>{[nextVideo]}</List>

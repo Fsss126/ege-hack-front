@@ -1,20 +1,32 @@
 import APIRequest from 'api';
-import {useForm, useFormValidityChecker} from 'components/ui/Form';
-import Form from 'components/ui/Form';
+import Form, {useForm, useFormValidityChecker} from 'components/ui/Form';
 import {Input} from 'components/ui/input';
 import Popup, {PopupAnimation} from 'components/ui/Popup';
+import {useForceUpdate} from 'hooks/common';
 import {useUser} from 'hooks/selectors';
 import React, {useCallback, useEffect, useRef} from 'react';
+import {PaymentReq} from 'types/dtos';
+import {CourseInfo} from 'types/entities';
+import {SimpleCallback} from 'types/utility/common';
 
-import {useForceUpdate} from '../../../hooks/common';
+interface FormData {
+  email: string;
+}
 
 const LOCAL_STORAGE_KEY = 'ege-hack-email';
 
-function createLinkRequest(requestData) {
+function createLinkRequest(requestData: PaymentReq) {
   return APIRequest.post('/payments/tinkoff/link', requestData);
 }
 
-const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
+interface PurchasePopupProps {
+  selectedCourses: Set<CourseInfo>;
+  opened: boolean;
+  onCloseClick: SimpleCallback;
+}
+
+const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
+  const {opened, selectedCourses, onCloseClick} = props;
   const {userInfo} = useUser();
   const formElementRef = useRef(null);
   const forceUpdate = useForceUpdate();
@@ -23,10 +35,10 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
     undefined,
     [opened],
   );
-  const {formData, isValid, onInputChange, reset} = useForm(
+  const {formData, isValid, onInputChange, reset} = useForm<FormData>(
     (state) => ({
       email:
-        userInfo && userInfo.email
+        userInfo && !(userInfo instanceof Error) && userInfo.email
           ? userInfo.email
           : localStorage.getItem(LOCAL_STORAGE_KEY) || '',
     }),
@@ -34,17 +46,13 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
   );
 
   const getRequestData = useCallback(
-    (email, selectedCourses) => {
-      if (!userInfo) {
-        return;
-      }
+    (email: string, selectedCourses: Set<CourseInfo>): PaymentReq => {
       return {
         courses: [...selectedCourses].map(({id}) => id),
-        vk_address: userInfo.contacts.vk,
         email,
       };
     },
-    [userInfo],
+    [],
   );
 
   const {email} = formData;
@@ -54,7 +62,7 @@ const PurchasePopup = ({opened, selectedCourses, onCloseClick}) => {
   }, [forceUpdate, opened]);
 
   useEffect(() => {
-    if (userInfo && !email) {
+    if (userInfo && !(userInfo instanceof Error) && !email) {
       onInputChange(userInfo.email || '', 'email');
     }
   }, [opened, onInputChange, userInfo, email]);

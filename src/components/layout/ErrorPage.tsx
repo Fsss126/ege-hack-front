@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
+import Button from '../ui/Button';
 import Page from './Page';
-import Button from './ui/Button';
 
 export type ErrorPageRedirectLink = {
   text: React.ReactNode;

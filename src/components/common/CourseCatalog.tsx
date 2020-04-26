@@ -3,8 +3,8 @@ import {CourseInfo, SubjectInfo} from 'types/entities';
 
 import Catalog, {
   CatalogBodyProps,
-  CatalogFilter,
   CatalogProps,
+  FilterFunc,
   FilterParams,
 } from './Catalog';
 
@@ -29,7 +29,7 @@ const CourseCatalog = <P extends object = {}>(
   );
 };
 
-const filter: CatalogFilter<CourseInfo> = (
+const filter: FilterFunc<CourseInfo> = (
   course,
   {subject, online, search}: FilterParams,
 ) =>

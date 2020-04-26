@@ -1,5 +1,5 @@
-import {NotFoundErrorPage} from 'components/ErrorPage';
-import Page, {PageContent} from 'components/Page';
+import {NotFoundErrorPage} from 'components/layout/ErrorPage';
+import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState, useTestTask} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentPropsWithPath, TestTaskPageParams} from 'types/routes';

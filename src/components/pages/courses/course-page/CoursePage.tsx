@@ -1,7 +1,7 @@
 import CourseOverview, {LessonRenderer} from 'components/common/CourseOverview';
 import Lesson from 'components/common/Lesson';
 import WebinarSchedule from 'components/common/WebinarSchedule';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {
   useCourseWebinars,
@@ -16,7 +16,6 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
   path,
   match,
   location,
-  history,
 }) => {
   const {
     params: {courseId: param_id},
@@ -63,8 +62,6 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
   if (course && lessons && teachers && webinars) {
     return (
       <CourseOverview.Body
-        match={match}
-        history={history}
         path={path}
         course={course}
         lessons={lessons}
@@ -73,7 +70,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
       >
         <PageContent parentSection={{name: 'Мои курсы'}}>
           <CourseOverview.Title />
-          <WebinarSchedule schedule={webinars} />
+          <WebinarSchedule schedule={webinars} title="Вебинары" />
           <CourseOverview.Lessons renderLesson={renderLesson} />
         </PageContent>
       </CourseOverview.Body>

@@ -8,8 +8,8 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo, TeacherInfo} from 'types/entities';
 
 import ConditionalRenderer from '../ConditionalRender';
-import {NotFoundErrorPage} from '../ErrorPage';
-import Page, {PageLink} from '../Page';
+import {NotFoundErrorPage} from '../layout/ErrorPage';
+import Page, {PageLink} from '../layout/Page';
 import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
@@ -111,7 +111,7 @@ const Title: React.FC = () => {
   const {course} = React.useContext(CourseOverviewContext);
 
   return (
-    <div className="course-overview__title layout__content-block">
+    <div className="course-overview__title layout__content-block layout__content-block--transparent">
       <h2>{course.name}</h2>
       <PageLink className="course-overview__link" to={`/shop/${course.id}`}>
         Страница курса
@@ -162,13 +162,13 @@ const Lessons: React.FC<LessonsProps> = (props) => {
 
   return (
     <div className="layout__content-block">
-      <h3>Уроки</h3>
+      <h3 className="content-block__title">Уроки</h3>
       <List renderItem={renderCourse}>{lessons}</List>
     </div>
   );
 };
 
-export type CourseOverviewProps = RouteComponentProps & {
+export type CourseOverviewProps = Pick<RouteComponentProps, 'location'> & {
   course?: CourseInfo;
   teachers?: TeacherInfo[];
   lessons?: LessonInfo[];

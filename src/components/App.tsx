@@ -19,7 +19,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import {NotFoundErrorPage} from './ErrorPage';
+import {NotFoundErrorPage} from './layout/ErrorPage';
 import Account from './pages/account';
 import Admin from './pages/admin';
 import MyCourses from './pages/courses';

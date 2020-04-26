@@ -1,13 +1,27 @@
-import Catalog from 'components/common/Catalog';
+import Catalog, {
+  CatalogBodyProps,
+  CatalogProps,
+  FilterFunc,
+  FilterProps,
+} from 'components/common/Catalog';
 import Teacher from 'components/common/Teacher';
 import _ from 'lodash';
 import React from 'react';
+import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 
-const Filter = (props) => (
-  <Catalog.Filter filterBy={{online: false}} {...props} />
+const Filter: React.FC<FilterProps> = (props) => (
+  <Catalog.Filter
+    filterBy={{online: false, subject: true, search: true}}
+    {...props}
+  />
 );
 
-const TeachersCatalog = (props) => {
+export type TeachersCatalogProps = Omit<
+  CatalogProps<CourseInfo>,
+  'emptyPlaceholder' | 'noMatchPlaceholder' | 'renderItem'
+>;
+
+const TeachersCatalog = (props: TeachersCatalogProps) => {
   const renderTeacher = React.useCallback(
     (teacher, {link, subjects, ...rest}) => (
       <div className="list__item col-12 col-md-6 d-flex" key={teacher.id}>
@@ -25,7 +39,8 @@ const TeachersCatalog = (props) => {
 
   return (
     <Catalog.Catalog
-      placeholder="Нет преподавателей, соответствующих условиям поиска"
+      emptyPlaceholder="Нет преподавателей"
+      noMatchPlaceholder="Нет преподавателей, соответствующих условиям поиска"
       flex
       alignment={'align-items-start'}
       renderItem={renderTeacher}
@@ -34,18 +49,28 @@ const TeachersCatalog = (props) => {
   );
 };
 
-const filter = (teacher, {subject}) =>
+const filter: FilterFunc<TeacherInfo> = (teacher, {subject}) =>
   subject ? teacher.subjects.some(({id}) => subject === id) : true;
 
-const Body = (props) => {
+export type CourseBodyProps = Omit<
+  CatalogBodyProps<CourseInfo>,
+  'items' | 'options' | 'filter'
+> & {
+  teachers: TeacherInfo[];
+  subjects: SubjectInfo[];
+};
+const Body: React.FC<CourseBodyProps> = (props) => {
   const {teachers, subjects, ...otherProps} = props;
 
   const options = React.useMemo(() => {
-    const subjectsMap = _.zipObject(
-      subjects.map(({id}) => id),
-      subjects,
-    );
-    const subjectsTeachers = _.reduce(
+    // const subjectsMap = _.zipObject(
+    //   subjects.map(({id}) => id),
+    //   subjects,
+    // );
+    const subjectsTeachers = _.reduce<
+      TeacherInfo,
+      {[key: number]: SubjectInfo}
+    >(
       teachers,
       (result, teacher) => {
         teacher.subjects.forEach((subject) => {
@@ -60,12 +85,11 @@ const Body = (props) => {
       value: id,
       label: name,
     }));
-  }, [teachers, subjects]);
+  }, [teachers]);
 
   return (
     <Catalog.Body
       options={options}
-      renderProps={{subjects}}
       filter={filter}
       items={teachers}
       {...otherProps}

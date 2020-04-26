@@ -1,9 +1,10 @@
 import Course from 'components/common/Course';
 import CourseCatalog from 'components/common/CourseCatalog';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import {useSubjects, useTeacherCourses} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Permission} from 'types/enums';
+import {RouteComponentPropsWithPath} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -11,12 +12,13 @@ const filterBy = {
   online: true,
 };
 
-const CourseCatalogPage = ({location, path, children: header}) => {
-  const {catalog, error, retry} = useTeacherCourses();
+const CourseCatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
+  const {location, path, children: header} = props;
+  const {catalog, error, reload} = useTeacherCourses();
   const {
     subjects,
     error: errorLoadingSubjects,
-    retry: reloadSubjects,
+    reload: reloadSubjects,
   } = useSubjects();
 
   const renderCourse = useCallback(
@@ -32,7 +34,7 @@ const CourseCatalogPage = ({location, path, children: header}) => {
           link={courseLink}
           noOnClickOnAction
           {...rest}
-        ></Course>
+        />
       );
     },
     [path],
@@ -48,16 +50,12 @@ const CourseCatalogPage = ({location, path, children: header}) => {
       title="Проверка работ"
       location={location}
     >
-      {isLoaded && (
+      {isLoaded && catalog && subjects && (
         <PageContent>
           <CourseCatalog.Body subjects={subjects} courses={catalog}>
             {header}
             <CourseCatalog.Filter filterBy={filterBy} />
-            <CourseCatalog.Catalog
-              adaptive={false}
-              plain
-              renderCourse={renderCourse}
-            />
+            <CourseCatalog.Catalog plain renderCourse={renderCourse} />
           </CourseCatalog.Body>
         </PageContent>
       )}

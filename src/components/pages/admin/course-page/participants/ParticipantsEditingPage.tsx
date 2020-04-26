@@ -1,5 +1,5 @@
 import APIRequest from 'api';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import Form, {
   ErrorHandler,
   FormSubmitHandler,

@@ -28,6 +28,7 @@
     "jsx-no-lambda": {
       "severity": "warning"
     },
-    "no-this-assignment": false
+    "no-this-assignment": false,
+    "one-variable-per-declaration": false
   }
 }

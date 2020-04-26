@@ -1,7 +1,7 @@
 import Course from 'components/common/Course';
 import CourseCatalog from 'components/common/CourseCatalog';
 import WebinarSchedule from 'components/common/WebinarSchedule';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {
   useSubjects,
@@ -48,19 +48,21 @@ const CatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
   );
   const isLoaded = !!(courses && subjects && webinars);
 
+  const title = 'Мои курсы';
+
   return (
     <Page
       isLoaded={isLoaded}
       className="user-courses"
       location={location}
-      title="Мои курсы"
+      title={title}
     >
       {!!(courses && subjects && webinars) && (
         <CourseCatalog.Body courses={courses} subjects={subjects}>
           <PageContent>
             <CourseCatalog.Filter />
-            <WebinarSchedule schedule={webinars} />
-            <CourseCatalog.Catalog renderCourse={renderCourse} />
+            <WebinarSchedule schedule={webinars} title="Ближайшие вебинары" />
+            <CourseCatalog.Catalog renderCourse={renderCourse} title={title} />
           </PageContent>
         </CourseCatalog.Body>
       )}

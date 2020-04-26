@@ -1,7 +1,7 @@
 import CourseOverview from 'components/common/CourseOverview';
 import Lesson from 'components/common/Lesson';
-import {NotFoundErrorPage} from 'components/ErrorPage';
-import Page, {PageContent} from 'components/Page';
+import {NotFoundErrorPage} from 'components/layout/ErrorPage';
+import Page, {PageContent} from 'components/layout/Page';
 import {
   useDiscount,
   useLessons,
@@ -9,38 +9,49 @@ import {
   useTeachers,
 } from 'hooks/selectors';
 import React, {useCallback} from 'react';
+import {CourseInfo} from 'types/entities';
+import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
 
 import CoursePrice from './CoursePrice';
 
-const CoursePage = ({
-  selectedCourses,
-  onCourseSelect,
-  children: selectedCoursesTab,
-  path: root,
-  location,
-  match,
-}) => {
+interface CoursePageProps
+  extends RouteComponentPropsWithPath<CoursePageParams> {
+  selectedCourses: Set<CourseInfo>;
+  onCourseSelect: (course: CourseInfo) => void;
+  children: React.ReactNode;
+}
+
+const CoursePage: React.FC<CoursePageProps> = (props) => {
   const {
-    params: {id: param_id},
+    selectedCourses,
+    onCourseSelect,
+    children: selectedCoursesTab,
+    path: root,
+    location,
+    match,
+  } = props;
+  const {
+    params: {courseId: param_id},
   } = match;
   const courseId = parseInt(param_id);
-  const {course, error, retry} = useShopCourse(courseId);
+  const {course, error, reload} = useShopCourse(courseId);
   const {
     teachers,
     error: errorLoadingTeachers,
-    retry: reloadTeachers,
+    reload: reloadTeachers,
   } = useTeachers();
   const {
     lessons,
     error: errorLoadingLessons,
-    retry: reloadLessons,
+    reload: reloadLessons,
   } = useLessons(courseId);
   const {
     discount,
+    isLoading,
     error: errorLoadingDiscount,
-    retry: reloadDiscount,
-  } = useDiscount(courseId);
-  const isSelected = selectedCourses.has(course);
+    reload: reloadDiscount,
+  } = useDiscount(selectedCourses);
+  const isSelected = !!(course && selectedCourses.has(course));
 
   const renderLesson = useCallback(
     (lesson) => {
@@ -73,11 +84,12 @@ const CoursePage = ({
         <PageContent parentSection={{name: 'Магазин курсов'}}>
           <CourseOverview.Description />
           <CoursePrice
+            isLoading={isLoading}
             isSelected={isSelected}
             discount={discount}
             onSelect={onCourseSelect}
-            error={error}
-            retry={reloadDiscount}
+            error={errorLoadingDiscount}
+            reload={reloadDiscount}
           />
           <CourseOverview.Teachers />
           <CourseOverview.Lessons renderLesson={renderLesson} />

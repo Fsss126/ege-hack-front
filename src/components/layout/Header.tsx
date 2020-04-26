@@ -5,8 +5,8 @@ import {Link} from 'react-router-dom';
 import {Credentials, UserInfo} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
-import CoverImage from './common/CoverImage';
-import DropdownMenu, {DropdownMenuOption} from './common/DropdownMenu';
+import CoverImage from '../common/CoverImage';
+import DropdownMenu, {DropdownMenuOption} from '../common/DropdownMenu';
 
 export type HeaderProps = {
   onMenuButtonClick: SimpleCallback;

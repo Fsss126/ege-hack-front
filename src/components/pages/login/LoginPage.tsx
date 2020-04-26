@@ -1,12 +1,21 @@
-import Page from 'components/Page';
+import Page from 'components/layout/Page';
 import Auth from 'definitions/auth';
 import {DEFAULT_LOGIN_REDIRECT} from 'definitions/constants';
 import {getAppUrl, getCurrentUrl} from 'definitions/helpers';
 import {useUser} from 'hooks/selectors';
 import React, {useEffect} from 'react';
-import {Redirect} from 'react-router-dom';
+import {StaticContext} from 'react-router';
+import {Redirect, RouteComponentProps} from 'react-router-dom';
 
-const LoginPage = (props) => {
+export interface LoginLocationState {
+  referrer?: string;
+}
+
+const LoginPage: React.FC<RouteComponentProps<
+  {},
+  StaticContext,
+  LoginLocationState
+>> = (props) => {
   const {location} = props;
   const {credentials, userInfo} = useUser();
 
