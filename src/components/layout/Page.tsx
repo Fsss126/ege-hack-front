@@ -118,18 +118,18 @@ enum LayoutAnimationClassNames {
 export type PageProps = {
   title?: string;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   checkLogin: boolean;
   showSidebar: boolean;
   showHeader: boolean;
   showUserNav: boolean;
   requiredPermissions?: RequiredPermissions;
   requiredRoles?: RequiredRoles;
-  fullMatch: boolean;
+  fullMatch?: boolean;
   loadUserInfo: boolean;
   isLoaded: boolean;
-} & Pick<RouteComponentProps<any>, 'location'>;
-const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
+} & Pick<RouteComponentProps, 'location'>;
+const Page = (props: PageProps) => {
   const {
     title,
     className,
@@ -143,8 +143,8 @@ const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
     fullMatch,
     loadUserInfo,
     isLoaded,
+    location,
   } = props;
-  const location = useLocation();
   const [isSideBarOpened, toggleSideBar] = useSideBarState();
   const {credentials, userInfo} = useUser();
 
@@ -166,7 +166,7 @@ const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
       );
     }
     if (permissionsSatisfied === false) {
-      return <PermissionsDeniedErrorPage />;
+      return <PermissionsDeniedErrorPage location={location} />;
     }
   }
   const showContent =

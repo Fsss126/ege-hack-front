@@ -50,7 +50,7 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
     isLoading,
     error: errorLoadingDiscount,
     reload: reloadDiscount,
-  } = useDiscount(selectedCourses);
+  } = useDiscount(courseId);
   const isSelected = !!(course && selectedCourses.has(course));
 
   const renderLesson = useCallback(
@@ -81,24 +81,31 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
         lessons={lessons}
         location={location}
       >
-        <PageContent parentSection={{name: 'Магазин курсов'}}>
-          <CourseOverview.Description />
-          <CoursePrice
-            isLoading={isLoading}
-            isSelected={isSelected}
-            discount={discount}
-            onSelect={onCourseSelect}
-            error={errorLoadingDiscount}
-            reload={reloadDiscount}
-          />
-          <CourseOverview.Teachers />
-          <CourseOverview.Lessons renderLesson={renderLesson} />
-        </PageContent>
+        <div>
+          <PageContent parentSection={{name: 'Магазин курсов'}}>
+            <CourseOverview.Description />
+            <CoursePrice
+              isSelected={isSelected}
+              discount={discount}
+              onSelect={onCourseSelect}
+              error={errorLoadingDiscount}
+              reload={reloadDiscount}
+            />
+            <CourseOverview.Teachers />
+            <CourseOverview.Lessons renderLesson={renderLesson} />
+          </PageContent>
+        </div>
         {selectedCoursesTab}
       </CourseOverview.Body>
     );
   } else if (error) {
-    return <NotFoundErrorPage message="Курс не найден" url={root} />;
+    return (
+      <NotFoundErrorPage
+        message="Курс не найден"
+        url={root}
+        location={location}
+      />
+    );
   } else {
     return <Page isLoaded={false} location={location} />;
   }

@@ -77,8 +77,8 @@ const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
       {isLoaded && (
         <CourseCatalog.Body subjects={subjects as any} courses={catalog as any}>
           <PageContent>
-            <CourseCatalog.Filter />
             <CourseCatalog.Catalog
+              filter={<CourseCatalog.Filter />}
               renderCourse={renderCourse}
               title="Доступные курсы"
             />

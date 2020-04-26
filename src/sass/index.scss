@@ -598,9 +598,18 @@ header {
 
   .layout__content-container {
     flex-grow: 1;
-    padding: 32px 0;
+
     @include media-breakpoint-up(md) {
-      padding: 32px 24px;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    &:first-child {
+      padding-top: 32px;
+    }
+
+    &:last-child {
+      padding-bottom: 32px;
     }
   }
 
@@ -631,10 +640,33 @@ header {
     &.layout__content-block--transparent {
       background: none;
     }
+
+    &>.scroll-container {
+      margin: 0 -#{$content-padding-horizontal};
+
+      .scroll-container__inner {
+        padding: 0 $content-padding-horizontal;
+      }
+    }
   }
 
-  .layout__content-block
-  ~ .layout__content-block:not(.layout__content-block--stacked) {
+  .layout__content-block-title {
+    padding: 0 $content-padding-horizontal $content-padding-vertical-sm;
+  }
+
+  .layout__content-block + .layout__content-block:not(.layout__content-block--stacked) {
+    margin-top: 24px;
+  }
+
+  .layout__content-block + .layout__content-block-title {
+    margin-top: 36px;
+  }
+
+  .layout__content-block-title + .layout__content-block {
+    margin-top: 0;
+  }
+
+  .layout__content-block + .layout__content-container {
     margin-top: 24px;
   }
 
@@ -782,6 +814,7 @@ header {
         }
         display: flex;
         flex-direction: column;
+        width: 100%;;
 
         .title {
           @include overflow-hidden;
@@ -888,6 +921,10 @@ header {
       padding-top: 0;
       padding-bottom: 0;
       background: none;
+
+      &>.content-block__title {
+
+      }
     }
 
     .list__item-wrap {
@@ -1203,11 +1240,23 @@ header {
   }
 
   .webinar-schedule {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .scroll-container--with-shadows {
+      &:before {
+        background: linear-gradient(90deg, $bg-grey, hsla(0,0%,100%,0));
+      }
+
+      &:after {
+        background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, $bg-grey);
+      }
+    }
+
     .webinar {
       cursor: pointer;
       min-height: 50px;
       flex-basis: 70vw;
-      flex-shrink: 0;
 
       .webinar-inner-container {
         transition: opacity 0.3s;
@@ -1332,7 +1381,7 @@ header {
   }
 
   .tab-nav {
-    .scroll-btn-container__inner-container {
+    .scroll-container__inner {
       display: flex;
     }
 
@@ -1364,16 +1413,6 @@ header {
 
   .tab-nav-container {
     padding-bottom: 0;
-
-    &.layout__content-block {
-      .tab-nav {
-        margin: 0 -#{$content-padding-horizontal};
-
-        .scroll-btn-container__inner-container {
-          padding: 0 $content-padding-horizontal;
-        }
-      }
-    }
   }
 
   .title-with-menu {

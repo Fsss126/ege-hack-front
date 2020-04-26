@@ -3,6 +3,7 @@ import * as Input from 'components/ui/input';
 import React, {useCallback, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 
+import {ContentBlock} from '../layout/ContentBlock';
 import {InputChangeHandler} from '../ui/input/Input';
 import {OptionShape} from '../ui/input/Select';
 import List, {ListItemRenderer, ListItemRenderProps, ListProps} from './List';
@@ -82,11 +83,7 @@ const Filter: React.FC<FilterProps> = (props) => {
   const onChange = useFilterCallback();
 
   return (
-    <div
-      className={classNames('layout__content-block', 'catalog__filters', {
-        'layout__content-block--transparent': transparent,
-      })}
-    >
+    <ContentBlock className="catalog__filters" transparent={transparent}>
       <div className="container p-0">
         <div className="row align-items-center">
           {filterBySubject && options && (
@@ -128,7 +125,7 @@ const Filter: React.FC<FilterProps> = (props) => {
           {children}
         </div>
       </div>
-    </div>
+    </ContentBlock>
   );
 };
 
@@ -155,6 +152,10 @@ export type CatalogProps<T extends object = any, P extends object = {}> = Omit<
   noMatchPlaceholder: React.ReactNode;
   renderProps?: P;
   title?: React.ReactNode;
+  titleInside?: boolean;
+  context?: React.Context<{items: T[]; totalItems: number}>;
+  children?: T[];
+  filter?: React.ReactNode;
 };
 const Catalog = <T extends object = any, P extends object = {}>(
   props: CatalogProps<T, P>,
@@ -165,9 +166,28 @@ const Catalog = <T extends object = any, P extends object = {}>(
     noMatchPlaceholder,
     renderProps,
     title,
+    titleInside,
+    context,
+    children,
+    filter,
     ...listProps
   } = props;
-  const {items, totalItems} = React.useContext(CatalogContext);
+  const contextState = React.useContext(
+    context ||
+      ((CatalogContext as unknown) as React.Context<{
+        items: T[];
+        totalItems: number;
+      }>),
+  );
+
+  let items, totalItems;
+
+  if (children) {
+    items = children;
+    totalItems = children.length;
+  } else {
+    ({items, totalItems} = contextState);
+  }
   const renderItem = React.useCallback(
     (item, renderProps, index) => {
       return renderFunc(item, {link: `${item.id}/`, ...renderProps}, index);
@@ -178,14 +198,14 @@ const Catalog = <T extends object = any, P extends object = {}>(
   const isEmpty = items.length === 0;
 
   return (
-    <div
-      className={classNames('layout__content-block', 'catalog__catalog', {
+    <ContentBlock
+      title={title}
+      outerContent={filter}
+      titleInside={titleInside}
+      className={classNames('catalog__catalog', {
         'catalog__catalog--empty': isEmpty,
       })}
     >
-      {title && (
-        <h3 className="content-block__title catalog__catalog-title">{title}</h3>
-      )}
       {!isEmpty ? (
         <List {...listProps} renderProps={renderProps} renderItem={renderItem}>
           {items}
@@ -199,7 +219,7 @@ const Catalog = <T extends object = any, P extends object = {}>(
           {noMatchPlaceholder}
         </div>
       )}
-    </div>
+    </ContentBlock>
   );
 };
 

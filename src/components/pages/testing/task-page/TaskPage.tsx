@@ -58,6 +58,7 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
         message="Вопрос теста не найден"
         url={root}
         text="Вернуться к уроку"
+        location={location}
       />
     );
   } else {

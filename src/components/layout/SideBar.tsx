@@ -26,8 +26,6 @@ const SideBar: React.FC<SideBarProps> = (props) => {
     [onMenuClose],
   );
 
-  const withIcons = accountRoles && accountRoles.length > 1;
-
   return (
     <div className="layout__sidebar" onClick={onClick}>
       <div className="layout__sidebar-bar">
@@ -66,11 +64,9 @@ const SideBar: React.FC<SideBarProps> = (props) => {
               {/*{isPupil && (*/}
               <React.Fragment>
                 <div className="layout__sidebar-menu-section d-flex">
-                  {withIcons && (
-                    <div className="layout__sidebar-menu-col">
-                      <i className="prefix-icon m-lg icon-academic" />
-                    </div>
-                  )}
+                  <div className="layout__sidebar-menu-col">
+                    <i className="prefix-icon m-lg icon-academic" />
+                  </div>
                   <div className="layout__sidebar-menu-col">
                     <NavLink
                       className="layout__sidebar-menu-link"
@@ -104,11 +100,9 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                 fullMatch={false}
               >
                 <div className="layout__sidebar-menu-section">
-                  {withIcons && (
-                    <div className="layout__sidebar-menu-col">
-                      <i className="prefix-icon m-lg icon-book-open" />
-                    </div>
-                  )}
+                  <div className="layout__sidebar-menu-col">
+                    <i className="prefix-icon m-lg icon-book-open" />
+                  </div>
                   <div className="layout__sidebar-menu-col">
                     <NavLink
                       className="layout__sidebar-menu-link"
@@ -132,11 +126,9 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                 fullMatch={false}
               >
                 <div className="layout__sidebar-menu-section">
-                  {withIcons && (
-                    <div className="layout__sidebar-menu-col">
-                      <i className="prefix-icon m-lg icon-edit" />
-                    </div>
-                  )}
+                  <div className="layout__sidebar-menu-col">
+                    <i className="prefix-icon m-lg icon-edit" />
+                  </div>
                   <div className="layout__sidebar-menu-col">
                     <NavLink className="layout__sidebar-menu-link" to="/admin/">
                       Управление контентом

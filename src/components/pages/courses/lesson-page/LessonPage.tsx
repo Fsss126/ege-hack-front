@@ -98,7 +98,7 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
         </Page>
       );
     } else {
-      return <NotFoundErrorPage message="Урок не найден" />;
+      return <NotFoundErrorPage message="Урок не найден" location={location} />;
     }
   } else {
     return <Page isLoaded={false} location={location} />;

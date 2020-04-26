@@ -6,7 +6,7 @@ import {DiscountHookResult} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
 
-interface CoursePriceProps extends DiscountHookResult {
+interface CoursePriceProps extends Omit<DiscountHookResult, 'isLoading'> {
   isSelected: boolean;
   onSelect: (course: CourseInfo) => void;
 }

@@ -1,14 +1,15 @@
 import APIRequest from 'api';
 import classNames from 'classnames';
-import ScrollBars from 'components/ui/ScrollBars';
 import React, {useCallback, useEffect, useState} from 'react';
 import Countdown, {CountdownTimeDelta} from 'react-countdown-now';
 import {CountdownRenderProps} from 'react-countdown-now/dist/Countdown';
+import {LinkResp} from 'types/dtos';
 import {PersonWebinar, WebinarInfo} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
-import {LinkResp} from '../../types/dtos';
+import {ContentBlock} from '../layout/ContentBlock';
 import CoverImage from './CoverImage';
+import ScrollContainer from './ScrollContainer';
 
 // const getTimerState = (releaseDate) => {
 //     console.log(releaseDate);
@@ -174,6 +175,9 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
       className={classNames('webinar', 'd-flex', {
         webinar__locked: !isUnlocked,
       })}
+      title={
+        isUnlocked ? 'Вы можете перейти к вебинару' : 'Вебинар еще не начался'
+      }
     >
       <div className="webinar-inner-container container d-flex">
         <div className="row flex-nowrap flex-grow-1">
@@ -216,28 +220,20 @@ const WebinarSchedule: React.FC<WebinarScheduleProps> = (props) => {
     return null;
   }
   return (
-    <div className="layout__content-block webinar-schedule">
-      {title && <h3 className="content-block__title">{title}</h3>}
-      <ScrollBars
-        autoHeight
-        autoHeightMax="unset"
-        hideVerticalScrollbar
-        hideHorizontalScrollbar
-        hideTracksWhenNotNeeded
-        style={{height: '100%'}}
-        className="scrollbars"
+    <ContentBlock className="webinar-schedule" title={title} transparent>
+      <ScrollContainer
+        className="webinar-schedule__list-wrap"
+        withShadows={false}
       >
-        <div className="d-flex flex-nowrap">
-          {schedule.map((webinar) => (
-            <Webinar
-              webinar={webinar}
-              courseId={webinar.course_id}
-              key={webinar.id}
-            />
-          ))}
-        </div>
-      </ScrollBars>
-    </div>
+        {schedule.map((webinar) => (
+          <Webinar
+            webinar={webinar}
+            courseId={webinar.course_id}
+            key={webinar.id}
+          />
+        ))}
+      </ScrollContainer>
+    </ContentBlock>
   );
 };
 

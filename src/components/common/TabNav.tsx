@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 import {NavLink, NavLinkProps} from '../ui/Link';
-import ButtonContainer, {ButtonContainerProps} from './ButtonContainer';
+import ScrollContainer, {ScrollContainerProps} from './ScrollContainer';
 
 export const TabNavLink: React.FC<NavLinkProps> = (props) => {
   const {className, ...rest} = props;
@@ -18,12 +18,12 @@ export const TabNavLink: React.FC<NavLinkProps> = (props) => {
 //     behavior: 'smooth'
 // })
 
-//TODO: scroll to active element
-const TabNav: React.FC<ButtonContainerProps> = (props) => {
+// TODO: scroll to active element
+const TabNav: React.FC<ScrollContainerProps> = (props) => {
   const {className, ...rest} = props;
 
   return (
-    <ButtonContainer className={classNames('tab-nav', className)} {...rest} />
+    <ScrollContainer className={classNames('tab-nav', className)} {...rest} />
   );
 };
 

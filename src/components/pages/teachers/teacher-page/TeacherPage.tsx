@@ -104,7 +104,13 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
       </Page>
     );
   } else if (error) {
-    return <NotFoundErrorPage message="Преподаватель не найден" url={root} />;
+    return (
+      <NotFoundErrorPage
+        message="Преподаватель не найден"
+        url={root}
+        location={location}
+      />
+    );
   } else {
     return <Page isLoaded={false} location={location} />;
   }

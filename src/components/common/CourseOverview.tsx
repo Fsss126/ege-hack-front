@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import CoverImage from 'components/common/CoverImage';
 import {ADMIN_ROLES} from 'definitions/constants';
 import {renderDate} from 'definitions/helpers';
@@ -8,8 +9,10 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo, TeacherInfo} from 'types/entities';
 
 import ConditionalRenderer from '../ConditionalRender';
+import {ContentBlock} from '../layout/ContentBlock';
 import {NotFoundErrorPage} from '../layout/ErrorPage';
 import Page, {PageLink} from '../layout/Page';
+import Catalog, {CatalogProps} from './Catalog';
 import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
@@ -30,7 +33,7 @@ CourseOverviewContext.displayName = 'CourseOverviewContext';
 const Description: React.FC = () => {
   const {course} = React.useContext(CourseOverviewContext);
   const now = new Date();
-  const isEnded = course.date_end > now;
+  const isEnded = course.date_end < now;
   const {
     date_start,
     date_end,
@@ -64,7 +67,7 @@ const Description: React.FC = () => {
         </div>
         <div className="course-overview__summary">
           <div className="col-auto course-overview__summary-item">
-            <i className="far fa-calendar-alt" />
+            <i className="far fa-calendar-alt prefix-icon" />
             {isEnded ? (
               <div className="d-inline-block align-top">
                 <div>
@@ -124,8 +127,7 @@ const Teachers: React.FC = () => {
   const {course, teachers} = React.useContext(CourseOverviewContext);
 
   return (
-    <div className="layout__content-block">
-      <h3>Преподаватели</h3>
+    <ContentBlock title="Преподаватели">
       <div className="course-overview__teachers container negate-block-padding">
         <div className="row">
           {course.teacher_ids.map((id, i) => (
@@ -138,7 +140,7 @@ const Teachers: React.FC = () => {
           ))}
         </div>
       </div>
-    </div>
+    </ContentBlock>
   );
 };
 
@@ -147,24 +149,28 @@ export type LessonRenderer = ListProps<
   {link: string}
 >['renderItem'];
 
-export type LessonsProps = {
-  renderLesson: LessonRenderer;
+export type LessonsProps<P extends object = {}> = Omit<
+  CatalogProps<LessonInfo, P>,
+  'emptyPlaceholder' | 'noMatchPlaceholder' | 'renderItem'
+> & {
+  renderLesson: CatalogProps<LessonInfo, P>['renderItem'];
 };
+
 const Lessons: React.FC<LessonsProps> = (props) => {
-  const {renderLesson: renderFunc} = props;
+  const {renderLesson, ...rest} = props;
+
   const {lessons} = React.useContext(CourseOverviewContext);
-  const renderCourse = React.useCallback(
-    (item, renderProps, index) => {
-      return renderFunc(item, {link: `${item.id}/`, ...renderProps}, index);
-    },
-    [renderFunc],
-  );
 
   return (
-    <div className="layout__content-block">
-      <h3 className="content-block__title">Уроки</h3>
-      <List renderItem={renderCourse}>{lessons}</List>
-    </div>
+    <Catalog.Catalog
+      title="Уроки"
+      emptyPlaceholder="Нет курсов"
+      noMatchPlaceholder="Нет курсов, соответствующих условиям поиска"
+      renderItem={renderLesson}
+      {...rest}
+    >
+      {lessons}
+    </Catalog.Catalog>
   );
 };
 
@@ -191,7 +197,7 @@ const CourseOverview: React.FC<CourseOverviewProps> = (props) => {
     return (
       <Page
         title={`${course.name}`}
-        className={`course-overview ${className || ''}`}
+        className={classNames('course-overview', 'catalog', className)}
         location={location}
       >
         <CourseOverviewContext.Provider
@@ -206,7 +212,13 @@ const CourseOverview: React.FC<CourseOverviewProps> = (props) => {
       </Page>
     );
   } else {
-    return <NotFoundErrorPage message="Курс не найден" url={root} />;
+    return (
+      <NotFoundErrorPage
+        message="Курс не найден"
+        url={root}
+        location={location}
+      />
+    );
   }
 };
 

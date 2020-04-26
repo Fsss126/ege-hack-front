@@ -60,9 +60,12 @@ const CatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
       {!!(courses && subjects && webinars) && (
         <CourseCatalog.Body courses={courses} subjects={subjects}>
           <PageContent>
-            <CourseCatalog.Filter />
             <WebinarSchedule schedule={webinars} title="Ближайшие вебинары" />
-            <CourseCatalog.Catalog renderCourse={renderCourse} title={title} />
+            <CourseCatalog.Catalog
+              renderCourse={renderCourse}
+              title={title}
+              filter={<CourseCatalog.Filter />}
+            />
           </PageContent>
         </CourseCatalog.Body>
       )}

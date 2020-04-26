@@ -819,30 +819,32 @@ input[type=number] {
   }
 }
 
-.scroll-btn-container {
+.scroll-container {
   display: flex;
   margin-left: -15px;
   margin-right: -15px;
   position: relative;
 
-  &:before, &:after {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 18px;
-    z-index: 1;
-  }
-  &:before {
-    left: 0;
-    background: linear-gradient(90deg, #fff, hsla(0,0%,100%,0));
+  &.scroll-container--with-shadows {
+    &:before, &:after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 18px;
+      z-index: 1;
+    }
+    &:before {
+      left: 0;
+      background: linear-gradient(90deg, #fff, hsla(0,0%,100%,0));
+    }
+
+    &:after {
+      right: 0;
+      background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, #fff);
+    }
   }
 
-  &:after {
-    right: 0;
-    background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, #fff);
-  }
-
-  .scroll-btn-container__inner-container {
+  .scroll-container__inner {
     display: flex;
     flex-wrap: nowrap;
     padding-left: 15px;
