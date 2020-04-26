@@ -66,6 +66,7 @@ export type FilterProps = {
   };
   children?: React.ReactNode;
   transparent?: boolean;
+  stacked?: boolean;
 };
 const Filter: React.FC<FilterProps> = (props) => {
   const {
@@ -75,6 +76,7 @@ const Filter: React.FC<FilterProps> = (props) => {
       search = false,
     } = {},
     transparent,
+    stacked,
     children,
   } = props;
   const {options, subject, online, search: searchKey} = React.useContext(
@@ -83,7 +85,11 @@ const Filter: React.FC<FilterProps> = (props) => {
   const onChange = useFilterCallback();
 
   return (
-    <ContentBlock className="catalog__filters" transparent={transparent}>
+    <ContentBlock
+      className="catalog__filters"
+      transparent={transparent}
+      stacked={stacked}
+    >
       <div className="container p-0">
         <div className="row align-items-center">
           {filterBySubject && options && (
@@ -151,10 +157,11 @@ export type CatalogProps<T extends object = any, P extends object = {}> = Omit<
   emptyPlaceholder: React.ReactNode;
   noMatchPlaceholder: React.ReactNode;
   renderProps?: P;
-  title?: React.ReactNode;
-  titleInside?: boolean;
   context?: React.Context<{items: T[]; totalItems: number}>;
   children?: T[];
+  title?: React.ReactNode;
+  titleInside?: boolean;
+  stacked?: boolean;
   filter?: React.ReactNode;
 };
 const Catalog = <T extends object = any, P extends object = {}>(
@@ -170,6 +177,7 @@ const Catalog = <T extends object = any, P extends object = {}>(
     context,
     children,
     filter,
+    stacked,
     ...listProps
   } = props;
   const contextState = React.useContext(
@@ -202,6 +210,7 @@ const Catalog = <T extends object = any, P extends object = {}>(
       title={title}
       outerContent={filter}
       titleInside={titleInside}
+      stacked={stacked}
       className={classNames('catalog__catalog', {
         'catalog__catalog--empty': isEmpty,
       })}

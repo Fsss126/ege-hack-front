@@ -70,7 +70,9 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
       >
         <PageContent parentSection={{name: 'Мои курсы'}}>
           <CourseOverview.Title />
-          <WebinarSchedule schedule={webinars} title="Вебинары" />
+        </PageContent>
+        <WebinarSchedule schedule={webinars} title="Вебинары" />
+        <PageContent>
           <CourseOverview.Lessons renderLesson={renderLesson} />
         </PageContent>
       </CourseOverview.Body>

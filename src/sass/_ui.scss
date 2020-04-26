@@ -908,6 +908,7 @@ input[type=number] {
   user-select: none;
 
   .description-block {
+    font-family: $font-medium;
     padding: 0 8px 0 0;
   }
 }
@@ -919,7 +920,7 @@ input[type=number] {
   height: 24px;
 
   .progress-circle__bg {
-    stroke: $icon-grey;
+    stroke: $border-grey;
   }
   .progress-circle__progress {
     stroke: $accent-orange;
