@@ -60,9 +60,9 @@
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+  min-width: 1em;
   display: inline-block;
   text-align: center;
-  width: 1em;
   box-sizing: content-box;
 
   &::before {
@@ -74,6 +74,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-statistic:before {
+  content: "\e910";
+}
+.icon-video:before {
+  content: "\e911";
+}
+.icon-assignment:before {
+  content: "\e916";
+}
+.icon-checkbox:before {
+  content: "\e917";
+}
+.icon-academic:before {
+  content: "\e912";
+}
+.icon-book-open:before {
+  content: "\e913";
+}
+.icon-book:before {
+  content: "\e914";
+}
+.icon-edit:before {
+  content: "\e915";
+}
 .icon-expand:before {
   content: "\e90e";
 }
@@ -112,6 +136,9 @@
 }
 .icon-bars:before {
   content: "\1f302";
+}
+.icon-angle:before {
+  content: "\e901";
 }
 .icon-check:before {
   content: "\e902";

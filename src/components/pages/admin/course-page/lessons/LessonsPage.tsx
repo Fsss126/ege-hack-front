@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import Catalog, {
-  CatalogFilter,
   CatalogItemRenderer,
+  FilterFunc,
 } from 'components/common/Catalog';
 import DropdownMenu, {
   DropdownIconButton,
@@ -11,7 +11,7 @@ import {
   RequiredPermissions,
   useCheckPermissions,
 } from 'components/ConditionalRender';
-import Page, {PageContent, PageParentSection} from 'components/Page';
+import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {useDeleteLesson} from 'hooks/selectors';
 import React, {useCallback} from 'react';
@@ -26,10 +26,7 @@ const filterBy = {
   online: false,
 };
 
-const filter: CatalogFilter<LessonInfo> = (
-  lesson,
-  {subject, online, search},
-) => {
+const filter: FilterFunc<LessonInfo> = (lesson, {subject, online, search}) => {
   const name = lesson.name.toLowerCase().replace(/\s/g, '');
   const searchKey = search.toLowerCase().replace(/\s/g, '');
 
@@ -133,7 +130,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
                   neutral
                   component={Link}
                   to={`/admin/${courseId}/lessons/create/`}
-                  icon={<i className="icon-add" />}
+                  after={<i className="icon-add" />}
                 >
                   Добавить урок
                 </Button>

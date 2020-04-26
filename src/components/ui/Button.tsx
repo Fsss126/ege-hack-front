@@ -10,8 +10,10 @@ export type ButtonProps<
   active: boolean;
   neutral: boolean;
   loading: boolean;
-  icon?: React.ReactNode;
-  iconAction?: SimpleCallback;
+  after?: React.ReactNode;
+  afterAction?: SimpleCallback;
+  before?: React.ReactNode;
+  beforeAction?: SimpleCallback;
   component: T;
   className?: string;
   dataAttribute?: boolean;
@@ -31,8 +33,10 @@ const Button = <T extends React.ElementType>(
     active,
     neutral,
     loading,
-    icon,
-    iconAction,
+    after,
+    afterAction,
+    before,
+    beforeAction,
     component: Component,
     onClick,
     dataAttribute,
@@ -51,12 +55,20 @@ const Button = <T extends React.ElementType>(
   return (
     <Component className={joinedClassname} {...rest}>
       <span className="btn__content">
-        {icon && (
+        {before && (
+          <div
+            className="btn__before"
+            onClick={beforeAction ? beforeAction : onClick}
+          >
+            {before}
+          </div>
+        )}
+        {after && (
           <div
             className="btn__after"
-            onClick={iconAction ? iconAction : onClick}
+            onClick={afterAction ? afterAction : onClick}
           >
-            {icon}
+            {after}
           </div>
         )}
         <span

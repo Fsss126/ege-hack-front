@@ -1,13 +1,11 @@
 import UserProfile from 'components/common/UserProfile';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import {useUser} from 'hooks/selectors';
 import React from 'react';
-import {UserInfo} from 'types/entities';
+import {RouteComponentProps} from 'react-router';
 
-export type AccountPageProps = {
-  userInfo?: UserInfo;
-};
-const AccountPage: React.FC<AccountPageProps> = () => {
+const AccountPage: React.FC<RouteComponentProps> = (props) => {
+  const {location} = props;
   const {userInfo} = useUser();
   let photo, first_name, last_name;
 
@@ -17,7 +15,12 @@ const AccountPage: React.FC<AccountPageProps> = () => {
     } = userInfo);
   }
   return (
-    <Page title="Аккаунт" className="account-page" isLoaded={true}>
+    <Page
+      title="Аккаунт"
+      className="account-page"
+      isLoaded={true}
+      location={location}
+    >
       <PageContent>
         <UserProfile
           first_name={first_name}

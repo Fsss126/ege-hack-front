@@ -144,16 +144,20 @@ const ListItem = <T extends {} = any, P = undefined>(
 
   if (link) {
     return (
-      <Link className={joinedClassname} to={link} onClick={onClick}>
-        {content}
-        {children}
-      </Link>
+      <div className="list__item-wrap">
+        <Link className={joinedClassname} to={link} onClick={onClick}>
+          {content}
+          {children}
+        </Link>
+      </div>
     );
   } else {
     return (
-      <div className={joinedClassname} onClick={onClick}>
-        {content}
-        {children}
+      <div className="list__item-wrap">
+        <div className={joinedClassname} onClick={onClick}>
+          {content}
+          {children}
+        </div>
       </div>
     );
   }

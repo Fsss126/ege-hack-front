@@ -7,12 +7,12 @@ import {Link, LinkProps, Redirect, useLocation} from 'react-router-dom';
 import Sticky from 'react-sticky-el';
 import {CSSTransition} from 'react-transition-group';
 
-import {useSideBarState} from './App';
+import {useSideBarState} from '../App';
 import {
   RequiredPermissions,
   RequiredRoles,
   useCheckPermissions,
-} from './ConditionalRender';
+} from '../ConditionalRender';
 import {PermissionsDeniedErrorPage} from './ErrorPage';
 import Header from './Header';
 import SideBar from './SideBar';
@@ -97,7 +97,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({
   </Sticky>
 );
 
-//TODO: Add page error boundary
+// TODO: Add page error boundary
 class PageErrorBoundary extends React.Component {
   state = {
     error: null,
@@ -112,24 +112,24 @@ enum LayoutAnimationClassNames {
   exitActive = 'sidebar-hiding',
 }
 
-//TODO: check error and show popup
-//TODO: parent sections using context
+// TODO: check error and show popup
+// TODO: parent sections using context
 
 export type PageProps = {
   title?: string;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   checkLogin: boolean;
   showSidebar: boolean;
   showHeader: boolean;
   showUserNav: boolean;
   requiredPermissions?: RequiredPermissions;
   requiredRoles?: RequiredRoles;
-  fullMatch: boolean;
+  fullMatch?: boolean;
   loadUserInfo: boolean;
   isLoaded: boolean;
-} & Pick<RouteComponentProps<any>, 'location'>;
-const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
+} & Pick<RouteComponentProps, 'location'>;
+const Page = (props: PageProps) => {
   const {
     title,
     className,
@@ -143,8 +143,8 @@ const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
     fullMatch,
     loadUserInfo,
     isLoaded,
+    location,
   } = props;
-  const location = useLocation();
   const [isSideBarOpened, toggleSideBar] = useSideBarState();
   const {credentials, userInfo} = useUser();
 
@@ -166,7 +166,7 @@ const Page: React.withDefaultProps<React.FC<PageProps>> = (props) => {
       );
     }
     if (permissionsSatisfied === false) {
-      return <PermissionsDeniedErrorPage />;
+      return <PermissionsDeniedErrorPage location={location} />;
     }
   }
   const showContent =

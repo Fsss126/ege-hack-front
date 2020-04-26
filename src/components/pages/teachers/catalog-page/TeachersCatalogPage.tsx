@@ -1,4 +1,4 @@
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import {useSubjects, useTeachers} from 'hooks/selectors';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
@@ -21,11 +21,13 @@ const TeachersCatalogPage: React.FC<RouteComponentProps> = ({location}) => {
       className="catalog teachers-catalog"
       location={location}
     >
-      {isLoaded && (
+      {isLoaded && teachers && subjects && (
         <TeachersCatalog.Body subjects={subjects} teachers={teachers}>
           <PageContent>
-            <TeachersCatalog.Filter />
-            <TeachersCatalog.Catalog />
+            <TeachersCatalog.Catalog
+              filter={<TeachersCatalog.Filter />}
+              title="Преподаватели"
+            />
           </PageContent>
         </TeachersCatalog.Body>
       )}

@@ -27,7 +27,7 @@ export const ExpandableContainer = (
         neutral
         className="expandable-container__toggle d-inline-block"
         onClick={toggleIsExpanded}
-        icon={<i className="icon-angle-down" />}
+        after={<i className="icon-angle-down" />}
       >
         {toggleText}
       </Button>

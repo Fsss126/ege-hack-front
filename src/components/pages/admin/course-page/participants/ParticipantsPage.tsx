@@ -1,6 +1,6 @@
 import Catalog, {
-  CatalogFilter,
   CatalogItemRenderer,
+  FilterFunc,
 } from 'components/common/Catalog';
 import CoverImage from 'components/common/CoverImage';
 import DropdownMenu, {
@@ -9,7 +9,7 @@ import DropdownMenu, {
 } from 'components/common/DropdownMenu';
 import ListItem from 'components/common/ListItem';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import Page, {PageContent, PageParentSection} from 'components/Page';
+import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import Tooltip from 'components/ui/Tooltip';
 import {renderDate} from 'definitions/helpers';
@@ -26,7 +26,7 @@ const filterBy = {
   online: false,
 };
 
-const filter: CatalogFilter<CourseParticipantInfo> = (
+const filter: FilterFunc<CourseParticipantInfo> = (
   {vk_info: {full_name}},
   {subject, online, search},
 ) => {
@@ -140,7 +140,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
                   neutral
                   component={Link}
                   to={`/admin/${courseId}/participants/edit/`}
-                  icon={<i className="icon-add" />}
+                  after={<i className="icon-add" />}
                 >
                   Добавить учеников
                 </Button>
@@ -149,12 +149,12 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
             <Catalog.Filter filterBy={filterBy}>
               {/*<div className="col d-flex justify-content-end">*/}
               {/*    <DropdownMenu content={(*/}
-              {/*        <DropdownIconButton className="icon-ellipsis"/>*/}
+              {/*        <DropdownIconButton className="after-ellipsis"/>*/}
               {/*    )}>*/}
               {/*        <DropdownMenuOption*/}
               {/*            component={Link}*/}
               {/*            navigateTo={`/catalog-page/${courseId}/participants/edit/`}>*/}
-              {/*            <i className="icon-add"/>Добавить учеников*/}
+              {/*            <i className="after-add"/>Добавить учеников*/}
               {/*        </DropdownMenuOption>*/}
               {/*    </DropdownMenu>*/}
               {/*</div>*/}

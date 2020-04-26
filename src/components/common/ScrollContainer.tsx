@@ -4,10 +4,12 @@ import Scrollbars from 'react-custom-scrollbars';
 
 import ScrollBars, {ScrollBarsProps} from '../ui/ScrollBars';
 
-export type ButtonContainerProps = ScrollBarsProps;
-const ButtonContainer = forwardRef<Scrollbars, ButtonContainerProps>(
+export interface ScrollContainerProps extends ScrollBarsProps {
+  withShadows?: boolean;
+}
+const ScrollContainer = forwardRef<Scrollbars, ScrollContainerProps>(
   (props, ref) => {
-    const {children, className, ...scrollbarProps} = props;
+    const {children, className, withShadows, ...scrollbarProps} = props;
 
     // const location = useLocation();
     // const scrollBarsRef = useRef(null);
@@ -23,11 +25,11 @@ const ButtonContainer = forwardRef<Scrollbars, ButtonContainerProps>(
     //     else shadowRight.style.opacity = 1;
     // }, []);
     return (
-      <div className={classNames('btn-container', className)}>
-        {/*<div className="shadow">*/}
-        {/*    <div className="left"/>*/}
-        {/*    <div className="right" ref={shadowRightRef}/>*/}
-        {/*</div>*/}
+      <div
+        className={classNames('scroll-container', className, {
+          'scroll-container--with-shadows': withShadows,
+        })}
+      >
         <ScrollBars
           ref={ref}
           // onScroll={onScroll}
@@ -37,17 +39,17 @@ const ButtonContainer = forwardRef<Scrollbars, ButtonContainerProps>(
           hideHorizontalScrollbar
           hideTracksWhenNotNeeded
           style={{height: '100%'}}
-          className="scrollbars"
           {...scrollbarProps}
         >
-          <div className="scroll-btn-container__inner-container">
-            {children}
-          </div>
+          <div className="scroll-container__inner">{children}</div>
         </ScrollBars>
       </div>
     );
   },
 );
-ButtonContainer.displayName = 'ButtonContainer';
+ScrollContainer.defaultProps = {
+  withShadows: true,
+};
+ScrollContainer.displayName = 'ScrollContainer';
 
-export default ButtonContainer;
+export default ScrollContainer;

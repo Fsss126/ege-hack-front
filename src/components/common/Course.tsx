@@ -11,7 +11,7 @@ export type CourseProps<P = undefined> = {
   online: boolean;
   isSelected: boolean;
 } & Omit<
-  ListItemProps<CourseInfo, P>,
+  React.Defaultize<ListItemProps<CourseInfo, P>, typeof ListItem.defaultProps>,
   'item' | 'preview' | 'description' | 'subtitle' | 'title'
 >;
 const Course = <P extends any = undefined>(

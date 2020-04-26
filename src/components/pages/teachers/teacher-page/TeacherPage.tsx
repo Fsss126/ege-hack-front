@@ -1,21 +1,24 @@
 import Course from 'components/common/Course';
 import CourseCatalog from 'components/common/CourseCatalog';
 import UserProfile from 'components/common/UserProfile';
-import {NotFoundErrorPage} from 'components/ErrorPage';
-import Page, {PageContent} from 'components/Page';
+import {NotFoundErrorPage} from 'components/layout/ErrorPage';
+import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
 import {useShopCatalog, useSubjects, useTeacher} from 'hooks/selectors';
 import _ from 'lodash';
 import React, {Fragment} from 'react';
+import {RouteComponentPropsWithPath, TeacherPageParams} from 'types/routes';
 
-const TeacherPage = (props) => {
+interface TeacherPageProps
+  extends RouteComponentPropsWithPath<TeacherPageParams> {}
+
+const TeacherPage: React.FC<TeacherPageProps> = (props) => {
   const {
     match: {
       params: {id: param_id},
     },
     path: root,
-    className,
     location,
   } = props;
   const id = parseInt(param_id);
@@ -24,12 +27,12 @@ const TeacherPage = (props) => {
   const {
     subjects,
     error: errorLoadingSubjects,
-    retry: reloadSubjects,
+    reload: reloadSubjects,
   } = useSubjects();
   const {
     catalog,
     error: errorLoadingCatalog,
-    retry: reloadCatalog,
+    reload: reloadCatalog,
   } = useShopCatalog();
 
   const renderCourse = React.useCallback((course, {link}) => {
@@ -85,27 +88,29 @@ const TeacherPage = (props) => {
       <Page
         isLoaded={true}
         title={`${fullName}`}
-        className={`teacher-page ${className || ''}`}
+        className="teacher-page"
         location={location}
       >
-        <PageContent parentSection={{name: 'Преподаватели'}}>
-          <UserProfile {...profile} />
-          <div className="layout__content-block">
-            <h3>Курсы преподавателя</h3>
-          </div>
-          <CourseCatalog.Body
-            className="course-shop"
-            subjects={subjects}
-            courses={teachersCourses}
-          >
-            <CourseCatalog.Filter />
-            <CourseCatalog.Catalog renderCourse={renderCourse} />
-          </CourseCatalog.Body>
-        </PageContent>
+        <CourseCatalog.Body subjects={subjects} courses={teachersCourses}>
+          <PageContent parentSection={{name: 'Преподаватели'}}>
+            <UserProfile {...profile} />
+            <CourseCatalog.Catalog
+              renderCourse={renderCourse}
+              title="Курсы преподавателя"
+              filter={<CourseCatalog.Filter />}
+            />
+          </PageContent>
+        </CourseCatalog.Body>
       </Page>
     );
   } else if (error) {
-    return <NotFoundErrorPage message="Преподаватель не найден" url={root} />;
+    return (
+      <NotFoundErrorPage
+        message="Преподаватель не найден"
+        url={root}
+        location={location}
+      />
+    );
   } else {
     return <Page isLoaded={false} location={location} />;
   }

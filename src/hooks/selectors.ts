@@ -129,7 +129,7 @@ export type DiscountHookResult = {
 };
 
 export function useDiscount(
-  selectedCourses: Set<CourseInfo> | CourseInfo,
+  selectedCourses: Set<CourseInfo> | number,
 ): DiscountHookResult {
   const {credentials} = useUser();
   const [discount, setDiscount] = React.useState<DiscountInfo>();

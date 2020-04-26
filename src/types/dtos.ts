@@ -89,6 +89,11 @@ export interface CourseDtoResp extends CourseDtoCommon, RespWithImage {
 
 export interface CourseDtoReq extends CourseDtoCommon, ReqWithImage {}
 
+export interface PaymentReq {
+  email: string;
+  courses: number[];
+}
+
 export interface CourseParticipantDto extends AccountDto {
   course_id: number;
   join_date_time: number;

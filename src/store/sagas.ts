@@ -5,6 +5,7 @@ import {
   actionChannel,
   ActionPattern,
   call,
+  delay,
   put as putEffect,
   PutEffect,
   select,
@@ -549,6 +550,7 @@ function* processTestSaveAnswer() {
         `/knowledge/tests/${testId}/answer`,
         requestData,
       );
+      yield delay(300);
       yield put({
         type: ActionType.TEST_SAVE_ANSWER,
         taskId,

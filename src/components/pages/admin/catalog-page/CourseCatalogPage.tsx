@@ -5,11 +5,10 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
-import {useAdminCourses, useSubjects} from 'hooks/selectors';
-import {useDeleteCourse} from 'hooks/selectors';
+import {useAdminCourses, useDeleteCourse, useSubjects} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
@@ -114,7 +113,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
                   neutral
                   component={Link}
                   to={`${path}/create/`}
-                  icon={<i className="icon-add" />}
+                  after={<i className="icon-add" />}
                 >
                   Добавить курс
                 </Button>

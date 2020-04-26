@@ -5,13 +5,19 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import ListItem from 'components/common/ListItem';
-import {File} from 'components/ui/input/file-input';
 import {downloadFile} from 'definitions/helpers';
 import React, {useCallback, useState} from 'react';
+import {HomeworkInfo} from 'types/entities';
 
 import HomeworkForm from './HomeworkForm';
 
-const Homework = (props) => {
+type HomeworkProps<P> = P & {
+  homework: HomeworkInfo;
+};
+
+const Homework = <P extends any>(
+  props: HomeworkProps<P>,
+): React.ReactElement => {
   const {homework, ...renderProps} = props;
   const {
     files,
@@ -22,17 +28,17 @@ const Homework = (props) => {
       contacts: {vk},
     },
   } = homework;
-  const [{file_name: name, downloadName, file_link: url}] = files || [{}];
+  const [{file_name: name, file_link: url}] = files || [{}];
 
   const [isAssessing, setIsAssessing] = useState(false);
   // files.map((file, i) => (
   //     <File file={file} key={i}/>
   // )
   const downloadCallback = useCallback(() => {
-    if (url) {
-      downloadFile(url, downloadName || name);
+    if (url && name) {
+      downloadFile(url, name);
     }
-  }, [url, name, downloadName]);
+  }, [url, name]);
   const assessCallback = useCallback(() => {
     setIsAssessing(true);
   }, []);

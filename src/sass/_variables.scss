@@ -1,9 +1,10 @@
 // colors
 $border-grey: #ebebeb;
-$icon-grey: #d7d7d7;
+$icon-grey: #bbbbbb;
 $bg-grey: #f8f8f8;
-$bg-hover: rgb(252, 252, 252);
-$bg-active: #f0f0f0;
+$bg-hover: rgba(0,0,0, 0.01);
+$bg-hover-deep: rgba(0,0,0, 0.04);
+$bg-active: $bg-grey;
 $text-dark: #525252;
 $text-grey: #888888;
 $text-light-grey: #d7d7d7;
@@ -27,7 +28,22 @@ $icon-font: 'icomoon';
 $font-awesome: Font Awesome\ 5 Free;
 
 $card-border-radius: 10px;
-$content-padding-top: 16px;
-$content-padding-sides: 22px;
-$content-padding: $content-padding-top $content-padding-sides;
+
+$element-border-radius: $card-border-radius;
+$element-padding: 8px 16px;
+
+$menu-list-padding: 0;
+$menu-option-padding: 6px 12px;
+
+$icon-btn-padding: 0.25em;
+$icon-btn-border-radius: 30%;
+
+$content-padding-vertical: 20px;
+$content-padding-horizontal: 24px;
+$content-padding: $content-padding-vertical $content-padding-horizontal;
+
+$content-padding-vertical-sm: 16px;
+$content-padding-horizontal-sm: 22px;
+$content-padding-sm: $content-padding-vertical-sm $content-padding-horizontal-sm;
+
 $border: 1px solid $border-grey;

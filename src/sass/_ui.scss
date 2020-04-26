@@ -85,7 +85,7 @@ label {
   @include btnBehavior;
   background: $accent-orange;
   border: 1px solid transparent;
-  border-radius: $card-border-radius;
+  border-radius: 50em;
   @include overflow-hidden;
   color: white;
   cursor: pointer;
@@ -140,6 +140,10 @@ label {
       &:hover {
         background: #ffffff24;
       }
+    }
+
+    &:not(.btn-neutral) {
+      font-family: $font-medium;
     }
   }
   &.btn-inactive {
@@ -210,6 +214,7 @@ label {
   z-index: 0;
 
   .file__btn {
+    font-weight: normal;
     position: relative;
     transition: background-color .3s;
 
@@ -446,12 +451,13 @@ label {
   }
 }
 
+
 input[type='text'], input[type='email'], input[type='tel'], input[type='number'], input[type='date'], textarea {
   outline: none;
   background-color: transparent;
   border: 1px solid #ebebeb;
-  padding: 6px 18px;
-  border-radius: 4px;
+  padding: $element-padding;
+  border-radius: $element-border-radius;
   width: 100%;
 
   &::placeholder {
@@ -483,6 +489,11 @@ input[type=number] {
   -moz-appearance:textfield;
 }
 
+.input-checkbox {
+  display: flex !important;
+  user-select: none;
+}
+
 [class*=input-] {
   margin: 0;
   @include btnBehavior;
@@ -491,19 +502,29 @@ input[type=number] {
     position: absolute;
     opacity: 0;
     cursor: pointer;
+    display: flex;
 
     &~.input__box {
-      display: inline-block;
       vertical-align: middle;
+      padding: $icon-btn-padding;
       width: 1em;
       height: 1em;
-      border: $border;
+      box-sizing: content-box;
+      box-shadow: inset 0 0 0 1px $border-grey;
+      border-radius: $icon-btn-border-radius;
       margin-right: 8px;
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       &::before {
+        font-family: $icon-font;
+        color: white;
+        content: '\e902';
+        font-size: 1em;
         display: block;
         position: absolute;
-        @include center(xy);
+        transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        transform: scale(0);
       }
     }
     .label {
@@ -511,13 +532,13 @@ input[type=number] {
     }
   }
 
-  input[type='radio']:checked, input[type='checkbox']:checked{
-    &~.input__box::before {
-      font-family: $icon-font;
-      color: $accent-orange;
-      content: '\e902';
-      font-size: 20px;
-      margin-left: 10%;
+  input[type='radio']:checked, input[type='checkbox']:checked {
+    &~.input__box {
+      box-shadow: inset 0 0 0 1px $accent-orange;
+      background: $accent-orange;
+      &::before {
+        transform: scale(1);
+      }
     }
   }
 
@@ -557,9 +578,18 @@ input[type=number] {
     max-width: 100%;
     .select__control {
       border: $border;
+      border-radius: $element-border-radius;
       box-shadow: none;
+      background: none;
+
       .select__value-container {
-        padding-left: 12px;
+        padding: $element-padding;
+        &>* {
+          margin-top: 0;
+          margin-bottom: 0;
+          padding-top: 0;
+          padding-bottom: 0;
+        }
       }
       input {
         &::placeholder {
@@ -571,6 +601,7 @@ input[type=number] {
         box-shadow: none;
       }
       .select__dropdown-indicator {
+        padding: $element-padding;
         transition: transform .3s;
         color: $text-light-grey;
       }
@@ -602,18 +633,21 @@ input[type=number] {
     }
     .select__menu {
       border: $border;
+      border-radius: $element-border-radius;
       @include overflow-hidden;
       box-shadow: 0 4px 11px hsla(0,0%,0%,0.1);
+      z-index: 10;
+
       .select__menu-list {
         //overflow: auto;
         max-height: none;
-        padding: 0;
+        padding: $menu-list-padding;
         width: 100%;
         .select__menu-notice {
           font-size: $font-size-sm;
         }
         .select__option {
-          padding: 4px 8px;
+          padding: $menu-option-padding;
           cursor: pointer;
           &.select__option--is-focused {
             background: $bg-active;
@@ -772,7 +806,7 @@ input[type=number] {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  
+
   .scrollbars__scroll-base {
     overflow: auto;
     display: flex;
@@ -785,34 +819,46 @@ input[type=number] {
   }
 }
 
-.scroll-btn-container {
+.scroll-container {
   display: flex;
   margin-left: -15px;
   margin-right: -15px;
   position: relative;
 
-  &:before, &:after {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 18px;
-    z-index: 1;
-  }
-  &:before {
-    left: 0;
-    background: linear-gradient(90deg, #fff, hsla(0,0%,100%,0));
+  &.scroll-container--with-shadows {
+    &:before, &:after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 18px;
+      z-index: 1;
+    }
+    &:before {
+      left: 0;
+      background: linear-gradient(90deg, #fff, hsla(0,0%,100%,0));
+    }
+
+    &:after {
+      right: 0;
+      background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, #fff);
+    }
   }
 
-  &:after {
-    right: 0;
-    background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, #fff);
-  }
-
-  .scroll-btn-container__inner-container {
+  .scroll-container__inner {
     display: flex;
     flex-wrap: nowrap;
     padding-left: 15px;
     padding-right: 15px;
+  }
+}
+
+.prefix-icon {
+  line-height: inherit;
+  color: $icon-grey;
+  margin-right: 1em;
+
+  &.m-lg {
+    margin-right: 1.2em;
   }
 }
 
@@ -821,9 +867,15 @@ input[type=number] {
   color: white;
   font-family: $font-bold;
   font-size: 12px;
-  padding: 4px;
-  border-radius: 6px;
+  padding: 0.3em 0.5em;
+  border-radius: 50em;
   line-height: 1;
+  min-width: calc(0.6em);
+  text-align: center;
+  display: inline-block;
+  box-sizing: content-box;
+  vertical-align: middle;
+
   &.accent {
     background: $accent-orange;
   }
@@ -856,6 +908,7 @@ input[type=number] {
   user-select: none;
 
   .description-block {
+    font-family: $font-medium;
     padding: 0 8px 0 0;
   }
 }
@@ -867,7 +920,7 @@ input[type=number] {
   height: 24px;
 
   .progress-circle__bg {
-    stroke: $icon-grey;
+    stroke: $border-grey;
   }
   .progress-circle__progress {
     stroke: $accent-orange;

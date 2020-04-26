@@ -1,6 +1,6 @@
 import Course from 'components/common/Course';
 import CourseCatalog from 'components/common/CourseCatalog';
-import Page, {PageContent} from 'components/Page';
+import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
 import {useShopCatalog, useSubjects} from 'hooks/selectors';
@@ -77,8 +77,11 @@ const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
       {isLoaded && (
         <CourseCatalog.Body subjects={subjects as any} courses={catalog as any}>
           <PageContent>
-            <CourseCatalog.Filter />
-            <CourseCatalog.Catalog renderCourse={renderCourse} />
+            <CourseCatalog.Catalog
+              filter={<CourseCatalog.Filter />}
+              renderCourse={renderCourse}
+              title="Доступные курсы"
+            />
           </PageContent>
         </CourseCatalog.Body>
       )}

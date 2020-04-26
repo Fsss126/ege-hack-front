@@ -1,7 +1,9 @@
+import classNames from 'classnames';
 import * as Input from 'components/ui/input';
 import React, {useCallback, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 
+import {ContentBlock} from '../layout/ContentBlock';
 import {InputChangeHandler} from '../ui/input/Input';
 import {OptionShape} from '../ui/input/Select';
 import List, {ListItemRenderer, ListItemRenderProps, ListProps} from './List';
@@ -63,6 +65,8 @@ export type FilterProps = {
     search: boolean;
   };
   children?: React.ReactNode;
+  transparent?: boolean;
+  stacked?: boolean;
 };
 const Filter: React.FC<FilterProps> = (props) => {
   const {
@@ -71,6 +75,8 @@ const Filter: React.FC<FilterProps> = (props) => {
       online: filterByOnline = true,
       search = false,
     } = {},
+    transparent,
+    stacked,
     children,
   } = props;
   const {options, subject, online, search: searchKey} = React.useContext(
@@ -79,7 +85,11 @@ const Filter: React.FC<FilterProps> = (props) => {
   const onChange = useFilterCallback();
 
   return (
-    <div className="layout__content-block catalog__filters">
+    <ContentBlock
+      className="catalog__filters"
+      transparent={transparent}
+      stacked={stacked}
+    >
       <div className="container p-0">
         <div className="row align-items-center">
           {filterBySubject && options && (
@@ -121,7 +131,7 @@ const Filter: React.FC<FilterProps> = (props) => {
           {children}
         </div>
       </div>
-    </div>
+    </ContentBlock>
   );
 };
 
@@ -147,6 +157,12 @@ export type CatalogProps<T extends object = any, P extends object = {}> = Omit<
   emptyPlaceholder: React.ReactNode;
   noMatchPlaceholder: React.ReactNode;
   renderProps?: P;
+  context?: React.Context<{items: T[]; totalItems: number}>;
+  children?: T[];
+  title?: React.ReactNode;
+  titleInside?: boolean;
+  stacked?: boolean;
+  filter?: React.ReactNode;
 };
 const Catalog = <T extends object = any, P extends object = {}>(
   props: CatalogProps<T, P>,
@@ -156,9 +172,30 @@ const Catalog = <T extends object = any, P extends object = {}>(
     emptyPlaceholder,
     noMatchPlaceholder,
     renderProps,
+    title,
+    titleInside,
+    context,
+    children,
+    filter,
+    stacked,
     ...listProps
   } = props;
-  const {items, totalItems} = React.useContext(CatalogContext);
+  const contextState = React.useContext(
+    context ||
+      ((CatalogContext as unknown) as React.Context<{
+        items: T[];
+        totalItems: number;
+      }>),
+  );
+
+  let items, totalItems;
+
+  if (children) {
+    items = children;
+    totalItems = children.length;
+  } else {
+    ({items, totalItems} = contextState);
+  }
   const renderItem = React.useCallback(
     (item, renderProps, index) => {
       return renderFunc(item, {link: `${item.id}/`, ...renderProps}, index);
@@ -166,9 +203,19 @@ const Catalog = <T extends object = any, P extends object = {}>(
     [renderFunc],
   );
 
+  const isEmpty = items.length === 0;
+
   return (
-    <div className="layout__content-block catalog__catalog">
-      {items.length > 0 ? (
+    <ContentBlock
+      title={title}
+      outerContent={filter}
+      titleInside={titleInside}
+      stacked={stacked}
+      className={classNames('catalog__catalog', {
+        'catalog__catalog--empty': isEmpty,
+      })}
+    >
+      {!isEmpty ? (
         <List {...listProps} renderProps={renderProps} renderItem={renderItem}>
           {items}
         </List>
@@ -181,17 +228,17 @@ const Catalog = <T extends object = any, P extends object = {}>(
           {noMatchPlaceholder}
         </div>
       )}
-    </div>
+    </ContentBlock>
   );
 };
 
-export type CatalogFilter<T> = (item: T, filterParams: FilterParams) => boolean;
+export type FilterFunc<T> = (item: T, filterParams: FilterParams) => boolean;
 
 export type CatalogBodyProps<T extends object = any> = {
   options?: OptionShape<number>[];
   items: T[];
   children?: React.ReactNode;
-  filter: CatalogFilter<T>;
+  filter: FilterFunc<T>;
 };
 const Body = <T extends object = any>(
   props: CatalogBodyProps<T>,

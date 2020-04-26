@@ -72,7 +72,7 @@ export const FormElementGroup = <E extends {}>(
         <Button
           neutral
           active={maxElements ? elementsCount < maxElements : true}
-          icon={<i className="icon-add" />}
+          after={<i className="icon-add" />}
           onClick={onAdd}
         >
           {addBtnText}
