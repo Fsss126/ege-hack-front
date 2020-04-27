@@ -852,7 +852,7 @@ input[type=number] {
   }
 
   &.scroll-container--full-width .scroll-container__inner {
-    padding: 0 $content-padding-horizontal + 15px;
+    padding: 0 $content-padding-horizontal;
 
     @each $breakpoint, $container-max-width in $container-max-widths {
       @include media-breakpoint-up($breakpoint, $grid-breakpoints) {

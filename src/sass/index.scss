@@ -611,6 +611,10 @@ header {
       padding-right: 24px;
     }
 
+    @include media-breakpoint-down(sm) {
+      padding: 0;
+    }
+
     &:first-child {
       padding-top: 32px;
     }

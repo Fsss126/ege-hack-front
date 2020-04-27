@@ -1,4 +1,5 @@
 import {ImageViewer} from 'components/common/ImageViewer';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import {ProgressIndicator} from 'components/ui/ProgressIndicator';
 import Tooltip from 'components/ui/Tooltip';
 import React from 'react';
@@ -38,8 +39,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
 
   return (
     <>
-      <div className="layout__content-block">
-        <h2 className="test__test-title">{name}</h2>
+      <ContentBlock title={`Тест: ${name}`}>
         <div className="container">
           <div className="row flex-nowrap align-items-center">
             <div className="col p-0">
@@ -93,7 +93,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
         )}
         <div className="test-task__task-text">{text}</div>
         <div className="test-task__task-answer">{children}</div>
-      </div>
+      </ContentBlock>
       {nav}
     </>
   );
