@@ -65,7 +65,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
             <div className="col-auto p-0">
               {percentage !== undefined ? (
                 <ProgressIndicator progress={percentage}>
-                  Результат {percentage * 80}%
+                  Результат {percentage * 100}%
                 </ProgressIndicator>
               ) : (
                 <ProgressIndicator progress={progress}>
