@@ -571,14 +571,12 @@ function* processTestStateFetched() {
       selectLessons,
     );
     const courseLessons = lessons[courseId];
-    console.log(courseLessons);
 
     if (!(courseLessons instanceof Array)) {
       return;
     }
     const lesson = _.find(courseLessons, {id: lessonId});
 
-    console.log(lesson);
     if (!lesson) {
       return;
     }

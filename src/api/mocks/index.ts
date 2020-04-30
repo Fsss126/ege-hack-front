@@ -144,7 +144,6 @@ export const mockTestsRequests = (api: AxiosInstance) => {
       switch (true) {
         case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
           const response = mockedTestAnswerResponses.pop();
-          console.log(response);
 
           if (response) {
             return getMockedResponse(config, response);

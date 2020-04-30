@@ -217,10 +217,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         newLessons.push(responseLesson);
       }
 
-      console.log({
-        ...state,
-        lessons: {...loadedLessons, [courseId]: newLessons},
-      });
       return {
         ...state,
         lessons: {...loadedLessons, [courseId]: newLessons},

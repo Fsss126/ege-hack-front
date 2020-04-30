@@ -138,11 +138,15 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
         event.preventDefault();
         return;
       }
-      const newWindow = window.open() as Window;
-      const response = (await APIRequest.get(
-        `/courses/${webinar.course_id || courseId}/schedule/link`,
-      )) as LinkResp;
-      newWindow.location.href = response.link;
+      try {
+        const response = (await APIRequest.get(
+          `/courses/${webinar.course_id || courseId}/schedule/link`,
+        )) as LinkResp;
+        const newWindow = window.open() as Window;
+        newWindow.location.href = response.link;
+      } catch (e) {
+        console.log(e);
+      }
     },
     [isUnlocked, webinar, courseId],
   );
