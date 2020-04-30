@@ -101,7 +101,6 @@ function App(): ReactElement {
         <Route path="/account" component={Account} />
         <Route path="/admin" component={Admin} />
         <Route path="/teaching" component={Teaching} />
-        {/*<Route path="/:section" component={Page}/>*/}
         <Route component={NotFoundErrorPage} />
       </Switch>
     </UIContext.Provider>

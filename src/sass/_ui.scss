@@ -809,6 +809,7 @@ input[type=number] {
 
   .scrollbars__scroll-base {
     overflow: auto;
+    max-height: inherit;
     display: flex;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;  /* IE 11 */

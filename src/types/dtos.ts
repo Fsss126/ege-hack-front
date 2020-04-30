@@ -292,6 +292,7 @@ export interface TestStateAnswerDto {
 }
 
 export interface TestStateDtoResp {
+  id: number;
   status: TestStatus;
   progress?: number;
   percentage?: number;

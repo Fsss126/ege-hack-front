@@ -182,6 +182,7 @@ export type TestStateAnswerInfo =
   | TestStatePassedAnswerInfo;
 
 type CommonTestStateInfo = {
+  id: number;
   status: TestStatus;
   last_task_id: number;
   progress: number;

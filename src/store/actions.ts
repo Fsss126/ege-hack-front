@@ -65,8 +65,8 @@ export enum ActionType {
   TEST_FETCH = 'TEST_FETCH',
   TEST_FETCHED = 'TEST_FETCHED',
   TEST_COMPLETE_REQUEST = 'TEST_COMPLETE_REQUEST',
-  TEST_STATE_FETCH = 'TEST_RESULTS_FETCH',
-  TEST_STATE_FETCHED = 'TEST_RESULTS_FETCHED',
+  TEST_STATE_FETCH = 'TEST_STATE_FETCH',
+  TEST_STATE_FETCHED = 'TEST_STATE_FETCHED',
   TEST_SAVE_ANSWER_REQUEST = 'TEST_SAVE_ANSWER_REQUEST',
   TEST_SAVE_ANSWER = 'TEST_SAVE_ANSWER',
 }
@@ -342,6 +342,8 @@ export type TestStartErrorCallback = (
 export type TestStartRequestAction = {
   type: ActionType.TEST_START_REQUEST;
   testId: number;
+  lessonId: number;
+  courseId: number;
   onSuccess?: TestStartCallback;
   onError?: TestStartErrorCallback;
 };
@@ -370,6 +372,8 @@ export type TestCompleteErrorCallback = (
 export type TestCompleteRequestAction = {
   type: ActionType.TEST_COMPLETE_REQUEST;
   testId: number;
+  lessonId: number;
+  courseId: number;
   onSuccess?: TestCompleteCallback;
   onError?: TestCompleteErrorCallback;
 };
@@ -377,11 +381,15 @@ export type TestCompleteRequestAction = {
 export type TestStateFetchAction = {
   type: ActionType.TEST_STATE_FETCH;
   testId: number;
+  lessonId: number;
+  courseId: number;
 };
 
 export type TestStateFetchedAction = {
   type: ActionType.TEST_STATE_FETCHED;
   testId: number;
+  lessonId: number;
+  courseId: number;
   state: TestStateInfo | AxiosError;
 };
 
@@ -401,6 +409,8 @@ export type TestSaveAnswerRequestAction = {
   type: ActionType.TEST_SAVE_ANSWER_REQUEST;
   testId: number;
   taskId: number;
+  lessonId: number;
+  courseId: number;
   answer: string;
   complete: boolean;
   onSuccess?: TestSaveAnswerCallback;
@@ -411,6 +421,8 @@ export type TestSaveAnswerAction = {
   type: ActionType.TEST_SAVE_ANSWER;
   testId: number;
   taskId: number;
+  lessonId: number;
+  courseId: number;
   answerInfo: TestStateAnswerInfo;
 };
 

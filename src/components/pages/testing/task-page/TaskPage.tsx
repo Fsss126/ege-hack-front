@@ -11,13 +11,20 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
 >> = (props) => {
   const {
     match: {
-      params: {testId: param_test, taskId: param_question},
+      params: {
+        testId: param_test,
+        taskId: param_question,
+        lessonId: param_lesson,
+        courseId: param_course,
+      },
     },
     path: root,
     location,
   } = props;
   const testId = parseInt(param_test);
   const taskId = parseInt(param_question);
+  const lessonId = parseInt(param_lesson);
+  const courseId = parseInt(param_course);
 
   const {test} = useTest(testId);
   const {task, error, reload} = useTestTask(testId, taskId);
@@ -25,7 +32,7 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
     state,
     error: errorLoadingTestState,
     reload: reloadTestState,
-  } = useTestState(testId);
+  } = useTestState(testId, lessonId, courseId);
 
   if (test && task && state) {
     const {name} = test;
@@ -45,6 +52,8 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
             key={location.pathname}
             testId={testId}
             taskId={taskId}
+            lessonId={lessonId}
+            courseId={courseId}
             test={test}
             state={state}
             task={task}

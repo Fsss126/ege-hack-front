@@ -17,19 +17,25 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
 >> = (props) => {
   const {
     match: {
-      params: {testId: param_test},
+      params: {
+        testId: param_test,
+        lessonId: param_lesson,
+        courseId: param_course,
+      },
     },
     path: root,
     location,
   } = props;
   const testId = parseInt(param_test);
+  const lessonId = parseInt(param_lesson);
+  const courseId = parseInt(param_lesson);
 
   const {test} = useTest(testId);
   const {
     state,
     error: errorLoadingTestState,
     reload: reloadTestState,
-  } = useTestState(testId);
+  } = useTestState(testId, lessonId, courseId);
 
   const renderAnswer: ListItemRenderer<TestStatePassedAnswerInfo> = useCallback(
     (answer, renderProps, index) => {

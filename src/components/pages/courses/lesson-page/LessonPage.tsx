@@ -79,7 +79,7 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
               <div className="container p-lg-0">
                 <div className="row align-items-start">
                   <LessonView lesson={selectedLesson} homework={homework} />
-                  <div className="col-12 col-lg-auto layout__content-block layout__content-block--transparent lesson-page__other-lessons">
+                  <div className="col-12 col-xl-auto layout__content-block layout__content-block--transparent lesson-page__other-lessons">
                     {nextVideo && <h3>Следующее занятие</h3>}
                     {nextVideo && (
                       <List renderItem={renderLesson}>{[nextVideo]}</List>

@@ -68,7 +68,7 @@ const useSelector = <TSelected>(
 ): TSelected => useSelectorGen(selector, equalityFn);
 
 export function useUserAuth(): void {
-  const dispatch = useDispatch<Dispatch<Action>>();
+  const dispatch = useDispatch();
 
   React.useLayoutEffect(() => {
     const loginCallback = (credentials: Credentials | null): void => {
@@ -874,6 +874,8 @@ export function useStartTest(): StartTestHookResult {
       dispatch({
         type: ActionType.TEST_START_REQUEST,
         testId,
+        courseId,
+        lessonId,
         onSuccess: onSuccessCallback,
         onError,
       });
@@ -885,6 +887,8 @@ export function useStartTest(): StartTestHookResult {
 export type SaveAnswerHookResult = (params: {
   testId: number;
   taskId: number;
+  lessonId: number;
+  courseId: number;
   answer: string;
   complete: boolean;
   navigateTo: string;
@@ -901,6 +905,8 @@ export function useSaveAnswer(): SaveAnswerHookResult {
       const {
         testId,
         taskId,
+        lessonId,
+        courseId,
         answer,
         complete,
         navigateTo,
@@ -920,6 +926,8 @@ export function useSaveAnswer(): SaveAnswerHookResult {
         type: ActionType.TEST_SAVE_ANSWER_REQUEST,
         testId,
         taskId,
+        lessonId,
+        courseId,
         answer,
         complete,
         onSuccess: onSuccessCallback,
@@ -932,6 +940,8 @@ export function useSaveAnswer(): SaveAnswerHookResult {
 
 export type CompleteTestHookResult = (params: {
   testId: number;
+  lessonId: number;
+  courseId: number;
   navigateTo: string;
   onSuccess: TestCompleteCallback;
   onError: TestCompleteErrorCallback;
@@ -943,7 +953,14 @@ export function useCompleteTest(): CompleteTestHookResult {
 
   return useCallback(
     (params) => {
-      const {testId, navigateTo, onSuccess, onError} = params;
+      const {
+        testId,
+        lessonId,
+        courseId,
+        navigateTo,
+        onSuccess,
+        onError,
+      } = params;
       const onSuccessCallback: TestCompleteCallback = (testId, results) => {
         onSuccess(testId, results);
         history.push(navigateTo);
@@ -952,6 +969,8 @@ export function useCompleteTest(): CompleteTestHookResult {
       dispatch({
         type: ActionType.TEST_COMPLETE_REQUEST,
         testId,
+        lessonId,
+        courseId,
         onSuccess: onSuccessCallback,
         onError,
       });
@@ -968,7 +987,7 @@ export type TestHookResult = {
 
 export function useTest(testId: number): TestHookResult {
   const test = useSelector(selectTest);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<Dispatch<Action>>();
   const dispatchFetchAction = useCallback(() => {
     dispatch({type: ActionType.TEST_FETCH, testId});
   }, [testId, dispatch]);
@@ -1010,12 +1029,16 @@ export type TestStateHookResult = {
   reload: SimpleCallback;
 };
 
-export function useTestState(testId: number): TestStateHookResult {
+export function useTestState(
+  testId: number,
+  lessonId: number,
+  courseId: number,
+): TestStateHookResult {
   const state = useSelector(selectTestState);
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEST_STATE_FETCH, testId});
-  }, [testId, dispatch]);
+    dispatch({type: ActionType.TEST_STATE_FETCH, testId, lessonId, courseId});
+  }, [dispatch, testId, lessonId, courseId]);
   useEffect(() => {
     if (!state) {
       dispatchFetchAction();

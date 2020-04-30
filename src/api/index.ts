@@ -31,7 +31,8 @@ import {LearningStatus} from 'types/enums';
 
 import {getUrl} from './helpers';
 import {mockTestsRequests} from './mocks';
-// import {mockRequests} from './mocks';
+// tslint:disable-next-line:no-duplicate-imports
+import {mockRequests} from './mocks';
 import {
   transformCourse,
   transformHomework,
@@ -72,7 +73,7 @@ const APIRequest = axios.create({
   },
 });
 
-APIRequest.interceptors.request.use(function (config) {
+APIRequest.interceptors.request.use((config) => {
   const url = getUrl(config);
 
   if (/\/login/.test(url.pathname)) {
@@ -90,7 +91,7 @@ APIRequest.interceptors.request.use(function (config) {
   }
 });
 
-//Interceptors
+// Interceptors
 const transformData = (response: AxiosResponse): AxiosResponse => {
   const {config, data} = response;
   const url = getUrl(config);
@@ -246,8 +247,8 @@ mockTestsRequests(APIRequest);
 
 APIRequest.interceptors.response.use(transformData, transformError);
 
-//returns mocks for all failed requests
-// mockRequests(APIRequest);
+// returns mocks for all failed requests
+mockRequests(APIRequest);
 
 window.APIRequest = APIRequest;
 

@@ -1,3 +1,4 @@
+import {CatalogItemRenderer} from 'components/common/Catalog';
 import Course from 'components/common/Course';
 import CourseCatalog from 'components/common/CourseCatalog';
 import UserProfile from 'components/common/UserProfile';
@@ -7,7 +8,8 @@ import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
 import {useShopCatalog, useSubjects, useTeacher} from 'hooks/selectors';
 import _ from 'lodash';
-import React, {Fragment} from 'react';
+import React, {Fragment, useCallback} from 'react';
+import {CourseInfo} from 'types/entities';
 import {RouteComponentPropsWithPath, TeacherPageParams} from 'types/routes';
 
 interface TeacherPageProps
@@ -35,31 +37,35 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
     reload: reloadCatalog,
   } = useShopCatalog();
 
-  const renderCourse = React.useCallback((course, {link}) => {
-    const {price, discount} = course;
+  const renderCourse: CatalogItemRenderer<CourseInfo> = useCallback(
+    (course, {link}) => {
+      const {price, purchased} = course;
 
-    return (
-      <Course
-        course={course}
-        selectable
-        key={course.id}
-        link={`/shop/${link}`}
-        action={
-          <Fragment>
-            <div className="list__item-action-info">
-              <span className="price">{renderPrice(price)}</span>{' '}
-              {discount && (
-                <span className="discount font-size-xs">
-                  {renderPrice(discount + price)}
-                </span>
+      return (
+        <Course
+          course={course}
+          selectable
+          key={course.id}
+          link={`/shop/${link}`}
+          action={
+            <Fragment>
+              {!purchased && (
+                <div className="list__item-action-info">
+                  <span className="price">{renderPrice(price)}</span>{' '}
+                </div>
               )}
-            </div>
-            <Button style={{minWidth: '110px'}}>Открыть</Button>
-          </Fragment>
-        }
-      />
-    );
-  }, []);
+              {purchased ? (
+                <Button neutral>Куплено</Button>
+              ) : (
+                <Button>Открыть</Button>
+              )}
+            </Fragment>
+          }
+        />
+      );
+    },
+    [],
+  );
 
   if (teacher && catalog && subjects) {
     const {

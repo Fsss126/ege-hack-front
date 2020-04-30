@@ -265,6 +265,7 @@ export const TEST_STATUS_COMPLETED: TestStatusResp = {
 };
 
 export const TEST_STATE_NOT_STARTED: TestStateDtoResp = {
+  id: TEST.id,
   status: TestStatus.NOT_STARTED,
   last_task_id: 0,
   progress: 0,
@@ -272,6 +273,7 @@ export const TEST_STATE_NOT_STARTED: TestStateDtoResp = {
 };
 
 export const TEST_STATE_STARTED: TestStateDtoResp = {
+  id: TEST.id,
   status: TestStatus.NOT_STARTED,
   last_task_id: 2,
   answers: TEST.tasks.slice(0, 2).map(({id, answer}) => ({
@@ -281,6 +283,7 @@ export const TEST_STATE_STARTED: TestStateDtoResp = {
 };
 
 export const TEST_STATE_COMPLETED: TestStateDtoResp = {
+  id: TEST.id,
   status: TestStatus.COMPLETED,
   last_task_id: TEST.tasks.length - 1,
   percentage: 0.8,

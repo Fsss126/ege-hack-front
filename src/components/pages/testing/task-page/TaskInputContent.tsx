@@ -33,6 +33,8 @@ interface InputData {
 interface TaskResultContentProps {
   testId: number;
   taskId: number;
+  lessonId: number;
+  courseId: number;
   test: SanitizedTestInfo;
   state: TestStateActiveInfo;
   task: SanitizedTaskInfo;
@@ -51,7 +53,7 @@ function getRequestData(data: InputData): string {
 }
 
 export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
-  const {testId, taskId, ...layoutProps} = props;
+  const {testId, taskId, lessonId, courseId, ...layoutProps} = props;
   const {task, test, state} = layoutProps;
   const {
     answers: {[taskId]: answer},
@@ -115,6 +117,8 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
       saveAnswerCallback({
         testId,
         taskId,
+        lessonId,
+        courseId,
         answer,
         complete,
         navigateTo,
@@ -124,7 +128,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
       return deferred.promise;
     },
-    [formData, saveAnswerCallback, taskId, testId, task],
+    [formData, task, saveAnswerCallback, testId, taskId, lessonId, courseId],
   );
 
   const submitTest = useCallback(
@@ -135,6 +139,8 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
       completeCallback({
         testId,
+        lessonId,
+        courseId,
         navigateTo,
         onSuccess: deferred.resolve,
         onError: deferred.reject,
@@ -142,7 +148,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
       return deferred.promise;
     },
-    [completeCallback, testId],
+    [completeCallback, courseId, lessonId, testId],
   );
 
   const onError = React.useCallback(

@@ -28,6 +28,8 @@ import {
   TeacherInfo,
   TestInfo,
   TestStateInfo,
+  TestStatePassedInfo,
+  TestStatusInfo,
   UserCourseInfo,
   UserInfo,
   WebinarScheduleInfo,
@@ -45,7 +47,6 @@ import {
   ParticipantsFetchAction,
   TestCompleteRequestAction,
   TestFetchAction,
-  TestFetchedAction,
   TestSaveAnswerRequestAction,
   TestStartRequestAction,
   TestStateFetchAction,
@@ -54,6 +55,7 @@ import {
   WebinarDeleteRequestAction,
 } from './actions';
 import {AppState} from './reducers';
+import {selectLessons} from './selectors';
 
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
@@ -465,18 +467,26 @@ function* fetchTestState() {
     ActionType.TEST_STATE_FETCH,
     function* (channel) {
       yield takeLeading(channel, function* (action: TestStateFetchAction) {
-        const {testId} = action;
+        const {testId, lessonId, courseId} = action;
         try {
           const state: TestStateInfo = yield call(
             APIRequest.post,
             `/knowledge/tests/${testId}/state`,
           );
-          yield put({type: ActionType.TEST_STATE_FETCHED, state, testId});
+          yield put({
+            type: ActionType.TEST_STATE_FETCHED,
+            state,
+            testId,
+            lessonId,
+            courseId,
+          });
         } catch (error) {
           yield put({
             type: ActionType.TEST_STATE_FETCHED,
             state: error,
             testId,
+            lessonId,
+            courseId,
           });
         }
       });
@@ -488,9 +498,9 @@ function* processTestStart() {
   yield takeEvery(ActionType.TEST_START_REQUEST, function* (
     action: TestStartRequestAction,
   ) {
-    const {testId, onSuccess, onError} = action;
+    const {testId, lessonId, courseId, onSuccess, onError} = action;
     yield put({type: ActionType.TEST_FETCH, testId});
-    yield put({type: ActionType.TEST_STATE_FETCH, testId});
+    yield put({type: ActionType.TEST_STATE_FETCH, testId, lessonId, courseId});
     const {state}: TestStateFetchedAction = yield take(
       (action: Action) =>
         action.type === ActionType.TEST_STATE_FETCHED &&
@@ -513,13 +523,19 @@ function* processTestComplete() {
   yield takeEvery(ActionType.TEST_COMPLETE_REQUEST, function* (
     action: TestCompleteRequestAction,
   ) {
-    const {testId, onSuccess, onError} = action;
+    const {testId, lessonId, courseId, onSuccess, onError} = action;
     try {
-      const state = yield call(
+      const state: TestStatePassedInfo = yield call(
         APIRequest.post,
         `/knowledge/tests/${testId}/complete`,
       );
-      yield put({type: ActionType.TEST_STATE_FETCHED, testId, state});
+      yield put({
+        type: ActionType.TEST_STATE_FETCHED,
+        testId,
+        lessonId,
+        courseId,
+        state,
+      });
       yield select();
 
       if (onSuccess) {
@@ -533,11 +549,70 @@ function* processTestComplete() {
   });
 }
 
+function* processTestStateFetched() {
+  yield takeEvery(ActionType.TEST_STATE_FETCHED, function* (
+    action: TestStateFetchedAction,
+  ) {
+    const {state, courseId, lessonId} = action;
+
+    if (state instanceof Error) {
+      return;
+    }
+
+    const {id, status, percentage, progress, passed} = state as any;
+    const statusInfo: Partial<TestStatusInfo> = {
+      id,
+      status,
+      percentage,
+      progress,
+      passed,
+    };
+    const lessons: AppState['dataReducer']['lessons'] = yield select(
+      selectLessons,
+    );
+    const courseLessons = lessons[courseId];
+    console.log(courseLessons);
+
+    if (!(courseLessons instanceof Array)) {
+      return;
+    }
+    const lesson = _.find(courseLessons, {id: lessonId});
+
+    console.log(lesson);
+    if (!lesson) {
+      return;
+    }
+
+    const updatedLessons: LessonInfo = {
+      ...lesson,
+      test: {
+        ...lesson.test,
+        ...statusInfo,
+      } as TestStatusInfo,
+    };
+
+    yield put({
+      type: ActionType.LESSONS_REVOKE,
+      courseId,
+      responseLesson: updatedLessons,
+    });
+  });
+}
+
 function* processTestSaveAnswer() {
   yield takeEvery(ActionType.TEST_SAVE_ANSWER_REQUEST, function* (
     action: TestSaveAnswerRequestAction,
   ) {
-    const {testId, taskId, answer, complete, onSuccess, onError} = action;
+    const {
+      testId,
+      taskId,
+      lessonId,
+      courseId,
+      answer,
+      complete,
+      onSuccess,
+      onError,
+    } = action;
 
     const requestData: UserAnswerDtoReq = {
       task_id: taskId,
@@ -555,6 +630,8 @@ function* processTestSaveAnswer() {
         type: ActionType.TEST_SAVE_ANSWER,
         taskId,
         testId,
+        lessonId,
+        courseId,
         answerInfo,
       });
       yield select();
@@ -563,6 +640,8 @@ function* processTestSaveAnswer() {
         yield put({
           type: ActionType.TEST_COMPLETE_REQUEST,
           testId,
+          lessonId,
+          courseId,
           onSuccess: () => {
             if (onSuccess) {
               onSuccess(testId, taskId, answerInfo);
@@ -623,5 +702,6 @@ export default function* rootSaga() {
   yield spawn(processTestStart);
   yield spawn(processTestComplete);
   yield spawn(processTestSaveAnswer);
+  yield spawn(processTestStateFetched);
   yield spawn(init);
 }

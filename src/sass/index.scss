@@ -892,9 +892,13 @@ header {
   .course {
     &.course-selected {
       background: $accent-bg;
+      
+      .title {
+        color: black;
+      }
 
       &:hover {
-        background: lighten($accent-orange, 26%);
+        background: lighten($accent-orange, 26%) !important;
       }
     }
 

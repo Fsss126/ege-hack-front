@@ -12,13 +12,15 @@ import {TaskResultContent} from './TaskResultContent';
 interface TaskViewerProps {
   testId: number;
   taskId: number;
+  lessonId: number;
+  courseId: number;
   test: SanitizedTestInfo;
   state: TestStateInfo;
   task: SanitizedTaskInfo;
 }
 
 export const TaskPageContent: React.FC<TaskViewerProps> = (props) => {
-  const {testId, taskId, test, state, task} = props;
+  const {testId, taskId, lessonId, courseId, test, state, task} = props;
 
   if (state.status === TestStatus.COMPLETED) {
     return (
@@ -35,6 +37,8 @@ export const TaskPageContent: React.FC<TaskViewerProps> = (props) => {
       <TaskInputContent
         testId={testId}
         taskId={taskId}
+        lessonId={lessonId}
+        courseId={courseId}
         test={test}
         state={state}
         task={task}

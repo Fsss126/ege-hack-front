@@ -29,7 +29,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
   } = props;
 
   return (
-    <div className="col-12 col-lg layout__content-block lesson-page__current-lesson">
+    <div className="col-12 col-xl layout__content-block lesson-page__current-lesson">
       <div className="block-container video-container">
         <VideoPlayer video_link={video} />
       </div>
