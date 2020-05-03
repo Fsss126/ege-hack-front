@@ -21,8 +21,8 @@ import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithPath} from 'types/routes';
 
-import LessonsPage from '../../admin/course-page/lessons/LessonsPage';
-import ParticipantsPage from '../../admin/course-page/participants/ParticipantsPage';
+import LessonsPage from '../../admin/courses/course-page/lessons/LessonsPage';
+import ParticipantsPage from '../../admin/courses/course-page/participants/ParticipantsPage';
 
 const renderLesson: CatalogItemRenderer<LessonInfo> = (
   lesson,

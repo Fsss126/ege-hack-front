@@ -290,6 +290,49 @@ export const dataReducer: Reducer<DataState, Action> = (
         homeworks: {[lessonId]: newHomeworks, ...loadedHomeworks},
       };
     }
+    case ActionType.SUBJECTS_REVOKE: {
+      const {responseSubject} = action;
+      const updateCatalog = (
+        catalog: SubjectInfo[] | AxiosError | undefined,
+      ): SubjectInfo[] | AxiosError | undefined => {
+        if (!(catalog instanceof Array)) {
+          return catalog;
+        }
+        const courseIndex = _.findIndex<SubjectInfo>(catalog, {
+          id: responseSubject.id,
+        });
+        const newCatalog = [...catalog];
+
+        if (courseIndex !== -1) {
+          const prevCourse = catalog[courseIndex];
+          newCatalog[courseIndex] = {...prevCourse, ...responseSubject};
+        } else {
+          newCatalog.push(responseSubject);
+        }
+        return newCatalog;
+      };
+      const {subjects} = state;
+
+      return {
+        ...state,
+        subjects: updateCatalog(subjects),
+      };
+    }
+    case ActionType.SUBJECT_DELETE: {
+      const {subjectId} = action;
+      const removeSubject = (
+        catalog: SubjectInfo[] | AxiosError | undefined,
+      ): SubjectInfo[] | AxiosError | undefined =>
+        catalog instanceof Array
+          ? catalog.filter(({id}) => id !== subjectId)
+          : catalog;
+      const {subjects} = state;
+
+      return {
+        ...state,
+        subjects: removeSubject(subjects),
+      };
+    }
     case ActionType.COURSES_REVOKE: {
       const {responseCourse} = action;
       const updateCatalog = <T extends CourseInfo>(

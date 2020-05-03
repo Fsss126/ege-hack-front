@@ -127,9 +127,9 @@ export function useWebinar(webinar: Webinar): WebinarHookResult {
 
 export type WebinarProps = {
   webinar: PersonWebinar;
-  courseId: number;
+  subjectId: number;
 };
-const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
+const Webinar: React.FC<WebinarProps> = ({webinar, subjectId}) => {
   const {state, isUnlocked, onTick, onWebinarStart} = useWebinar(webinar);
 
   const onClick = React.useCallback(
@@ -140,7 +140,7 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
       }
       try {
         const response = (await APIRequest.get(
-          `/courses/${webinar.course_id || courseId}/schedule/link`,
+          `/courses/${webinar.course_id || subjectId}/schedule/link`,
         )) as LinkResp;
         const newWindow = window.open() as Window;
         newWindow.location.href = response.link;
@@ -148,7 +148,7 @@ const Webinar: React.FC<WebinarProps> = ({webinar, courseId}) => {
         console.log(e);
       }
     },
-    [isUnlocked, webinar, courseId],
+    [isUnlocked, webinar, subjectId],
   );
 
   const renderCountdown = useCallback((remainingTime: CountdownRenderProps) => {
@@ -238,7 +238,7 @@ const WebinarSchedule: React.FC<WebinarScheduleProps> = (props) => {
           {schedule.map((webinar) => (
             <Webinar
               webinar={webinar}
-              courseId={webinar.course_id}
+              subjectId={webinar.course_id}
               key={webinar.id}
             />
           ))}

@@ -6,6 +6,10 @@ export interface RouteComponentPropsWithPath<
   path: string;
 }
 
+export interface SubjectPageParams {
+  subjectId: string;
+}
+
 export interface CoursePageParams {
   courseId: string;
 }

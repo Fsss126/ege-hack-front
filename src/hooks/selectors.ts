@@ -121,6 +121,23 @@ export function useSubjects(): SubjectsHookResult {
     : {subjects, reload: dispatchFetchAction};
 }
 
+export type SubjectHookResult = {
+  subject?: SubjectInfo;
+  error?: AxiosError | true;
+  reload: SimpleCallback;
+};
+
+export function useSubject(teacherId: number): SubjectHookResult {
+  const {subjects, error, reload} = useSubjects();
+  const subject = subjects ? _.find(subjects, {id: teacherId}) : undefined;
+
+  return {
+    subject,
+    error: subjects && !subject ? true : error,
+    reload,
+  };
+}
+
 export type DiscountHookResult = {
   discount?: DiscountInfo;
   error?: AxiosError;
@@ -341,6 +358,19 @@ export function useTeacherCourse(courseId: number): TeacherCourseHookResult {
     error: catalog && !course ? true : error,
     reload,
   };
+}
+
+export type RevokeSubjectsHookResult = (responseSubject: SubjectInfo) => void;
+
+export function useRevokeSubjects(): RevokeSubjectsHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseSubject: SubjectInfo) => {
+      dispatch({type: ActionType.SUBJECTS_REVOKE, responseSubject});
+    },
+    [dispatch],
+  );
 }
 
 export type RevokeCoursesHookResult = (responseCourse: CourseInfo) => void;
@@ -711,6 +741,39 @@ function useRedirect(redirectUrl?: string): RedirectHookResult {
       history.replace(redirectUrl);
     }
   }, [history, redirectUrl]);
+}
+
+export type DeleteSubjectHookResult = (subjectId: number) => void;
+
+export function useDeleteSubject(
+  redirectUrl?: string,
+  onDelete?: CourseDeleteCallback,
+  onError?: CourseDeleteErrorCallback,
+): DeleteCourseHookResult {
+  const dispatch = useDispatch();
+  const redirectIfSupplied = useRedirect(redirectUrl);
+
+  const deleteCallback = useCallback(
+    (subjectId) => {
+      redirectIfSupplied();
+      if (onDelete) {
+        onDelete(subjectId);
+      }
+    },
+    [redirectIfSupplied, onDelete],
+  );
+
+  return useCallback(
+    (subjectId) => {
+      dispatch({
+        type: ActionType.SUBJECT_DELETE_REQUEST,
+        subjectId,
+        onDelete: deleteCallback,
+        onError,
+      });
+    },
+    [dispatch, deleteCallback, onError],
+  );
 }
 
 export type DeleteCourseHookResult = (courseId: number) => void;

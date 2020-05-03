@@ -19,6 +19,7 @@ import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {CoursePageParams} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -36,7 +37,7 @@ const filter: FilterFunc<CourseParticipantInfo> = (
   return search ? userName.includes(searchKey) : true;
 };
 
-export type ParticipantsPageProps = RouteComponentProps<{courseId: string}> & {
+export type ParticipantsPageProps = RouteComponentProps<CoursePageParams> & {
   path: string;
   parentSection?: PageParentSection;
   participants?: CourseParticipantInfo[];

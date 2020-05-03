@@ -5,13 +5,14 @@ import {RouteComponentProps} from 'react-router';
 import {LessonDtoReq} from 'types/dtos';
 import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {CoursePageParams} from 'types/routes';
 
 import LessonForm from './LessonForm';
 
 const createRequest = (requestData: LessonDtoReq): Promise<LessonInfo> =>
   APIRequest.post('/lessons', requestData);
 
-const LessonCreatingPage: React.FC<RouteComponentProps<{courseId: string}>> = (
+const LessonCreatingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
   props,
 ) => {
   const {

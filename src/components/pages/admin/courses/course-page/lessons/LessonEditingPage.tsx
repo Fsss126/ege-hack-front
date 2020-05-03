@@ -6,13 +6,13 @@ import {RouteComponentProps} from 'react-router';
 import {LessonDtoReq} from 'types/dtos';
 import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {LessonPageParams} from 'types/routes';
 
 import LessonForm from './LessonForm';
 
-const LessonEditingPage: React.FC<RouteComponentProps<{
-  courseId: string;
-  lessonId: string;
-}>> = (props) => {
+const LessonEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
+  props,
+) => {
   const {
     match: {
       params: {courseId: param_course, lessonId: param_lesson},

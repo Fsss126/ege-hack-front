@@ -130,8 +130,23 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                     <i className="prefix-icon m-lg icon-edit" />
                   </div>
                   <div className="layout__sidebar-menu-col">
-                    <NavLink className="layout__sidebar-menu-link" to="/admin/">
-                      Управление контентом
+                    <NavLink
+                      className="layout__sidebar-menu-link"
+                      to="/admin/courses/"
+                    >
+                      Курсы
+                    </NavLink>
+                    <NavLink
+                      className="layout__sidebar-menu-link"
+                      to="/admin/subjects/"
+                    >
+                      Предметы
+                    </NavLink>
+                    <NavLink
+                      className="layout__sidebar-menu-link"
+                      to="/admin/knowledge/"
+                    >
+                      База знаний
                     </NavLink>
                     <NavLink
                       className="layout__sidebar-menu-link"

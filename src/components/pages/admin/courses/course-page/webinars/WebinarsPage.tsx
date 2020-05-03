@@ -21,6 +21,7 @@ import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, WebinarInfo, WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {CoursePageParams} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -98,7 +99,7 @@ const Webinar = (props: WebinarProps): React.ReactElement => {
   );
 };
 
-export type WebinarsPageProps = RouteComponentProps<{courseId: string}> & {
+export type WebinarsPageProps = RouteComponentProps<CoursePageParams> & {
   path: string;
   parentSection?: PageParentSection;
   children: React.ReactNode;

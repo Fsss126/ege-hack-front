@@ -35,8 +35,8 @@ function getDate(daysForward: number) {
 
 export const ACCOUNT_INFO: UserInfo = {
   id: 154792439,
-  roles: [AccountRole.PUPIL, AccountRole.TEACHER],
-  permissions: [Permission.HOMEWORK_CHECK],
+  roles: [AccountRole.PUPIL, AccountRole.TEACHER, AccountRole.ADMIN],
+  permissions: [Permission.HOMEWORK_CHECK, Permission.SUBJECT_EDIT],
   vk_info: {
     id: 154792439,
     first_name: 'Alexandra',
@@ -69,22 +69,22 @@ export const SUBJECTS: SubjectInfo[] = [
   // { id: 'french', name: 'Французский язык' },
   // { id: 'chinese', name: 'Китайский язык' },
   // { id: 'spanish', name: 'Испанский язык' }
-  {id: 1, name: 'Русский язык'},
-  {id: 2, name: 'Литература'},
-  {id: 3, name: 'Математика'},
-  {id: 4, name: 'Информатика'},
-  {id: 5, name: 'Физика'},
-  {id: 6, name: 'Химия'},
-  {id: 7, name: 'Биология'},
-  {id: 8, name: 'Обществознание'},
-  {id: 9, name: 'История'},
-  {id: 10, name: 'География'},
-  {id: 11, name: 'Английский язык'},
-  {id: 12, name: 'Немецкий язык'},
-  {id: 13, name: 'Французский язык'},
-  {id: 14, name: 'Китайский язык'},
-  {id: 15, name: 'Испанский язык'},
-].map((subj) => ({...subj, image_link: ''}));
+  {id: 1, name: 'Русский язык', image_link: poster},
+  {id: 2, name: 'Литература', image_link: poster},
+  {id: 3, name: 'Математика', image_link: poster},
+  {id: 4, name: 'Информатика', image_link: poster},
+  {id: 5, name: 'Физика', image_link: poster},
+  {id: 6, name: 'Химия', image_link: poster},
+  {id: 7, name: 'Биология', image_link: poster},
+  {id: 8, name: 'Обществознание', image_link: poster},
+  {id: 9, name: 'История', image_link: poster},
+  {id: 10, name: 'География', image_link: poster},
+  {id: 11, name: 'Английский язык', image_link: poster},
+  {id: 12, name: 'Немецкий язык', image_link: poster},
+  {id: 13, name: 'Французский язык', image_link: poster},
+  {id: 14, name: 'Китайский язык', image_link: poster},
+  {id: 15, name: 'Испанский язык', image_link: poster},
+];
 
 export const TEACHERS: TeacherInfo[] = [
   {

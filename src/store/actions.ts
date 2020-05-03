@@ -55,6 +55,9 @@ export enum ActionType {
   HOMEWORKS_FETCH = 'HOMEWORKS_FETCH',
   HOMEWORKS_FETCHED = 'HOMEWORKS_FETCHED',
   HOMEWORKS_REVOKE = 'HOMEWORKS_REVOKE',
+  SUBJECTS_REVOKE = 'SUBJECTS_REVOKE',
+  SUBJECT_DELETE_REQUEST = 'SUBJECT_DELETE_REQUEST',
+  SUBJECT_DELETE = 'SUBJECT_DELETE',
   COURSES_REVOKE = 'COURSES_REVOKE',
   COURSE_DELETE_REQUEST = 'COURSE_DELETE_REQUEST',
   COURSE_DELETE = 'COURSE_DELETE',
@@ -272,6 +275,30 @@ export type ParticipantDeleteAction = {
   userId: number;
 };
 
+export type SubjectsRevokeAction = {
+  type: ActionType.SUBJECTS_REVOKE;
+  responseSubject: SubjectInfo;
+};
+
+export type SubjectDeleteCallback = (courseId: number) => void;
+
+export type SubjectDeleteErrorCallback = (
+  subjectId: number,
+  error: AxiosError,
+) => void;
+
+export type SubjectDeleteRequestAction = {
+  type: ActionType.SUBJECT_DELETE_REQUEST;
+  subjectId: number;
+  onDelete?: SubjectDeleteCallback;
+  onError?: SubjectDeleteErrorCallback;
+};
+
+export type SubjectDeleteAction = {
+  type: ActionType.SUBJECT_DELETE;
+  subjectId: number;
+};
+
 export type CoursesRevokeAction = {
   type: ActionType.COURSES_REVOKE;
   responseCourse: CourseInfo;
@@ -465,6 +492,9 @@ export type Action = {type: ActionType} & (
   | ParticipantDeleteRequestAction
   | ParticipantDeleteAction
   | HomeworksRevokeAction
+  | SubjectsRevokeAction
+  | SubjectDeleteRequestAction
+  | SubjectDeleteAction
   | CoursesRevokeAction
   | CourseDeleteRequestAction
   | CourseDeleteAction

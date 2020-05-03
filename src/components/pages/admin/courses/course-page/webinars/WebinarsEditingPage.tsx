@@ -6,10 +6,11 @@ import {RouteComponentProps} from 'react-router';
 import {WebinarScheduleDtoReq} from 'types/dtos';
 import {WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {CoursePageParams} from 'types/routes';
 
 import WebinarsForm from './WebinarsForm';
 
-const WebinarsEditingPage: React.FC<RouteComponentProps<{courseId: string}>> = (
+const WebinarsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
   props,
 ) => {
   const {

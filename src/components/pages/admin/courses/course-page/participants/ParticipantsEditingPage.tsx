@@ -15,6 +15,7 @@ import {RouteComponentProps} from 'react-router';
 import {AddParticipantsReq} from 'types/dtos';
 import {CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {CoursePageParams} from 'types/routes';
 
 interface ParticipantsFormData {
   accounts: string;
@@ -34,9 +35,9 @@ function getRequestData(formData: ParticipantsFormData): AddParticipantsReq {
 
 const returnLink = '..';
 
-const ParticipantsEditingPage: React.FC<RouteComponentProps<{
-  courseId: string;
-}>> = (props) => {
+const ParticipantsEditingPage: React.FC<RouteComponentProps<
+  CoursePageParams
+>> = (props) => {
   const {
     match: {
       params: {courseId: param_course},

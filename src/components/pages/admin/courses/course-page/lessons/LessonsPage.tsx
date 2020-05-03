@@ -19,6 +19,7 @@ import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {CoursePageParams} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -38,7 +39,7 @@ export type LessonRenderer = CatalogItemRenderer<
   {action?: React.ReactElement}
 >;
 
-export type LessonsPageProps = RouteComponentProps<{courseId: string}> & {
+export type LessonsPageProps = RouteComponentProps<CoursePageParams> & {
   path: string;
   parentSection?: PageParentSection;
   children: React.ReactNode;

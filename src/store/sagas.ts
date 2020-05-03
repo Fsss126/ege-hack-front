@@ -45,6 +45,7 @@ import {
   LessonsFetchAction,
   ParticipantDeleteRequestAction,
   ParticipantsFetchAction,
+  SubjectDeleteRequestAction,
   TestCompleteRequestAction,
   TestFetchAction,
   TestSaveAnswerRequestAction,
@@ -378,6 +379,25 @@ function* processParticipantDelete() {
   });
 }
 
+function* processSubjectDelete() {
+  yield takeEvery(ActionType.SUBJECT_DELETE_REQUEST, function* (
+    action: SubjectDeleteRequestAction,
+  ) {
+    const {subjectId, onDelete, onError} = action;
+    try {
+      yield call(APIRequest.delete, `/subjects/${subjectId}`);
+      if (onDelete) {
+        yield call(onDelete, subjectId);
+      }
+      yield put({type: ActionType.SUBJECT_DELETE, subjectId});
+    } catch (error) {
+      if (onError) {
+        yield call(onError, subjectId, error);
+      }
+    }
+  });
+}
+
 function* processCourseDelete() {
   yield takeEvery(ActionType.COURSE_DELETE_REQUEST, function* (
     action: CourseDeleteRequestAction,
@@ -692,6 +712,7 @@ export default function* rootSaga() {
   yield spawn(fetchTest);
   yield spawn(fetchTestState);
 
+  yield spawn(processSubjectDelete);
   yield spawn(processCourseDelete);
   yield spawn(processLessonDelete);
   yield spawn(processParticipantDelete);

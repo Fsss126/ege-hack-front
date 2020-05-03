@@ -7,6 +7,7 @@ import {
   HomeworkDtoResp,
   LessonDtoResp,
   PersonWebinarDto,
+  SubjectDtoResp,
   TeacherDtoResp,
   TestStateAnswerDto,
   UserInfoDtoResp,
@@ -37,6 +38,7 @@ import {
   transformCourse,
   transformHomework,
   transformLesson,
+  transformSubject,
   transformTest,
   transformTestState,
   transformUser,
@@ -58,6 +60,7 @@ export const getCancelToken = () => {
 
 const APIRequest = axios.create({
   baseURL: API_ROOT,
+  timeout: 5000,
   paramsSerializer: (params) => {
     const searchParams = new URLSearchParams();
     _.forEach(params, (value, key) => {
@@ -101,6 +104,8 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
         return transformUser<UserInfoDtoResp, UserInfo>(data);
       case url.pathname === '/accounts/teachers':
         return (data as TeacherDtoResp[]).map<TeacherInfo>(transformUser);
+      case url.pathname === '/subjects':
+        return (data as SubjectDtoResp[]).map(transformSubject);
       case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):
         return transformUser<TeacherDtoResp, TeacherInfo>(
           data as TeacherDtoResp,

@@ -7,6 +7,7 @@ import {
   FileInfo,
   HomeworkDtoResp,
   LessonDtoResp,
+  SubjectDtoResp,
   TestDtoResp,
   TestStateAnswerDto,
   TestStateDtoResp,
@@ -19,6 +20,7 @@ import {
   CourseInfo,
   HomeworkInfo,
   LessonInfo,
+  SubjectInfo,
   TestInfo,
   TestStateInfo,
   TestStatusInfo,
@@ -40,6 +42,14 @@ export const transformFileInfo = (file: FileInfo): FileInfo => {
   };
 };
 
+export const transformSubject = ({
+  image_link,
+  ...rest
+}: SubjectDtoResp): SubjectInfo => ({
+  image_link: image_link ? getImageLink(image_link) : image_link,
+  ...rest,
+});
+
 export const transformCourse = ({
   date_start,
   date_end,
@@ -49,7 +59,7 @@ export const transformCourse = ({
 }: CourseDtoResp): CourseInfo => ({
   date_start: new Date(date_start),
   date_end: new Date(date_end),
-  image_link: `${API_ROOT}${image_link}`,
+  image_link: getImageLink(image_link),
   teacher_ids: [teacher_id],
   ...rest,
 });
