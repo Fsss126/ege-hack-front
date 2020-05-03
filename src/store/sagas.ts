@@ -19,6 +19,7 @@ import {
 import APIRequest from '../api';
 import {UserAnswerDtoReq} from '../types/dtos';
 import {
+  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
@@ -31,9 +32,9 @@ import {
   TestStatePassedInfo,
   TestStatusInfo,
   UserCourseInfo,
-  UserInfo,
   WebinarScheduleInfo,
 } from '../types/entities';
+import {AccountRole} from '../types/enums';
 import {
   Action,
   ActionType,
@@ -67,7 +68,7 @@ function* fetchUserInfo() {
     [ActionType.LOG_IN, ActionType.LOG_IN_SUCCESS],
     function* () {
       try {
-        const userInfo: UserInfo = yield call(Auth.getUserInfo);
+        const userInfo: AccountInfo = yield call(Auth.getUserInfo);
         yield put({type: ActionType.USER_INFO_FETCHED, userInfo});
       } catch (error) {
         yield put({type: ActionType.USER_INFO_FETCHED, userInfo: error});
@@ -147,6 +148,69 @@ function* fetchTeachers() {
         yield put({type: ActionType.TEACHERS_FETCHED, teachers});
       } catch (error) {
         yield put({type: ActionType.TEACHERS_FETCHED, teachers: error});
+      }
+    });
+  });
+}
+
+function* fetchAssistants() {
+  yield* waitForLogin(ActionType.ASSISTANTS_FETCH, function* (channel) {
+    yield takeLeading(channel, function* () {
+      try {
+        const assistants: AccountInfo[] = yield call(
+          APIRequest.get,
+          '/accounts/management',
+          {
+            params: {
+              role: AccountRole.HELPER,
+            },
+          },
+        );
+        yield put({type: ActionType.ASSISTANTS_FETCHED, assistants});
+      } catch (error) {
+        yield put({type: ActionType.ASSISTANTS_FETCHED, assistants: error});
+      }
+    });
+  });
+}
+
+function* fetchAdmins() {
+  yield* waitForLogin(ActionType.ADMINS_FETCH, function* (channel) {
+    yield takeLeading(channel, function* () {
+      try {
+        const admins: AccountInfo[] = yield call(
+          APIRequest.get,
+          '/accounts/management',
+          {
+            params: {
+              role: AccountRole.ADMIN,
+            },
+          },
+        );
+        yield put({type: ActionType.ADMINS_FETCHED, admins});
+      } catch (error) {
+        yield put({type: ActionType.ADMINS_FETCHED, admins: error});
+      }
+    });
+  });
+}
+
+function* fetchModerators() {
+  yield* waitForLogin(ActionType.MODERATORS_FETCH, function* (channel) {
+    yield takeLeading(channel, function* () {
+      try {
+        const moderators: AccountInfo[] = yield call(
+          APIRequest.get,
+          '/accounts/management',
+          {
+            params: {
+              role: AccountRole.MODERATOR,
+            },
+          },
+        );
+        yield put({type: ActionType.MODERATORS_FETCHED, moderators});
+      } catch (error) {
+        yield put({type: ActionType.MODERATORS_FETCHED, moderators: error});
       }
     });
   });
@@ -701,6 +765,9 @@ export default function* rootSaga() {
   yield spawn(fetchUserCourses);
   yield spawn(fetchSubjects);
   yield spawn(fetchTeachers);
+  yield spawn(fetchAssistants);
+  yield spawn(fetchAdmins);
+  yield spawn(fetchModerators);
   yield spawn(fetchLessons);
   yield spawn(fetchCourseWebinars);
   yield spawn(fetchUpcomingWebinars);

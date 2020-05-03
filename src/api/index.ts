@@ -2,6 +2,7 @@ import axios, {AxiosError, AxiosResponse} from 'axios';
 import Auth from 'definitions/auth';
 import _ from 'lodash';
 import {
+  AccountDtoResp,
   CourseDtoResp,
   CourseParticipantDto,
   HomeworkDtoResp,
@@ -10,10 +11,10 @@ import {
   SubjectDtoResp,
   TeacherDtoResp,
   TestStateAnswerDto,
-  UserInfoDtoResp,
   WebinarScheduleDtoResp,
 } from 'types/dtos';
 import {
+  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
@@ -25,7 +26,6 @@ import {
   TestStateInfo,
   UserAnswerInfo,
   UserCourseInfo,
-  UserInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {LearningStatus} from 'types/enums';
@@ -101,11 +101,19 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
   const getData = (): any => {
     switch (true) {
       case url.pathname === '/accounts/info':
-        return transformUser<UserInfoDtoResp, UserInfo>(data);
+        return transformUser<AccountDtoResp, AccountInfo>(data);
       case url.pathname === '/accounts/teachers':
         return (data as TeacherDtoResp[]).map<TeacherInfo>(transformUser);
+      case url.pathname === '/accounts/management':
+        return (data as AccountDtoResp[]).map<AccountInfo>(transformUser);
       case url.pathname === '/subjects':
-        return (data as SubjectDtoResp[]).map(transformSubject);
+        if (config.method === 'get') {
+          return (data as SubjectDtoResp[]).map(transformSubject);
+        } else {
+          return transformSubject(data);
+        }
+      case /\/subjects\/(\w*)$/.test(url.pathname):
+        return transformSubject(data);
       case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):
         return transformUser<TeacherDtoResp, TeacherInfo>(
           data as TeacherDtoResp,

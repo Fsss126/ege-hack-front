@@ -12,7 +12,7 @@ import {useCheckPermissions} from 'components/ConditionalRender';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
-import {useSubjects} from 'hooks/selectors';
+import {useDeleteSubject, useSubjects} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {SubjectInfo} from 'types/entities';
@@ -47,11 +47,17 @@ const SubjectCatalogPage: React.FC<SubjectCatalogPageProps> = (props) => {
 
   const canEdit = useCheckPermissions(Permission.SUBJECT_EDIT);
 
+  const onDelete = useDeleteSubject();
+
   const renderSubject: CatalogItemRenderer<SubjectInfo> = useCallback(
     (subject, {link, ...rest}) => {
       const {id, image_link, name, description} = subject;
 
       const editLink = `${link}edit/`;
+
+      const deleteCallback = (): void => {
+        onDelete(id);
+      };
 
       const action = canEdit ? (
         <DropdownMenu
@@ -61,7 +67,7 @@ const SubjectCatalogPage: React.FC<SubjectCatalogPageProps> = (props) => {
             <i className="icon-edit" />
             Изменить
           </DropdownMenuOption>
-          <DropdownMenuOption>
+          <DropdownMenuOption onClick={deleteCallback}>
             <i className="icon-close" />
             Удалить
           </DropdownMenuOption>

@@ -9,6 +9,7 @@ import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
 import {
   selectAdminCourses,
+  selectAdmins,
   selectAdminWebinars,
   selectHomeworks,
   selectLessons,
@@ -16,6 +17,7 @@ import {
   selectShopCourses,
   selectSubjects,
   selectTeacherCourses,
+  selectTeachers,
   selectTest,
   selectTestState,
   selectUpcomingWebinars,
@@ -44,6 +46,7 @@ import {
 } from '../store/actions';
 import {AppState} from '../store/reducers';
 import {
+  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   Credentials,
@@ -209,7 +212,7 @@ export type TeachersHookResult = {
 };
 
 export function useTeachers(): TeachersHookResult {
-  const {teachers} = useSelector(({dataReducer: {teachers}}) => ({teachers}));
+  const teachers = useSelector(selectTeachers);
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
     dispatch({type: ActionType.TEACHERS_FETCH});
@@ -239,6 +242,28 @@ export function useTeacher(teacherId: number): TeacherHookResult {
     error: teachers && !teacher ? true : error,
     reload,
   };
+}
+
+export type AdminsHookResult = {
+  admins?: AccountInfo[];
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useAdmins(): AdminsHookResult {
+  const admins = useSelector(selectAdmins);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.ADMINS_FETCH});
+  }, [dispatch]);
+  useEffect(() => {
+    if (!admins) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, admins]);
+  return admins instanceof Error
+    ? {error: admins, reload: dispatchFetchAction}
+    : {admins, reload: dispatchFetchAction};
 }
 
 export type ShopCatalogHookResult = {

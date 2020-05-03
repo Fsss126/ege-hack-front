@@ -21,6 +21,18 @@ export const selectTeacherCourses = (state: AppState) =>
 export const selectUserCourses = (state: AppState) =>
   selectDataReducer(state).userCourses;
 
+export const selectTeachers = (state: AppState) =>
+  selectDataReducer(state).teachers;
+
+export const selectAssistants = (state: AppState) =>
+  selectDataReducer(state).assistants;
+
+export const selectAdmins = (state: AppState) =>
+  selectDataReducer(state).admins;
+
+export const selectModerators = (state: AppState) =>
+  selectDataReducer(state).moderators;
+
 export const selectLessons = (state: AppState) =>
   selectDataReducer(state).lessons;
 

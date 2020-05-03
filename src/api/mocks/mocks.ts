@@ -10,6 +10,7 @@ import {
   TestStatusResp,
 } from 'types/dtos';
 import {
+  AccountInfo,
   AnswerType,
   CourseInfo,
   HomeworkInfo,
@@ -19,7 +20,6 @@ import {
   TeacherInfo,
   TestStatusInfo,
   UserCourseInfo,
-  UserInfo,
 } from 'types/entities';
 import {AccountRole, LearningStatus, Permission} from 'types/enums';
 
@@ -33,7 +33,7 @@ function getDate(daysForward: number) {
   return date;
 }
 
-export const ACCOUNT_INFO: UserInfo = {
+export const ACCOUNT_INFO: AccountInfo = {
   id: 154792439,
   roles: [AccountRole.PUPIL, AccountRole.TEACHER, AccountRole.ADMIN],
   permissions: [Permission.HOMEWORK_CHECK, Permission.SUBJECT_EDIT],

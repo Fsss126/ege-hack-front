@@ -41,7 +41,7 @@ const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
           text: 'Ок',
         },
         {
-          text: 'Вернуться к курсу',
+          text: 'Вернуться к предметам',
           url: returnLink,
         },
       ]);

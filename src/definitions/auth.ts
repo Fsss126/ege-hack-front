@@ -1,5 +1,5 @@
 import APIRequest from 'api';
-import {Credentials, UserInfo} from 'types/entities';
+import {AccountInfo, Credentials} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
 const LOCAL_STORAGE_KEY = 'ege-hack-user-data';
@@ -44,7 +44,7 @@ export type AuthLogoutCallback = SimpleCallback;
 
 class Auth {
   credentials!: Credentials | null;
-  userInfo?: UserInfo;
+  userInfo?: AccountInfo;
   eventHandlers: {
     [AuthEventTypes.login]?: AuthLoginCallback[];
     [AuthEventTypes.logout]?: AuthLogoutCallback[];

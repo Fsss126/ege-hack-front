@@ -59,7 +59,7 @@ export interface AccountDtoReq {
   teacher?: TeacherDtoReq;
 }
 
-export interface UserInfoDtoResp {
+export interface AccountDtoResp {
   id: number;
   email?: string;
   roles: AccountRole[];

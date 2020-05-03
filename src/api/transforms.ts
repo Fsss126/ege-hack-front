@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import {
   AccountDto,
+  AccountDtoResp,
   CorrectAnswerDto,
   CourseDtoResp,
   FileInfo,
@@ -12,10 +13,9 @@ import {
   TestStateAnswerDto,
   TestStateDtoResp,
   UserAnswerDtoResp,
-  UserInfoDtoResp,
 } from '../types/dtos';
 import {
-  AccountInfo,
+  CommonAccountInfo,
   CorrectAnswerInfo,
   CourseInfo,
   HomeworkInfo,
@@ -97,8 +97,8 @@ export const transformLesson = ({
 });
 
 export const transformUser = <
-  T extends AccountDto | UserInfoDtoResp,
-  R extends AccountInfo
+  T extends AccountDto | AccountDtoResp,
+  R extends CommonAccountInfo
 >(
   accountDto: T,
 ): R => {

@@ -1,5 +1,6 @@
 import {AxiosError} from 'axios';
 import {
+  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
@@ -12,7 +13,6 @@ import {
   TestStateInfo,
   TestStatePassedInfo,
   UserCourseInfo,
-  UserInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 
@@ -32,6 +32,12 @@ export enum ActionType {
   SUBJECTS_FETCHED = 'SUBJECTS_FETCHED',
   TEACHERS_FETCH = 'TEACHERS_FETCH',
   TEACHERS_FETCHED = 'TEACHERS_FETCHED',
+  ASSISTANTS_FETCH = 'ASSISTANTS_FETCH',
+  ASSISTANTS_FETCHED = 'ASSISTANTS_FETCHED',
+  ADMINS_FETCH = 'ADMINS_FETCH',
+  ADMINS_FETCHED = 'ADMINS_FETCHED',
+  MODERATORS_FETCH = 'MODERATORS_FETCH',
+  MODERATORS_FETCHED = 'MODERATORS_FETCHED',
   LESSONS_FETCH = 'LESSONS_FETCH',
   LESSONS_FETCHED = 'LESSONS_FETCHED',
   LESSONS_REVOKE = 'LESSONS_REVOKE',
@@ -99,7 +105,7 @@ export type UserInfoFetchAction = {type: ActionType.USER_INFO_FETCH};
 
 export type UserInfoFetchedAction = {
   type: ActionType.USER_INFO_FETCHED;
-  userInfo: UserInfo | AxiosError;
+  userInfo: AccountInfo | AxiosError;
 };
 
 export type ShopCoursesFetchAction = {type: ActionType.SHOP_COURSES_FETCH};
@@ -144,6 +150,27 @@ export type TeachersFetchAction = {type: ActionType.TEACHERS_FETCH};
 export type TeachersFetchedAction = {
   type: ActionType.TEACHERS_FETCHED;
   teachers: TeacherInfo[] | AxiosError;
+};
+
+export type AssistantsFetchAction = {type: ActionType.ASSISTANTS_FETCH};
+
+export type AssistantsFetchedAction = {
+  type: ActionType.ASSISTANTS_FETCHED;
+  assistants: AccountInfo[] | AxiosError;
+};
+
+export type AdminsFetchAction = {type: ActionType.ADMINS_FETCH};
+
+export type AdminsFetchedAction = {
+  type: ActionType.ADMINS_FETCHED;
+  admins: AccountInfo[] | AxiosError;
+};
+
+export type ModeratorsFetchAction = {type: ActionType.MODERATORS_FETCH};
+
+export type ModeratorsFetchedAction = {
+  type: ActionType.MODERATORS_FETCHED;
+  moderators: AccountInfo[] | AxiosError;
 };
 
 export type LessonsFetchAction = {
@@ -473,6 +500,12 @@ export type Action = {type: ActionType} & (
   | SubjectsFetchedAction
   | TeachersFetchAction
   | TeachersFetchedAction
+  | AssistantsFetchAction
+  | AssistantsFetchedAction
+  | AdminsFetchAction
+  | AdminsFetchedAction
+  | ModeratorsFetchAction
+  | ModeratorsFetchedAction
   | LessonsFetchAction
   | LessonsFetchedAction
   | CourseWebinarsFetchAction

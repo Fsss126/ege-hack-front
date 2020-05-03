@@ -1,6 +1,6 @@
 import {useUser} from 'hooks/selectors';
 import _ from 'lodash';
-import {UserInfo} from 'types/entities';
+import {AccountInfo} from 'types/entities';
 
 import {AccountRole, Permission} from '../types/enums';
 
@@ -9,7 +9,7 @@ export type RequiredPermissions = Permission | Permission[];
 export type RequiredRoles = AccountRole | AccountRole[];
 
 export function checkPermissions(
-  userInfo: UserInfo,
+  userInfo: AccountInfo,
   requiredPermissions?: RequiredPermissions,
   requiredRoles?: RequiredRoles,
   fullMatch = true,

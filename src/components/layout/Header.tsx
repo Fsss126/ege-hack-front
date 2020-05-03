@@ -2,7 +2,7 @@ import Auth from 'definitions/auth';
 import logo from 'img/logo.svg';
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {Credentials, UserInfo} from 'types/entities';
+import {AccountInfo, Credentials} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
 import CoverImage from '../common/CoverImage';
@@ -11,7 +11,7 @@ import DropdownMenu, {DropdownMenuOption} from '../common/DropdownMenu';
 export type HeaderProps = {
   onMenuButtonClick: SimpleCallback;
   user: Credentials | null;
-  userInfo?: UserInfo;
+  userInfo?: AccountInfo;
   sidebar: boolean;
   showUserNav: boolean;
 };

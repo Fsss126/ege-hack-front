@@ -3,6 +3,7 @@ import Auth from 'definitions/auth';
 import _ from 'lodash';
 import {Reducer} from 'redux';
 import {
+  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   Credentials,
@@ -12,7 +13,6 @@ import {
   SubjectInfo,
   TeacherInfo,
   UserCourseInfo,
-  UserInfo,
   WebinarInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
@@ -21,11 +21,14 @@ import {Action, ActionType} from '../actions';
 
 export interface DataState {
   credentials: Credentials | null | AxiosError;
-  userInfo?: UserInfo | AxiosError;
+  userInfo?: AccountInfo | AxiosError;
   shopCourses?: CourseInfo[] | AxiosError;
   userCourses?: UserCourseInfo[] | AxiosError;
   subjects?: SubjectInfo[] | AxiosError;
   teachers?: TeacherInfo[] | AxiosError;
+  assistants?: AccountInfo[] | AxiosError;
+  moderators?: AccountInfo[] | AxiosError;
+  admins?: AccountInfo[] | AxiosError;
   lessons: {[courseId: number]: LessonInfo[] | AxiosError};
   webinars: {
     [courseId: number]: PersonWebinar[] | AxiosError;
@@ -45,6 +48,9 @@ const defaultState: DataState = {
   userCourses: undefined,
   subjects: undefined,
   teachers: undefined,
+  assistants: undefined,
+  admins: undefined,
+  moderators: undefined,
   lessons: {},
   webinars: {},
   participants: {},
@@ -112,6 +118,30 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         teachers,
+      };
+    }
+    case ActionType.ASSISTANTS_FETCHED: {
+      const {assistants} = action;
+
+      return {
+        ...state,
+        assistants,
+      };
+    }
+    case ActionType.ADMINS_FETCHED: {
+      const {admins} = action;
+
+      return {
+        ...state,
+        admins,
+      };
+    }
+    case ActionType.MODERATORS_FETCHED: {
+      const {moderators} = action;
+
+      return {
+        ...state,
+        moderators,
       };
     }
     case ActionType.LESSONS_FETCHED: {

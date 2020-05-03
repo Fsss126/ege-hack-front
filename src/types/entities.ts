@@ -1,4 +1,5 @@
 import {
+  AccountDtoResp,
   AnswerType,
   CorrectAnswerDto,
   CourseDtoResp,
@@ -18,7 +19,6 @@ import {
   TestStatus,
   TestStatusResp,
   ThemeDtoResp,
-  UserInfoDtoResp,
   VkUserDto,
   WebinarDtoResp,
   WebinarScheduleDtoResp,
@@ -41,7 +41,7 @@ export interface ContactInfo {
   ok?: string;
 }
 
-export interface AccountInfo {
+export interface CommonAccountInfo {
   id: number;
   vk_info: VkUserInfo;
   contacts: ContactInfo;
@@ -49,15 +49,15 @@ export interface AccountInfo {
 
 export interface PupilInfo
   extends Omit<PupilDtoResp, 'account_id' | 'vk_info'>,
-    AccountInfo {}
+    CommonAccountInfo {}
 
 export interface TeacherInfo
   extends Omit<TeacherDtoResp, 'account_id' | 'vk_info'>,
-    AccountInfo {}
+    CommonAccountInfo {}
 
-export interface UserInfo
-  extends Omit<UserInfoDtoResp, 'vk_info'>,
-    AccountInfo {}
+export interface AccountInfo
+  extends Omit<AccountDtoResp, 'vk_info'>,
+    CommonAccountInfo {}
 
 export interface CourseInfo
   extends Omit<CourseDtoResp, 'date_start' | 'date_end' | 'teacher_id'> {
@@ -75,7 +75,7 @@ export interface CourseParticipantInfo
       CourseParticipantDto,
       'account_id' | 'vk_info' | 'join_date_time'
     >,
-    AccountInfo {
+    CommonAccountInfo {
   join_date_time: Date;
 }
 
