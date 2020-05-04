@@ -19,6 +19,8 @@ import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithPath, SubjectPageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../layout/ContentBlock';
+
 const filterBy = {
   search: true,
   subject: false,
@@ -95,7 +97,7 @@ const SubjectCatalogPage: React.FC<SubjectCatalogPageProps> = (props) => {
         />
       );
     },
-    [canEdit],
+    [canEdit, onDelete],
   );
   const isLoaded = !!subjects;
 
@@ -114,7 +116,7 @@ const SubjectCatalogPage: React.FC<SubjectCatalogPageProps> = (props) => {
           <Catalog.Body items={subjects} filter={filter}>
             {header}
             {canEdit && (
-              <div className="layout__content-block layout__content-block--stacked d-flex">
+              <ContentBlock stacked className="d-flex">
                 <Button
                   neutral
                   component={Link}
@@ -123,7 +125,7 @@ const SubjectCatalogPage: React.FC<SubjectCatalogPageProps> = (props) => {
                 >
                   Добавить предмет
                 </Button>
-              </div>
+              </ContentBlock>
             )}
             <Catalog.Filter filterBy={filterBy} />
             <Catalog.Catalog

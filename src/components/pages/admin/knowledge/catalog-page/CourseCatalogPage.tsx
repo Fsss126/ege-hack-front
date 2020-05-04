@@ -15,6 +15,8 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
+import {ContentBlock} from '../../../../layout/ContentBlock';
+
 const filterBy = {
   search: true,
   subject: true,
@@ -108,7 +110,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
           >
             {header}
             {canEdit && (
-              <div className="layout__content-block layout__content-block--stacked d-flex">
+              <ContentBlock stacked className="d-flex">
                 <Button
                   neutral
                   component={Link}
@@ -117,7 +119,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
                 >
                   Добавить курс
                 </Button>
-              </div>
+              </ContentBlock>
             )}
             <CourseCatalog.Filter filterBy={filterBy} />
             <CourseCatalog.Catalog plain renderCourse={renderCourse} />

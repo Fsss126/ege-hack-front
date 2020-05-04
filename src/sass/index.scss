@@ -1462,6 +1462,10 @@ header {
 
   .tab-nav-container {
     padding-bottom: 0;
+
+    .content-block__title {
+      margin-bottom: 0;
+    }
   }
 
   .title-with-menu {

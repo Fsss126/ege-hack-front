@@ -8,6 +8,7 @@ import {WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../../layout/ContentBlock';
 import WebinarsForm from './WebinarsForm';
 
 const WebinarsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
@@ -68,7 +69,7 @@ const WebinarsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     >
       {isLoaded && (
         <PageContent>
-          <div className="layout__content-block">
+          <ContentBlock>
             <WebinarsForm
               webinars={webinars as WebinarScheduleInfo}
               title={title}
@@ -78,7 +79,7 @@ const WebinarsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
               createRequest={createRequest}
               onSubmitted={onSubmitted}
             />
-          </div>
+          </ContentBlock>
         </PageContent>
       )}
     </Page>

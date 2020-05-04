@@ -68,7 +68,6 @@ const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
   }, [opened, onInputChange, userInfo, email]);
 
   const onSubmit = React.useCallback(() => {
-    console.log('submit', email);
     localStorage.setItem(LOCAL_STORAGE_KEY, email);
     return createLinkRequest(getRequestData(email, selectedCourses));
   }, [email, getRequestData, selectedCourses]);

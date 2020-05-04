@@ -9,6 +9,7 @@ import {RouteComponentProps} from 'react-router';
 import {LessonInfo} from 'types/entities';
 import {LessonPageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../layout/ContentBlock';
 import LessonView from './LessonView';
 
 const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
@@ -75,11 +76,14 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
           location={location}
         >
           <PageContent parentSection={{name: course.name}}>
-            <div className="layout__content-block layout__content-block--transparent">
+            <ContentBlock transparent>
               <div className="container p-lg-0">
                 <div className="row align-items-start">
                   <LessonView lesson={selectedLesson} homework={homework} />
-                  <div className="col-12 col-xl-auto layout__content-block layout__content-block--transparent lesson-page__other-lessons">
+                  <ContentBlock
+                    transparent
+                    className="col-12 col-xl-auto lesson-page__other-lessons"
+                  >
                     {nextVideo && <h3>Следующее занятие</h3>}
                     {nextVideo && (
                       <List renderItem={renderLesson}>{[nextVideo]}</List>
@@ -90,10 +94,10 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
                         <List renderItem={renderLesson}>{otherLessons}</List>
                       </React.Fragment>
                     )}
-                  </div>
+                  </ContentBlock>
                 </div>
               </div>
-            </div>
+            </ContentBlock>
           </PageContent>
         </Page>
       );

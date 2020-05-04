@@ -23,6 +23,8 @@ import {CourseInfo, WebinarInfo, WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../../layout/ContentBlock';
+
 const filterBy = {
   search: true,
   subject: false,
@@ -182,7 +184,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
           <PageContent parentSection={parentSection}>
             {header}
             {canEdit && (
-              <div className="layout__content-block layout__content-block--stacked d-flex">
+              <ContentBlock stacked className="d-flex">
                 <Button
                   neutral
                   component={Link}
@@ -191,7 +193,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
                 >
                   Добавить вебинар
                 </Button>
-              </div>
+              </ContentBlock>
             )}
             <Catalog.Filter filterBy={filterBy} />
             <Catalog.Catalog

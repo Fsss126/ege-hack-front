@@ -1,6 +1,7 @@
 import React from 'react';
 import {ContactInfo, VkUserInfo} from 'types/entities';
 
+import {ContentBlock} from '../layout/ContentBlock';
 import Contacts from './Contacts';
 import CoverImage from './CoverImage';
 
@@ -29,7 +30,7 @@ const UserProfile: React.FC<UserProfileProps> = (props) => {
           />
         </div>
       </div>
-      <div className="user-profile__info layout__content-block">
+      <ContentBlock className="user-profile__info">
         <div className="d-flex flex-column align-items-center">
           {fullName ? (
             <h2>{fullName}</h2>
@@ -44,7 +45,7 @@ const UserProfile: React.FC<UserProfileProps> = (props) => {
             {about}
           </div>
         </div>
-      </div>
+      </ContentBlock>
     </React.Fragment>
   );
 };

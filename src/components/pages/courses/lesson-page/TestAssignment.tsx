@@ -90,7 +90,10 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
             )}
           </div>
           <div className="col-auto">
-            <Button after={<LoadingIndicator state={state} />} onClick={onClick}>
+            <Button
+              after={<LoadingIndicator state={state} />}
+              onClick={onClick}
+            >
               {isStarted ? 'Продолжить' : 'Начать тест'}
             </Button>
           </div>

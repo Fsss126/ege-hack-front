@@ -1,4 +1,4 @@
-import TabNav, {TabNavLink} from 'components/common/TabNav';
+import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {Redirect, Route, Switch} from 'react-router-dom';
@@ -11,15 +11,14 @@ export type CoursesPageProps = RouteComponentProps & {
 const CoursesPage: React.FC<CoursesPageProps> = (props) => {
   const {path} = props;
   const header = (
-    <div className="layout__content-block tab-nav-container">
-      <h2>Курсы</h2>
+    <TabNavBlock title="Курсы">
       <TabNav>
         <TabNavLink to={`${path}/list/`}>Список</TabNavLink>
         <TabNavLink to={`${path}/calendar/`} disabled>
           Календарь
         </TabNavLink>
       </TabNav>
-    </div>
+    </TabNavBlock>
   );
 
   return (

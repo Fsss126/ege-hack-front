@@ -17,6 +17,8 @@ import {CourseInfo, CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
 
+import {ContentBlock} from '../../../../../layout/ContentBlock';
+
 export type ParticipantsPageProps = RouteComponentPropsWithPath<
   CoursePageParams
 > & {
@@ -43,7 +45,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
 
   const canEdit = useCheckPermissions(Permission.PARTICIPANT_MANAGEMENT);
 
-  const courseLink = `${path}/${courseId}`;
+  const courseLink = `/admin/courses/${courseId}`;
 
   const onDelete = useDeleteParticipant();
 
@@ -115,7 +117,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
           <PageContent parentSection={parentSection}>
             {header}
             {canEdit && (
-              <div className="layout__content-block layout__content-block--stacked d-flex">
+              <ContentBlock className="d-flex">
                 <Button
                   neutral
                   component={Link}
@@ -124,7 +126,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
                 >
                   Добавить учеников
                 </Button>
-              </div>
+              </ContentBlock>
             )}
             <AccountCatalog.Filter />
             <AccountCatalog.Catalog

@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 
+import {ContentBlock, ContentBlockProps} from '../layout/ContentBlock';
 import {NavLink, NavLinkProps} from '../ui/Link';
 import ScrollContainer, {ScrollContainerProps} from './ScrollContainer';
 
@@ -24,6 +25,19 @@ const TabNav: React.FC<ScrollContainerProps> = (props) => {
 
   return (
     <ScrollContainer className={classNames('tab-nav', className)} {...rest} />
+  );
+};
+
+export const TabNavBlock: React.FC<ContentBlockProps> = (props) => {
+  const {className} = props;
+
+  return (
+    <ContentBlock
+      {...props}
+      titleInside
+      titleBig
+      className={classNames('tab-nav-container', className)}
+    />
   );
 };
 

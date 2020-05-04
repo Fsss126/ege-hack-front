@@ -6,6 +6,7 @@ import {SubjectDtoReq} from 'types/dtos';
 import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
+import {ContentBlock} from '../../../../layout/ContentBlock';
 import SubjectForm from './SubjectForm';
 
 const createRequest = (requestData: SubjectDtoReq): Promise<SubjectInfo> =>
@@ -41,7 +42,7 @@ const SubjectCreatingPage: React.FC<RouteComponentProps> = (props) => {
       location={location}
     >
       <PageContent>
-        <div className="layout__content-block">
+        <ContentBlock>
           <SubjectForm
             title="Новый предмет"
             errorMessage="Ошибка при создании предмета"
@@ -49,7 +50,7 @@ const SubjectCreatingPage: React.FC<RouteComponentProps> = (props) => {
             createRequest={createRequest}
             onSubmitted={onSubmitted}
           />
-        </div>
+        </ContentBlock>
       </PageContent>
     </Page>
   );

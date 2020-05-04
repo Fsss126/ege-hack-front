@@ -1,11 +1,13 @@
-import TabNav, {TabNavLink} from 'components/common/TabNav';
+import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {useHomeworks, useLesson, useTeacherCourse} from 'hooks/selectors';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
 
+import {ContentBlock} from '../../../layout/ContentBlock';
 import AssignmentPage from './AssignmentPage';
 import HomeworksPage from './HomeworksPage';
+import TestPage from './TestPage';
 
 const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
   props,
@@ -31,8 +33,7 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
   const isLoaded = !!(lesson && homeworks && courseId);
 
   const header = isLoaded && lesson && (
-    <div className="layout__content-block tab-nav-container">
-      <h2>{lesson.name}</h2>
+    <TabNavBlock title={lesson.name}>
       <TabNav>
         <TabNavLink to={`${match.url}/homeworks/`}>
           Работы{' '}
@@ -43,8 +44,9 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
           )}
         </TabNavLink>
         <TabNavLink to={`${match.url}/assignment/`}>Задание</TabNavLink>
+        {lesson.test && <TabNavLink to={`${match.url}/test/`}>Тест</TabNavLink>}
       </TabNav>
-    </div>
+    </TabNavBlock>
   );
 
   const parentSection = course
@@ -83,6 +85,20 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
           >
             {header}
           </AssignmentPage>
+        )}
+      />
+      <Route
+        path={`${match.path}/test`}
+        render={(props) => (
+          <TestPage
+            lesson={lesson}
+            isLoaded={isLoaded}
+            path={root}
+            parentSection={parentSection}
+            {...props}
+          >
+            {header}
+          </TestPage>
         )}
       />
       <Route

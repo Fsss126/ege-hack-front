@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import List, {ListItemRenderer} from 'components/common/List';
 import ListItem from 'components/common/ListItem';
 import Page, {PageContent} from 'components/layout/Page';
@@ -9,6 +8,7 @@ import {TestStatus} from 'types/dtos';
 import {TestStatePassedAnswerInfo} from 'types/entities';
 import {RouteComponentPropsWithPath, TestPageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../layout/ContentBlock';
 import {CorrectBadge, IncorrectBadge} from '../task-page/Results';
 import {ResultBar} from './ResultBar';
 
@@ -90,7 +90,7 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
         <PageContent
           parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
         >
-          <div className="layout__content-block">
+          <ContentBlock>
             <h2 className="test__test-title">{name}</h2>
             <h3 className="test-passage">
               {passed ? 'Тест пройден' : 'Тест не пройден'}
@@ -102,7 +102,7 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
             <List renderItem={renderAnswer} plain className="test-results">
               {answersList}
             </List>
-          </div>
+          </ContentBlock>
         </PageContent>
       </Page>
     );

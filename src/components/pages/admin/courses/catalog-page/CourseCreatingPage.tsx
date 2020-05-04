@@ -7,6 +7,7 @@ import {CourseDtoReq} from 'types/dtos';
 import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
+import {ContentBlock} from '../../../../layout/ContentBlock';
 import CourseForm from './CourseForm';
 
 const createRequest = (requestData: CourseDtoReq): Promise<CourseInfo> =>
@@ -55,7 +56,7 @@ const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
     >
       {isLoaded && (
         <PageContent>
-          <div className="layout__content-block">
+          <ContentBlock>
             <CourseForm
               subjects={subjects as SubjectInfo[]}
               teachers={teachers as TeacherInfo[]}
@@ -65,7 +66,7 @@ const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
               createRequest={createRequest}
               onSubmitted={onSubmitted}
             />
-          </div>
+          </ContentBlock>
         </PageContent>
       )}
     </Page>

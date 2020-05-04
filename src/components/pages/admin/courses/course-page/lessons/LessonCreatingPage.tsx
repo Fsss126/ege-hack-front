@@ -7,6 +7,7 @@ import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../../layout/ContentBlock';
 import LessonForm from './LessonForm';
 
 const createRequest = (requestData: LessonDtoReq): Promise<LessonInfo> =>
@@ -52,7 +53,7 @@ const LessonCreatingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     >
       {isLoaded && (
         <PageContent>
-          <div className="layout__content-block">
+          <ContentBlock>
             <LessonForm
               title="Новый урок"
               errorMessage="Ошибка при создании урока"
@@ -61,7 +62,7 @@ const LessonCreatingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
               createRequest={createRequest}
               onSubmitted={onSubmitted}
             />
-          </div>
+          </ContentBlock>
         </PageContent>
       )}
     </Page>

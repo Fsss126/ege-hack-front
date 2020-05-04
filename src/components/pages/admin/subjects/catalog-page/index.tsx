@@ -1,6 +1,7 @@
 import React from 'react';
 import {RouteComponentPropsWithPath, SubjectPageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../layout/ContentBlock';
 import SubjectCatalogPage from './SubjectCatalogPage';
 
 const CoursesPage: React.FC<RouteComponentPropsWithPath<SubjectPageParams>> = (
@@ -10,9 +11,9 @@ const CoursesPage: React.FC<RouteComponentPropsWithPath<SubjectPageParams>> = (
     match: {path},
   } = props;
   const header = (
-    <div className="layout__content-block">
+    <ContentBlock>
       <h2>Предметы</h2>
-    </div>
+    </ContentBlock>
   );
 
   return (

@@ -7,6 +7,7 @@ import {SubjectDtoReq} from 'types/dtos';
 import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
+import {ContentBlock} from '../../../../layout/ContentBlock';
 import SubjectForm from './SubjectForm';
 
 const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
@@ -61,7 +62,7 @@ const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
     >
       {isLoaded && (
         <PageContent>
-          <div className="layout__content-block">
+          <ContentBlock>
             <SubjectForm
               subject={subject}
               title="Изменение предмета"
@@ -70,7 +71,7 @@ const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
               createRequest={createRequest}
               onSubmitted={onSubmitted}
             />
-          </div>
+          </ContentBlock>
         </PageContent>
       )}
     </Page>

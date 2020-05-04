@@ -21,6 +21,8 @@ import {CourseInfo, LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../../layout/ContentBlock';
+
 const filterBy = {
   search: true,
   subject: false,
@@ -73,12 +75,12 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
 
   const onDelete = useDeleteLesson();
 
-  const courseLink = `${path}/${courseId}`;
+  const courseLink = `/admin/courses/${courseId}`;
 
   const renderLesson: CatalogItemRenderer<LessonInfo> = useCallback(
     (lesson, {link, ...rest}, index) => {
       const {id, course_id} = lesson;
-      const lessonLink = `${courseLink}/${link}`;
+      const lessonLink = `${path}/${course_id}/${link}`;
 
       const deleteCallback = (): void => {
         onDelete(course_id, id);
@@ -107,7 +109,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
         index,
       );
     },
-    [courseLink, render, canEdit, onDelete],
+    [path, render, canEdit, onDelete],
   );
   const title = course && `Уроки курса ${course.name}`;
 
@@ -125,7 +127,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
           <PageContent parentSection={parentSection}>
             {header}
             {canEdit && (
-              <div className="layout__content-block layout__content-block--stacked d-flex">
+              <ContentBlock stacked className="d-flex">
                 <Button
                   neutral
                   component={Link}
@@ -134,7 +136,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
                 >
                   Добавить урок
                 </Button>
-              </div>
+              </ContentBlock>
             )}
             <Catalog.Filter filterBy={filterBy} />
             <Catalog.Catalog

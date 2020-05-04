@@ -8,6 +8,7 @@ import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../layout/ContentBlock';
 import CourseForm from './CourseForm';
 
 const CourseEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
@@ -72,7 +73,7 @@ const CourseEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     >
       {isLoaded && (
         <PageContent>
-          <div className="layout__content-block">
+          <ContentBlock>
             <CourseForm
               course={course as CourseInfo}
               subjects={subjects as SubjectInfo[]}
@@ -83,7 +84,7 @@ const CourseEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
               createRequest={createRequest}
               onSubmitted={onSubmitted}
             />
-          </div>
+          </ContentBlock>
         </PageContent>
       )}
     </Page>

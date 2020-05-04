@@ -45,7 +45,7 @@ const Description: React.FC = () => {
   return (
     <React.Fragment>
       <CoverImage src={course.image_link} className="course-overview__cover" />
-      <div className="course-overview__info layout__content-block">
+      <ContentBlock className="course-overview__info">
         <div className="title-with-menu">
           <div className="title-with-menu__action">
             <ConditionalRenderer requiredRoles={ADMIN_ROLES} fullMatch={false}>
@@ -106,7 +106,7 @@ const Description: React.FC = () => {
           {/*    )}*/}
         </div>
         <div className="description-block font-size-sm">{description}</div>
-      </div>
+      </ContentBlock>
     </React.Fragment>
   );
 };
@@ -115,12 +115,12 @@ const Title: React.FC = () => {
   const {course} = React.useContext(CourseOverviewContext);
 
   return (
-    <div className="course-overview__title layout__content-block layout__content-block--transparent">
+    <ContentBlock className="course-overview__title" transparent>
       <h2>{course.name}</h2>
       <PageLink className="course-overview__link" to={`/shop/${course.id}`}>
         Страница курса
       </PageLink>
-    </div>
+    </ContentBlock>
   );
 };
 

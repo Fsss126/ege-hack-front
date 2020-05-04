@@ -95,7 +95,6 @@ const SubjectForm: React.FC<SubjectFormProps> = (props) => {
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<SubjectInfo>>
   >(() => {
-    console.log('submit', formData);
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 

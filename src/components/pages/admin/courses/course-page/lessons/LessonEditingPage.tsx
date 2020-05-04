@@ -8,6 +8,7 @@ import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {LessonPageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../../layout/ContentBlock';
 import LessonForm from './LessonForm';
 
 const LessonEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
@@ -61,7 +62,7 @@ const LessonEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
     >
       {isLoaded && (
         <PageContent>
-          <div className="layout__content-block">
+          <ContentBlock>
             <LessonForm
               lesson={lesson}
               title="Изменение урока"
@@ -71,7 +72,7 @@ const LessonEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
               createRequest={createRequest}
               onSubmitted={onSubmitted}
             />
-          </div>
+          </ContentBlock>
         </PageContent>
       )}
     </Page>

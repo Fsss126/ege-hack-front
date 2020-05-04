@@ -9,6 +9,7 @@ import {CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
+import {ContentBlock} from '../../../../../layout/ContentBlock';
 import AccountsForm from '../../../users/AccountsForm';
 
 function getRequestData(accounts: string[]): AddParticipantsReq {
@@ -56,7 +57,7 @@ const ParticipantsEditingPage: React.FC<RouteComponentProps<
     >
       {isLoaded && (
         <PageContent>
-          <div className="layout__content-block">
+          <ContentBlock>
             <AccountsForm<AddParticipantsReq, CourseParticipantInfo>
               title="Добавление учеников"
               revokeRelatedData={revokeParticipants}
@@ -68,7 +69,7 @@ const ParticipantsEditingPage: React.FC<RouteComponentProps<
               returnMessage="Вернуться к курсу"
               errorMessage="Ошибка при добавлении учеников"
             />
-          </div>
+          </ContentBlock>
         </PageContent>
       )}
     </Page>

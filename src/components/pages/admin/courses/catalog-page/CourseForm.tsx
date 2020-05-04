@@ -189,7 +189,6 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<CourseInfo>>
   >(() => {
-    console.log('submit', formData);
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 

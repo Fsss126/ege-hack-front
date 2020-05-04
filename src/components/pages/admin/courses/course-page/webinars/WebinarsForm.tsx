@@ -142,7 +142,6 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<WebinarScheduleInfo>>
   >(() => {
-    console.log('submit', formData);
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 

@@ -15,6 +15,8 @@ import {Link} from 'react-router-dom';
 import {AccountInfo} from 'types/entities';
 import {AccountRole, Permission} from 'types/enums';
 
+import {ContentBlock} from '../../../layout/ContentBlock';
+
 type UsersGroupPageProps = RouteComponentProps & {
   role: AccountRole;
   accounts?: AccountInfo[];
@@ -88,7 +90,7 @@ const UsersGroupPage: React.FC<UsersGroupPageProps> = (props) => {
           <PageContent>
             {header}
             {canEdit && (
-              <div className="layout__content-block layout__content-block--stacked d-flex">
+              <ContentBlock stacked className="d-flex">
                 <Button
                   neutral
                   component={Link}
@@ -97,7 +99,7 @@ const UsersGroupPage: React.FC<UsersGroupPageProps> = (props) => {
                 >
                   {addButtonText}
                 </Button>
-              </div>
+              </ContentBlock>
             )}
             <AccountCatalog.Filter />
             <AccountCatalog.Catalog

@@ -1,4 +1,4 @@
-import TabNav, {TabNavLink} from 'components/common/TabNav';
+import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import {useAccounts} from 'hooks/selectors';
 import React from 'react';
@@ -35,13 +35,8 @@ const UsersPage: React.FC<RouteComponentProps> = (props) => {
 
   const isLoaded = !!(teachers && assistants && admins && moderators);
 
-  const canEdit = useCheckPermissions(Permission.PARTICIPANT_MANAGEMENT);
-
   const header = !!(teachers && assistants && admins && moderators) && (
-    <div className="layout__content-block tab-nav-container">
-      <div className="title-with-menu">
-        <h2>Пользователи</h2>
-      </div>
+    <TabNavBlock title="Пользователи">
       <TabNav>
         <TabNavLink to={`${match.url}/teachers/`}>
           Учителя <span className="badge">{teachers.length}</span>
@@ -56,7 +51,7 @@ const UsersPage: React.FC<RouteComponentProps> = (props) => {
           Модераторы <span className="badge">{moderators.length}</span>
         </TabNavLink>
       </TabNav>
-    </div>
+    </TabNavBlock>
   );
 
   return (

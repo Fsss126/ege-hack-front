@@ -6,6 +6,8 @@ import {DiscountHookResult} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
 
+import {ContentBlock} from '../../../layout/ContentBlock';
+
 interface CoursePriceProps extends Omit<DiscountHookResult, 'isLoading'> {
   isSelected: boolean;
   onSelect: (course: CourseInfo) => void;
@@ -34,15 +36,11 @@ const CoursePrice: React.FC<CoursePriceProps> = (props) => {
   }, [callback, course]);
 
   return (
-    <div
-      className={classNames(
-        'layout__content-block',
-        'layout__content-block--stacked',
-        'course-overview__offer',
-        {
-          'course-overview__offer--selected': isSelected,
-        },
-      )}
+    <ContentBlock
+      stacked
+      className={classNames('course-overview__offer', {
+        'course-overview__offer--selected': isSelected,
+      })}
     >
       <div className="row justify-content-end align-items-center">
         {purchased ? (
@@ -73,7 +71,7 @@ const CoursePrice: React.FC<CoursePriceProps> = (props) => {
           </div>
         )}
       </div>
-    </div>
+    </ContentBlock>
   );
 };
 

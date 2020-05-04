@@ -5,6 +5,7 @@ import {File} from 'components/ui/input';
 import React from 'react';
 import {HomeworkInfo, LessonInfo} from 'types/entities';
 
+import {ContentBlock} from '../../../layout/ContentBlock';
 import HomeworkLoader from './HomeworkLoader';
 import {TestAssignment} from './TestAssignment';
 
@@ -29,7 +30,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
   } = props;
 
   return (
-    <div className="col-12 col-xl layout__content-block lesson-page__current-lesson">
+    <ContentBlock className="col-12 col-xl lesson-page__current-lesson">
       <div className="block-container video-container">
         <VideoPlayer video_link={video} />
       </div>
@@ -91,7 +92,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
           <TestAssignment courseId={course_id} lessonId={id} test={test} />
         </div>
       )}
-    </div>
+    </ContentBlock>
   );
 };
 

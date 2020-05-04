@@ -5,7 +5,7 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import Lesson from 'components/common/Lesson';
-import TabNav, {TabNavLink} from 'components/common/TabNav';
+import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import {
   useAdminLessons,
@@ -83,7 +83,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
 
   const courseLink = `${match.url}/`;
   const header = isLoaded && course && (
-    <div className="layout__content-block tab-nav-container">
+    <TabNavBlock>
       <div className="title-with-menu">
         <div className="title-with-menu__action">
           {canEditCourse && (
@@ -132,7 +132,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
           Календарь
         </TabNavLink>
       </TabNav>
-    </div>
+    </TabNavBlock>
   );
   const parentSection = {
     name: 'Курсы',

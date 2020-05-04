@@ -76,7 +76,7 @@ const HomeworksPage: React.FC<HomeworksPageProps> = (props) => {
         <Catalog.Body items={homeworks} filter={filter}>
           <PageContent parentSection={parentSection}>
             {header}
-            <Catalog.Filter filterBy={filterBy} />
+            <Catalog.Filter filterBy={filterBy} stacked />
             <Catalog.Catalog
               className="users-list"
               emptyPlaceholder="Нет загруженных работ"
