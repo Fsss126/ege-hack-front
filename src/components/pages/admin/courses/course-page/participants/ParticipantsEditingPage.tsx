@@ -1,6 +1,6 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
-import Page, {PageContent} from 'components/layout/Page';
+import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import {RevokeRelatedDataCallback} from 'components/ui/Form';
 import {useRevokeParticipants} from 'hooks/selectors';
 import React, {useCallback} from 'react';

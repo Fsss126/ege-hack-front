@@ -1,6 +1,6 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
-import Page, {PageContent} from 'components/layout/Page';
+import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {SubjectDtoReq} from 'types/dtos';
@@ -12,7 +12,12 @@ import SubjectForm from './SubjectForm';
 const createRequest = (requestData: SubjectDtoReq): Promise<SubjectInfo> =>
   APIRequest.post('/subjects', requestData) as Promise<SubjectInfo>;
 
-const returnLink = '/admin/';
+const returnLink = `..`;
+
+const parentSection: PageParentSection = {
+  name: 'Предметы',
+  url: returnLink,
+};
 
 const SubjectCreatingPage: React.FC<RouteComponentProps> = (props) => {
   const {location} = props;
@@ -41,7 +46,7 @@ const SubjectCreatingPage: React.FC<RouteComponentProps> = (props) => {
       title="Создание предмета"
       location={location}
     >
-      <PageContent>
+      <PageContent parentSection={parentSection}>
         <ContentBlock>
           <SubjectForm
             title="Новый предмет"

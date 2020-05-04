@@ -1,6 +1,6 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
-import Page, {PageContent} from 'components/layout/Page';
+import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import {useSubject} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
@@ -9,6 +9,13 @@ import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
 import SubjectForm from './SubjectForm';
+
+const returnLink = `..`;
+
+const parentSection: PageParentSection = {
+  name: 'Предметы',
+  url: returnLink,
+};
 
 const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
   props,
@@ -32,8 +39,6 @@ const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
     error: errorLoadingSubject,
     reload: reloadSubject,
   } = useSubject(subjectId);
-
-  const returnLink = `/admin/subjects/`;
 
   const onSubmitted = useCallback(
     (response, showSuccessMessage) => {
@@ -61,7 +66,7 @@ const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
       location={location}
     >
       {isLoaded && (
-        <PageContent>
+        <PageContent parentSection={parentSection}>
           <ContentBlock>
             <SubjectForm
               subject={subject}

@@ -51,6 +51,10 @@ class Auth {
   } = {};
 
   constructor() {
+    if (!VK) {
+      return;
+    }
+    VK.init({apiId: VK_APP_ID});
     let credentials;
     try {
       credentials = getCredentialsFromStorage();
@@ -77,7 +81,7 @@ class Auth {
     // window.VK.Auth.login(this.onLogin, 4194304);
   };
 
-  logout = (): void => {
+  onLogout = (): void => {
     console.info('Logout');
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     this.credentials = null;
@@ -85,6 +89,12 @@ class Auth {
     for (const handler of this.eventHandlers[AuthEventTypes.logout] || []) {
       handler();
     }
+  };
+
+  logout = (): void => {
+    VK.Auth.getLoginStatus(() => {
+      VK.Auth.logout(this.onLogout);
+    });
   };
 
   onLogin = async (code: string, redirectUrl: string): Promise<void> => {

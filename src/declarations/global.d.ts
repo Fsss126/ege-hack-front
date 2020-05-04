@@ -11,9 +11,10 @@ declare global {
     declare type Dictionary<T> = { [key: string]: T }
 
     declare interface Window {
-        VK: any;
         APIRequest: AxiosInstance;
     }
+
+    declare const VK: any;
 
     declare namespace NodeJS {
         export interface ProcessEnv {

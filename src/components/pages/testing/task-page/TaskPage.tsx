@@ -1,9 +1,10 @@
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState, useTestTask} from 'hooks/selectors';
-import React, {useCallback} from 'react';
+import React from 'react';
 import {RouteComponentPropsWithPath, TestTaskPageParams} from 'types/routes';
 
+import {TestStatus} from '../../../../types/dtos';
 import {TaskPageContent} from './TaskPageContent';
 
 export const TaskPage: React.FC<RouteComponentPropsWithPath<
@@ -37,6 +38,9 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
   if (test && task && state) {
     const {name} = test;
     const {order} = task;
+    const {status} = state;
+
+    const isCompleted = status === TestStatus.COMPLETED;
 
     return (
       <Page
@@ -46,7 +50,11 @@ export const TaskPage: React.FC<RouteComponentPropsWithPath<
         location={location}
       >
         <PageContent
-          parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
+          parentSection={
+            isCompleted
+              ? {name: 'Вернуться к результатам', url: '../results/'}
+              : {name: 'Вернуться к уроку', url: '../../../'}
+          }
         >
           <TaskPageContent
             key={location.pathname}
