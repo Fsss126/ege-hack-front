@@ -1,3 +1,4 @@
+import {AccountRole} from '../types/enums';
 import {AppState} from './reducers';
 
 export const selectDataReducer = (state: AppState) => state.dataReducer;
@@ -24,17 +25,7 @@ export const selectUserCourses = (state: AppState) =>
 export const selectUserTeachers = (state: AppState) =>
   selectDataReducer(state).userTeachers;
 
-export const selectTeachers = (state: AppState) =>
-  selectDataReducer(state).teachers;
-
-export const selectAssistants = (state: AppState) =>
-  selectDataReducer(state).assistants;
-
-export const selectAdmins = (state: AppState) =>
-  selectDataReducer(state).admins;
-
-export const selectModerators = (state: AppState) =>
-  selectDataReducer(state).moderators;
+export const selectUsers = (state: AppState) => selectDataReducer(state).users;
 
 export const selectLessons = (state: AppState) =>
   selectDataReducer(state).lessons;

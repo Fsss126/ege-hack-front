@@ -17,7 +17,7 @@ import {
 } from 'redux-saga/effects';
 
 import APIRequest from '../api';
-import {UserAnswerDtoReq} from '../types/dtos';
+import {AccountsRoleReq, UserAnswerDtoReq} from '../types/dtos';
 import {
   AccountInfo,
   CourseInfo,
@@ -36,6 +36,7 @@ import {
 } from '../types/entities';
 import {AccountRole} from '../types/enums';
 import {
+  AccountsDeleteRequestAction,
   Action,
   ActionType,
   AdminWebinarsFetchAction,
@@ -153,89 +154,48 @@ function* fetchUserTeachers() {
   });
 }
 
-function* fetchTeachers() {
-  yield* waitForLogin(ActionType.TEACHERS_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const teachers: AccountInfo[] = yield call(
-          APIRequest.get,
-          '/accounts/management',
-          {
-            params: {
-              role: AccountRole.TEACHER,
-            },
-          },
-        );
-        yield put({type: ActionType.TEACHERS_FETCHED, teachers});
-      } catch (error) {
-        yield put({type: ActionType.TEACHERS_FETCHED, teachers: error});
-      }
-    });
-  });
+function getFetchAccounts(role: AccountRole) {
+  return function* fetchAccounts() {
+    yield* waitForLogin(
+      (action: Action) =>
+        action.type === ActionType.ACCOUNTS_FETCH && action.role === role,
+      function* (channel) {
+        yield takeLeading(channel, function* () {
+          try {
+            const accounts: AccountInfo[] = yield call(
+              APIRequest.get,
+              '/accounts/management',
+              {
+                params: {
+                  role,
+                },
+              },
+            );
+            yield put({
+              type: ActionType.ACCOUNTS_FETCHED,
+              accounts,
+              role,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.ACCOUNTS_FETCHED,
+              accounts: error,
+              role,
+            });
+          }
+        });
+      },
+    );
+  };
 }
 
-function* fetchAssistants() {
-  yield* waitForLogin(ActionType.ASSISTANTS_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const assistants: AccountInfo[] = yield call(
-          APIRequest.get,
-          '/accounts/management',
-          {
-            params: {
-              role: AccountRole.HELPER,
-            },
-          },
-        );
-        yield put({type: ActionType.ASSISTANTS_FETCHED, assistants});
-      } catch (error) {
-        yield put({type: ActionType.ASSISTANTS_FETCHED, assistants: error});
-      }
-    });
-  });
-}
+const fetchTeachers = getFetchAccounts(AccountRole.TEACHER);
 
-function* fetchAdmins() {
-  yield* waitForLogin(ActionType.ADMINS_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const admins: AccountInfo[] = yield call(
-          APIRequest.get,
-          '/accounts/management',
-          {
-            params: {
-              role: AccountRole.ADMIN,
-            },
-          },
-        );
-        yield put({type: ActionType.ADMINS_FETCHED, admins});
-      } catch (error) {
-        yield put({type: ActionType.ADMINS_FETCHED, admins: error});
-      }
-    });
-  });
-}
+const fetchAssistants = getFetchAccounts(AccountRole.HELPER);
 
-function* fetchModerators() {
-  yield* waitForLogin(ActionType.MODERATORS_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const moderators: AccountInfo[] = yield call(
-          APIRequest.get,
-          '/accounts/management',
-          {
-            params: {
-              role: AccountRole.MODERATOR,
-            },
-          },
-        );
-        yield put({type: ActionType.MODERATORS_FETCHED, moderators});
-      } catch (error) {
-        yield put({type: ActionType.MODERATORS_FETCHED, moderators: error});
-      }
-    });
-  });
-}
+const fetchAdmins = getFetchAccounts(AccountRole.ADMIN);
+
+const fetchModerators = getFetchAccounts(AccountRole.MODERATOR);
 
 // TODO: handle take leading properly
 function* fetchLessons() {
@@ -459,6 +419,40 @@ function* processParticipantDelete() {
     } catch (error) {
       if (onError) {
         yield call(onError, courseId, userId, error);
+      }
+    }
+  });
+}
+
+function* processAccountsDelete() {
+  yield takeEvery(ActionType.ACCOUNTS_DELETE_REQUEST, function* (
+    action: AccountsDeleteRequestAction,
+  ) {
+    const {accountIds, role, onDelete, onError} = action;
+    try {
+      const request: AccountsRoleReq = {
+        accounts: accountIds.map((id) => id.toString()),
+        role,
+      };
+      const accounts: AccountInfo[] = yield call(
+        APIRequest.delete,
+        '/accounts/management',
+        {
+          data: request,
+        },
+      );
+
+      if (onDelete) {
+        yield call(onDelete, accountIds);
+      }
+      yield put({
+        type: ActionType.ACCOUNTS_DELETE,
+        role,
+        responseAccounts: accounts,
+      });
+    } catch (error) {
+      if (onError) {
+        yield call(onError, accountIds, error);
       }
     }
   });
@@ -805,6 +799,7 @@ export default function* rootSaga() {
   yield spawn(processCourseDelete);
   yield spawn(processLessonDelete);
   yield spawn(processParticipantDelete);
+  yield spawn(processAccountsDelete);
   yield spawn(processWebinarDelete);
 
   yield spawn(processTestStart);

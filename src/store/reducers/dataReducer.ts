@@ -13,9 +13,9 @@ import {
   SubjectInfo,
   TeacherInfo,
   UserCourseInfo,
-  WebinarInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
+import {AccountRole} from 'types/enums';
 
 import {Action, ActionType} from '../actions';
 
@@ -26,10 +26,7 @@ export interface DataState {
   userCourses?: UserCourseInfo[] | AxiosError;
   subjects?: SubjectInfo[] | AxiosError;
   userTeachers?: TeacherInfo[] | AxiosError;
-  teachers?: AccountInfo[] | AxiosError;
-  assistants?: AccountInfo[] | AxiosError;
-  moderators?: AccountInfo[] | AxiosError;
-  admins?: AccountInfo[] | AxiosError;
+  users: Record<AccountRole, AccountInfo[] | AxiosError | undefined>;
   lessons: {[courseId: number]: LessonInfo[] | AxiosError};
   webinars: {
     [courseId: number]: PersonWebinar[] | AxiosError;
@@ -49,10 +46,13 @@ const defaultState: DataState = {
   userCourses: undefined,
   subjects: undefined,
   userTeachers: undefined,
-  teachers: undefined,
-  assistants: undefined,
-  admins: undefined,
-  moderators: undefined,
+  users: {
+    [AccountRole.PUPIL]: undefined,
+    [AccountRole.TEACHER]: undefined,
+    [AccountRole.HELPER]: undefined,
+    [AccountRole.ADMIN]: undefined,
+    [AccountRole.MODERATOR]: undefined,
+  },
   lessons: {},
   webinars: {},
   participants: {},
@@ -122,36 +122,26 @@ export const dataReducer: Reducer<DataState, Action> = (
         userTeachers: teachers,
       };
     }
-    case ActionType.TEACHERS_FETCHED: {
-      const {teachers} = action;
+    case ActionType.ACCOUNTS_FETCHED: {
+      const {accounts, role} = action;
 
       return {
         ...state,
-        teachers,
+        users: {
+          ...state.users,
+          [role]: accounts,
+        },
       };
     }
-    case ActionType.ASSISTANTS_FETCHED: {
-      const {assistants} = action;
+    case ActionType.ACCOUNTS_DELETE:
+    case ActionType.ACCOUNTS_REVOKE: {
+      const {responseAccounts, role} = action;
 
       return {
         ...state,
-        assistants,
-      };
-    }
-    case ActionType.ADMINS_FETCHED: {
-      const {admins} = action;
-
-      return {
-        ...state,
-        admins,
-      };
-    }
-    case ActionType.MODERATORS_FETCHED: {
-      const {moderators} = action;
-
-      return {
-        ...state,
-        moderators,
+        users: {...state.users, [role]: responseAccounts},
+        userTeachers:
+          role === AccountRole.TEACHER ? undefined : state.userTeachers,
       };
     }
     case ActionType.LESSONS_FETCHED: {

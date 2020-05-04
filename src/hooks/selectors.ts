@@ -9,35 +9,36 @@ import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
 import {
   selectAdminCourses,
-  selectAdmins,
   selectAdminWebinars,
-  selectAssistants,
   selectHomeworks,
   selectLessons,
-  selectModerators,
   selectParticipants,
   selectShopCourses,
   selectSubjects,
   selectTeacherCourses,
-  selectTeachers,
   selectTest,
   selectTestState,
   selectUpcomingWebinars,
   selectUser,
   selectUserCourses,
+  selectUsers,
   selectUserTeachers,
   selectWebinars,
 } from 'store/selectors';
-import {Permission} from 'types/enums';
+import {AccountRole, Permission} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
 
 import {
+  AccountsDeleteCallback,
+  AccountsDeleteErrorCallback,
   Action,
   ActionType,
   CourseDeleteCallback,
   CourseDeleteErrorCallback,
   LessonDeleteCallback,
   LessonDeleteErrorCallback,
+  ParticipantDeleteCallback,
+  ParticipantDeleteErrorCallback,
   TestCompleteCallback,
   TestCompleteErrorCallback,
   TestSaveAnswerCallback,
@@ -247,92 +248,71 @@ export function useUserTeacher(teacherId: number): UserTeacherHookResult {
   };
 }
 
-export type TeachersHookResult = {
-  teachers?: AccountInfo[];
+export type AccountsHookResult = {
+  accounts?: AccountInfo[];
   error?: AxiosError;
   reload: SimpleCallback;
 };
 
-export function useTeachers(): TeachersHookResult {
-  const teachers = useSelector(selectTeachers);
+export function useAccounts(role: AccountRole): AccountsHookResult {
+  const selector = useCallback((state: AppState) => selectUsers(state)[role], [
+    role,
+  ]);
+  const accounts = useSelector(selector);
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEACHERS_FETCH});
-  }, [dispatch]);
+    dispatch({type: ActionType.ACCOUNTS_FETCH, role});
+  }, [dispatch, role]);
   useEffect(() => {
-    if (!teachers) {
+    if (!accounts) {
       dispatchFetchAction();
     }
-  }, [dispatchFetchAction, teachers]);
-  return teachers instanceof Error
-    ? {error: teachers, reload: dispatchFetchAction}
-    : {teachers, reload: dispatchFetchAction};
+  }, [dispatchFetchAction, accounts]);
+  return accounts instanceof Error
+    ? {error: accounts, reload: dispatchFetchAction}
+    : {accounts, reload: dispatchFetchAction};
 }
 
-export type AssistantsHookResult = {
-  assistants?: AccountInfo[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
+export type RevokeAccountsHookResult = (
+  responseAccounts: AccountInfo[],
+) => void;
 
-export function useAssistants(): AssistantsHookResult {
-  const assistants = useSelector(selectAssistants);
+export function useRevokeAccounts(role: AccountRole): RevokeAccountsHookResult {
   const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.ASSISTANTS_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (!assistants) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, assistants]);
-  return assistants instanceof Error
-    ? {error: assistants, reload: dispatchFetchAction}
-    : {assistants, reload: dispatchFetchAction};
+
+  return useCallback(
+    (responseAccounts) => {
+      dispatch({
+        type: ActionType.ACCOUNTS_REVOKE,
+        role,
+        responseAccounts,
+      });
+    },
+    [dispatch, role],
+  );
 }
 
-export type AdminsHookResult = {
-  admins?: AccountInfo[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
+export type DeleteAccountHookResult = (accountId: number) => void;
 
-export function useAdmins(): AdminsHookResult {
-  const admins = useSelector(selectAdmins);
+export function useDeleteAccount(
+  role: AccountRole,
+  onDelete?: AccountsDeleteCallback,
+  onError?: AccountsDeleteErrorCallback,
+): DeleteAccountHookResult {
   const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.ADMINS_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (!admins) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, admins]);
-  return admins instanceof Error
-    ? {error: admins, reload: dispatchFetchAction}
-    : {admins, reload: dispatchFetchAction};
-}
 
-export type ModeratorsHookResult = {
-  moderators?: AccountInfo[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useModerators(): ModeratorsHookResult {
-  const moderators = useSelector(selectModerators);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.MODERATORS_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (!moderators) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, moderators]);
-  return moderators instanceof Error
-    ? {error: moderators, reload: dispatchFetchAction}
-    : {moderators, reload: dispatchFetchAction};
+  return useCallback(
+    (accountId) => {
+      dispatch({
+        type: ActionType.ACCOUNTS_DELETE_REQUEST,
+        role,
+        accountIds: [accountId],
+        onDelete,
+        onError,
+      });
+    },
+    [dispatch, onDelete, onError, role],
+  );
 }
 
 export type ShopCatalogHookResult = {
@@ -691,27 +671,6 @@ export function useRevokeParticipants(
   );
 }
 
-export type RevokeTeachersHookResult = (
-  responseTeachers: AccountInfo[],
-) => void;
-
-export function useRevokeTeachers(
-  courseId: number,
-): RevokeParticipantsHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseParticipants) => {
-      dispatch({
-        type: ActionType.PARTICIPANTS_REVOKE,
-        courseId,
-        responseParticipants,
-      });
-    },
-    [dispatch, courseId],
-  );
-}
-
 export type AdminWebinarsHookResult = {
   webinars?: WebinarScheduleInfo | false;
   error?: AxiosError | true;
@@ -864,7 +823,7 @@ export function useDeleteSubject(
   redirectUrl?: string,
   onDelete?: CourseDeleteCallback,
   onError?: CourseDeleteErrorCallback,
-): DeleteCourseHookResult {
+): DeleteSubjectHookResult {
   const dispatch = useDispatch();
   const redirectIfSupplied = useRedirect(redirectUrl);
 
@@ -931,8 +890,8 @@ export type DeleteLessonHookResult = (
 
 export function useDeleteLesson(
   redirectUrl?: string,
-  onDelete?: LessonDeleteCallback,
-  onError?: LessonDeleteErrorCallback,
+  onDelete?: ParticipantDeleteCallback,
+  onError?: ParticipantDeleteErrorCallback,
 ): DeleteLessonHookResult {
   const dispatch = useDispatch();
   const redirectIfSupplied = useRedirect(redirectUrl);
@@ -961,10 +920,15 @@ export function useDeleteLesson(
   );
 }
 
+export type DeleteParticipantHookResult = (
+  courseId: number,
+  userId: number,
+) => void;
+
 export function useDeleteParticipant(
   onDelete?: LessonDeleteCallback,
   onError?: LessonDeleteErrorCallback,
-) {
+): DeleteParticipantHookResult {
   const dispatch = useDispatch();
 
   return useCallback(
