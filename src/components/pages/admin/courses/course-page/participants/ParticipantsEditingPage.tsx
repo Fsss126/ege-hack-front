@@ -1,4 +1,5 @@
 import APIRequest from 'api';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import {RevokeRelatedDataCallback} from 'components/ui/Form';
 import {useRevokeParticipants} from 'hooks/selectors';
@@ -9,7 +10,6 @@ import {CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
-import {ContentBlock} from '../../../../../layout/ContentBlock';
 import AccountsForm from '../../../users/AccountsForm';
 
 function getRequestData(accounts: string[]): AddParticipantsReq {

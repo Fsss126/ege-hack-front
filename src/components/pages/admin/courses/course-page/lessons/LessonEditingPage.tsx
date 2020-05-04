@@ -1,4 +1,5 @@
 import APIRequest from 'api';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import {useLesson} from 'hooks/selectors';
 import React, {useCallback} from 'react';
@@ -8,7 +9,6 @@ import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {LessonPageParams} from 'types/routes';
 
-import {ContentBlock} from '../../../../../layout/ContentBlock';
 import LessonForm from './LessonForm';
 
 const LessonEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (

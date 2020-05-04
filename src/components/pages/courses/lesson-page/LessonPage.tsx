@@ -1,5 +1,6 @@
 import Lesson from 'components/common/Lesson';
 import List, {ListItemRenderer} from 'components/common/List';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
 import {useHomework, useLessons, useUserCourses} from 'hooks/selectors';
@@ -9,7 +10,6 @@ import {RouteComponentProps} from 'react-router';
 import {LessonInfo} from 'types/entities';
 import {LessonPageParams} from 'types/routes';
 
-import {ContentBlock} from '../../../layout/ContentBlock';
 import LessonView from './LessonView';
 
 const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {

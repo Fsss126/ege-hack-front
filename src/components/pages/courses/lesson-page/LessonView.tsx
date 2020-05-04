@@ -1,11 +1,11 @@
 import {ExpandableContainer} from 'components/common/ExpandableContainer';
 import HomeworkAssignment from 'components/common/HomeworkAssignment';
 import VideoPlayer from 'components/common/VideoPlayer';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import {File} from 'components/ui/input';
 import React from 'react';
 import {HomeworkInfo, LessonInfo} from 'types/entities';
 
-import {ContentBlock} from '../../../layout/ContentBlock';
 import HomeworkLoader from './HomeworkLoader';
 import {TestAssignment} from './TestAssignment';
 

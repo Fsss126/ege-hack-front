@@ -1,7 +1,7 @@
 import classNames from 'classnames';
+import {ContentBlock, ContentBlockProps} from 'components/layout/ContentBlock';
 import React from 'react';
 
-import {ContentBlock, ContentBlockProps} from '../layout/ContentBlock';
 import {NavLink, NavLinkProps} from '../ui/Link';
 import ScrollContainer, {ScrollContainerProps} from './ScrollContainer';
 

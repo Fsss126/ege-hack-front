@@ -1,7 +1,7 @@
+import {ContentBlock} from 'components/layout/ContentBlock';
 import React from 'react';
 import {ContactInfo, VkUserInfo} from 'types/entities';
 
-import {ContentBlock} from '../layout/ContentBlock';
 import Contacts from './Contacts';
 import CoverImage from './CoverImage';
 

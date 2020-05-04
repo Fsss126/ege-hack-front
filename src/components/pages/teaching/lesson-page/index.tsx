@@ -1,10 +1,10 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import {useHomeworks, useLesson, useTeacherCourse} from 'hooks/selectors';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
 
-import {ContentBlock} from '../../../layout/ContentBlock';
 import AssignmentPage from './AssignmentPage';
 import HomeworksPage from './HomeworksPage';
 import TestPage from './TestPage';

@@ -1,5 +1,6 @@
 import List, {ListItemRenderer} from 'components/common/List';
 import ListItem from 'components/common/ListItem';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState} from 'hooks/selectors';
 import React, {useCallback} from 'react';
@@ -8,7 +9,6 @@ import {TestStatus} from 'types/dtos';
 import {TestStatePassedAnswerInfo} from 'types/entities';
 import {RouteComponentPropsWithPath, TestPageParams} from 'types/routes';
 
-import {ContentBlock} from '../../../layout/ContentBlock';
 import {CorrectBadge, IncorrectBadge} from '../task-page/Results';
 import {ResultBar} from './ResultBar';
 

@@ -1,4 +1,5 @@
 import APIRequest from 'api';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
@@ -6,7 +7,6 @@ import {SubjectDtoReq} from 'types/dtos';
 import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
-import {ContentBlock} from '../../../../layout/ContentBlock';
 import SubjectForm from './SubjectForm';
 
 const createRequest = (requestData: SubjectDtoReq): Promise<SubjectInfo> =>

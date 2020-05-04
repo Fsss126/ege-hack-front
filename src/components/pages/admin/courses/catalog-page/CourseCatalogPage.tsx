@@ -5,6 +5,7 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import {useCheckPermissions} from 'components/ConditionalRender';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
@@ -14,8 +15,6 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithPath} from 'types/routes';
-
-import {ContentBlock} from '../../../../layout/ContentBlock';
 
 const filterBy = {
   search: true,

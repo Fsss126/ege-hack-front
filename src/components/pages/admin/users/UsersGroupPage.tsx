@@ -6,6 +6,7 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import {useCheckPermissions} from 'components/ConditionalRender';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {useDeleteAccount} from 'hooks/selectors';
@@ -14,8 +15,6 @@ import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {AccountInfo} from 'types/entities';
 import {AccountRole, Permission} from 'types/enums';
-
-import {ContentBlock} from '../../../layout/ContentBlock';
 
 type UsersGroupPageProps = RouteComponentProps & {
   role: AccountRole;

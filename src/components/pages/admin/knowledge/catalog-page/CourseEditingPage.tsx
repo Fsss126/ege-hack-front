@@ -1,4 +1,5 @@
 import APIRequest from 'api';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import {useAdminCourse, useSubjects, useUserTeachers} from 'hooks/selectors';
 import React, {useCallback} from 'react';
@@ -7,7 +8,6 @@ import {CourseDtoReq} from 'types/dtos';
 import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
-import {ContentBlock} from '../../../../layout/ContentBlock';
 import CourseForm from './CourseForm';
 
 const CourseEditingPage: React.FC<RouteComponentProps<{courseId: string}>> = (

@@ -1,4 +1,5 @@
 import APIRequest from 'api';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import {useSubject} from 'hooks/selectors';
 import React, {useCallback} from 'react';
@@ -7,7 +8,6 @@ import {SubjectDtoReq} from 'types/dtos';
 import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
-import {ContentBlock} from '../../../../layout/ContentBlock';
 import SubjectForm from './SubjectForm';
 
 const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (

@@ -1,12 +1,11 @@
 import HomeworkAssignment from 'components/common/HomeworkAssignment';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageContentProps} from 'components/layout/Page';
 import {HomeworksHookResult} from 'hooks/selectors';
 import React from 'react';
 import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
-
-import {ContentBlock} from '../../../layout/ContentBlock';
 
 interface AssignmentPageProps
   extends RouteComponentPropsWithPath<LessonPageParams> {

@@ -1,9 +1,9 @@
 import classNames from 'classnames';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import * as Input from 'components/ui/input';
 import React, {useCallback, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 
-import {ContentBlock} from '../layout/ContentBlock';
 import {InputChangeHandler} from '../ui/input/Input';
 import {OptionShape} from '../ui/input/Select';
 import List, {ListItemRenderer, ListItemRenderProps, ListProps} from './List';

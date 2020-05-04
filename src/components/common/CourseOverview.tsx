@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import CoverImage from 'components/common/CoverImage';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import {ADMIN_ROLES} from 'definitions/constants';
 import {renderDate} from 'definitions/helpers';
 import _ from 'lodash';
@@ -9,7 +10,6 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo, TeacherInfo} from 'types/entities';
 
 import ConditionalRenderer from '../ConditionalRender';
-import {ContentBlock} from '../layout/ContentBlock';
 import {NotFoundErrorPage} from '../layout/ErrorPage';
 import Page, {PageContent, PageLink} from '../layout/Page';
 import Catalog, {CatalogProps} from './Catalog';

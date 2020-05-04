@@ -1,12 +1,11 @@
 import classNames from 'classnames';
 import {CourseOverviewContext} from 'components/common/CourseOverview';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
 import {DiscountHookResult} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
-
-import {ContentBlock} from '../../../layout/ContentBlock';
 
 interface CoursePriceProps extends Omit<DiscountHookResult, 'isLoading'> {
   isSelected: boolean;

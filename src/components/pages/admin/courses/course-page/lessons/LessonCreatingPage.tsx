@@ -1,4 +1,5 @@
 import APIRequest from 'api';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
@@ -7,7 +8,6 @@ import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
-import {ContentBlock} from '../../../../../layout/ContentBlock';
 import LessonForm from './LessonForm';
 
 const createRequest = (requestData: LessonDtoReq): Promise<LessonInfo> =>

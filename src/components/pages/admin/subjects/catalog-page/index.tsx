@@ -1,7 +1,7 @@
+import {ContentBlock} from 'components/layout/ContentBlock';
 import React from 'react';
 import {RouteComponentPropsWithPath, SubjectPageParams} from 'types/routes';
 
-import {ContentBlock} from '../../../../layout/ContentBlock';
 import SubjectCatalogPage from './SubjectCatalogPage';
 
 const CoursesPage: React.FC<RouteComponentPropsWithPath<SubjectPageParams>> = (

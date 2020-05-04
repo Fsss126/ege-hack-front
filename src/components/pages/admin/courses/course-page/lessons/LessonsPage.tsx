@@ -11,6 +11,7 @@ import {
   RequiredPermissions,
   useCheckPermissions,
 } from 'components/ConditionalRender';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {useDeleteLesson} from 'hooks/selectors';
@@ -20,8 +21,6 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
-
-import {ContentBlock} from '../../../../../layout/ContentBlock';
 
 const filterBy = {
   search: true,

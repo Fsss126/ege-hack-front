@@ -11,6 +11,7 @@ import ListItem, {ListItemProps} from 'components/common/ListItem';
 import PosterCover from 'components/common/PosterCover';
 import {useWebinar, WEBINAR_STATE} from 'components/common/WebinarSchedule';
 import {useCheckPermissions} from 'components/ConditionalRender';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderDate} from 'definitions/helpers';
@@ -22,8 +23,6 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, WebinarInfo, WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
-
-import {ContentBlock} from '../../../../../layout/ContentBlock';
 
 const filterBy = {
   search: true,

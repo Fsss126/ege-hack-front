@@ -1,5 +1,6 @@
 import APIRequest from 'api';
 import classNames from 'classnames';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import React, {useCallback, useEffect, useState} from 'react';
 import Countdown, {CountdownTimeDelta} from 'react-countdown-now';
 import {CountdownRenderProps} from 'react-countdown-now/dist/Countdown';
@@ -7,7 +8,6 @@ import {LinkResp} from 'types/dtos';
 import {PersonWebinar, WebinarInfo} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
-import {ContentBlock} from '../layout/ContentBlock';
 import {PageContent} from '../layout/Page';
 import CoverImage from './CoverImage';
 import ScrollContainer from './ScrollContainer';

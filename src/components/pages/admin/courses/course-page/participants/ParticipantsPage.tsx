@@ -6,6 +6,7 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import {useCheckPermissions} from 'components/ConditionalRender';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import Tooltip from 'components/ui/Tooltip';
@@ -16,8 +17,6 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
-
-import {ContentBlock} from '../../../../../layout/ContentBlock';
 
 export type ParticipantsPageProps = RouteComponentPropsWithPath<
   CoursePageParams
