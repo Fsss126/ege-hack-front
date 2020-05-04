@@ -1,13 +1,10 @@
-import Catalog, {
-  CatalogItemRenderer,
-  FilterFunc,
-} from 'components/common/Catalog';
-import CoverImage from 'components/common/CoverImage';
+import {Account} from 'components/common/Account';
+import AccountCatalog from 'components/common/AccountCatalog';
+import {CatalogItemRenderer} from 'components/common/Catalog';
 import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
-import ListItem from 'components/common/ListItem';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
@@ -15,30 +12,14 @@ import Tooltip from 'components/ui/Tooltip';
 import {renderDate} from 'definitions/helpers';
 import {useDeleteParticipant} from 'hooks/selectors';
 import React, {useCallback} from 'react';
-import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {CoursePageParams} from 'types/routes';
+import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
 
-const filterBy = {
-  search: true,
-  subject: false,
-  online: false,
-};
-
-const filter: FilterFunc<CourseParticipantInfo> = (
-  {vk_info: {full_name}},
-  {subject, online, search},
-) => {
-  const userName = full_name.toLowerCase().replace(/\s/g, '');
-  const searchKey = search.toLowerCase().replace(/\s/g, '');
-
-  return search ? userName.includes(searchKey) : true;
-};
-
-export type ParticipantsPageProps = RouteComponentProps<CoursePageParams> & {
-  path: string;
+export type ParticipantsPageProps = RouteComponentPropsWithPath<
+  CoursePageParams
+> & {
   parentSection?: PageParentSection;
   participants?: CourseParticipantInfo[];
   course?: CourseInfo;
@@ -61,6 +42,8 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
   const courseId = parseInt(param_course);
 
   const canEdit = useCheckPermissions(Permission.PARTICIPANT_MANAGEMENT);
+
+  const courseLink = `${path}/${courseId}`;
 
   const onDelete = useDeleteParticipant();
 
@@ -105,15 +88,11 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
       );
 
       return (
-        <ListItem
+        <Account
           key={id}
-          item={user}
-          className="user"
-          title={`${last_name} ${first_name}`}
+          account={user}
           selectable
           noOnClickOnAction
-          preview={<CoverImage src={photo} className="course__cover" round />}
-          link={vk}
           action={action}
           {...renderProps}
         />
@@ -132,7 +111,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
       location={location}
     >
       {isLoaded && participants && (
-        <Catalog.Body items={participants} filter={filter}>
+        <AccountCatalog.Body accounts={participants}>
           <PageContent parentSection={parentSection}>
             {header}
             {canEdit && (
@@ -140,14 +119,14 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
                 <Button
                   neutral
                   component={Link}
-                  to={`/admin/${courseId}/participants/edit/`}
+                  to={`${courseLink}/participants/edit/`}
                   after={<i className="icon-add" />}
                 >
                   Добавить учеников
                 </Button>
               </div>
             )}
-            <Catalog.Filter filterBy={filterBy}>
+            <AccountCatalog.Filter>
               {/*<div className="col d-flex justify-content-end">*/}
               {/*    <DropdownMenu content={(*/}
               {/*        <DropdownIconButton className="after-ellipsis"/>*/}
@@ -159,16 +138,16 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
               {/*        </DropdownMenuOption>*/}
               {/*    </DropdownMenu>*/}
               {/*</div>*/}
-            </Catalog.Filter>
-            <Catalog.Catalog
+            </AccountCatalog.Filter>
+            <AccountCatalog.Catalog
               className="users-list"
               emptyPlaceholder="Нет учеников на курсе"
               noMatchPlaceholder="Нет совпадающих учеников"
               plain
-              renderItem={renderStudent}
+              renderAccount={renderStudent}
             />
           </PageContent>
-        </Catalog.Body>
+        </AccountCatalog.Body>
       )}
     </Page>
   );

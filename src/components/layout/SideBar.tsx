@@ -151,7 +151,6 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                     <NavLink
                       className="layout__sidebar-menu-link"
                       to="/admin/users/"
-                      disabled
                     >
                       Пользователи
                     </NavLink>

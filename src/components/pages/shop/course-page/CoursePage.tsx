@@ -6,7 +6,7 @@ import {
   useDiscount,
   useLessons,
   useShopCourse,
-  useTeachers,
+  useUserTeachers,
 } from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
@@ -39,7 +39,7 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useTeachers();
+  } = useUserTeachers();
   const {
     lessons,
     error: errorLoadingLessons,

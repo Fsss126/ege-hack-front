@@ -1,6 +1,6 @@
 import APIRequest from 'api';
 import Page, {PageContent} from 'components/layout/Page';
-import {useAdminCourse, useSubjects, useTeachers} from 'hooks/selectors';
+import {useAdminCourse, useSubjects, useUserTeachers} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {CourseDtoReq} from 'types/dtos';
@@ -36,7 +36,7 @@ const CourseEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useTeachers();
+  } = useUserTeachers();
   const {
     course,
     error: errorLoadingCourses,

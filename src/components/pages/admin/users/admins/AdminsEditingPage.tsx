@@ -9,7 +9,7 @@ import {CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
-import AccountsForm from '../../../users/AccountsForm';
+import AccountsForm from '../AccountsForm';
 
 function getRequestData(accounts: string[]): AddParticipantsReq {
   return {
@@ -19,9 +19,9 @@ function getRequestData(accounts: string[]): AddParticipantsReq {
 
 const returnLink = '..';
 
-const ParticipantsEditingPage: React.FC<RouteComponentProps<
-  CoursePageParams
->> = (props) => {
+const AdminsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
+  props,
+) => {
   const {
     match: {
       params: {courseId: param_course},
@@ -75,4 +75,4 @@ const ParticipantsEditingPage: React.FC<RouteComponentProps<
   );
 };
 
-export default ParticipantsEditingPage;
+export default AdminsEditingPage;

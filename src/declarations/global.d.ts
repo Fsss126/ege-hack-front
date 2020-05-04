@@ -1,7 +1,15 @@
-import { AxiosInstance } from "axios";
-import {Includes, InsertAfterEach} from "definitions/mixins";
+import { AxiosInstance } from 'axios';
+import {Includes, InsertAfterEach} from 'definitions/mixins';
 
 declare global {
+    declare type OmitCommon<T extends K, K> = Omit<T, keyof K>;
+
+    declare type Optionalize<T, K extends keyof  T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+    declare type OptionalizeCommon<T extends K, K> = Omit<T, keyof K> & Partial<K>;
+
+    declare type Dictionary<T> = { [key: string]: T }
+
     declare interface Window {
         VK: any;
         APIRequest: AxiosInstance;

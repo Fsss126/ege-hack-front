@@ -11,8 +11,10 @@ import {
   selectAdminCourses,
   selectAdmins,
   selectAdminWebinars,
+  selectAssistants,
   selectHomeworks,
   selectLessons,
+  selectModerators,
   selectParticipants,
   selectShopCourses,
   selectSubjects,
@@ -23,6 +25,7 @@ import {
   selectUpcomingWebinars,
   selectUser,
   selectUserCourses,
+  selectUserTeachers,
   selectWebinars,
 } from 'store/selectors';
 import {Permission} from 'types/enums';
@@ -205,8 +208,47 @@ export function useDiscount(
   return {discount, error, reload: fetchDiscount, isLoading};
 }
 
-export type TeachersHookResult = {
+export type UserTeachersHookResult = {
   teachers?: TeacherInfo[];
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useUserTeachers(): UserTeachersHookResult {
+  const teachers = useSelector(selectUserTeachers);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.USER_TEACHERS_FETCH});
+  }, [dispatch]);
+  useEffect(() => {
+    if (!teachers) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, teachers]);
+  return teachers instanceof Error
+    ? {error: teachers, reload: dispatchFetchAction}
+    : {teachers, reload: dispatchFetchAction};
+}
+
+export type UserTeacherHookResult = {
+  teacher?: TeacherInfo;
+  error?: AxiosError | true;
+  reload: SimpleCallback;
+};
+
+export function useUserTeacher(teacherId: number): UserTeacherHookResult {
+  const {teachers, error, reload} = useUserTeachers();
+  const teacher = teachers ? _.find(teachers, {id: teacherId}) : undefined;
+
+  return {
+    teacher,
+    error: teachers && !teacher ? true : error,
+    reload,
+  };
+}
+
+export type TeachersHookResult = {
+  teachers?: AccountInfo[];
   error?: AxiosError;
   reload: SimpleCallback;
 };
@@ -227,21 +269,26 @@ export function useTeachers(): TeachersHookResult {
     : {teachers, reload: dispatchFetchAction};
 }
 
-export type TeacherHookResult = {
-  teacher?: TeacherInfo;
-  error?: AxiosError | true;
+export type AssistantsHookResult = {
+  assistants?: AccountInfo[];
+  error?: AxiosError;
   reload: SimpleCallback;
 };
 
-export function useTeacher(teacherId: number): TeacherHookResult {
-  const {teachers, error, reload} = useTeachers();
-  const teacher = teachers ? _.find(teachers, {id: teacherId}) : undefined;
-
-  return {
-    teacher,
-    error: teachers && !teacher ? true : error,
-    reload,
-  };
+export function useAssistants(): AssistantsHookResult {
+  const assistants = useSelector(selectAssistants);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.ASSISTANTS_FETCH});
+  }, [dispatch]);
+  useEffect(() => {
+    if (!assistants) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, assistants]);
+  return assistants instanceof Error
+    ? {error: assistants, reload: dispatchFetchAction}
+    : {assistants, reload: dispatchFetchAction};
 }
 
 export type AdminsHookResult = {
@@ -264,6 +311,28 @@ export function useAdmins(): AdminsHookResult {
   return admins instanceof Error
     ? {error: admins, reload: dispatchFetchAction}
     : {admins, reload: dispatchFetchAction};
+}
+
+export type ModeratorsHookResult = {
+  moderators?: AccountInfo[];
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useModerators(): ModeratorsHookResult {
+  const moderators = useSelector(selectModerators);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.MODERATORS_FETCH});
+  }, [dispatch]);
+  useEffect(() => {
+    if (!moderators) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, moderators]);
+  return moderators instanceof Error
+    ? {error: moderators, reload: dispatchFetchAction}
+    : {moderators, reload: dispatchFetchAction};
 }
 
 export type ShopCatalogHookResult = {
@@ -606,6 +675,27 @@ export type RevokeParticipantsHookResult = (
 ) => void;
 
 export function useRevokeParticipants(
+  courseId: number,
+): RevokeParticipantsHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseParticipants) => {
+      dispatch({
+        type: ActionType.PARTICIPANTS_REVOKE,
+        courseId,
+        responseParticipants,
+      });
+    },
+    [dispatch, courseId],
+  );
+}
+
+export type RevokeTeachersHookResult = (
+  responseTeachers: AccountInfo[],
+) => void;
+
+export function useRevokeTeachers(
   courseId: number,
 ): RevokeParticipantsHookResult {
   const dispatch = useDispatch();

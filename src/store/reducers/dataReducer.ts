@@ -25,7 +25,8 @@ export interface DataState {
   shopCourses?: CourseInfo[] | AxiosError;
   userCourses?: UserCourseInfo[] | AxiosError;
   subjects?: SubjectInfo[] | AxiosError;
-  teachers?: TeacherInfo[] | AxiosError;
+  userTeachers?: TeacherInfo[] | AxiosError;
+  teachers?: AccountInfo[] | AxiosError;
   assistants?: AccountInfo[] | AxiosError;
   moderators?: AccountInfo[] | AxiosError;
   admins?: AccountInfo[] | AxiosError;
@@ -47,6 +48,7 @@ const defaultState: DataState = {
   shopCourses: undefined,
   userCourses: undefined,
   subjects: undefined,
+  userTeachers: undefined,
   teachers: undefined,
   assistants: undefined,
   admins: undefined,
@@ -110,6 +112,14 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         subjects,
+      };
+    }
+    case ActionType.USER_TEACHERS_FETCHED: {
+      const {teachers} = action;
+
+      return {
+        ...state,
+        userTeachers: teachers,
       };
     }
     case ActionType.TEACHERS_FETCHED: {

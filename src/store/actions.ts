@@ -30,14 +30,28 @@ export enum ActionType {
   USER_COURSES_FETCHED = 'USER_COURSES_FETCHED',
   SUBJECTS_FETCH = 'SUBJECTS_FETCH',
   SUBJECTS_FETCHED = 'SUBJECTS_FETCHED',
+  USER_TEACHERS_FETCH = 'USER_TEACHERS_FETCH',
+  USER_TEACHERS_FETCHED = 'USER_TEACHERS_FETCHED',
   TEACHERS_FETCH = 'TEACHERS_FETCH',
   TEACHERS_FETCHED = 'TEACHERS_FETCHED',
+  TEACHERS_REVOKE = 'TEACHERS_REVOKE',
+  TEACHERS_DELETE_REQUEST = 'TEACHERS_DELETE_REQUEST',
+  TEACHERS_DELETE = 'TEACHERS_DELETE',
   ASSISTANTS_FETCH = 'ASSISTANTS_FETCH',
   ASSISTANTS_FETCHED = 'ASSISTANTS_FETCHED',
+  ASSISTANTS_REVOKE = 'ASSISTANTS_REVOKE',
+  ASSISTANTS_DELETE_REQUEST = 'ASSISTANTS_DELETE_REQUEST',
+  ASSISTANTS_DELETE = 'ASSISTANTS_DELETE',
   ADMINS_FETCH = 'ADMINS_FETCH',
   ADMINS_FETCHED = 'ADMINS_FETCHED',
+  ADMINS_REVOKE = 'ADMINS_REVOKE',
+  ADMINS_DELETE_REQUEST = 'ADMINS_DELETE_REQUEST',
+  ADMINS_DELETE = 'ADMINS_DELETE',
   MODERATORS_FETCH = 'MODERATORS_FETCH',
   MODERATORS_FETCHED = 'MODERATORS_FETCHED',
+  MODERATORS_REVOKE = 'MODERATORS_REVOKE',
+  MODERATORS_DELETE_REQUEST = 'MODERATORS_DELETE_REQUEST',
+  MODERATORS_DELETE = 'MODERATORS_DELETE',
   LESSONS_FETCH = 'LESSONS_FETCH',
   LESSONS_FETCHED = 'LESSONS_FETCHED',
   LESSONS_REVOKE = 'LESSONS_REVOKE',
@@ -145,11 +159,50 @@ export type SubjectsFetchedAction = {
   subjects: SubjectInfo[] | AxiosError;
 };
 
+export type UserTeachersFetchAction = {type: ActionType.USER_TEACHERS_FETCH};
+
+export type UserTeachersFetchedAction = {
+  type: ActionType.USER_TEACHERS_FETCHED;
+  teachers: TeacherInfo[] | AxiosError;
+};
+
+type AccountsFetchAction<A extends ActionType> = {type: A};
+
+type AccountsFetchedAction<A extends ActionType> = {
+  type: A;
+  accounts: AccountInfo[] | AxiosError;
+};
+
+export type AccountsRevokeAction<A extends ActionType> = {
+  type: A;
+  responseAccounts: AccountInfo[];
+};
+
+export type AccountDeleteCallback = (accountId: number) => void;
+
+export type AccountDeleteErrorCallback = (
+  accountId: number,
+  error: AxiosError,
+) => void;
+
+export type AccountDeleteRequestAction<A extends ActionType> = {
+  type: A;
+  accountId: number;
+  onDelete?: AccountDeleteCallback;
+  onError?: AccountDeleteErrorCallback;
+};
+
+export type AccountDeleteAction<A extends ActionType> = {
+  type: A;
+  courseId: number;
+  userId: number;
+};
+
 export type TeachersFetchAction = {type: ActionType.TEACHERS_FETCH};
 
 export type TeachersFetchedAction = {
   type: ActionType.TEACHERS_FETCHED;
-  teachers: TeacherInfo[] | AxiosError;
+  teachers: AccountInfo[] | AxiosError;
 };
 
 export type AssistantsFetchAction = {type: ActionType.ASSISTANTS_FETCH};
@@ -164,6 +217,11 @@ export type AdminsFetchAction = {type: ActionType.ADMINS_FETCH};
 export type AdminsFetchedAction = {
   type: ActionType.ADMINS_FETCHED;
   admins: AccountInfo[] | AxiosError;
+};
+
+export type AdminsRevokeAction = {
+  type: ActionType.ADMINS_REVOKE;
+  responseAdmins: AccountInfo[];
 };
 
 export type ModeratorsFetchAction = {type: ActionType.MODERATORS_FETCH};
@@ -498,6 +556,8 @@ export type Action = {type: ActionType} & (
   | UserCoursesFetchedAction
   | SubjectsFetchAction
   | SubjectsFetchedAction
+  | UserTeachersFetchAction
+  | UserTeachersFetchedAction
   | TeachersFetchAction
   | TeachersFetchedAction
   | AssistantsFetchAction

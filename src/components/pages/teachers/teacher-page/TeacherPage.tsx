@@ -6,7 +6,7 @@ import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
-import {useShopCatalog, useSubjects, useTeacher} from 'hooks/selectors';
+import {useShopCatalog, useSubjects, useUserTeacher} from 'hooks/selectors';
 import _ from 'lodash';
 import React, {Fragment, useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
@@ -25,7 +25,7 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
   } = props;
   const id = parseInt(param_id);
 
-  const {teacher, error, reload} = useTeacher(id);
+  const {teacher, error, reload} = useUserTeacher(id);
   const {
     subjects,
     error: errorLoadingSubjects,

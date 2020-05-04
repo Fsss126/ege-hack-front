@@ -15,7 +15,7 @@ import {
 import React, {useCallback} from 'react';
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import {Permission} from 'types/enums';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
 
 import LessonsPage, {LessonRenderer} from './lessons/LessonsPage';
 import ParticipantsPage from './participants/ParticipantsPage';
@@ -38,7 +38,7 @@ const renderLesson: LessonRenderer = (lesson, {link: lessonLink, ...rest}) => {
   );
 };
 
-export type CoursePageProps = RouteComponentPropsWithPath<{courseId: string}>;
+export type CoursePageProps = RouteComponentPropsWithPath<CoursePageParams>;
 const CoursePage: React.FC<CoursePageProps> = (props) => {
   const {path: root, match} = props;
   const {

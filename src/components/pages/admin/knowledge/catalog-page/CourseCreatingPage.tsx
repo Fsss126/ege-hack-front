@@ -1,6 +1,6 @@
 import APIRequest from 'api';
 import Page, {PageContent} from 'components/layout/Page';
-import {useSubjects, useTeachers} from 'hooks/selectors';
+import {useSubjects, useUserTeachers} from 'hooks/selectors';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {CourseDtoReq} from 'types/dtos';
@@ -25,7 +25,7 @@ const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useTeachers();
+  } = useUserTeachers();
 
   const onSubmitted = React.useCallback(
     (response, showSuccessMessage, reset) => {

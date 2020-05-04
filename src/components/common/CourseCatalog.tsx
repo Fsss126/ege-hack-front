@@ -62,11 +62,8 @@ const Body = (props: CourseBodyProps): React.ReactElement => {
   );
 };
 
-// const HomeworksPage = (props) => (<Catalog.Page BodyComponent={Body} {...props}/>);
-
 export default {
   ...Catalog,
   Catalog: CourseCatalog,
   Body,
-  // Page: HomeworksPage
 };

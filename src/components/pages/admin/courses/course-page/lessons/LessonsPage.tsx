@@ -73,10 +73,12 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
 
   const onDelete = useDeleteLesson();
 
+  const courseLink = `${path}/${courseId}`;
+
   const renderLesson: CatalogItemRenderer<LessonInfo> = useCallback(
     (lesson, {link, ...rest}, index) => {
       const {id, course_id} = lesson;
-      const lessonLink = `${path}/${course_id}/${link}`;
+      const lessonLink = `${courseLink}/${link}`;
 
       const deleteCallback = (): void => {
         onDelete(course_id, id);
@@ -91,10 +93,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
             <DropdownMenu
               content={<DropdownIconButton className="icon-ellipsis" />}
             >
-              <DropdownMenuOption
-                component={Link}
-                to={`/admin/${course_id}/${link}edit/`}
-              >
+              <DropdownMenuOption component={Link} to={`${lessonLink}edit/`}>
                 <i className="far fa-edit" />
                 Изменить
               </DropdownMenuOption>
@@ -108,7 +107,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
         index,
       );
     },
-    [path, canEdit, onDelete, render],
+    [courseLink, render, canEdit, onDelete],
   );
   const title = course && `Уроки курса ${course.name}`;
 
@@ -130,7 +129,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
                 <Button
                   neutral
                   component={Link}
-                  to={`/admin/${courseId}/lessons/create/`}
+                  to={`${courseLink}/lessons/create/`}
                   after={<i className="icon-add" />}
                 >
                   Добавить урок

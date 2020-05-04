@@ -137,13 +137,34 @@ function* fetchUserCourses() {
   });
 }
 
-function* fetchTeachers() {
-  yield* waitForLogin(ActionType.TEACHERS_FETCH, function* (channel) {
+function* fetchUserTeachers() {
+  yield* waitForLogin(ActionType.USER_TEACHERS_FETCH, function* (channel) {
     yield takeLeading(channel, function* () {
       try {
         const teachers: TeacherInfo[] = yield call(
           APIRequest.get,
           '/accounts/teachers',
+        );
+        yield put({type: ActionType.USER_TEACHERS_FETCHED, teachers});
+      } catch (error) {
+        yield put({type: ActionType.USER_TEACHERS_FETCHED, teachers: error});
+      }
+    });
+  });
+}
+
+function* fetchTeachers() {
+  yield* waitForLogin(ActionType.TEACHERS_FETCH, function* (channel) {
+    yield takeLeading(channel, function* () {
+      try {
+        const teachers: AccountInfo[] = yield call(
+          APIRequest.get,
+          '/accounts/management',
+          {
+            params: {
+              role: AccountRole.TEACHER,
+            },
+          },
         );
         yield put({type: ActionType.TEACHERS_FETCHED, teachers});
       } catch (error) {
@@ -764,6 +785,7 @@ export default function* rootSaga() {
   yield spawn(fetchShopCourses);
   yield spawn(fetchUserCourses);
   yield spawn(fetchSubjects);
+  yield spawn(fetchUserTeachers);
   yield spawn(fetchTeachers);
   yield spawn(fetchAssistants);
   yield spawn(fetchAdmins);

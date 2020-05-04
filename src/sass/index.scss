@@ -892,7 +892,7 @@ header {
   .course {
     &.course-selected {
       background: $accent-bg;
-      
+
       .title {
         color: black;
       }
@@ -1433,7 +1433,13 @@ header {
       color: $text-grey;
       font-size: 14px;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
       //transition: outline-color .3s, color .3s;
+
+      .badge {
+        margin-left: 8px;
+      }
 
       &.active {
         box-shadow: inset 0 -2px #{$accent-orange};

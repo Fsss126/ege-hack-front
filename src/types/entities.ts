@@ -66,6 +66,8 @@ export interface CourseInfo
   teacher_ids: CourseDtoResp['teacher_id'][];
 }
 
+export type BasicAccountInfo = Omit<AccountInfo, 'permissions' | 'roles'>;
+
 export interface UserCourseInfo extends CourseInfo {
   status: LearningStatus;
 }

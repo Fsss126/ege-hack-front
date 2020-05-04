@@ -6,8 +6,8 @@ import Button from 'components/ui/Button';
 import {
   useCourseWebinars,
   useLessons,
-  useTeachers,
   useUserCourse,
+  useUserTeachers,
 } from 'hooks/selectors';
 import React from 'react';
 import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
@@ -31,7 +31,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useTeachers();
+  } = useUserTeachers();
   const {
     lessons,
     error: errorLoadingLessons,
