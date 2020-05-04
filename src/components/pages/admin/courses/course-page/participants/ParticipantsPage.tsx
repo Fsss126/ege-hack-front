@@ -126,19 +126,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
                 </Button>
               </div>
             )}
-            <AccountCatalog.Filter>
-              {/*<div className="col d-flex justify-content-end">*/}
-              {/*    <DropdownMenu content={(*/}
-              {/*        <DropdownIconButton className="after-ellipsis"/>*/}
-              {/*    )}>*/}
-              {/*        <DropdownMenuOption*/}
-              {/*            component={Link}*/}
-              {/*            navigateTo={`/catalog-page/${courseId}/participants/edit/`}>*/}
-              {/*            <i className="after-add"/>Добавить учеников*/}
-              {/*        </DropdownMenuOption>*/}
-              {/*    </DropdownMenu>*/}
-              {/*</div>*/}
-            </AccountCatalog.Filter>
+            <AccountCatalog.Filter />
             <AccountCatalog.Catalog
               className="users-list"
               emptyPlaceholder="Нет учеников на курсе"

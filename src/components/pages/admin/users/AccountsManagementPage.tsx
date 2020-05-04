@@ -1,6 +1,6 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
-import Page, {PageContent} from 'components/layout/Page';
+import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import {RevokeRelatedDataCallback} from 'components/ui/Form';
 import {useRevokeAccounts} from 'hooks/selectors';
 import React, {useCallback} from 'react';
@@ -12,6 +12,11 @@ import {AccountRole, Permission} from 'types/enums';
 import AccountsForm from './AccountsForm';
 
 const returnLink = '..';
+
+const parentSection: PageParentSection = {
+  name: 'Пользователи',
+  url: returnLink,
+};
 
 interface AccountsManagementPageProps extends RouteComponentProps {
   role: AccountRole;
@@ -55,7 +60,7 @@ const AccountsManagementPage: React.FC<AccountsManagementPageProps> = (
       location={location}
     >
       {isLoaded && (
-        <PageContent>
+        <PageContent parentSection={parentSection}>
           <ContentBlock>
             <AccountsForm<AccountsRoleReq, AccountInfo>
               title={title}
