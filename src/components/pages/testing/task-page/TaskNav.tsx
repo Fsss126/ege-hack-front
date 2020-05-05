@@ -1,9 +1,15 @@
+import {
+  Pagination,
+  PaginationItem,
+  PaginationRenderItemParams,
+} from '@material-ui/lab';
 import classNames from 'classnames';
 import ScrollContainer from 'components/common/ScrollContainer';
 import Button from 'components/ui/Button';
-import Link from 'components/ui/Link';
 import {LOADING_STATE, LoadingIndicator} from 'components/ui/LoadingIndicator';
-import React from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
+import Scrollbars from 'react-custom-scrollbars';
+import {Link} from 'react-router-dom';
 import {
   SanitizedTaskInfo,
   SanitizedTestInfo,
@@ -14,7 +20,7 @@ import {
 export type LinkClickCallback = (
   link: string,
   submit: boolean,
-  event: React.MouseEvent<HTMLAnchorElement>,
+  event: React.ChangeEvent<unknown>,
 ) => void;
 
 type TaskNavProps = {
@@ -23,11 +29,20 @@ type TaskNavProps = {
   state: TestStateInfo;
   onClick?: LinkClickCallback;
   loadingState?: LOADING_STATE;
+  nextAccent?: boolean;
   navigateTo?: string;
 };
 
 export const TaskNav: React.FC<TaskNavProps> = (props) => {
-  const {test, state, task, onClick, loadingState, navigateTo} = props;
+  const {
+    test,
+    state,
+    task,
+    onClick,
+    loadingState,
+    navigateTo,
+    nextAccent,
+  } = props;
 
   const {tasks} = test;
   const {order} = task;
@@ -39,6 +54,75 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
 
   const next = isLastTask ? '../results/' : `../${test.tasks[order + 1].id}`;
   const prev = isFirstTask ? undefined : `../${test.tasks[order - 1].id}`;
+
+  const onPaginationChange = useCallback(
+    (event: React.ChangeEvent<unknown>, page: number) => {
+      const task = page ? tasks[page - 1] : undefined;
+
+      if (!(task && onClick)) {
+        return;
+      }
+
+      const link = `../${task.id}/`;
+
+      onClick(link, false, event);
+    },
+    [onClick, tasks],
+  );
+
+  const scrollbarsRef = useRef<Scrollbars>(null);
+
+  useEffect(() => {
+    const scrollbars = scrollbarsRef.current;
+
+    if (!scrollbars) {
+      return;
+    }
+    const current = scrollbars.view.querySelector<HTMLElement>('.Mui-selected');
+
+    if (!current) {
+      return;
+    }
+
+    const offset = current.offsetLeft;
+    scrollbars.view.scroll({
+      left: offset,
+      behavior: 'smooth',
+    });
+  }, [task]);
+
+  const renderItem = useCallback(
+    (params: PaginationRenderItemParams) => {
+      const {page, ...restParams} = params;
+      const task = params.page ? tasks[params.page - 1] : undefined;
+
+      if (!task) {
+        return <PaginationItem {...params} />;
+      }
+
+      const link = `../${task.id}/`;
+      const answer = answers[task.id]?.user_answer;
+
+      return (
+        <PaginationItem
+          component={Link}
+          className={classNames('test-task__nav-question', {
+            'test-task__nav-question--answered': !!answer,
+          })}
+          to={link}
+          {...restParams}
+          page={
+            loadingState &&
+            navigateTo === link &&
+            loadingState !== LOADING_STATE.DONE
+              ? ((<LoadingIndicator state={loadingState} />) as any)
+              : page
+          }
+        />
+      );
+    },
+    [answers, loadingState, navigateTo, tasks],
+  );
 
   return (
     <div className="test-task__nav">
@@ -67,32 +151,23 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
           Назад
         </Button>
         <div className="test-task__nav-questions">
-          <ScrollContainer withShadows withArrows arrowScrollOffset={15}>
-            {tasks.map((task, index) => {
-              const link = `../${task.id}/`;
-
-              return (
-                <Button<typeof Link>
-                  component={Link}
-                  to={link}
-                  onClick={onClick && ((event) => onClick(link, false, event))}
-                  neutral={task.order !== order}
-                  className={classNames('test-task__nav-question', {
-                    'test-task__nav-question--answered': !!answers[task.id]
-                      ?.user_answer,
-                  })}
-                  key={task.id}
-                >
-                  {index + 1}
-                </Button>
-              );
-            })}
+          <ScrollContainer withShadows ref={scrollbarsRef}>
+            <Pagination
+              size={'small'}
+              onChange={onPaginationChange}
+              hideNextButton
+              hidePrevButton
+              count={tasks.length}
+              page={task.order + 1}
+              renderItem={renderItem}
+            />
           </ScrollContainer>
         </div>
         <Button<typeof Link>
           dataAttribute
           className={classNames('test-task__nav-btn', 'test-task__nav-next')}
           clickOnWrapper
+          neutral={!nextAccent}
           component={Link}
           to={next}
           onClick={onClick && ((event) => onClick(next, true, event))}

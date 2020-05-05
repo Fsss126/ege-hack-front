@@ -1618,23 +1618,23 @@ header {
     .test-task__nav {
       display: flex;
 
+      @include media-breakpoint-down(sm) {
+        margin-left: 24px;
+        margin-right: 24px;
+      }
+
       .test-task__nav-inner {
         margin: 24px auto 0;
         display: flex;
         align-items: center;
         flex-wrap: nowrap;
         overflow: hidden;
-
-        @include media-breakpoint-down(sm) {
-          margin-left: 24px;
-          margin-right: 24px;
-        }
       }
 
       .test-task__nav-questions {
         flex-shrink: 1;
         overflow: hidden;
-        margin: 0 16px;
+        margin: 0 8px;
         font-size: 12px;
 
         .scroll-container {
@@ -1645,11 +1645,11 @@ header {
             max-width: calc(2em * 8 + 2.4em + 8px * 8 + 30px);
 
             &:before {
-              background: linear-gradient(90deg, $bg-grey, hsla(0,0%,100%,0));
+              background: linear-gradient(90deg, $bg-grey, hsla(0, 0%, 100%, 0));
             }
 
             &:after {
-              background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, $bg-grey);
+              background: linear-gradient(90deg, hsla(0, 0%, 100%, 0) 0, $bg-grey);
             }
           }
 
@@ -1657,41 +1657,26 @@ header {
             align-items: center;
           }
 
-          .scroll-container__arrow {
-            align-items: flex-end;
-            color: $icon-grey;
-
-            &:before {
-              content: "\e90d";
-              transform: none;
-            }
+          .MuiPagination-ul {
+            flex-wrap: nowrap;
           }
         }
 
+
         .test-task__nav-question {
-          flex-shrink: 0;
-          width: 2em;
-          height: 2em;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           font-family: $font-medium;
 
-          &:not(.btn-neutral) {
-            width: 2.4em;
-            height: 2.4em;
+          &.test-task__nav-question--answered {
+            font-family: $font-bold;
+            color: $accent-orange !important;
+
+            &.Mui-selected {
+              background: $accent-bg;
+            }
           }
 
-          .btn__name {
-            padding: 0;
-          }
-
-          &.btn-neutral.test-task__nav-question--answered {
-            color: $accent-orange;
-          }
-
-          & + .test-task__nav-question {
-            margin-left: 8px;
+          .file__state-indicator {
+            display: flex;
           }
         }
       }
@@ -1700,6 +1685,10 @@ header {
         line-height: 30px;
         display: flex;
         flex-shrink: 0;
+
+        .btn__before:hover, .btn__after:hover {
+          background: inherit;
+        }
 
         &.test-task__nav-prev {
 

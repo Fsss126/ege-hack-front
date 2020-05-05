@@ -215,6 +215,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
       loadingState={loadingState}
       onClick={onNavClick}
       navigateTo={navigateLink}
+      nextAccent={hasChanged}
     />
   );
 

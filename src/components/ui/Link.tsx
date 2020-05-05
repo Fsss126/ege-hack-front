@@ -43,6 +43,7 @@ const Link: React.FC<LinkProps> = ({to: link, ...props}) => {
       return false;
     }
     try {
+      // tslint:disable-next-line:no-unused-expression
       new URL(link);
       return true;
     } catch (e) {
