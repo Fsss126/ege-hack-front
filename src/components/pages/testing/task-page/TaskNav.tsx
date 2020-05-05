@@ -1,7 +1,9 @@
+import classNames from 'classnames';
+import ScrollContainer from 'components/common/ScrollContainer';
 import Button from 'components/ui/Button';
 import Link from 'components/ui/Link';
 import {LOADING_STATE, LoadingIndicator} from 'components/ui/LoadingIndicator';
-import React, {useCallback} from 'react';
+import React from 'react';
 import {
   SanitizedTaskInfo,
   SanitizedTestInfo,
@@ -11,6 +13,7 @@ import {
 
 export type LinkClickCallback = (
   link: string,
+  submit: boolean,
   event: React.MouseEvent<HTMLAnchorElement>,
 ) => void;
 
@@ -18,61 +21,39 @@ type TaskNavProps = {
   task: SanitizedTaskInfo;
   test: SanitizedTestInfo;
   state: TestStateInfo;
-  onNextClick?: LinkClickCallback;
-  onPrevClick?: LinkClickCallback;
+  onClick?: LinkClickCallback;
   loadingState?: LOADING_STATE;
   navigateTo?: string;
 };
 
 export const TaskNav: React.FC<TaskNavProps> = (props) => {
-  const {
-    test,
-    state,
-    task,
-    onNextClick,
-    onPrevClick,
-    loadingState,
-    navigateTo,
-  } = props;
+  const {test, state, task, onClick, loadingState, navigateTo} = props;
 
+  const {tasks} = test;
   const {order} = task;
-  const {status} = state;
-  const tasksCount = test.tasks.length;
+  const {status, answers} = state;
+  const tasksCount = tasks.length;
   const isFirstTask = order === 0;
   const isLastTask = order === tasksCount - 1;
   const isCompleted = status === TestStatus.COMPLETED;
 
   const next = isLastTask ? '../results/' : `../${test.tasks[order + 1].id}`;
-  const prev = isFirstTask ? null : `../${test.tasks[order - 1].id}`;
-
-  const nextClickCallback: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
-    (event) => {
-      if (onNextClick) {
-        onNextClick(next, event);
-      }
-    },
-    [next, onNextClick],
-  );
-
-  const prevClickCallback: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
-    (event) => {
-      if (prev && onPrevClick) {
-        onPrevClick(prev, event);
-      }
-    },
-    [prev, onPrevClick],
-  );
+  const prev = isFirstTask ? undefined : `../${test.tasks[order - 1].id}`;
 
   return (
     <div className="test-task__nav">
-      {prev && (
+      <div className="test-task__nav-inner">
         <Button<typeof Link>
           neutral
           dataAttribute
-          className="test-task__nav-prev"
+          className={classNames('test-task__nav-btn', 'test-task__nav-prev', {
+            hidden: !prev,
+          })}
           component={Link}
-          to={prev}
-          onClick={prevClickCallback}
+          to={prev || '.'}
+          onClick={
+            prev && onClick ? (event) => onClick(prev, false, event) : undefined
+          }
           before={
             loadingState &&
             navigateTo === prev &&
@@ -83,31 +64,51 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
             )
           }
         >
-          Предыдущий вопрос
+          Назад
         </Button>
-      )}
-      <Button<typeof Link>
-        dataAttribute
-        className="test-task__nav-next"
-        component={Link}
-        to={next}
-        onClick={nextClickCallback}
-        after={
-          loadingState &&
-          navigateTo === next &&
-          loadingState !== LOADING_STATE.DONE ? (
-            <LoadingIndicator state={loadingState} />
-          ) : (
-            <i className="icon-angle-right" />
-          )
-        }
-      >
-        {isLastTask
-          ? isCompleted
-            ? 'Результаты'
-            : 'Завершить'
-          : 'Следующий вопрос'}
-      </Button>
+        <div className="test-task__nav-questions">
+          <ScrollContainer withShadows withArrows arrowScrollOffset={15}>
+            {tasks.map((task, index) => {
+              const link = `../${task.id}/`;
+
+              return (
+                <Button<typeof Link>
+                  component={Link}
+                  to={link}
+                  onClick={onClick && ((event) => onClick(link, false, event))}
+                  neutral={task.order !== order}
+                  className={classNames('test-task__nav-question', {
+                    'test-task__nav-question--answered': !!answers[task.id]
+                      ?.user_answer,
+                  })}
+                  key={task.id}
+                >
+                  {index + 1}
+                </Button>
+              );
+            })}
+          </ScrollContainer>
+        </div>
+        <Button<typeof Link>
+          dataAttribute
+          className={classNames('test-task__nav-btn', 'test-task__nav-next')}
+          clickOnWrapper
+          component={Link}
+          to={next}
+          onClick={onClick && ((event) => onClick(next, true, event))}
+          after={
+            loadingState &&
+            navigateTo === next &&
+            loadingState !== LOADING_STATE.DONE ? (
+              <LoadingIndicator state={loadingState} />
+            ) : (
+              <i className="icon-angle-right" />
+            )
+          }
+        >
+          {isLastTask ? (isCompleted ? 'Результаты' : 'Завершить') : 'Далее'}
+        </Button>
+      </div>
     </div>
   );
 };

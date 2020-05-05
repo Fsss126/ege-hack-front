@@ -187,10 +187,10 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
   );
   const loadingState = useLoadingState(submitting, submitting === false);
 
-  const onNextClick: LinkClickCallback = useCallback(
-    (link, event) => {
+  const onNavClick: LinkClickCallback = useCallback(
+    (link, complete, event) => {
       if (!hasChanged) {
-        if (isLastTask) {
+        if (complete && isLastTask) {
           event.preventDefault();
           event.stopPropagation();
 
@@ -202,22 +202,9 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
       event.preventDefault();
       event.stopPropagation();
 
-      handleSubmit(submitAnswer(isLastTask, link));
+      handleSubmit(submitAnswer(complete && isLastTask, link));
     },
     [handleSubmit, hasChanged, isLastTask, submitAnswer, submitTest],
-  );
-
-  const onPrevClick: LinkClickCallback = useCallback(
-    (link, event) => {
-      if (!hasChanged) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-      handleSubmit(submitAnswer(false, link));
-    },
-    [handleSubmit, hasChanged, submitAnswer],
   );
 
   const nav = (
@@ -226,8 +213,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
       test={test}
       state={state}
       loadingState={loadingState}
-      onNextClick={onNextClick}
-      onPrevClick={onPrevClick}
+      onClick={onNavClick}
       navigateTo={navigateLink}
     />
   );

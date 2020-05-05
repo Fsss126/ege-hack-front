@@ -827,21 +827,51 @@ input[type=number] {
   position: relative;
 
   &.scroll-container--with-shadows {
-    &:before, &:after {
-      content: '';
+    .scrollbars {
+      &:before, &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 18px;
+        z-index: 1;
+      }
+      &:before {
+        left: 0;
+        background: linear-gradient(90deg, #fff, hsla(0,0%,100%,0));
+      }
+
+      &:after {
+        right: 0;
+        background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, #fff);
+      }
+    }
+  }
+
+  &.scroll-container--with-arrows {
+    padding: 0 1.4em;
+
+    .scroll-container__arrow {
       position: absolute;
       height: 100%;
-      width: 18px;
-      z-index: 1;
-    }
-    &:before {
-      left: 0;
-      background: linear-gradient(90deg, #fff, hsla(0,0%,100%,0));
-    }
+      z-index: 2;
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .3s;
 
-    &:after {
-      right: 0;
-      background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, #fff);
+      &.icon-angle-left {
+        left: 0;
+      }
+
+      &.icon-angle-right {
+        right: 0;
+      }
+
+      &.scroll-container__arrow--visible {
+        opacity: 1;
+      }
     }
   }
 
@@ -889,7 +919,8 @@ input[type=number] {
   font-size: 12px;
   padding: 0.3em 0.5em;
   border-radius: 50em;
-  line-height: 1;
+  height: 1em;
+  line-height: 1.2em;
   min-width: calc(0.6em);
   text-align: center;
   display: inline-block;

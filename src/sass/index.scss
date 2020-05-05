@@ -1617,37 +1617,110 @@ header {
 
     .test-task__nav {
       display: flex;
-      flex-wrap: wrap;
-      @include media-breakpoint-down(sm) {
-        margin: 0 20px;
+
+      .test-task__nav-inner {
+        margin: 24px auto 0;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        overflow: hidden;
+
+        @include media-breakpoint-down(sm) {
+          margin-left: 24px;
+          margin-right: 24px;
+        }
       }
 
-      .btn {
+      .test-task__nav-questions {
+        flex-shrink: 1;
+        overflow: hidden;
+        margin: 0 16px;
+        font-size: 12px;
+
+        .scroll-container {
+          margin: 0;
+
+          .scrollbars {
+            box-sizing: content-box;
+            max-width: calc(2em * 8 + 2.4em + 8px * 8 + 30px);
+
+            &:before {
+              background: linear-gradient(90deg, $bg-grey, hsla(0,0%,100%,0));
+            }
+
+            &:after {
+              background: linear-gradient(90deg, hsla(0,0%,100%,0) 0, $bg-grey);
+            }
+          }
+
+          .scroll-container__inner {
+            align-items: center;
+          }
+
+          .scroll-container__arrow {
+            align-items: flex-end;
+            color: $icon-grey;
+
+            &:before {
+              content: "\e90d";
+              transform: none;
+            }
+          }
+        }
+
+        .test-task__nav-question {
+          flex-shrink: 0;
+          width: 2em;
+          height: 2em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: $font-medium;
+
+          &:not(.btn-neutral) {
+            width: 2.4em;
+            height: 2.4em;
+          }
+
+          .btn__name {
+            padding: 0;
+          }
+
+          &.btn-neutral.test-task__nav-question--answered {
+            color: $accent-orange;
+          }
+
+          & + .test-task__nav-question {
+            margin-left: 8px;
+          }
+        }
+      }
+
+      .btn.test-task__nav-btn {
         line-height: 30px;
-        margin-top: 24px;
         display: flex;
         flex-shrink: 0;
 
         &.test-task__nav-prev {
-          margin-right: auto;
-
-          .btn__name {
-            order: 1;
-          }
 
           @include media-breakpoint-down(sm) {
-            .btn__name:before {
-              content: 'Назад';
+            .btn__name {
+              display: none;
+            }
+            .btn__before {
+              padding: 10px;
             }
           }
         }
 
         &.test-task__nav-next {
-          margin-left: auto;
 
           @include media-breakpoint-down(sm) {
-            .btn__name:before {
-              content: 'Далее';
+            .btn__name {
+              display: none;
+            }
+            .btn__after {
+              padding: 10px;
             }
           }
         }
