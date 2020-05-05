@@ -76,7 +76,10 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
           location={location}
         >
           <PageContent parentSection={{name: course.name}}>
-            <ContentBlock transparent>
+            <ContentBlock
+              transparent
+              className="lesson-page__top-content-block"
+            >
               <div className="container p-lg-0">
                 <div className="row align-items-start">
                   <LessonView lesson={selectedLesson} homework={homework} />

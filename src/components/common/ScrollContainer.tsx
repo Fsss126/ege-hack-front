@@ -1,15 +1,8 @@
 import classNames from 'classnames';
-import React, {
-  forwardRef,
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import ScrollBars, {ScrollBarsProps} from 'components/ui/ScrollBars';
+import {useCombinedRefs} from 'hooks/helpers';
+import React, {forwardRef, useCallback, useLayoutEffect, useState} from 'react';
 import Scrollbars from 'react-custom-scrollbars';
-
-import {useCombinedRefs} from '../../utils/react';
-import ScrollBars, {ScrollBarsProps} from '../ui/ScrollBars';
 
 export interface ScrollContainerProps extends ScrollBarsProps {
   withShadows?: boolean;

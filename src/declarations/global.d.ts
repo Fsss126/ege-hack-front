@@ -10,6 +10,14 @@ declare global {
 
     declare type Dictionary<T> = { [key: string]: T }
 
+    declare type Yield<T> = T extends import('redux-saga').EventChannel<infer U1>
+      ? U1
+      : ReturnType<T> extends Promise<infer U2>
+        ? U2
+        : ReturnType<T> extends Generator<unknown, infer U3>
+          ? U3
+          : ReturnType<T>;
+
     declare interface Window {
         APIRequest: AxiosInstance;
     }

@@ -11,7 +11,7 @@ const Knowledge: React.FC<RouteComponentProps<any>> = ({match}) => {
     <Switch>
       <Route
         exact
-        path={`${match.path}/create`}
+        path={`${match.path}/theme/create`}
         component={CourseCreatingPage}
       />
       <Route exact path={`${match.path}/edit`} component={CourseEditingPage} />

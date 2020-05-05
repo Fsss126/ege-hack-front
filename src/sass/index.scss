@@ -1127,6 +1127,10 @@ header {
   }
 
   .lesson-page {
+    .lesson-page__top-content-block {
+      padding-top: 0;
+    }
+
     .layout__content-container > .layout__content-block {
       @include media-breakpoint-down(md) {
         background: none;

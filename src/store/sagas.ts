@@ -34,9 +34,10 @@ import {
   UserCourseInfo,
   WebinarScheduleInfo,
 } from '../types/entities';
-import {AccountRole} from '../types/enums';
+import {takeLeadingPerKey} from '../utils/sagaHelpers';
 import {
   AccountsDeleteRequestAction,
+  AccountsFetchAction,
   Action,
   ActionType,
   AdminWebinarsFetchAction,
@@ -154,13 +155,14 @@ function* fetchUserTeachers() {
   });
 }
 
-function getFetchAccounts(role: AccountRole) {
-  return function* fetchAccounts() {
-    yield* waitForLogin(
-      (action: Action) =>
-        action.type === ActionType.ACCOUNTS_FETCH && action.role === role,
-      function* (channel) {
-        yield takeLeading(channel, function* () {
+function* fetchAccounts() {
+  yield* waitForLogin<AccountsFetchAction>(
+    ActionType.ACCOUNTS_FETCH,
+    function* (channel) {
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: AccountsFetchAction) {
+          const {role} = action;
           try {
             const accounts: AccountInfo[] = yield call(
               APIRequest.get,
@@ -183,38 +185,38 @@ function getFetchAccounts(role: AccountRole) {
               role,
             });
           }
-        });
-      },
-    );
-  };
+        },
+        (action) => action.role,
+      );
+    },
+  );
 }
 
-const fetchTeachers = getFetchAccounts(AccountRole.TEACHER);
-
-const fetchAssistants = getFetchAccounts(AccountRole.HELPER);
-
-const fetchAdmins = getFetchAccounts(AccountRole.ADMIN);
-
-const fetchModerators = getFetchAccounts(AccountRole.MODERATOR);
-
-// TODO: handle take leading properly
 function* fetchLessons() {
   yield* waitForLogin<LessonsFetchAction>(ActionType.LESSONS_FETCH, function* (
     channel,
   ) {
-    yield takeLeading(channel, function* (action: LessonsFetchAction) {
-      const {courseId} = action;
-      try {
-        const lessons: LessonInfo[] = yield call(APIRequest.get, '/lessons', {
-          params: {
+    yield takeLeadingPerKey(
+      channel,
+      function* (action: LessonsFetchAction) {
+        const {courseId} = action;
+        try {
+          const lessons: LessonInfo[] = yield call(APIRequest.get, '/lessons', {
+            params: {
+              courseId,
+            },
+          });
+          yield put({type: ActionType.LESSONS_FETCHED, lessons, courseId});
+        } catch (error) {
+          yield put({
+            type: ActionType.LESSONS_FETCHED,
+            lessons: error,
             courseId,
-          },
-        });
-        yield put({type: ActionType.LESSONS_FETCHED, lessons, courseId});
-      } catch (error) {
-        yield put({type: ActionType.LESSONS_FETCHED, lessons: error, courseId});
-      }
-    });
+          });
+        }
+      },
+      (action) => action.courseId,
+    );
   });
 }
 
@@ -222,26 +224,30 @@ function* fetchCourseWebinars() {
   yield* waitForLogin<CourseWebinarsFetchAction>(
     ActionType.COURSE_WEBINARS_FETCH,
     function* (channel) {
-      yield takeLeading(channel, function* (action: CourseWebinarsFetchAction) {
-        const {courseId} = action;
-        try {
-          const webinars: PersonWebinar[] = yield call(
-            APIRequest.get,
-            `/courses/${courseId}/schedule/person`,
-          );
-          yield put({
-            type: ActionType.COURSE_WEBINARS_FETCHED,
-            webinars,
-            courseId,
-          });
-        } catch (error) {
-          yield put({
-            type: ActionType.COURSE_WEBINARS_FETCHED,
-            webinars: error,
-            courseId,
-          });
-        }
-      });
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: CourseWebinarsFetchAction) {
+          const {courseId} = action;
+          try {
+            const webinars: PersonWebinar[] = yield call(
+              APIRequest.get,
+              `/courses/${courseId}/schedule/person`,
+            );
+            yield put({
+              type: ActionType.COURSE_WEBINARS_FETCHED,
+              webinars,
+              courseId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.COURSE_WEBINARS_FETCHED,
+              webinars: error,
+              courseId,
+            });
+          }
+        },
+        (action) => action.courseId,
+      );
     },
   );
 }
@@ -274,26 +280,30 @@ function* fetchParticipants() {
   yield* waitForLogin<ParticipantsFetchAction>(
     ActionType.PARTICIPANTS_FETCH,
     function* (channel) {
-      yield takeLeading(channel, function* (action: ParticipantsFetchAction) {
-        const {courseId} = action;
-        try {
-          const participants: CourseParticipantInfo[] = yield call(
-            APIRequest.get,
-            `/courses/${courseId}/participants`,
-          );
-          yield put({
-            type: ActionType.PARTICIPANTS_FETCHED,
-            participants,
-            courseId,
-          });
-        } catch (error) {
-          yield put({
-            type: ActionType.PARTICIPANTS_FETCHED,
-            participants: error,
-            courseId,
-          });
-        }
-      });
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: ParticipantsFetchAction) {
+          const {courseId} = action;
+          try {
+            const participants: CourseParticipantInfo[] = yield call(
+              APIRequest.get,
+              `/courses/${courseId}/participants`,
+            );
+            yield put({
+              type: ActionType.PARTICIPANTS_FETCHED,
+              participants,
+              courseId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.PARTICIPANTS_FETCHED,
+              participants: error,
+              courseId,
+            });
+          }
+        },
+        (action) => action.courseId,
+      );
     },
   );
 }
@@ -319,26 +329,30 @@ function* fetchAdminWebinars() {
   yield* waitForLogin<AdminWebinarsFetchAction>(
     ActionType.ADMIN_WEBINARS_FETCH,
     function* (channel) {
-      yield takeLeading(channel, function* (action: AdminWebinarsFetchAction) {
-        const {courseId} = action;
-        try {
-          const webinars: WebinarScheduleInfo = yield call(
-            APIRequest.get,
-            `/courses/${courseId}/schedule`,
-          );
-          yield put({
-            type: ActionType.ADMIN_WEBINARS_FETCHED,
-            webinars,
-            courseId,
-          });
-        } catch (error) {
-          yield put({
-            type: ActionType.ADMIN_WEBINARS_FETCHED,
-            webinars: error,
-            courseId,
-          });
-        }
-      });
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: AdminWebinarsFetchAction) {
+          const {courseId} = action;
+          try {
+            const webinars: WebinarScheduleInfo = yield call(
+              APIRequest.get,
+              `/courses/${courseId}/schedule`,
+            );
+            yield put({
+              type: ActionType.ADMIN_WEBINARS_FETCHED,
+              webinars,
+              courseId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.ADMIN_WEBINARS_FETCHED,
+              webinars: error,
+              courseId,
+            });
+          }
+        },
+        (action) => action.courseId,
+      );
     },
   );
 }
@@ -363,65 +377,77 @@ function* fetchHomeworks() {
   yield* waitForLogin<HomeworksFetchAction>(
     ActionType.HOMEWORKS_FETCH,
     function* (channel) {
-      yield takeLeading(channel, function* (action: HomeworksFetchAction) {
-        const {lessonId} = action;
-        try {
-          const homeworks: HomeworkInfo[] = yield call(
-            APIRequest.get,
-            `/lessons/${lessonId}/homeworks`,
-          );
-          yield put({type: ActionType.HOMEWORKS_FETCHED, homeworks, lessonId});
-        } catch (error) {
-          yield put({
-            type: ActionType.HOMEWORKS_FETCHED,
-            homeworks: error,
-            lessonId,
-          });
-        }
-      });
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: HomeworksFetchAction) {
+          const {lessonId} = action;
+          try {
+            const homeworks: HomeworkInfo[] = yield call(
+              APIRequest.get,
+              `/lessons/${lessonId}/homeworks`,
+            );
+            yield put({
+              type: ActionType.HOMEWORKS_FETCHED,
+              homeworks,
+              lessonId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.HOMEWORKS_FETCHED,
+              homeworks: error,
+              lessonId,
+            });
+          }
+        },
+        (action) => action.lessonId,
+      );
     },
   );
 }
 
 function* processLessonDelete() {
-  yield takeEvery(ActionType.LESSON_DELETE_REQUEST, function* (
-    action: LessonDeleteRequestAction,
-  ) {
-    const {courseId, lessonId, onDelete, onError} = action;
-    try {
-      yield call(APIRequest.delete, `/lessons/${lessonId}`);
-      if (onDelete) {
-        yield call(onDelete, courseId, lessonId);
+  yield takeLeadingPerKey(
+    ActionType.LESSON_DELETE_REQUEST,
+    function* (action: LessonDeleteRequestAction) {
+      const {courseId, lessonId, onDelete, onError} = action;
+      try {
+        yield call(APIRequest.delete, `/lessons/${lessonId}`);
+        if (onDelete) {
+          yield call(onDelete, courseId, lessonId);
+        }
+        yield put({type: ActionType.LESSON_DELETE, courseId, lessonId});
+      } catch (error) {
+        if (onError) {
+          yield call(onError, courseId, lessonId, error);
+        }
       }
-      yield put({type: ActionType.LESSON_DELETE, courseId, lessonId});
-    } catch (error) {
-      if (onError) {
-        yield call(onError, courseId, lessonId, error);
-      }
-    }
-  });
+    },
+    (action) => action.lessonId,
+  );
 }
 
 function* processParticipantDelete() {
-  yield takeEvery(ActionType.PARTICIPANTS_DELETE_REQUEST, function* (
-    action: ParticipantDeleteRequestAction,
-  ) {
-    const {courseId, userId, onDelete, onError} = action;
-    try {
-      yield call(
-        APIRequest.delete,
-        `courses/${courseId}/participants/${userId}`,
-      );
-      if (onDelete) {
-        yield call(onDelete, courseId, userId);
+  yield takeLeadingPerKey(
+    ActionType.PARTICIPANTS_DELETE_REQUEST,
+    function* (action: ParticipantDeleteRequestAction) {
+      const {courseId, userId, onDelete, onError} = action;
+      try {
+        yield call(
+          APIRequest.delete,
+          `courses/${courseId}/participants/${userId}`,
+        );
+        if (onDelete) {
+          yield call(onDelete, courseId, userId);
+        }
+        yield put({type: ActionType.PARTICIPANTS_DELETE, courseId, userId});
+      } catch (error) {
+        if (onError) {
+          yield call(onError, courseId, userId, error);
+        }
       }
-      yield put({type: ActionType.PARTICIPANTS_DELETE, courseId, userId});
-    } catch (error) {
-      if (onError) {
-        yield call(onError, courseId, userId, error);
-      }
-    }
-  });
+    },
+    (action) => [action.courseId, action.userId],
+  );
 }
 
 function* processAccountsDelete() {
@@ -459,87 +485,93 @@ function* processAccountsDelete() {
 }
 
 function* processSubjectDelete() {
-  yield takeEvery(ActionType.SUBJECT_DELETE_REQUEST, function* (
-    action: SubjectDeleteRequestAction,
-  ) {
-    const {subjectId, onDelete, onError} = action;
-    try {
-      yield call(APIRequest.delete, `/subjects/${subjectId}`);
-      if (onDelete) {
-        yield call(onDelete, subjectId);
+  yield takeLeadingPerKey(
+    ActionType.SUBJECT_DELETE_REQUEST,
+    function* (action: SubjectDeleteRequestAction) {
+      const {subjectId, onDelete, onError} = action;
+      try {
+        yield call(APIRequest.delete, `/subjects/${subjectId}`);
+        if (onDelete) {
+          yield call(onDelete, subjectId);
+        }
+        yield put({type: ActionType.SUBJECT_DELETE, subjectId});
+      } catch (error) {
+        if (onError) {
+          yield call(onError, subjectId, error);
+        }
       }
-      yield put({type: ActionType.SUBJECT_DELETE, subjectId});
-    } catch (error) {
-      if (onError) {
-        yield call(onError, subjectId, error);
-      }
-    }
-  });
+    },
+    (action) => action.subjectId,
+  );
 }
 
 function* processCourseDelete() {
-  yield takeEvery(ActionType.COURSE_DELETE_REQUEST, function* (
-    action: CourseDeleteRequestAction,
-  ) {
-    const {courseId, onDelete, onError} = action;
-    try {
-      yield call(APIRequest.delete, `/courses/${courseId}`);
-      if (onDelete) {
-        yield call(onDelete, courseId);
+  yield takeLeadingPerKey(
+    ActionType.COURSE_DELETE_REQUEST,
+    function* (action: CourseDeleteRequestAction) {
+      const {courseId, onDelete, onError} = action;
+      try {
+        yield call(APIRequest.delete, `/courses/${courseId}`);
+        if (onDelete) {
+          yield call(onDelete, courseId);
+        }
+        yield put({type: ActionType.COURSE_DELETE, courseId});
+      } catch (error) {
+        if (onError) {
+          yield call(onError, courseId, error);
+        }
       }
-      yield put({type: ActionType.COURSE_DELETE, courseId});
-    } catch (error) {
-      if (onError) {
-        yield call(onError, courseId, error);
-      }
-    }
-  });
+    },
+    (action) => action.courseId,
+  );
 }
 
 function* processWebinarDelete() {
-  yield takeEvery(ActionType.WEBINAR_DELETE_REQUEST, function* (
-    action: WebinarDeleteRequestAction,
-  ) {
-    const {courseId, webinarId, webinarsSchedule, onDelete, onError} = action;
-    const {
-      course_id,
-      click_meeting_link,
-      image_link,
-      webinars,
-    } = webinarsSchedule;
-    const requestData = {
-      course_id,
-      click_meeting_link,
-      image: image_link.split('/').pop(),
-      webinars: webinars
-        .filter(({id}) => id !== webinarId)
-        .map(({date_start, ...rest}) => ({
-          ...rest,
-          date_start: date_start.getTime(),
-        })),
-    };
-    try {
-      const responseWebinars: WebinarScheduleInfo = yield call(
-        APIRequest.put,
-        `/courses/${courseId}/schedule`,
-        requestData,
-      );
+  yield takeLeadingPerKey(
+    ActionType.WEBINAR_DELETE_REQUEST,
+    function* (action: WebinarDeleteRequestAction) {
+      const {courseId, webinarId, webinarsSchedule, onDelete, onError} = action;
+      const {
+        course_id,
+        click_meeting_link,
+        image_link,
+        webinars,
+      } = webinarsSchedule;
+      const requestData = {
+        course_id,
+        click_meeting_link,
+        image: image_link.split('/').pop(),
+        webinars: webinars
+          .filter(({id}) => id !== webinarId)
+          .map(({date_start, ...rest}) => ({
+            ...rest,
+            date_start: date_start.getTime(),
+          })),
+      };
+      try {
+        const responseWebinars: WebinarScheduleInfo = yield call(
+          APIRequest.put,
+          `/courses/${courseId}/schedule`,
+          requestData,
+        );
 
-      if (onDelete) {
-        yield call(onDelete, courseId, webinarId);
+        if (onDelete) {
+          yield call(onDelete, courseId, webinarId);
+        }
+        yield put({
+          type: ActionType.WEBINAR_DELETE,
+          courseId,
+          webinarId,
+          responseWebinars,
+        });
+      } catch (error) {
+        if (onError) {
+          yield call(onError, courseId, webinarId, error);
+        }
       }
-      yield put({
-        type: ActionType.WEBINAR_DELETE,
-        courseId,
-        webinarId,
-        responseWebinars,
-      });
-    } catch (error) {
-      if (onError) {
-        yield call(onError, courseId, webinarId, error);
-      }
-    }
-  });
+    },
+    (action) => [action.courseId, action.webinarId],
+  );
 }
 
 function* fetchTest() {
@@ -565,87 +597,100 @@ function* fetchTestState() {
   yield* waitForLogin<TestStateFetchAction>(
     ActionType.TEST_STATE_FETCH,
     function* (channel) {
-      yield takeLeading(channel, function* (action: TestStateFetchAction) {
-        const {testId, lessonId, courseId} = action;
-        try {
-          const state: TestStateInfo = yield call(
-            APIRequest.post,
-            `/knowledge/tests/${testId}/state`,
-          );
-          yield put({
-            type: ActionType.TEST_STATE_FETCHED,
-            state,
-            testId,
-            lessonId,
-            courseId,
-          });
-        } catch (error) {
-          yield put({
-            type: ActionType.TEST_STATE_FETCHED,
-            state: error,
-            testId,
-            lessonId,
-            courseId,
-          });
-        }
-      });
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: TestStateFetchAction) {
+          const {testId, lessonId, courseId} = action;
+          try {
+            const state: TestStateInfo = yield call(
+              APIRequest.post,
+              `/knowledge/tests/${testId}/state`,
+            );
+            yield put({
+              type: ActionType.TEST_STATE_FETCHED,
+              state,
+              testId,
+              lessonId,
+              courseId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.TEST_STATE_FETCHED,
+              state: error,
+              testId,
+              lessonId,
+              courseId,
+            });
+          }
+        },
+        (action) => action.testId,
+      );
     },
   );
 }
 
 function* processTestStart() {
-  yield takeEvery(ActionType.TEST_START_REQUEST, function* (
-    action: TestStartRequestAction,
-  ) {
-    const {testId, lessonId, courseId, onSuccess, onError} = action;
-    yield put({type: ActionType.TEST_FETCH, testId});
-    yield put({type: ActionType.TEST_STATE_FETCH, testId, lessonId, courseId});
-    const {state}: TestStateFetchedAction = yield take(
-      (action: Action) =>
-        action.type === ActionType.TEST_STATE_FETCHED &&
-        action.testId === testId,
-    );
-
-    if (state instanceof Error) {
-      if (onError) {
-        yield call(onError, testId, state);
-      }
-    } else {
-      if (onSuccess) {
-        yield call(onSuccess, testId, state);
-      }
-    }
-  });
-}
-
-function* processTestComplete() {
-  yield takeEvery(ActionType.TEST_COMPLETE_REQUEST, function* (
-    action: TestCompleteRequestAction,
-  ) {
-    const {testId, lessonId, courseId, onSuccess, onError} = action;
-    try {
-      const state: TestStatePassedInfo = yield call(
-        APIRequest.post,
-        `/knowledge/tests/${testId}/complete`,
-      );
+  yield takeLeadingPerKey(
+    ActionType.TEST_START_REQUEST,
+    function* (action: TestStartRequestAction) {
+      const {testId, lessonId, courseId, onSuccess, onError} = action;
+      yield put({type: ActionType.TEST_FETCH, testId});
       yield put({
-        type: ActionType.TEST_STATE_FETCHED,
+        type: ActionType.TEST_STATE_FETCH,
         testId,
         lessonId,
         courseId,
-        state,
       });
-      yield select();
+      const {state}: TestStateFetchedAction = yield take(
+        (action: Action) =>
+          action.type === ActionType.TEST_STATE_FETCHED &&
+          action.testId === testId,
+      );
 
-      if (onSuccess) {
-        yield call(onSuccess, testId, state);
+      if (state instanceof Error) {
+        if (onError) {
+          yield call(onError, testId, state);
+        }
+      } else {
+        if (onSuccess) {
+          yield call(onSuccess, testId, state);
+        }
       }
-    } catch (e) {
-      if (onError) {
-        yield call(onError, testId, e);
+    },
+    (action) => action.testId,
+  );
+}
+
+function* processTestComplete() {
+  yield takeLeadingPerKey(
+    ActionType.TEST_COMPLETE_REQUEST,
+    function* (action: TestCompleteRequestAction) {
+      const {testId, lessonId, courseId, onSuccess, onError} = action;
+      try {
+        const state: TestStatePassedInfo = yield call(
+          APIRequest.post,
+          `/knowledge/tests/${testId}/complete`,
+        );
+        yield put({
+          type: ActionType.TEST_STATE_FETCHED,
+          testId,
+          lessonId,
+          courseId,
+          state,
+        });
+        yield select();
+
+        if (onSuccess) {
+          yield call(onSuccess, testId, state);
+        }
+      } catch (e) {
+        if (onError) {
+          yield call(onError, testId, e);
+        }
       }
-    }
-  });
+    },
+    (action) => action.testId,
+  );
 }
 
 function* processTestStateFetched() {
@@ -666,9 +711,9 @@ function* processTestStateFetched() {
       progress,
       passed,
     };
-    const lessons: AppState['dataReducer']['lessons'] = yield select(
-      selectLessons,
-    );
+    const lessons = (yield select(selectLessons)) as Yield<
+      typeof selectLessons
+    >;
     const courseLessons = lessons[courseId];
 
     if (!(courseLessons instanceof Array)) {
@@ -697,70 +742,72 @@ function* processTestStateFetched() {
 }
 
 function* processTestSaveAnswer() {
-  yield takeEvery(ActionType.TEST_SAVE_ANSWER_REQUEST, function* (
-    action: TestSaveAnswerRequestAction,
-  ) {
-    const {
-      testId,
-      taskId,
-      lessonId,
-      courseId,
-      answer,
-      complete,
-      onSuccess,
-      onError,
-    } = action;
-
-    const requestData: UserAnswerDtoReq = {
-      task_id: taskId,
-      user_answer: answer,
-    };
-
-    try {
-      const answerInfo = yield call(
-        APIRequest.put,
-        `/knowledge/tests/${testId}/answer`,
-        requestData,
-      );
-      yield delay(300);
-      yield put({
-        type: ActionType.TEST_SAVE_ANSWER,
-        taskId,
+  yield takeLeadingPerKey(
+    ActionType.TEST_SAVE_ANSWER_REQUEST,
+    function* (action: TestSaveAnswerRequestAction) {
+      const {
         testId,
+        taskId,
         lessonId,
         courseId,
-        answerInfo,
-      });
-      yield select();
+        answer,
+        complete,
+        onSuccess,
+        onError,
+      } = action;
 
-      if (complete) {
+      const requestData: UserAnswerDtoReq = {
+        task_id: taskId,
+        user_answer: answer,
+      };
+
+      try {
+        const answerInfo = yield call(
+          APIRequest.put,
+          `/knowledge/tests/${testId}/answer`,
+          requestData,
+        );
+        yield delay(300);
         yield put({
-          type: ActionType.TEST_COMPLETE_REQUEST,
+          type: ActionType.TEST_SAVE_ANSWER,
+          taskId,
           testId,
           lessonId,
           courseId,
-          onSuccess: () => {
-            if (onSuccess) {
-              onSuccess(testId, taskId, answerInfo);
-            }
-          },
-          onError: (testId, error) => {
-            if (onError) {
-              onError(testId, taskId, error);
-            }
-          },
+          answerInfo,
         });
-      }
+        yield select();
 
-      if (onSuccess) {
-        yield call(onSuccess, testId, taskId, answerInfo);
+        if (complete) {
+          yield put({
+            type: ActionType.TEST_COMPLETE_REQUEST,
+            testId,
+            lessonId,
+            courseId,
+            onSuccess: () => {
+              if (onSuccess) {
+                onSuccess(testId, taskId, answerInfo);
+              }
+            },
+            onError: (testId, error) => {
+              if (onError) {
+                onError(testId, taskId, error);
+              }
+            },
+          });
+        }
+
+        if (onSuccess) {
+          yield call(onSuccess, testId, taskId, answerInfo);
+        }
+      } catch (e) {
+        if (onError) {
+          yield call(onError, testId, taskId, e);
+        }
       }
-    } catch (e) {
-      if (onError) {
-        yield call(onError, testId, taskId, e);
-      }
-    }
-  });
+    },
+    (action) => [action.testId, action.taskId],
+  );
 }
 
 function* init() {
@@ -780,10 +827,7 @@ export default function* rootSaga() {
   yield spawn(fetchUserCourses);
   yield spawn(fetchSubjects);
   yield spawn(fetchUserTeachers);
-  yield spawn(fetchTeachers);
-  yield spawn(fetchAssistants);
-  yield spawn(fetchAdmins);
-  yield spawn(fetchModerators);
+  yield spawn(fetchAccounts);
   yield spawn(fetchLessons);
   yield spawn(fetchCourseWebinars);
   yield spawn(fetchUpcomingWebinars);

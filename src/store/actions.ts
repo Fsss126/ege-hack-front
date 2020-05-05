@@ -153,9 +153,12 @@ export type UserTeachersFetchedAction = {
   teachers: TeacherInfo[] | AxiosError;
 };
 
-type AccountsFetchAction = {type: ActionType.ACCOUNTS_FETCH; role: AccountRole};
+export type AccountsFetchAction = {
+  type: ActionType.ACCOUNTS_FETCH;
+  role: AccountRole;
+};
 
-type AccountsFetchedAction = {
+export type AccountsFetchedAction = {
   type: ActionType.ACCOUNTS_FETCHED;
   role: AccountRole;
   accounts: AccountInfo[] | AxiosError;
