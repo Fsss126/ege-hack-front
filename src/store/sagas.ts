@@ -256,9 +256,7 @@ function* fetchUpcomingWebinars() {
   yield* waitForLogin<UpcomingWebinarsFetchAction>(
     ActionType.UPCOMING_WEBINARS_FETCH,
     function* (channel) {
-      yield takeLeading(channel, function* (
-        action: UpcomingWebinarsFetchAction,
-      ) {
+      yield takeLeading(channel, function* () {
         try {
           const webinars: PersonWebinar[] = yield call(
             APIRequest.get,

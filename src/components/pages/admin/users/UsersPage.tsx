@@ -1,9 +1,8 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
-import {useCheckPermissions} from 'components/ConditionalRender';
 import {useAccounts} from 'hooks/selectors';
 import React from 'react';
 import {Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom';
-import {AccountRole, Permission} from 'types/enums';
+import {AccountRole} from 'types/enums';
 
 import AdminsPage from './admins/AdminsPage';
 import AssistantsPage from './assistants/AssistantsPage';
@@ -35,6 +34,20 @@ const UsersPage: React.FC<RouteComponentProps> = (props) => {
 
   const isLoaded = !!(teachers && assistants && admins && moderators);
 
+  const errors = [
+    errorLoadingAdmins,
+    errorLoadingModerators,
+    errorLoadingTeachers,
+    errorLoadingAssistants,
+  ];
+
+  const reloadCallbacks = [
+    reloadAdmins,
+    reloadModerators,
+    reloadTeachers,
+    reloadAssistants,
+  ];
+
   const header = !!(teachers && assistants && admins && moderators) && (
     <TabNavBlock title="Пользователи">
       <TabNav>
@@ -62,6 +75,8 @@ const UsersPage: React.FC<RouteComponentProps> = (props) => {
           <AdminsPage
             accounts={admins ? admins : undefined}
             isLoaded={isLoaded}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}
@@ -74,6 +89,8 @@ const UsersPage: React.FC<RouteComponentProps> = (props) => {
           <ModeratorsPage
             accounts={moderators ? moderators : undefined}
             isLoaded={isLoaded}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}
@@ -86,6 +103,8 @@ const UsersPage: React.FC<RouteComponentProps> = (props) => {
           <TeachersPage
             accounts={teachers ? teachers : undefined}
             isLoaded={isLoaded}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}
@@ -98,6 +117,8 @@ const UsersPage: React.FC<RouteComponentProps> = (props) => {
           <AssistantsPage
             accounts={assistants ? assistants : undefined}
             isLoaded={isLoaded}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}

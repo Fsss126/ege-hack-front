@@ -66,10 +66,10 @@ const Body: React.FC<CourseBodyProps> = (props) => {
   const {teachers, subjects, ...otherProps} = props;
 
   const options = React.useMemo(() => {
-    // const subjectsMap = _.zipObject(
-    //   subjects.map(({id}) => id),
-    //   subjects,
-    // );
+    const subjectsMap = _.zipObject(
+      subjects.map(({id}) => id),
+      subjects,
+    );
     const subjectsTeachers = _.reduce<
       TeacherInfo,
       {[key: number]: SubjectInfo}
@@ -77,7 +77,7 @@ const Body: React.FC<CourseBodyProps> = (props) => {
       teachers,
       (result, teacher) => {
         teacher.subjects.forEach((subject) => {
-          result[subject.id] = subject;
+          result[subject.id] = subjectsMap[subject.id];
         });
         return result;
       },
@@ -88,7 +88,7 @@ const Body: React.FC<CourseBodyProps> = (props) => {
       value: id,
       label: name,
     }));
-  }, [teachers]);
+  }, [subjects, teachers]);
 
   return (
     <Catalog.Body
@@ -100,12 +100,9 @@ const Body: React.FC<CourseBodyProps> = (props) => {
   );
 };
 
-// const Page = (props) => (<Catalog.Page BodyComponent={Body} {...props}/>);
-
 export default {
   ...Catalog,
   Filter,
   Catalog: TeachersCatalog,
   Body,
-  // Page
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import {BasicAccountInfo, CourseInfo, SubjectInfo} from 'types/entities';
+import {BasicAccountInfo} from 'types/entities';
 
 import Catalog, {
   CatalogBodyProps,

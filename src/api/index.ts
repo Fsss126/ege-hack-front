@@ -24,7 +24,6 @@ import {
   TestInfo,
   TestStateAnswerInfo,
   TestStateInfo,
-  UserAnswerInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
 } from 'types/entities';

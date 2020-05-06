@@ -8,27 +8,6 @@ import {useDispatch, useSelector as useSelectorGen} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
 import {
-  selectAdminCourses,
-  selectAdminWebinars,
-  selectHomeworks,
-  selectLessons,
-  selectParticipants,
-  selectShopCourses,
-  selectSubjects,
-  selectTeacherCourses,
-  selectTest,
-  selectTestState,
-  selectUpcomingWebinars,
-  selectUser,
-  selectUserCourses,
-  selectUsers,
-  selectUserTeachers,
-  selectWebinars,
-} from 'store/selectors';
-import {AccountRole, Permission} from 'types/enums';
-import {SimpleCallback} from 'types/utility/common';
-
-import {
   AccountsDeleteCallback,
   AccountsDeleteErrorCallback,
   Action,
@@ -47,8 +26,26 @@ import {
   TestStartErrorCallback,
   WebinarDeleteCallback,
   WebinarDeleteErrorCallback,
-} from '../store/actions';
-import {AppState} from '../store/reducers';
+} from 'store/actions';
+import {AppState} from 'store/reducers';
+import {
+  selectAdminCourses,
+  selectAdminWebinars,
+  selectHomeworks,
+  selectLessons,
+  selectParticipants,
+  selectShopCourses,
+  selectSubjects,
+  selectTeacherCourses,
+  selectTest,
+  selectTestState,
+  selectUpcomingWebinars,
+  selectUser,
+  selectUserCourses,
+  selectUsers,
+  selectUserTeachers,
+  selectWebinars,
+} from 'store/selectors';
 import {
   AccountInfo,
   CourseInfo,
@@ -62,12 +59,12 @@ import {
   SanitizedTestInfo,
   SubjectInfo,
   TeacherInfo,
-  TestInfo,
   TestStateInfo,
   TestStatus,
-  WebinarInfo,
   WebinarScheduleInfo,
-} from '../types/entities';
+} from 'types/entities';
+import {AccountRole, Permission} from 'types/enums';
+import {SimpleCallback} from 'types/utility/common';
 
 const useSelector = <TSelected>(
   selector: (state: AppState) => TSelected,
@@ -193,7 +190,7 @@ export function useDiscount(
       );
       setDiscount(discount);
     } catch (e) {
-      console.log('error loading discount', e);
+      console.error('Error loading discount', e);
       setError(e);
     } finally {
       setLoading(false);

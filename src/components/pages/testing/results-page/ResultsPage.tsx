@@ -17,20 +17,15 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
 >> = (props) => {
   const {
     match: {
-      params: {
-        testId: param_test,
-        lessonId: param_lesson,
-        courseId: param_course,
-      },
+      params: {testId: param_test, lessonId: param_lesson},
     },
-    path: root,
     location,
   } = props;
   const testId = parseInt(param_test);
   const lessonId = parseInt(param_lesson);
   const courseId = parseInt(param_lesson);
 
-  const {test} = useTest(testId);
+  const {test, error: errorLoadingTest, reload: reloadTest} = useTest(testId);
   const {
     state,
     error: errorLoadingTestState,
@@ -59,6 +54,11 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
     [],
   );
 
+  const isLoaded = !!(test && state);
+
+  let content;
+  let title;
+
   if (test && state) {
     const {name, tasks, percentage: minPercentage} = test;
 
@@ -80,33 +80,38 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
       return answer || null;
     });
 
-    return (
-      <Page
-        isLoaded={true}
-        title={`Результаты – ${name}`}
-        className="test-page test-results-page"
-        location={location}
+    title = `Результаты – ${name}`;
+    content = (
+      <PageContent
+        parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
       >
-        <PageContent
-          parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
-        >
-          <ContentBlock>
-            <h2 className="test__test-title">{name}</h2>
-            <h3 className="test-passage">
-              {passed ? 'Тест пройден' : 'Тест не пройден'}
-            </h3>
-            <ResultBar percentage={percentage} minPercentage={minPercentage} />
-            <div className="tasks-count">
-              Вопросов: {correctCount}/{tasksCount}
-            </div>
-            <List renderItem={renderAnswer} plain className="test-results">
-              {answersList}
-            </List>
-          </ContentBlock>
-        </PageContent>
-      </Page>
+        <ContentBlock>
+          <h2 className="test__test-title">{name}</h2>
+          <h3 className="test-passage">
+            {passed ? 'Тест пройден' : 'Тест не пройден'}
+          </h3>
+          <ResultBar percentage={percentage} minPercentage={minPercentage} />
+          <div className="tasks-count">
+            Вопросов: {correctCount}/{tasksCount}
+          </div>
+          <List renderItem={renderAnswer} plain className="test-results">
+            {answersList}
+          </List>
+        </ContentBlock>
+      </PageContent>
     );
-  } else {
-    return <Page isLoaded={false} location={location} />;
   }
+
+  return (
+    <Page
+      isLoaded={isLoaded}
+      title={title}
+      className="test-page test-results-page"
+      errors={[errorLoadingTest, errorLoadingTestState]}
+      reloadCallbacks={[reloadTest, reloadTestState]}
+      location={location}
+    >
+      {content}
+    </Page>
+  );
 };

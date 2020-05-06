@@ -9,15 +9,15 @@ import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo, TeacherInfo} from 'types/entities';
 
+import {SimpleCallback} from '../../types/utility/common';
 import ConditionalRenderer from '../ConditionalRender';
-import {NotFoundErrorPage} from '../layout/ErrorPage';
 import Page, {PageContent, PageLink} from '../layout/Page';
 import Catalog, {CatalogProps} from './Catalog';
 import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
 } from './DropdownMenu';
-import List, {ListProps} from './List';
+import {ListProps} from './List';
 import ScrollContainer from './ScrollContainer';
 import Teacher from './Teacher';
 
@@ -196,6 +196,9 @@ export type CourseOverviewProps = Pick<RouteComponentProps, 'location'> & {
   path: string;
   children: React.ReactNode;
   className?: string;
+  isLoaded: boolean;
+  errors?: any[];
+  reloadCallbacks?: SimpleCallback[];
 };
 const CourseOverview: React.FC<CourseOverviewProps> = (props) => {
   const {
@@ -206,6 +209,9 @@ const CourseOverview: React.FC<CourseOverviewProps> = (props) => {
     children,
     className,
     location,
+    isLoaded,
+    errors,
+    reloadCallbacks,
   } = props;
 
   const teachers = useMemo(() => {
@@ -218,33 +224,41 @@ const CourseOverview: React.FC<CourseOverviewProps> = (props) => {
     );
   }, [course, passedTeachers]);
 
+  let title;
+  let content;
+
   if (course && teachers && lessons) {
-    return (
-      <Page
-        title={`${course.name}`}
-        className={classNames('course-overview', 'catalog', className)}
-        location={location}
+    title = course.name;
+
+    content = (
+      <CourseOverviewContext.Provider
+        value={{
+          course,
+          teachers,
+          lessons,
+        }}
       >
-        <CourseOverviewContext.Provider
-          value={{
-            course,
-            teachers,
-            lessons,
-          }}
-        >
-          {children}
-        </CourseOverviewContext.Provider>
-      </Page>
-    );
-  } else {
-    return (
-      <NotFoundErrorPage
-        message="Курс не найден"
-        url={root}
-        location={location}
-      />
+        {children}
+      </CourseOverviewContext.Provider>
     );
   }
+
+  return (
+    <Page
+      title={title}
+      isLoaded={isLoaded}
+      className={classNames('course-overview', 'catalog', className)}
+      location={location}
+      errors={errors}
+      reloadCallbacks={reloadCallbacks}
+      notFoundPageProps={{
+        message: 'Курс не найден',
+        url: root,
+      }}
+    >
+      {content}
+    </Page>
+  );
 };
 
 export default {

@@ -17,6 +17,7 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {SimpleCallback} from 'types/utility/common';
 
 export type ParticipantsPageProps = RouteComponentPropsWithPath<
   CoursePageParams
@@ -26,6 +27,8 @@ export type ParticipantsPageProps = RouteComponentPropsWithPath<
   course?: CourseInfo;
   isLoaded: boolean;
   children: React.ReactNode;
+  errors?: any[];
+  reloadCallbacks: SimpleCallback[];
 };
 const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
   const {
@@ -38,7 +41,8 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
     isLoaded,
     children: header,
     parentSection,
-    path,
+    errors,
+    reloadCallbacks,
   } = props;
   const courseId = parseInt(param_course);
 
@@ -50,12 +54,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
 
   const renderStudent: CatalogItemRenderer<CourseParticipantInfo> = useCallback(
     (user, {link, ...renderProps}) => {
-      const {
-        id,
-        vk_info: {first_name, last_name, photo},
-        contacts: {vk},
-        join_date_time,
-      } = user;
+      const {id, join_date_time} = user;
       const deleteCallback = (): void => {
         onDelete(courseId, id);
       };
@@ -110,6 +109,8 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
       className="admin-page admin-page--participants"
       title={title}
       location={location}
+      errors={errors}
+      reloadCallbacks={reloadCallbacks}
     >
       {isLoaded && participants && (
         <AccountCatalog.Body accounts={participants}>

@@ -45,7 +45,11 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
     params: {courseId: param_id},
   } = match;
   const courseId = parseInt(param_id);
-  const {course, error, reload} = useAdminCourse(courseId);
+  const {
+    course,
+    error: errorLoadingCourse,
+    reload: reloadCourse,
+  } = useAdminCourse(courseId);
   const {
     participants,
     error: errorLoadingParticipants,
@@ -135,6 +139,20 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
     url: root,
   };
 
+  const errors = [
+    errorLoadingCourse,
+    errorLoadingParticipants,
+    errorLoadingLessons,
+    errorLoadingWebinars,
+  ];
+
+  const reloadCallbacks = [
+    reloadCourse,
+    reloadParticipants,
+    reloadLessons,
+    reloadWebinars,
+  ];
+
   return (
     <Switch>
       <Route
@@ -146,6 +164,8 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
             isLoaded={isLoaded}
             path={root}
             parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}
@@ -163,6 +183,8 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
             isLoaded={isLoaded}
             path={root}
             parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}
@@ -178,6 +200,8 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
             isLoaded={isLoaded}
             path={root}
             parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}

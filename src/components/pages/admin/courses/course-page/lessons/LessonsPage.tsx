@@ -21,6 +21,7 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
+import {SimpleCallback} from 'types/utility/common';
 
 const filterBy = {
   search: true,
@@ -28,7 +29,7 @@ const filterBy = {
   online: false,
 };
 
-const filter: FilterFunc<LessonInfo> = (lesson, {subject, online, search}) => {
+const filter: FilterFunc<LessonInfo> = (lesson, {search}) => {
   const name = lesson.name.toLowerCase().replace(/\s/g, '');
   const searchKey = search.toLowerCase().replace(/\s/g, '');
 
@@ -50,6 +51,8 @@ export type LessonsPageProps = RouteComponentProps<CoursePageParams> & {
   renderLesson: LessonRenderer;
   className?: string;
   isLoaded: boolean;
+  errors?: any[];
+  reloadCallbacks: SimpleCallback[];
 };
 const LessonsPage: React.FC<LessonsPageProps> = (props) => {
   const {
@@ -64,6 +67,8 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
     requiredPermissions,
     renderLesson: render,
     className,
+    errors,
+    reloadCallbacks,
   } = props;
   const {
     params: {courseId: param_id},
@@ -119,6 +124,8 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
       requiredPermissions={requiredPermissions}
       className={classNames('admin-page', 'admin-page--lessons', className)}
       title={title}
+      errors={errors}
+      reloadCallbacks={reloadCallbacks}
       location={location}
     >
       {isLoaded && (

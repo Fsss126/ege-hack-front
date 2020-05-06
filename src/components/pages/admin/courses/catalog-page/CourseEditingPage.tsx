@@ -70,6 +70,8 @@ const CourseEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
       className="course-form-page"
       title="Изменение курса"
       location={location}
+      errors={[errorLoadingSubjects, errorLoadingTeachers, errorLoadingCourses]}
+      reloadCallbacks={[reloadSubjects, reloadTeachers, reloadCourses]}
     >
       {isLoaded && (
         <PageContent>

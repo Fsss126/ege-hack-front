@@ -74,18 +74,21 @@ const HomeworkForm: React.FC<HomeworkFormProps> = (props) => {
   }, [formData, createRequest]);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const onSubmitted = useCallback((response, showSuccessMessage, reset) => {
-    setIsSubmitted(true);
-    // showSuccessMessage("Изменения сохранены", [
-    //     {
-    //         text: 'Ок'
-    //     },
-    //     {
-    //         text: 'Продолжить',
-    //         action: cancelAssess
-    //     }
-    // ]);
-  }, []);
+  const onSubmitted = useCallback(
+    (response, showSuccessMessage) => {
+      setIsSubmitted(true);
+      showSuccessMessage('Изменения сохранены', [
+        {
+          text: 'Ок',
+        },
+        {
+          text: 'Продолжить',
+          action: cancelAssess,
+        },
+      ]);
+    },
+    [cancelAssess],
+  );
 
   const onError = useCallback((error, showErrorMessage, reloadCallback) => {
     showErrorMessage('Ошибка при выполнении запроса', [

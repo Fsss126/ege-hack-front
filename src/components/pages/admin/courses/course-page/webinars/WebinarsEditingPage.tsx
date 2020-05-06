@@ -22,7 +22,11 @@ const WebinarsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
   } = props;
   const courseId = parseInt(param_course);
 
-  const {course, error, reload} = useAdminCourse(courseId);
+  const {
+    course,
+    error: errorLoadingCourse,
+    reload: reloadCourse,
+  } = useAdminCourse(courseId);
   const {
     webinars,
     error: errorLoadingWebinars,
@@ -38,7 +42,7 @@ const WebinarsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
   const returnLink = `/admin/${courseId}/webinars/`;
 
   const onSubmitted = useCallback(
-    (response, showSuccessMessage, reset) => {
+    (response, showSuccessMessage) => {
       showSuccessMessage('Изменения сохранены', [
         {
           text: 'Ок',
@@ -66,6 +70,8 @@ const WebinarsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
       className="lesson-form-page"
       title={title}
       location={location}
+      errors={[errorLoadingCourse, errorLoadingWebinars]}
+      reloadCallbacks={[reloadCourse, reloadWebinars]}
     >
       {isLoaded && (
         <PageContent>

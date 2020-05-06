@@ -44,7 +44,7 @@ ErrorPage.defaultProps = {
   text: 'На главную',
 };
 
-type SpecificErrorPageProps = Omit<
+export type SpecificErrorPageProps = Omit<
   React.Defaultize<ErrorPageProps, typeof ErrorPage.defaultProps>,
   'errorCode'
 >;

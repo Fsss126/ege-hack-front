@@ -15,6 +15,7 @@ import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {AccountInfo} from 'types/entities';
 import {AccountRole, Permission} from 'types/enums';
+import {SimpleCallback} from 'types/utility/common';
 
 type UsersGroupPageProps = RouteComponentProps & {
   role: AccountRole;
@@ -24,6 +25,8 @@ type UsersGroupPageProps = RouteComponentProps & {
   addButtonText: string;
   emptyPlaceholder: string;
   noMatchPlaceholder: string;
+  errors?: any[];
+  reloadCallbacks?: SimpleCallback[];
 };
 const UsersGroupPage: React.FC<UsersGroupPageProps> = (props) => {
   const {
@@ -36,6 +39,8 @@ const UsersGroupPage: React.FC<UsersGroupPageProps> = (props) => {
     emptyPlaceholder,
     noMatchPlaceholder,
     role,
+    errors,
+    reloadCallbacks,
   } = props;
 
   const canEdit = useCheckPermissions(Permission.ACCOUNT_MANAGEMENT);
@@ -83,6 +88,8 @@ const UsersGroupPage: React.FC<UsersGroupPageProps> = (props) => {
       className="admin-page admin-page--admins"
       title={title}
       location={location}
+      errors={errors}
+      reloadCallbacks={reloadCallbacks}
     >
       {isLoaded && accounts && (
         <AccountCatalog.Body accounts={accounts}>

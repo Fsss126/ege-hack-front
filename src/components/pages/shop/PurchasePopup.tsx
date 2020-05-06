@@ -36,7 +36,7 @@ const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
     [opened],
   );
   const {formData, isValid, onInputChange, reset} = useForm<FormData>(
-    (state) => ({
+    () => ({
       email:
         userInfo && !(userInfo instanceof Error) && userInfo.email
           ? userInfo.email
@@ -83,17 +83,14 @@ const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
           action: reloadCallback,
         },
       ]);
-      console.log(error);
+      console.error(error);
     },
     [],
   );
 
-  const onSubmitted = React.useCallback(
-    (response, showSuccessMessage, reset) => {
-      window.location = response.link;
-    },
-    [],
-  );
+  const onSubmitted = React.useCallback((response) => {
+    window.location = response.link;
+  }, []);
 
   return (
     <Popup

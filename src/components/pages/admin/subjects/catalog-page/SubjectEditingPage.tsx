@@ -40,20 +40,17 @@ const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
     reload: reloadSubject,
   } = useSubject(subjectId);
 
-  const onSubmitted = useCallback(
-    (response, showSuccessMessage) => {
-      showSuccessMessage('Изменения сохранены', [
-        {
-          text: 'Ок',
-        },
-        {
-          text: 'Вернуться к предметам',
-          url: returnLink,
-        },
-      ]);
-    },
-    [returnLink],
-  );
+  const onSubmitted = useCallback((response, showSuccessMessage) => {
+    showSuccessMessage('Изменения сохранены', [
+      {
+        text: 'Ок',
+      },
+      {
+        text: 'Вернуться к предметам',
+        url: returnLink,
+      },
+    ]);
+  }, []);
 
   const isLoaded = !!subject;
 
@@ -64,6 +61,8 @@ const SubjectEditingPage: React.FC<RouteComponentProps<{subjectId: string}>> = (
       className="subject-form-page"
       title="Изменение предмента"
       location={location}
+      errors={[errorLoadingSubject]}
+      reloadCallbacks={[reloadSubject]}
     >
       {isLoaded && (
         <PageContent parentSection={parentSection}>

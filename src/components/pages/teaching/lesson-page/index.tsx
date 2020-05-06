@@ -1,5 +1,4 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
-import {ContentBlock} from 'components/layout/ContentBlock';
 import {useHomeworks, useLesson, useTeacherCourse} from 'hooks/selectors';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
@@ -19,7 +18,10 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
   const courseId = parseInt(param_course);
   const lessonId = parseInt(param_lesson);
 
-  const {lesson, error, reload} = useLesson(courseId, lessonId);
+  const {lesson, error: errorLoadingLesson, reload: reloadLesson} = useLesson(
+    courseId,
+    lessonId,
+  );
   const {
     course,
     error: errorLoadingCourse,
@@ -56,6 +58,14 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
       }
     : undefined;
 
+  const errors = [
+    errorLoadingLesson,
+    errorLoadingCourse,
+    errorLoadingHomeworks,
+  ];
+
+  const reloadCallbacks = [reloadLesson, reloadCourse, reloadHomeworks];
+
   return (
     <Switch>
       <Route
@@ -67,6 +77,8 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
             isLoaded={isLoaded}
             path={root}
             parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}
@@ -81,6 +93,8 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
             isLoaded={isLoaded}
             path={root}
             parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}
@@ -95,6 +109,8 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
             isLoaded={isLoaded}
             path={root}
             parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}

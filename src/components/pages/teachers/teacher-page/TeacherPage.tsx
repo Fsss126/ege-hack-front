@@ -2,7 +2,6 @@ import {CatalogItemRenderer} from 'components/common/Catalog';
 import Course from 'components/common/Course';
 import CourseCatalog from 'components/common/CourseCatalog';
 import UserProfile from 'components/common/UserProfile';
-import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
@@ -25,7 +24,11 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
   } = props;
   const id = parseInt(param_id);
 
-  const {teacher, error, reload} = useUserTeacher(id);
+  const {
+    teacher,
+    error: errorLoadingTeacher,
+    reload: reloadTeacher,
+  } = useUserTeacher(id);
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -67,6 +70,11 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
     [],
   );
 
+  const isLoaded = !!(teacher && catalog && subjects);
+
+  let content;
+  let title;
+
   if (teacher && catalog && subjects) {
     const {
       vk_info: {first_name, last_name, photo},
@@ -90,36 +98,37 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
     };
     const fullName = `${first_name} ${last_name}`;
 
-    return (
-      <Page
-        isLoaded={true}
-        title={`${fullName}`}
-        className="teacher-page"
-        location={location}
-      >
-        <CourseCatalog.Body subjects={subjects} courses={teachersCourses}>
-          <PageContent parentSection={{name: 'Преподаватели'}}>
-            <UserProfile {...profile} />
-            <CourseCatalog.Catalog
-              renderCourse={renderCourse}
-              title="Курсы преподавателя"
-              filter={<CourseCatalog.Filter />}
-            />
-          </PageContent>
-        </CourseCatalog.Body>
-      </Page>
+    title = fullName;
+    content = (
+      <CourseCatalog.Body subjects={subjects} courses={teachersCourses}>
+        <PageContent parentSection={{name: 'Преподаватели'}}>
+          <UserProfile {...profile} />
+          <CourseCatalog.Catalog
+            renderCourse={renderCourse}
+            title="Курсы преподавателя"
+            filter={<CourseCatalog.Filter />}
+          />
+        </PageContent>
+      </CourseCatalog.Body>
     );
-  } else if (error) {
-    return (
-      <NotFoundErrorPage
-        message="Преподаватель не найден"
-        url={root}
-        location={location}
-      />
-    );
-  } else {
-    return <Page isLoaded={false} location={location} />;
   }
+
+  return (
+    <Page
+      title={title}
+      className="teacher-page"
+      errors={[errorLoadingSubjects, errorLoadingCatalog, errorLoadingTeacher]}
+      reloadCallbacks={[reloadSubjects, reloadCatalog, reloadTeacher]}
+      isLoaded={isLoaded}
+      location={location}
+      notFoundPageProps={{
+        message: 'Преподаватель не найден',
+        url: root,
+      }}
+    >
+      {content}
+    </Page>
+  );
 };
 
 export default TeacherPage;

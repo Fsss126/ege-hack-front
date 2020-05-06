@@ -3,6 +3,7 @@ import 'sass/index.scss';
 import {Location, LocationListener} from 'history';
 import {useToggle} from 'hooks/common';
 import {useUserAuth} from 'hooks/selectors';
+import {SnackbarProvider} from 'notistack';
 import React, {
   createContext,
   ReactElement,
@@ -19,6 +20,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
+import {DEBUG_MODE} from '../definitions/constants';
 import {NotFoundErrorPage} from './layout/ErrorPage';
 import Account from './pages/account';
 import Admin from './pages/admin';
@@ -52,7 +54,9 @@ function useForceTrailingSlash(): void {
   const path = location.pathname;
 
   if (path.slice(-1) !== '/') {
-    console.log(window.location);
+    if (DEBUG_MODE) {
+      console.warn('Force trailing slash', path);
+    }
     history.replace(path + '/');
   }
 }
@@ -76,7 +80,10 @@ export function useSideBarState(): UIState['sidebar'] {
 }
 
 const onLocationChange = (location: Location): void => {
-  console.log(`- - - location: '${location.pathname}'`);
+  if (DEBUG_MODE) {
+    // eslint-disable-next-line no-console
+    console.log(`- - - location: '${location.pathname}'`);
+  }
 };
 
 const DefaultRedirect = (): ReactElement => <Redirect to="/courses" />;
@@ -91,18 +98,35 @@ function App(): ReactElement {
 
   return (
     <UIContext.Provider value={uiState}>
-      <Switch>
-        <Route path="/index.html" component={DefaultRedirect} />
-        <Route exact path="/" component={DefaultRedirect} />
-        <Route path="/login" component={Login} />
-        <Route path="/courses" component={MyCourses} />
-        <Route path="/shop" component={Shop} />
-        <Route path="/teachers" component={Teachers} />
-        <Route path="/account" component={Account} />
-        <Route path="/admin" component={Admin} />
-        <Route path="/teaching" component={Teaching} />
-        <Route component={NotFoundErrorPage} />
-      </Switch>
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+        className="snackbar"
+        iconVariant={{
+          error: <i className="snackbar__icon icon-alert" />,
+          success: <i className="snackbar__icon icon-check" />,
+        }}
+        classes={{
+          variantSuccess: 'snackbar--success',
+          variantError: 'snackbar--error',
+          variantInfo: 'snackbar--info',
+          variantWarning: 'snackbar--warning',
+          root: 'snackbar__root',
+        }}
+      >
+        <Switch>
+          <Route path="/index.html" component={DefaultRedirect} />
+          <Route exact path="/" component={DefaultRedirect} />
+          <Route path="/login" component={Login} />
+          <Route path="/courses" component={MyCourses} />
+          <Route path="/shop" component={Shop} />
+          <Route path="/teachers" component={Teachers} />
+          <Route path="/account" component={Account} />
+          <Route path="/admin" component={Admin} />
+          <Route path="/teaching" component={Teaching} />
+          <Route component={NotFoundErrorPage} />
+        </Switch>
+      </SnackbarProvider>
     </UIContext.Provider>
   );
 }

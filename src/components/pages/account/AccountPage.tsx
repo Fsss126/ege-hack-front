@@ -14,11 +14,15 @@ const AccountPage: React.FC<RouteComponentProps> = (props) => {
       vk_info: {photo, first_name, last_name},
     } = userInfo);
   }
+
+  const isLoaded = !!userInfo;
+
   return (
     <Page
       title="Аккаунт"
       className="account-page"
-      isLoaded={true}
+      isLoaded={isLoaded}
+      withShimmer={true}
       location={location}
     >
       <PageContent>

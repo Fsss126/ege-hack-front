@@ -109,6 +109,8 @@ const SubjectCatalogPage: React.FC<SubjectCatalogPageProps> = (props) => {
       className="admin-page admin-page--subjects"
       title="Управление предметами"
       location={location}
+      errors={[errorLoadingSubjects]}
+      reloadCallbacks={[reloadSubjects]}
     >
       {isLoaded && subjects && (
         <PageContent>

@@ -902,6 +902,48 @@ input[type=number] {
   }
 }
 
+.snackbar {
+  .snackbar--success {
+    background: $success-bg;
+    color: $success-green;
+  }
+
+  .snackbar--error {
+    background: $error-bg;
+    color: $error-red;
+  }
+
+  .snackbar--info {
+    background: $accent-bg;
+    color: $accent-orange;
+  }
+
+  .MuiSnackbarContent-root {
+    border-radius: $element-border-radius;
+    border: $border;
+    overflow: hidden;
+    cursor: default;
+    box-shadow: none;
+  }
+
+  .MuiSnackbarContent-message {
+    font-family: $font-medium !important;
+  }
+
+  .MuiSnackbarContent-action {
+    margin-right: 0;
+    cursor: pointer;
+  }
+
+  i {
+    font-size: 22px;
+  }
+
+  .snackbar__icon {
+    margin-right: 8px;
+  }
+}
+
 .prefix-icon {
   line-height: inherit;
   color: $icon-grey;

@@ -115,7 +115,7 @@ export function usePreviewState(
       }
       responseRef.current = {file_name, file_link, file_id};
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
   const deleteCallback = React.useCallback(() => {

@@ -14,7 +14,11 @@ const filterBy = {
 
 const CourseCatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
   const {location, path, children: header} = props;
-  const {catalog, error, reload} = useTeacherCourses();
+  const {
+    catalog,
+    error: errorLoadingCourses,
+    reload: reloadCourses,
+  } = useTeacherCourses();
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -48,6 +52,8 @@ const CourseCatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
       requiredPermissions={Permission.HOMEWORK_CHECK}
       className="admin-page admin-page--courses"
       title="Проверка работ"
+      errors={[errorLoadingCourses, errorLoadingSubjects]}
+      reloadCallbacks={[reloadCourses, reloadSubjects]}
       location={location}
     >
       {isLoaded && catalog && subjects && (

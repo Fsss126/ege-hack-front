@@ -23,6 +23,7 @@ import {Link} from 'react-router-dom';
 import {CourseInfo, WebinarInfo, WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
+import {SimpleCallback} from 'types/utility/common';
 
 const filterBy = {
   search: true,
@@ -107,6 +108,8 @@ export type WebinarsPageProps = RouteComponentProps<CoursePageParams> & {
   course?: CourseInfo;
   webinars?: WebinarScheduleInfo;
   isLoaded: boolean;
+  errors?: any[];
+  reloadCallbacks: SimpleCallback[];
 };
 const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
   const {
@@ -118,6 +121,8 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
     webinars: webinarSchedule,
     isLoaded,
     parentSection,
+    errors,
+    reloadCallbacks,
   } = props;
   const {
     params: {courseId: param_id},
@@ -176,6 +181,8 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
       requiredPermissions={Permission.WEBINAR_EDIT}
       className="admin-page admin-page--webinars"
       title={title}
+      errors={errors}
+      reloadCallbacks={reloadCallbacks}
       location={location}
     >
       {isLoaded && webinars && (

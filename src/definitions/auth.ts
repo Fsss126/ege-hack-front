@@ -51,16 +51,12 @@ class Auth {
   } = {};
 
   constructor() {
-    if (!VK) {
-      return;
-    }
-    VK.init({apiId: VK_APP_ID});
     let credentials;
     try {
       credentials = getCredentialsFromStorage();
       this.setCredentials(credentials);
     } catch (e) {
-      console.log('error retrieving credentials from local storage');
+      console.error('Error retrieving credentials from local storage.');
       this.setCredentials(null);
     }
   }
@@ -74,15 +70,9 @@ class Auth {
 
   login = (redirectUrl: string): void => {
     window.location.href = `https://oauth.vk.com/authorize?client_id=${VK_APP_ID}&display=page&redirect_uri=${redirectUrl}&response_type=code&openapi=1&scope=email`;
-    // if (!window.VK)
-    //     return;
-    // if (!initVK)
-    //     window.VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
-    // window.VK.Auth.login(this.onLogin, 4194304);
   };
 
   onLogout = (): void => {
-    console.info('Logout');
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     this.credentials = null;
     this.userInfo = undefined;
@@ -92,18 +82,21 @@ class Auth {
   };
 
   logout = (): void => {
+    if (!VK) {
+      return;
+    }
+    VK.init({apiId: VK_APP_ID});
+
     VK.Auth.getLoginStatus(() => {
       VK.Auth.logout(this.onLogout);
     });
   };
 
   onLogin = async (code: string, redirectUrl: string): Promise<void> => {
-    console.log('login', code);
     const credentials: Credentials = await APIRequest.post('/login/vk', {
       code,
       redirect_uri: redirectUrl,
     });
-    console.info('got credentials', credentials);
     setCredentialsToStorage(credentials);
     this.setCredentials(credentials);
   };

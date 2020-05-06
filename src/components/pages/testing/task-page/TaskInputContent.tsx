@@ -1,6 +1,5 @@
 import {addMockedTestAnswerResponses} from 'api/mocks';
 import {
-  FormSubmitHandler,
   useForm,
   useFormHandleError,
   useFormHandleSubmitted,
@@ -162,7 +161,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
           action: reloadCallback,
         },
       ]);
-      console.log(error);
+      console.error(error);
     },
     [],
   );

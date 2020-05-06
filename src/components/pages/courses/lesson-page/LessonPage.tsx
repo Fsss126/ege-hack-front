@@ -22,8 +22,11 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
   const courseId = parseInt(param_course);
   const lessonId = parseInt(param_lesson);
 
-  const {courses, error, reload} = useUserCourses();
-  // const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
+  const {
+    courses,
+    error: errorLoadingCourses,
+    reload: reloadCourses,
+  } = useUserCourses();
   const {
     lessons,
     error: errorLoadingLessons,
@@ -108,7 +111,18 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
       return <NotFoundErrorPage message="Урок не найден" location={location} />;
     }
   } else {
-    return <Page isLoaded={false} location={location} />;
+    return (
+      <Page
+        isLoaded={false}
+        location={location}
+        errors={[
+          errorLoadingCourses,
+          errorLoadingLessons,
+          errorLoadingHomework,
+        ]}
+        reloadCallbacks={[reloadCourses, reloadLessons, reloadHomework]}
+      />
+    );
   }
 };
 

@@ -3,16 +3,19 @@ import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {AccountInfo} from 'types/entities';
 import {AccountRole} from 'types/enums';
+import {SimpleCallback} from 'types/utility/common';
 
 import UsersGroupPage from '../UsersGroupPage';
 
-type ModeratorsPageProps = RouteComponentProps & {
+type TeachersPageProps = RouteComponentProps & {
   parentSection?: PageParentSection;
   accounts?: AccountInfo[];
   isLoaded: boolean;
   children: React.ReactNode;
+  errors?: any[];
+  reloadCallbacks?: SimpleCallback[];
 };
-const TeachersPage: React.FC<ModeratorsPageProps> = (props) => {
+const TeachersPage: React.FC<TeachersPageProps> = (props) => {
   return (
     <UsersGroupPage
       {...props}

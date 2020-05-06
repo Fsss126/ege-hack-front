@@ -33,7 +33,9 @@ export type ActionButtonProps = {
 } & MessageAction;
 class ActionButton extends React.Component<ActionButtonProps> {
   onClick = (): void => {
-    'action' in this.props && this.props.action && this.props.action();
+    if ('action' in this.props && this.props.action) {
+      this.props.action();
+    }
     this.props.callback();
   };
 

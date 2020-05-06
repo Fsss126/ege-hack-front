@@ -14,7 +14,11 @@ import {RouteComponentPropsWithPath} from 'types/routes';
 
 const CatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
   const {location} = props;
-  const {courses, error, reload} = useUserCourses();
+  const {
+    courses,
+    error: errorLoadingCourses,
+    reload: reloadCourses,
+  } = useUserCourses();
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -56,6 +60,8 @@ const CatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
       className="user-courses"
       location={location}
       title={title}
+      errors={[errorLoadingCourses, errorLoadingSubjects, errorLoadingWebinars]}
+      reloadCallbacks={[reloadCourses, reloadSubjects, reloadWebinars]}
     >
       {!!(courses && subjects && webinars) && (
         <CourseCatalog.Body courses={courses} subjects={subjects}>

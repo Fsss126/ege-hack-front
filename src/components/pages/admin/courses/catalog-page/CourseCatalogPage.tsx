@@ -27,7 +27,11 @@ export type CourseCatalogPageProps = RouteComponentPropsWithPath & {
 };
 const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
   const {location, path, children: header} = props;
-  const {catalog, error, reload} = useAdminCourses();
+  const {
+    catalog,
+    error: errorLoadingCatalog,
+    reload: reloadCatalog,
+  } = useAdminCourses();
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -99,6 +103,8 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
       className="admin-page admin-page--courses"
       title="Управление курсами"
       location={location}
+      errors={[errorLoadingCatalog, errorLoadingSubjects]}
+      reloadCallbacks={[reloadCatalog, reloadSubjects]}
     >
       {isLoaded && (
         <PageContent>

@@ -6,7 +6,11 @@ import {RouteComponentProps} from 'react-router';
 import TeachersCatalog from './TeachersCatalog';
 
 const TeachersCatalogPage: React.FC<RouteComponentProps> = ({location}) => {
-  const {teachers, error, reload} = useUserTeachers();
+  const {
+    teachers,
+    error: errorLoadingTeachers,
+    reload: reloadTeachers,
+  } = useUserTeachers();
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -15,7 +19,13 @@ const TeachersCatalogPage: React.FC<RouteComponentProps> = ({location}) => {
   const isLoaded = !!(teachers && subjects);
 
   return (
-    <Page isLoaded={isLoaded} title="Преподаватели" location={location}>
+    <Page
+      isLoaded={isLoaded}
+      title="Преподаватели"
+      location={location}
+      errors={[errorLoadingSubjects, errorLoadingTeachers]}
+      reloadCallbacks={[reloadSubjects, reloadTeachers]}
+    >
       {isLoaded && teachers && subjects && (
         <TeachersCatalog.Body subjects={subjects} teachers={teachers}>
           <PageContent>

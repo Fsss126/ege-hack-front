@@ -19,7 +19,9 @@ export const FormElement: React.withDefaultProps<React.FC<FormElementProps>> = (
 ) => {
   const {index, name, className, onChange, deletable, children} = props;
   const onDelete = useCallback(() => {
-    onChange && onChange(null, `${name}[${index}]`);
+    if (onChange) {
+      onChange(null, `${name}[${index}]`);
+    }
   }, [name, index, onChange]);
 
   return (
@@ -61,8 +63,9 @@ export const FormElementGroup = <E extends {}>(
   } = props;
   const elementsCount = elements.length;
   const onAdd = useCallback(() => {
-    onChange &&
+    if (onChange) {
       onChange(_.cloneDeep(initialElementData), `${name}[${elementsCount}]`);
+    }
   }, [name, elementsCount, initialElementData, onChange]);
 
   return (

@@ -6,6 +6,7 @@ import React from 'react';
 import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {SimpleCallback} from 'types/utility/common';
 
 interface AssignmentPageProps
   extends RouteComponentPropsWithPath<LessonPageParams> {
@@ -14,10 +15,20 @@ interface AssignmentPageProps
   isLoaded: boolean;
   parentSection: PageContentProps['parentSection'];
   children: React.ReactNode;
+  errors?: any[];
+  reloadCallbacks: SimpleCallback[];
 }
 
 const AssignmentPage: React.FC<AssignmentPageProps> = (props) => {
-  const {location, lesson, isLoaded, children: header, parentSection} = props;
+  const {
+    location,
+    lesson,
+    isLoaded,
+    children: header,
+    parentSection,
+    errors,
+    reloadCallbacks,
+  } = props;
 
   const title = lesson && `Задание к уроку ${lesson.name}`;
 
@@ -27,6 +38,8 @@ const AssignmentPage: React.FC<AssignmentPageProps> = (props) => {
       requiredPermissions={Permission.HOMEWORK_CHECK}
       className="admin-page admin-page--participants"
       title={title}
+      errors={errors}
+      reloadCallbacks={reloadCallbacks}
       location={location}
     >
       {isLoaded && (

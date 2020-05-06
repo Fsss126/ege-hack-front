@@ -37,7 +37,7 @@ const LessonEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
   const returnLink = `/admin/${courseId}/lessons/`;
 
   const onSubmitted = useCallback(
-    (response, showSuccessMessage, reset) => {
+    (response, showSuccessMessage) => {
       showSuccessMessage('Изменения сохранены', [
         {
           text: 'Ок',
@@ -59,6 +59,8 @@ const LessonEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
       className="lesson-form-page"
       title="Изменение урока"
       location={location}
+      errors={[errorLoadingLesson]}
+      reloadCallbacks={[reloadLesson]}
     >
       {isLoaded && (
         <PageContent>

@@ -7,10 +7,11 @@ import {RouteComponentProps} from 'react-router';
 import {CourseDtoReq} from 'types/dtos';
 import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {CoursePageParams} from 'types/routes';
 
 import CourseForm from './CourseForm';
 
-const CourseEditingPage: React.FC<RouteComponentProps<{courseId: string}>> = (
+const CourseEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
   props,
 ) => {
   const {
@@ -69,6 +70,8 @@ const CourseEditingPage: React.FC<RouteComponentProps<{courseId: string}>> = (
       className="course-form-page"
       title="Изменение курса"
       location={location}
+      errors={[errorLoadingSubjects, errorLoadingTeachers, errorLoadingCourses]}
+      reloadCallbacks={[reloadSubjects, reloadTeachers, reloadCourses]}
     >
       {isLoaded && (
         <PageContent>

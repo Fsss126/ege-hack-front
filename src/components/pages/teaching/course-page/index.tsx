@@ -10,7 +10,6 @@ import {useCheckPermissions} from 'components/ConditionalRender';
 import {
   useAdminLessons,
   useDeleteCourse,
-  useLessons,
   useParticipants,
   useTeacherCourse,
   // useAdminWebinars
@@ -52,7 +51,11 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
     params: {courseId: param_id},
   } = match;
   const courseId = parseInt(param_id);
-  const {course, error, reload} = useTeacherCourse(courseId);
+  const {
+    course,
+    error: errorLoadingCourse,
+    reload: reloadCourse,
+  } = useTeacherCourse(courseId);
   const {
     participants,
     error: errorLoadingParticipants,
@@ -64,11 +67,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
     reload: reloadLessons,
   } = useAdminLessons(courseId);
   // const {webinars, error: errorLoadingWebinars, retry: reloadWebinars} = useAdminWebinars(courseId);
-  const isLoaded = !!(
-    course !== undefined &&
-    participants !== undefined &&
-    lessons !== undefined
-  );
+  const isLoaded = !!(course && participants && lessons);
 
   const canEditCourse = useCheckPermissions(Permission.COURSE_EDIT);
   // const canEditLessons = useCheckPermissions(Permissions.LESSON_EDIT);
@@ -139,6 +138,14 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
     url: root,
   };
 
+  const errors = [
+    errorLoadingCourse,
+    errorLoadingLessons,
+    errorLoadingParticipants,
+  ];
+
+  const reloadCallbacks = [reloadCourse, reloadLessons, reloadParticipants];
+
   return (
     <Switch>
       <Route
@@ -150,6 +157,8 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
             isLoaded={isLoaded}
             path={root}
             parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}
@@ -167,6 +176,8 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
             isLoaded={isLoaded}
             path={root}
             parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
             {...props}
           >
             {header}

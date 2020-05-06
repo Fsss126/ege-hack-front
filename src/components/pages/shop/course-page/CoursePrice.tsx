@@ -2,18 +2,23 @@ import classNames from 'classnames';
 import {CourseOverviewContext} from 'components/common/CourseOverview';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Button from 'components/ui/Button';
+import {
+  LoadingIndicator,
+  useLoadingState,
+} from 'components/ui/LoadingIndicator';
 import {renderPrice} from 'definitions/helpers';
 import {DiscountHookResult} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
 
-interface CoursePriceProps extends Omit<DiscountHookResult, 'isLoading'> {
+interface CoursePriceProps extends DiscountHookResult {
   isSelected: boolean;
   onSelect: (course: CourseInfo) => void;
 }
 
 const CoursePrice: React.FC<CoursePriceProps> = (props) => {
   const {
+    isLoading,
     isSelected,
     onSelect: callback,
     discount: discountInfo,
@@ -24,6 +29,8 @@ const CoursePrice: React.FC<CoursePriceProps> = (props) => {
   const {price: fullPrice, purchased} = course;
   const {discounted_price: price, message} = discountInfo || {};
   const discount = price ? fullPrice - price : undefined;
+
+  const loadingState = useLoadingState(isLoading, false, !!error);
 
   React.useEffect(() => {
     if (window.dispatchEvent) {
@@ -66,7 +73,7 @@ const CoursePrice: React.FC<CoursePriceProps> = (props) => {
           </React.Fragment>
         ) : (
           <div className="col-auto">
-            <div className="spinner-border" />
+            <LoadingIndicator state={loadingState} />
           </div>
         )}
       </div>

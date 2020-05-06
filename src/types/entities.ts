@@ -17,7 +17,6 @@ import {
   TeacherDtoResp,
   TestDtoResp,
   TestStatus,
-  TestStatusResp,
   ThemeDtoResp,
   VkUserDto,
   WebinarDtoResp,

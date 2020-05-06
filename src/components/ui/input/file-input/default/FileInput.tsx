@@ -28,7 +28,7 @@ const FileInput = (props: FileInputProps) => {
         showUploadButtonWhenDisabled || !isDisabled ? InputButton : null
       }
       PreviewComponent={Preview}
-      {...props}
+      {...rest}
     />
   );
 };

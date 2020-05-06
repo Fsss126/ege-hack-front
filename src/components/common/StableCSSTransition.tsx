@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import {CSSTransition} from 'react-transition-group';
 
-//hack to get context because lib doesn't export it properly and import doesn't work
+// hack to get context because lib doesn't export it properly and import doesn't work
 // const TransitionGroupContext = Transition.contextType;
 //
 // const getClassNames = (classNames, type) => {

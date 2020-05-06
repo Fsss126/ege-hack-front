@@ -53,6 +53,8 @@ const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
       className="course-form-page"
       title="Создание курса"
       location={location}
+      errors={[errorLoadingTeachers, errorLoadingSubjects]}
+      reloadCallbacks={[reloadTeachers, reloadSubjects]}
     >
       {isLoaded && (
         <PageContent>

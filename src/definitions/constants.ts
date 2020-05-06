@@ -13,3 +13,5 @@ export const TEACHER_ROLES: AccountRole[] = [
 export const APP_BASE_URL: string = process.env.REACT_APP_BASE_URL;
 
 export const DEFAULT_LOGIN_REDIRECT = '/shop/';
+
+export const DEBUG_MODE = process.env.NODE_ENV !== 'production';

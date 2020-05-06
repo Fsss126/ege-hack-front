@@ -1,4 +1,3 @@
-/* eslint-disable  no-restricted-globals */
 import Form, {
   ErrorHandler,
   FormProps,
@@ -9,12 +8,10 @@ import Form, {
 } from 'components/ui/Form';
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
-import {OptionShape} from 'components/ui/input/Select';
-import {useRevokeCourses, useRevokeSubjects} from 'hooks/selectors';
+import {useRevokeSubjects} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import {CourseDtoReq, FileInfo, SubjectDtoReq} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {FileInfo, SubjectDtoReq} from 'types/dtos';
+import {SubjectInfo} from 'types/entities';
 
 type SubjectFormData = {
   name: string;

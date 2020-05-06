@@ -18,7 +18,6 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
     lesson: {
       id,
       name,
-      image_link: cover,
       video_link: video,
       description,
       assignment,

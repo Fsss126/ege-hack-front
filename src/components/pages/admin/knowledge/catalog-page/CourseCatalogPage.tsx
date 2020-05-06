@@ -11,10 +11,10 @@ import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
 import {useAdminCourses, useDeleteCourse, useSubjects} from 'hooks/selectors';
 import React, {useCallback} from 'react';
-import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {RouteComponentPropsWithPath} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -22,13 +22,16 @@ const filterBy = {
   online: true,
 };
 
-export type CourseCatalogPageProps = RouteComponentProps & {
-  path: string;
+export type CourseCatalogPageProps = RouteComponentPropsWithPath & {
   children: React.ReactElement;
 };
 const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
   const {location, path, children: header} = props;
-  const {catalog, error, reload} = useAdminCourses();
+  const {
+    catalog,
+    error: errorLoadingCatalog,
+    reload: reloadCatalog,
+  } = useAdminCourses();
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -100,6 +103,8 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
       className="admin-page admin-page--courses"
       title="Управление курсами"
       location={location}
+      errors={[errorLoadingCatalog, errorLoadingSubjects]}
+      reloadCallbacks={[reloadCatalog, reloadSubjects]}
     >
       {isLoaded && (
         <PageContent>

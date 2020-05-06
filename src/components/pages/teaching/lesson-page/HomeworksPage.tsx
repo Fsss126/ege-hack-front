@@ -8,6 +8,7 @@ import React, {useCallback} from 'react';
 import {HomeworkInfo, LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {SimpleCallback} from 'types/utility/common';
 
 import Homework from './Homework';
 
@@ -38,23 +39,21 @@ interface HomeworksPageProps
   isLoaded: boolean;
   parentSection: PageContentProps['parentSection'];
   children: React.ReactNode;
+  errors?: any[];
+  reloadCallbacks: SimpleCallback[];
 }
 
 const HomeworksPage: React.FC<HomeworksPageProps> = (props) => {
   const {
-    match: {
-      params: {courseId: param_course, lessonId: param_lesson},
-    },
     location,
     homeworks,
     lesson,
     isLoaded,
     children: header,
     parentSection,
-    path,
+    errors,
+    reloadCallbacks,
   } = props;
-  const courseId = parseInt(param_course);
-  const lessonId = parseInt(param_lesson);
 
   const renderHomework: CatalogItemRenderer<HomeworkInfo> = useCallback(
     (homework, {link, ...renderProps}) => (
@@ -70,6 +69,8 @@ const HomeworksPage: React.FC<HomeworksPageProps> = (props) => {
       requiredPermissions={Permission.HOMEWORK_CHECK}
       className="admin-page teaching-page--homeworks"
       title={title}
+      errors={errors}
+      reloadCallbacks={reloadCallbacks}
       location={location}
     >
       {isLoaded && homeworks && (
