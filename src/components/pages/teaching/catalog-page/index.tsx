@@ -1,12 +1,12 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {RouteComponentPropsWithParentProps} from 'types/routes';
 
 import CourseCatalogPage from './CourseCatalogPage';
 
-const CoursesPage: React.FC<RouteComponentPropsWithPath> = (props) => {
-  const {path} = props;
+const CoursesPage: React.FC<RouteComponentPropsWithParentProps> = (props) => {
+  const {path, url} = props;
   const header = (
     <TabNavBlock title="Преподавание">
       <TabNav>
@@ -23,12 +23,12 @@ const CoursesPage: React.FC<RouteComponentPropsWithPath> = (props) => {
       <Route
         path={[`${path}/list`, `${path}/calendar`]}
         render={(props) => (
-          <CourseCatalogPage path={path} {...props}>
+          <CourseCatalogPage path={path} url={url} {...props}>
             {header}
           </CourseCatalogPage>
         )}
       />
-      <Route render={() => <Redirect to={`${path}/list/`} />} />
+      <Route render={() => <Redirect to={`${url}/list/`} />} />
     </Switch>
   );
 };

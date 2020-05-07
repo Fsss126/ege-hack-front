@@ -5,7 +5,7 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import {ContentBlock} from 'components/layout/ContentBlock';
+import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
@@ -14,7 +14,7 @@ import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {CourseInfo, SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {RouteComponentPropsWithParentProps} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -22,11 +22,11 @@ const filterBy = {
   online: true,
 };
 
-export type CourseCatalogPageProps = RouteComponentPropsWithPath & {
+export type CourseCatalogPageProps = RouteComponentPropsWithParentProps & {
   children: React.ReactElement;
 };
-const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
-  const {location, path, children: header} = props;
+const ThemeCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
+  const {location, url, children: header} = props;
   const {
     catalog,
     error: errorLoadingCatalog,
@@ -45,7 +45,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
   const renderCourse = useCallback(
     (course, {link, ...rest}) => {
       const {id, hide_from_market} = course;
-      const courseLink = `${path}/${link}`;
+      const courseLink = `${url}/${link}`;
       const deleteCallback = (): void => {
         onDelete(id);
       };
@@ -90,7 +90,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
         />
       );
     },
-    [canEdit, onDelete, path],
+    [canEdit, onDelete, url],
   );
   const isLoaded = !!(catalog && subjects);
 
@@ -114,16 +114,24 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
           >
             {header}
             {canEdit && (
-              <ContentBlock stacked className="d-flex">
+              <ButtonsBlock stacked>
                 <Button
                   neutral
                   component={Link}
-                  to={`${path}/create/`}
+                  to={`${url}/theme/create/`}
                   after={<i className="icon-add" />}
                 >
-                  Добавить курс
+                  Добавить тему
                 </Button>
-              </ContentBlock>
+                <Button
+                  neutral
+                  component={Link}
+                  to={`${url}/task/create/`}
+                  after={<i className="icon-add" />}
+                >
+                  Добавить задачу
+                </Button>
+              </ButtonsBlock>
             )}
             <CourseCatalog.Filter filterBy={filterBy} />
             <CourseCatalog.Catalog plain renderCourse={renderCourse} />
@@ -134,4 +142,4 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
   );
 };
 
-export default CourseCatalogPage;
+export default ThemeCatalogPage;

@@ -2,16 +2,19 @@ import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {useHomeworks, useLesson, useTeacherCourse} from 'hooks/selectors';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {
+  LessonPageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 
 import AssignmentPage from './AssignmentPage';
 import HomeworksPage from './HomeworksPage';
 import TestPage from './TestPage';
 
-const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
-  props,
-) => {
-  const {path: root, match} = props;
+const LessonPage: React.FC<RouteComponentPropsWithParentProps<
+  LessonPageParams
+>> = (props) => {
+  const {path, url, match} = props;
   const {
     params: {courseId: param_course, lessonId: param_lesson},
   } = match;
@@ -75,7 +78,8 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
             lesson={lesson}
             homeworks={homeworks}
             isLoaded={isLoaded}
-            path={root}
+            path={path}
+            url={url}
             parentSection={parentSection}
             errors={errors}
             reloadCallbacks={reloadCallbacks}
@@ -91,7 +95,8 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
           <AssignmentPage
             lesson={lesson}
             isLoaded={isLoaded}
-            path={root}
+            path={path}
+            url={url}
             parentSection={parentSection}
             errors={errors}
             reloadCallbacks={reloadCallbacks}
@@ -107,7 +112,8 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
           <TestPage
             lesson={lesson}
             isLoaded={isLoaded}
-            path={root}
+            path={path}
+            url={url}
             parentSection={parentSection}
             errors={errors}
             reloadCallbacks={reloadCallbacks}
@@ -119,7 +125,7 @@ const LessonPage: React.FC<RouteComponentPropsWithPath<LessonPageParams>> = (
       />
       <Route
         render={() => (
-          <Redirect to={`${root}/${courseId}/${lessonId}/homeworks/`} />
+          <Redirect to={`${path}/${courseId}/${lessonId}/homeworks/`} />
         )}
       />
     </Switch>

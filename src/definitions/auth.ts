@@ -83,12 +83,18 @@ class Auth {
 
   logout = (): void => {
     if (!VK) {
+      this.onLogout();
       return;
     }
     VK.init({apiId: VK_APP_ID});
 
+    const timeout = setTimeout(this.onLogout, 500);
+
     VK.Auth.getLoginStatus(() => {
-      VK.Auth.logout(this.onLogout);
+      VK.Auth.logout(() => {
+        clearTimeout(timeout);
+        this.onLogout();
+      });
     });
   };
 

@@ -84,10 +84,11 @@ export type CourseFormProps = {
   errorMessage: string;
   cancelLink: FormComponentProps['cancelLink'];
   course?: CourseInfo;
+  subjectId?: number;
 };
 type SubjectOption = OptionShape<number>;
 type TeacherOption = SubjectOption;
-const CourseForm: React.FC<CourseFormProps> = (props) => {
+const ThemeForm: React.FC<CourseFormProps> = (props) => {
   const {
     subjects,
     teachers,
@@ -96,6 +97,7 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
     onSubmitted,
     errorMessage,
     cancelLink,
+    subjectId,
   } = props;
 
   const subjectOptions = useMemo<SubjectOption[]>(
@@ -126,7 +128,9 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
   const {formData, isValid, onInputChange, reset} = useForm<CourseFormData>(
     (state): CourseFormData => {
       if (state || !course) {
-        return INITIAL_FORM_DATA;
+        return subjectId
+          ? {...INITIAL_FORM_DATA, subject_id: subjectId}
+          : INITIAL_FORM_DATA;
       } else {
         const {
           image_link,
@@ -344,4 +348,4 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
   );
 };
 
-export default CourseForm;
+export default ThemeForm;

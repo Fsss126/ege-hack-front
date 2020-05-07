@@ -18,7 +18,9 @@ const Courses: React.FC<RouteComponentProps<any>> = ({match}) => {
       <Route
         exact
         path={[match.path, `${match.path}/list`, `${match.path}/calendar`]}
-        render={(props) => <CatalogPage path={match.path} {...props} />}
+        render={(props) => (
+          <CatalogPage path={match.path} url={match.url} {...props} />
+        )}
       />
       <Route
         path={`${match.path}/:courseId/participants/edit`}
@@ -42,7 +44,9 @@ const Courses: React.FC<RouteComponentProps<any>> = ({match}) => {
       />
       <Route
         path={`${match.path}/:courseId`}
-        render={(props) => <CoursePage path={match.path} {...props} />}
+        render={(props) => (
+          <CoursePage path={match.path} url={match.url} {...props} />
+        )}
       />
       {/*<Route path={`${match.path}/:courseId/:lessonId`} component={LessonPage}/>*/}
     </Switch>

@@ -9,12 +9,15 @@ import {
 } from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
-import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {
+  CoursePageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 
 import CoursePrice from './CoursePrice';
 
 interface CoursePageProps
-  extends RouteComponentPropsWithPath<CoursePageParams> {
+  extends RouteComponentPropsWithParentProps<CoursePageParams> {
   selectedCourses: Set<CourseInfo>;
   onCourseSelect: (course: CourseInfo) => void;
   children: React.ReactNode;

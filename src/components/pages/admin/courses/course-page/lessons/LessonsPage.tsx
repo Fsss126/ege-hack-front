@@ -11,16 +11,18 @@ import {
   RequiredPermissions,
   useCheckPermissions,
 } from 'components/ConditionalRender';
-import {ContentBlock} from 'components/layout/ContentBlock';
+import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {useDeleteLesson} from 'hooks/selectors';
 import React, {useCallback} from 'react';
-import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {CoursePageParams} from 'types/routes';
+import {
+  CoursePageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 import {SimpleCallback} from 'types/utility/common';
 
 const filterBy = {
@@ -41,8 +43,9 @@ export type LessonRenderer = CatalogItemRenderer<
   {action?: React.ReactElement}
 >;
 
-export type LessonsPageProps = RouteComponentProps<CoursePageParams> & {
-  path: string;
+export type LessonsPageProps = RouteComponentPropsWithParentProps<
+  CoursePageParams
+> & {
   parentSection?: PageParentSection;
   children: React.ReactNode;
   course?: CourseInfo;
@@ -133,7 +136,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
           <PageContent parentSection={parentSection}>
             {header}
             {canEdit && (
-              <ContentBlock stacked className="d-flex">
+              <ButtonsBlock stacked>
                 <Button
                   neutral
                   component={Link}
@@ -142,7 +145,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
                 >
                   Добавить урок
                 </Button>
-              </ContentBlock>
+              </ButtonsBlock>
             )}
             <Catalog.Filter filterBy={filterBy} />
             <Catalog.Catalog

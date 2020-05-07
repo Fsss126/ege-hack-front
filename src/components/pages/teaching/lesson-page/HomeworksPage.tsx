@@ -7,7 +7,10 @@ import {HomeworksHookResult} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {HomeworkInfo, LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {
+  LessonPageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 import {SimpleCallback} from 'types/utility/common';
 
 import Homework from './Homework';
@@ -33,7 +36,7 @@ const filter: FilterFunc<HomeworkInfo> = (
 };
 
 interface HomeworksPageProps
-  extends RouteComponentPropsWithPath<LessonPageParams> {
+  extends RouteComponentPropsWithParentProps<LessonPageParams> {
   homeworks?: HomeworksHookResult['homeworks'];
   lesson?: LessonInfo;
   isLoaded: boolean;

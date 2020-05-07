@@ -60,6 +60,7 @@ const Shop: React.FC<RouteComponentProps> = (props) => {
               selectedCourses={selectedCourses}
               onCourseSelect={onCourseSelect}
               path={match.path}
+              url={match.url}
               {...props}
             >
               {selectedCoursesTab}

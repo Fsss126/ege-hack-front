@@ -6,7 +6,7 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import {ContentBlock} from 'components/layout/ContentBlock';
+import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import Tooltip from 'components/ui/Tooltip';
@@ -16,10 +16,13 @@ import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {CourseInfo, CourseParticipantInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {
+  CoursePageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 import {SimpleCallback} from 'types/utility/common';
 
-export type ParticipantsPageProps = RouteComponentPropsWithPath<
+export type ParticipantsPageProps = RouteComponentPropsWithParentProps<
   CoursePageParams
 > & {
   parentSection?: PageParentSection;
@@ -117,7 +120,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
           <PageContent parentSection={parentSection}>
             {header}
             {canEdit && (
-              <ContentBlock className="d-flex">
+              <ButtonsBlock stacked>
                 <Button
                   neutral
                   component={Link}
@@ -126,7 +129,7 @@ const ParticipantsPage: React.FC<ParticipantsPageProps> = (props) => {
                 >
                   Добавить учеников
                 </Button>
-              </ContentBlock>
+              </ButtonsBlock>
             )}
             <AccountCatalog.Filter />
             <AccountCatalog.Catalog

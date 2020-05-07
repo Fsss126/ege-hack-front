@@ -5,11 +5,14 @@ import {HomeworksHookResult} from 'hooks/selectors';
 import React from 'react';
 import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {LessonPageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {
+  LessonPageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 import {SimpleCallback} from 'types/utility/common';
 
 interface AssignmentPageProps
-  extends RouteComponentPropsWithPath<LessonPageParams> {
+  extends RouteComponentPropsWithParentProps<LessonPageParams> {
   homeworks?: HomeworksHookResult['homeworks'];
   lesson?: LessonInfo;
   isLoaded: boolean;

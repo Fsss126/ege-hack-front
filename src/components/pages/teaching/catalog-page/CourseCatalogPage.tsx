@@ -4,7 +4,7 @@ import Page, {PageContent} from 'components/layout/Page';
 import {useSubjects, useTeacherCourses} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Permission} from 'types/enums';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {RouteComponentPropsWithParentProps} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -12,7 +12,9 @@ const filterBy = {
   online: true,
 };
 
-const CourseCatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
+const CourseCatalogPage: React.FC<RouteComponentPropsWithParentProps> = (
+  props,
+) => {
   const {location, path, children: header} = props;
   const {
     catalog,

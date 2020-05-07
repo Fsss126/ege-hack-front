@@ -967,8 +967,16 @@ header {
       padding-top: 0;
       padding-bottom: 0;
 
-      .catalog__filter-container ~ .catalog__filter-container {
-        padding-left: 0;
+      $filter-padding: 8px;
+
+      .catalog__filters-container {
+        margin-top: -$filter-padding;
+        margin-bottom: -$filter-padding;
+
+        .catalog__filter-container {
+          padding-top: $filter-padding;
+          padding-bottom: $filter-padding;
+        }
       }
 
       .select {
@@ -1310,6 +1318,7 @@ header {
         border-radius: $element-border-radius;
         border: $border;
         overflow: hidden;
+        z-index: 1;
       }
 
       &:hover .webinar-inner-container {

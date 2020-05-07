@@ -90,7 +90,7 @@ const Filter: React.FC<FilterProps> = (props) => {
       transparent={transparent}
       stacked={stacked}
     >
-      <div className="container p-0">
+      <div className="catalog__filters-container container p-0">
         <div className="row align-items-center">
           {filterBySubject && options && (
             <div className="catalog__filter-container subject-select-container col-auto align-items-center">

@@ -363,27 +363,33 @@ const Form = <R, E extends Error = AxiosError>(
       {title && <h3 className="form__title">{title}</h3>}
       {children}
       <div className="form__action-container btn-container text-right">
-        {cancelLink && (
-          <Button<typeof Link> component={Link} neutral={true} to={cancelLink}>
-            {cancelButtonText}
+        <div className="btn-container__inner justify-content-end">
+          {cancelLink && (
+            <Button<typeof Link>
+              component={Link}
+              neutral={true}
+              to={cancelLink}
+            >
+              {cancelButtonText}
+            </Button>
+          )}
+          {onCancelClick && (
+            <Button neutral={true} onClick={onCancelClick}>
+              {cancelButtonText}
+            </Button>
+          )}{' '}
+          <Button
+            active={isValid}
+            after={
+              (hasChanged || state !== LOADING_STATE.DONE) && (
+                <LoadingIndicator state={state} />
+              )
+            }
+            onClick={handleSubmit}
+          >
+            {submitButtonText}
           </Button>
-        )}
-        {onCancelClick && (
-          <Button neutral={true} onClick={onCancelClick}>
-            {cancelButtonText}
-          </Button>
-        )}{' '}
-        <Button
-          active={isValid}
-          after={
-            (hasChanged || state !== LOADING_STATE.DONE) && (
-              <LoadingIndicator state={state} />
-            )
-          }
-          onClick={handleSubmit}
-        >
-          {submitButtonText}
-        </Button>
+        </div>
       </div>
       <MessagePopup ref={messagePopupRef} />
       {blockNavigation && hasChanged && <NavigationBlocker />}

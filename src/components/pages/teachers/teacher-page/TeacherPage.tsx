@@ -9,10 +9,13 @@ import {useShopCatalog, useSubjects, useUserTeacher} from 'hooks/selectors';
 import _ from 'lodash';
 import React, {Fragment, useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
-import {RouteComponentPropsWithPath, TeacherPageParams} from 'types/routes';
+import {
+  RouteComponentPropsWithParentProps,
+  TeacherPageParams,
+} from 'types/routes';
 
 interface TeacherPageProps
-  extends RouteComponentPropsWithPath<TeacherPageParams> {}
+  extends RouteComponentPropsWithParentProps<TeacherPageParams> {}
 
 const TeacherPage: React.FC<TeacherPageProps> = (props) => {
   const {

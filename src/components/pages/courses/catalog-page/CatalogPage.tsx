@@ -10,9 +10,9 @@ import {
 } from 'hooks/selectors';
 import React from 'react';
 import {LearningStatus} from 'types/enums';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {RouteComponentPropsWithParentProps} from 'types/routes';
 
-const CatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
+const CatalogPage: React.FC<RouteComponentPropsWithParentProps> = (props) => {
   const {location} = props;
   const {
     courses,

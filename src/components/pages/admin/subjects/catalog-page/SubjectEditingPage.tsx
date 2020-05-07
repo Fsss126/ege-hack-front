@@ -10,7 +10,7 @@ import {Permission} from 'types/enums';
 
 import SubjectForm from './SubjectForm';
 
-const returnLink = `..`;
+const returnLink = `../..`;
 
 const parentSection: PageParentSection = {
   name: 'Предметы',

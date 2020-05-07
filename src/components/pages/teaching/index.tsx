@@ -11,13 +11,21 @@ const Teaching: React.FC<RouteComponentProps> = ({match}) => {
     <Switch>
       <Route
         path={`${match.path}/:courseId(\\d+)/:lessonId(\\d+)`}
-        render={(props) => <LessonPage path={match.path} {...props} />}
+        render={(props) => (
+          <LessonPage path={match.path} url={match.url} {...props} />
+        )}
       />
       <Route
         path={`${match.path}/:courseId(\\d+)`}
-        render={(props) => <CoursePage path={match.path} {...props} />}
+        render={(props) => (
+          <CoursePage path={match.path} url={match.url} {...props} />
+        )}
       />
-      <Route render={(props) => <CatalogPage path={match.path} {...props} />} />
+      <Route
+        render={(props) => (
+          <CatalogPage path={match.path} url={match.url} {...props} />
+        )}
+      />
     </Switch>
   );
 };

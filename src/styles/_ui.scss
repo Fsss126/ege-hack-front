@@ -185,19 +185,21 @@ label {
 }
 
 .btn-container {
-  .btn {
-    display: inline-block;
+  .btn-container__inner {
+    margin: -4px 0;
+    display: flex;
+
+    .btn {
+      flex-shrink: 0;
+      margin: 4px 8px;
+      &:first-child {
+        margin-left: 0;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
-  //display: flex;
-  //.btn {
-  //  margin: 0 4px;
-  //  &:first-child {
-  //    margin-left: 0;
-  //  }
-  //  &:last-child {
-  //    margin-right: 0;
-  //  }
-  //}
 }
 
 .input-container {

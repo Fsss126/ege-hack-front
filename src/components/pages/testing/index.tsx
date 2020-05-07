@@ -11,20 +11,28 @@ const Testing: React.FC<RouteComponentProps> = ({match}) => {
     <Switch>
       <Route
         path={`${match.path}/:testId/start`}
-        render={(props) => <StartPage path={match.path} {...props} />}
+        render={(props) => (
+          <StartPage path={match.path} url={match.url} {...props} />
+        )}
       />
       <Route
         path={`${match.path}/:testId/results`}
-        render={(props) => <ResultsPage path={match.path} {...props} />}
+        render={(props) => (
+          <ResultsPage path={match.path} url={match.url} {...props} />
+        )}
       />
       <Route
         path={`${match.path}/:testId/:taskId`}
-        render={(props) => <TaskPage path={match.path} {...props} />}
+        render={(props) => (
+          <TaskPage path={match.path} url={match.url} {...props} />
+        )}
       />
       <Route
         exact
         path={`${match.path}`}
-        render={(props) => <StartPage path={match.path} {...props} />}
+        render={(props) => (
+          <StartPage path={match.path} url={match.url} {...props} />
+        )}
       />
     </Switch>
   );

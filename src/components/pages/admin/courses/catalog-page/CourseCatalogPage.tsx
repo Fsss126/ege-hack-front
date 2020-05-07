@@ -5,7 +5,7 @@ import DropdownMenu, {
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import {ContentBlock} from 'components/layout/ContentBlock';
+import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
@@ -14,7 +14,7 @@ import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {CourseInfo, SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {RouteComponentPropsWithParentProps} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -22,7 +22,7 @@ const filterBy = {
   online: true,
 };
 
-export type CourseCatalogPageProps = RouteComponentPropsWithPath & {
+export type CourseCatalogPageProps = RouteComponentPropsWithParentProps & {
   children: React.ReactElement;
 };
 const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
@@ -114,7 +114,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
           >
             {header}
             {canEdit && (
-              <ContentBlock stacked className="d-flex">
+              <ButtonsBlock stacked>
                 <Button
                   neutral
                   component={Link}
@@ -123,7 +123,7 @@ const CourseCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
                 >
                   Добавить курс
                 </Button>
-              </ContentBlock>
+              </ButtonsBlock>
             )}
             <CourseCatalog.Filter filterBy={filterBy} />
             <CourseCatalog.Catalog plain renderCourse={renderCourse} />

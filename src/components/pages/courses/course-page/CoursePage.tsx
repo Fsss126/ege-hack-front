@@ -10,13 +10,14 @@ import {
   useUserTeachers,
 } from 'hooks/selectors';
 import React from 'react';
-import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {
+  CoursePageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 
-const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
-  path,
-  match,
-  location,
-}) => {
+const CoursePage: React.FC<RouteComponentPropsWithParentProps<
+  CoursePageParams
+>> = ({path, match, location}) => {
   const {
     params: {courseId: param_id},
   } = match;

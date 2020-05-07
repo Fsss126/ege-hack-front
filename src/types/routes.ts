@@ -1,9 +1,10 @@
 import {RouteComponentProps} from 'react-router';
 
-export interface RouteComponentPropsWithPath<
+export interface RouteComponentPropsWithParentProps<
   Params extends {[K in keyof Params]?: string} = {}
 > extends RouteComponentProps<Params> {
   path: string;
+  url: string;
 }
 
 export interface SubjectPageParams {
@@ -28,4 +29,8 @@ export interface TestPageParams extends LessonPageParams {
 
 export interface TestTaskPageParams extends TestPageParams {
   taskId: string;
+}
+
+export interface ThemePageParams extends SubjectPageParams {
+  themeId: string;
 }

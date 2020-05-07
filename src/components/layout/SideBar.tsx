@@ -1,4 +1,4 @@
-import {ADMIN_ROLES, TEACHER_ROLES} from 'definitions/constants';
+import {ADMIN_ROLES, DEBUG_MODE, TEACHER_ROLES} from 'definitions/constants';
 import React, {useCallback} from 'react';
 import {AccountRole} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
@@ -145,8 +145,15 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                     <NavLink
                       className="layout__sidebar-menu-link"
                       to="/admin/knowledge/"
+                      disabled={!DEBUG_MODE}
                     >
                       База знаний
+                      {!DEBUG_MODE && (
+                        <>
+                          {' '}
+                          <span className="badge accent">Скоро</span>
+                        </>
+                      )}
                     </NavLink>
                     <NavLink
                       className="layout__sidebar-menu-link"

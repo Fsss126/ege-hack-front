@@ -1,8 +1,8 @@
 import React from 'react';
-import {RouteComponentPropsWithPath, TestPageParams} from 'types/routes';
+import {RouteComponentPropsWithParentProps, TestPageParams} from 'types/routes';
 
 // TODO
-export const StartPage: React.FC<RouteComponentPropsWithPath<
+export const StartPage: React.FC<RouteComponentPropsWithParentProps<
   TestPageParams
 >> = () => {
   return null;

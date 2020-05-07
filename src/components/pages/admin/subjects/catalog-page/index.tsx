@@ -1,12 +1,15 @@
 import {ContentBlock} from 'components/layout/ContentBlock';
 import React from 'react';
-import {RouteComponentPropsWithPath, SubjectPageParams} from 'types/routes';
+import {
+  RouteComponentPropsWithParentProps,
+  SubjectPageParams,
+} from 'types/routes';
 
 import SubjectCatalogPage from './SubjectCatalogPage';
 
-const CoursesPage: React.FC<RouteComponentPropsWithPath<SubjectPageParams>> = (
-  props,
-) => {
+const CoursesPage: React.FC<RouteComponentPropsWithParentProps<
+  SubjectPageParams
+>> = (props) => {
   const {
     match: {path},
   } = props;

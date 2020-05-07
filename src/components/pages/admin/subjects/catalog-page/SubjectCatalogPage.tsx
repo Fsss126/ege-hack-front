@@ -18,7 +18,10 @@ import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {RouteComponentPropsWithPath, SubjectPageParams} from 'types/routes';
+import {
+  RouteComponentPropsWithParentProps,
+  SubjectPageParams,
+} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -33,7 +36,7 @@ const filter: FilterFunc<SubjectInfo> = ({name}, {search}) => {
   return search ? subjectName.includes(searchKey) : true;
 };
 
-export type SubjectCatalogPageProps = RouteComponentPropsWithPath<
+export type SubjectCatalogPageProps = RouteComponentPropsWithParentProps<
   SubjectPageParams
 > & {
   children: React.ReactElement;

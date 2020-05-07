@@ -7,12 +7,12 @@ import React, {useCallback} from 'react';
 import {Redirect} from 'react-router';
 import {TestStatus} from 'types/dtos';
 import {TestStatePassedAnswerInfo} from 'types/entities';
-import {RouteComponentPropsWithPath, TestPageParams} from 'types/routes';
+import {RouteComponentPropsWithParentProps, TestPageParams} from 'types/routes';
 
 import {CorrectBadge, IncorrectBadge} from '../task-page/Results';
 import {ResultBar} from './ResultBar';
 
-export const ResultsPage: React.FC<RouteComponentPropsWithPath<
+export const ResultsPage: React.FC<RouteComponentPropsWithParentProps<
   TestPageParams
 >> = (props) => {
   const {

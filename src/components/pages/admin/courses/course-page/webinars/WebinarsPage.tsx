@@ -11,18 +11,20 @@ import ListItem, {ListItemProps} from 'components/common/ListItem';
 import PosterCover from 'components/common/PosterCover';
 import {useWebinar, WEBINAR_STATE} from 'components/common/WebinarSchedule';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import {ContentBlock} from 'components/layout/ContentBlock';
+import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderDate} from 'definitions/helpers';
 import {useDeleteWebinar} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import Countdown, {CountdownRenderProps} from 'react-countdown-now';
-import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
 import {CourseInfo, WebinarInfo, WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {CoursePageParams} from 'types/routes';
+import {
+  CoursePageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 import {SimpleCallback} from 'types/utility/common';
 
 const filterBy = {
@@ -101,8 +103,9 @@ const Webinar = (props: WebinarProps): React.ReactElement => {
   );
 };
 
-export type WebinarsPageProps = RouteComponentProps<CoursePageParams> & {
-  path: string;
+export type WebinarsPageProps = RouteComponentPropsWithParentProps<
+  CoursePageParams
+> & {
   parentSection?: PageParentSection;
   children: React.ReactNode;
   course?: CourseInfo;
@@ -190,7 +193,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
           <PageContent parentSection={parentSection}>
             {header}
             {canEdit && (
-              <ContentBlock stacked className="d-flex">
+              <ButtonsBlock stacked>
                 <Button
                   neutral
                   component={Link}
@@ -199,7 +202,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
                 >
                   Добавить вебинар
                 </Button>
-              </ContentBlock>
+              </ButtonsBlock>
             )}
             <Catalog.Filter filterBy={filterBy} />
             <Catalog.Catalog

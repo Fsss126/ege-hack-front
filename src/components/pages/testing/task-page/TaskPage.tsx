@@ -2,11 +2,14 @@ import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState, useTestTask} from 'hooks/selectors';
 import React from 'react';
 import {TestStatus} from 'types/dtos';
-import {RouteComponentPropsWithPath, TestTaskPageParams} from 'types/routes';
+import {
+  RouteComponentPropsWithParentProps,
+  TestTaskPageParams,
+} from 'types/routes';
 
 import {TaskPageContent} from './TaskPageContent';
 
-export const TaskPage: React.FC<RouteComponentPropsWithPath<
+export const TaskPage: React.FC<RouteComponentPropsWithParentProps<
   TestTaskPageParams
 >> = (props) => {
   const {

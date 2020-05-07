@@ -18,7 +18,10 @@ import React, {useCallback} from 'react';
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {
+  CoursePageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 
 import LessonsPage from '../../admin/courses/course-page/lessons/LessonsPage';
 import ParticipantsPage from '../../admin/courses/course-page/participants/ParticipantsPage';
@@ -43,10 +46,10 @@ const renderLesson: CatalogItemRenderer<LessonInfo> = (
   );
 };
 
-const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
-  props,
-) => {
-  const {path: root, match} = props;
+const CoursePage: React.FC<RouteComponentPropsWithParentProps<
+  CoursePageParams
+>> = (props) => {
+  const {path, url, match} = props;
   const {
     params: {courseId: param_id},
   } = match;
@@ -74,7 +77,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
   // const canEditParticipants = useCheckPermissions(Permissions.PARTICIPANT_MANAGEMENT);
   // const canEditWebinars = useCheckPermissions(Permissions.WEBINAR_EDIT);
 
-  const parentPage = `${root}/`;
+  const parentPage = `${path}/`;
   const onDelete = useDeleteCourse(parentPage);
   const deleteCallback = useCallback(() => {
     onDelete(courseId);
@@ -135,7 +138,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
   );
   const parentSection = {
     name: 'Курсы',
-    url: root,
+    url: path,
   };
 
   const errors = [
@@ -155,7 +158,8 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
             course={course || undefined}
             participants={participants || undefined}
             isLoaded={isLoaded}
-            path={root}
+            path={path}
+            url={url}
             parentSection={parentSection}
             errors={errors}
             reloadCallbacks={reloadCallbacks}
@@ -174,7 +178,8 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
             course={course || undefined}
             lessons={lessons || undefined}
             isLoaded={isLoaded}
-            path={root}
+            path={path}
+            url={url}
             parentSection={parentSection}
             errors={errors}
             reloadCallbacks={reloadCallbacks}
@@ -195,7 +200,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<{courseId: string}>> = (
       {/*        {header}*/}
       {/*    </WebinarsPage>*/}
       {/*)}/>*/}
-      <Route render={() => <Redirect to={`${root}/${courseId}/lessons/`} />} />
+      <Route render={() => <Redirect to={`${path}/${courseId}/lessons/`} />} />
     </Switch>
   );
 };

@@ -1,4 +1,4 @@
-import 'sass/index.scss';
+import 'styles/index.scss';
 
 import {Location, LocationListener} from 'history';
 import {useToggle} from 'hooks/common';

@@ -7,16 +7,26 @@ import {RouteComponentProps} from 'react-router';
 import {CourseDtoReq} from 'types/dtos';
 import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {SubjectPageParams} from 'types/routes';
 
-import CourseForm from './CourseForm';
+import ThemeForm from './ThemeForm';
 
 const createRequest = (requestData: CourseDtoReq): Promise<CourseInfo> =>
   APIRequest.post('/courses', requestData) as Promise<CourseInfo>;
 
 const returnLink = '/admin/';
 
-const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
-  const {location} = props;
+const ThemeCreatingPage: React.FC<RouteComponentProps<
+  Partial<SubjectPageParams>
+>> = (props) => {
+  const {
+    match: {
+      params: {subjectId: param_subject},
+    },
+    location,
+  } = props;
+  const subjectId = param_subject ? parseInt(param_subject) : undefined;
+
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -59,7 +69,8 @@ const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
       {isLoaded && (
         <PageContent>
           <ContentBlock>
-            <CourseForm
+            <ThemeForm
+              subjectId={subjectId}
               subjects={subjects as SubjectInfo[]}
               teachers={teachers as TeacherInfo[]}
               title="Новый курс"
@@ -75,4 +86,4 @@ const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
   );
 };
 
-export default CourseCreatingPage;
+export default ThemeCreatingPage;
