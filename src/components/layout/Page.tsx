@@ -114,13 +114,6 @@ export const BottomTab: React.FC<BottomTabProps> = ({
   </Sticky>
 );
 
-// TODO: Add page error boundary
-class PageErrorBoundary extends React.Component {
-  state = {
-    error: null,
-  };
-}
-
 enum LayoutAnimationClassNames {
   enter = 'sidebar-opened',
   enterActive = 'sidebar-opened',
@@ -128,9 +121,6 @@ enum LayoutAnimationClassNames {
   exit = 'sidebar-hiding',
   exitActive = 'sidebar-hiding',
 }
-
-// TODO: check error and show popup
-// TODO: parent sections using context
 
 export type PageProps = {
   title?: string;

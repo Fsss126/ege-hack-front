@@ -143,8 +143,7 @@ class MenuList<T extends OptionShape = OptionShape> extends Component<
   componentDidMount(): void {
     // needed to the select to scroll the list to the selected option
     if (this.scrollBar.current) {
-      // TODO: investigate why declaration merging not working in this case
-      assignRef(this.props.innerRef, (this.scrollBar.current as any).view);
+      assignRef(this.props.innerRef, this.scrollBar.current.view);
     }
   }
 

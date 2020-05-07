@@ -115,7 +115,6 @@ export type LessonFormProps = {
   lesson?: LessonInfo;
 };
 
-// TODO: preload video
 const LessonForm: React.FC<LessonFormProps> = (props) => {
   const {
     courseId,

@@ -62,7 +62,6 @@ const defaultState: DataState = {
   homeworks: {},
 };
 
-// TODO: add utils normalization
 export const dataReducer: Reducer<DataState, Action> = (
   state = defaultState,
   action,
@@ -240,8 +239,7 @@ export const dataReducer: Reducer<DataState, Action> = (
 
       if (lessonIndex !== -1) {
         const prevLesson = courseLessons[lessonIndex];
-        const mergedLesson = {...prevLesson, ...responseLesson};
-        newLessons[lessonIndex] = mergedLesson;
+        newLessons[lessonIndex] = {...prevLesson, ...responseLesson};
         newLessons = _.sortBy(newLessons, 'num');
       } else {
         newLessons.push(responseLesson);
