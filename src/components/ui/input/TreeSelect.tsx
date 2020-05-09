@@ -16,7 +16,7 @@ interface CommonDataNode<V extends Key> {
   [key: string]: any;
 }
 
-interface SimpleDataNode<V extends Key, T extends Key = V>
+export interface SimpleDataNode<V extends Key, T extends Key = V>
   extends CommonDataNode<V> {
   id?: T;
   pId?: T;
@@ -24,7 +24,7 @@ interface SimpleDataNode<V extends Key, T extends Key = V>
   isLeaf?: boolean;
 }
 
-interface TreeDataNode<V extends Key> extends CommonDataNode<V> {
+export interface TreeDataNode<V extends Key> extends CommonDataNode<V> {
   children?: TreeDataNode<V>[];
 }
 
@@ -36,7 +36,7 @@ export interface SimpleModeConfig {
 
 type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
   SelectProps<V>,
-  'treeData' | 'onChange' | 'treeDataSimpleMode'
+  'treeData' | 'onChange' | 'treeDataSimpleMode' | 'loadData'
 > & {
   onChange: InputChangeHandler<V>;
   name: string;
@@ -45,10 +45,12 @@ type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
     | {
         treeDataSimpleMode: true | SimpleModeConfig;
         treeData?: SimpleDataNode<V, T>[];
+        loadData?: (node: SimpleDataNode<V, T>) => Promise<unknown>;
       }
     | {
         treeDataSimpleMode?: false;
         treeData?: TreeDataNode<V>[];
+        loadData?: (node: TreeDataNode<V>) => Promise<unknown>;
       }
   );
 
@@ -104,12 +106,12 @@ function useDefaultExpandedKeys<V extends Key, T extends Key = V>(
           ? currentNode[treeDataSimpleMode.pId]
           : currentNode.pId;
 
+      defaultExpandedKeys.push(currentNode.value);
+      currentNode = flattenTreeData[parentId];
+
       if (!parentId) {
         break;
       }
-
-      defaultExpandedKeys.push(currentNode.value);
-      currentNode = flattenTreeData[parentId];
     }
 
     return defaultExpandedKeys;
@@ -128,6 +130,7 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     treeData,
     treeDataSimpleMode,
     value,
+    loadData,
     ...rest
   } = props;
 
@@ -171,6 +174,7 @@ const TreeSelect = <V extends Key, T extends Key = V>(
         treeData={treeData}
         treeDataSimpleMode={treeDataSimpleMode}
         value={value}
+        loadData={loadData as any}
         {...rest}
       />
     </div>
