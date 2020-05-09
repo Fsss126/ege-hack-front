@@ -28,6 +28,9 @@ export interface DataState {
   userCourses?: UserCourseInfo[] | AxiosError;
   subjects?: SubjectInfo[] | AxiosError;
   userTeachers?: TeacherInfo[] | AxiosError;
+  userHomeworks: {
+    [courseId: number]: {[lessonId: number]: HomeworkInfo | AxiosError | null};
+  };
   users: Record<AccountRole, AccountInfo[] | AxiosError | undefined>;
   lessons: {[courseId: number]: LessonInfo[] | AxiosError};
   webinars: {
@@ -61,6 +64,7 @@ const defaultState: DataState = {
   userCourses: undefined,
   subjects: undefined,
   userTeachers: undefined,
+  userHomeworks: {},
   users: {
     [AccountRole.PUPIL]: undefined,
     [AccountRole.TEACHER]: undefined,
@@ -91,6 +95,14 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         credentials,
+      };
+    }
+    case ActionType.LOG_IN_ERROR: {
+      const {error} = action;
+
+      return {
+        ...state,
+        credentials: error,
       };
     }
     case ActionType.LOG_OUT: {
@@ -232,17 +244,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         teacherCourses: courses,
       };
     }
-    case ActionType.HOMEWORKS_FETCHED: {
-      const {lessonId, homeworks} = action;
-
-      return {
-        ...state,
-        homeworks: {
-          ...state.homeworks,
-          [lessonId]: homeworks,
-        },
-      };
-    }
     case ActionType.LESSONS_REVOKE: {
       const {courseId, responseLesson} = action;
       const {
@@ -285,6 +286,34 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
+    case ActionType.USER_HOMEWORKS_FETCHED: {
+      const {courseId, lessonId, homework} = action;
+
+      return {
+        ...state,
+        userHomeworks: {
+          ...state.userHomeworks,
+          [courseId]: {
+            ...(state.userHomeworks[courseId] || {}),
+            [lessonId]: homework,
+          },
+        },
+      };
+    }
+    case ActionType.USER_HOMEWORKS_REVOKE: {
+      const {courseId, lessonId, responseHomework} = action;
+
+      return {
+        ...state,
+        userHomeworks: {
+          ...state.userHomeworks,
+          [courseId]: {
+            ...(state.userHomeworks[courseId] || {}),
+            [lessonId]: responseHomework,
+          },
+        },
+      };
+    }
     case ActionType.PARTICIPANTS_REVOKE: {
       const {responseParticipants, courseId} = action;
 
@@ -308,6 +337,17 @@ export const dataReducer: Reducer<DataState, Action> = (
         participants: {
           ...loadedParticipants,
           [courseId]: courseParticipants.filter(({id}) => id !== userId),
+        },
+      };
+    }
+    case ActionType.HOMEWORKS_FETCHED: {
+      const {lessonId, homeworks} = action;
+
+      return {
+        ...state,
+        homeworks: {
+          ...state.homeworks,
+          [lessonId]: homeworks,
         },
       };
     }

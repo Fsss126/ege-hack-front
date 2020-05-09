@@ -1,4 +1,5 @@
 import APIRequest from 'api';
+import {AxiosError} from 'axios';
 import {AccountInfo, Credentials} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
@@ -7,6 +8,7 @@ const VK_APP_ID = process.env.REACT_APP_VK_APP_ID;
 
 export enum AuthEventTypes {
   login = 'auth.login',
+  error = 'auth.error',
   logout = 'auth.logout',
 }
 
@@ -40,6 +42,8 @@ function getCredentialsFromStorage(): Credentials | null {
 
 export type AuthLoginCallback = (credentials: Credentials | null) => void;
 
+export type AuthErrorCallback = (error: AxiosError) => void;
+
 export type AuthLogoutCallback = SimpleCallback;
 
 class Auth {
@@ -47,6 +51,7 @@ class Auth {
   userInfo?: AccountInfo;
   eventHandlers: {
     [AuthEventTypes.login]?: AuthLoginCallback[];
+    [AuthEventTypes.error]?: AuthErrorCallback[];
     [AuthEventTypes.logout]?: AuthLogoutCallback[];
   } = {};
 
@@ -108,17 +113,18 @@ class Auth {
   };
 
   subscribe(eventType: AuthEventTypes.login, handler: AuthLoginCallback): void;
+  subscribe(eventType: AuthEventTypes.error, handler: AuthErrorCallback): void;
   subscribe(
     eventType: AuthEventTypes.logout,
     handler: AuthLogoutCallback,
   ): void;
   subscribe(
     eventType: AuthEventTypes,
-    handler: AuthLoginCallback | AuthLogoutCallback,
+    handler: AuthLoginCallback | AuthErrorCallback | AuthLogoutCallback,
   ): void {
     (
       this.eventHandlers[eventType] || (this.eventHandlers[eventType] = [])
-    ).push(handler);
+    ).push(handler as any);
   }
 
   unsubscribe(
@@ -126,12 +132,16 @@ class Auth {
     handler: AuthLoginCallback,
   ): void;
   unsubscribe(
+    eventType: AuthEventTypes.error,
+    handler: AuthErrorCallback,
+  ): void;
+  unsubscribe(
     eventType: AuthEventTypes.logout,
     handler: AuthLogoutCallback,
   ): void;
   unsubscribe(
     eventType: AuthEventTypes,
-    handler: AuthLoginCallback | AuthLogoutCallback,
+    handler: AuthLoginCallback | AuthErrorCallback | AuthLogoutCallback,
   ): void {
     const {
       eventHandlers: {[eventType]: eventHandlers},
@@ -140,9 +150,10 @@ class Auth {
     if (!eventHandlers) {
       return;
     }
-    this.eventHandlers[eventType] = eventHandlers.filter(
-      (func) => func !== handler,
-    ) as any;
+    this.eventHandlers[eventType] = (eventHandlers as any).filter(
+      (func: AuthLoginCallback | AuthErrorCallback | SimpleCallback) =>
+        func !== handler,
+    );
   }
 
   getAccessToken(): string {

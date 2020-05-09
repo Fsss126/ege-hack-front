@@ -30,6 +30,9 @@ export const selectUsers = (state: AppState) => selectDataReducer(state).users;
 export const selectLessons = (state: AppState) =>
   selectDataReducer(state).lessons;
 
+export const selectUserHomeworks = (state: AppState) =>
+  selectDataReducer(state).userHomeworks;
+
 export const selectHomeworks = (state: AppState) =>
   selectDataReducer(state).homeworks;
 

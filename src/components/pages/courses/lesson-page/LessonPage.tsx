@@ -3,7 +3,7 @@ import List, {ListItemRenderer} from 'components/common/List';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
-import {useHomework, useLessons, useUserCourses} from 'hooks/selectors';
+import {useLessons, useUserCourses, useUserHomework} from 'hooks/selectors';
 import _ from 'lodash';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
@@ -36,7 +36,7 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
     homework,
     error: errorLoadingHomework,
     reload: reloadHomework,
-  } = useHomework(lessonId);
+  } = useUserHomework(courseId, lessonId);
   const renderLesson: ListItemRenderer<LessonInfo> = (lesson, renderProps) => {
     const {id, locked} = lesson;
 

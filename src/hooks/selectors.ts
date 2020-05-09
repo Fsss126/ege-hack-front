@@ -47,6 +47,7 @@ import {
   selectUpcomingWebinars,
   selectUser,
   selectUserCourses,
+  selectUserHomeworks,
   selectUsers,
   selectUserTeachers,
   selectWebinars,
@@ -83,14 +84,20 @@ export function useUserAuth(): void {
   React.useLayoutEffect(() => {
     const loginCallback = (credentials: Credentials | null): void => {
       dispatch({type: ActionType.LOG_IN_SUCCESS, credentials});
+      dispatch({type: ActionType.USER_INFO_FETCH});
+    };
+    const errorCallback = (error: AxiosError): void => {
+      dispatch({type: ActionType.LOG_IN_ERROR, error});
     };
     const logoutCallback = (): void => {
       dispatch({type: ActionType.LOG_OUT});
     };
     Auth.subscribe(AuthEventTypes.login, loginCallback);
+    Auth.subscribe(AuthEventTypes.error, errorCallback);
     Auth.subscribe(AuthEventTypes.logout, logoutCallback);
     return (): void => {
       Auth.unsubscribe(AuthEventTypes.login, loginCallback);
+      Auth.unsubscribe(AuthEventTypes.error, errorCallback);
       Auth.unsubscribe(AuthEventTypes.logout, logoutCallback);
     };
   }, [dispatch]);
@@ -713,54 +720,52 @@ export function useRevokeWebinars(courseId: number): RevokeWebinarssHookResult {
   );
 }
 
-export type HomeworkHookResult = {
-  homework?: HomeworkInfo;
+export type UserHomeworkHookResult = {
+  homework?: HomeworkInfo | null;
   error?: AxiosError;
   reload: SimpleCallback;
 };
 
-export function useHomework(lessonId: number): HomeworkHookResult {
-  const {credentials} = useUser();
-  const [homework, setHomework] = useState<HomeworkInfo>();
-  const [error, setError] = useState<AxiosError>();
-  const fetchHomework = useCallback(async () => {
-    if (requests.homework && requests.homework[lessonId]) {
-      return requests.homework[lessonId];
+export function useUserHomework(
+  courseId: number,
+  lessonId: number,
+): UserHomeworkHookResult {
+  const homework = (useSelector(selectUserHomeworks)[courseId] || {})[lessonId];
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.USER_HOMEWORKS_FETCH, courseId, lessonId});
+  }, [courseId, dispatch, lessonId]);
+  useEffect(() => {
+    if (!homework && homework !== null) {
+      dispatchFetchAction();
     }
-    const request = APIRequest.get<HomeworkInfo>(
-      `/lessons/${lessonId}/homeworks/pupil`,
-    );
-    (requests.homework || (requests.homework = {}))[lessonId] = request;
-    try {
-      if (error) {
-        setError(undefined);
-      }
-      const homework: HomeworkInfo = (await request) as any;
-      setHomework(homework);
-    } catch (e) {
-      console.error(e);
-      setError(e);
-    } finally {
-      delete requests.homework[lessonId];
-    }
-    return request;
-  }, [error, lessonId]);
+  }, [dispatchFetchAction, homework]);
+  return homework instanceof Error
+    ? {error: homework, reload: dispatchFetchAction}
+    : {homework, reload: dispatchFetchAction};
+}
 
-  React.useEffect(() => {
-    if (
-      credentials &&
-      !(
-        homework ||
-        homework === null ||
-        (requests.homework && requests.homework[lessonId]) ||
-        error
-      )
-    ) {
-      fetchHomework();
-    }
-  }, [credentials, homework, lessonId, error, fetchHomework]);
+export type RevokeUserHomeworkHookResult = (
+  responseHomework: HomeworkInfo,
+) => void;
 
-  return {homework, error, reload: fetchHomework};
+export function useRevokeUserHomework(
+  courseId: number,
+  lessonId: number,
+): RevokeUserHomeworkHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseHomework) => {
+      dispatch({
+        type: ActionType.USER_HOMEWORKS_REVOKE,
+        courseId,
+        lessonId,
+        responseHomework,
+      });
+    },
+    [courseId, dispatch, lessonId],
+  );
 }
 
 export type UpcomingWebinarsHookResult = {

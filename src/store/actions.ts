@@ -21,7 +21,7 @@ import {AccountRole} from '../types/enums';
 
 export enum ActionType {
   LOG_IN = 'LOG_IN',
-  LOG_IN_REQUEST = 'LOG_IN_ERROR',
+  LOG_IN_REQUEST = 'LOG_IN_REQUEST',
   LOG_IN_SUCCESS = 'LOG_IN_SUCCESS',
   LOG_IN_ERROR = 'LOG_IN_ERROR',
   LOG_OUT = 'LOG_OUT',
@@ -45,6 +45,9 @@ export enum ActionType {
   LESSONS_REVOKE = 'LESSONS_REVOKE',
   LESSON_DELETE_REQUEST = 'LESSON_DELETE_REQUEST',
   LESSON_DELETE = 'LESSON_DELETE',
+  USER_HOMEWORKS_FETCH = 'USER_HOMEWORKS_FETCH',
+  USER_HOMEWORKS_FETCHED = 'USER_HOMEWORKS_FETCHED',
+  USER_HOMEWORKS_REVOKE = 'USER_HOMEWORKS_REVOKE',
   COURSE_WEBINARS_FETCH = 'COURSE_WEBINARS_FETCH',
   COURSE_WEBINARS_FETCHED = 'COURSE_WEBINARS_FETCHED',
   UPCOMING_WEBINARS_FETCH = 'UPCOMING_WEBINARS_FETCH',
@@ -205,6 +208,48 @@ export type LessonsFetchedAction = {
   lessons: LessonInfo[] | AxiosError;
 };
 
+export type LessonDeleteCallback = (courseId: number, lessonId: number) => void;
+
+export type LessonDeleteErrorCallback = (
+  courseId: number,
+  lessonId: number,
+  error: AxiosError,
+) => void;
+
+export type LessonDeleteRequestAction = {
+  type: ActionType.LESSON_DELETE_REQUEST;
+  courseId: number;
+  lessonId: number;
+  onDelete?: LessonDeleteCallback;
+  onError?: LessonDeleteErrorCallback;
+};
+
+export type LessonDeleteAction = {
+  type: ActionType.LESSON_DELETE;
+  courseId: number;
+  lessonId: number;
+};
+
+export type UserHomeworksFetchAction = {
+  type: ActionType.USER_HOMEWORKS_FETCH;
+  courseId: number;
+  lessonId: number;
+};
+
+export type UserHomeworksFetchedAction = {
+  type: ActionType.USER_HOMEWORKS_FETCHED;
+  courseId: number;
+  lessonId: number;
+  homework: HomeworkInfo | AxiosError;
+};
+
+export type UserHomeworksRevokeAction = {
+  type: ActionType.USER_HOMEWORKS_REVOKE;
+  courseId: number;
+  lessonId: number;
+  responseHomework: HomeworkInfo;
+};
+
 export type CourseWebinarsFetchAction = {
   type: ActionType.COURSE_WEBINARS_FETCH;
   courseId: number;
@@ -268,28 +313,6 @@ export type LessonRevokeAction = {
   type: ActionType.LESSONS_REVOKE;
   courseId: number;
   responseLesson: LessonInfo;
-};
-
-export type LessonDeleteCallback = (courseId: number, lessonId: number) => void;
-
-export type LessonDeleteErrorCallback = (
-  courseId: number,
-  lessonId: number,
-  error: AxiosError,
-) => void;
-
-export type LessonDeleteRequestAction = {
-  type: ActionType.LESSON_DELETE_REQUEST;
-  courseId: number;
-  lessonId: number;
-  onDelete?: LessonDeleteCallback;
-  onError?: LessonDeleteErrorCallback;
-};
-
-export type LessonDeleteAction = {
-  type: ActionType.LESSON_DELETE;
-  courseId: number;
-  lessonId: number;
 };
 
 export type ParticipantsRevokeAction = {
@@ -555,6 +578,12 @@ export type Action = {type: ActionType} & (
   | AccountsDeleteAction
   | LessonsFetchAction
   | LessonsFetchedAction
+  | LessonRevokeAction
+  | LessonDeleteRequestAction
+  | LessonDeleteAction
+  | UserHomeworksFetchAction
+  | UserHomeworksFetchedAction
+  | UserHomeworksRevokeAction
   | CourseWebinarsFetchAction
   | CourseWebinarsFetchedAction
   | UpcomingWebinarsFetchAction
@@ -565,9 +594,6 @@ export type Action = {type: ActionType} & (
   | AdminWebinarsFetchedAction
   | HomeworksFetchAction
   | HomeworksFetchedAction
-  | LessonRevokeAction
-  | LessonDeleteRequestAction
-  | LessonDeleteAction
   | ParticipantsRevokeAction
   | ParticipantDeleteRequestAction
   | ParticipantDeleteAction

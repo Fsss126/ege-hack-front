@@ -58,6 +58,7 @@ import {
   TestStateFetchAction,
   TestStateFetchedAction,
   UpcomingWebinarsFetchAction,
+  UserHomeworksFetchAction,
   WebinarDeleteRequestAction,
 } from './actions';
 import {AppState} from './reducers';
@@ -66,20 +67,6 @@ import {selectLessons} from './selectors';
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
 const put = (action: Action): PutEffect<Action> => putEffect<Action>(action);
-
-function* fetchUserInfo() {
-  yield takeLeading(
-    [ActionType.LOG_IN, ActionType.LOG_IN_SUCCESS],
-    function* () {
-      try {
-        const userInfo: AccountInfo = yield call(Auth.getUserInfo);
-        yield put({type: ActionType.USER_INFO_FETCHED, userInfo});
-      } catch (error) {
-        yield put({type: ActionType.USER_INFO_FETCHED, userInfo: error});
-      }
-    },
-  );
-}
 
 function* waitForLogin<A extends Action = Action>(
   pattern: ActionPattern<A>,
@@ -100,6 +87,17 @@ function* fetchSubjects() {
         yield put({type: ActionType.SUBJECTS_FETCHED, subjects: error});
       }
     });
+  });
+}
+
+function* fetchUserInfo() {
+  yield takeLeading([ActionType.USER_INFO_FETCH], function* () {
+    try {
+      const userInfo: AccountInfo = yield call(Auth.getUserInfo);
+      yield put({type: ActionType.USER_INFO_FETCHED, userInfo});
+    } catch (error) {
+      yield put({type: ActionType.USER_INFO_FETCHED, userInfo: error});
+    }
   });
 }
 
@@ -220,6 +218,40 @@ function* fetchLessons() {
       (action) => action.courseId,
     );
   });
+}
+
+function* fetchUserHomeworks() {
+  yield* waitForLogin<UserHomeworksFetchAction>(
+    ActionType.USER_HOMEWORKS_FETCH,
+    function* (channel) {
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: UserHomeworksFetchAction) {
+          const {courseId, lessonId} = action;
+          try {
+            const homework: HomeworkInfo = yield call(
+              APIRequest.get,
+              `/lessons/${lessonId}/homeworks/pupil`,
+            );
+            yield put({
+              type: ActionType.USER_HOMEWORKS_FETCHED,
+              homework,
+              courseId,
+              lessonId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.USER_HOMEWORKS_FETCHED,
+              homework: error,
+              courseId,
+              lessonId,
+            });
+          }
+        },
+        (action) => action.lessonId,
+      );
+    },
+  );
 }
 
 function* fetchCourseWebinars() {
@@ -859,6 +891,7 @@ function* init() {
 
   if (credentials) {
     yield put({type: ActionType.LOG_IN});
+    yield put({type: ActionType.USER_INFO_FETCH});
   }
 }
 
@@ -869,6 +902,7 @@ export default function* rootSaga() {
   yield spawn(fetchUserCourses);
   yield spawn(fetchSubjects);
   yield spawn(fetchUserTeachers);
+  yield spawn(fetchUserHomeworks);
   yield spawn(fetchAccounts);
   yield spawn(fetchLessons);
   yield spawn(fetchCourseWebinars);

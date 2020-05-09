@@ -165,7 +165,7 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
         ) {
           return transformHomework(data);
         }
-        return;
+        return null;
       }
       case url.pathname === '/courses/schedule/person':
       case /\/courses\/\w*\/schedule\/person$/.test(url.pathname): {

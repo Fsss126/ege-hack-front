@@ -11,7 +11,7 @@ import {TestAssignment} from './TestAssignment';
 
 export interface LessonViewProps {
   lesson: LessonInfo;
-  homework: HomeworkInfo;
+  homework: HomeworkInfo | null;
 }
 const LessonView: React.FC<LessonViewProps> = (props) => {
   const {
@@ -60,6 +60,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
           <HomeworkLoader
             homework={homework}
             deadline={assignment.deadline}
+            courseId={course_id}
             lessonId={id}
           />
           <div className="hw-result">

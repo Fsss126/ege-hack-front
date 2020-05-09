@@ -2,16 +2,18 @@ import APIRequest from 'api';
 import NavigationBlocker from 'components/common/NavigationBlocker';
 import {FileInput} from 'components/ui/input';
 import {InputSubmitCallback} from 'components/ui/input/file-input/GenericFileInput';
+import {useRevokeUserHomework} from 'hooks/selectors';
 import React from 'react';
 import {HomeworkInfo} from 'types/entities';
 
 export type HomeworkLoaderProps = {
-  homework: HomeworkInfo;
+  homework: HomeworkInfo | null;
   deadline: Date;
+  courseId: number;
   lessonId: number;
 };
 const HomeworkLoader: React.FC<HomeworkLoaderProps> = (props) => {
-  const {homework, deadline, lessonId} = props;
+  const {homework, deadline, courseId, lessonId} = props;
   const isHomeworkSubmissionClosed = React.useCallback(
     () => deadline && new Date() >= deadline,
     [deadline],
@@ -20,23 +22,25 @@ const HomeworkLoader: React.FC<HomeworkLoaderProps> = (props) => {
   const onChange = React.useCallback((files, name, changed) => {
     setChanges(changed);
   }, []);
+
+  const revokeUserHomework = useRevokeUserHomework(courseId, lessonId);
+
   const onSubmit: InputSubmitCallback = React.useCallback(
     async (files) => {
       const file = files && files[0] ? files[0].file_id : null;
 
-      // TODO: add error alert
-      return APIRequest({
+      const responseHomework: HomeworkInfo = (await APIRequest({
         url: `/lessons/${lessonId}/homeworks/pupil`,
         method: file ? 'PUT' : 'DELETE',
         data: {
           file,
         },
-      }).then(() => {
-        setChanges(false);
-      });
-      // return Promise.resolve();
+      })) as any;
+
+      setChanges(false);
+      revokeUserHomework(responseHomework);
     },
-    [lessonId, setChanges],
+    [lessonId, revokeUserHomework],
   );
 
   return (
