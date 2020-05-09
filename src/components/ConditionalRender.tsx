@@ -1,4 +1,4 @@
-import {useUser} from 'hooks/selectors';
+import {useUserInfo} from 'hooks/selectors';
 import _ from 'lodash';
 import {AccountInfo} from 'types/entities';
 
@@ -49,9 +49,9 @@ export function useCheckPermissions(
   requiredRoles?: RequiredRoles,
   fullMatch = true,
 ): boolean | undefined {
-  const {userInfo} = useUser();
+  const {userInfo, error} = useUserInfo();
 
-  if (!userInfo || userInfo instanceof Error) {
+  if (!userInfo || error) {
     return undefined;
   }
   return checkPermissions(

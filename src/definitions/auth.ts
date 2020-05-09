@@ -8,6 +8,7 @@ const VK_APP_ID = process.env.REACT_APP_VK_APP_ID;
 
 export enum AuthEventTypes {
   login = 'auth.login',
+  success = 'auth.success',
   error = 'auth.error',
   logout = 'auth.logout',
 }
@@ -40,20 +41,25 @@ function getCredentialsFromStorage(): Credentials | null {
   }
 }
 
-export type AuthLoginCallback = (credentials: Credentials | null) => void;
+export type AuthLoginCallback = SimpleCallback;
+
+export type AuthSuccessCallback = (credentials: Credentials | null) => void;
 
 export type AuthErrorCallback = (error: AxiosError) => void;
 
 export type AuthLogoutCallback = SimpleCallback;
 
+type AuthEventHandlers = {
+  [AuthEventTypes.login]?: AuthLoginCallback[];
+  [AuthEventTypes.success]?: AuthSuccessCallback[];
+  [AuthEventTypes.error]?: AuthErrorCallback[];
+  [AuthEventTypes.logout]?: AuthLogoutCallback[];
+};
+
 class Auth {
   credentials!: Credentials | null;
   userInfo?: AccountInfo;
-  eventHandlers: {
-    [AuthEventTypes.login]?: AuthLoginCallback[];
-    [AuthEventTypes.error]?: AuthErrorCallback[];
-    [AuthEventTypes.logout]?: AuthLogoutCallback[];
-  } = {};
+  eventHandlers: AuthEventHandlers = {};
 
   constructor() {
     let credentials;
@@ -68,7 +74,7 @@ class Auth {
 
   setCredentials(credentials: Credentials | null): void {
     this.credentials = credentials;
-    for (const handler of this.eventHandlers[AuthEventTypes.login] || []) {
+    for (const handler of this.eventHandlers[AuthEventTypes.success] || []) {
       handler(this.credentials);
     }
   }
@@ -83,6 +89,12 @@ class Auth {
     this.userInfo = undefined;
     for (const handler of this.eventHandlers[AuthEventTypes.logout] || []) {
       handler();
+    }
+  };
+
+  onError = (e: AxiosError): void => {
+    for (const handler of this.eventHandlers[AuthEventTypes.error] || []) {
+      handler(e);
     }
   };
 
@@ -104,44 +116,29 @@ class Auth {
   };
 
   onLogin = async (code: string, redirectUrl: string): Promise<void> => {
-    const credentials: Credentials = await APIRequest.post('/login/vk', {
-      code,
-      redirect_uri: redirectUrl,
-    });
-    setCredentialsToStorage(credentials);
-    this.setCredentials(credentials);
+    try {
+      const credentials: Credentials = await APIRequest.post('/login/vk', {
+        code,
+        redirect_uri: redirectUrl,
+      });
+      setCredentialsToStorage(credentials);
+      this.setCredentials(credentials);
+    } catch (e) {
+      this.onError(e);
+    }
   };
 
-  subscribe(eventType: AuthEventTypes.login, handler: AuthLoginCallback): void;
-  subscribe(eventType: AuthEventTypes.error, handler: AuthErrorCallback): void;
-  subscribe(
-    eventType: AuthEventTypes.logout,
-    handler: AuthLogoutCallback,
-  ): void;
-  subscribe(
-    eventType: AuthEventTypes,
-    handler: AuthLoginCallback | AuthErrorCallback | AuthLogoutCallback,
+  subscribe<E extends keyof AuthEventHandlers>(
+    eventType: E,
+    handler: ArrayElement<NonNullable<AuthEventHandlers[E]>>,
   ): void {
-    (
-      this.eventHandlers[eventType] || (this.eventHandlers[eventType] = [])
-    ).push(handler as any);
+    ((this.eventHandlers[eventType] ||
+      (this.eventHandlers[eventType] = [])) as any).push(handler);
   }
 
-  unsubscribe(
-    eventType: AuthEventTypes.login,
-    handler: AuthLoginCallback,
-  ): void;
-  unsubscribe(
-    eventType: AuthEventTypes.error,
-    handler: AuthErrorCallback,
-  ): void;
-  unsubscribe(
-    eventType: AuthEventTypes.logout,
-    handler: AuthLogoutCallback,
-  ): void;
-  unsubscribe(
-    eventType: AuthEventTypes,
-    handler: AuthLoginCallback | AuthErrorCallback | AuthLogoutCallback,
+  unsubscribe<E extends keyof AuthEventHandlers>(
+    eventType: E,
+    handler: ArrayElement<NonNullable<AuthEventHandlers[E]>>,
   ): void {
     const {
       eventHandlers: {[eventType]: eventHandlers},
@@ -151,7 +148,7 @@ class Auth {
       return;
     }
     this.eventHandlers[eventType] = (eventHandlers as any).filter(
-      (func: AuthLoginCallback | AuthErrorCallback | SimpleCallback) =>
+      (func: AuthSuccessCallback | AuthErrorCallback | SimpleCallback) =>
         func !== handler,
     );
   }

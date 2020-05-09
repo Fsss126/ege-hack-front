@@ -1,9 +1,15 @@
 import APIRequest, {getCancelToken} from 'api';
 import {AxiosError, Canceler} from 'axios';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import Auth, {AuthEventTypes} from 'definitions/auth';
+import Auth, {
+  AuthErrorCallback,
+  AuthEventTypes,
+  AuthLoginCallback,
+  AuthLogoutCallback,
+  AuthSuccessCallback,
+} from 'definitions/auth';
 import _ from 'lodash';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useDispatch, useSelector as useSelectorGen} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
@@ -33,6 +39,7 @@ import {AppState} from 'store/reducers';
 import {
   selectAdminCourses,
   selectAdminWebinars,
+  selectCredentials,
   selectHomeworks,
   selectKnowledgeTree,
   selectLessons,
@@ -48,6 +55,7 @@ import {
   selectUser,
   selectUserCourses,
   selectUserHomeworks,
+  selectUserInfo,
   selectUsers,
   selectUserTeachers,
   selectWebinars,
@@ -82,31 +90,33 @@ export function useUserAuth(): void {
   const dispatch = useDispatch();
 
   React.useLayoutEffect(() => {
-    const loginCallback = (credentials: Credentials | null): void => {
+    const loginCallback: AuthLoginCallback = () => {
+      dispatch({type: ActionType.LOG_IN_REQUEST});
+    };
+    const successCallback: AuthSuccessCallback = (credentials) => {
       dispatch({type: ActionType.LOG_IN_SUCCESS, credentials});
       dispatch({type: ActionType.USER_INFO_FETCH});
     };
-    const errorCallback = (error: AxiosError): void => {
+    const errorCallback: AuthErrorCallback = (error) => {
       dispatch({type: ActionType.LOG_IN_ERROR, error});
     };
-    const logoutCallback = (): void => {
+    const logoutCallback: AuthLogoutCallback = (): void => {
       dispatch({type: ActionType.LOG_OUT});
     };
+
     Auth.subscribe(AuthEventTypes.login, loginCallback);
+    Auth.subscribe(AuthEventTypes.success, successCallback);
     Auth.subscribe(AuthEventTypes.error, errorCallback);
     Auth.subscribe(AuthEventTypes.logout, logoutCallback);
+
     return (): void => {
       Auth.unsubscribe(AuthEventTypes.login, loginCallback);
+      Auth.unsubscribe(AuthEventTypes.success, successCallback);
       Auth.unsubscribe(AuthEventTypes.error, errorCallback);
       Auth.unsubscribe(AuthEventTypes.logout, logoutCallback);
     };
   }, [dispatch]);
 }
-
-interface RequestsStore {
-  [key: string]: any;
-}
-const requests: RequestsStore = {};
 
 export type UserHookResult = ReturnType<typeof selectUser>;
 
@@ -114,6 +124,37 @@ export function useUser(): UserHookResult {
   const {credentials, userInfo} = useSelector(selectUser);
 
   return {credentials, userInfo};
+}
+
+export type CredentialsHookResult = {
+  credentials: Credentials | null;
+  error?: AxiosError;
+};
+
+export function useCredentials(): CredentialsHookResult {
+  const credentials = useSelector(selectCredentials);
+
+  return credentials instanceof Error
+    ? {error: credentials, credentials: null}
+    : {credentials};
+}
+
+export type UserInfoHookResult = {
+  userInfo?: AccountInfo;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useUserInfo(): UserInfoHookResult {
+  const userInfo = useSelector(selectUserInfo);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.USER_INFO_FETCH});
+  }, [dispatch]);
+
+  return userInfo instanceof Error
+    ? {error: userInfo, reload: dispatchFetchAction}
+    : {userInfo, reload: dispatchFetchAction};
 }
 
 export type SubjectsHookResult = {

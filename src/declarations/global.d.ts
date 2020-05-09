@@ -4,11 +4,21 @@ import {Includes, InsertAfterEach} from 'definitions/mixins';
 declare global {
     declare type OmitCommon<T extends K, K> = Omit<T, keyof K>;
 
-    declare type Optionalize<T, K extends keyof  T> = Omit<T, K> & Partial<Pick<T, K>>;
+    declare type Optionalize<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
     declare type OptionalizeCommon<T extends K, K> = Omit<T, keyof K> & Partial<K>;
 
-    declare type Dictionary<T> = { [key: string]: T }
+    declare type ArrayElement<ArrayType extends unknown[]> = ArrayType[number];
+
+    declare type Maybe<T> = T | undefined;
+
+    declare type Key = string | number;
+
+    declare type Dictionary<T, K extends Key = string> = K extends string ? { [key: string]: T } : { [key: number]: T };
+
+    declare type PartialDictionary<T, K extends Key = string> = Partial<Dictionary<T, K>>;
+
+    declare type PartialRecord<K extends keyof any, T> = Partial<Record<K, T>>;
 
     declare type Yield<T> = T extends import('redux-saga').EventChannel<infer U1>
       ? U1

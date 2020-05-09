@@ -21,27 +21,33 @@ import {AccountRole} from 'types/enums';
 
 import {Action, ActionType} from '../actions';
 
+type DataProperty<T> = Maybe<T | AxiosError>;
+
 export interface DataState {
   credentials: Credentials | null | AxiosError;
-  userInfo?: AccountInfo | AxiosError;
-  shopCourses?: CourseInfo[] | AxiosError;
-  userCourses?: UserCourseInfo[] | AxiosError;
-  subjects?: SubjectInfo[] | AxiosError;
-  userTeachers?: TeacherInfo[] | AxiosError;
+  userInfo?: DataProperty<AccountInfo>;
+  shopCourses?: DataProperty<CourseInfo[]>;
+  userCourses?: DataProperty<UserCourseInfo[]>;
+  subjects?: DataProperty<SubjectInfo[]>;
+  userTeachers?: DataProperty<TeacherInfo[]>;
   userHomeworks: {
-    [courseId: number]: {[lessonId: number]: HomeworkInfo | AxiosError | null};
+    [courseId: number]: {
+      [lessonId: number]: DataProperty<HomeworkInfo | null>;
+    };
   };
-  users: Record<AccountRole, AccountInfo[] | AxiosError | undefined>;
-  lessons: {[courseId: number]: LessonInfo[] | AxiosError};
+  users: Record<AccountRole, DataProperty<AccountInfo[]>>;
+  lessons: {[courseId: number]: DataProperty<LessonInfo[]>};
   webinars: {
-    [courseId: number]: PersonWebinar[] | AxiosError;
-    upcoming?: PersonWebinar[] | AxiosError;
+    [courseId: number]: DataProperty<PersonWebinar[]>;
+    upcoming?: DataProperty<PersonWebinar[]>;
   };
-  participants: {[courseId: number]: CourseParticipantInfo[] | AxiosError};
-  adminCourses?: CourseInfo[] | AxiosError;
-  adminWebinars: {[courseId: number]: WebinarScheduleInfo | AxiosError};
-  teacherCourses?: CourseInfo[] | AxiosError;
-  homeworks: {[lessonId: number]: HomeworkInfo[] | AxiosError};
+  participants: {
+    [courseId: number]: DataProperty<CourseParticipantInfo[]>;
+  };
+  adminCourses?: DataProperty<CourseInfo[]>;
+  adminWebinars: {[courseId: number]: DataProperty<WebinarScheduleInfo>};
+  teacherCourses?: DataProperty<CourseInfo[]>;
+  homeworks: {[lessonId: number]: DataProperty<HomeworkInfo[]>};
   themes: {
     [themeId: number]: ThemeInfo;
   };
@@ -50,9 +56,10 @@ export interface DataState {
   };
   knowledgeTree: {
     [subjectId: number]: {
-      [key in number | 'root']?:
-        | {themeIds: number[]; taskIds: number[]}
-        | AxiosError;
+      [key in number | 'root']?: DataProperty<{
+        themeIds: number[];
+        taskIds: number[];
+      }>;
     };
   };
 }
@@ -89,6 +96,12 @@ export const dataReducer: Reducer<DataState, Action> = (
   action,
 ): DataState => {
   switch (action.type) {
+    case ActionType.LOG_IN_REQUEST: {
+      return {
+        ...state,
+        credentials: null,
+      };
+    }
     case ActionType.LOG_IN_SUCCESS: {
       const {credentials} = action;
 
@@ -111,12 +124,24 @@ export const dataReducer: Reducer<DataState, Action> = (
         credentials: null,
       };
     }
+    case ActionType.USER_INFO_FETCH: {
+      return {
+        ...state,
+        userInfo: undefined,
+      };
+    }
     case ActionType.USER_INFO_FETCHED: {
       const {userInfo} = action;
 
       return {
         ...state,
         userInfo,
+      };
+    }
+    case ActionType.SHOP_COURSES_FETCH: {
+      return {
+        ...state,
+        shopCourses: undefined,
       };
     }
     case ActionType.SHOP_COURSES_FETCHED: {
@@ -127,12 +152,24 @@ export const dataReducer: Reducer<DataState, Action> = (
         shopCourses: courses,
       };
     }
+    case ActionType.USER_COURSES_FETCH: {
+      return {
+        ...state,
+        userCourses: undefined,
+      };
+    }
     case ActionType.USER_COURSES_FETCHED: {
       const {courses} = action;
 
       return {
         ...state,
         userCourses: courses,
+      };
+    }
+    case ActionType.SUBJECTS_FETCH: {
+      return {
+        ...state,
+        subjects: undefined,
       };
     }
     case ActionType.SUBJECTS_FETCHED: {
@@ -143,12 +180,29 @@ export const dataReducer: Reducer<DataState, Action> = (
         subjects,
       };
     }
+    case ActionType.USER_TEACHERS_FETCH: {
+      return {
+        ...state,
+        userTeachers: undefined,
+      };
+    }
     case ActionType.USER_TEACHERS_FETCHED: {
       const {teachers} = action;
 
       return {
         ...state,
         userTeachers: teachers,
+      };
+    }
+    case ActionType.ACCOUNTS_FETCH: {
+      const {role} = action;
+
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          [role]: undefined,
+        },
       };
     }
     case ActionType.ACCOUNTS_FETCHED: {
@@ -173,6 +227,17 @@ export const dataReducer: Reducer<DataState, Action> = (
           role === AccountRole.TEACHER ? undefined : state.userTeachers,
       };
     }
+    case ActionType.LESSONS_FETCH: {
+      const {courseId} = action;
+
+      return {
+        ...state,
+        lessons: {
+          ...state.lessons,
+          [courseId]: undefined,
+        },
+      };
+    }
     case ActionType.LESSONS_FETCHED: {
       const {courseId, lessons} = action;
 
@@ -181,6 +246,17 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {
           ...state.lessons,
           [courseId]: lessons,
+        },
+      };
+    }
+    case ActionType.COURSE_WEBINARS_FETCH: {
+      const {courseId} = action;
+
+      return {
+        ...state,
+        webinars: {
+          ...state.webinars,
+          [courseId]: undefined,
         },
       };
     }
@@ -195,6 +271,15 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
+    case ActionType.UPCOMING_WEBINARS_FETCH: {
+      return {
+        ...state,
+        webinars: {
+          ...state.webinars,
+          upcoming: undefined,
+        },
+      };
+    }
     case ActionType.UPCOMING_WEBINARS_FETCHED: {
       const {webinars} = action;
 
@@ -203,6 +288,17 @@ export const dataReducer: Reducer<DataState, Action> = (
         webinars: {
           ...state.webinars,
           upcoming: webinars,
+        },
+      };
+    }
+    case ActionType.PARTICIPANTS_FETCH: {
+      const {courseId} = action;
+
+      return {
+        ...state,
+        participants: {
+          ...state.participants,
+          [courseId]: undefined,
         },
       };
     }
@@ -217,12 +313,29 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
+    case ActionType.ADMIN_COURSES_FETCH: {
+      return {
+        ...state,
+        adminCourses: undefined,
+      };
+    }
     case ActionType.ADMIN_COURSES_FETCHED: {
       const {courses} = action;
 
       return {
         ...state,
         adminCourses: courses,
+      };
+    }
+    case ActionType.ADMIN_WEBINARS_FETCH: {
+      const {courseId} = action;
+
+      return {
+        ...state,
+        adminWebinars: {
+          ...state.adminWebinars,
+          [courseId]: undefined,
+        },
       };
     }
     case ActionType.ADMIN_WEBINARS_FETCHED: {
@@ -234,6 +347,12 @@ export const dataReducer: Reducer<DataState, Action> = (
           ...state.adminWebinars,
           [courseId]: webinars,
         },
+      };
+    }
+    case ActionType.TEACHER_COURSES_FETCH: {
+      return {
+        ...state,
+        teacherCourses: undefined,
       };
     }
     case ActionType.TEACHER_COURSES_FETCHED: {
@@ -250,7 +369,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {[courseId]: courseLessons, ...loadedLessons},
       } = state;
 
-      if (courseLessons instanceof Error) {
+      if (!courseLessons || courseLessons instanceof Error) {
         return state;
       }
       const lessonIndex = _.findIndex(courseLessons, {id: responseLesson.id});
@@ -275,7 +394,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {[courseId]: courseLessons, ...loadedLessons},
       } = state;
 
-      if (courseLessons instanceof Error) {
+      if (!courseLessons || courseLessons instanceof Error) {
         return state;
       }
       return {
@@ -283,6 +402,20 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {
           ...loadedLessons,
           [courseId]: courseLessons.filter(({id}) => id !== lessonId),
+        },
+      };
+    }
+    case ActionType.USER_HOMEWORKS_FETCH: {
+      const {courseId, lessonId} = action;
+
+      return {
+        ...state,
+        userHomeworks: {
+          ...state.userHomeworks,
+          [courseId]: {
+            ...(state.userHomeworks[courseId] || {}),
+            [lessonId]: undefined,
+          },
         },
       };
     }
@@ -329,7 +462,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         participants: {[courseId]: courseParticipants, ...loadedParticipants},
       } = state;
 
-      if (courseParticipants instanceof Error) {
+      if (!courseParticipants || courseParticipants instanceof Error) {
         return state;
       }
       return {
@@ -337,6 +470,17 @@ export const dataReducer: Reducer<DataState, Action> = (
         participants: {
           ...loadedParticipants,
           [courseId]: courseParticipants.filter(({id}) => id !== userId),
+        },
+      };
+    }
+    case ActionType.HOMEWORKS_FETCH: {
+      const {lessonId} = action;
+
+      return {
+        ...state,
+        homeworks: {
+          ...state.homeworks,
+          [lessonId]: undefined,
         },
       };
     }
@@ -362,7 +506,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         homeworks: {[lessonId]: lessonHomeworks, ...loadedHomeworks},
       } = state;
 
-      if (lessonHomeworks instanceof Error) {
+      if (!lessonHomeworks || lessonHomeworks instanceof Error) {
         return state;
       }
       const lessonIndex = _.findIndex(lessonHomeworks, {

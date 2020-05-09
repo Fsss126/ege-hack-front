@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import {useUser} from 'hooks/selectors';
+import {useCredentials, useUser, useUserInfo} from 'hooks/selectors';
 import {SnackbarKey, useSnackbar} from 'notistack';
 import React, {useEffect, useRef, useState} from 'react';
 import {Helmet} from 'react-helmet';
@@ -45,7 +45,6 @@ const PageLoadingPlaceholder: React.FC<PageLoadingPlaceholderProps> = (
 export type PageLinkProps = {
   arrow: boolean;
   forward: boolean;
-  // } & React.ComponentProps<typeof Link>;
 } & LinkProps;
 
 export const PageLink: React.withDefaultProps<React.FC<PageLinkProps>> = ({
@@ -155,19 +154,27 @@ const Page = (props: PageProps) => {
     loadUserInfo,
     isLoaded,
     location,
-    errors = [],
-    reloadCallbacks = [],
+    errors: passedErrors,
+    reloadCallbacks: passedErrorCallbacks,
     withShimmer,
     notFoundPageProps = {},
   } = props;
   const [isSideBarOpened, toggleSideBar] = useSideBarState();
-  const {credentials, userInfo} = useUser();
+  const {credentials} = useCredentials();
+  const {
+    userInfo,
+    error: errorLoadingUserInfo,
+    reload: reloadUserInfo,
+  } = useUserInfo();
 
   const permissionsSatisfied = useCheckPermissions(
     requiredPermissions,
     requiredRoles,
     fullMatch,
   );
+
+  const errors = [errorLoadingUserInfo, ...(passedErrors || [])];
+  const reloadCallbacks = [reloadUserInfo, ...(passedErrorCallbacks || [])];
 
   const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 

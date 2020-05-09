@@ -6,8 +6,6 @@ import traverse from 'traverse';
 
 import {InputChangeHandler} from './Input';
 
-type Key = string | number;
-
 interface CommonDataNode<V extends Key> {
   title?: React.ReactNode;
   label?: React.ReactNode;
