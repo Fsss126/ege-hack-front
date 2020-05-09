@@ -204,12 +204,25 @@ const Page = (props: PageProps) => {
     }
   }, [errors]);
 
+  const errorsRef = useRef<any[]>(errors);
+  const reloadCallbacksRef = useRef<SimpleCallback[]>(reloadCallbacks);
   const snackbarKeyRef = useRef<SnackbarKey>();
+
+  errorsRef.current = errors;
+  reloadCallbacksRef.current = reloadCallbacks;
 
   useEffect(() => {
     if (hasError) {
+      // eslint-disable-next-line prefer-const
+      let snackbarKey: SnackbarKey;
+
       const reloadCallback = () => {
+        const reloadCallbacks = reloadCallbacksRef.current;
+        const errors = errorsRef.current;
+
         setHasError(false);
+        closeSnackbar(snackbarKey);
+
         for (const [i, callback] of reloadCallbacks.entries()) {
           if (errors[i]) {
             callback();
@@ -217,22 +230,16 @@ const Page = (props: PageProps) => {
         }
       };
 
-      snackbarKeyRef.current = enqueueSnackbar('Ошибка при загрузке', {
+      snackbarKey = enqueueSnackbar('Ошибка при загрузке', {
         persist: true,
-        key: location.pathname,
+        key: new Date().getTime(),
         variant: 'error',
         preventDuplicate: true,
         action: <i className="icon-reload" onClick={reloadCallback} />,
       });
+      snackbarKeyRef.current = snackbarKey;
     }
-  }, [
-    closeSnackbar,
-    enqueueSnackbar,
-    errors,
-    hasError,
-    location.pathname,
-    reloadCallbacks,
-  ]);
+  }, [closeSnackbar, enqueueSnackbar, hasError]);
 
   useEffect(() => {
     return () => {

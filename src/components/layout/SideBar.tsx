@@ -1,6 +1,6 @@
 import {ADMIN_ROLES, DEBUG_MODE, TEACHER_ROLES} from 'definitions/constants';
 import React, {useCallback} from 'react';
-import {AccountRole} from 'types/enums';
+import {AccountRole, Permission} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
 
 import Contacts from '../common/Contacts';
@@ -136,12 +136,16 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                     >
                       Курсы
                     </NavLink>
-                    <NavLink
-                      className="layout__sidebar-menu-link"
-                      to="/admin/subjects/"
+                    <ConditionalRenderer
+                      requiredPermissions={[Permission.SUBJECT_EDIT]}
                     >
-                      Предметы
-                    </NavLink>
+                      <NavLink
+                        className="layout__sidebar-menu-link"
+                        to="/admin/subjects/"
+                      >
+                        Предметы
+                      </NavLink>
+                    </ConditionalRenderer>
                     <NavLink
                       className="layout__sidebar-menu-link"
                       to="/admin/knowledge/"
@@ -155,12 +159,16 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                         </>
                       )}
                     </NavLink>
-                    <NavLink
-                      className="layout__sidebar-menu-link"
-                      to="/admin/users/"
+                    <ConditionalRenderer
+                      requiredPermissions={[Permission.PARTICIPANT_MANAGEMENT]}
                     >
-                      Пользователи
-                    </NavLink>
+                      <NavLink
+                        className="layout__sidebar-menu-link"
+                        to="/admin/users/"
+                      >
+                        Пользователи
+                      </NavLink>
+                    </ConditionalRenderer>
                   </div>
                 </div>
               </ConditionalRenderer>

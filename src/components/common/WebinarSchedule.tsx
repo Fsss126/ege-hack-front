@@ -116,13 +116,18 @@ const Webinar: React.FC<WebinarProps> = ({webinar, subjectId}) => {
         );
         return;
       }
+
+      const newWindow = window.open() as Window;
+
       try {
         const response = (await APIRequest.get(
           `/courses/${webinar.course_id || subjectId}/schedule/link`,
         )) as LinkResp;
-        const newWindow = window.open() as Window;
         newWindow.location.href = response.link;
+        newWindow.focus();
       } catch (e) {
+        newWindow.close();
+
         console.error(e);
         enqueueSnackbar('Ошибка при подключении к вебинару', {
           persist: false,

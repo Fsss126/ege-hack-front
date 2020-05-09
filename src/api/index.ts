@@ -59,7 +59,7 @@ export const getCancelToken = () => {
 
 const APIRequest = axios.create({
   baseURL: API_ROOT,
-  timeout: 5000,
+  timeout: 10000,
   paramsSerializer: (params) => {
     const searchParams = new URLSearchParams();
     _.forEach(params, (value, key) => {
@@ -255,12 +255,12 @@ const transformError = (error: AxiosError) => {
   }
 };
 
-mockTestsRequests(APIRequest);
+// mockTestsRequests(APIRequest);
 
 APIRequest.interceptors.response.use(transformData, transformError);
 
 // returns mocks for all failed requests
-mockRequests(APIRequest);
+// mockRequests(APIRequest);
 
 window.APIRequest = APIRequest;
 

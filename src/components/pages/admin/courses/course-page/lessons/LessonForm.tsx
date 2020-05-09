@@ -327,6 +327,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
             filesName="Материалы к уроку"
             value={attachments}
             maxFiles={10}
+            maxSizeBytes={1024 * 1024 * 15}
             // accept="image/*,audio/*,video/*"
             initialFiles={lesson ? lesson.attachments : undefined}
             onChange={onInputChange}

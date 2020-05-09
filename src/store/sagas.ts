@@ -97,7 +97,7 @@ function* fetchSubjects() {
         const subjects: SubjectInfo[] = yield call(APIRequest.get, '/subjects');
         yield put({type: ActionType.SUBJECTS_FETCHED, subjects});
       } catch (error) {
-        yield put({type: ActionType.USER_INFO_FETCHED, userInfo: error});
+        yield put({type: ActionType.SUBJECTS_FETCHED, subjects: error});
       }
     });
   });
