@@ -54,7 +54,7 @@ const Description: React.FC = () => {
               >
                 <DropdownMenuOption
                   component={Link}
-                  to={`/admin/${course.id}/`}
+                  to={`/admin/courses/${course.id}/`}
                 >
                   <i className="icon-logout" />
                   Управление курсом

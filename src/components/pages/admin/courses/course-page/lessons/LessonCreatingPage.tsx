@@ -24,7 +24,7 @@ const LessonCreatingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
   } = props;
   const courseId = parseInt(param_course);
 
-  const returnLink = `/admin/${courseId}/lessons/`;
+  const returnLink = `/admin/courses/${courseId}/lessons/`;
 
   const onSubmitted = React.useCallback(
     (response, showSuccessMessage, reset) => {

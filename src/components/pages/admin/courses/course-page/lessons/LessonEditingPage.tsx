@@ -34,7 +34,7 @@ const LessonEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
     lessonId,
   );
 
-  const returnLink = `/admin/${courseId}/lessons/`;
+  const returnLink = `/admin/courses/${courseId}/lessons/`;
 
   const onSubmitted = useCallback(
     (response, showSuccessMessage) => {

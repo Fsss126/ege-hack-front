@@ -39,7 +39,7 @@ const WebinarsEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     [courseId],
   );
 
-  const returnLink = `/admin/${courseId}/webinars/`;
+  const returnLink = `/admin/courses/${courseId}/webinars/`;
 
   const onSubmitted = useCallback(
     (response, showSuccessMessage) => {

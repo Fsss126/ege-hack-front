@@ -44,7 +44,7 @@ const CourseEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     reload: reloadCourses,
   } = useAdminCourse(courseId);
 
-  const returnLink = `/admin/${courseId}/`;
+  const returnLink = `/admin/courses/${courseId}/`;
 
   const onSubmitted = useCallback(
     (response, showSuccessMessage) => {

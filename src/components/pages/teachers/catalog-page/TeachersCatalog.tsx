@@ -25,7 +25,7 @@ const TeachersCatalog = (props: TeachersCatalogProps) => {
   const renderTeacher = React.useCallback(
     (teacher, {link, subjects, ...rest}) => (
       <div
-        className="teacher-profile-wrap list__item col-12 col-md-6 col-lg-4 d-flex"
+        className="teacher-profile-wrap list__item col-12 col-md-6 col-xl-4 d-flex"
         key={teacher.id}
       >
         <Teacher
