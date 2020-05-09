@@ -8,14 +8,14 @@ import {HomeworkInfo} from 'types/entities';
 
 export type HomeworkLoaderProps = {
   homework: HomeworkInfo | null;
-  deadline: Date;
+  deadline?: Date;
   courseId: number;
   lessonId: number;
 };
 const HomeworkLoader: React.FC<HomeworkLoaderProps> = (props) => {
   const {homework, deadline, courseId, lessonId} = props;
   const isHomeworkSubmissionClosed = React.useCallback(
-    () => deadline && new Date() >= deadline,
+    () => !!(deadline && new Date() >= deadline),
     [deadline],
   );
   const [hasChanges, setChanges] = React.useState(false);

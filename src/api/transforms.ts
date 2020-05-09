@@ -87,7 +87,7 @@ export const transformLesson = ({
     : undefined,
   assignment: hometask
     ? {
-        deadline: new Date(hometask.deadline),
+        deadline: hometask.deadline ? new Date(hometask.deadline) : undefined,
         description: hometask.description,
         files: hometask.file_info
           ? [transformFileInfo(hometask.file_info)]

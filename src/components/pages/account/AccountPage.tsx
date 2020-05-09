@@ -1,15 +1,15 @@
 import UserProfile from 'components/common/UserProfile';
 import Page, {PageContent} from 'components/layout/Page';
-import {useUser} from 'hooks/selectors';
+import {useUserInfo} from 'hooks/selectors';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 
 const AccountPage: React.FC<RouteComponentProps> = (props) => {
   const {location} = props;
-  const {userInfo} = useUser();
+  const {userInfo} = useUserInfo();
   let photo, first_name, last_name;
 
-  if (userInfo && !(userInfo instanceof Error)) {
+  if (userInfo) {
     ({
       vk_info: {photo, first_name, last_name},
     } = userInfo);

@@ -152,7 +152,7 @@ export interface FileInfo {
 }
 
 export interface HometaskDtoResp {
-  deadline: number;
+  deadline?: number;
   description?: string;
   file_info?: FileInfo;
 }

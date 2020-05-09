@@ -3,7 +3,7 @@ import Form, {useForm, useFormValidityChecker} from 'components/ui/Form';
 import {Input} from 'components/ui/input';
 import Popup, {PopupAnimation} from 'components/ui/Popup';
 import {useForceUpdate} from 'hooks/common';
-import {useUser} from 'hooks/selectors';
+import {useUserInfo} from 'hooks/selectors';
 import React, {useCallback, useEffect, useRef} from 'react';
 import {PaymentReq} from 'types/dtos';
 import {CourseInfo} from 'types/entities';
@@ -27,7 +27,7 @@ interface PurchasePopupProps {
 
 const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
   const {opened, selectedCourses, onCloseClick} = props;
-  const {userInfo} = useUser();
+  const {userInfo} = useUserInfo();
   const formElementRef = useRef(null);
   const forceUpdate = useForceUpdate();
   const checkValidity = useFormValidityChecker(
@@ -38,7 +38,7 @@ const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
   const {formData, isValid, onInputChange, reset} = useForm<FormData>(
     () => ({
       email:
-        userInfo && !(userInfo instanceof Error) && userInfo.email
+        userInfo && userInfo.email
           ? userInfo.email
           : localStorage.getItem(LOCAL_STORAGE_KEY) || '',
     }),

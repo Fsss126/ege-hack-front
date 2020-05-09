@@ -98,7 +98,7 @@ export type LoginRequestAction = {type: ActionType.LOG_IN_REQUEST};
 
 export type LoginSuccessAction = {
   type: ActionType.LOG_IN_SUCCESS;
-  credentials: Credentials | null;
+  credentials: Credentials;
 };
 
 export type LoginErrorAction = {

@@ -97,7 +97,7 @@ export interface PersonWebinar
 
 export interface AssignmentInfo
   extends Omit<HometaskDtoResp, 'deadline' | 'file_info'> {
-  deadline: Date;
+  deadline?: Date;
   files?: FileInfo[];
 }
 

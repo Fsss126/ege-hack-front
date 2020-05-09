@@ -24,7 +24,7 @@ import {Action, ActionType} from '../actions';
 type DataProperty<T> = Maybe<T | AxiosError>;
 
 export interface DataState {
-  credentials: Credentials | null | AxiosError;
+  credentials?: DataProperty<Credentials>;
   userInfo?: DataProperty<AccountInfo>;
   shopCourses?: DataProperty<CourseInfo[]>;
   userCourses?: DataProperty<UserCourseInfo[]>;
@@ -99,7 +99,7 @@ export const dataReducer: Reducer<DataState, Action> = (
     case ActionType.LOG_IN_REQUEST: {
       return {
         ...state,
-        credentials: null,
+        credentials: undefined,
       };
     }
     case ActionType.LOG_IN_SUCCESS: {
@@ -121,7 +121,7 @@ export const dataReducer: Reducer<DataState, Action> = (
     case ActionType.LOG_OUT: {
       return {
         ...defaultState,
-        credentials: null,
+        credentials: undefined,
       };
     }
     case ActionType.USER_INFO_FETCH: {

@@ -52,7 +52,6 @@ import {
   selectTestState,
   selectThemes,
   selectUpcomingWebinars,
-  selectUser,
   selectUserCourses,
   selectUserHomeworks,
   selectUserInfo,
@@ -118,25 +117,15 @@ export function useUserAuth(): void {
   }, [dispatch]);
 }
 
-export type UserHookResult = ReturnType<typeof selectUser>;
-
-export function useUser(): UserHookResult {
-  const {credentials, userInfo} = useSelector(selectUser);
-
-  return {credentials, userInfo};
-}
-
 export type CredentialsHookResult = {
-  credentials: Credentials | null;
+  credentials?: Credentials;
   error?: AxiosError;
 };
 
 export function useCredentials(): CredentialsHookResult {
   const credentials = useSelector(selectCredentials);
 
-  return credentials instanceof Error
-    ? {error: credentials, credentials: null}
-    : {credentials};
+  return credentials instanceof Error ? {error: credentials} : {credentials};
 }
 
 export type UserInfoHookResult = {
@@ -206,7 +195,7 @@ export type DiscountHookResult = {
 export function useDiscount(
   selectedCourses: Set<CourseInfo> | number,
 ): DiscountHookResult {
-  const {credentials} = useUser();
+  const {credentials} = useCredentials();
   const [discount, setDiscount] = React.useState<DiscountInfo>();
   const [error, setError] = React.useState();
   const [isLoading, setLoading] = React.useState(true);

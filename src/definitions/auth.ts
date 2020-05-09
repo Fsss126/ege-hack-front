@@ -20,12 +20,12 @@ function setCredentialsToStorage(credentials: Credentials): void {
   );
 }
 
-function getCredentialsFromStorage(): Credentials | null {
+function getCredentialsFromStorage(): Maybe<Credentials> {
   try {
     const storedString = localStorage.getItem(LOCAL_STORAGE_KEY);
 
     if (!storedString) {
-      return null;
+      return undefined;
     }
     const credentials = JSON.parse(storedString);
 
@@ -43,7 +43,7 @@ function getCredentialsFromStorage(): Credentials | null {
 
 export type AuthLoginCallback = SimpleCallback;
 
-export type AuthSuccessCallback = (credentials: Credentials | null) => void;
+export type AuthSuccessCallback = (credentials: Credentials) => void;
 
 export type AuthErrorCallback = (error: AxiosError) => void;
 
@@ -57,7 +57,7 @@ type AuthEventHandlers = {
 };
 
 class Auth {
-  credentials!: Credentials | null;
+  credentials?: Credentials;
   userInfo?: AccountInfo;
   eventHandlers: AuthEventHandlers = {};
 
@@ -68,15 +68,12 @@ class Auth {
       this.setCredentials(credentials);
     } catch (e) {
       console.error('Error retrieving credentials from local storage.');
-      this.setCredentials(null);
+      this.setCredentials(undefined);
     }
   }
 
-  setCredentials(credentials: Credentials | null): void {
+  setCredentials(credentials: Credentials | undefined): void {
     this.credentials = credentials;
-    for (const handler of this.eventHandlers[AuthEventTypes.success] || []) {
-      handler(this.credentials);
-    }
   }
 
   login = (redirectUrl: string): void => {
@@ -85,10 +82,18 @@ class Auth {
 
   onLogout = (): void => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
-    this.credentials = null;
+    this.credentials = undefined;
     this.userInfo = undefined;
     for (const handler of this.eventHandlers[AuthEventTypes.logout] || []) {
       handler();
+    }
+  };
+
+  onSuccess = (credentials: Credentials): void => {
+    setCredentialsToStorage(credentials);
+    this.setCredentials(credentials);
+    for (const handler of this.eventHandlers[AuthEventTypes.success] || []) {
+      handler(credentials);
     }
   };
 
@@ -121,8 +126,7 @@ class Auth {
         code,
         redirect_uri: redirectUrl,
       });
-      setCredentialsToStorage(credentials);
-      this.setCredentials(credentials);
+      this.onSuccess(credentials);
     } catch (e) {
       this.onError(e);
     }

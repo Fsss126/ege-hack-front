@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import {useCredentials, useUser, useUserInfo} from 'hooks/selectors';
+import {useCredentials, useUserInfo} from 'hooks/selectors';
 import {SnackbarKey, useSnackbar} from 'notistack';
 import React, {useEffect, useRef, useState} from 'react';
 import {Helmet} from 'react-helmet';
@@ -255,7 +255,7 @@ const Page = (props: PageProps) => {
   }, [closeSnackbar]);
 
   if (checkLogin) {
-    if (credentials === null) {
+    if (!credentials) {
       return (
         <Redirect
           to={{
