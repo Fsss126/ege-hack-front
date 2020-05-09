@@ -305,3 +305,8 @@ export interface TestStateDtoResp {
   last_task_id?: number;
   answers: TestStateAnswerDto[];
 }
+
+export interface KnowledgeLevelDtoResponse {
+  themes: ThemeDtoResp[];
+  tasks: TaskDtoResp[];
+}

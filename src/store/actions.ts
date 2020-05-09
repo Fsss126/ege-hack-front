@@ -4,6 +4,7 @@ import {
   CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
+  KnowledgeLevelInfo,
   LessonInfo,
   PersonWebinar,
   SubjectInfo,
@@ -79,8 +80,8 @@ export enum ActionType {
   TEST_STATE_FETCHED = 'TEST_STATE_FETCHED',
   TEST_SAVE_ANSWER_REQUEST = 'TEST_SAVE_ANSWER_REQUEST',
   TEST_SAVE_ANSWER = 'TEST_SAVE_ANSWER',
-  KNOWLEDGE_BASE_FETCH = 'KNOWLEDGE_BASE_FETCH',
-  KNOWLEDGE_BASE_FETCHED = 'KNOWLEDGE_BASE_FETCHED',
+  KNOWLEDGE_LEVEL_FETCH = 'KNOWLEDGE_LEVEL_FETCH',
+  KNOWLEDGE_LEVEL_FETCHED = 'KNOWLEDGE_LEVEL_FETCHED',
 }
 
 interface Credentials {
@@ -500,6 +501,33 @@ export type TestSaveAnswerAction = {
   answerInfo: TestStateAnswerInfo;
 };
 
+export type KnowledgeLevelFetchCallback = (
+  subjectId: number,
+  themeId: number | undefined,
+  content: KnowledgeLevelInfo,
+) => void;
+
+export type KnowledgeLevelFetchErrorCallback = (
+  subjectId: number,
+  themeId: number | undefined,
+  error: AxiosError,
+) => void;
+
+export type KnowledgeLevelFetchAction = {
+  type: ActionType.KNOWLEDGE_LEVEL_FETCH;
+  subjectId: number;
+  themeId?: number;
+  onSuccess?: KnowledgeLevelFetchCallback;
+  onError?: KnowledgeLevelFetchErrorCallback;
+};
+
+export type KnowledgeLevelFetchedAction = {
+  type: ActionType.KNOWLEDGE_LEVEL_FETCHED;
+  subjectId: number;
+  themeId?: number;
+  content: KnowledgeLevelInfo | AxiosError;
+};
+
 export type Action = {type: ActionType} & (
   | LoginAction
   | LoginRequestAction
@@ -561,4 +589,6 @@ export type Action = {type: ActionType} & (
   | TestStateFetchedAction
   | TestSaveAnswerRequestAction
   | TestSaveAnswerAction
+  | KnowledgeLevelFetchAction
+  | KnowledgeLevelFetchedAction
 );

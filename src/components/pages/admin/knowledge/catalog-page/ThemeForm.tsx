@@ -245,6 +245,48 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
           />
         </div>
         <FieldsContainer className="col">
+          <Input.TreeSelect<string>
+            placeholder="Выберите тему"
+            name="theme_id"
+            onChange={() => {
+              // to do
+            }}
+            value={'0-0-1'}
+            treeData={[
+              {
+                title: 'Node1',
+                value: '0-0',
+                children: [
+                  {
+                    title: 'Child Node1',
+                    value: '0-0-1',
+                  },
+                  {
+                    title: 'Child Node2',
+                    value: '0-0-2',
+                  },
+                ],
+              },
+              {
+                title: 'Node1',
+                value: '0-2',
+                children: [
+                  {
+                    title: 'Child Node1',
+                    value: '0-0-1',
+                  },
+                  {
+                    title: 'Child Node2',
+                    value: '0-0-2',
+                  },
+                ],
+              },
+              {
+                title: 'Node2',
+                value: '0-1',
+              },
+            ]}
+          />
           <Input.Input
             name="name"
             type="text"
@@ -260,7 +302,7 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             options={subjectOptions}
             value={subject_id}
             isClearable={false}
-            callback={onInputChange}
+            onChange={onInputChange}
           />
           <Input.Select
             name="teacher_id"
@@ -269,7 +311,7 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             options={teacherOptions}
             value={teacher_id}
             isClearable={false}
-            callback={onInputChange}
+            onChange={onInputChange}
           />
           <Input.Input
             name="price"

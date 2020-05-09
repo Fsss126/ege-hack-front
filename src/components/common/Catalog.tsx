@@ -100,7 +100,7 @@ const Filter: React.FC<FilterProps> = (props) => {
                 options={options}
                 value={subject}
                 placeholder="Предмет"
-                callback={onChange}
+                onChange={onChange}
               />
             </div>
           )}

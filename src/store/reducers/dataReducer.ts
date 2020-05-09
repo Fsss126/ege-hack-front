@@ -11,7 +11,9 @@ import {
   LessonInfo,
   PersonWebinar,
   SubjectInfo,
+  TaskInfo,
   TeacherInfo,
+  ThemeInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
@@ -37,6 +39,19 @@ export interface DataState {
   adminWebinars: {[courseId: number]: WebinarScheduleInfo | AxiosError};
   teacherCourses?: CourseInfo[] | AxiosError;
   homeworks: {[lessonId: number]: HomeworkInfo[] | AxiosError};
+  themes: {
+    [themeId: number]: ThemeInfo;
+  };
+  tasks: {
+    [taskId: number]: TaskInfo;
+  };
+  knowledgeTree: {
+    [subjectId: number]: {
+      [key in number | 'root']?:
+        | {themeIds: number[]; taskIds: number[]}
+        | AxiosError;
+    };
+  };
 }
 
 const defaultState: DataState = {
@@ -60,6 +75,9 @@ const defaultState: DataState = {
   adminWebinars: {},
   teacherCourses: undefined,
   homeworks: {},
+  themes: {},
+  tasks: {},
+  knowledgeTree: {},
 };
 
 export const dataReducer: Reducer<DataState, Action> = (
@@ -422,6 +440,44 @@ export const dataReducer: Reducer<DataState, Action> = (
         adminWebinars: {...adminWebinars, [courseId]: responseWebinars},
         webinars: loadedWebinars,
       };
+    }
+    case ActionType.KNOWLEDGE_LEVEL_FETCHED: {
+      const {subjectId, themeId, content} = action;
+      const themeKey = themeId !== undefined ? themeId : 'root';
+
+      let stateUpdate: Partial<DataState>;
+
+      if (content instanceof Error) {
+        stateUpdate = {
+          knowledgeTree: {
+            [subjectId]: {
+              [themeKey]: content,
+            },
+          },
+        };
+      } else {
+        const {themes, tasks} = content;
+        const themesMap = _.keyBy(themes, 'id');
+        const tasksMap = _.keyBy(tasks, 'id');
+
+        const themeIds = _.map(themes, 'id');
+        const taskIds = _.map(tasks, 'id');
+
+        stateUpdate = {
+          themes: themesMap,
+          tasks: tasksMap,
+          knowledgeTree: {
+            [subjectId]: {
+              [themeKey]: {
+                themeIds,
+                taskIds,
+              },
+            },
+          },
+        };
+      }
+
+      return _.merge(state, stateUpdate);
     }
     default:
       return state;

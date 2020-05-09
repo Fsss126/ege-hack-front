@@ -3,7 +3,7 @@ import {AxiosError, Canceler} from 'axios';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import Auth, {AuthEventTypes} from 'definitions/auth';
 import _ from 'lodash';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useDispatch, useSelector as useSelectorGen} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
@@ -14,6 +14,8 @@ import {
   ActionType,
   CourseDeleteCallback,
   CourseDeleteErrorCallback,
+  KnowledgeLevelFetchCallback,
+  KnowledgeLevelFetchErrorCallback,
   LessonDeleteCallback,
   LessonDeleteErrorCallback,
   ParticipantDeleteCallback,
@@ -32,13 +34,16 @@ import {
   selectAdminCourses,
   selectAdminWebinars,
   selectHomeworks,
+  selectKnowledgeTree,
   selectLessons,
   selectParticipants,
   selectShopCourses,
   selectSubjects,
+  selectTasks,
   selectTeacherCourses,
   selectTest,
   selectTestState,
+  selectThemes,
   selectUpcomingWebinars,
   selectUser,
   selectUserCourses,
@@ -53,6 +58,7 @@ import {
   Credentials,
   DiscountInfo,
   HomeworkInfo,
+  KnowledgeLevelInfo,
   LessonInfo,
   PersonWebinar,
   SanitizedTaskInfo,
@@ -351,7 +357,6 @@ export function useShopCourse(courseId: number): ShopCourseHookResult {
   };
 }
 
-// TODO: check permissions in sagas
 export type AdminCoursesHookResult = {
   catalog?: CourseInfo[] | false;
   error?: AxiosError;
@@ -621,7 +626,7 @@ export function useAdminLesson(
 
 export type ParticipantsHookResult = {
   participants?: CourseParticipantInfo[] | false;
-  error?: AxiosError | true;
+  error?: AxiosError;
   reload: SimpleCallback;
 };
 
@@ -1186,4 +1191,79 @@ export function useTestState(
   return state instanceof Error
     ? {error: state, reload: dispatchFetchAction}
     : {state, reload: dispatchFetchAction};
+}
+
+export type KnowledgeLevelFetchHookResult = (
+  subjectId: number,
+  themeId?: number,
+) => void;
+
+export function useKnowledgeLevelFetch(
+  onSuccess?: KnowledgeLevelFetchCallback,
+  onError?: KnowledgeLevelFetchErrorCallback,
+): KnowledgeLevelFetchHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (subjectId, themeId) => {
+      dispatch({
+        type: ActionType.KNOWLEDGE_LEVEL_FETCH,
+        subjectId,
+        themeId,
+        onSuccess,
+        onError,
+      });
+    },
+    [dispatch, onError, onSuccess],
+  );
+}
+
+export type KnowledgeLevelHookResult = {
+  content?: KnowledgeLevelInfo | false;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useKnowledgeLevel(
+  subjectId: number,
+  themeId?: number,
+): KnowledgeLevelHookResult {
+  const isAllowed = useCheckPermissions(Permission.LESSON_EDIT);
+  const themes = useSelector(selectThemes);
+  const tasks = useSelector(selectTasks);
+  const knowledgeTree = useSelector(selectKnowledgeTree);
+  const knowledgeLevel =
+    knowledgeTree[subjectId]?.[themeId === undefined ? 'root' : themeId];
+  const knowledgeLevelFetch = useKnowledgeLevelFetch();
+  const dispatchFetchAction = useCallback(() => {
+    knowledgeLevelFetch(subjectId, themeId);
+  }, [knowledgeLevelFetch, subjectId, themeId]);
+
+  useEffect(() => {
+    if (isAllowed) {
+      if (!knowledgeLevel) {
+        dispatchFetchAction();
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, knowledgeLevel]);
+
+  const content = useMemo(() => {
+    if (!knowledgeLevel || knowledgeLevel instanceof Error) {
+      return undefined;
+    } else {
+      const content: KnowledgeLevelInfo = {
+        themes: knowledgeLevel.themeIds.map((themeId) => themes[themeId]),
+        tasks: knowledgeLevel.taskIds.map((taskId) => tasks[taskId]),
+      };
+
+      return content;
+    }
+  }, [knowledgeLevel, tasks, themes]);
+
+  return knowledgeLevel instanceof Error
+    ? {error: knowledgeLevel, reload: dispatchFetchAction}
+    : {
+        content: !isAllowed ? false : content,
+        reload: dispatchFetchAction,
+      };
 }

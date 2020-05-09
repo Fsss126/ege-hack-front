@@ -167,7 +167,7 @@ class MenuList<T extends OptionShape = OptionShape> extends Component<
 
 export type SelectProps<V = any, L extends React.ReactNode = string> = {
   value?: V;
-  callback: InputChangeHandler<V | undefined>;
+  onChange: InputChangeHandler<V | undefined>;
   options: OptionsType<OptionShape<V, L>>;
   name: string;
   withContainer?: boolean;
@@ -184,7 +184,7 @@ export class Select<
   };
 
   onChange = (option: ValueType<OptionShape<V, L>>): void => {
-    this.props.callback(
+    this.props.onChange(
       option && 'value' in option ? option.value : null,
       this.props.name,
     );

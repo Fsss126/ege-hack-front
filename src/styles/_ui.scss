@@ -4,6 +4,7 @@
 @import "~bootstrap/scss/utilities";
 @import "~bootstrap/scss/forms";
 @import "~react-day-picker/lib/style";
+@import "~antd/dist/antd";
 @import "fonts";
 @import "variables";
 @import "animations";
@@ -397,7 +398,7 @@ label {
   display: block;
 
   .poster-cover {
-    border: 2px dashed $border-grey;
+    border: $border-dashed;
   }
   .image-input__controls {
     @include center(xy);
@@ -575,14 +576,17 @@ input[type=number] {
 .select {
   display: flex;
   align-items: center;
+
   .select__container {
     flex-grow: 1;
     max-width: 100%;
+
     .select__control {
       border: $border;
       border-radius: $element-border-radius;
       box-shadow: none;
       background: none;
+      cursor: pointer;
 
       .select__value-container {
         padding: $element-padding;
@@ -669,6 +673,174 @@ input[type=number] {
 
     &.select__clear-btn-hidden {
       transform: scale(0);
+    }
+  }
+}
+
+.ant-select {
+  font-size: 1em;
+  border: $border;
+  border-radius: $element-border-radius;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &.ant-select-single {
+    .ant-select-selector .ant-select-selection-search {
+      display: flex;
+      align-items: center;
+      left: $element-padding-horizontal;
+    }
+
+    &:not(.ant-select-customize-input) {
+      //noinspection CssReplaceWithShorthandSafely
+      .ant-select-selector {
+        border: none;
+        padding: $element-padding;
+        padding-right: calc(1em + 3 * #{$element-padding-horizontal});
+        height: auto;
+        background-color: unset;
+      }
+
+      &.ant-select-show-search {
+        .ant-select-selector input {
+          cursor: pointer;
+          height: auto;
+        }
+      }
+    }
+
+    &.ant-select-focused:not(.ant-select-customize-input) .ant-select-selector {
+      box-shadow: none;
+
+      input {
+        cursor: pointer;
+        height: auto;
+      }
+    }
+
+    .ant-select-selector {
+      display: flex;
+      cursor: pointer !important;
+
+      .ant-select-selection-item, .ant-select-selection-placeholder {
+        opacity: 1;
+        line-height: inherit;
+        padding-right: 0;
+        margin-left: 2px;
+        margin-right: 2px;
+        flex-shrink: 0;
+        flex-grow: 0;
+        flex-basis: auto;
+        cursor: pointer !important;
+      }
+
+      .ant-select-selection-placeholder {
+        color: $text-grey;
+      }
+
+      .ant-select-selection-item {
+        color: inherit;
+      }
+    }
+  }
+
+  .ant-select-arrow {
+    font-size: 1em;
+    width: auto;
+    height: auto;
+    top: auto;
+    left: auto;
+    right: 0;
+    margin: 0;
+
+    padding: $element-padding;
+    transition: transform .3s;
+    color: $text-light-grey;
+
+    i {
+      display: block;
+    }
+  }
+
+  &.ant-select-open {
+    .ant-select-arrow {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.ant-select-container {
+  position: relative;
+
+  .ant-select-dropdown-container {
+    background: black;
+
+    & > div {
+      height: 100%;
+    }
+
+    .ant-select-dropdown {
+      top: 100% !important;
+      left: 0 !important;
+      max-width: 100% !important;
+      z-index: 10 !important;
+      margin-bottom: 8px;
+      margin-top: 8px;
+      padding: 0;
+      font-size: 1em;
+
+      border: $border;
+      border-radius: $element-border-radius;
+      @include overflow-hidden;
+      box-shadow: 0 4px 11px hsla(0,0%,0%,0.1);
+
+      .ant-select-tree {
+        font-size: 1em;
+
+        .ant-select-tree-list {
+          padding: $menu-list-padding;
+          @include hide-scrollbar;
+
+          //noinspection CssReplaceWithShorthandSafely
+          .ant-select-tree-treenode {
+            padding: $menu-option-padding;
+            padding-left: $menu-option-padding-horizontal / 3 * 2;
+            cursor: pointer;
+
+            .ant-select-tree-node-content-wrapper {
+              background: none;
+            }
+
+            &:hover, &.ant-select-tree-treenode-selected {
+              background: $bg-active;
+            }
+          }
+
+          .ant-select-tree-switcher {
+            transition: transform .3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &ant-select-tree-switcher_open {
+              transform: rotate(0deg);
+            }
+
+            &.ant-select-tree-switcher_close {
+              transform: rotate(-90deg);
+            }
+
+            .ant-select-tree-switcher-icon, .ant-select-tree-switcher-loading-icon {
+              display: block;
+              color: $text-light-grey;
+            }
+            .ant-select-tree-switcher-icon {
+              font-size: 0.8em;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -767,7 +939,7 @@ input[type=number] {
   .form-entity {
     padding: 26px 24px;
     margin: 0;
-    border: 2px dashed $border-grey;
+    border: $border-dashed;
     border-radius: 10px;
     &~.form-entity {
       margin-top: 16px;
@@ -980,6 +1152,7 @@ input[type=number] {
   width: 1em;
   height: 1em;
   border-width: .1em;
+  animation: loadingCircle 1s infinite linear
 }
 
 .description-text {

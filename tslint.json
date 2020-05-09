@@ -47,6 +47,7 @@
       "severity": "warn"
     },
     "no-this-assignment": false,
-    "one-variable-per-declaration": false
+    "one-variable-per-declaration": false,
+    "no-restricted-globals": false
   }
 }

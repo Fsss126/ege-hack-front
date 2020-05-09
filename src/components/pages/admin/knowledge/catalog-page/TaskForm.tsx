@@ -255,7 +255,7 @@ const TaskForm: React.FC<CourseFormProps> = (props) => {
             options={subjectOptions}
             value={subject_id}
             isClearable={false}
-            callback={onInputChange}
+            onChange={onInputChange}
           />
           <Input.Select
             name="teacher_id"
@@ -264,7 +264,7 @@ const TaskForm: React.FC<CourseFormProps> = (props) => {
             options={teacherOptions}
             value={teacher_id}
             isClearable={false}
-            callback={onInputChange}
+            onChange={onInputChange}
           />
           <Input.Input
             name="price"

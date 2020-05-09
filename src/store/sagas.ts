@@ -23,6 +23,7 @@ import {
   CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
+  KnowledgeLevelInfo,
   LessonInfo,
   PersonWebinar,
   SubjectInfo,
@@ -44,6 +45,7 @@ import {
   CourseDeleteRequestAction,
   CourseWebinarsFetchAction,
   HomeworksFetchAction,
+  KnowledgeLevelFetchAction,
   LessonDeleteRequestAction,
   LessonsFetchAction,
   ParticipantDeleteRequestAction,
@@ -676,7 +678,6 @@ function* processTestComplete() {
           courseId,
           state,
         });
-        yield select();
 
         if (onSuccess) {
           yield call(onSuccess, testId, state);
@@ -808,6 +809,49 @@ function* processTestSaveAnswer() {
   );
 }
 
+function* fetchKnowledgeLevel() {
+  yield takeLeadingPerKey(
+    ActionType.KNOWLEDGE_LEVEL_FETCH,
+    function* (action: KnowledgeLevelFetchAction) {
+      const {subjectId, themeId, onSuccess, onError} = action;
+      try {
+        const content: KnowledgeLevelInfo = yield call(
+          APIRequest.get,
+          '/knowledge/content',
+          {
+            params: {
+              subjectId,
+              themeId,
+            },
+          },
+        );
+        yield put({
+          type: ActionType.KNOWLEDGE_LEVEL_FETCHED,
+          subjectId,
+          themeId,
+          content,
+        });
+
+        if (onSuccess) {
+          yield call(onSuccess, subjectId, themeId, content);
+        }
+      } catch (e) {
+        yield put({
+          type: ActionType.KNOWLEDGE_LEVEL_FETCHED,
+          subjectId,
+          themeId,
+          content: e,
+        });
+
+        if (onError) {
+          yield call(onError, subjectId, themeId, e);
+        }
+      }
+    },
+    (action) => [action.subjectId, action.themeId],
+  );
+}
+
 function* init() {
   const credentials = yield select(
     (state: AppState) => state.dataReducer.credentials,
@@ -836,6 +880,7 @@ export default function* rootSaga() {
   yield spawn(fetchHomeworks);
   yield spawn(fetchTest);
   yield spawn(fetchTestState);
+  yield spawn(fetchKnowledgeLevel);
 
   yield spawn(processSubjectDelete);
   yield spawn(processCourseDelete);

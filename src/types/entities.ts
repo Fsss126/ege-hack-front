@@ -206,3 +206,8 @@ export interface TestStatePassedInfo extends CommonTestStateInfo {
 }
 
 export type TestStateInfo = TestStateActiveInfo | TestStatePassedInfo;
+
+export interface KnowledgeLevelInfo {
+  themes: ThemeInfo[];
+  tasks: TaskInfo[];
+}

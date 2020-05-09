@@ -30,10 +30,14 @@ $font-awesome: Font Awesome\ 5 Free;
 $card-border-radius: 10px;
 
 $element-border-radius: $card-border-radius;
-$element-padding: 8px 16px;
+$element-padding-vertical: 8px;
+$element-padding-horizontal: 16px;
+$element-padding: $element-padding-vertical $element-padding-horizontal;
 
 $menu-list-padding: 0;
-$menu-option-padding: 6px 12px;
+$menu-option-padding-vertical: 6px;
+$menu-option-padding-horizontal: 12px;
+$menu-option-padding: $menu-option-padding-vertical $menu-option-padding-horizontal;
 
 $icon-btn-padding: 0.25em;
 $icon-btn-border-radius: 30%;
@@ -47,3 +51,4 @@ $content-padding-horizontal-sm: 22px;
 $content-padding-sm: $content-padding-vertical-sm $content-padding-horizontal-sm;
 
 $border: 1px solid $border-grey;
+$border-dashed: 1.5px dashed $border-grey;

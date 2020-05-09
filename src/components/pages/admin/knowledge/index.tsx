@@ -13,12 +13,12 @@ const Knowledge: React.FC<RouteComponentProps<any>> = ({match}) => {
     <Switch>
       <Route
         exact
-        path={`${match.path}/:subjectId?/theme/create`}
+        path={`${match.path}/:subjectId?/:themeId?/theme/create`}
         component={ThemeCreatingPage}
       />
       <Route
         exact
-        path={`${match.path}/:subjectId?/task/create`}
+        path={`${match.path}/:subjectId?/:themeId?/task/create`}
         component={TaskCreatingPage}
       />
       <Route
@@ -28,7 +28,7 @@ const Knowledge: React.FC<RouteComponentProps<any>> = ({match}) => {
       />
       <Route
         exact
-        path={`${match.path}/:subjectId/theme/:taskId/edit`}
+        path={`${match.path}/:subjectId/task/:taskId/edit`}
         component={TaskEditingPage}
       />
       <Route
