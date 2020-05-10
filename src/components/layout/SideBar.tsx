@@ -146,19 +146,23 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                         Предметы
                       </NavLink>
                     </ConditionalRenderer>
-                    <NavLink
-                      className="layout__sidebar-menu-link"
-                      to="/admin/knowledge/"
-                      disabled={!DEBUG_MODE}
+                    <ConditionalRenderer
+                      requiredPermissions={[Permission.KNOWLEDGE_BASE_EDIT]}
                     >
-                      База знаний
-                      {!DEBUG_MODE && (
-                        <>
-                          {' '}
-                          <span className="badge accent">Скоро</span>
-                        </>
-                      )}
-                    </NavLink>
+                      <NavLink
+                        className="layout__sidebar-menu-link"
+                        to="/admin/knowledge/"
+                        disabled={!DEBUG_MODE}
+                      >
+                        База знаний
+                        {!DEBUG_MODE && (
+                          <>
+                            {' '}
+                            <span className="badge accent">Скоро</span>
+                          </>
+                        )}
+                      </NavLink>
+                    </ConditionalRenderer>
                     <ConditionalRenderer
                       requiredPermissions={[Permission.PARTICIPANT_MANAGEMENT]}
                     >

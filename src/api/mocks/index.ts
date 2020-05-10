@@ -178,6 +178,8 @@ export const mockTestsRequests = (api: AxiosInstance) => {
           };
 
           return getMockedResponse(config, content);
+        case /\/knowledge\/theme\/(.*)$/.test(url.pathname):
+          return getMockedResponse(config, THEMES[0]);
         default:
           throw error;
       }

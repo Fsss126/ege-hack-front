@@ -339,6 +339,7 @@ export const THEMES: ThemeDtoResp[] = [
     subjectId: 1,
     hasSubThemes: true,
     hasTasks: false,
+    parentThemeId: 10,
   },
   {
     id: 2,

@@ -1,32 +1,32 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useAdminCourse, useSubjects, useUserTeachers} from 'hooks/selectors';
+import {useKnowledgeTheme, useSubjects} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
-import {CourseDtoReq} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {ThemeDtoReq} from 'types/dtos';
+import {ThemeInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {CoursePageParams} from 'types/routes';
+import {ThemePageParams} from 'types/routes';
 
-import TaskForm from './TaskForm';
 import ThemeForm from './ThemeForm';
 
-const ThemeEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
+const ThemeEditingPage: React.FC<RouteComponentProps<ThemePageParams>> = (
   props,
 ) => {
   const {
     match: {
-      params: {courseId: param_course},
+      params: {subjectId: param_subject, themeId: param_theme},
     },
     location,
   } = props;
-  const courseId = parseInt(param_course);
+  const subjectId = parseInt(param_subject);
+  const themeId = parseInt(param_theme);
 
   const createRequest = React.useCallback(
-    (requestData: CourseDtoReq): Promise<CourseInfo> =>
-      APIRequest.put(`/courses/${courseId}`, requestData),
-    [courseId],
+    (requestData: ThemeDtoReq): Promise<ThemeInfo> =>
+      APIRequest.put(`/knowledge/theme/${themeId}`, requestData),
+    [themeId],
   );
 
   const {
@@ -35,17 +35,12 @@ const ThemeEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     reload: reloadSubjects,
   } = useSubjects();
   const {
-    teachers,
-    error: errorLoadingTeachers,
-    reload: reloadTeachers,
-  } = useUserTeachers();
-  const {
-    course,
-    error: errorLoadingCourses,
-    reload: reloadCourses,
-  } = useAdminCourse(courseId);
+    theme,
+    error: errorLoadingTheme,
+    reload: reloadTheme,
+  } = useKnowledgeTheme(subjectId, themeId);
 
-  const returnLink = `/admin/courses/${courseId}/`;
+  const returnLink = '/admin/knowledge/';
 
   const onSubmitted = useCallback(
     (response, showSuccessMessage) => {
@@ -54,7 +49,7 @@ const ThemeEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
           text: 'Ок',
         },
         {
-          text: 'Вернуться к курсу',
+          text: 'Вернуться к базе знаний',
           url: returnLink,
         },
       ]);
@@ -62,26 +57,25 @@ const ThemeEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     [returnLink],
   );
 
-  const isLoaded = !!(teachers && subjects && course);
+  const isLoaded = !!(theme && subjects);
 
   return (
     <Page
       isLoaded={isLoaded}
       requiredPermissions={Permission.COURSE_EDIT}
       className="course-form-page"
-      title="Изменение курса"
+      title="Изменение темы"
       location={location}
-      errors={[errorLoadingSubjects, errorLoadingTeachers, errorLoadingCourses]}
-      reloadCallbacks={[reloadSubjects, reloadTeachers, reloadCourses]}
+      errors={[errorLoadingSubjects, errorLoadingTheme]}
+      reloadCallbacks={[reloadSubjects, reloadTheme]}
     >
-      {isLoaded && (
+      {!!(theme && subjects) && (
         <PageContent>
           <ContentBlock>
-            <TaskForm
-              course={course as CourseInfo}
-              subjects={subjects as SubjectInfo[]}
-              teachers={teachers as TeacherInfo[]}
-              title="Изменение курса"
+            <ThemeForm
+              theme={theme}
+              subjects={subjects}
+              title="Изменение темы"
               errorMessage="Ошибка при сохранении изменений"
               cancelLink={returnLink}
               createRequest={createRequest}

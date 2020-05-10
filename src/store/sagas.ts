@@ -32,6 +32,7 @@ import {
   TestStateInfo,
   TestStatePassedInfo,
   TestStatusInfo,
+  ThemeInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
 } from '../types/entities';
@@ -46,6 +47,7 @@ import {
   CourseWebinarsFetchAction,
   HomeworksFetchAction,
   KnowledgeLevelFetchAction,
+  KnowledgeThemeFetchAction,
   LessonDeleteRequestAction,
   LessonsFetchAction,
   ParticipantDeleteRequestAction,
@@ -884,6 +886,36 @@ function* fetchKnowledgeLevel() {
   );
 }
 
+function* fetchKnowledgeTheme() {
+  yield* waitForLogin<KnowledgeThemeFetchAction>(
+    ActionType.KNOWLEDGE_THEME_FETCH,
+    function* (channel) {
+      yield takeLeading(channel, function* (action: KnowledgeThemeFetchAction) {
+        const {subjectId, themeId} = action;
+        try {
+          const theme: ThemeInfo = yield call(
+            APIRequest.get,
+            `/knowledge/theme/${themeId}/`,
+          );
+          yield put({
+            type: ActionType.KNOWLEDGE_THEME_FETCHED,
+            theme,
+            subjectId,
+            themeId,
+          });
+        } catch (error) {
+          yield put({
+            type: ActionType.KNOWLEDGE_THEME_FETCHED,
+            theme: error,
+            subjectId,
+            themeId,
+          });
+        }
+      });
+    },
+  );
+}
+
 function* init() {
   const credentials = yield select(
     (state: AppState) => state.dataReducer.credentials,
@@ -915,6 +947,7 @@ export default function* rootSaga() {
   yield spawn(fetchTest);
   yield spawn(fetchTestState);
   yield spawn(fetchKnowledgeLevel);
+  yield spawn(fetchKnowledgeTheme);
 
   yield spawn(processSubjectDelete);
   yield spawn(processCourseDelete);

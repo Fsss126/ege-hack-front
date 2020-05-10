@@ -24,6 +24,9 @@ declare global {
 
     declare type PartialRecord<K extends keyof any, T> = Partial<Record<K, T>>;
 
+    // tslint:disable-next-line:ban-types
+    export type DeepPartial<T> = T extends Function ? T : (T extends object ? { [P in keyof T]?: DeepPartial<T[P]>; } : T);
+
     declare type Yield<T> = T extends import('redux-saga').EventChannel<infer U1>
       ? U1
       : ReturnType<T> extends Promise<infer U2>

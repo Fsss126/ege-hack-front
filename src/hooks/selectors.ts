@@ -41,16 +41,16 @@ import {
   selectAdminWebinars,
   selectCredentials,
   selectHomeworks,
+  selectKnowledgeTasks,
+  selectKnowledgeThemes,
   selectKnowledgeTree,
   selectLessons,
   selectParticipants,
   selectShopCourses,
   selectSubjects,
-  selectTasks,
   selectTeacherCourses,
   selectTest,
   selectTestState,
-  selectThemes,
   selectUpcomingWebinars,
   selectUserCourses,
   selectUserHomeworks,
@@ -72,6 +72,7 @@ import {
   SanitizedTaskInfo,
   SanitizedTestInfo,
   SubjectInfo,
+  TaskInfo,
   TeacherInfo,
   TestStateInfo,
   TestStatus,
@@ -80,6 +81,8 @@ import {
 } from 'types/entities';
 import {AccountRole, Permission} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
+
+import {DataProperty} from '../store/reducers/dataReducer';
 
 const useSelector = <TSelected>(
   selector: (state: AppState) => TSelected,
@@ -1255,7 +1258,7 @@ export function useKnowledgeLevelFetch(): KnowledgeLevelFetchHookResult {
 
 export type KnowledgeLevelHookResult = {
   content?: KnowledgeLevelInfo | false;
-  error?: AxiosError;
+  error?: AxiosError | true;
   reload: SimpleCallback;
 };
 
@@ -1263,9 +1266,9 @@ export function useKnowledgeLevel(
   subjectId: number,
   themeId?: number,
 ): KnowledgeLevelHookResult {
-  const isAllowed = useCheckPermissions(Permission.LESSON_EDIT);
-  const themes = useSelector(selectThemes);
-  const tasks = useSelector(selectTasks);
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
+  const themes = useSelector(selectKnowledgeThemes);
+  const tasks = useSelector(selectKnowledgeTasks);
   const knowledgeTree = useSelector(selectKnowledgeTree);
   const knowledgeLevel =
     knowledgeTree[subjectId]?.[themeId === undefined ? 'root' : themeId];
@@ -1282,21 +1285,42 @@ export function useKnowledgeLevel(
     }
   }, [dispatchFetchAction, isAllowed, knowledgeLevel]);
 
+  let errorInMap: AxiosError | true | undefined;
+
   const content = useMemo(() => {
     if (!knowledgeLevel || knowledgeLevel instanceof Error) {
       return undefined;
     } else {
+      const filter = <T extends TaskInfo | ThemeInfo>(
+        theme: DataProperty<T>,
+      ): theme is T => {
+        if (!theme) {
+          errorInMap = true;
+        } else if (theme instanceof Error) {
+          errorInMap = theme;
+        }
+
+        return !!theme && !(theme instanceof Error);
+      };
+
       const content: KnowledgeLevelInfo = {
-        themes: knowledgeLevel.themeIds.map((themeId) => themes[themeId]),
-        tasks: knowledgeLevel.taskIds.map((taskId) => tasks[taskId]),
+        themes: knowledgeLevel.themeIds
+          .map((themeId) => themes[themeId])
+          .filter(filter),
+        tasks: knowledgeLevel.taskIds
+          .map((taskId) => tasks[taskId])
+          .filter(filter),
       };
 
       return content;
     }
   }, [knowledgeLevel, tasks, themes]);
 
-  return knowledgeLevel instanceof Error
-    ? {error: knowledgeLevel, reload: dispatchFetchAction}
+  return knowledgeLevel instanceof Error || errorInMap
+    ? {
+        error: knowledgeLevel instanceof Error ? knowledgeLevel : errorInMap,
+        reload: dispatchFetchAction,
+      }
     : {
         content: !isAllowed ? false : content,
         reload: dispatchFetchAction,
@@ -1312,8 +1336,8 @@ export type KnowledgeSubjectThemesHookResult = {
 export function useKnowledgeSubjectThemes(
   subjectId?: number,
 ): KnowledgeSubjectThemesHookResult {
-  const isAllowed = useCheckPermissions(Permission.LESSON_EDIT);
-  const themes = useSelector(selectThemes);
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
+  const themes = useSelector(selectKnowledgeThemes);
   const knowledgeTree = useSelector(selectKnowledgeTree);
   const knowledgeBaseSubject = subjectId ? knowledgeTree[subjectId] : undefined;
   const knowledgeLevelFetch = useKnowledgeLevelFetch();
@@ -1351,7 +1375,11 @@ export function useKnowledgeSubjectThemes(
           return [];
         }
 
-        return level.themeIds.map((themeId) => themes[themeId]);
+        return level.themeIds
+          .map((themeId) => themes[themeId])
+          .filter<ThemeInfo>(
+            (theme): theme is ThemeInfo => !!theme && !(theme instanceof Error),
+          );
       })
       .flatten()
       .value();
@@ -1381,4 +1409,32 @@ export function useRevokeKnowledgeTheme(): RevokeKnowledgeThemeHookResult {
     },
     [dispatch],
   );
+}
+
+export type KnowledgeThemeHookResult = {
+  theme?: ThemeInfo | false;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useKnowledgeTheme(
+  subjectId: number,
+  themeId: number,
+): KnowledgeThemeHookResult {
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
+  const theme = useSelector(selectKnowledgeThemes)[themeId];
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.KNOWLEDGE_THEME_FETCH, subjectId, themeId});
+  }, [dispatch, subjectId, themeId]);
+  useEffect(() => {
+    if (isAllowed) {
+      if (!theme) {
+        dispatchFetchAction();
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, theme]);
+  return theme instanceof Error
+    ? {error: theme, reload: dispatchFetchAction}
+    : {theme: !isAllowed ? false : theme, reload: dispatchFetchAction};
 }

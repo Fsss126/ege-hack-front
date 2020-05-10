@@ -21,7 +21,7 @@ import {AccountRole} from 'types/enums';
 
 import {Action, ActionType} from '../actions';
 
-type DataProperty<T> = Maybe<T | AxiosError>;
+export type DataProperty<T> = Maybe<T | AxiosError>;
 
 export type KnowledgeTreeLevel = {
   themeIds: number[];
@@ -58,10 +58,10 @@ export interface DataState {
   teacherCourses?: DataProperty<CourseInfo[]>;
   homeworks: {[lessonId: number]: DataProperty<HomeworkInfo[]>};
   themes: {
-    [themeId: number]: ThemeInfo;
+    [themeId: number]: DataProperty<ThemeInfo>;
   };
   tasks: {
-    [taskId: number]: TaskInfo;
+    [taskId: number]: DataProperty<TaskInfo>;
   };
   knowledgeTree: {
     [subjectId: number]: KnowledgeBaseSubject;
@@ -665,6 +665,49 @@ export const dataReducer: Reducer<DataState, Action> = (
         };
       }
       return _.cloneDeep(_.merge(state, stateUpdate));
+    }
+    case ActionType.KNOWLEDGE_THEME_REVOKE: {
+      const {responseTheme} = action;
+      const {subjectId, id, parentThemeId} = responseTheme;
+
+      const themeKey = parentThemeId !== undefined ? parentThemeId : 'root';
+
+      const stateUpdate: Partial<DataState> = {
+        themes: {[id]: responseTheme},
+        knowledgeTree: {
+          [subjectId]: {
+            [themeKey]: {
+              themeIds: [id],
+              taskIds: [],
+            },
+          },
+        },
+      };
+
+      const customizer = (objValue: any, srcValue: any, key: string) => {
+        if (_.isArray(objValue)) {
+          if (key === 'themeIds') {
+            return _.indexOf(objValue, id) < 0
+              ? objValue.concat(srcValue)
+              : objValue;
+          } else if (key === 'themeIds') {
+            return objValue.concat(srcValue);
+          }
+        }
+      };
+
+      return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
+    }
+    case ActionType.KNOWLEDGE_THEME_FETCHED: {
+      const {themeId, theme} = action;
+
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          [themeId]: theme,
+        },
+      };
     }
     default:
       return state;

@@ -64,13 +64,13 @@ const ThemeCreatingPage: React.FC<RouteComponentProps<
       errors={[errorLoadingSubjects]}
       reloadCallbacks={[reloadSubjects]}
     >
-      {isLoaded && (
+      {!!subjects && (
         <PageContent>
           <ContentBlock>
             <ThemeForm
               subjectId={subjectId}
               parentThemeId={parentThemeId}
-              subjects={subjects as SubjectInfo[]}
+              subjects={subjects}
               title="Новая тема"
               errorMessage="Ошибка при создании темы"
               cancelLink={returnLink}

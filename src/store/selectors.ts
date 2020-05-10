@@ -57,9 +57,10 @@ export const selectTest = (state: AppState) => state.testReducer.test;
 
 export const selectTestState = (state: AppState) => state.testReducer.state;
 
-export const selectTasks = (state: AppState) => selectDataReducer(state).tasks;
+export const selectKnowledgeTasks = (state: AppState) =>
+  selectDataReducer(state).tasks;
 
-export const selectThemes = (state: AppState) =>
+export const selectKnowledgeThemes = (state: AppState) =>
   selectDataReducer(state).themes;
 
 export const selectKnowledgeTree = (state: AppState) =>

@@ -167,6 +167,14 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
     [fetchThemes],
   );
 
+  const onSubjectChange: typeof onInputChange = useCallback(
+    (value: any, name: any) => {
+      onInputChange(value, name);
+      onInputChange(undefined, 'parentThemeId');
+    },
+    [onInputChange],
+  );
+
   return (
     <Form<ThemeInfo>
       title={formTitle}
@@ -189,7 +197,7 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             options={subjectOptions}
             value={subjectId}
             isClearable={false}
-            onChange={onInputChange}
+            onChange={onSubjectChange}
           />
           <Input.TreeSelect<number, number>
             placeholder="Родительская тема"
