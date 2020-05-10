@@ -99,7 +99,7 @@ const Webinar: React.FC<WebinarProps> = ({webinar, subjectId}) => {
   const {enqueueSnackbar} = useSnackbar();
 
   const onClick = React.useCallback(
-    async (event) => {
+    (event) => {
       if (!isUnlocked) {
         event.preventDefault();
         enqueueSnackbar(
@@ -119,23 +119,25 @@ const Webinar: React.FC<WebinarProps> = ({webinar, subjectId}) => {
 
       const newWindow = window.open() as Window;
 
-      try {
-        const response = (await APIRequest.get(
-          `/courses/${webinar.course_id || subjectId}/schedule/link`,
-        )) as LinkResp;
-        newWindow.location.href = response.link;
-        newWindow.focus();
-      } catch (e) {
-        newWindow.close();
+      (async () => {
+        try {
+          const response = (await APIRequest.get(
+            `/courses/${webinar.course_id || subjectId}/schedule/link`,
+          )) as LinkResp;
+          newWindow.location.href = response.link;
+          newWindow.focus();
+        } catch (e) {
+          newWindow.close();
 
-        console.error(e);
-        enqueueSnackbar('Ошибка при подключении к вебинару', {
-          persist: false,
-          key: webinar.id,
-          variant: 'error',
-          preventDuplicate: true,
-        });
-      }
+          console.error(e);
+          enqueueSnackbar('Ошибка при подключении к вебинару', {
+            persist: false,
+            key: webinar.id,
+            variant: 'error',
+            preventDuplicate: true,
+          });
+        }
+      })();
     },
     [isUnlocked, webinar, subjectId, enqueueSnackbar],
   );

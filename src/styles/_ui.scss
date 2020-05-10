@@ -683,6 +683,7 @@ input[type=number] {
   border-radius: $element-border-radius;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   cursor: pointer;
 
   &.ant-select-single {
@@ -697,7 +698,6 @@ input[type=number] {
       .ant-select-selector {
         border: none;
         padding: $element-padding;
-        padding-right: calc(1em + 3 * #{$element-padding-horizontal});
         height: auto;
         background-color: unset;
       }
@@ -745,27 +745,61 @@ input[type=number] {
     }
   }
 
-  .ant-select-arrow {
+  .ant-select-arrow, .ant-select-clear {
+    position: relative;
     font-size: 1em;
     width: auto;
     height: auto;
     top: auto;
     left: auto;
-    right: 0;
+    right: auto;
     margin: 0;
-
-    padding: $element-padding;
     transition: transform .3s;
     color: $text-light-grey;
+    background: none;
 
     i {
       display: block;
     }
   }
 
+  .ant-select-arrow {
+    padding: $element-padding;
+    order: 2;
+  }
+
+  .ant-select-clear {
+    opacity: 1;
+    margin-left: auto;
+  }
+
+  [aria-live="polite"] {
+    display: none !important;
+  }
+
   &.ant-select-open {
     .ant-select-arrow {
       transform: rotate(180deg);
+    }
+  }
+
+  $icons-padding: 2 * $element-padding-horizontal;
+
+  &.ant-select-show-arrow, &.ant-select-allow-clear {
+    .ant-select-selector {
+      margin-right: calc(-1 * (1em + #{$icons-padding}));
+    }
+  }
+
+  &.ant-select-allow-clear .ant-select-selector {
+    margin-right: calc(-2 * (1em + #{$icons-padding}));
+  }
+
+  &.ant-select-disabled {
+    opacity: .6;
+
+    * {
+      cursor: default !important;
     }
   }
 }
@@ -774,8 +808,6 @@ input[type=number] {
   position: relative;
 
   .ant-select-dropdown-container {
-    background: black;
-
     & > div {
       height: 100%;
     }
@@ -840,6 +872,13 @@ input[type=number] {
             }
           }
         }
+      }
+
+      .ant-select-dropdown__no-data {
+        padding: $element-padding;
+        font-size: 14px;
+        color: $text-grey;
+        text-align: center;
       }
     }
   }

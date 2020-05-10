@@ -8,6 +8,7 @@ import {
   TestStateDtoResp,
   TestStatus,
   TestStatusResp,
+  ThemeDtoResp,
 } from 'types/dtos';
 import {
   AccountInfo,
@@ -54,21 +55,6 @@ export const ACCOUNT_INFO: AccountInfo = {
 };
 
 export const SUBJECTS: SubjectInfo[] = [
-  // { id: 'russian', name: 'Русский язык' },
-  // { id: 'literature', name: 'Литература' },
-  // { id: 'math', name: 'Математика' },
-  // { id: 'informatics', name: 'Информатика' },
-  // { id: 'physics', name: 'Физика' },
-  // { id: 'chemistry', name: 'Химия' },
-  // { id: 'biology', name: 'Биология' },
-  // { id: 'sociology', name: 'Обществознание' },
-  // { id: 'history', name: 'История' },
-  // { id: 'geography', name: 'География' },
-  // { id: 'english', name: 'Английский язык' },
-  // { id: 'german', name: 'Немецкий язык' },
-  // { id: 'french', name: 'Французский язык' },
-  // { id: 'chinese', name: 'Китайский язык' },
-  // { id: 'spanish', name: 'Испанский язык' }
   {id: 1, name: 'Русский язык', image_link: poster},
   {id: 2, name: 'Литература', image_link: poster},
   {id: 3, name: 'Математика', image_link: poster},
@@ -345,6 +331,37 @@ export const LESSONS: LessonInfo[] = _.times(4, (j) => {
     } as TestStatusInfo,
   };
 });
+
+export const THEMES: ThemeDtoResp[] = [
+  {
+    id: 1,
+    title: 'Lorem ipsum dolor sit amet',
+    subjectId: 1,
+    hasSubThemes: true,
+    hasTasks: false,
+  },
+  {
+    id: 2,
+    title: 'Lorem ipsum dolor sit amet',
+    subjectId: 1,
+    hasSubThemes: true,
+    hasTasks: false,
+  },
+  {
+    id: 3,
+    title: 'Lorem ipsum dolor sit amet',
+    subjectId: 1,
+    hasSubThemes: true,
+    hasTasks: false,
+  },
+  {
+    id: 4,
+    title: 'Lorem ipsum dolor sit amet',
+    subjectId: 1,
+    hasSubThemes: false,
+    hasTasks: false,
+  },
+];
 
 // export const TEST_ID = 1;
 // export const TEST_HASH = '2d01669a3c8cda169545b4f7b607efb3';

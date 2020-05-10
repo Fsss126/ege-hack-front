@@ -8,7 +8,7 @@ import {CourseDtoReq} from 'types/dtos';
 import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
-import ThemeForm from './ThemeForm';
+import TaskForm from './TaskForm';
 
 const createRequest = (requestData: CourseDtoReq): Promise<CourseInfo> =>
   APIRequest.post('/courses', requestData) as Promise<CourseInfo>;
@@ -59,7 +59,7 @@ const TaskCreatingPage: React.FC<RouteComponentProps> = (props) => {
       {isLoaded && (
         <PageContent>
           <ContentBlock>
-            <ThemeForm
+            <TaskForm
               subjects={subjects as SubjectInfo[]}
               teachers={teachers as TeacherInfo[]}
               title="Новый курс"

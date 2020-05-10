@@ -243,12 +243,18 @@ export interface TaskDtoResp extends Partial<RespWithImage> {
   answer: CorrectAnswerDto;
 }
 
-export interface ThemeDtoResp {
-  id: number;
+interface ThemeDtoCommon {
   title: string;
   subjectId: number;
   parentThemeId?: number;
-  order: number;
+}
+
+export interface ThemeDtoReq extends ThemeDtoCommon {}
+
+export interface ThemeDtoResp extends ThemeDtoCommon {
+  id: number;
+  hasSubThemes: boolean;
+  hasTasks: boolean;
 }
 
 export interface TestDtoResp {

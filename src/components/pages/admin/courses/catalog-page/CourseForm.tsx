@@ -183,7 +183,6 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
   const to = date_end;
   const modifiers = {start: from, end: to};
 
-  // const dateStartInputRef = React.useRef(null);
   const dateEndInputRef = useRef<DayPickerInput>(null);
 
   const onSubmit = useCallback<

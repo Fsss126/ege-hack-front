@@ -1,10 +1,14 @@
 /* eslint-disable  no-restricted-globals */
-import Select, {TreeSelectProps as SelectProps} from 'antd/lib/tree-select';
+import TreeSelectInput, {
+  TreeSelectProps as SelectProps,
+} from 'antd/lib/tree-select';
 import classNames from 'classnames';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import traverse from 'traverse';
 
-import {InputChangeHandler} from './Input';
+import {useToggle} from '../../../hooks/common';
+import {getPlaceholder, InputChangeHandler} from './Input';
+import {InputContainer} from './InputContainer';
 
 interface CommonDataNode<V extends Key> {
   title?: React.ReactNode;
@@ -36,11 +40,14 @@ export interface SimpleModeConfig {
 
 type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
   SelectProps<V>,
-  'treeData' | 'onChange' | 'treeDataSimpleMode' | 'loadData'
+  'treeData' | 'onChange' | 'treeDataSimpleMode' | 'loadData' | 'placeholder'
 > & {
   onChange: InputChangeHandler<V>;
   name: string;
   key?: string;
+  placeholder?: string;
+  required?: boolean;
+  withContainer?: boolean;
 } & (
     | {
         treeDataSimpleMode: true | SimpleModeConfig;
@@ -131,6 +138,9 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     treeDataSimpleMode,
     value,
     loadData,
+    placeholder,
+    withContainer,
+    required,
     ...rest
   } = props;
 
@@ -154,18 +164,42 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     [dropdownContainerId],
   );
 
-  const icon = <i className="icon-angle-down" />;
+  const elementRef = useRef<HTMLDivElement>(null);
 
-  return (
-    <div className="ant-select-container">
+  useEffect(() => {
+    const element = elementRef.current;
+    const input = element?.querySelector<HTMLInputElement>('input');
+
+    if (input) {
+      input.name = name;
+      input.required = required || false;
+    }
+  }, [name, required]);
+
+  const suffixIcon = () => <i className="icon-angle-down" />;
+  const clearIcon = <i className="icon-close" />;
+  const switcherIcon = <i className="icon-angle-down" />;
+  const noDataPlaceholder = (
+    <div className="ant-select-dropdown__no-data">Нет опций</div>
+  );
+
+  const formattedPlaceholder = getPlaceholder(placeholder, required);
+
+  const loadingPlaceholder = value !== undefined && treeData === undefined && (
+    <div className="spinner-border" />
+  );
+
+  const input = (
+    <div className="ant-select-container" ref={elementRef}>
       <div className="ant-select-dropdown-container" id={dropdownContainerId} />
-      <Select<V>
+      <TreeSelectInput<V>
         showSearch
         listHeight={200}
         onChange={changeCallback}
-        suffixIcon={icon}
-        switcherIcon={icon}
-        showCheckedStrategy={Select.SHOW_ALL}
+        suffixIcon={suffixIcon}
+        switcherIcon={switcherIcon}
+        clearIcon={clearIcon}
+        showCheckedStrategy={TreeSelectInput.SHOW_ALL}
         getPopupContainer={getPopupContainer}
         dropdownStyle={{
           minWidth: '100%',
@@ -173,12 +207,33 @@ const TreeSelect = <V extends Key, T extends Key = V>(
         treeDefaultExpandedKeys={defaultExpandedKeys}
         treeData={treeData}
         treeDataSimpleMode={treeDataSimpleMode}
-        value={value}
+        notFoundContent={noDataPlaceholder}
+        treeNodeFilterProp="title"
+        value={loadingPlaceholder ? undefined : value}
         loadData={loadData as any}
+        placeholder={
+          loadingPlaceholder
+            ? loadingPlaceholder
+            : withContainer
+            ? 'Не выбрано'
+            : formattedPlaceholder
+        }
         {...rest}
       />
     </div>
   );
+
+  return withContainer ? (
+    <InputContainer placeholder={placeholder} required={required}>
+      {input}
+    </InputContainer>
+  ) : (
+    input
+  );
+};
+
+TreeSelect.defaultProps = {
+  withContainer: true,
 };
 
 export default TreeSelect;

@@ -23,6 +23,15 @@ import {Action, ActionType} from '../actions';
 
 type DataProperty<T> = Maybe<T | AxiosError>;
 
+export type KnowledgeTreeLevel = {
+  themeIds: number[];
+  taskIds: number[];
+};
+
+export type KnowledgeBaseSubject = {
+  [key in number | 'root']?: DataProperty<KnowledgeTreeLevel>;
+};
+
 export interface DataState {
   credentials?: DataProperty<Credentials>;
   userInfo?: DataProperty<AccountInfo>;
@@ -55,12 +64,7 @@ export interface DataState {
     [taskId: number]: TaskInfo;
   };
   knowledgeTree: {
-    [subjectId: number]: {
-      [key in number | 'root']?: DataProperty<{
-        themeIds: number[];
-        taskIds: number[];
-      }>;
-    };
+    [subjectId: number]: KnowledgeBaseSubject;
   };
 }
 
@@ -660,8 +664,7 @@ export const dataReducer: Reducer<DataState, Action> = (
           },
         };
       }
-
-      return _.merge(state, stateUpdate);
+      return _.cloneDeep(_.merge(state, stateUpdate));
     }
     default:
       return state;

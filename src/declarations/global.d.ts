@@ -8,6 +8,10 @@ declare global {
 
     declare type OptionalizeCommon<T extends K, K> = Omit<T, keyof K> & Partial<K>;
 
+    declare type Require<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
+    declare type RequireCommon<T extends K, K> = T & Required<Pick<T, keyof K>>;
+
     declare type ArrayElement<ArrayType extends unknown[]> = ArrayType[number];
 
     declare type Maybe<T> = T | undefined;

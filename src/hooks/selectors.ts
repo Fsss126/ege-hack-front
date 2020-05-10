@@ -75,6 +75,7 @@ import {
   TeacherInfo,
   TestStateInfo,
   TestStatus,
+  ThemeInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {AccountRole, Permission} from 'types/enums';
@@ -1231,16 +1232,15 @@ export function useTestState(
 export type KnowledgeLevelFetchHookResult = (
   subjectId: number,
   themeId?: number,
-) => void;
-
-export function useKnowledgeLevelFetch(
   onSuccess?: KnowledgeLevelFetchCallback,
   onError?: KnowledgeLevelFetchErrorCallback,
-): KnowledgeLevelFetchHookResult {
+) => void;
+
+export function useKnowledgeLevelFetch(): KnowledgeLevelFetchHookResult {
   const dispatch = useDispatch();
 
   return useCallback(
-    (subjectId, themeId) => {
+    (subjectId, themeId, onSuccess, onError) => {
       dispatch({
         type: ActionType.KNOWLEDGE_LEVEL_FETCH,
         subjectId,
@@ -1249,7 +1249,7 @@ export function useKnowledgeLevelFetch(
         onError,
       });
     },
-    [dispatch, onError, onSuccess],
+    [dispatch],
   );
 }
 
@@ -1301,4 +1301,84 @@ export function useKnowledgeLevel(
         content: !isAllowed ? false : content,
         reload: dispatchFetchAction,
       };
+}
+
+export type KnowledgeSubjectThemesHookResult = {
+  themes?: ThemeInfo[] | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useKnowledgeSubjectThemes(
+  subjectId?: number,
+): KnowledgeSubjectThemesHookResult {
+  const isAllowed = useCheckPermissions(Permission.LESSON_EDIT);
+  const themes = useSelector(selectThemes);
+  const knowledgeTree = useSelector(selectKnowledgeTree);
+  const knowledgeBaseSubject = subjectId ? knowledgeTree[subjectId] : undefined;
+  const knowledgeLevelFetch = useKnowledgeLevelFetch();
+
+  const dispatchFetchAction = useCallback(
+    (subjectId: number) => {
+      knowledgeLevelFetch(subjectId);
+    },
+    [knowledgeLevelFetch],
+  );
+
+  useEffect(() => {
+    if (isAllowed) {
+      if (
+        subjectId !== undefined &&
+        !(knowledgeBaseSubject && knowledgeBaseSubject.root)
+      ) {
+        dispatchFetchAction(subjectId);
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, knowledgeBaseSubject, subjectId]);
+
+  const subjectThemes = useMemo(() => {
+    if (!knowledgeBaseSubject || !knowledgeBaseSubject.root) {
+      return undefined;
+    }
+
+    if (knowledgeBaseSubject.root instanceof Error) {
+      return knowledgeBaseSubject.root;
+    }
+
+    return _(knowledgeBaseSubject)
+      .map((level) => {
+        if (!level || level instanceof Error) {
+          return [];
+        }
+
+        return level.themeIds.map((themeId) => themes[themeId]);
+      })
+      .flatten()
+      .value();
+  }, [knowledgeBaseSubject, themes]);
+
+  const reloadCallback = useMemo(
+    () => (subjectId ? () => dispatchFetchAction(subjectId) : undefined),
+    [dispatchFetchAction, subjectId],
+  );
+
+  return subjectThemes instanceof Error
+    ? {error: subjectThemes, reload: reloadCallback}
+    : {
+        themes: !isAllowed ? false : subjectThemes,
+        reload: reloadCallback,
+      };
+}
+
+export type RevokeKnowledgeThemeHookResult = (responseTheme: ThemeInfo) => void;
+
+export function useRevokeKnowledgeTheme(): RevokeKnowledgeThemeHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseTheme: ThemeInfo) => {
+      dispatch({type: ActionType.KNOWLEDGE_THEME_REVOKE, responseTheme});
+    },
+    [dispatch],
+  );
 }

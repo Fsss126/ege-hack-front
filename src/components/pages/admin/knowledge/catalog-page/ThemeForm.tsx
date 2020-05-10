@@ -10,193 +10,108 @@ import Form, {
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {OptionShape} from 'components/ui/input/Select';
-import {useRevokeCourses} from 'hooks/selectors';
+import {SimpleDataNode} from 'components/ui/input/TreeSelect';
+import {
+  useKnowledgeLevelFetch,
+  useKnowledgeSubjectThemes,
+  useRevokeKnowledgeTheme,
+} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import {CourseDtoReq, FileInfo} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {ThemeDtoReq} from 'types/dtos';
+import {SubjectInfo, ThemeInfo} from 'types/entities';
+import {Deferred} from 'utils/promiseHelper';
 
-type CourseFormData = {
-  name: string;
-  subject_id?: number;
-  teacher_id?: number;
-  image?: FileInfo[];
-  spread_sheet_link: string;
-  price: string;
-  date_start?: Date;
-  date_end?: Date;
-  online: boolean;
-  description: string;
-  hide_from_market: boolean;
+type ThemeFormData = {
+  title: string;
+  subjectId?: number;
+  parentThemeId?: number;
 };
-const INITIAL_FORM_DATA: CourseFormData = {
-  name: '',
-  price: '',
-  online: false,
-  description: '',
-  hide_from_market: true,
-  spread_sheet_link: '',
-  date_start: undefined,
-  date_end: undefined,
-  image: undefined,
+const INITIAL_FORM_DATA: ThemeFormData = {
+  title: '',
 };
 
-function getRequestData(formData: CourseFormData): CourseDtoReq {
-  const {
-    name,
-    subject_id,
-    teacher_id,
-    image,
-    price,
-    date_start,
-    date_end,
-    online,
-    description,
-    hide_from_market,
-    spread_sheet_link,
-  } = formData;
+function getRequestData(formData: ThemeFormData): ThemeDtoReq {
+  const {title, subjectId, parentThemeId} = formData;
 
   return {
-    name,
-    subject_id: subject_id as number,
-    teacher_id: teacher_id as number,
-    image: (image as FileInfo[])[0].file_id,
-    price: parseFloat(price),
-    date_start: (date_start as Date).getTime(),
-    date_end: (date_end as Date).getTime(),
-    online,
-    description,
-    hide_from_market,
-    spread_sheet_link,
+    title,
+    subjectId: subjectId as number,
+    parentThemeId: parentThemeId as number,
   };
 }
 
-const isHiddenFromMarket = (isAvailable: boolean): boolean => !isAvailable;
-
-type FormComponentProps = FormProps<CourseInfo>;
+type FormComponentProps = FormProps<ThemeInfo>;
 
 export type CourseFormProps = {
   subjects: SubjectInfo[];
-  teachers: TeacherInfo[];
   title?: string;
-  createRequest: (data: CourseDtoReq) => Promise<CourseInfo>;
-  onSubmitted: SubmittedHandler<CourseInfo>;
+  createRequest: (data: ThemeDtoReq) => Promise<ThemeInfo>;
+  onSubmitted: SubmittedHandler<ThemeInfo>;
   errorMessage: string;
   cancelLink: FormComponentProps['cancelLink'];
-  course?: CourseInfo;
+  theme?: ThemeInfo;
   subjectId?: number;
+  parentThemeId?: number;
 };
+
 type SubjectOption = OptionShape<number>;
-type TeacherOption = SubjectOption;
+type ThemeTreeNode = Require<SimpleDataNode<number, number>, 'rootPId'>;
+
 const ThemeForm: React.FC<CourseFormProps> = (props) => {
   const {
     subjects,
-    teachers,
-    title,
+    title: formTitle,
     createRequest,
     onSubmitted,
     errorMessage,
     cancelLink,
-    subjectId,
+    subjectId: passedSubjectId,
+    parentThemeId: passedParentThemeId,
   } = props;
-
-  const subjectOptions = useMemo<SubjectOption[]>(
-    () => subjects.map(({id, name}) => ({value: id, label: name})),
-    [subjects],
-  );
-  const teacherOptions = useMemo<TeacherOption[]>(
-    () =>
-      teachers.map(({id, vk_info: {first_name, last_name}}) => ({
-        value: id,
-        label: `${first_name} ${last_name}`,
-      })),
-    [teachers],
-  );
 
   const formElementRef = useRef<HTMLFormElement>(null);
 
-  const checkValidity = useFormValidityChecker<CourseFormData>(
+  const checkValidity = useFormValidityChecker<ThemeFormData>(
     formElementRef.current,
-    (name, input, formData) => {
-      if (name === 'image') {
-        return formData.image && !!formData.image[0];
-      }
-    },
   );
 
-  const {course} = props;
-  const {formData, isValid, onInputChange, reset} = useForm<CourseFormData>(
-    (state): CourseFormData => {
-      if (state || !course) {
-        return subjectId
-          ? {...INITIAL_FORM_DATA, subject_id: subjectId}
-          : INITIAL_FORM_DATA;
+  const {theme} = props;
+  const {formData, isValid, onInputChange, reset} = useForm<ThemeFormData>(
+    (state): ThemeFormData => {
+      if (state || !theme) {
+        const formData = {...INITIAL_FORM_DATA};
+
+        if (passedSubjectId) {
+          formData.subjectId = passedSubjectId;
+        }
+
+        if (passedParentThemeId) {
+          formData.parentThemeId = passedParentThemeId;
+        }
+
+        return formData;
       } else {
-        const {
-          image_link,
-          id,
-          purchased,
-          teacher_ids,
-          hide_from_market,
-          description,
-          price,
-          spread_sheet_link,
-          ...otherData
-        } = course;
+        const {title, subjectId, parentThemeId} = theme;
 
         return {
-          hide_from_market: hide_from_market || false,
-          teacher_id: teacher_ids[0],
-          image: image_link
-            ? [
-                {
-                  file_id: image_link.split('/').pop() as string,
-                  file_link: image_link,
-                  file_name: image_link,
-                },
-              ]
-            : undefined,
-          description: description || '',
-          price: price.toString(),
-          spread_sheet_link: spread_sheet_link || '',
-          ...otherData,
+          title,
+          subjectId,
+          parentThemeId,
         };
       }
     },
     checkValidity,
   );
 
-  const {
-    name,
-    subject_id,
-    teacher_id,
-    image,
-    price,
-    date_start,
-    date_end,
-    online,
-    description,
-    hide_from_market,
-    spread_sheet_link,
-  } = formData;
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialImageFile = useMemo(() => formData.image, []);
-
-  const from = date_start;
-  const to = date_end;
-  const modifiers = {start: from, end: to};
-
-  // const dateStartInputRef = React.useRef(null);
-  const dateEndInputRef = useRef<DayPickerInput>(null);
+  const {title, subjectId, parentThemeId} = formData;
 
   const onSubmit = useCallback<
-    FormSubmitHandler<[undefined], Promise<CourseInfo>>
+    FormSubmitHandler<[undefined], Promise<ThemeInfo>>
   >(() => {
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 
-  const revokeShopCatalog = useRevokeCourses();
+  const revokeThemes = useRevokeKnowledgeTheme();
 
   const onError = useCallback<ErrorHandler>(
     (error, showErrorMessage, reloadCallback) => {
@@ -213,175 +128,86 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
     [errorMessage],
   );
 
-  const onStartDateSelect = useCallback(
-    () => dateEndInputRef.current?.getInput().focus(),
-    [],
+  const {
+    themes,
+    error: errorLoadingRootThemes,
+    reload: reloadRootThemes,
+  } = useKnowledgeSubjectThemes(subjectId);
+
+  const subjectOptions = useMemo<SubjectOption[]>(
+    () => subjects.map(({id, name}) => ({value: id, label: name})),
+    [subjects],
+  );
+  const themeTreeNodes = useMemo<ThemeTreeNode[] | undefined>(
+    () =>
+      themes
+        ? themes.map(({id, parentThemeId, subjectId, hasSubThemes, title}) => ({
+            id,
+            value: id,
+            pId: parentThemeId,
+            rootPId: subjectId,
+            isLeaf: !hasSubThemes,
+            title,
+          }))
+        : undefined,
+    [themes],
+  );
+
+  const fetchThemes = useKnowledgeLevelFetch();
+
+  const loadData = useCallback(
+    (treeNode: ThemeTreeNode): Promise<unknown> => {
+      const deferred = new Deferred();
+      const {rootPId: subjectId, id} = treeNode;
+
+      fetchThemes(subjectId, id, deferred.resolve, deferred.reject);
+
+      return deferred.promise;
+    },
+    [fetchThemes],
   );
 
   return (
-    <Form<CourseInfo>
-      title={title}
+    <Form<ThemeInfo>
+      title={formTitle}
       ref={formElementRef}
-      className="course-form container p-0"
+      className="theme-form container p-0"
       isValid={isValid}
       reset={reset}
       onSubmit={onSubmit}
       onSubmitted={onSubmitted}
       onError={onError}
-      revokeRelatedData={revokeShopCatalog}
+      revokeRelatedData={revokeThemes}
       cancelLink={cancelLink}
     >
       <div className="row">
-        <div className="preview-container col-12 col-md-auto">
-          <Input.ImageInput
-            name="image"
-            required
-            value={image}
-            maxFiles={1}
-            initialFiles={initialImageFile}
-            accept="image/*"
-            onChange={onInputChange}
-            maxSizeBytes={1024 * 1024}
-          />
-        </div>
         <FieldsContainer className="col">
-          <Input.TreeSelect<string>
-            placeholder="Выберите тему"
-            name="theme_id"
-            onChange={() => {
-              // to do
-            }}
-            value={'0-0-1'}
-            treeData={[
-              {
-                title: 'Node1',
-                value: '0-0',
-                children: [
-                  {
-                    title: 'Child Node1',
-                    value: '0-0-1',
-                  },
-                  {
-                    title: 'Child Node2',
-                    value: '0-0-2',
-                  },
-                ],
-              },
-              {
-                title: 'Node1',
-                value: '0-2',
-                children: [
-                  {
-                    title: 'Child Node1',
-                    value: '0-0-1',
-                  },
-                  {
-                    title: 'Child Node2',
-                    value: '0-0-2',
-                  },
-                ],
-              },
-              {
-                title: 'Node2',
-                value: '0-1',
-              },
-            ]}
-          />
-          <Input.Input
-            name="name"
-            type="text"
-            required
-            placeholder="Название"
-            value={name}
-            onChange={onInputChange}
-          />
           <Input.Select
-            name="subject_id"
+            name="subjectId"
             required
             placeholder="Предмет"
             options={subjectOptions}
-            value={subject_id}
+            value={subjectId}
             isClearable={false}
             onChange={onInputChange}
           />
-          <Input.Select
-            name="teacher_id"
-            required
-            placeholder="Преподаватель"
-            options={teacherOptions}
-            value={teacher_id}
-            isClearable={false}
+          <Input.TreeSelect<number, number>
+            placeholder="Родительская тема"
+            name="parentThemeId"
             onChange={onInputChange}
+            value={parentThemeId}
+            treeDataSimpleMode
+            treeData={themeTreeNodes}
+            allowClear
+            loadData={loadData as any}
+            disabled={themeTreeNodes === undefined}
           />
           <Input.Input
-            name="price"
-            type="price"
-            required
-            placeholder="Цена"
-            value={price}
-            onChange={onInputChange}
-          />
-          <Input.CheckBox
-            name="online"
-            value={online}
-            label="Онлайн курс"
-            onChange={onInputChange}
-          />
-          <div className="row">
-            <div className="col start-date-input-container">
-              <Input.DateInput
-                value={from}
-                required
-                placeholder="Дата начала"
-                dayPickerProps={{
-                  selectedDays: [from, from && to ? {from, to} : undefined],
-                  disabledDays: to ? {after: to} : undefined,
-                  toMonth: to,
-                  modifiers,
-                  onDayClick: onStartDateSelect,
-                }}
-                name="date_start"
-                onChange={onInputChange}
-              />
-            </div>
-            <div className="col end-date-input-container">
-              <Input.DateInput
-                ref={dateEndInputRef}
-                required
-                value={to}
-                placeholder="Дата окончания"
-                dayPickerProps={{
-                  selectedDays: [from, from && to ? {from, to} : undefined],
-                  disabledDays: from ? {before: from} : undefined,
-                  modifiers,
-                  month: from,
-                  fromMonth: from,
-                }}
-                name="date_end"
-                onChange={onInputChange}
-              />
-            </div>
-          </div>
-          <Input.TextArea
-            name="description"
-            className="large"
-            placeholder="Описание"
-            value={description}
-            onChange={onInputChange}
-          />
-          <Input.CheckBox
-            name="hide_from_market"
-            value={!hide_from_market}
-            label="Доступен в магазине"
-            parse={isHiddenFromMarket}
-            onChange={onInputChange}
-          />
-          <Input.Input
-            name="spread_sheet_link"
+            name="title"
             type="text"
-            placeholder="Ссылка на Гугл таблицу"
-            value={spread_sheet_link}
-            maxLength={1000}
+            required
+            placeholder="Название"
+            value={title}
             onChange={onInputChange}
           />
         </FieldsContainer>

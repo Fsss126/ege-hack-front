@@ -13,6 +13,7 @@ import {
   TestStateAnswerInfo,
   TestStateInfo,
   TestStatePassedInfo,
+  ThemeInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
@@ -85,6 +86,12 @@ export enum ActionType {
   TEST_SAVE_ANSWER = 'TEST_SAVE_ANSWER',
   KNOWLEDGE_LEVEL_FETCH = 'KNOWLEDGE_LEVEL_FETCH',
   KNOWLEDGE_LEVEL_FETCHED = 'KNOWLEDGE_LEVEL_FETCHED',
+  KNOWLEDGE_THEME_REVOKE = 'KNOWLEDGE_THEME_REVOKE',
+  KNOWLEDGE_THEME_DELETE_REQUEST = 'KNOWLEDGE_THEME_DELETE_REQUEST',
+  KNOWLEDGE_THEME_DELETE = 'KNOWLEDGE_THEME_DELETE',
+  KNOWLEDGE_TASK_REVOKE = 'KNOWLEDGE_TASK_REVOKE',
+  KNOWLEDGE_TASK_DELETE_REQUEST = 'KNOWLEDGE_TASK_DELETE_REQUEST',
+  KNOWLEDGE_TASK_DELETE = 'KNOWLEDGE_TASK_DELETE',
 }
 
 interface Credentials {
@@ -551,6 +558,11 @@ export type KnowledgeLevelFetchedAction = {
   content: KnowledgeLevelInfo | AxiosError;
 };
 
+export type KnowledgeThemeRevokeAction = {
+  type: ActionType.KNOWLEDGE_THEME_REVOKE;
+  responseTheme: ThemeInfo;
+};
+
 export type Action = {type: ActionType} & (
   | LoginAction
   | LoginRequestAction
@@ -617,4 +629,5 @@ export type Action = {type: ActionType} & (
   | TestSaveAnswerAction
   | KnowledgeLevelFetchAction
   | KnowledgeLevelFetchedAction
+  | KnowledgeThemeRevokeAction
 );

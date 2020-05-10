@@ -95,7 +95,7 @@ function parsePrice(price: string): string {
 }
 
 export const getPlaceholder = (
-  placeholder: string,
+  placeholder?: string,
   required?: boolean,
 ): string | undefined =>
   placeholder ? (required ? `${placeholder}*` : placeholder) : undefined;

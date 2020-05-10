@@ -12,10 +12,16 @@ import {
   TEST_STATE_NOT_STARTED,
   TEST_STATUS_COMPLETED,
   TEST_STATUS_NOT_STARTED,
+  THEMES,
   WEBINAR_SCHEDULE,
 } from 'api/mocks/mocks';
 import {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
-import {AnswerType, TestStateAnswerDto} from 'types/dtos';
+import {DEBUG_MODE} from 'definitions/constants';
+import {
+  AnswerType,
+  KnowledgeLevelDtoResponse,
+  TestStateAnswerDto,
+} from 'types/dtos';
 import {SanitizedTaskInfo, TestAnswerValue} from 'types/entities';
 
 import {getUrl} from '../helpers';
@@ -115,6 +121,9 @@ export const addMockedTestAnswerResponses = (
 };
 
 export const mockTestsRequests = (api: AxiosInstance) => {
+  if (!DEBUG_MODE) {
+    return;
+  }
   api.interceptors.response.use(
     (response) => {
       const {config, data} = response;
@@ -155,6 +164,20 @@ export const mockTestsRequests = (api: AxiosInstance) => {
           return getMockedResponse(config, TEST_STATE_COMPLETED);
         case /\/knowledge\/tests\/(.*)$/.test(url.pathname):
           return getMockedResponse(config, TEST);
+        case /\/knowledge\/content/.test(url.pathname):
+          const {subjectId, themeId} = config.params;
+
+          const content: KnowledgeLevelDtoResponse = {
+            themes: THEMES.map((theme, index) => ({
+              ...theme,
+              id: parseInt(`${subjectId}${themeId || ''}${index}`),
+              subjectId,
+              parentThemeId: themeId,
+            })),
+            tasks: [],
+          };
+
+          return getMockedResponse(config, content);
         default:
           throw error;
       }

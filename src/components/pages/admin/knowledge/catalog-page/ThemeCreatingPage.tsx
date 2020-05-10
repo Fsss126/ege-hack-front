@@ -1,52 +1,50 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useSubjects, useUserTeachers} from 'hooks/selectors';
+import {useSubjects} from 'hooks/selectors';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
-import {CourseDtoReq} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {ThemeDtoReq} from 'types/dtos';
+import {SubjectInfo, ThemeInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {SubjectPageParams} from 'types/routes';
+import {ThemePageParams} from 'types/routes';
 
 import ThemeForm from './ThemeForm';
 
-const createRequest = (requestData: CourseDtoReq): Promise<CourseInfo> =>
-  APIRequest.post('/courses', requestData) as Promise<CourseInfo>;
+const createRequest = (requestData: ThemeDtoReq): Promise<ThemeInfo> =>
+  APIRequest.post('/knowledge/theme', requestData) as Promise<ThemeInfo>;
 
-const returnLink = '/admin/';
+const returnLink = '/admin/knowledge/';
+
+type ThemeCreatingPageParams = Partial<ThemePageParams>;
 
 const ThemeCreatingPage: React.FC<RouteComponentProps<
-  Partial<SubjectPageParams>
+  Partial<ThemeCreatingPageParams>
 >> = (props) => {
   const {
     match: {
-      params: {subjectId: param_subject},
+      params: {subjectId: param_subject, themeId: param_theme},
     },
     location,
   } = props;
   const subjectId = param_subject ? parseInt(param_subject) : undefined;
+  const parentThemeId = param_theme ? parseInt(param_theme) : undefined;
 
   const {
     subjects,
     error: errorLoadingSubjects,
     reload: reloadSubjects,
   } = useSubjects();
-  const {
-    teachers,
-    error: errorLoadingTeachers,
-    reload: reloadTeachers,
-  } = useUserTeachers();
 
   const onSubmitted = React.useCallback(
     (response, showSuccessMessage, reset) => {
-      showSuccessMessage('Курс создан', [
+      showSuccessMessage('Тема создана', [
         {
-          text: 'Новый курс',
+          text: 'Новый новая тема',
           action: reset,
         },
         {
-          text: 'Вернуться к курсам',
+          text: 'Вернуться к базе знаний',
           url: returnLink,
         },
       ]);
@@ -54,27 +52,27 @@ const ThemeCreatingPage: React.FC<RouteComponentProps<
     [],
   );
 
-  const isLoaded = !!(teachers && subjects);
+  const isLoaded = !!subjects;
 
   return (
     <Page
       isLoaded={isLoaded}
       requiredPermissions={Permission.COURSE_EDIT}
-      className="course-form-page"
-      title="Создание курса"
+      className="theme-form-page"
+      title="Создание темы"
       location={location}
-      errors={[errorLoadingTeachers, errorLoadingSubjects]}
-      reloadCallbacks={[reloadTeachers, reloadSubjects]}
+      errors={[errorLoadingSubjects]}
+      reloadCallbacks={[reloadSubjects]}
     >
       {isLoaded && (
         <PageContent>
           <ContentBlock>
             <ThemeForm
               subjectId={subjectId}
+              parentThemeId={parentThemeId}
               subjects={subjects as SubjectInfo[]}
-              teachers={teachers as TeacherInfo[]}
-              title="Новый курс"
-              errorMessage="Ошибка при создании курса"
+              title="Новая тема"
+              errorMessage="Ошибка при создании темы"
               cancelLink={returnLink}
               createRequest={createRequest}
               onSubmitted={onSubmitted}

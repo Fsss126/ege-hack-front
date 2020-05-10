@@ -255,7 +255,7 @@ const transformError = (error: AxiosError) => {
   }
 };
 
-// mockTestsRequests(APIRequest);
+mockTestsRequests(APIRequest);
 
 APIRequest.interceptors.response.use(transformData, transformError);
 
