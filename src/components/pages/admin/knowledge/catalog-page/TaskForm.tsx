@@ -1,4 +1,7 @@
 /* eslint-disable  no-restricted-globals */
+import {getVideoLink} from 'api/transforms';
+import {ExpandableContainer} from 'components/common/ExpandableContainer';
+import VideoPlayer from 'components/common/VideoPlayer';
 import Form, {
   ErrorHandler,
   FormProps,
@@ -9,140 +12,156 @@ import Form, {
 } from 'components/ui/Form';
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
+import {InputContainer} from 'components/ui/input/InputContainer';
 import {OptionShape} from 'components/ui/input/Select';
-import {useRevokeCourses} from 'hooks/selectors';
+import {useRevokeKnowledgeTask} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import {CourseDtoReq, FileInfo} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {AnswerType, FileInfo, TaskDtoReq} from 'types/dtos';
+import {SubjectInfo, TaskInfo} from 'types/entities';
 
-type CourseFormData = {
-  name: string;
-  subject_id?: number;
-  teacher_id?: number;
+import {
+  getVideoId,
+  getVideoLinkIsValid,
+} from '../../courses/course-page/lessons/LessonForm';
+import {useThemeSelect} from './ThemeForm';
+
+type TaskFormData = {
   image?: FileInfo[];
-  spread_sheet_link: string;
-  price: string;
-  date_start?: Date;
-  date_end?: Date;
-  online: boolean;
-  description: string;
-  hide_from_market: boolean;
+  text: string;
+  complexity: string;
+  weight: string;
+  subjectId?: number;
+  themeId?: number;
+  type: AnswerType;
+  value: string;
+  videoSolution: string;
+  textSolution: string;
 };
-const INITIAL_FORM_DATA: CourseFormData = {
-  name: '',
-  price: '',
-  online: false,
-  description: '',
-  hide_from_market: true,
-  spread_sheet_link: '',
-  date_start: undefined,
-  date_end: undefined,
-  image: undefined,
+const INITIAL_FORM_DATA: TaskFormData = {
+  text: '',
+  complexity: '',
+  weight: '1',
+  value: '',
+  videoSolution: '',
+  textSolution: '',
+  type: AnswerType.TEXT,
 };
 
-function getRequestData(formData: CourseFormData): CourseDtoReq {
+const typeOptions: OptionShape<AnswerType>[] = [
+  {value: AnswerType.FILE, label: 'Файл'},
+  {value: AnswerType.NUMBER, label: 'Число'},
+  {value: AnswerType.TEXT, label: 'Текст'},
+];
+
+function getRequestData(formData: TaskFormData): TaskDtoReq {
   const {
-    name,
-    subject_id,
-    teacher_id,
     image,
-    price,
-    date_start,
-    date_end,
-    online,
-    description,
-    hide_from_market,
-    spread_sheet_link,
+    text,
+    complexity,
+    weight,
+    subjectId,
+    themeId,
+    type,
+    value,
+    videoSolution,
+    textSolution,
   } = formData;
 
   return {
-    name,
-    subject_id: subject_id as number,
-    teacher_id: teacher_id as number,
-    image: (image as FileInfo[])[0].file_id,
-    price: parseFloat(price),
-    date_start: (date_start as Date).getTime(),
-    date_end: (date_end as Date).getTime(),
-    online,
-    description,
-    hide_from_market,
-    spread_sheet_link,
+    subjectId: subjectId as number,
+    themeId,
+    image: image && image[0] ? image[0].file_id : undefined,
+    text,
+    complexity: parseFloat(complexity),
+    weight: parseFloat(weight),
+    answer: {
+      type: type as AnswerType,
+      value,
+      videoSolution,
+      textSolution,
+    },
   };
 }
 
-const isHiddenFromMarket = (isAvailable: boolean): boolean => !isAvailable;
+type FormComponentProps = FormProps<TaskInfo>;
 
-type FormComponentProps = FormProps<CourseInfo>;
-
-export type CourseFormProps = {
+export type TaskFormProps = {
   subjects: SubjectInfo[];
-  teachers: TeacherInfo[];
   title?: string;
-  createRequest: (data: CourseDtoReq) => Promise<CourseInfo>;
-  onSubmitted: SubmittedHandler<CourseInfo>;
+  createRequest: (data: TaskDtoReq) => Promise<TaskInfo>;
+  onSubmitted: SubmittedHandler<TaskInfo>;
   errorMessage: string;
   cancelLink: FormComponentProps['cancelLink'];
-  course?: CourseInfo;
+  task?: TaskInfo;
+  subjectId?: number;
+  parentThemeId?: number;
 };
-type SubjectOption = OptionShape<number>;
-type TeacherOption = SubjectOption;
-const TaskForm: React.FC<CourseFormProps> = (props) => {
+
+const TaskForm: React.FC<TaskFormProps> = (props) => {
   const {
     subjects,
-    teachers,
-    title,
+    title: formTitle,
     createRequest,
     onSubmitted,
     errorMessage,
     cancelLink,
+    subjectId: passedSubjectId,
+    parentThemeId: passedThemeId,
   } = props;
-
-  const subjectOptions = useMemo<SubjectOption[]>(
-    () => subjects.map(({id, name}) => ({value: id, label: name})),
-    [subjects],
-  );
-  const teacherOptions = useMemo<TeacherOption[]>(
-    () =>
-      teachers.map(({id, vk_info: {first_name, last_name}}) => ({
-        value: id,
-        label: `${first_name} ${last_name}`,
-      })),
-    [teachers],
-  );
 
   const formElementRef = useRef<HTMLFormElement>(null);
 
-  const checkValidity = useFormValidityChecker<CourseFormData>(
+  const checkValidity = useFormValidityChecker<TaskFormData>(
     formElementRef.current,
     (name, input, formData) => {
       if (name === 'image') {
         return formData.image && !!formData.image[0];
       }
+
+      if (name === 'videoSolution') {
+        const {videoSolution} = formData;
+
+        return videoSolution ? getVideoLinkIsValid(videoSolution) : undefined;
+      }
+
+      if (name === 'value') {
+        const {type} = formData;
+
+        if (type === AnswerType.FILE) {
+          return true;
+        }
+
+        return undefined;
+      }
     },
   );
 
-  const {course} = props;
-  const {formData, isValid, onInputChange, reset} = useForm<CourseFormData>(
-    (state): CourseFormData => {
-      if (state || !course) {
-        return INITIAL_FORM_DATA;
+  const {task} = props;
+  const {formData, isValid, onInputChange, reset} = useForm<TaskFormData>(
+    (state): TaskFormData => {
+      if (state || !task) {
+        const formData = {...INITIAL_FORM_DATA};
+
+        if (passedSubjectId) {
+          formData.subjectId = passedSubjectId;
+        }
+
+        if (passedThemeId) {
+          formData.themeId = passedThemeId;
+        }
+
+        return formData;
       } else {
         const {
           image_link,
           id,
-          purchased,
-          teacher_ids,
-          hide_from_market,
-          description,
-          price,
-          spread_sheet_link,
+          weight,
+          complexity,
+          answer: {value, videoSolution, textSolution, ...answer},
           ...otherData
-        } = course;
+        } = task;
 
         return {
-          hide_from_market: hide_from_market || false,
-          teacher_id: teacher_ids[0],
           image: image_link
             ? [
                 {
@@ -152,9 +171,12 @@ const TaskForm: React.FC<CourseFormProps> = (props) => {
                 },
               ]
             : undefined,
-          description: description || '',
-          price: price.toString(),
-          spread_sheet_link: spread_sheet_link || '',
+          weight: weight.toString(),
+          complexity: complexity ? complexity.toString() : '',
+          value: value ? value.toString() : '',
+          videoSolution: videoSolution || '',
+          textSolution: textSolution || '',
+          ...answer,
           ...otherData,
         };
       }
@@ -163,36 +185,30 @@ const TaskForm: React.FC<CourseFormProps> = (props) => {
   );
 
   const {
-    name,
-    subject_id,
-    teacher_id,
     image,
-    price,
-    date_start,
-    date_end,
-    online,
-    description,
-    hide_from_market,
-    spread_sheet_link,
+    text,
+    complexity,
+    weight,
+    subjectId,
+    themeId,
+    type,
+    value,
+    videoSolution,
+    textSolution,
   } = formData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialImageFile = useMemo(() => formData.image, []);
-
-  const from = date_start;
-  const to = date_end;
-  const modifiers = {start: from, end: to};
-
-  // const dateStartInputRef = React.useRef(null);
-  const dateEndInputRef = useRef<DayPickerInput>(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialVideoLink = useMemo(() => formData.videoSolution, []);
 
   const onSubmit = useCallback<
-    FormSubmitHandler<[undefined], Promise<CourseInfo>>
+    FormSubmitHandler<[undefined], Promise<TaskInfo>>
   >(() => {
     return createRequest(getRequestData(formData));
   }, [formData, createRequest]);
 
-  const revokeShopCatalog = useRevokeCourses();
+  const revokeTask = useRevokeKnowledgeTask();
 
   const onError = useCallback<ErrorHandler>(
     (error, showErrorMessage, reloadCallback) => {
@@ -209,135 +225,147 @@ const TaskForm: React.FC<CourseFormProps> = (props) => {
     [errorMessage],
   );
 
-  const onStartDateSelect = useCallback(
-    () => dateEndInputRef.current?.getInput().focus(),
-    [],
+  const {
+    hasError,
+    isLoading,
+    subjectOptions,
+    themeTreeNodes,
+    loadData,
+    onSubjectChange,
+  } = useThemeSelect(subjects, onInputChange, subjectId, themeId);
+
+  const onTypeChange = useCallback(
+    (value: any, name: any) => {
+      onInputChange(value, name);
+      onInputChange('', 'value');
+    },
+    [onInputChange],
   );
 
   return (
-    <Form<CourseInfo>
-      title={title}
+    <Form<TaskInfo>
+      title={formTitle}
       ref={formElementRef}
-      className="course-form container p-0"
+      className="task-form container p-0"
       isValid={isValid}
       reset={reset}
       onSubmit={onSubmit}
       onSubmitted={onSubmitted}
       onError={onError}
-      revokeRelatedData={revokeShopCatalog}
+      revokeRelatedData={revokeTask}
       cancelLink={cancelLink}
     >
       <div className="row">
-        <div className="preview-container col-12 col-md-auto">
-          <Input.ImageInput
-            name="image"
-            required
-            value={image}
-            maxFiles={1}
-            initialFiles={initialImageFile}
-            accept="image/*"
-            onChange={onInputChange}
-            maxSizeBytes={1024 * 1024}
-          />
-        </div>
-        <FieldsContainer className="col">
-          <Input.Input
-            name="name"
-            type="text"
-            required
-            placeholder="Название"
-            value={name}
-            onChange={onInputChange}
-          />
+        <FieldsContainer className="col-12">
           <Input.Select
-            name="subject_id"
+            name="subjectId"
             required
             placeholder="Предмет"
             options={subjectOptions}
-            value={subject_id}
+            value={subjectId}
             isClearable={false}
+            onChange={onSubjectChange}
+          />
+          <Input.TreeSelect<number, number>
+            placeholder="Тема"
+            name="themeId"
+            onChange={onInputChange}
+            value={themeId}
+            treeDataSimpleMode
+            treeData={themeTreeNodes}
+            allowClear
+            loading={isLoading && !hasError}
+            loadData={loadData as any}
+            disabled={themeTreeNodes === undefined}
+          />
+          <Input.Input
+            name="text"
+            type="text"
+            required
+            placeholder="Текст задания"
+            value={text}
             onChange={onInputChange}
           />
           <Input.Select
-            name="teacher_id"
+            name="type"
             required
-            placeholder="Преподаватель"
-            options={teacherOptions}
-            value={teacher_id}
+            placeholder="Тип ответа"
+            options={typeOptions}
+            value={type}
             isClearable={false}
-            onChange={onInputChange}
+            onChange={onTypeChange}
           />
-          <Input.Input
-            name="price"
-            type="price"
-            required
-            placeholder="Цена"
-            value={price}
-            onChange={onInputChange}
-          />
-          <Input.CheckBox
-            name="online"
-            value={online}
-            label="Онлайн курс"
-            onChange={onInputChange}
-          />
+          {type !== AnswerType.FILE && (
+            <Input.Input
+              name="value"
+              required
+              placeholder="Ответ"
+              value={value}
+              onChange={onInputChange}
+            />
+          )}
           <div className="row">
-            <div className="col start-date-input-container">
-              <Input.DateInput
-                value={from}
+            <div className="preview-container col-12 col-md-auto">
+              <InputContainer placeholder="Рисунок">
+                <Input.ImageInput
+                  name="image"
+                  required
+                  value={image}
+                  maxFiles={1}
+                  initialFiles={initialImageFile}
+                  accept="image/*"
+                  onChange={onInputChange}
+                  maxSizeBytes={1024 * 1024}
+                />
+              </InputContainer>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <Input.Input
+                name="weight"
+                type="number"
                 required
-                placeholder="Дата начала"
-                dayPickerProps={{
-                  selectedDays: [from, from && to ? {from, to} : undefined],
-                  disabledDays: to ? {after: to} : undefined,
-                  toMonth: to,
-                  modifiers,
-                  onDayClick: onStartDateSelect,
-                }}
-                name="date_start"
+                placeholder="Вес"
+                value={weight}
                 onChange={onInputChange}
               />
             </div>
-            <div className="col end-date-input-container">
-              <Input.DateInput
-                ref={dateEndInputRef}
-                required
-                value={to}
-                placeholder="Дата окончания"
-                dayPickerProps={{
-                  selectedDays: [from, from && to ? {from, to} : undefined],
-                  disabledDays: from ? {before: from} : undefined,
-                  modifiers,
-                  month: from,
-                  fromMonth: from,
-                }}
-                name="date_end"
+            <div className="col">
+              <Input.Input
+                name="complexity"
+                type="number"
+                placeholder="Сложность"
+                value={complexity}
                 onChange={onInputChange}
               />
             </div>
           </div>
           <Input.TextArea
-            name="description"
+            name="textSolution"
             className="large"
-            placeholder="Описание"
-            value={description}
-            onChange={onInputChange}
-          />
-          <Input.CheckBox
-            name="hide_from_market"
-            value={!hide_from_market}
-            label="Доступен в магазине"
-            parse={isHiddenFromMarket}
+            placeholder="Решение"
+            value={textSolution}
             onChange={onInputChange}
           />
           <Input.Input
-            name="spread_sheet_link"
+            name="videoSolution"
             type="text"
-            placeholder="Ссылка на Гугл таблицу"
-            value={spread_sheet_link}
-            maxLength={1000}
+            placeholder="Ссылка на видео решения"
+            value={videoSolution}
             onChange={onInputChange}
           />
+          {videoSolution && getVideoLinkIsValid(videoSolution) && (
+            <ExpandableContainer
+              key={videoSolution}
+              toggleText="Видео"
+              initiallyExpanded={videoSolution !== initialVideoLink}
+            >
+              <VideoPlayer
+                video_link={getVideoLink(getVideoId(videoSolution))}
+              />
+            </ExpandableContainer>
+          )}
         </FieldsContainer>
       </div>
     </Form>

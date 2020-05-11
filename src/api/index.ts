@@ -260,7 +260,7 @@ mockTestsRequests(APIRequest);
 APIRequest.interceptors.response.use(transformData, transformError);
 
 // returns mocks for all failed requests
-// mockRequests(APIRequest);
+mockRequests(APIRequest);
 
 window.APIRequest = APIRequest;
 

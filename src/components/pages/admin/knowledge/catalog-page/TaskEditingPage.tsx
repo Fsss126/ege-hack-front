@@ -9,6 +9,7 @@ import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
+import CourseForm from '../../courses/catalog-page/CourseForm';
 import TaskForm from './TaskForm';
 
 const TaskEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
@@ -76,7 +77,7 @@ const TaskEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
       {isLoaded && (
         <PageContent>
           <ContentBlock>
-            <TaskForm
+            <CourseForm
               course={course as CourseInfo}
               subjects={subjects as SubjectInfo[]}
               teachers={teachers as TeacherInfo[]}

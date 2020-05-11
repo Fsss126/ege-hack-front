@@ -5,7 +5,7 @@ import {useSubjects} from 'hooks/selectors';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {ThemeDtoReq} from 'types/dtos';
-import {SubjectInfo, ThemeInfo} from 'types/entities';
+import {ThemeInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {ThemePageParams} from 'types/routes';
 
@@ -19,7 +19,7 @@ const returnLink = '/admin/knowledge/';
 type ThemeCreatingPageParams = Partial<ThemePageParams>;
 
 const ThemeCreatingPage: React.FC<RouteComponentProps<
-  Partial<ThemeCreatingPageParams>
+  ThemeCreatingPageParams
 >> = (props) => {
   const {
     match: {
@@ -57,7 +57,7 @@ const ThemeCreatingPage: React.FC<RouteComponentProps<
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.COURSE_EDIT}
+      requiredPermissions={Permission.KNOWLEDGE_BASE_EDIT}
       className="theme-form-page"
       title="Создание темы"
       location={location}

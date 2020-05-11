@@ -1,42 +1,50 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useSubjects, useUserTeachers} from 'hooks/selectors';
+import {useSubjects} from 'hooks/selectors';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
-import {CourseDtoReq} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {TaskDtoReq} from 'types/dtos';
+import {TaskInfo} from 'types/entities';
 import {Permission} from 'types/enums';
+import {ThemePageParams} from 'types/routes';
 
 import TaskForm from './TaskForm';
 
-const createRequest = (requestData: CourseDtoReq): Promise<CourseInfo> =>
-  APIRequest.post('/courses', requestData) as Promise<CourseInfo>;
+const createRequest = (requestData: TaskDtoReq): Promise<TaskInfo> =>
+  APIRequest.post('/knowledge/tasks', requestData) as Promise<TaskInfo>;
 
-const returnLink = '/admin/';
+const returnLink = '/admin/knowledge/';
 
-const TaskCreatingPage: React.FC<RouteComponentProps> = (props) => {
-  const {location} = props;
+type TaskCreatingPageParams = Partial<ThemePageParams>;
+
+const TaskCreatingPage: React.FC<RouteComponentProps<
+  TaskCreatingPageParams
+>> = (props) => {
+  const {
+    match: {
+      params: {subjectId: param_subject, themeId: param_theme},
+    },
+    location,
+  } = props;
+  const subjectId = param_subject ? parseInt(param_subject) : undefined;
+  const parentThemeId = param_theme ? parseInt(param_theme) : undefined;
+
   const {
     subjects,
     error: errorLoadingSubjects,
     reload: reloadSubjects,
   } = useSubjects();
-  const {
-    teachers,
-    error: errorLoadingTeachers,
-    reload: reloadTeachers,
-  } = useUserTeachers();
 
   const onSubmitted = React.useCallback(
     (response, showSuccessMessage, reset) => {
-      showSuccessMessage('Курс создан', [
+      showSuccessMessage('Задание создано', [
         {
-          text: 'Новый курс',
+          text: 'Новое задание',
           action: reset,
         },
         {
-          text: 'Вернуться к курсам',
+          text: 'Вернуться к базе знаний',
           url: returnLink,
         },
       ]);
@@ -44,26 +52,27 @@ const TaskCreatingPage: React.FC<RouteComponentProps> = (props) => {
     [],
   );
 
-  const isLoaded = !!(teachers && subjects);
+  const isLoaded = !!subjects;
 
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.COURSE_EDIT}
+      requiredPermissions={Permission.KNOWLEDGE_BASE_EDIT}
       className="course-form-page"
       title="Создание курса"
       location={location}
-      errors={[errorLoadingTeachers, errorLoadingSubjects]}
-      reloadCallbacks={[reloadTeachers, reloadSubjects]}
+      errors={[errorLoadingSubjects]}
+      reloadCallbacks={[reloadSubjects]}
     >
-      {isLoaded && (
+      {!!subjects && (
         <PageContent>
           <ContentBlock>
             <TaskForm
-              subjects={subjects as SubjectInfo[]}
-              teachers={teachers as TeacherInfo[]}
-              title="Новый курс"
-              errorMessage="Ошибка при создании курса"
+              subjectId={subjectId}
+              parentThemeId={parentThemeId}
+              subjects={subjects}
+              title="Новое задание"
+              errorMessage="Ошибка при создании задания"
               cancelLink={returnLink}
               createRequest={createRequest}
               onSubmitted={onSubmitted}

@@ -232,15 +232,20 @@ export interface CorrectAnswerDto {
   textSolution?: string;
 }
 
-export interface TaskDtoResp extends Partial<RespWithImage> {
-  id: number;
+interface TaskDtoCommon {
   text: string;
   complexity?: number;
   weight: number;
   subjectId: number;
-  themeId: number;
-  order: number;
+  themeId?: number;
   answer: CorrectAnswerDto;
+}
+
+export interface TaskDtoReq extends TaskDtoCommon, Partial<ReqWithImage> {}
+
+export interface TaskDtoResp extends TaskDtoCommon, Partial<RespWithImage> {
+  id: number;
+  order: number;
 }
 
 interface ThemeDtoCommon {

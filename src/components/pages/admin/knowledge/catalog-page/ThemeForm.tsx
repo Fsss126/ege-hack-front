@@ -10,6 +10,7 @@ import Form, {
 } from 'components/ui/Form';
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
+import {InputChangeHandler} from 'components/ui/input/Input';
 import {OptionShape} from 'components/ui/input/Select';
 import {SimpleDataNode} from 'components/ui/input/TreeSelect';
 import {
@@ -56,15 +57,19 @@ export type CourseFormProps = {
   parentThemeId?: number;
 };
 
-type SubjectOption = OptionShape<number>;
-type ThemeTreeNode = Require<SimpleDataNode<number, number>, 'rootPId'>;
+export type SubjectOption = OptionShape<number>;
 
-const mapSubjectsToOptions = ({id, name}: SubjectInfo): SubjectOption => ({
+export type ThemeTreeNode = Require<SimpleDataNode<number, number>, 'rootPId'>;
+
+export const mapSubjectsToOptions = ({
+  id,
+  name,
+}: SubjectInfo): SubjectOption => ({
   value: id,
   label: name,
 });
 
-const mapThemesToNodes = ({
+export const mapThemesToNodes = ({
   id,
   parentThemeId,
   subjectId,
@@ -78,6 +83,78 @@ const mapThemesToNodes = ({
   isLeaf: !hasSubThemes,
   title,
 });
+
+export function useThemeSelect(
+  subjects: SubjectInfo[],
+  onInputChange: InputChangeHandler<any, any>,
+  subjectId?: number,
+  parentThemeId?: number,
+) {
+  const {
+    themes,
+    error: errorLoadingRootThemes,
+    reload: reloadRootThemes,
+  } = useKnowledgeSubjectThemes(subjectId);
+  const {
+    theme: parentTheme,
+    error: errorLoadingParentTheme,
+    reload: reloadParentTheme,
+  } = useKnowledgeTheme(subjectId, parentThemeId);
+
+  const isLoading =
+    subjectId !== undefined &&
+    (!themes || (parentThemeId !== undefined && !parentTheme));
+
+  const {hasError, notFound} = useHandleErrors(
+    [errorLoadingRootThemes, errorLoadingParentTheme],
+    [reloadRootThemes, reloadParentTheme],
+  );
+
+  const subjectOptions = useMemo<SubjectOption[]>(
+    () => subjects.map(mapSubjectsToOptions),
+    [subjects],
+  );
+  const themeTreeNodes = useMemo<ThemeTreeNode[] | undefined>(() => {
+    let themesNodes = themes ? themes.map(mapThemesToNodes) : [];
+    const parentThemeNode = parentTheme ? mapThemesToNodes(parentTheme) : [];
+
+    themesNodes = _.uniqBy(_.concat(themesNodes, parentThemeNode), 'id');
+
+    return isLoading ? undefined : themesNodes;
+  }, [isLoading, parentTheme, themes]);
+
+  const fetchThemes = useKnowledgeLevelFetch();
+
+  const loadData = useCallback(
+    (treeNode: ThemeTreeNode): Promise<unknown> => {
+      const deferred = new Deferred();
+      const {rootPId: subjectId, id} = treeNode;
+
+      fetchThemes(subjectId, id, deferred.resolve, deferred.reject);
+
+      return deferred.promise;
+    },
+    [fetchThemes],
+  );
+
+  const onSubjectChange = useCallback(
+    (value: any, name: any) => {
+      onInputChange(value, name);
+      onInputChange(undefined, 'parentThemeId');
+    },
+    [onInputChange],
+  );
+
+  return {
+    hasError,
+    notFound,
+    isLoading,
+    subjectOptions,
+    themeTreeNodes,
+    loadData,
+    onSubjectChange,
+  };
+}
 
 const ThemeForm: React.FC<CourseFormProps> = (props) => {
   const {
@@ -151,59 +228,13 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
   );
 
   const {
-    themes,
-    error: errorLoadingRootThemes,
-    reload: reloadRootThemes,
-  } = useKnowledgeSubjectThemes(subjectId);
-  const {
-    theme: parentTheme,
-    error: errorLoadingParentTheme,
-    reload: reloadParentTheme,
-  } = useKnowledgeTheme(subjectId, parentThemeId);
-
-  const isLoading =
-    subjectId !== undefined &&
-    (!themes || (parentThemeId !== undefined && !parentTheme));
-
-  const {hasError} = useHandleErrors(
-    [errorLoadingRootThemes, errorLoadingParentTheme],
-    [reloadRootThemes, reloadParentTheme],
-  );
-
-  const subjectOptions = useMemo<SubjectOption[]>(
-    () => subjects.map(mapSubjectsToOptions),
-    [subjects],
-  );
-  const themeTreeNodes = useMemo<ThemeTreeNode[] | undefined>(() => {
-    let themesNodes = themes ? themes.map(mapThemesToNodes) : [];
-    const parentThemeNode = parentTheme ? mapThemesToNodes(parentTheme) : [];
-
-    themesNodes = _.uniqBy(_.concat(themesNodes, parentThemeNode), 'id');
-
-    return isLoading ? undefined : themesNodes;
-  }, [isLoading, parentTheme, themes]);
-
-  const fetchThemes = useKnowledgeLevelFetch();
-
-  const loadData = useCallback(
-    (treeNode: ThemeTreeNode): Promise<unknown> => {
-      const deferred = new Deferred();
-      const {rootPId: subjectId, id} = treeNode;
-
-      fetchThemes(subjectId, id, deferred.resolve, deferred.reject);
-
-      return deferred.promise;
-    },
-    [fetchThemes],
-  );
-
-  const onSubjectChange: typeof onInputChange = useCallback(
-    (value: any, name: any) => {
-      onInputChange(value, name);
-      onInputChange(undefined, 'parentThemeId');
-    },
-    [onInputChange],
-  );
+    hasError,
+    isLoading,
+    subjectOptions,
+    themeTreeNodes,
+    loadData,
+    onSubjectChange,
+  } = useThemeSelect(subjects, onInputChange, subjectId, parentThemeId);
 
   return (
     <Form<ThemeInfo>

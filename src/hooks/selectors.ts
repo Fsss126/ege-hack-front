@@ -1454,3 +1454,16 @@ export function useKnowledgeTheme(
     ? {error: theme, reload: reloadCallback}
     : {theme: !isAllowed ? false : theme, reload: reloadCallback};
 }
+
+export type RevokeKnowledgeTaskHookResult = (responseTheme: TaskInfo) => void;
+
+export function useRevokeKnowledgeTask(): RevokeKnowledgeTaskHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseTask: TaskInfo) => {
+      dispatch({type: ActionType.KNOWLEDGE_TASK_REVOKE, responseTask});
+    },
+    [dispatch],
+  );
+}

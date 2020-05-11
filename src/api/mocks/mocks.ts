@@ -37,7 +37,11 @@ function getDate(daysForward: number) {
 export const ACCOUNT_INFO: AccountInfo = {
   id: 154792439,
   roles: [AccountRole.PUPIL, AccountRole.TEACHER, AccountRole.ADMIN],
-  permissions: [Permission.HOMEWORK_CHECK, Permission.SUBJECT_EDIT],
+  permissions: [
+    Permission.HOMEWORK_CHECK,
+    Permission.SUBJECT_EDIT,
+    Permission.KNOWLEDGE_BASE_EDIT,
+  ],
   vk_info: {
     id: 154792439,
     first_name: 'Alexandra',

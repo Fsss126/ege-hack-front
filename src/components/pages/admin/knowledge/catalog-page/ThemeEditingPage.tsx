@@ -62,7 +62,7 @@ const ThemeEditingPage: React.FC<RouteComponentProps<ThemePageParams>> = (
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.COURSE_EDIT}
+      requiredPermissions={Permission.KNOWLEDGE_BASE_EDIT}
       className="course-form-page"
       title="Изменение темы"
       location={location}

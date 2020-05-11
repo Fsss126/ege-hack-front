@@ -44,7 +44,7 @@ const INITIAL_FORM_DATA: LessonFormData = {
   hometask_deadline: undefined,
 };
 
-function getVideoLinkIsValid(videoLink: string) {
+export function getVideoLinkIsValid(videoLink: string) {
   try {
     const url = new URL(videoLink);
 
@@ -54,7 +54,7 @@ function getVideoLinkIsValid(videoLink: string) {
   }
 }
 
-function getVideoId(videoLink: string) {
+export function getVideoId(videoLink: string) {
   return videoLink.split('/').pop() as string;
 }
 
