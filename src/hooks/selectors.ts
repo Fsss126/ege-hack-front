@@ -1401,19 +1401,6 @@ export function useKnowledgeSubjectThemes(
       };
 }
 
-export type RevokeKnowledgeThemeHookResult = (responseTheme: ThemeInfo) => void;
-
-export function useRevokeKnowledgeTheme(): RevokeKnowledgeThemeHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseTheme: ThemeInfo) => {
-      dispatch({type: ActionType.KNOWLEDGE_THEME_REVOKE, responseTheme});
-    },
-    [dispatch],
-  );
-}
-
 export type KnowledgeThemeHookResult = {
   theme?: ThemeInfo | false;
   error?: AxiosError;
@@ -1455,7 +1442,61 @@ export function useKnowledgeTheme(
     : {theme: !isAllowed ? false : theme, reload: reloadCallback};
 }
 
-export type RevokeKnowledgeTaskHookResult = (responseTheme: TaskInfo) => void;
+export type RevokeKnowledgeThemeHookResult = (responseTheme: ThemeInfo) => void;
+
+export function useRevokeKnowledgeTheme(): RevokeKnowledgeThemeHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseTheme: ThemeInfo) => {
+      dispatch({type: ActionType.KNOWLEDGE_THEME_REVOKE, responseTheme});
+    },
+    [dispatch],
+  );
+}
+
+export type KnowledgeTaskHookResult = {
+  task?: TaskInfo | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useKnowledgeTask(
+  subjectId?: number,
+  taskId?: number,
+): KnowledgeTaskHookResult {
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
+  const tasks = useSelector(selectKnowledgeTasks);
+  const task = taskId ? tasks[taskId] : undefined;
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(
+    (subjectId: number, taskId: number) => {
+      dispatch({type: ActionType.KNOWLEDGE_TASK_FETCH, subjectId, taskId});
+    },
+    [dispatch],
+  );
+  useEffect(() => {
+    if (isAllowed) {
+      if (subjectId !== undefined && taskId !== undefined && !task) {
+        dispatchFetchAction(subjectId, taskId);
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, subjectId, task, taskId]);
+
+  const reloadCallback = useMemo(
+    () =>
+      subjectId !== undefined && taskId !== undefined
+        ? () => dispatchFetchAction(subjectId, taskId)
+        : undefined,
+    [dispatchFetchAction, subjectId, taskId],
+  );
+
+  return task instanceof Error
+    ? {error: task, reload: reloadCallback}
+    : {task: !isAllowed ? false : task, reload: reloadCallback};
+}
+
+export type RevokeKnowledgeTaskHookResult = (responseTask: TaskInfo) => void;
 
 export function useRevokeKnowledgeTask(): RevokeKnowledgeTaskHookResult {
   const dispatch = useDispatch();

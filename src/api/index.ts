@@ -21,9 +21,7 @@ import {
   LessonInfo,
   PersonWebinar,
   TeacherInfo,
-  TestInfo,
   TestStateAnswerInfo,
-  TestStateInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
@@ -36,8 +34,10 @@ import {mockRequests} from './mocks';
 import {
   transformCourse,
   transformHomework,
+  transformKnowledgeLevel,
   transformLesson,
   transformSubject,
+  transformTask,
   transformTest,
   transformTestState,
   transformUser,
@@ -219,10 +219,18 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
         } as TestStateAnswerInfo;
       case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
       case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname): {
-        return transformTestState(data) as TestStateInfo;
+        return transformTestState(data);
       }
       case /\/knowledge\/tests\/(.*)$/.test(url.pathname): {
-        return transformTest(data) as TestInfo;
+        return transformTest(data);
+      }
+      case /\/knowledge\/content/.test(url.pathname): {
+        return transformKnowledgeLevel(data);
+      }
+      case /\/knowledge\/tasks\/(.*)\/$/.test(url.pathname): {
+        if (config.method !== 'delete') {
+          return transformTask(data);
+        }
       }
       default:
         return response.data;

@@ -155,6 +155,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
         const {
           image_link,
           id,
+          order,
           weight,
           complexity,
           answer: {value, videoSolution, textSolution, ...answer},
@@ -278,9 +279,8 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
             loadData={loadData as any}
             disabled={themeTreeNodes === undefined}
           />
-          <Input.Input
+          <Input.TextArea
             name="text"
-            type="text"
             required
             placeholder="Текст задания"
             value={text}

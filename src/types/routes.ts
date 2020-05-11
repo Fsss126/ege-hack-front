@@ -34,3 +34,7 @@ export interface TestTaskPageParams extends TestPageParams {
 export interface ThemePageParams extends SubjectPageParams {
   themeId: string;
 }
+
+export interface TaskPageParams extends SubjectPageParams {
+  taskId: string;
+}

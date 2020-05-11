@@ -4,6 +4,7 @@ import pic from 'img/dummy-pic.jpg';
 import _ from 'lodash';
 import {LoremIpsum} from 'lorem-ipsum';
 import {
+  TaskDtoResp,
   TestDtoResp,
   TestStateDtoResp,
   TestStatus,
@@ -183,14 +184,14 @@ export const WEBINAR_SCHEDULE: PersonWebinar[] = COURSES.slice(0, 3).map(
   }),
 );
 
-const TEST_TASKS = [
+export const TEST_TASKS: TaskDtoResp[] = [
   {
     id: 0,
     image_link: '/files/938f8e5f-8819-11ea-808a-072fece60c1f',
     text:
       'Два велосипедиста совершают кольцевую гонку с одинаковой угловой скоростью. Положения и траектории движения велосипедистов показаны на рисунке. Чему равно отношение линейных скоростей велосипедистов?',
-    subjectId: 0,
-    themeId: 0,
+    subjectId: 1,
+    themeId: 10,
     order: 0,
     weight: 1,
     complexity: 5,
@@ -203,8 +204,8 @@ const TEST_TASKS = [
     id: 1,
     text:
       'Верхнюю точку моста радиусом 100 м автомобиль проходит со скоростью 20 м/с. Чему равно центростремительное ускорение автомобиля? (Ответ дайте в метрах в секунду в квадрате.)',
-    subjectId: 0,
-    themeId: 0,
+    subjectId: 1,
+    themeId: 1,
     order: 1,
     weight: 1,
     answer: {
@@ -217,8 +218,8 @@ const TEST_TASKS = [
     image_link: '/files/e09c97c1-8819-11ea-808a-072fece60c1f',
     text:
       'В схеме на рисунке сопротивление резистора и полное сопротивление реостата равны R, ЭДС батарейки равна Е, её внутреннее сопротивление ничтожно (). Как ведут себя (увеличиваются, уменьшаются, остаются постоянными) показания идеального вольтметра при перемещении движка реостата из крайнего верхнего в крайнее нижнее положение? Ответ поясните, указав, какие физические закономерности Вы использовали для объяснения.',
-    subjectId: 0,
-    themeId: 0,
+    subjectId: 1,
+    themeId: 1,
     order: 2,
     weight: 1,
     complexity: 10,

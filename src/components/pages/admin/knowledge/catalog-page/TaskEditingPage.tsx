@@ -1,32 +1,32 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useAdminCourse, useSubjects, useUserTeachers} from 'hooks/selectors';
+import {useKnowledgeTask, useSubjects} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
-import {CourseDtoReq} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {TaskDtoReq} from 'types/dtos';
+import {TaskInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {CoursePageParams} from 'types/routes';
+import {TaskPageParams} from 'types/routes';
 
-import CourseForm from '../../courses/catalog-page/CourseForm';
 import TaskForm from './TaskForm';
 
-const TaskEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
+const TaskEditingPage: React.FC<RouteComponentProps<TaskPageParams>> = (
   props,
 ) => {
   const {
     match: {
-      params: {courseId: param_course},
+      params: {subjectId: param_subject, taskId: param_task},
     },
     location,
   } = props;
-  const courseId = parseInt(param_course);
+  const subjectId = param_subject ? parseInt(param_subject) : undefined;
+  const taskId = param_task ? parseInt(param_task) : undefined;
 
   const createRequest = React.useCallback(
-    (requestData: CourseDtoReq): Promise<CourseInfo> =>
-      APIRequest.put(`/courses/${courseId}`, requestData),
-    [courseId],
+    (requestData: TaskDtoReq): Promise<TaskInfo> =>
+      APIRequest.put(`/knowledge/tasks/${taskId}`, requestData),
+    [taskId],
   );
 
   const {
@@ -34,18 +34,12 @@ const TaskEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     error: errorLoadingSubjects,
     reload: reloadSubjects,
   } = useSubjects();
-  const {
-    teachers,
-    error: errorLoadingTeachers,
-    reload: reloadTeachers,
-  } = useUserTeachers();
-  const {
-    course,
-    error: errorLoadingCourses,
-    reload: reloadCourses,
-  } = useAdminCourse(courseId);
+  const {task, error: errorLoadingTask, reload: reloadTask} = useKnowledgeTask(
+    subjectId,
+    taskId,
+  );
 
-  const returnLink = `/admin/courses/${courseId}/`;
+  const returnLink = '/admin/knowledge/';
 
   const onSubmitted = useCallback(
     (response, showSuccessMessage) => {
@@ -54,7 +48,7 @@ const TaskEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
           text: 'Ок',
         },
         {
-          text: 'Вернуться к курсу',
+          text: 'Вернуться к базе знаний',
           url: returnLink,
         },
       ]);
@@ -62,26 +56,25 @@ const TaskEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     [returnLink],
   );
 
-  const isLoaded = !!(teachers && subjects && course);
+  const isLoaded = !!(task && subjects);
 
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.COURSE_EDIT}
-      className="course-form-page"
-      title="Изменение курса"
+      requiredPermissions={Permission.KNOWLEDGE_BASE_EDIT}
+      className="task-form-page"
+      title="Изменение задания"
       location={location}
-      errors={[errorLoadingSubjects, errorLoadingTeachers, errorLoadingCourses]}
-      reloadCallbacks={[reloadSubjects, reloadTeachers, reloadCourses]}
+      errors={[errorLoadingSubjects, errorLoadingTask]}
+      reloadCallbacks={[reloadSubjects, reloadTask]}
     >
-      {isLoaded && (
+      {!!(task && subjects) && (
         <PageContent>
           <ContentBlock>
-            <CourseForm
-              course={course as CourseInfo}
-              subjects={subjects as SubjectInfo[]}
-              teachers={teachers as TeacherInfo[]}
-              title="Изменение курса"
+            <TaskForm
+              task={task}
+              subjects={subjects}
+              title="Новое задание"
               errorMessage="Ошибка при сохранении изменений"
               cancelLink={returnLink}
               createRequest={createRequest}

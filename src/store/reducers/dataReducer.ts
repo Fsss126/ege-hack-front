@@ -666,6 +666,17 @@ export const dataReducer: Reducer<DataState, Action> = (
       }
       return _.cloneDeep(_.merge(state, stateUpdate));
     }
+    case ActionType.KNOWLEDGE_THEME_FETCHED: {
+      const {themeId, theme} = action;
+
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          [themeId]: theme,
+        },
+      };
+    }
     case ActionType.KNOWLEDGE_THEME_REVOKE: {
       const {responseTheme} = action;
       const {subjectId, id, parentThemeId} = responseTheme;
@@ -690,7 +701,7 @@ export const dataReducer: Reducer<DataState, Action> = (
             return _.indexOf(objValue, id) < 0
               ? objValue.concat(srcValue)
               : objValue;
-          } else if (key === 'themeIds') {
+          } else if (key === 'taskIds') {
             return objValue.concat(srcValue);
           }
         }
@@ -698,16 +709,48 @@ export const dataReducer: Reducer<DataState, Action> = (
 
       return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
     }
-    case ActionType.KNOWLEDGE_THEME_FETCHED: {
-      const {themeId, theme} = action;
+    case ActionType.KNOWLEDGE_TASK_FETCHED: {
+      const {taskId, task} = action;
 
       return {
         ...state,
-        themes: {
-          ...state.themes,
-          [themeId]: theme,
+        tasks: {
+          ...state.tasks,
+          [taskId]: task,
         },
       };
+    }
+    case ActionType.KNOWLEDGE_TASK_REVOKE: {
+      const {responseTask} = action;
+      const {subjectId, id, themeId} = responseTask;
+
+      const themeKey = themeId !== undefined ? themeId : 'root';
+
+      const stateUpdate: Partial<DataState> = {
+        tasks: {[id]: responseTask},
+        knowledgeTree: {
+          [subjectId]: {
+            [themeKey]: {
+              themeIds: [],
+              taskIds: [id],
+            },
+          },
+        },
+      };
+
+      const customizer = (objValue: any, srcValue: any, key: string) => {
+        if (_.isArray(objValue)) {
+          if (key === 'taskIds') {
+            return _.indexOf(objValue, id) < 0
+              ? objValue.concat(srcValue)
+              : objValue;
+          } else if (key === 'themeIds') {
+            return objValue.concat(srcValue);
+          }
+        }
+      };
+
+      return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
     }
     default:
       return state;

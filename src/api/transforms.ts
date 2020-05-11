@@ -7,6 +7,7 @@ import {
   CourseDtoResp,
   FileInfo,
   HomeworkDtoResp,
+  KnowledgeLevelDtoResponse,
   LessonDtoResp,
   SubjectDtoResp,
   TestDtoResp,
@@ -19,8 +20,10 @@ import {
   CorrectAnswerInfo,
   CourseInfo,
   HomeworkInfo,
+  KnowledgeLevelInfo,
   LessonInfo,
   SubjectInfo,
+  TaskInfo,
   TestInfo,
   TestStateInfo,
   TestStatusInfo,
@@ -147,22 +150,19 @@ export const transformCorrectAnswer = (
   };
 };
 
+export const transformTask = ({image_link, answer, ...rest}: TaskInfo) => ({
+  ...rest,
+  image_link: image_link ? getImageLink(image_link) : image_link,
+  answer: transformCorrectAnswer(answer),
+});
+
 export const transformTest = ({
   deadline,
   tasks,
   ...rest
 }: TestDtoResp): TestInfo => ({
   deadline: deadline ? new Date(deadline) : undefined,
-  tasks: _.sortBy(tasks, 'order').map((task, i) => {
-    const {image_link, answer} = task;
-
-    return {
-      ...task,
-      order: i,
-      image_link: image_link ? getImageLink(image_link) : image_link,
-      answer: transformCorrectAnswer(answer),
-    };
-  }),
+  tasks: tasks.map((task) => transformTask(task)),
   ...rest,
 });
 
@@ -203,4 +203,12 @@ export const transformTestState = ({
   last_task_id: last_task_id || 0,
   progress: progress || 0,
   status: status as any,
+});
+
+export const transformKnowledgeLevel = ({
+  tasks,
+  ...rest
+}: KnowledgeLevelDtoResponse): KnowledgeLevelInfo => ({
+  ...rest,
+  tasks: tasks.map((task) => transformTask(task)),
 });

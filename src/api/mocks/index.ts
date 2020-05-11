@@ -12,6 +12,7 @@ import {
   TEST_STATE_NOT_STARTED,
   TEST_STATUS_COMPLETED,
   TEST_STATUS_NOT_STARTED,
+  TEST_TASKS,
   THEMES,
   WEBINAR_SCHEDULE,
 } from 'api/mocks/mocks';
@@ -178,7 +179,7 @@ export const mockTestsRequests = (api: AxiosInstance) => {
           };
 
           return getMockedResponse(config, content);
-        case /\/knowledge\/theme\/(.*)\/$/.test(url.pathname):
+        case /\/knowledge\/theme\/(.*)\/$/.test(url.pathname): {
           const id = Number(
             /\/knowledge\/theme\/(.*)\/$/.exec(url.pathname)?.[1],
           );
@@ -187,6 +188,17 @@ export const mockTestsRequests = (api: AxiosInstance) => {
             ...THEMES[0],
             id,
           });
+        }
+        case /\/knowledge\/tasks\/(.*)\/$/.test(url.pathname): {
+          const id = Number(
+            /\/knowledge\/tasks\/(.*)\/$/.exec(url.pathname)?.[1],
+          );
+
+          return getMockedResponse(config, {
+            ...TEST_TASKS[0],
+            id,
+          });
+        }
         default:
           throw error;
       }
