@@ -141,6 +141,7 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     placeholder,
     withContainer,
     required,
+    loading,
     ...rest
   } = props;
 
@@ -185,9 +186,9 @@ const TreeSelect = <V extends Key, T extends Key = V>(
 
   const formattedPlaceholder = getPlaceholder(placeholder, required);
 
-  const loadingPlaceholder = value !== undefined && treeData === undefined && (
-    <div className="spinner-border" />
-  );
+  const hasData = value === undefined || treeData !== undefined;
+
+  const loadingPlaceholder = <div className="spinner-border" />;
 
   const input = (
     <div className="ant-select-container" ref={elementRef}>
@@ -209,10 +210,11 @@ const TreeSelect = <V extends Key, T extends Key = V>(
         treeDataSimpleMode={treeDataSimpleMode}
         notFoundContent={noDataPlaceholder}
         treeNodeFilterProp="title"
-        value={loadingPlaceholder ? undefined : value}
+        value={loading || !hasData ? undefined : value}
         loadData={loadData as any}
+        loading={loading}
         placeholder={
-          loadingPlaceholder
+          loading
             ? loadingPlaceholder
             : withContainer
             ? 'Не выбрано'

@@ -1,4 +1,5 @@
 /* eslint-disable  no-restricted-globals */
+import {useHandleErrors} from 'components/layout/Page';
 import Form, {
   ErrorHandler,
   FormProps,
@@ -14,6 +15,7 @@ import {SimpleDataNode} from 'components/ui/input/TreeSelect';
 import {
   useKnowledgeLevelFetch,
   useKnowledgeSubjectThemes,
+  useKnowledgeTheme,
   useRevokeKnowledgeTheme,
 } from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
@@ -56,6 +58,26 @@ export type CourseFormProps = {
 
 type SubjectOption = OptionShape<number>;
 type ThemeTreeNode = Require<SimpleDataNode<number, number>, 'rootPId'>;
+
+const mapSubjectsToOptions = ({id, name}: SubjectInfo): SubjectOption => ({
+  value: id,
+  label: name,
+});
+
+const mapThemesToNodes = ({
+  id,
+  parentThemeId,
+  subjectId,
+  hasSubThemes,
+  title,
+}: ThemeInfo): ThemeTreeNode => ({
+  id,
+  value: id,
+  pId: parentThemeId,
+  rootPId: subjectId,
+  isLeaf: !hasSubThemes,
+  title,
+});
 
 const ThemeForm: React.FC<CourseFormProps> = (props) => {
   const {
@@ -133,25 +155,33 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
     error: errorLoadingRootThemes,
     reload: reloadRootThemes,
   } = useKnowledgeSubjectThemes(subjectId);
+  const {
+    theme: parentTheme,
+    error: errorLoadingParentTheme,
+    reload: reloadParentTheme,
+  } = useKnowledgeTheme(subjectId, parentThemeId);
+
+  const isLoading =
+    subjectId !== undefined &&
+    (!themes || (parentThemeId !== undefined && !parentTheme));
+
+  const {hasError} = useHandleErrors(
+    [errorLoadingRootThemes, errorLoadingParentTheme],
+    [reloadRootThemes, reloadParentTheme],
+  );
 
   const subjectOptions = useMemo<SubjectOption[]>(
-    () => subjects.map(({id, name}) => ({value: id, label: name})),
+    () => subjects.map(mapSubjectsToOptions),
     [subjects],
   );
-  const themeTreeNodes = useMemo<ThemeTreeNode[] | undefined>(
-    () =>
-      themes
-        ? themes.map(({id, parentThemeId, subjectId, hasSubThemes, title}) => ({
-            id,
-            value: id,
-            pId: parentThemeId,
-            rootPId: subjectId,
-            isLeaf: !hasSubThemes,
-            title,
-          }))
-        : undefined,
-    [themes],
-  );
+  const themeTreeNodes = useMemo<ThemeTreeNode[] | undefined>(() => {
+    let themesNodes = themes ? themes.map(mapThemesToNodes) : [];
+    const parentThemeNode = parentTheme ? mapThemesToNodes(parentTheme) : [];
+
+    themesNodes = _.uniqBy(_.concat(themesNodes, parentThemeNode), 'id');
+
+    return isLoading ? undefined : themesNodes;
+  }, [isLoading, parentTheme, themes]);
 
   const fetchThemes = useKnowledgeLevelFetch();
 
@@ -207,6 +237,7 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             treeDataSimpleMode
             treeData={themeTreeNodes}
             allowClear
+            loading={isLoading && !hasError}
             loadData={loadData as any}
             disabled={themeTreeNodes === undefined}
           />

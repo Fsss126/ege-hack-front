@@ -121,6 +121,88 @@ enum LayoutAnimationClassNames {
   exitActive = 'sidebar-hiding',
 }
 
+export function useHandleErrors(
+  errors: any[],
+  reloadCallbacks: Maybe<SimpleCallback>[],
+) {
+  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+
+  const [hasError, setHasError] = useState(
+    errors.some((error) => !!error && error !== true),
+  );
+  const [notFound, setNotFound] = useState(
+    errors.some((error) => error === true),
+  );
+
+  if (errors.length !== reloadCallbacks.length) {
+    throw new Error('Wrong errors or reloadCallbacks props provided.');
+  }
+
+  useEffect(() => {
+    for (const error of errors) {
+      if (error === true) {
+        setNotFound(true);
+        return;
+      }
+    }
+
+    for (const error of errors) {
+      if (error) {
+        setHasError(true);
+        break;
+      }
+    }
+  }, [errors]);
+
+  const errorsRef = useRef<any[]>(errors);
+  const reloadCallbacksRef = useRef<Maybe<SimpleCallback>[]>(reloadCallbacks);
+  const snackbarKeyRef = useRef<SnackbarKey>();
+
+  errorsRef.current = errors;
+  reloadCallbacksRef.current = reloadCallbacks;
+
+  useEffect(() => {
+    if (hasError) {
+      // eslint-disable-next-line prefer-const
+      let snackbarKey: SnackbarKey;
+
+      const reloadCallback = () => {
+        const reloadCallbacks = reloadCallbacksRef.current;
+        const errors = errorsRef.current;
+
+        setHasError(false);
+        closeSnackbar(snackbarKey);
+
+        for (const [i, callback] of reloadCallbacks.entries()) {
+          if (errors[i] && callback) {
+            callback();
+          }
+        }
+      };
+
+      snackbarKey = enqueueSnackbar('Ошибка при загрузке', {
+        persist: true,
+        key: new Date().getTime(),
+        variant: 'error',
+        preventDuplicate: true,
+        action: <i className="icon-reload" onClick={reloadCallback} />,
+      });
+      snackbarKeyRef.current = snackbarKey;
+    }
+  }, [closeSnackbar, enqueueSnackbar, hasError]);
+
+  useEffect(() => {
+    return () => {
+      closeSnackbar(snackbarKeyRef.current);
+    };
+  }, [closeSnackbar]);
+
+  return {
+    hasError,
+    notFound,
+  };
+}
+
 export type PageProps = {
   title?: string;
   className?: string;
@@ -135,7 +217,7 @@ export type PageProps = {
   loadUserInfo: boolean;
   isLoaded: boolean;
   errors?: any[];
-  reloadCallbacks?: SimpleCallback[];
+  reloadCallbacks?: Maybe<SimpleCallback>[];
   withShimmer?: boolean;
   notFoundPageProps?: Omit<SpecificErrorPageProps, 'location'>;
 } & Pick<RouteComponentProps, 'location'>;
@@ -176,83 +258,13 @@ const Page = (props: PageProps) => {
   const errors = [errorLoadingUserInfo, ...(passedErrors || [])];
   const reloadCallbacks = [reloadUserInfo, ...(passedErrorCallbacks || [])];
 
-  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-
-  const [hasError, setHasError] = useState(
-    errors.some((error) => !!error && error !== true),
-  );
-  const [notFound, setNotFound] = useState(
-    errors.some((error) => error === true),
-  );
+  const {hasError, notFound} = useHandleErrors(errors, reloadCallbacks);
 
   const loadingState = useLoadingState(
     !isLoaded && !hasError,
     isLoaded,
     hasError,
   );
-
-  if (errors.length !== reloadCallbacks.length) {
-    throw new Error('Wrong errors or reloadCallbacks props provided.');
-  }
-
-  useEffect(() => {
-    for (const error of errors) {
-      if (error === true) {
-        setNotFound(true);
-        return;
-      }
-    }
-
-    for (const error of errors) {
-      if (error) {
-        setHasError(true);
-        break;
-      }
-    }
-  }, [errors]);
-
-  const errorsRef = useRef<any[]>(errors);
-  const reloadCallbacksRef = useRef<SimpleCallback[]>(reloadCallbacks);
-  const snackbarKeyRef = useRef<SnackbarKey>();
-
-  errorsRef.current = errors;
-  reloadCallbacksRef.current = reloadCallbacks;
-
-  useEffect(() => {
-    if (hasError) {
-      // eslint-disable-next-line prefer-const
-      let snackbarKey: SnackbarKey;
-
-      const reloadCallback = () => {
-        const reloadCallbacks = reloadCallbacksRef.current;
-        const errors = errorsRef.current;
-
-        setHasError(false);
-        closeSnackbar(snackbarKey);
-
-        for (const [i, callback] of reloadCallbacks.entries()) {
-          if (errors[i]) {
-            callback();
-          }
-        }
-      };
-
-      snackbarKey = enqueueSnackbar('Ошибка при загрузке', {
-        persist: true,
-        key: new Date().getTime(),
-        variant: 'error',
-        preventDuplicate: true,
-        action: <i className="icon-reload" onClick={reloadCallback} />,
-      });
-      snackbarKeyRef.current = snackbarKey;
-    }
-  }, [closeSnackbar, enqueueSnackbar, hasError]);
-
-  useEffect(() => {
-    return () => {
-      closeSnackbar(snackbarKeyRef.current);
-    };
-  }, [closeSnackbar]);
 
   if (checkLogin) {
     if (!credentials) {

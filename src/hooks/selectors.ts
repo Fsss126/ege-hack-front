@@ -1386,7 +1386,10 @@ export function useKnowledgeSubjectThemes(
   }, [knowledgeBaseSubject, themes]);
 
   const reloadCallback = useMemo(
-    () => (subjectId ? () => dispatchFetchAction(subjectId) : undefined),
+    () =>
+      subjectId !== undefined
+        ? () => dispatchFetchAction(subjectId)
+        : undefined,
     [dispatchFetchAction, subjectId],
   );
 
@@ -1414,27 +1417,40 @@ export function useRevokeKnowledgeTheme(): RevokeKnowledgeThemeHookResult {
 export type KnowledgeThemeHookResult = {
   theme?: ThemeInfo | false;
   error?: AxiosError;
-  reload: SimpleCallback;
+  reload?: SimpleCallback;
 };
 
 export function useKnowledgeTheme(
-  subjectId: number,
-  themeId: number,
+  subjectId?: number,
+  themeId?: number,
 ): KnowledgeThemeHookResult {
   const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
-  const theme = useSelector(selectKnowledgeThemes)[themeId];
+  const themes = useSelector(selectKnowledgeThemes);
+  const theme = themeId ? themes[themeId] : undefined;
   const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.KNOWLEDGE_THEME_FETCH, subjectId, themeId});
-  }, [dispatch, subjectId, themeId]);
+  const dispatchFetchAction = useCallback(
+    (subjectId: number, themeId: number) => {
+      dispatch({type: ActionType.KNOWLEDGE_THEME_FETCH, subjectId, themeId});
+    },
+    [dispatch],
+  );
   useEffect(() => {
     if (isAllowed) {
-      if (!theme) {
-        dispatchFetchAction();
+      if (subjectId !== undefined && themeId !== undefined && !theme) {
+        dispatchFetchAction(subjectId, themeId);
       }
     }
-  }, [dispatchFetchAction, isAllowed, theme]);
+  }, [dispatchFetchAction, isAllowed, subjectId, theme, themeId]);
+
+  const reloadCallback = useMemo(
+    () =>
+      subjectId !== undefined && themeId !== undefined
+        ? () => dispatchFetchAction(subjectId, themeId)
+        : undefined,
+    [dispatchFetchAction, subjectId, themeId],
+  );
+
   return theme instanceof Error
-    ? {error: theme, reload: dispatchFetchAction}
-    : {theme: !isAllowed ? false : theme, reload: dispatchFetchAction};
+    ? {error: theme, reload: reloadCallback}
+    : {theme: !isAllowed ? false : theme, reload: reloadCallback};
 }
