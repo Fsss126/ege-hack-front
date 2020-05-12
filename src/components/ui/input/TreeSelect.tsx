@@ -16,6 +16,7 @@ interface CommonDataNode<V extends Key> {
   disabled?: boolean;
   disableCheckbox?: boolean;
   checkable?: boolean;
+  selectable?: boolean;
   value: V;
   [key: string]: any;
 }

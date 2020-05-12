@@ -12,7 +12,7 @@ import {ThemePageParams} from 'types/routes';
 import TaskForm from './TaskForm';
 
 const createRequest = (requestData: TaskDtoReq): Promise<TaskInfo> =>
-  APIRequest.post('/knowledge/tasks', requestData) as Promise<TaskInfo>;
+  APIRequest.post('/knowledge/content/tasks', requestData) as Promise<TaskInfo>;
 
 const returnLink = '/admin/knowledge/';
 

@@ -232,8 +232,15 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
     subjectOptions,
     themeTreeNodes,
     loadData,
-    onSubjectChange,
-  } = useThemeSelect(subjects, onInputChange, subjectId, themeId);
+  } = useThemeSelect(subjects, subjectId, themeId);
+
+  const onSubjectChange = useCallback(
+    (value: any, name: any) => {
+      onInputChange(value, name);
+      onInputChange(undefined, 'themeId');
+    },
+    [onInputChange],
+  );
 
   const onTypeChange = useCallback(
     (value: any, name: any) => {

@@ -25,7 +25,7 @@ const ThemeEditingPage: React.FC<RouteComponentProps<ThemePageParams>> = (
 
   const createRequest = React.useCallback(
     (requestData: ThemeDtoReq): Promise<ThemeInfo> =>
-      APIRequest.put(`/knowledge/theme/${themeId}`, requestData),
+      APIRequest.put(`/knowledge/content/themes/${themeId}`, requestData),
     [themeId],
   );
 

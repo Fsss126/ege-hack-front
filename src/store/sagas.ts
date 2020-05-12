@@ -855,10 +855,12 @@ function* fetchKnowledgeLevel() {
           APIRequest.get,
           '/knowledge/content',
           {
-            params: {
-              subjectId,
-              themeId,
-            },
+            params: themeId
+              ? {
+                  subjectId,
+                  themeId,
+                }
+              : {subjectId},
           },
         );
         yield put({
@@ -897,7 +899,7 @@ function* fetchKnowledgeTheme() {
         try {
           const theme: ThemeInfo = yield call(
             APIRequest.get,
-            `/knowledge/theme/${themeId}/`,
+            `/knowledge/content/themes/${themeId}/`,
           );
           yield put({
             type: ActionType.KNOWLEDGE_THEME_FETCHED,
@@ -927,7 +929,7 @@ function* fetchKnowledgeTask() {
         try {
           const task: TaskInfo = yield call(
             APIRequest.get,
-            `/knowledge/tasks/${taskId}/`,
+            `/knowledge/content/tasks/${taskId}/`,
           );
           yield put({
             type: ActionType.KNOWLEDGE_TASK_FETCHED,

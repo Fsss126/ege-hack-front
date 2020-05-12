@@ -206,18 +206,18 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
         initialElementData={INITIAL_WEBINAR_DATA}
         renderElement={(
           {name, date_start, duration, description},
-          i,
+          {index},
         ): React.ReactElement => (
           <FormElement
             name="webinars"
-            index={i}
+            index={index}
             onChange={onInputChange}
-            key={i}
+            key={index}
           >
             <FieldsContainer className="row">
               <div className="col-12">
                 <Input.Input
-                  name={`webinars[${i}].name`}
+                  name={`webinars[${index}].name`}
                   type="text"
                   required
                   placeholder="Название"
@@ -227,7 +227,7 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
               </div>
               <div className="col-12">
                 <Input.TextArea
-                  name={`webinars[${i}].description`}
+                  name={`webinars[${index}].description`}
                   placeholder="Описание"
                   value={description}
                   onChange={onInputChange}
@@ -243,13 +243,13 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
                     disabledDays: {before: new Date()},
                     modifiers: {start: date_start, end: date_start},
                   }}
-                  name={`webinars[${i}].date_start`}
+                  name={`webinars[${index}].date_start`}
                   onChange={onInputChange}
                 />
               </div>
               <div className="col-12 col-md-6 col-lg">
                 <Input.TimeInput
-                  name={`webinars[${i}].date_start`}
+                  name={`webinars[${index}].date_start`}
                   required
                   disabled={!date_start}
                   placeholder="Время"
@@ -259,7 +259,7 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
               </div>
               <div className="col-12 col-md-6 col-lg d-flex align-items-center">
                 <Input.Input
-                  name={`webinars[${i}].duration`}
+                  name={`webinars[${index}].duration`}
                   type="number"
                   required
                   placeholder="Длительность"

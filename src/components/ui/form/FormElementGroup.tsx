@@ -39,27 +39,46 @@ FormElement.defaultProps = {
   deletable: true,
 };
 
-export type FormElementGroupProps<E> = {
+export type FormElementRenderProps<E, P extends object = {}> = P & {
+  index: number;
+  elements: E[];
+  onChange: InputChangeHandler<E>;
+};
+
+export type ElementComponentProps<E, P extends object = {}> = E &
+  FormElementRenderProps<E, P>;
+
+export type FormElementGroupProps<E, P extends object = {}> = {
   name: string;
   onChange: InputChangeHandler<E>;
   elements: E[];
-  renderElement: (element: E, i: number) => React.ReactElement;
   maxElements?: number;
+  renderProps: P;
   initialElementData: E;
   addBtnText: string;
-};
+} & (
+  | {
+      renderElement: (
+        element: E,
+        props: FormElementRenderProps<E, P>,
+      ) => React.ReactElement;
+    }
+  | {
+      elementComponent: React.ComponentType<ElementComponentProps<E, P>>;
+    }
+);
 
-export const FormElementGroup = <E extends {}>(
-  props: FormElementGroupProps<E>,
+export const FormElementGroup = <E extends {}, P extends object = {}>(
+  props: FormElementGroupProps<E, P>,
 ): React.ReactElement => {
   const {
     name,
     onChange,
     elements,
-    renderElement,
     maxElements,
     initialElementData,
     addBtnText,
+    renderProps,
   } = props;
   const elementsCount = elements.length;
   const onAdd = useCallback(() => {
@@ -68,9 +87,32 @@ export const FormElementGroup = <E extends {}>(
     }
   }, [name, elementsCount, initialElementData, onChange]);
 
+  let renderedElements;
+
+  if ('renderElement' in props) {
+    const {renderElement} = props;
+
+    renderedElements = elements.map((element, index) =>
+      renderElement(element, {...renderProps, index, elements, onChange}),
+    );
+  } else {
+    const {elementComponent: Element} = props;
+
+    renderedElements = elements.map((element, index) => (
+      <Element
+        {...element}
+        {...renderProps}
+        index={index}
+        elements={elements}
+        onChange={onChange}
+        key={index}
+      />
+    ));
+  }
+
   return (
     <div className="form-entities-group">
-      {elements.map((element, i) => renderElement(element, i))}
+      {renderedElements}
       <div className="form-entities-group__add-btn-container">
         <Button
           neutral
@@ -86,4 +128,5 @@ export const FormElementGroup = <E extends {}>(
 };
 FormElementGroup.defaultProps = {
   addBtnText: 'Добавить элемент',
+  renderProps: {},
 };

@@ -97,6 +97,11 @@ export enum ActionType {
   KNOWLEDGE_TASK_REVOKE = 'KNOWLEDGE_TASK_REVOKE',
   KNOWLEDGE_TASK_DELETE_REQUEST = 'KNOWLEDGE_TASK_DELETE_REQUEST',
   KNOWLEDGE_TASK_DELETE = 'KNOWLEDGE_TASK_DELETE',
+  KNOWLEDGE_TEST_FETCH = 'KNOWLEDGE_TEST_FETCH',
+  KNOWLEDGE_TEST_FETCHED = 'KNOWLEDGE_TEST_FETCHED',
+  KNOWLEDGE_TEST_REVOKE = 'KNOWLEDGE_TEST_REVOKE',
+  KNOWLEDGE_TEST_DELETE_REQUEST = 'KNOWLEDGE_TEST_DELETE_REQUEST',
+  KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
 
 interface Credentials {
@@ -649,6 +654,51 @@ export type KnowledgeTaskDeleteAction = {
   taskId: number;
 };
 
+export type KnowledgeTestFetchAction = {
+  type: ActionType.KNOWLEDGE_TEST_FETCH;
+  testId: number;
+};
+
+export type KnowledgeTestFetchedAction = {
+  type: ActionType.KNOWLEDGE_TEST_FETCHED;
+  testId: number;
+  test: TestInfo | AxiosError;
+};
+
+export type KnowledgeTestRevokeAction = {
+  type: ActionType.KNOWLEDGE_TEST_REVOKE;
+  courseId: number;
+  lessonId: number;
+  responseTest: TestInfo;
+};
+
+export type KnowledgeTestDeleteCallback = (
+  lessonId: number,
+  testId: number,
+) => void;
+
+export type KnowledgeTestDeleteErrorCallback = (
+  lessonId: number,
+  testId: number,
+  error: AxiosError,
+) => void;
+
+export type KnowledgeTestDeleteRequestAction = {
+  type: ActionType.KNOWLEDGE_TEST_DELETE_REQUEST;
+  courseId: number;
+  lessonId: number;
+  testId: number;
+  onDelete?: KnowledgeTestDeleteCallback;
+  onError?: KnowledgeTestDeleteErrorCallback;
+};
+
+export type KnowledgeTestDeleteAction = {
+  type: ActionType.KNOWLEDGE_TEST_DELETE;
+  courseId: number;
+  lessonId: number;
+  testId: number;
+};
+
 export type Action = {type: ActionType} & (
   | LoginAction
   | LoginRequestAction
@@ -725,4 +775,9 @@ export type Action = {type: ActionType} & (
   | KnowledgeTaskRevokeAction
   | KnowledgeTaskDeleteRequestAction
   | KnowledgeTaskDeleteAction
+  | KnowledgeTestFetchAction
+  | KnowledgeTestFetchedAction
+  | KnowledgeTestRevokeAction
+  | KnowledgeTestDeleteRequestAction
+  | KnowledgeTestDeleteAction
 );

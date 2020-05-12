@@ -25,7 +25,7 @@ const TaskEditingPage: React.FC<RouteComponentProps<TaskPageParams>> = (
 
   const createRequest = React.useCallback(
     (requestData: TaskDtoReq): Promise<TaskInfo> =>
-      APIRequest.put(`/knowledge/tasks/${taskId}`, requestData),
+      APIRequest.put(`/knowledge/content/tasks/${taskId}`, requestData),
     [taskId],
   );
 

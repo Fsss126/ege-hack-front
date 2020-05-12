@@ -262,11 +262,18 @@ export interface ThemeDtoResp extends ThemeDtoCommon {
   hasTasks: boolean;
 }
 
-export interface TestDtoResp {
-  id: number;
+interface TestDtoCommon {
   name: string;
   deadline?: number;
   percentage: number;
+}
+
+export interface TestDtoReq extends TestDtoCommon {
+  taskIds: number[];
+}
+
+export interface TestDtoResp extends TestDtoCommon {
+  id: number;
   tasks: TaskDtoResp[];
 }
 

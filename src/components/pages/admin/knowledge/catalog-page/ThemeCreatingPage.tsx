@@ -12,7 +12,9 @@ import {ThemePageParams} from 'types/routes';
 import ThemeForm from './ThemeForm';
 
 const createRequest = (requestData: ThemeDtoReq): Promise<ThemeInfo> =>
-  APIRequest.post('/knowledge/theme', requestData) as Promise<ThemeInfo>;
+  APIRequest.post('/knowledge/content/themes', requestData) as Promise<
+    ThemeInfo
+  >;
 
 const returnLink = '/admin/knowledge/';
 

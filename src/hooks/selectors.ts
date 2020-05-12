@@ -74,6 +74,7 @@ import {
   SubjectInfo,
   TaskInfo,
   TeacherInfo,
+  TestInfo,
   TestStateInfo,
   TestStatus,
   ThemeInfo,
@@ -82,7 +83,10 @@ import {
 import {AccountRole, Permission} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
 
-import {DataProperty} from '../store/reducers/dataReducer';
+import {
+  DataProperty,
+  KnowledgeBaseSubject,
+} from '../store/reducers/dataReducer';
 
 const useSelector = <TSelected>(
   selector: (state: AppState) => TSelected,
@@ -1184,6 +1188,27 @@ export function useTest(testId: number): TestHookResult {
     : {test, reload: dispatchFetchAction};
 }
 
+type RevokeRestHookResult = (responseTest: TestInfo) => void;
+
+export function useRevokeTest(
+  courseId: number,
+  lessonId: number,
+): RevokeRestHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseTest: TestInfo) => {
+      dispatch({
+        type: ActionType.KNOWLEDGE_TEST_REVOKE,
+        responseTest,
+        courseId,
+        lessonId,
+      });
+    },
+    [courseId, dispatch, lessonId],
+  );
+}
+
 export type TestTaskHookResult = {
   task?: SanitizedTaskInfo;
   error?: AxiosError | true;
@@ -1327,19 +1352,17 @@ export function useKnowledgeLevel(
       };
 }
 
-export type KnowledgeSubjectThemesHookResult = {
-  themes?: ThemeInfo[] | false;
+type KnowledgeSubjectContentHookResult = {
+  content?: KnowledgeBaseSubject | false;
   error?: AxiosError;
   reload?: SimpleCallback;
 };
-
-export function useKnowledgeSubjectThemes(
+function useKnowledgeSubjectContent(
   subjectId?: number,
-): KnowledgeSubjectThemesHookResult {
+): KnowledgeSubjectContentHookResult {
   const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
-  const themes = useSelector(selectKnowledgeThemes);
   const knowledgeTree = useSelector(selectKnowledgeTree);
-  const knowledgeBaseSubject = subjectId ? knowledgeTree[subjectId] : undefined;
+  const subjectContent = subjectId ? knowledgeTree[subjectId] : undefined;
   const knowledgeLevelFetch = useKnowledgeLevelFetch();
 
   const dispatchFetchAction = useCallback(
@@ -1351,25 +1374,59 @@ export function useKnowledgeSubjectThemes(
 
   useEffect(() => {
     if (isAllowed) {
-      if (
-        subjectId !== undefined &&
-        !(knowledgeBaseSubject && knowledgeBaseSubject.root)
-      ) {
+      if (subjectId !== undefined && !(subjectContent && subjectContent.root)) {
         dispatchFetchAction(subjectId);
       }
     }
-  }, [dispatchFetchAction, isAllowed, knowledgeBaseSubject, subjectId]);
+  }, [dispatchFetchAction, isAllowed, subjectContent, subjectId]);
+
+  const reload = useMemo(
+    () =>
+      subjectId !== undefined
+        ? () => dispatchFetchAction(subjectId)
+        : undefined,
+    [dispatchFetchAction, subjectId],
+  );
+
+  if (isAllowed === false) {
+    return {content: false};
+  }
+
+  if (!subjectContent || !subjectContent.root) {
+    return {content: undefined, reload};
+  }
+
+  if (subjectContent.root instanceof Error) {
+    return {error: subjectContent.root, reload};
+  }
+
+  return {content: subjectContent, reload};
+}
+
+export type KnowledgeSubjectThemesHookResult = {
+  themes?: ThemeInfo[] | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useKnowledgeSubjectThemes(
+  subjectId?: number,
+): KnowledgeSubjectThemesHookResult {
+  const {content: subjectContent, error, reload} = useKnowledgeSubjectContent(
+    subjectId,
+  );
+  const themes = useSelector(selectKnowledgeThemes);
 
   const subjectThemes = useMemo(() => {
-    if (!knowledgeBaseSubject || !knowledgeBaseSubject.root) {
+    if (subjectContent === false) {
+      return false;
+    }
+
+    if (!subjectContent || !subjectContent.root) {
       return undefined;
     }
 
-    if (knowledgeBaseSubject.root instanceof Error) {
-      return knowledgeBaseSubject.root;
-    }
-
-    return _(knowledgeBaseSubject)
+    return _(subjectContent)
       .map((level) => {
         if (!level || level instanceof Error) {
           return [];
@@ -1383,21 +1440,60 @@ export function useKnowledgeSubjectThemes(
       })
       .flatten()
       .value();
-  }, [knowledgeBaseSubject, themes]);
+  }, [subjectContent, themes]);
 
-  const reloadCallback = useMemo(
-    () =>
-      subjectId !== undefined
-        ? () => dispatchFetchAction(subjectId)
-        : undefined,
-    [dispatchFetchAction, subjectId],
-  );
-
-  return subjectThemes instanceof Error
-    ? {error: subjectThemes, reload: reloadCallback}
+  return error
+    ? {error, reload}
     : {
-        themes: !isAllowed ? false : subjectThemes,
-        reload: reloadCallback,
+        themes: subjectThemes,
+        reload,
+      };
+}
+
+export type KnowledgeSubjectTasksHookResult = {
+  tasks?: TaskInfo[] | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useKnowledgeSubjectTasks(
+  subjectId?: number,
+): KnowledgeSubjectTasksHookResult {
+  const {content: subjectContent, error, reload} = useKnowledgeSubjectContent(
+    subjectId,
+  );
+  const tasks = useSelector(selectKnowledgeTasks);
+
+  const subjectTasks = useMemo(() => {
+    if (subjectContent === false) {
+      return false;
+    }
+
+    if (!subjectContent || !subjectContent.root) {
+      return undefined;
+    }
+
+    return _(subjectContent)
+      .map((level) => {
+        if (!level || level instanceof Error) {
+          return [];
+        }
+
+        return level.taskIds
+          .map((taskId) => tasks[taskId])
+          .filter<TaskInfo>(
+            (task): task is TaskInfo => !!task && !(task instanceof Error),
+          );
+      })
+      .flatten()
+      .value();
+  }, [subjectContent, tasks]);
+
+  return error
+    ? {error, reload}
+    : {
+        tasks: subjectTasks,
+        reload,
       };
 }
 

@@ -13,6 +13,7 @@ import {
   SubjectInfo,
   TaskInfo,
   TeacherInfo,
+  TestInfo,
   ThemeInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
@@ -45,6 +46,9 @@ export interface DataState {
     };
   };
   users: Record<AccountRole, DataProperty<AccountInfo[]>>;
+  // TODO: normalize
+  // courseLessons: {[courseId: number]: DataProperty<number[]>};
+  // lessons: {[lessonId: number]: LessonInfo};
   lessons: {[courseId: number]: DataProperty<LessonInfo[]>};
   webinars: {
     [courseId: number]: DataProperty<PersonWebinar[]>;
@@ -65,6 +69,9 @@ export interface DataState {
   };
   knowledgeTree: {
     [subjectId: number]: KnowledgeBaseSubject;
+  };
+  tests: {
+    [testId: number]: DataProperty<TestInfo>;
   };
 }
 
@@ -93,6 +100,7 @@ const defaultState: DataState = {
   themes: {},
   tasks: {},
   knowledgeTree: {},
+  tests: {},
 };
 
 export const dataReducer: Reducer<DataState, Action> = (
@@ -751,6 +759,82 @@ export const dataReducer: Reducer<DataState, Action> = (
       };
 
       return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
+    }
+    case ActionType.KNOWLEDGE_TEST_FETCH: {
+      const {testId} = action;
+
+      return {
+        ...state,
+        tests: {
+          ...state.tests,
+          [testId]: undefined,
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_TEST_FETCHED: {
+      const {testId, test} = action;
+
+      return {
+        ...state,
+        tests: {
+          ...state.tests,
+          [testId]: test,
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_TEST_REVOKE: {
+      const {lessonId, courseId, responseTest} = action;
+      const {id: testId} = responseTest;
+      const {
+        lessons: {[courseId]: courseLessons, ...loadedLessons},
+      } = state;
+
+      const tests = {...state.tests, [testId]: responseTest};
+
+      if (!courseLessons || courseLessons instanceof Error) {
+        return {...state, tests};
+      }
+
+      const lessonIndex = _.findIndex(courseLessons, {id: lessonId});
+      const newLessons = [...courseLessons];
+
+      if (lessonIndex !== -1) {
+        const prevLesson = courseLessons[lessonIndex];
+        // TODO: change
+        newLessons[lessonIndex] = {...prevLesson, test: responseTest.id as any};
+      }
+
+      return {
+        ...state,
+        lessons: {...loadedLessons, [courseId]: newLessons},
+        tests,
+      };
+    }
+    case ActionType.KNOWLEDGE_TEST_DELETE: {
+      const {courseId, lessonId, testId} = action;
+      const {
+        lessons: {[courseId]: courseLessons, ...loadedLessons},
+      } = state;
+
+      const tests = {...state.tests, [testId]: undefined};
+
+      if (!courseLessons || courseLessons instanceof Error) {
+        return {...state, tests};
+      }
+
+      const lessonIndex = _.findIndex(courseLessons, {id: lessonId});
+      const newLessons = [...courseLessons];
+
+      if (lessonIndex !== -1) {
+        const prevLesson = courseLessons[lessonIndex];
+        newLessons[lessonIndex] = {...prevLesson, test: undefined};
+      }
+
+      return {
+        ...state,
+        lessons: {...loadedLessons, [courseId]: newLessons},
+        tests,
+      };
     }
     default:
       return state;
