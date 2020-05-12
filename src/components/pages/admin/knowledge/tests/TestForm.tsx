@@ -57,9 +57,9 @@ function getRequestData(formData: TestFormData): TestDtoReq {
 
   return {
     name,
-    percentage: parseFloat(percentage),
+    pass_criteria: parseFloat(percentage),
     deadline: deadline ? deadline.getTime() : undefined,
-    taskIds: tasks.map(({taskId}) => taskId as number),
+    task_ids: tasks.map(({taskId}) => taskId as number),
   };
 }
 
@@ -67,14 +67,14 @@ export type TaskTreeNode = Require<SimpleDataNode<number, number>, 'rootPId'>;
 
 export const mapTasksToNodes = ({
   id,
-  themeId,
-  subjectId,
+  theme_id,
+  subject_id,
   text,
 }: TaskInfo): TaskTreeNode => ({
   id,
   value: id,
-  pId: themeId,
-  rootPId: subjectId,
+  pId: theme_id,
+  rootPId: subject_id,
   isLeaf: true,
   title: text,
 });
@@ -242,11 +242,11 @@ const TestForm: React.FC<TestFormProps> = (props) => {
       if (state || !test) {
         return INITIAL_FORM_DATA;
       } else {
-        const {id, tasks, percentage, ...rest} = test;
+        const {id, tasks, pass_criteria, ...rest} = test;
 
         return {
           ...rest,
-          percentage: percentage.toString(),
+          percentage: pass_criteria.toString(),
           tasks: tasks.map(({id}) => ({taskId: id})),
         };
       }

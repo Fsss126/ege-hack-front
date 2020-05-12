@@ -30,9 +30,9 @@ interface ResultsProps {
 export const Results = (props: ResultsProps) => {
   const {userAnswer, correctAnswer, isCorrect} = props;
   const {type, value} = userAnswer;
-  const {value: correctValue, textSolution, videoSolution} = correctAnswer;
+  const {value: correctValue, text_solution, video_solution} = correctAnswer;
   const isAnswered = value !== undefined;
-  const hasSolution = !!(textSolution || videoSolution);
+  const hasSolution = !!(text_solution || video_solution);
 
   return (
     <div className="test-task__result">
@@ -67,9 +67,9 @@ export const Results = (props: ResultsProps) => {
           toggleText="Решение"
           initiallyExpanded={!isCorrect}
         >
-          {videoSolution && <VideoPlayer video_link={videoSolution} />}
-          {textSolution && (
-            <div className="test-task__solution-text">{textSolution}</div>
+          {video_solution && <VideoPlayer video_link={video_solution} />}
+          {text_solution && (
+            <div className="test-task__solution-text">{text_solution}</div>
           )}
         </ExpandableContainer>
       )}

@@ -3,13 +3,16 @@ import _ from 'lodash';
 import {
   AccountDto,
   AccountDtoResp,
+  AnswerType,
   CorrectAnswerDto,
   CourseDtoResp,
   FileInfo,
   HomeworkDtoResp,
   KnowledgeLevelDtoResponse,
   LessonDtoResp,
+  SolutionDto,
   SubjectDtoResp,
+  TaskDtoResp,
   TestDtoResp,
   TestStateAnswerDto,
   TestStateDtoResp,
@@ -141,19 +144,28 @@ export const transformHomework = ({
 
 export const transformCorrectAnswer = (
   answer: CorrectAnswerDto,
+  solution: SolutionDto,
 ): CorrectAnswerInfo => {
-  const {videoSolution} = answer;
+  const {type, num_value, text_value} = answer;
+  const {video_value, text_value: text_solution} = solution;
 
   return {
-    ...answer,
-    videoSolution: videoSolution ? getVideoLink(videoSolution) : videoSolution,
+    type,
+    value: type === AnswerType.TEXT ? text_value : num_value,
+    video_solution: video_value ? getVideoLink(video_value) : video_value,
+    text_solution,
   };
 };
 
-export const transformTask = ({image_link, answer, ...rest}: TaskInfo) => ({
+export const transformTask = ({
+  image_link,
+  answer,
+  solution,
+  ...rest
+}: TaskDtoResp): TaskInfo => ({
   ...rest,
   image_link: image_link ? getImageLink(image_link) : image_link,
-  answer: transformCorrectAnswer(answer),
+  answer: transformCorrectAnswer(answer, solution),
 });
 
 export const transformTest = ({
@@ -187,13 +199,14 @@ export const transformTestState = ({
   answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerDto>>(
     answers,
     (result, answer) => {
-      const {user_answer, correct_answer} = answer;
+      const {user_answer, correct_answer, solution} = answer;
       result[answer.task_id] = {
         ...answer,
         user_answer: transformUserAnswer(user_answer),
-        correct_answer: correct_answer
-          ? transformCorrectAnswer(correct_answer)
-          : correct_answer,
+        correct_answer:
+          correct_answer && solution
+            ? transformCorrectAnswer(correct_answer, solution)
+            : correct_answer,
       };
       return result;
     },

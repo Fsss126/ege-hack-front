@@ -189,6 +189,7 @@ label {
   .btn-container__inner {
     margin: -4px 0;
     display: flex;
+    flex-wrap: wrap;
 
     .btn {
       flex-shrink: 0;

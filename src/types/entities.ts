@@ -137,23 +137,31 @@ export type TestStatusInfo = {
     }
 );
 
-export type CorrectAnswerInfo = CorrectAnswerDto;
+export interface CorrectAnswerInfo {
+  type: AnswerType;
+  value?: string | number;
+  video_solution?: string;
+  text_solution?: string;
+}
 
-export type TaskInfo = TaskDtoResp;
+export interface TaskInfo extends Omit<TaskDtoResp, 'solution' | 'answer'> {
+  answer: CorrectAnswerInfo;
+}
 
 export interface SanitizedTaskAnswer {
   type: AnswerType;
 }
 
 export interface SanitizedTaskInfo
-  extends Omit<TaskDtoResp, 'answer' | 'themeId' | 'subjectId'> {
+  extends Omit<TaskDtoResp, 'answer' | 'theme_id' | 'subject_id' | 'solution'> {
   answer: SanitizedTaskAnswer;
 }
 
 export type ThemeInfo = ThemeDtoResp;
 
-export interface TestInfo extends Omit<TestDtoResp, 'deadline'> {
+export interface TestInfo extends Omit<TestDtoResp, 'deadline' | 'tasks'> {
   deadline?: Date;
+  tasks: TaskInfo[];
 }
 
 export interface SanitizedTestInfo extends Omit<TestInfo, 'tasks'> {

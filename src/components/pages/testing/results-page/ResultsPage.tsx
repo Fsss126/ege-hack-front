@@ -60,7 +60,7 @@ export const ResultsPage: React.FC<RouteComponentPropsWithParentProps<
   let title;
 
   if (test && state) {
-    const {name, tasks, percentage: minPercentage} = test;
+    const {name, tasks, pass_criteria: minPercentage} = test;
 
     if (state.status !== TestStatus.COMPLETED) {
       const {last_task_id} = state;

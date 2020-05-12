@@ -290,7 +290,7 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
 
   // reset on null
   useEffect(() => {
-    if (value === null) {
+    if (value === undefined) {
       for (const file of inputFilesRef.current) {
         file.remove();
       }

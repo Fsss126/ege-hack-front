@@ -227,18 +227,31 @@ export enum AnswerType {
 
 export interface CorrectAnswerDto {
   type: AnswerType;
-  value?: string | number;
-  videoSolution?: string;
-  textSolution?: string;
+  text_value?: string;
+  num_value?: number;
+}
+
+export enum SolutionType {
+  NONE = 'NONE',
+  TEXT = 'TEXT',
+  VIDEO = 'VIDEO',
+}
+
+export interface SolutionDto {
+  type: SolutionType;
+  text_value?: string;
+  video_value?: string;
 }
 
 interface TaskDtoCommon {
+  name: string;
   text: string;
   complexity?: number;
-  weight: number;
-  subjectId: number;
-  themeId?: number;
+  score: number;
+  subject_id: number;
+  theme_id?: number;
   answer: CorrectAnswerDto;
+  solution: SolutionDto;
 }
 
 export interface TaskDtoReq extends TaskDtoCommon, Partial<ReqWithImage> {}
@@ -249,27 +262,27 @@ export interface TaskDtoResp extends TaskDtoCommon, Partial<RespWithImage> {
 }
 
 interface ThemeDtoCommon {
-  title: string;
-  subjectId: number;
-  parentThemeId?: number;
+  name: string;
+  subject_id: number;
+  parent_theme_id?: number;
 }
 
 export interface ThemeDtoReq extends ThemeDtoCommon {}
 
 export interface ThemeDtoResp extends ThemeDtoCommon {
   id: number;
-  hasSubThemes: boolean;
-  hasTasks: boolean;
+  contains_themes: boolean;
+  contains_tasks: boolean;
 }
 
 interface TestDtoCommon {
   name: string;
   deadline?: number;
-  percentage: number;
+  pass_criteria: number;
 }
 
 export interface TestDtoReq extends TestDtoCommon {
-  taskIds: number[];
+  task_ids: number[];
 }
 
 export interface TestDtoResp extends TestDtoCommon {
@@ -311,6 +324,7 @@ export interface TestStateAnswerDto {
   task_id: number;
   user_answer: UserAnswerDtoResp;
   correct_answer?: CorrectAnswerDto;
+  solution?: SolutionDto;
   is_correct?: boolean;
 }
 

@@ -4,6 +4,7 @@ import pic from 'img/dummy-pic.jpg';
 import _ from 'lodash';
 import {LoremIpsum} from 'lorem-ipsum';
 import {
+  SolutionType,
   TaskDtoResp,
   TestDtoResp,
   TestStateDtoResp,
@@ -190,27 +191,35 @@ export const TEST_TASKS: TaskDtoResp[] = [
     image_link: '/files/938f8e5f-8819-11ea-808a-072fece60c1f',
     text:
       'Два велосипедиста совершают кольцевую гонку с одинаковой угловой скоростью. Положения и траектории движения велосипедистов показаны на рисунке. Чему равно отношение линейных скоростей велосипедистов?',
-    subjectId: 1,
-    themeId: 10,
+    subject_id: 1,
+    name: 'Задача про велосипедистов',
+    theme_id: 10,
     order: 0,
-    weight: 1,
+    score: 1,
     complexity: 5,
     answer: {
       type: AnswerType.NUMBER,
-      value: 0.5,
+      num_value: 0.5,
+    },
+    solution: {
+      type: SolutionType.NONE,
     },
   },
   {
     id: 1,
     text:
       'Верхнюю точку моста радиусом 100 м автомобиль проходит со скоростью 20 м/с. Чему равно центростремительное ускорение автомобиля? (Ответ дайте в метрах в секунду в квадрате.)',
-    subjectId: 1,
-    themeId: 1,
+    subject_id: 1,
+    name: 'Задача про мост',
+    theme_id: 1,
     order: 1,
-    weight: 1,
+    score: 1,
     answer: {
       type: AnswerType.NUMBER,
-      value: 1,
+      num_value: 1,
+    },
+    solution: {
+      type: SolutionType.NONE,
     },
   },
   {
@@ -218,15 +227,19 @@ export const TEST_TASKS: TaskDtoResp[] = [
     image_link: '/files/e09c97c1-8819-11ea-808a-072fece60c1f',
     text:
       'В схеме на рисунке сопротивление резистора и полное сопротивление реостата равны R, ЭДС батарейки равна Е, её внутреннее сопротивление ничтожно (). Как ведут себя (увеличиваются, уменьшаются, остаются постоянными) показания идеального вольтметра при перемещении движка реостата из крайнего верхнего в крайнее нижнее положение? Ответ поясните, указав, какие физические закономерности Вы использовали для объяснения.',
-    subjectId: 1,
-    themeId: 1,
+    subject_id: 1,
+    name: 'Задача про резистор',
+    theme_id: 1,
     order: 2,
-    weight: 1,
+    score: 1,
     complexity: 10,
     answer: {
       type: AnswerType.FILE,
-      videoSolution: '375255364',
-      textSolution:
+    },
+    solution: {
+      type: SolutionType.VIDEO,
+      video_value: '375255364',
+      text_value:
         'Вольтметр подключают параллельно к тому участку, на котором нужно измерить напряжение. При этом, естественно, часть тока в цепи начинает течь через сам вольтметр. Тем самым вольтметр вносит возмущение в цепь и показывает напряжение, которое отличается от реального (когда вольтметра нет). Идеальным вольтметром называют прибор, который данной проблемой не страдает. То есть он имеет бесконечное собственное сопротивление.',
     },
   },
@@ -235,7 +248,7 @@ export const TEST_TASKS: TaskDtoResp[] = [
 export const TEST: TestDtoResp = {
   id: 1,
   name: 'Движение по окружности',
-  percentage: 0.4,
+  pass_criteria: 0.4,
   deadline: new Date(2020, 4, 1, 20).getTime(),
   tasks: _.times(10).map((i) => ({
     ...TEST_TASKS[i % TEST_TASKS.length],
@@ -340,31 +353,31 @@ export const LESSONS: LessonInfo[] = _.times(4, (j) => {
 export const THEMES: ThemeDtoResp[] = [
   {
     id: 1,
-    title: 'Lorem ipsum dolor sit amet',
-    subjectId: 1,
-    hasSubThemes: true,
-    hasTasks: false,
+    name: 'Lorem ipsum dolor sit amet',
+    subject_id: 1,
+    contains_themes: true,
+    contains_tasks: false,
   },
   {
     id: 2,
-    title: 'Lorem ipsum dolor sit amet',
-    subjectId: 1,
-    hasSubThemes: true,
-    hasTasks: false,
+    name: 'Lorem ipsum dolor sit amet',
+    subject_id: 1,
+    contains_themes: true,
+    contains_tasks: false,
   },
   {
     id: 3,
-    title: 'Lorem ipsum dolor sit amet',
-    subjectId: 1,
-    hasSubThemes: true,
-    hasTasks: false,
+    name: 'Lorem ipsum dolor sit amet',
+    subject_id: 1,
+    contains_themes: true,
+    contains_tasks: false,
   },
   {
     id: 4,
-    title: 'Lorem ipsum dolor sit amet',
-    subjectId: 1,
-    hasSubThemes: false,
-    hasTasks: false,
+    name: 'Lorem ipsum dolor sit amet',
+    subject_id: 1,
+    contains_themes: false,
+    contains_tasks: false,
   },
 ];
 

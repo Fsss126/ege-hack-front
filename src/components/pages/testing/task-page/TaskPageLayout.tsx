@@ -24,7 +24,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
   const {test, state, task, nav, children} = props;
 
   const {name} = test;
-  const {text, order, image_link, weight, complexity} = task;
+  const {text, order, image_link, score, complexity} = task;
   const {status, progress} = state;
   const tasksCount = test.tasks.length;
   const isCompleted = status === TestStatus.COMPLETED;
@@ -35,7 +35,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
     percentage = state.percentage;
   }
 
-  const showTaskInfo = !!(weight || complexity);
+  const showTaskInfo = !!(score || complexity);
 
   return (
     <>
@@ -52,7 +52,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
                         {complexity !== undefined && (
                           <div>Сложность: {complexity}</div>
                         )}
-                        {weight !== undefined && <div>Вес: {weight}</div>}
+                        {score !== undefined && <div>Вес: {score}</div>}
                       </div>
                     }
                     position="bottom"
@@ -81,7 +81,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
               </div>
               <div className="col p-0">
                 {complexity !== undefined && <div>Сложность: {complexity}</div>}
-                {weight !== undefined && <div>Вес: {weight}</div>}
+                {score !== undefined && <div>Вес: {score}</div>}
               </div>
             </div>
           )}

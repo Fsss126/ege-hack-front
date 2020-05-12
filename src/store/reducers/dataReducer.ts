@@ -687,14 +687,14 @@ export const dataReducer: Reducer<DataState, Action> = (
     }
     case ActionType.KNOWLEDGE_THEME_REVOKE: {
       const {responseTheme} = action;
-      const {subjectId, id, parentThemeId} = responseTheme;
+      const {subject_id, id, parent_theme_id} = responseTheme;
 
-      const themeKey = parentThemeId !== undefined ? parentThemeId : 'root';
+      const themeKey = parent_theme_id !== undefined ? parent_theme_id : 'root';
 
       const stateUpdate: Partial<DataState> = {
         themes: {[id]: responseTheme},
         knowledgeTree: {
-          [subjectId]: {
+          [subject_id]: {
             [themeKey]: {
               themeIds: [id],
               taskIds: [],
@@ -730,14 +730,14 @@ export const dataReducer: Reducer<DataState, Action> = (
     }
     case ActionType.KNOWLEDGE_TASK_REVOKE: {
       const {responseTask} = action;
-      const {subjectId, id, themeId} = responseTask;
+      const {subject_id, id, theme_id} = responseTask;
 
-      const themeKey = themeId !== undefined ? themeId : 'root';
+      const themeKey = theme_id !== undefined ? theme_id : 'root';
 
       const stateUpdate: Partial<DataState> = {
         tasks: {[id]: responseTask},
         knowledgeTree: {
-          [subjectId]: {
+          [subject_id]: {
             [themeKey]: {
               themeIds: [],
               taskIds: [id],

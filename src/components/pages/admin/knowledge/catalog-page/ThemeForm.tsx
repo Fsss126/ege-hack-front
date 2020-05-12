@@ -24,21 +24,21 @@ import {SubjectInfo, ThemeInfo} from 'types/entities';
 import {Deferred} from 'utils/promiseHelper';
 
 type ThemeFormData = {
-  title: string;
-  subjectId?: number;
-  parentThemeId?: number;
+  name: string;
+  subject_id?: number;
+  parent_theme_id?: number;
 };
 const INITIAL_FORM_DATA: ThemeFormData = {
-  title: '',
+  name: '',
 };
 
 function getRequestData(formData: ThemeFormData): ThemeDtoReq {
-  const {title, subjectId, parentThemeId} = formData;
+  const {name, subject_id, parent_theme_id} = formData;
 
   return {
-    title,
-    subjectId: subjectId as number,
-    parentThemeId: parentThemeId as number,
+    name,
+    subject_id: subject_id as number,
+    parent_theme_id: parent_theme_id as number,
   };
 }
 
@@ -70,17 +70,17 @@ export const mapSubjectsToOptions = ({
 
 export const mapThemesToNodes = ({
   id,
-  parentThemeId,
-  subjectId,
-  hasSubThemes,
-  title,
+  parent_theme_id,
+  subject_id,
+  contains_themes,
+  name,
 }: ThemeInfo): ThemeTreeNode => ({
   id,
   value: id,
-  pId: parentThemeId,
-  rootPId: subjectId,
-  isLeaf: !hasSubThemes,
-  title,
+  pId: parent_theme_id,
+  rootPId: subject_id,
+  isLeaf: !contains_themes,
+  title: name,
 });
 
 export function useLoadThemeLevel() {
@@ -89,9 +89,9 @@ export function useLoadThemeLevel() {
   return useCallback(
     (treeNode: ThemeTreeNode): Promise<unknown> => {
       const deferred = new Deferred();
-      const {rootPId: subjectId, id} = treeNode;
+      const {rootPId: subject_id, id} = treeNode;
 
-      fetchThemes(subjectId, id, deferred.resolve, deferred.reject);
+      fetchThemes(subject_id, id, deferred.resolve, deferred.reject);
 
       return deferred.promise;
     },
@@ -101,22 +101,22 @@ export function useLoadThemeLevel() {
 
 export function useThemeSelect(
   subjects: SubjectInfo[],
-  subjectId?: number,
+  subject_id?: number,
   themeId?: number,
 ) {
   const {
     themes,
     error: errorLoadingRootThemes,
     reload: reloadRootThemes,
-  } = useKnowledgeSubjectThemes(subjectId);
+  } = useKnowledgeSubjectThemes(subject_id);
   const {
     theme,
     error: errorLoadingTheme,
     reload: reloadTheme,
-  } = useKnowledgeTheme(subjectId, themeId);
+  } = useKnowledgeTheme(subject_id, themeId);
 
   const isLoading =
-    subjectId !== undefined && (!themes || (themeId !== undefined && !theme));
+    subject_id !== undefined && (!themes || (themeId !== undefined && !theme));
 
   const errors = [errorLoadingRootThemes, errorLoadingTheme];
   const reloadCallbacks = [reloadRootThemes, reloadTheme];
@@ -175,28 +175,28 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
         const formData = {...INITIAL_FORM_DATA};
 
         if (passedSubjectId) {
-          formData.subjectId = passedSubjectId;
+          formData.subject_id = passedSubjectId;
         }
 
         if (passedParentThemeId) {
-          formData.parentThemeId = passedParentThemeId;
+          formData.parent_theme_id = passedParentThemeId;
         }
 
         return formData;
       } else {
-        const {title, subjectId, parentThemeId} = theme;
+        const {name, subject_id, parent_theme_id} = theme;
 
         return {
-          title,
-          subjectId,
-          parentThemeId,
+          name,
+          subject_id,
+          parent_theme_id,
         };
       }
     },
     checkValidity,
   );
 
-  const {title, subjectId, parentThemeId} = formData;
+  const {name, subject_id, parent_theme_id} = formData;
 
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<ThemeInfo>>
@@ -227,12 +227,12 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
     subjectOptions,
     themeTreeNodes,
     loadData,
-  } = useThemeSelect(subjects, subjectId, parentThemeId);
+  } = useThemeSelect(subjects, subject_id, parent_theme_id);
 
   const onSubjectChange = useCallback(
     (value: any, name: any) => {
       onInputChange(value, name);
-      onInputChange(undefined, 'parentThemeId');
+      onInputChange(undefined, 'parent_theme_id');
     },
     [onInputChange],
   );
@@ -253,19 +253,19 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
       <div className="row">
         <FieldsContainer className="col">
           <Input.Select
-            name="subjectId"
+            name="subject_id"
             required
             placeholder="Предмет"
             options={subjectOptions}
-            value={subjectId}
+            value={subject_id}
             isClearable={false}
             onChange={onSubjectChange}
           />
           <Input.TreeSelect<number, number>
             placeholder="Родительская тема"
-            name="parentThemeId"
+            name="parent_theme_id"
             onChange={onInputChange}
-            value={parentThemeId}
+            value={parent_theme_id}
             treeDataSimpleMode
             treeData={themeTreeNodes}
             allowClear
@@ -274,11 +274,11 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             disabled={themeTreeNodes === undefined}
           />
           <Input.Input
-            name="title"
+            name="name"
             type="text"
             required
             placeholder="Название"
-            value={title}
+            value={name}
             onChange={onInputChange}
           />
         </FieldsContainer>

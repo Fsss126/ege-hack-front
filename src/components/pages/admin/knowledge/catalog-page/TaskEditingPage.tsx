@@ -74,7 +74,7 @@ const TaskEditingPage: React.FC<RouteComponentProps<TaskPageParams>> = (
             <TaskForm
               task={task}
               subjects={subjects}
-              title="Новое задание"
+              title="Изменение задания"
               errorMessage="Ошибка при сохранении изменений"
               cancelLink={returnLink}
               createRequest={createRequest}

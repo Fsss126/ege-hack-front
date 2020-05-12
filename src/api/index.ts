@@ -224,10 +224,10 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
       case /\/knowledge\/tests\/(.*)$/.test(url.pathname): {
         return transformTest(data);
       }
-      case /\/knowledge\/content/.test(url.pathname): {
+      case /\/knowledge\/content$/.test(url.pathname): {
         return transformKnowledgeLevel(data);
       }
-      case /\/knowledge\/tasks\/(.*)\/$/.test(url.pathname): {
+      case /\/knowledge\/content\/tasks\/(.*)$/.test(url.pathname): {
         if (config.method !== 'delete') {
           return transformTask(data);
         }

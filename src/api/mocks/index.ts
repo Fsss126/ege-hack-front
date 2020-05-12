@@ -172,8 +172,8 @@ export const mockTestsRequests = (api: AxiosInstance) => {
             themes: THEMES.map((theme, index) => ({
               ...theme,
               id: parseInt(`${subjectId}${themeId || ''}${index}`),
-              subjectId,
-              parentThemeId: themeId,
+              subject_id: subjectId,
+              parent_theme_id: themeId,
             })),
             tasks: [],
           };

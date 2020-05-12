@@ -16,7 +16,7 @@ import {InputContainer} from 'components/ui/input/InputContainer';
 import {OptionShape} from 'components/ui/input/Select';
 import {useRevokeKnowledgeTask} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
-import {AnswerType, FileInfo, TaskDtoReq} from 'types/dtos';
+import {AnswerType, FileInfo, SolutionType, TaskDtoReq} from 'types/dtos';
 import {SubjectInfo, TaskInfo} from 'types/entities';
 
 import {
@@ -27,23 +27,25 @@ import {useThemeSelect} from './ThemeForm';
 
 type TaskFormData = {
   image?: FileInfo[];
+  name: string;
   text: string;
   complexity: string;
-  weight: string;
-  subjectId?: number;
-  themeId?: number;
+  score: string;
+  subject_id?: number;
+  theme_id?: number;
   type: AnswerType;
   value: string;
-  videoSolution: string;
-  textSolution: string;
+  video_solution: string;
+  text_solution: string;
 };
 const INITIAL_FORM_DATA: TaskFormData = {
+  name: '',
   text: '',
   complexity: '',
-  weight: '1',
+  score: '1',
   value: '',
-  videoSolution: '',
-  textSolution: '',
+  video_solution: '',
+  text_solution: '',
   type: AnswerType.TEXT,
 };
 
@@ -56,30 +58,44 @@ const typeOptions: OptionShape<AnswerType>[] = [
 function getRequestData(formData: TaskFormData): TaskDtoReq {
   const {
     image,
+    name,
     text,
     complexity,
-    weight,
-    subjectId,
-    themeId,
+    score,
+    subject_id,
+    theme_id,
     type,
     value,
-    videoSolution,
-    textSolution,
+    video_solution,
+    text_solution,
   } = formData;
 
   return {
-    subjectId: subjectId as number,
-    themeId,
+    subject_id: subject_id as number,
+    name,
+    theme_id,
     image: image && image[0] ? image[0].file_id : undefined,
     text,
     complexity: parseFloat(complexity),
-    weight: parseFloat(weight),
-    answer: {
-      type: type as AnswerType,
-      value,
-      videoSolution,
-      textSolution,
-    },
+    score: parseFloat(score),
+    answer:
+      type === AnswerType.NUMBER
+        ? {
+            type,
+            num_value: parseFloat(value),
+          }
+        : type === AnswerType.TEXT
+        ? {type, text_value: value}
+        : {type},
+    solution: video_solution
+      ? {
+          type: SolutionType.VIDEO,
+          video_value: video_solution,
+          text_value: text_solution,
+        }
+      : text_solution
+      ? {type: SolutionType.TEXT, text_value: text_solution}
+      : {type: SolutionType.NONE},
   };
 }
 
@@ -118,10 +134,10 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
         return formData.image && !!formData.image[0];
       }
 
-      if (name === 'videoSolution') {
-        const {videoSolution} = formData;
+      if (name === 'video_solution') {
+        const {video_solution} = formData;
 
-        return videoSolution ? getVideoLinkIsValid(videoSolution) : undefined;
+        return video_solution ? getVideoLinkIsValid(video_solution) : undefined;
       }
 
       if (name === 'value') {
@@ -143,23 +159,24 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
         const formData = {...INITIAL_FORM_DATA};
 
         if (passedSubjectId) {
-          formData.subjectId = passedSubjectId;
+          formData.subject_id = passedSubjectId;
         }
 
         if (passedThemeId) {
-          formData.themeId = passedThemeId;
+          formData.theme_id = passedThemeId;
         }
 
         return formData;
       } else {
         const {
+          name,
+          text,
           image_link,
-          id,
-          order,
-          weight,
+          score,
           complexity,
-          answer: {value, videoSolution, textSolution, ...answer},
-          ...otherData
+          subject_id,
+          theme_id,
+          answer: {value, video_solution, text_solution, type},
         } = task;
 
         return {
@@ -172,13 +189,16 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
                 },
               ]
             : undefined,
-          weight: weight.toString(),
+          score: score.toString(),
           complexity: complexity ? complexity.toString() : '',
           value: value ? value.toString() : '',
-          videoSolution: videoSolution || '',
-          textSolution: textSolution || '',
-          ...answer,
-          ...otherData,
+          video_solution: video_solution || '',
+          text_solution: text_solution || '',
+          type,
+          name,
+          text,
+          subject_id,
+          theme_id,
         };
       }
     },
@@ -186,22 +206,23 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
   );
 
   const {
+    name,
     image,
     text,
     complexity,
-    weight,
-    subjectId,
-    themeId,
+    score,
+    subject_id,
+    theme_id,
     type,
     value,
-    videoSolution,
-    textSolution,
+    video_solution,
+    text_solution,
   } = formData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialImageFile = useMemo(() => formData.image, []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialVideoLink = useMemo(() => formData.videoSolution, []);
+  const initialVideoLink = useMemo(() => formData.video_solution, []);
 
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<TaskInfo>>
@@ -232,7 +253,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
     subjectOptions,
     themeTreeNodes,
     loadData,
-  } = useThemeSelect(subjects, subjectId, themeId);
+  } = useThemeSelect(subjects, subject_id, theme_id);
 
   const onSubjectChange = useCallback(
     (value: any, name: any) => {
@@ -266,25 +287,33 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
       <div className="row">
         <FieldsContainer className="col-12">
           <Input.Select
-            name="subjectId"
+            name="subject_id"
             required
             placeholder="Предмет"
             options={subjectOptions}
-            value={subjectId}
+            value={subject_id}
             isClearable={false}
             onChange={onSubjectChange}
           />
           <Input.TreeSelect<number, number>
             placeholder="Тема"
-            name="themeId"
+            name="theme_id"
             onChange={onInputChange}
-            value={themeId}
+            value={theme_id}
             treeDataSimpleMode
             treeData={themeTreeNodes}
             allowClear
             loading={isLoading && !hasError}
             loadData={loadData as any}
             disabled={themeTreeNodes === undefined}
+          />
+          <Input.Input
+            name="name"
+            type="text"
+            required
+            placeholder="Название"
+            value={name}
+            onChange={onInputChange}
           />
           <Input.TextArea
             name="text"
@@ -330,11 +359,11 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
           <div className="row">
             <div className="col">
               <Input.Input
-                name="weight"
+                name="score"
                 type="number"
                 required
                 placeholder="Вес"
-                value={weight}
+                value={score}
                 onChange={onInputChange}
               />
             </div>
@@ -349,27 +378,27 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
             </div>
           </div>
           <Input.TextArea
-            name="textSolution"
+            name="text_solution"
             className="large"
             placeholder="Решение"
-            value={textSolution}
+            value={text_solution}
             onChange={onInputChange}
           />
           <Input.Input
-            name="videoSolution"
+            name="video_solution"
             type="text"
             placeholder="Ссылка на видео решения"
-            value={videoSolution}
+            value={video_solution}
             onChange={onInputChange}
           />
-          {videoSolution && getVideoLinkIsValid(videoSolution) && (
+          {video_solution && getVideoLinkIsValid(video_solution) && (
             <ExpandableContainer
-              key={videoSolution}
+              key={video_solution}
               toggleText="Видео"
-              initiallyExpanded={videoSolution !== initialVideoLink}
+              initiallyExpanded={video_solution !== initialVideoLink}
             >
               <VideoPlayer
-                video_link={getVideoLink(getVideoId(videoSolution))}
+                video_link={getVideoLink(getVideoId(video_solution))}
               />
             </ExpandableContainer>
           )}

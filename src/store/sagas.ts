@@ -899,7 +899,7 @@ function* fetchKnowledgeTheme() {
         try {
           const theme: ThemeInfo = yield call(
             APIRequest.get,
-            `/knowledge/content/themes/${themeId}/`,
+            `/knowledge/content/themes/${themeId}`,
           );
           yield put({
             type: ActionType.KNOWLEDGE_THEME_FETCHED,
@@ -929,7 +929,7 @@ function* fetchKnowledgeTask() {
         try {
           const task: TaskInfo = yield call(
             APIRequest.get,
-            `/knowledge/content/tasks/${taskId}/`,
+            `/knowledge/content/tasks/${taskId}`,
           );
           yield put({
             type: ActionType.KNOWLEDGE_TASK_FETCHED,

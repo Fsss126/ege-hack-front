@@ -42,7 +42,7 @@ const ThemeCreatingPage: React.FC<RouteComponentProps<
     (response, showSuccessMessage, reset) => {
       showSuccessMessage('Тема создана', [
         {
-          text: 'Новый новая тема',
+          text: 'Новая тема',
           action: reset,
         },
         {
