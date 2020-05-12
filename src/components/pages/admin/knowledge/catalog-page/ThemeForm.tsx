@@ -58,7 +58,14 @@ export type CourseFormProps = {
 
 export type SubjectOption = OptionShape<number>;
 
-export type ThemeTreeNode = Require<SimpleDataNode<number, number>, 'rootPId'>;
+export type ThemeTreeNode = Require<
+  SimpleDataNode<number, string>,
+  'rootPId'
+> & {
+  themeId: number;
+  parentThemeId?: number;
+  subjectId: number;
+};
 
 export const mapSubjectsToOptions = ({
   id,
@@ -72,15 +79,19 @@ export const mapThemesToNodes = ({
   id,
   parent_theme_id,
   subject_id,
-  contains_themes,
+  has_sub_themes,
+  has_sub_tasks,
   name,
 }: ThemeInfo): ThemeTreeNode => ({
-  id,
+  id: `1.theme.${id}`,
   value: id,
-  pId: parent_theme_id,
-  rootPId: subject_id,
-  isLeaf: !contains_themes,
+  pId: `1.theme.${parent_theme_id}`,
+  rootPId: `subject.${subject_id}`,
   title: name,
+  themeId: id,
+  parentThemeId: parent_theme_id,
+  subjectId: subject_id,
+  isLeaf: !has_sub_themes && !has_sub_tasks,
 });
 
 export function useLoadThemeLevel() {
@@ -89,9 +100,9 @@ export function useLoadThemeLevel() {
   return useCallback(
     (treeNode: ThemeTreeNode): Promise<unknown> => {
       const deferred = new Deferred();
-      const {rootPId: subject_id, id} = treeNode;
+      const {subjectId, themeId} = treeNode;
 
-      fetchThemes(subject_id, id, deferred.resolve, deferred.reject);
+      fetchThemes(subjectId, themeId, deferred.resolve, deferred.reject);
 
       return deferred.promise;
     },
@@ -261,7 +272,7 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             isClearable={false}
             onChange={onSubjectChange}
           />
-          <Input.TreeSelect<number, number>
+          <Input.TreeSelect<number, string>
             placeholder="Родительская тема"
             name="parent_theme_id"
             onChange={onInputChange}

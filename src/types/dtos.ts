@@ -271,8 +271,8 @@ export interface ThemeDtoReq extends ThemeDtoCommon {}
 
 export interface ThemeDtoResp extends ThemeDtoCommon {
   id: number;
-  contains_themes: boolean;
-  contains_tasks: boolean;
+  has_sub_themes: boolean;
+  has_sub_tasks: boolean;
 }
 
 interface TestDtoCommon {

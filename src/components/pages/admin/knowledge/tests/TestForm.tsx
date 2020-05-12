@@ -37,13 +37,13 @@ type TaskData = {
 
 type TestFormData = {
   name: string;
-  percentage: string;
+  pass_criteria: string;
   deadline?: Date;
   tasks: TaskData[];
 };
 const INITIAL_FORM_DATA: TestFormData = {
   name: '',
-  percentage: '',
+  pass_criteria: '',
   deadline: undefined,
   tasks: [],
 };
@@ -53,17 +53,17 @@ const INITIAL_TASK_DATA: TaskData = {
 };
 
 function getRequestData(formData: TestFormData): TestDtoReq {
-  const {name, percentage, deadline, tasks} = formData;
+  const {name, pass_criteria, deadline, tasks} = formData;
 
   return {
     name,
-    pass_criteria: parseFloat(percentage),
+    pass_criteria: parseFloat(pass_criteria),
     deadline: deadline ? deadline.getTime() : undefined,
     task_ids: tasks.map(({taskId}) => taskId as number),
   };
 }
 
-export type TaskTreeNode = Require<SimpleDataNode<number, number>, 'rootPId'>;
+export type TaskTreeNode = Require<SimpleDataNode<number, string>, 'rootPId'>;
 
 export const mapTasksToNodes = ({
   id,
@@ -71,10 +71,10 @@ export const mapTasksToNodes = ({
   subject_id,
   text,
 }: TaskInfo): TaskTreeNode => ({
-  id,
+  id: `2.task.${id}`,
   value: id,
-  pId: theme_id,
-  rootPId: subject_id,
+  pId: `1.theme.${theme_id}`,
+  rootPId: `subject.${subject_id}`,
   isLeaf: true,
   title: text,
 });
@@ -82,6 +82,7 @@ export const mapTasksToNodes = ({
 export const mapThemeToContainingNodes = (theme: ThemeInfo): ThemeTreeNode => ({
   ...mapThemesToNodes(theme),
   selectable: false,
+  value: NaN,
 });
 
 export function useTaskSelect(
@@ -118,7 +119,9 @@ export function useTaskSelect(
   const {hasError, notFound} = useHandleErrors(errors, reloadCallbacks);
 
   const themeTreeNodes = useMemo<ThemeTreeNode[] | undefined>(() => {
-    const themesNodes = themes ? themes.map(mapThemeToContainingNodes) : [];
+    const themesNodes = themes
+      ? themes.map(mapThemeToContainingNodes).filter(({isLeaf}) => !isLeaf)
+      : [];
 
     return isLoading ? undefined : themesNodes;
   }, [isLoading, themes]);
@@ -158,6 +161,7 @@ type TaskElementRenderProps = {
 
 type TaskElementProps = ElementComponentProps<TaskData, TaskElementRenderProps>;
 
+// TODO: disable selected tasks
 const TaskElement = (props: TaskElementProps) => {
   const {taskId, selectedTasks, subjects, subjectId, onChange, index} = props;
 
@@ -168,12 +172,13 @@ const TaskElement = (props: TaskElementProps) => {
   );
 
   return (
-    <FormElement name="task" index={index} onChange={onChange} key={index}>
+    <FormElement name="tasks" index={index} onChange={onChange} key={index}>
       <FieldsContainer>
         <div className="col-12">
-          <Input.TreeSelect<number, number>
+          <Input.TreeSelect<number, string>
             placeholder="Задание"
             name={`tasks[${index}].taskId`}
+            required
             onChange={onChange}
             value={taskId}
             treeDataSimpleMode
@@ -246,7 +251,7 @@ const TestForm: React.FC<TestFormProps> = (props) => {
 
         return {
           ...rest,
-          percentage: pass_criteria.toString(),
+          pass_criteria: pass_criteria.toString(),
           tasks: tasks.map(({id}) => ({taskId: id})),
         };
       }
@@ -254,7 +259,7 @@ const TestForm: React.FC<TestFormProps> = (props) => {
     checkValidity,
   );
 
-  const {name, percentage, deadline, tasks} = formData;
+  const {name, pass_criteria, deadline, tasks} = formData;
 
   const revokeTest = useRevokeTest(courseId, lessonId);
 
@@ -329,10 +334,11 @@ const TestForm: React.FC<TestFormProps> = (props) => {
             </div>
             <div className="col">
               <Input.Input
-                name="percentage"
-                type="number"
+                name="pass_criteria"
+                required
+                type="decimal"
                 placeholder="Порог прохождения"
-                value={percentage}
+                value={pass_criteria}
                 onChange={onInputChange}
               />
             </div>

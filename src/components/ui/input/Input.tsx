@@ -135,7 +135,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       required={required}
       value={format ? format(value) : value}
       onChange={onChange}
-      type={type === 'number' || type === 'price' ? 'text' : type}
+      type={
+        type === 'number' || type === 'price'
+          ? 'text'
+          : type === 'decimal'
+          ? 'number'
+          : type
+      }
       onKeyPress={
         type === 'number' || type === 'price' ? onNumberKeyPress : undefined
       }

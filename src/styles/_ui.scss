@@ -808,79 +808,86 @@ input[type=number] {
 .ant-select-container {
   position: relative;
 
-  .ant-select-dropdown-container {
-    & > div {
-      height: 100%;
-    }
+  & > * {
+    position: static !important;
+  }
 
-    .ant-select-dropdown {
-      top: 100% !important;
-      left: 0 !important;
-      max-width: 100% !important;
-      z-index: 10 !important;
-      margin-bottom: 8px;
-      margin-top: 8px;
-      padding: 0;
+  .ant-select-dropdown {
+    top: 100% !important;
+    left: 0 !important;
+    max-width: 100% !important;
+    z-index: 10 !important;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    padding: 0;
+    font-size: 1em;
+
+    border: $border;
+    border-radius: $element-border-radius;
+    @include overflow-hidden;
+    box-shadow: 0 4px 11px hsla(0,0%,0%,0.1);
+
+    .ant-select-tree {
       font-size: 1em;
 
-      border: $border;
-      border-radius: $element-border-radius;
-      @include overflow-hidden;
-      box-shadow: 0 4px 11px hsla(0,0%,0%,0.1);
+      .ant-select-tree-list {
+        padding: $menu-list-padding;
+        @include hide-scrollbar;
 
-      .ant-select-tree {
-        font-size: 1em;
+        //noinspection CssReplaceWithShorthandSafely
+        .ant-select-tree-treenode {
+          padding: $menu-option-padding;
+          padding-left: $menu-option-padding-horizontal / 3 * 2;
+          cursor: default;
 
-        .ant-select-tree-list {
-          padding: $menu-list-padding;
-          @include hide-scrollbar;
+          .ant-select-tree-node-content-wrapper {
+            background: none;
+            cursor: inherit;
+          }
 
-          //noinspection CssReplaceWithShorthandSafely
-          .ant-select-tree-treenode {
-            padding: $menu-option-padding;
-            padding-left: $menu-option-padding-horizontal / 3 * 2;
+          &.ant-select-tree-treenode-selected {
+            background: $bg-active;
+          }
+
+          &.ant-select-tree-treenode--selectable {
             cursor: pointer;
 
-            .ant-select-tree-node-content-wrapper {
-              background: none;
-            }
-
-            &:hover, &.ant-select-tree-treenode-selected {
+            &:hover {
               background: $bg-active;
             }
           }
+        }
 
-          .ant-select-tree-switcher {
-            transition: transform .3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .ant-select-tree-switcher {
+          transition: transform .3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
-            &ant-select-tree-switcher_open {
-              transform: rotate(0deg);
-            }
+          &ant-select-tree-switcher_open {
+            transform: rotate(0deg);
+          }
 
-            &.ant-select-tree-switcher_close {
-              transform: rotate(-90deg);
-            }
+          &.ant-select-tree-switcher_close {
+            transform: rotate(-90deg);
+          }
 
-            .ant-select-tree-switcher-icon, .ant-select-tree-switcher-loading-icon {
-              display: block;
-              color: $text-light-grey;
-            }
-            .ant-select-tree-switcher-icon {
-              font-size: 0.8em;
-            }
+          .ant-select-tree-switcher-icon, .ant-select-tree-switcher-loading-icon {
+            display: block;
+            color: $text-light-grey;
+          }
+          .ant-select-tree-switcher-icon {
+            font-size: 0.8em;
           }
         }
       }
+    }
 
-      .ant-select-dropdown__no-data {
-        padding: $element-padding;
-        font-size: 14px;
-        color: $text-grey;
-        text-align: center;
-      }
+    .ant-select-dropdown__no-data {
+      padding: $element-padding;
+      font-size: 14px;
+      color: $text-grey;
+      text-align: center;
     }
   }
 }
@@ -958,7 +965,7 @@ input[type=number] {
 }
 
 .form {
-  .input {
+  .input, .DayPickerInput {
     display: block;
   }
   .form__title {

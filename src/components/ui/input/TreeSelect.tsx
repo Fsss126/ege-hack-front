@@ -18,6 +18,7 @@ interface CommonDataNode<V extends Key> {
   checkable?: boolean;
   selectable?: boolean;
   value: V;
+  className?: string;
   [key: string]: any;
 }
 
@@ -39,11 +40,17 @@ export interface SimpleModeConfig {
   rootPId?: string;
 }
 
+type TreeSelectCallback<V extends Key, T extends Key = V> = (
+  value: V,
+  node: SimpleDataNode<V, T>,
+) => void;
+
 type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
   SelectProps<V>,
   'treeData' | 'onChange' | 'treeDataSimpleMode' | 'loadData' | 'placeholder'
 > & {
-  onChange: InputChangeHandler<V>;
+  onChange?: InputChangeHandler<V>;
+  onSelect?: TreeSelectCallback<V, T>;
   name: string;
   key?: string;
   placeholder?: string;
@@ -62,19 +69,37 @@ type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
       }
   );
 
-function useDefaultExpandedKeys<V extends Key, T extends Key = V>(
-  treeDataSimpleMode: false | undefined,
-  treeData?: TreeDataNode<V>[],
-  value?: V,
-): V[];
-function useDefaultExpandedKeys<V extends Key, T extends Key = V>(
-  treeDataSimpleMode: true | SimpleModeConfig,
-  treeData?: SimpleDataNode<V, T>[],
-  value?: V,
-): V[];
+function useSimplifyTreeData<V extends Key, T extends Key = V>(
+  treeDataSimpleMode?: boolean | SimpleModeConfig,
+  treeData?: SimpleDataNode<V, T>[] | TreeDataNode<V>[],
+): Maybe<SimpleDataNode<V, T>[]> {
+  return useMemo(() => {
+    if (!treeDataSimpleMode) {
+      if (!treeData) {
+        return treeData;
+      }
+
+      return traverse(treeData).reduce(function (result: SimpleDataNode<V>[]) {
+        if (typeof this.node === 'object' && !(this.node instanceof Array)) {
+          result.push({
+            id: this.node.value,
+            pId: this.parent?.isRoot
+              ? undefined
+              : this.parent?.parent?.node.value,
+            ...this.node,
+          });
+        }
+        return result;
+      }, []);
+    } else {
+      return treeData;
+    }
+  }, [treeData, treeDataSimpleMode]);
+}
+
 function useDefaultExpandedKeys<V extends Key, T extends Key = V>(
   treeDataSimpleMode: boolean | SimpleModeConfig | undefined,
-  treeData?: SimpleDataNode<V, T>[] | TreeDataNode<V>[],
+  treeData?: SimpleDataNode<V, T>[],
   value?: V,
 ): V[] {
   return useMemo(() => {
@@ -82,27 +107,7 @@ function useDefaultExpandedKeys<V extends Key, T extends Key = V>(
       return [];
     }
 
-    let flattenTreeData: Dictionary<SimpleDataNode<V, T>>;
-
-    if (!treeDataSimpleMode) {
-      flattenTreeData = traverse(treeData).reduce(function (
-        result: SimpleDataNode<V>[],
-      ) {
-        if (typeof this.node === 'object' && !(this.node instanceof Array)) {
-          result[this.node.value] = {
-            id: this.node.value,
-            pId: this.parent?.isRoot
-              ? undefined
-              : this.parent?.parent?.node.value,
-            value: this.node.value,
-          };
-        }
-        return result;
-      },
-      {});
-    } else {
-      flattenTreeData = _.keyBy(treeData as SimpleDataNode<V, T>[], 'value');
-    }
+    const flattenTreeData = _.keyBy(treeData, 'value');
 
     let currentNode = flattenTreeData[value.toString()];
 
@@ -135,7 +140,7 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     onChange,
     name,
     key,
-    treeData,
+    treeData: passedTreeData,
     treeDataSimpleMode,
     value,
     loadData,
@@ -146,27 +151,42 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     ...rest
   } = props;
 
+  const treeData = useSimplifyTreeData(treeDataSimpleMode, passedTreeData);
+
   const defaultExpandedKeys = useDefaultExpandedKeys<V, T>(
-    treeDataSimpleMode as any,
+    treeDataSimpleMode,
     treeData,
     value,
   );
 
-  const changeCallback = useCallback(
-    (value: V) => {
-      onChange(value, name);
-    },
+  const mappedTreeData = useMemo(() => {
+    return !treeData
+      ? treeData
+      : treeData.map((node) => ({
+          ...node,
+          className: classNames(node.className, {
+            'ant-select-tree-treenode--selectable': node.selectable !== false,
+            'ant-select-tree-treenode--disabled': node.disabled,
+          }),
+        }));
+  }, [treeData]);
+
+  const changeCallback = useMemo(
+    () =>
+      onChange
+        ? (value: V) => {
+            onChange(value, name);
+          }
+        : undefined,
     [name, onChange],
   );
 
-  const dropdownContainerId = classNames('ant-select-dropdown-container', key);
+  const elementRef = useRef<HTMLDivElement>(null);
 
   const getPopupContainer = useCallback(
-    () => document.getElementById(dropdownContainerId) as HTMLDivElement,
-    [dropdownContainerId],
+    (trigger) => trigger.parentNode.parentNode,
+    [],
   );
-
-  const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -193,7 +213,6 @@ const TreeSelect = <V extends Key, T extends Key = V>(
 
   const input = (
     <div className="ant-select-container" ref={elementRef}>
-      <div className="ant-select-dropdown-container" id={dropdownContainerId} />
       <TreeSelectInput<V>
         showSearch
         listHeight={200}
@@ -207,7 +226,7 @@ const TreeSelect = <V extends Key, T extends Key = V>(
           minWidth: '100%',
         }}
         treeDefaultExpandedKeys={defaultExpandedKeys}
-        treeData={treeData}
+        treeData={mappedTreeData}
         treeDataSimpleMode={treeDataSimpleMode}
         notFoundContent={noDataPlaceholder}
         treeNodeFilterProp="title"

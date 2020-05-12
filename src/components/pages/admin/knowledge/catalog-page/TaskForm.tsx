@@ -295,7 +295,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
             isClearable={false}
             onChange={onSubjectChange}
           />
-          <Input.TreeSelect<number, number>
+          <Input.TreeSelect<number, string>
             placeholder="Тема"
             name="theme_id"
             onChange={onInputChange}
