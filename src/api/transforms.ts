@@ -144,10 +144,10 @@ export const transformHomework = ({
 
 export const transformCorrectAnswer = (
   answer: CorrectAnswerDto,
-  solution: SolutionDto,
+  solution?: SolutionDto,
 ): CorrectAnswerInfo => {
   const {type, num_value, text_value} = answer;
-  const {video_value, text_value: text_solution} = solution;
+  const {video_value, text_value: text_solution} = solution || {};
 
   return {
     type,

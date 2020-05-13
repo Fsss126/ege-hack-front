@@ -16,7 +16,7 @@ import {InputContainer} from 'components/ui/input/InputContainer';
 import {OptionShape} from 'components/ui/input/Select';
 import {useRevokeKnowledgeTask} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
-import {AnswerType, FileInfo, SolutionType, TaskDtoReq} from 'types/dtos';
+import {AnswerType, FileInfo, TaskDtoReq} from 'types/dtos';
 import {SubjectInfo, TaskInfo} from 'types/entities';
 
 import {
@@ -87,15 +87,10 @@ function getRequestData(formData: TaskFormData): TaskDtoReq {
         : type === AnswerType.TEXT
         ? {type, text_value: value}
         : {type},
-    solution: video_solution
-      ? {
-          type: SolutionType.VIDEO,
-          video_value: video_solution,
-          text_value: text_solution,
-        }
-      : text_solution
-      ? {type: SolutionType.TEXT, text_value: text_solution}
-      : {type: SolutionType.NONE},
+    solution: {
+      video_value: video_solution,
+      text_value: text_solution,
+    },
   };
 }
 
@@ -252,6 +247,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
     isLoading,
     subjectOptions,
     themeTreeNodes,
+    loadedNodeIds,
     loadData,
   } = useThemeSelect(subjects, subject_id, theme_id);
 
@@ -303,6 +299,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
             treeDataSimpleMode
             treeData={themeTreeNodes}
             allowClear
+            treeLoadedKeys={loadedNodeIds}
             loading={isLoading && !hasError}
             loadData={loadData as any}
             disabled={themeTreeNodes === undefined}
@@ -362,6 +359,8 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
                 name="score"
                 type="number"
                 required
+                min="0"
+                max="10"
                 placeholder="Вес"
                 value={score}
                 onChange={onInputChange}
@@ -371,6 +370,8 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
               <Input.Input
                 name="complexity"
                 type="number"
+                min="0"
+                max="10"
                 placeholder="Сложность"
                 value={complexity}
                 onChange={onInputChange}

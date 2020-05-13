@@ -1352,14 +1352,14 @@ export function useKnowledgeLevel(
       };
 }
 
-type KnowledgeSubjectContentHookResult = {
+type KnowledgeSubjectTreeHookResult = {
   content?: KnowledgeBaseSubject | false;
   error?: AxiosError;
   reload?: SimpleCallback;
 };
-function useKnowledgeSubjectContent(
+function useKnowledgeSubjectTree(
   subjectId?: number,
-): KnowledgeSubjectContentHookResult {
+): KnowledgeSubjectTreeHookResult {
   const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
   const knowledgeTree = useSelector(selectKnowledgeTree);
   const subjectContent = subjectId ? knowledgeTree[subjectId] : undefined;
@@ -1403,96 +1403,81 @@ function useKnowledgeSubjectContent(
   return {content: subjectContent, reload};
 }
 
-export type KnowledgeSubjectThemesHookResult = {
+export type KnowledgeSubjectContentHookResult = {
   themes?: ThemeInfo[] | false;
+  tasks?: TaskInfo[] | false;
+  loadedThemes: number[];
   error?: AxiosError;
   reload?: SimpleCallback;
 };
 
-export function useKnowledgeSubjectThemes(
+export function useKnowledgeSubjectContent(
   subjectId?: number,
-): KnowledgeSubjectThemesHookResult {
-  const {content: subjectContent, error, reload} = useKnowledgeSubjectContent(
+): KnowledgeSubjectContentHookResult {
+  const {content: subjectContent, error, reload} = useKnowledgeSubjectTree(
     subjectId,
   );
   const themes = useSelector(selectKnowledgeThemes);
-
-  const subjectThemes = useMemo(() => {
-    if (subjectContent === false) {
-      return false;
-    }
-
-    if (!subjectContent || !subjectContent.root) {
-      return undefined;
-    }
-
-    return _(subjectContent)
-      .map((level) => {
-        if (!level || level instanceof Error) {
-          return [];
-        }
-
-        return level.themeIds
-          .map((themeId) => themes[themeId])
-          .filter<ThemeInfo>(
-            (theme): theme is ThemeInfo => !!theme && !(theme instanceof Error),
-          );
-      })
-      .flatten()
-      .value();
-  }, [subjectContent, themes]);
-
-  return error
-    ? {error, reload}
-    : {
-        themes: subjectThemes,
-        reload,
-      };
-}
-
-export type KnowledgeSubjectTasksHookResult = {
-  tasks?: TaskInfo[] | false;
-  error?: AxiosError;
-  reload?: SimpleCallback;
-};
-
-export function useKnowledgeSubjectTasks(
-  subjectId?: number,
-): KnowledgeSubjectTasksHookResult {
-  const {content: subjectContent, error, reload} = useKnowledgeSubjectContent(
-    subjectId,
-  );
   const tasks = useSelector(selectKnowledgeTasks);
 
-  const subjectTasks = useMemo(() => {
+  const {loadedThemes, subjectThemes, subjectTasks} = useMemo(() => {
+    const loadedThemes: number[] = [];
+
+    let subjectThemes: ThemeInfo[] | false | undefined;
+    let subjectTasks: TaskInfo[] | false | undefined;
+
     if (subjectContent === false) {
-      return false;
-    }
+      subjectThemes = false;
+    } else if (!subjectContent || !subjectContent.root) {
+      subjectThemes = undefined;
+    } else {
+      subjectThemes = [];
+      subjectTasks = [];
 
-    if (!subjectContent || !subjectContent.root) {
-      return undefined;
-    }
+      for (const key in subjectContent) {
+        const level = subjectContent[key];
 
-    return _(subjectContent)
-      .map((level) => {
         if (!level || level instanceof Error) {
-          return [];
+          continue;
         }
 
-        return level.taskIds
-          .map((taskId) => tasks[taskId])
-          .filter<TaskInfo>(
-            (task): task is TaskInfo => !!task && !(task instanceof Error),
-          );
-      })
-      .flatten()
-      .value();
-  }, [subjectContent, tasks]);
+        let isLoaded = true;
+
+        for (const themeId of level.themeIds) {
+          const theme = themes[themeId];
+
+          if (!theme || theme instanceof Error) {
+            isLoaded = false;
+          } else {
+            subjectThemes.push(theme);
+          }
+        }
+
+        for (const taskId of level.taskIds) {
+          const task = tasks[taskId];
+
+          if (!task || task instanceof Error) {
+            isLoaded = false;
+          } else {
+            subjectTasks.push(task);
+          }
+        }
+
+        if (isLoaded && key !== 'root') {
+          loadedThemes.push(parseInt(key));
+        }
+      }
+    }
+
+    return {loadedThemes, subjectThemes, subjectTasks} as const;
+  }, [subjectContent, tasks, themes]);
 
   return error
-    ? {error, reload}
+    ? {error, loadedThemes, reload}
     : {
+        themes: subjectThemes,
         tasks: subjectTasks,
+        loadedThemes,
         reload,
       };
 }

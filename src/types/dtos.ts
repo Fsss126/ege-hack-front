@@ -231,14 +231,7 @@ export interface CorrectAnswerDto {
   num_value?: number;
 }
 
-export enum SolutionType {
-  NONE = 'NONE',
-  TEXT = 'TEXT',
-  VIDEO = 'VIDEO',
-}
-
 export interface SolutionDto {
-  type: SolutionType;
   text_value?: string;
   video_value?: string;
 }
@@ -251,7 +244,7 @@ interface TaskDtoCommon {
   subject_id: number;
   theme_id?: number;
   answer: CorrectAnswerDto;
-  solution: SolutionDto;
+  solution?: SolutionDto;
 }
 
 export interface TaskDtoReq extends TaskDtoCommon, Partial<ReqWithImage> {}

@@ -4,7 +4,6 @@ import pic from 'img/dummy-pic.jpg';
 import _ from 'lodash';
 import {LoremIpsum} from 'lorem-ipsum';
 import {
-  SolutionType,
   TaskDtoResp,
   TestDtoResp,
   TestStateDtoResp,
@@ -201,9 +200,6 @@ export const TEST_TASKS: TaskDtoResp[] = [
       type: AnswerType.NUMBER,
       num_value: 0.5,
     },
-    solution: {
-      type: SolutionType.NONE,
-    },
   },
   {
     id: 1,
@@ -217,9 +213,6 @@ export const TEST_TASKS: TaskDtoResp[] = [
     answer: {
       type: AnswerType.NUMBER,
       num_value: 1,
-    },
-    solution: {
-      type: SolutionType.NONE,
     },
   },
   {
@@ -237,7 +230,6 @@ export const TEST_TASKS: TaskDtoResp[] = [
       type: AnswerType.FILE,
     },
     solution: {
-      type: SolutionType.VIDEO,
       video_value: '375255364',
       text_value:
         'Вольтметр подключают параллельно к тому участку, на котором нужно измерить напряжение. При этом, естественно, часть тока в цепи начинает течь через сам вольтметр. Тем самым вольтметр вносит возмущение в цепь и показывает напряжение, которое отличается от реального (когда вольтметра нет). Идеальным вольтметром называют прибор, который данной проблемой не страдает. То есть он имеет бесконечное собственное сопротивление.',

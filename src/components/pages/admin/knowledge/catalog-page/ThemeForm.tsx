@@ -14,7 +14,7 @@ import {OptionShape} from 'components/ui/input/Select';
 import {SimpleDataNode} from 'components/ui/input/TreeSelect';
 import {
   useKnowledgeLevelFetch,
-  useKnowledgeSubjectThemes,
+  useKnowledgeSubjectContent,
   useKnowledgeTheme,
   useRevokeKnowledgeTheme,
 } from 'hooks/selectors';
@@ -67,6 +67,10 @@ export type ThemeTreeNode = Require<
   subjectId: number;
 };
 
+export const getThemeNodeId = (id: number) => `1.theme.${id}`;
+
+export const getSubjectNodeId = (id: number) => `subject.${id}`;
+
 export const mapSubjectsToOptions = ({
   id,
   name,
@@ -83,10 +87,10 @@ export const mapThemesToNodes = ({
   has_sub_tasks,
   name,
 }: ThemeInfo): ThemeTreeNode => ({
-  id: `1.theme.${id}`,
+  id: getThemeNodeId(id),
   value: id,
-  pId: `1.theme.${parent_theme_id}`,
-  rootPId: `subject.${subject_id}`,
+  pId: parent_theme_id ? getThemeNodeId(parent_theme_id) : undefined,
+  rootPId: getSubjectNodeId(subject_id),
   title: name,
   themeId: id,
   parentThemeId: parent_theme_id,
@@ -117,9 +121,10 @@ export function useThemeSelect(
 ) {
   const {
     themes,
+    loadedThemes,
     error: errorLoadingRootThemes,
     reload: reloadRootThemes,
-  } = useKnowledgeSubjectThemes(subject_id);
+  } = useKnowledgeSubjectContent(subject_id);
   const {
     theme,
     error: errorLoadingTheme,
@@ -149,12 +154,15 @@ export function useThemeSelect(
 
   const loadData = useLoadThemeLevel();
 
+  const loadedNodeIds = loadedThemes.map((id) => getThemeNodeId(id));
+
   return {
     hasError,
     notFound,
     isLoading,
     subjectOptions,
     themeTreeNodes,
+    loadedNodeIds,
     loadData,
     errors,
     reloadCallbacks,
@@ -237,6 +245,7 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
     isLoading,
     subjectOptions,
     themeTreeNodes,
+    loadedNodeIds,
     loadData,
   } = useThemeSelect(subjects, subject_id, parent_theme_id);
 
@@ -279,6 +288,7 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             value={parent_theme_id}
             treeDataSimpleMode
             treeData={themeTreeNodes}
+            treeLoadedKeys={loadedNodeIds}
             allowClear
             loading={isLoading && !hasError}
             loadData={loadData as any}

@@ -102,27 +102,39 @@ function useDefaultExpandedKeys<V extends Key, T extends Key = V>(
   treeData?: SimpleDataNode<V, T>[],
   value?: V,
 ): V[] {
+  const isRootLoaded = !!treeData;
+
   return useMemo(() => {
     if (!treeData || !value) {
       return [];
     }
 
-    const flattenTreeData = _.keyBy(treeData, 'value');
+    const idKey =
+      typeof treeDataSimpleMode === 'object' && treeDataSimpleMode.id
+        ? treeDataSimpleMode.id
+        : 'id';
+    const pIdKey =
+      typeof treeDataSimpleMode === 'object' && treeDataSimpleMode.pId
+        ? treeDataSimpleMode.pId
+        : 'pId';
 
-    let currentNode = flattenTreeData[value.toString()];
+    const flattenTreeData = _.keyBy(treeData, idKey);
+
+    let currentNode = _.find(treeData, (node) => node.value === value);
+
+    if (!currentNode) {
+      return [];
+    }
 
     const defaultExpandedKeys: V[] = [];
 
     while (true) {
-      const parentId =
-        typeof treeDataSimpleMode === 'object' && treeDataSimpleMode.pId
-          ? currentNode[treeDataSimpleMode.pId]
-          : currentNode.pId;
+      const parentId: string = currentNode[pIdKey];
 
       defaultExpandedKeys.push(currentNode.value);
       currentNode = flattenTreeData[parentId];
 
-      if (!parentId) {
+      if (!parentId || !currentNode) {
         break;
       }
     }
@@ -130,7 +142,7 @@ function useDefaultExpandedKeys<V extends Key, T extends Key = V>(
     return defaultExpandedKeys;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isRootLoaded]);
 }
 
 const TreeSelect = <V extends Key, T extends Key = V>(
@@ -154,7 +166,7 @@ const TreeSelect = <V extends Key, T extends Key = V>(
   const treeData = useSimplifyTreeData(treeDataSimpleMode, passedTreeData);
 
   const defaultExpandedKeys = useDefaultExpandedKeys<V, T>(
-    treeDataSimpleMode,
+    treeDataSimpleMode || true,
     treeData,
     value,
   );

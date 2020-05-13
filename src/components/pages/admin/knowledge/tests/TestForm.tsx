@@ -16,8 +16,7 @@ import {
 import * as Input from 'components/ui/input';
 import {SimpleDataNode} from 'components/ui/input/TreeSelect';
 import {
-  useKnowledgeSubjectTasks,
-  useKnowledgeSubjectThemes,
+  useKnowledgeSubjectContent,
   useKnowledgeTask,
   useRevokeTest,
 } from 'hooks/selectors';
@@ -26,6 +25,7 @@ import {TestDtoReq} from 'types/dtos';
 import {SubjectInfo, TaskInfo, TestInfo, ThemeInfo} from 'types/entities';
 
 import {
+  getThemeNodeId,
   mapThemesToNodes,
   ThemeTreeNode,
   useLoadThemeLevel,
@@ -92,14 +92,12 @@ export function useTaskSelect(
 ) {
   const {
     themes,
-    error: errorLoadingRootThemes,
-    reload: reloadRootThemes,
-  } = useKnowledgeSubjectThemes(subjectId);
-  const {
     tasks,
-    error: errorLoadingRootTasks,
-    reload: reloadRootTasks,
-  } = useKnowledgeSubjectTasks(subjectId);
+    loadedThemes,
+    error: errorLoadingRootContent,
+    reload: reloadRootContent,
+  } = useKnowledgeSubjectContent(subjectId);
+
   const {task, error: errorLoadingTask, reload: reloadTask} = useKnowledgeTask(
     subjectId,
     taskId,
@@ -109,12 +107,8 @@ export function useTaskSelect(
     subjectId !== undefined &&
     (!themes || !tasks || (taskId !== undefined && !task));
 
-  const errors = [
-    errorLoadingRootThemes,
-    errorLoadingRootTasks,
-    errorLoadingTask,
-  ];
-  const reloadCallbacks = [reloadRootThemes, reloadRootTasks, reloadTask];
+  const errors = [errorLoadingRootContent, errorLoadingTask];
+  const reloadCallbacks = [reloadRootContent, reloadTask];
 
   const {hasError, notFound} = useHandleErrors(errors, reloadCallbacks);
 
@@ -140,6 +134,8 @@ export function useTaskSelect(
       : undefined;
   }, [taskTreeNodes, themeTreeNodes]);
 
+  const loadedNodeIds = loadedThemes.map((id) => getThemeNodeId(id));
+
   const loadData = useLoadThemeLevel();
 
   return {
@@ -148,6 +144,7 @@ export function useTaskSelect(
     isLoading,
     treeNodes,
     loadData,
+    loadedNodeIds,
     errors,
     reloadCallbacks,
   };
@@ -165,11 +162,13 @@ type TaskElementProps = ElementComponentProps<TaskData, TaskElementRenderProps>;
 const TaskElement = (props: TaskElementProps) => {
   const {taskId, selectedTasks, subjects, subjectId, onChange, index} = props;
 
-  const {hasError, isLoading, treeNodes, loadData} = useTaskSelect(
-    subjects,
-    subjectId,
-    taskId,
-  );
+  const {
+    hasError,
+    isLoading,
+    treeNodes,
+    loadedNodeIds,
+    loadData,
+  } = useTaskSelect(subjects, subjectId, taskId);
 
   return (
     <FormElement name="tasks" index={index} onChange={onChange} key={index}>
@@ -183,6 +182,7 @@ const TaskElement = (props: TaskElementProps) => {
             value={taskId}
             treeDataSimpleMode
             treeData={treeNodes}
+            treeLoadedKeys={loadedNodeIds}
             allowClear
             loading={isLoading && !hasError}
             loadData={loadData as any}
@@ -338,6 +338,9 @@ const TestForm: React.FC<TestFormProps> = (props) => {
                 required
                 type="decimal"
                 placeholder="Порог прохождения"
+                step="0.01"
+                min="0"
+                max="1"
                 value={pass_criteria}
                 onChange={onInputChange}
               />
