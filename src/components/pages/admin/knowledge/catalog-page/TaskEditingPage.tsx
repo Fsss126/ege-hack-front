@@ -61,7 +61,7 @@ const TaskEditingPage: React.FC<RouteComponentProps<TaskPageParams>> = (
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.KNOWLEDGE_BASE_EDIT}
+      requiredPermissions={Permission.KNOWLEDGE_CONTENT_EDIT}
       className="task-form-page"
       title="Изменение задания"
       location={location}

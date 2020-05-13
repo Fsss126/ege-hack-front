@@ -73,6 +73,9 @@ export interface DataState {
   tests: {
     [testId: number]: DataProperty<TestInfo>;
   };
+  lessonsTests: {
+    [lessonId: number]: DataProperty<number>;
+  };
 }
 
 const defaultState: DataState = {
@@ -101,6 +104,7 @@ const defaultState: DataState = {
   tasks: {},
   knowledgeTree: {},
   tests: {},
+  lessonsTests: {},
 };
 
 export const dataReducer: Reducer<DataState, Action> = (
@@ -761,35 +765,34 @@ export const dataReducer: Reducer<DataState, Action> = (
       return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
     }
     case ActionType.KNOWLEDGE_TEST_FETCH: {
-      const {testId} = action;
+      const {lessonId} = action;
 
       return {
         ...state,
         tests: {
           ...state.tests,
-          [testId]: undefined,
+          [lessonId]: undefined,
         },
       };
     }
     case ActionType.KNOWLEDGE_TEST_FETCHED: {
-      const {testId, test} = action;
+      const {lessonId, test} = action;
 
       return {
         ...state,
         tests: {
           ...state.tests,
-          [testId]: test,
+          [lessonId]: test,
         },
       };
     }
     case ActionType.KNOWLEDGE_TEST_REVOKE: {
       const {lessonId, courseId, responseTest} = action;
-      const {id: testId} = responseTest;
       const {
         lessons: {[courseId]: courseLessons, ...loadedLessons},
       } = state;
 
-      const tests = {...state.tests, [testId]: responseTest};
+      const tests = {...state.tests, [lessonId]: responseTest};
 
       if (!courseLessons || courseLessons instanceof Error) {
         return {...state, tests};
@@ -811,12 +814,12 @@ export const dataReducer: Reducer<DataState, Action> = (
       };
     }
     case ActionType.KNOWLEDGE_TEST_DELETE: {
-      const {courseId, lessonId, testId} = action;
+      const {courseId, lessonId} = action;
       const {
         lessons: {[courseId]: courseLessons, ...loadedLessons},
       } = state;
 
-      const tests = {...state.tests, [testId]: undefined};
+      const tests = {...state.tests, [lessonId]: undefined};
 
       if (!courseLessons || courseLessons instanceof Error) {
         return {...state, tests};

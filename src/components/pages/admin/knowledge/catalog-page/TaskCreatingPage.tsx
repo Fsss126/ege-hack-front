@@ -57,7 +57,7 @@ const TaskCreatingPage: React.FC<RouteComponentProps<
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.KNOWLEDGE_BASE_EDIT}
+      requiredPermissions={Permission.KNOWLEDGE_CONTENT_EDIT}
       className="task-form-page"
       title="Создание курса"
       location={location}

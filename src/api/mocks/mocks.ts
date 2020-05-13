@@ -41,7 +41,7 @@ export const ACCOUNT_INFO: AccountInfo = {
   permissions: [
     Permission.HOMEWORK_CHECK,
     Permission.SUBJECT_EDIT,
-    Permission.KNOWLEDGE_BASE_EDIT,
+    Permission.KNOWLEDGE_CONTENT_EDIT,
   ],
   vk_info: {
     id: 154792439,

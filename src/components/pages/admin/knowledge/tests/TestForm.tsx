@@ -18,7 +18,7 @@ import {SimpleDataNode} from 'components/ui/input/TreeSelect';
 import {
   useKnowledgeSubjectContent,
   useKnowledgeTask,
-  useRevokeTest,
+  useRevokeKnowledgeTest,
 } from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {TestDtoReq} from 'types/dtos';
@@ -261,7 +261,7 @@ const TestForm: React.FC<TestFormProps> = (props) => {
 
   const {name, pass_criteria, deadline, tasks} = formData;
 
-  const revokeTest = useRevokeTest(courseId, lessonId);
+  const revokeTest = useRevokeKnowledgeTest(courseId, lessonId);
 
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<TestInfo>>

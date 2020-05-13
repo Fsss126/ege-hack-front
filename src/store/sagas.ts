@@ -49,6 +49,7 @@ import {
   HomeworksFetchAction,
   KnowledgeLevelFetchAction,
   KnowledgeTaskFetchAction,
+  KnowledgeTestFetchAction,
   KnowledgeThemeFetchAction,
   LessonDeleteRequestAction,
   LessonsFetchAction,
@@ -950,6 +951,39 @@ function* fetchKnowledgeTask() {
   );
 }
 
+function* fetchKnowledgeTest() {
+  yield* waitForLogin<KnowledgeTestFetchAction>(
+    ActionType.KNOWLEDGE_TEST_FETCH,
+    function* (channel) {
+      yield takeLeading(channel, function* (action: KnowledgeTestFetchAction) {
+        const {lessonId} = action;
+        try {
+          const test: TestInfo = yield call(
+            APIRequest.get,
+            `/knowledge/tests`,
+            {
+              params: {
+                lessonId,
+              },
+            },
+          );
+          yield put({
+            type: ActionType.KNOWLEDGE_TEST_FETCHED,
+            test,
+            lessonId,
+          });
+        } catch (error) {
+          yield put({
+            type: ActionType.KNOWLEDGE_TEST_FETCHED,
+            test: error,
+            lessonId,
+          });
+        }
+      });
+    },
+  );
+}
+
 function* init() {
   const credentials = yield select(
     (state: AppState) => state.dataReducer.credentials,
@@ -983,6 +1017,7 @@ export default function* rootSaga() {
   yield spawn(fetchKnowledgeLevel);
   yield spawn(fetchKnowledgeTheme);
   yield spawn(fetchKnowledgeTask);
+  yield spawn(fetchKnowledgeTest);
 
   yield spawn(processSubjectDelete);
   yield spawn(processCourseDelete);

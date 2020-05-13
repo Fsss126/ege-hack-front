@@ -1,27 +1,27 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useAdminCourse, useAdminWebinars} from 'hooks/selectors';
+import {useAdminCourse, useKnowledgeTest, useSubjects} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
-import {WebinarScheduleDtoReq} from 'types/dtos';
-import {WebinarScheduleInfo} from 'types/entities';
+import {TestDtoReq} from 'types/dtos';
+import {TestInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {CoursePageParams} from 'types/routes';
+import {LessonPageParams} from 'types/routes';
 
-import WebinarsForm from '../../courses/course-page/webinars/WebinarsForm';
 import TestForm from './TestForm';
 
-const TestEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
+const TestEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
   props,
 ) => {
   const {
     match: {
-      params: {courseId: param_course},
+      params: {courseId: param_course, lessonId: param_lesson},
     },
     location,
   } = props;
   const courseId = parseInt(param_course);
+  const lessonId = parseInt(param_lesson);
 
   const {
     course,
@@ -29,18 +29,21 @@ const TestEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     reload: reloadCourse,
   } = useAdminCourse(courseId);
   const {
-    webinars,
-    error: errorLoadingWebinars,
-    reload: reloadWebinars,
-  } = useAdminWebinars(courseId);
-
-  const createRequest = useCallback(
-    (requestData: WebinarScheduleDtoReq): Promise<WebinarScheduleInfo> =>
-      APIRequest.put(`/courses/${courseId}/schedule`, requestData),
-    [courseId],
+    subjects,
+    error: errorLoadingSubjects,
+    reload: reloadSubjects,
+  } = useSubjects();
+  const {test, error: errorLoadingTest, reload: reloadTest} = useKnowledgeTest(
+    lessonId,
   );
 
-  const returnLink = `/admin/courses/${courseId}/webinars/`;
+  const createRequest = useCallback(
+    (requestData: TestDtoReq): Promise<TestInfo> =>
+      APIRequest.put(`/knowledge/tests/${(test as TestInfo).id}`, requestData),
+    [test],
+  );
+
+  const returnLink = `/admin/courses/${courseId}/lessons/`;
 
   const onSubmitted = useCallback(
     (response, showSuccessMessage) => {
@@ -49,7 +52,7 @@ const TestEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
           text: 'Ок',
         },
         {
-          text: 'Вернуться к вебинарам',
+          text: 'Вернуться к уроку',
           url: returnLink,
         },
       ]);
@@ -57,29 +60,27 @@ const TestEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
     [returnLink],
   );
 
-  const isLoaded = !!(course && webinars);
-
-  const title =
-    webinars === null
-      ? 'Создание графика вебинаров'
-      : 'Изменение графика вебинаров';
+  const isLoaded = !!(course && subjects && test);
 
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.WEBINAR_EDIT}
-      className="lesson-form-page"
-      title={title}
+      requiredPermissions={Permission.TEST_EDIT}
+      className="test-form-page"
+      title="Изменение теста"
       location={location}
-      errors={[errorLoadingCourse, errorLoadingWebinars]}
-      reloadCallbacks={[reloadCourse, reloadWebinars]}
+      errors={[errorLoadingCourse, errorLoadingSubjects, errorLoadingTest]}
+      reloadCallbacks={[reloadCourse, reloadSubjects, reloadTest]}
     >
-      {isLoaded && (
+      {!!(course && subjects && test) && (
         <PageContent>
           <ContentBlock>
-            <WebinarsForm
-              webinars={webinars as WebinarScheduleInfo}
-              title={title}
+            <TestForm
+              test={test}
+              subjectId={course.subject_id}
+              lessonId={lessonId}
+              subjects={subjects}
+              title="Изменение тест"
               errorMessage="Ошибка при сохранении изменений"
               cancelLink={returnLink}
               courseId={courseId}

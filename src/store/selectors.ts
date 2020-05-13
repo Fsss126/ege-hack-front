@@ -2,10 +2,6 @@ import {AppState} from './reducers';
 
 export const selectDataReducer = (state: AppState) => state.dataReducer;
 
-export const selectUser = ({
-  dataReducer: {credentials, userInfo},
-}: AppState) => ({credentials, userInfo});
-
 export const selectCredentials = (state: AppState) =>
   selectDataReducer(state).credentials;
 
@@ -65,3 +61,6 @@ export const selectKnowledgeThemes = (state: AppState) =>
 
 export const selectKnowledgeTree = (state: AppState) =>
   selectDataReducer(state).knowledgeTree;
+
+export const selectKnowledgeTests = (state: AppState) =>
+  selectDataReducer(state).tests;

@@ -42,6 +42,7 @@ import {
   selectCredentials,
   selectHomeworks,
   selectKnowledgeTasks,
+  selectKnowledgeTests,
   selectKnowledgeThemes,
   selectKnowledgeTree,
   selectLessons,
@@ -1188,27 +1189,6 @@ export function useTest(testId: number): TestHookResult {
     : {test, reload: dispatchFetchAction};
 }
 
-type RevokeRestHookResult = (responseTest: TestInfo) => void;
-
-export function useRevokeTest(
-  courseId: number,
-  lessonId: number,
-): RevokeRestHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseTest: TestInfo) => {
-      dispatch({
-        type: ActionType.KNOWLEDGE_TEST_REVOKE,
-        responseTest,
-        courseId,
-        lessonId,
-      });
-    },
-    [courseId, dispatch, lessonId],
-  );
-}
-
 export type TestTaskHookResult = {
   task?: SanitizedTaskInfo;
   error?: AxiosError | true;
@@ -1291,7 +1271,7 @@ export function useKnowledgeLevel(
   subjectId: number,
   themeId?: number,
 ): KnowledgeLevelHookResult {
-  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
   const themes = useSelector(selectKnowledgeThemes);
   const tasks = useSelector(selectKnowledgeTasks);
   const knowledgeTree = useSelector(selectKnowledgeTree);
@@ -1360,7 +1340,7 @@ type KnowledgeSubjectTreeHookResult = {
 function useKnowledgeSubjectTree(
   subjectId?: number,
 ): KnowledgeSubjectTreeHookResult {
-  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
   const knowledgeTree = useSelector(selectKnowledgeTree);
   const subjectContent = subjectId ? knowledgeTree[subjectId] : undefined;
   const knowledgeLevelFetch = useKnowledgeLevelFetch();
@@ -1492,7 +1472,7 @@ export function useKnowledgeTheme(
   subjectId?: number,
   themeId?: number,
 ): KnowledgeThemeHookResult {
-  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
   const themes = useSelector(selectKnowledgeThemes);
   const theme = themeId ? themes[themeId] : undefined;
   const dispatch = useDispatch();
@@ -1546,7 +1526,7 @@ export function useKnowledgeTask(
   subjectId?: number,
   taskId?: number,
 ): KnowledgeTaskHookResult {
-  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_BASE_EDIT);
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
   const tasks = useSelector(selectKnowledgeTasks);
   const task = taskId ? tasks[taskId] : undefined;
   const dispatch = useDispatch();
@@ -1587,5 +1567,52 @@ export function useRevokeKnowledgeTask(): RevokeKnowledgeTaskHookResult {
       dispatch({type: ActionType.KNOWLEDGE_TASK_REVOKE, responseTask});
     },
     [dispatch],
+  );
+}
+
+export type KnowledgeTestHookResult = {
+  test?: TestInfo | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useKnowledgeTest(lessonId: number): KnowledgeTestHookResult {
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
+  const test = useSelector(selectKnowledgeTests)[lessonId];
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.KNOWLEDGE_TEST_FETCH, lessonId});
+  }, [dispatch, lessonId]);
+  useEffect(() => {
+    if (isAllowed) {
+      if (!test) {
+        dispatchFetchAction();
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, lessonId, test]);
+
+  return test instanceof Error
+    ? {error: test, reload: dispatchFetchAction}
+    : {test: !isAllowed ? false : test, reload: dispatchFetchAction};
+}
+
+type RevokeKnowledgeTestHookResult = (responseTest: TestInfo) => void;
+
+export function useRevokeKnowledgeTest(
+  courseId: number,
+  lessonId: number,
+): RevokeKnowledgeTestHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseTest: TestInfo) => {
+      dispatch({
+        type: ActionType.KNOWLEDGE_TEST_REVOKE,
+        responseTest,
+        courseId,
+        lessonId,
+      });
+    },
+    [courseId, dispatch, lessonId],
   );
 }

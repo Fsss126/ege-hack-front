@@ -147,7 +147,7 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                       </NavLink>
                     </ConditionalRenderer>
                     <ConditionalRenderer
-                      requiredPermissions={[Permission.KNOWLEDGE_BASE_EDIT]}
+                      requiredPermissions={[Permission.KNOWLEDGE_CONTENT_EDIT]}
                     >
                       <NavLink
                         className="layout__sidebar-menu-link"

@@ -656,12 +656,12 @@ export type KnowledgeTaskDeleteAction = {
 
 export type KnowledgeTestFetchAction = {
   type: ActionType.KNOWLEDGE_TEST_FETCH;
-  testId: number;
+  lessonId: number;
 };
 
 export type KnowledgeTestFetchedAction = {
   type: ActionType.KNOWLEDGE_TEST_FETCHED;
-  testId: number;
+  lessonId: number;
   test: TestInfo | AxiosError;
 };
 
@@ -687,7 +687,6 @@ export type KnowledgeTestDeleteRequestAction = {
   type: ActionType.KNOWLEDGE_TEST_DELETE_REQUEST;
   courseId: number;
   lessonId: number;
-  testId: number;
   onDelete?: KnowledgeTestDeleteCallback;
   onError?: KnowledgeTestDeleteErrorCallback;
 };
@@ -696,7 +695,6 @@ export type KnowledgeTestDeleteAction = {
   type: ActionType.KNOWLEDGE_TEST_DELETE;
   courseId: number;
   lessonId: number;
-  testId: number;
 };
 
 export type Action = {type: ActionType} & (

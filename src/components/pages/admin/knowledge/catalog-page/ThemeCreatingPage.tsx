@@ -59,7 +59,7 @@ const ThemeCreatingPage: React.FC<RouteComponentProps<
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.KNOWLEDGE_BASE_EDIT}
+      requiredPermissions={Permission.KNOWLEDGE_CONTENT_EDIT}
       className="theme-form-page"
       title="Создание темы"
       location={location}

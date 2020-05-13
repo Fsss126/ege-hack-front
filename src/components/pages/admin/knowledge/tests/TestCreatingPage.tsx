@@ -1,13 +1,13 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useAdminCourse, useAdminWebinars, useSubjects} from 'hooks/selectors';
+import {useAdminCourse, useSubjects} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
-import {TestDtoReq, WebinarScheduleDtoReq} from 'types/dtos';
-import {TestInfo, WebinarScheduleInfo} from 'types/entities';
+import {TestDtoReq} from 'types/dtos';
+import {TestInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {CoursePageParams, LessonPageParams} from 'types/routes';
+import {LessonPageParams} from 'types/routes';
 
 import TestForm from './TestForm';
 
@@ -48,12 +48,12 @@ const TestCreatingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
 
   const onSubmitted = useCallback(
     (response, showSuccessMessage) => {
-      showSuccessMessage('Изменения сохранены', [
+      showSuccessMessage('Тест создан', [
         {
           text: 'Ок',
         },
         {
-          text: 'Вернуться к вебинарам',
+          text: 'Вернуться к уроку',
           url: returnLink,
         },
       ]);
@@ -66,8 +66,8 @@ const TestCreatingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.WEBINAR_EDIT}
-      className="lesson-form-page"
+      requiredPermissions={Permission.TEST_EDIT}
+      className="test-form-page"
       title="Создание теста"
       location={location}
       errors={[errorLoadingCourse, errorLoadingSubjects]}
