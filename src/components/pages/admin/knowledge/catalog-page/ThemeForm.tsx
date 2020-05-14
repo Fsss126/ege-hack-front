@@ -1,5 +1,4 @@
 /* eslint-disable  no-restricted-globals */
-import {useHandleErrors} from 'components/layout/Page';
 import Form, {
   ErrorHandler,
   FormProps,
@@ -11,17 +10,12 @@ import Form, {
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {OptionShape} from 'components/ui/input/Select';
-import {SimpleDataNode} from 'components/ui/input/TreeSelect';
-import {
-  useKnowledgeLevelFetch,
-  useKnowledgeSubjectContent,
-  useKnowledgeTheme,
-  useRevokeKnowledgeTheme,
-} from 'hooks/selectors';
+import {useRevokeKnowledgeTheme} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {ThemeDtoReq} from 'types/dtos';
 import {SubjectInfo, ThemeInfo} from 'types/entities';
-import {Deferred} from 'utils/promiseHelper';
+
+import {ThemeSelect} from './ThemeSelect';
 
 type ThemeFormData = {
   name: string;
@@ -58,126 +52,6 @@ export type CourseFormProps = {
 
 export type SubjectOption = OptionShape<number>;
 
-export type ThemeTreeNode = Require<
-  SimpleDataNode<number, string>,
-  'rootPId'
-> & {
-  themeId: number;
-  parentThemeId?: number;
-  subjectId: number;
-};
-
-export const getThemeNodeId = (id: number) => `1.theme.${id}`;
-
-export const getSubjectNodeId = (id: number) => `subject.${id}`;
-
-export const mapSubjectsToOptions = ({
-  id,
-  name,
-}: SubjectInfo): SubjectOption => ({
-  value: id,
-  label: name,
-});
-
-export const mapThemesToNodes = ({
-  id,
-  parent_theme_id,
-  subject_id,
-  has_sub_themes,
-  name,
-}: ThemeInfo): ThemeTreeNode => ({
-  id: getThemeNodeId(id),
-  value: id,
-  pId: parent_theme_id ? getThemeNodeId(parent_theme_id) : undefined,
-  rootPId: getSubjectNodeId(subject_id),
-  title: name,
-  themeId: id,
-  parentThemeId: parent_theme_id,
-  subjectId: subject_id,
-  isLeaf: !has_sub_themes,
-});
-
-export function useLoadThemeLevel() {
-  const fetchThemes = useKnowledgeLevelFetch();
-
-  return useCallback(
-    (treeNode: ThemeTreeNode): Promise<unknown> => {
-      const deferred = new Deferred();
-      const {subjectId, themeId} = treeNode;
-
-      fetchThemes(subjectId, themeId, deferred.resolve, deferred.reject);
-
-      return deferred.promise;
-    },
-    [fetchThemes],
-  );
-}
-
-export function useThemeSelect(
-  subjects: SubjectInfo[],
-  subject_id?: number,
-  themeId?: number,
-  ...excludedThemes: ThemeInfo[]
-) {
-  const {
-    themes,
-    loadedThemes,
-    error: errorLoadingRootThemes,
-    reload: reloadRootThemes,
-  } = useKnowledgeSubjectContent(subject_id);
-  const {
-    theme,
-    error: errorLoadingTheme,
-    reload: reloadTheme,
-  } = useKnowledgeTheme(subject_id, themeId);
-
-  const isLoading =
-    subject_id !== undefined && (!themes || (themeId !== undefined && !theme));
-
-  const errors = [errorLoadingRootThemes, errorLoadingTheme];
-  const reloadCallbacks = [reloadRootThemes, reloadTheme];
-
-  const {hasError, notFound} = useHandleErrors(errors, reloadCallbacks);
-
-  const subjectOptions = useMemo<SubjectOption[]>(
-    () => subjects.map(mapSubjectsToOptions),
-    [subjects],
-  );
-  const themeTreeNodes = useMemo<ThemeTreeNode[] | undefined>(() => {
-    let themesNodes = themes ? themes.map(mapThemesToNodes) : [];
-    const themeNode = theme ? mapThemesToNodes(theme) : [];
-
-    themesNodes = _.uniqBy(_.concat(themesNodes, themeNode), 'id');
-
-    return isLoading ? undefined : themesNodes;
-  }, [isLoading, theme, themes]);
-
-  const loadData = useLoadThemeLevel();
-
-  const loadedNodeIds = loadedThemes.map((id) => getThemeNodeId(id));
-
-  // TODO: set isLeaf flag of parent nodes with no children left after filtering
-  const filteredTreeNodes = useMemo(
-    () =>
-      themeTreeNodes?.filter(({value}) =>
-        _.every(excludedThemes, (theme) => value !== theme.id),
-      ),
-    [excludedThemes, themeTreeNodes],
-  );
-
-  return {
-    hasError,
-    notFound,
-    isLoading,
-    subjectOptions,
-    themeTreeNodes: filteredTreeNodes,
-    loadedNodeIds,
-    loadData,
-    errors,
-    reloadCallbacks,
-  };
-}
-
 const ThemeForm: React.FC<CourseFormProps> = (props) => {
   const {
     subjects,
@@ -189,6 +63,11 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
     subjectId: passedSubjectId,
     parentThemeId: passedParentThemeId,
   } = props;
+
+  const subjectOptions = useMemo<SubjectOption[]>(
+    () => subjects.map(({id, name}) => ({value: id, label: name})),
+    [subjects],
+  );
 
   const formElementRef = useRef<HTMLFormElement>(null);
 
@@ -249,20 +128,6 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
     [errorMessage],
   );
 
-  const {
-    hasError,
-    isLoading,
-    subjectOptions,
-    themeTreeNodes,
-    loadedNodeIds,
-    loadData,
-  } = useThemeSelect(
-    subjects,
-    subject_id,
-    parent_theme_id,
-    ...(theme ? [theme] : []),
-  );
-
   const onSubjectChange = useCallback(
     (value: any, name: any) => {
       onInputChange(value, name);
@@ -295,18 +160,12 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             isClearable={false}
             onChange={onSubjectChange}
           />
-          <Input.TreeSelect<number, string>
+          <ThemeSelect
+            subjectId={subject_id}
             placeholder="Родительская тема"
             name="parent_theme_id"
             onChange={onInputChange}
             value={parent_theme_id}
-            treeDataSimpleMode
-            treeData={themeTreeNodes}
-            treeLoadedKeys={loadedNodeIds}
-            allowClear
-            loading={isLoading && !hasError}
-            loadData={loadData as any}
-            disabled={themeTreeNodes === undefined}
           />
           <Input.Input
             name="name"

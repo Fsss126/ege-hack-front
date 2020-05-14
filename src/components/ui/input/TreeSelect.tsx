@@ -3,10 +3,9 @@ import TreeSelectInput, {
   TreeSelectProps as SelectProps,
 } from 'antd/lib/tree-select';
 import classNames from 'classnames';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import traverse from 'traverse';
 
-import {useToggle} from '../../../hooks/common';
 import {getPlaceholder, InputChangeHandler} from './Input';
 import {InputContainer} from './InputContainer';
 
@@ -45,7 +44,7 @@ type TreeSelectCallback<V extends Key, T extends Key = V> = (
   node: SimpleDataNode<V, T>,
 ) => void;
 
-type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
+export type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
   SelectProps<V>,
   'treeData' | 'onChange' | 'treeDataSimpleMode' | 'loadData' | 'placeholder'
 > & {

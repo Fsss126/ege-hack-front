@@ -272,5 +272,4 @@ export default {
   Filter,
   Catalog,
   Body,
-  // Page: CatalogPage
 };

@@ -23,7 +23,8 @@ import {
   getVideoId,
   getVideoLinkIsValid,
 } from '../../courses/course-page/lessons/LessonForm';
-import {useThemeSelect} from './ThemeForm';
+import {SubjectOption} from './ThemeForm';
+import {ThemeSelect} from './ThemeSelect';
 
 type TaskFormData = {
   image?: FileInfo[];
@@ -119,6 +120,11 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
     subjectId: passedSubjectId,
     parentThemeId: passedThemeId,
   } = props;
+
+  const subjectOptions = useMemo<SubjectOption[]>(
+    () => subjects.map(({id, name}) => ({value: id, label: name})),
+    [subjects],
+  );
 
   const formElementRef = useRef<HTMLFormElement>(null);
 
@@ -242,15 +248,6 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
     [errorMessage],
   );
 
-  const {
-    hasError,
-    isLoading,
-    subjectOptions,
-    themeTreeNodes,
-    loadedNodeIds,
-    loadData,
-  } = useThemeSelect(subjects, subject_id, theme_id);
-
   const onSubjectChange = useCallback(
     (value: any, name: any) => {
       onInputChange(value, name);
@@ -291,18 +288,12 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
             isClearable={false}
             onChange={onSubjectChange}
           />
-          <Input.TreeSelect<number, string>
+          <ThemeSelect
+            subjectId={subject_id}
             placeholder="Тема"
             name="theme_id"
             onChange={onInputChange}
             value={theme_id}
-            treeDataSimpleMode
-            treeData={themeTreeNodes}
-            allowClear
-            treeLoadedKeys={loadedNodeIds}
-            loading={isLoading && !hasError}
-            loadData={loadData as any}
-            disabled={themeTreeNodes === undefined}
           />
           <Input.Input
             name="name"

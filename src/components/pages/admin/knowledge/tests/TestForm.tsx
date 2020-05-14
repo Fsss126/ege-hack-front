@@ -1,4 +1,3 @@
-import {useHandleErrors} from 'components/layout/Page';
 import Form, {
   ErrorHandler,
   FormProps,
@@ -14,22 +13,12 @@ import {
   FormElementGroup,
 } from 'components/ui/form/FormElementGroup';
 import * as Input from 'components/ui/input';
-import {SimpleDataNode} from 'components/ui/input/TreeSelect';
-import {
-  useKnowledgeSubjectContent,
-  useKnowledgeTask,
-  useRevokeKnowledgeTest,
-} from 'hooks/selectors';
+import {useRevokeKnowledgeTest} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {TestDtoReq} from 'types/dtos';
-import {SubjectInfo, TaskInfo, TestInfo, ThemeInfo} from 'types/entities';
+import {SubjectInfo, TestInfo} from 'types/entities';
 
-import {
-  getThemeNodeId,
-  mapThemesToNodes,
-  ThemeTreeNode,
-  useLoadThemeLevel,
-} from '../catalog-page/ThemeForm';
+import {TaskSelect} from './TaskSelect';
 
 type TaskData = {
   taskId?: number;
@@ -63,97 +52,8 @@ function getRequestData(formData: TestFormData): TestDtoReq {
   };
 }
 
-export type TaskTreeNode = Require<SimpleDataNode<number, string>, 'rootPId'>;
-
-export const mapTasksToNodes = ({
-  id,
-  theme_id,
-  subject_id,
-  text,
-}: TaskInfo): TaskTreeNode => ({
-  id: `2.task.${id}`,
-  value: id,
-  pId: `1.theme.${theme_id}`,
-  rootPId: `subject.${subject_id}`,
-  isLeaf: true,
-  title: text,
-});
-
-export const mapThemeToContainingNodes = (theme: ThemeInfo): ThemeTreeNode => ({
-  ...mapThemesToNodes(theme),
-  isLeaf: !theme.has_sub_themes && !theme.has_sub_tasks,
-  selectable: false,
-  value: NaN,
-});
-
-export function useTaskSelect(
-  subjects: SubjectInfo[],
-  subjectId?: number,
-  taskId?: number,
-) {
-  const {
-    themes,
-    tasks,
-    loadedThemes,
-    error: errorLoadingRootContent,
-    reload: reloadRootContent,
-  } = useKnowledgeSubjectContent(subjectId);
-
-  const {task, error: errorLoadingTask, reload: reloadTask} = useKnowledgeTask(
-    subjectId,
-    taskId,
-  );
-
-  const isLoading =
-    subjectId !== undefined &&
-    (!themes || !tasks || (taskId !== undefined && !task));
-
-  const errors = [errorLoadingRootContent, errorLoadingTask];
-  const reloadCallbacks = [reloadRootContent, reloadTask];
-
-  const {hasError, notFound} = useHandleErrors(errors, reloadCallbacks);
-
-  const themeTreeNodes = useMemo<ThemeTreeNode[] | undefined>(() => {
-    const themesNodes = themes
-      ? themes.map(mapThemeToContainingNodes).filter(({isLeaf}) => !isLeaf)
-      : [];
-
-    return isLoading ? undefined : themesNodes;
-  }, [isLoading, themes]);
-  const taskTreeNodes = useMemo<TaskTreeNode[] | undefined>(() => {
-    let tasksNodes = tasks ? tasks.map(mapTasksToNodes) : [];
-    const taskNode = task ? mapTasksToNodes(task) : [];
-
-    tasksNodes = _.uniqBy(_.concat(tasksNodes, taskNode), 'id');
-
-    return isLoading ? undefined : tasksNodes;
-  }, [isLoading, task, tasks]);
-
-  const treeNodes = useMemo(() => {
-    return themeTreeNodes && taskTreeNodes
-      ? _.concat(themeTreeNodes, taskTreeNodes)
-      : undefined;
-  }, [taskTreeNodes, themeTreeNodes]);
-
-  const loadedNodeIds = loadedThemes.map((id) => getThemeNodeId(id));
-
-  const loadData = useLoadThemeLevel();
-
-  return {
-    hasError,
-    notFound,
-    isLoading,
-    treeNodes,
-    loadData,
-    loadedNodeIds,
-    errors,
-    reloadCallbacks,
-  };
-}
-
 type TaskElementRenderProps = {
   selectedTasks: number[];
-  subjects: SubjectInfo[];
   subjectId: number;
 };
 
@@ -161,33 +61,19 @@ type TaskElementProps = ElementComponentProps<TaskData, TaskElementRenderProps>;
 
 // TODO: disable selected tasks
 const TaskElement = (props: TaskElementProps) => {
-  const {taskId, selectedTasks, subjects, subjectId, onChange, index} = props;
-
-  const {
-    hasError,
-    isLoading,
-    treeNodes,
-    loadedNodeIds,
-    loadData,
-  } = useTaskSelect(subjects, subjectId, taskId);
+  const {taskId, selectedTasks, subjectId, onChange, index} = props;
 
   return (
     <FormElement name="tasks" index={index} onChange={onChange} key={index}>
       <FieldsContainer>
         <div className="col-12">
-          <Input.TreeSelect<number, string>
+          <TaskSelect
+            subjectId={subjectId}
             placeholder="Задание"
             name={`tasks[${index}].taskId`}
             required
             onChange={onChange}
             value={taskId}
-            treeDataSimpleMode
-            treeData={treeNodes}
-            treeLoadedKeys={loadedNodeIds}
-            allowClear
-            loading={isLoading && !hasError}
-            loadData={loadData as any}
-            disabled={treeNodes === undefined}
           />
         </div>
       </FieldsContainer>
@@ -201,7 +87,6 @@ export type TestFormProps = {
   lessonId: number;
   courseId: number;
   subjectId: number;
-  subjects: SubjectInfo[];
   title?: string;
   createRequest: (data: TestDtoReq) => Promise<TestInfo>;
   onSubmitted: SubmittedHandler<TestInfo>;
@@ -215,7 +100,6 @@ const TestForm: React.FC<TestFormProps> = (props) => {
     lessonId,
     subjectId,
     courseId,
-    subjects,
     title,
     createRequest,
     onSubmitted,
@@ -355,7 +239,7 @@ const TestForm: React.FC<TestFormProps> = (props) => {
         name="tasks"
         addBtnText="Добавить задание"
         initialElementData={INITIAL_TASK_DATA}
-        renderProps={{selectedTasks, subjects, subjectId}}
+        renderProps={{selectedTasks, subjectId}}
         elementComponent={TaskElement}
       />
     </Form>

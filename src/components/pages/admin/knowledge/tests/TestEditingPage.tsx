@@ -28,11 +28,6 @@ const TestEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
     error: errorLoadingCourse,
     reload: reloadCourse,
   } = useAdminCourse(courseId);
-  const {
-    subjects,
-    error: errorLoadingSubjects,
-    reload: reloadSubjects,
-  } = useSubjects();
   const {test, error: errorLoadingTest, reload: reloadTest} = useKnowledgeTest(
     lessonId,
   );
@@ -60,7 +55,7 @@ const TestEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
     [returnLink],
   );
 
-  const isLoaded = !!(course && subjects && test);
+  const isLoaded = !!(course && test);
 
   return (
     <Page
@@ -69,17 +64,16 @@ const TestEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
       className="test-form-page"
       title="Изменение теста"
       location={location}
-      errors={[errorLoadingCourse, errorLoadingSubjects, errorLoadingTest]}
-      reloadCallbacks={[reloadCourse, reloadSubjects, reloadTest]}
+      errors={[errorLoadingCourse, errorLoadingTest]}
+      reloadCallbacks={[reloadCourse, reloadTest]}
     >
-      {!!(course && subjects && test) && (
+      {!!(course && test) && (
         <PageContent>
           <ContentBlock>
             <TestForm
               test={test}
               subjectId={course.subject_id}
               lessonId={lessonId}
-              subjects={subjects}
               title="Изменение тест"
               errorMessage="Ошибка при сохранении изменений"
               cancelLink={returnLink}

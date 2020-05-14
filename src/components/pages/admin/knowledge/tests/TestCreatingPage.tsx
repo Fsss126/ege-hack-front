@@ -1,7 +1,7 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useAdminCourse, useSubjects} from 'hooks/selectors';
+import {useAdminCourse} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {TestDtoReq} from 'types/dtos';
@@ -28,11 +28,6 @@ const TestCreatingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
     error: errorLoadingCourse,
     reload: reloadCourse,
   } = useAdminCourse(courseId);
-  const {
-    subjects,
-    error: errorLoadingSubjects,
-    reload: reloadSubjects,
-  } = useSubjects();
 
   const createRequest = useCallback(
     (requestData: TestDtoReq): Promise<TestInfo> =>
@@ -61,7 +56,7 @@ const TestCreatingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
     [returnLink],
   );
 
-  const isLoaded = !!(course && subjects);
+  const isLoaded = !!course;
 
   return (
     <Page
@@ -70,16 +65,15 @@ const TestCreatingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
       className="test-form-page"
       title="Создание теста"
       location={location}
-      errors={[errorLoadingCourse, errorLoadingSubjects]}
-      reloadCallbacks={[reloadCourse, reloadSubjects]}
+      errors={[errorLoadingCourse]}
+      reloadCallbacks={[reloadCourse]}
     >
-      {!!(course && subjects) && (
+      {!!course && (
         <PageContent>
           <ContentBlock>
             <TestForm
               subjectId={course.subject_id}
               lessonId={lessonId}
-              subjects={subjects}
               title="Новый тест"
               errorMessage="Ошибка при создании теста"
               cancelLink={returnLink}
