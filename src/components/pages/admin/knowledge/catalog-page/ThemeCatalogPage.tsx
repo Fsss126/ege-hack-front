@@ -16,6 +16,8 @@ import {CourseInfo, SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithParentProps} from 'types/routes';
 
+import {TreeCatalog} from '../../../../common/TreeCatalog';
+
 const filterBy = {
   search: true,
   subject: true,
@@ -133,6 +135,7 @@ const ThemeCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
                 </Button>
               </ButtonsBlock>
             )}
+            <TreeCatalog />
             <CourseCatalog.Filter filterBy={filterBy} />
             <CourseCatalog.Catalog plain renderCourse={renderCourse} />
           </CourseCatalog.Body>

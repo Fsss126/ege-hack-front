@@ -238,7 +238,7 @@ export const TEST_TASKS: TaskDtoResp[] = [
 ];
 
 export const TEST: TestDtoResp = {
-  id: 1,
+  id: 12,
   name: 'Движение по окружности',
   pass_criteria: 0.4,
   deadline: new Date(2020, 4, 1, 20).getTime(),
@@ -261,9 +261,12 @@ export const TEST_STATUS_COMPLETED: TestStatusResp = {
   id: TEST.id,
   name: TEST.name,
   status: TestStatus.COMPLETED,
+  progress: 1,
   percentage: 1,
   passed: true,
   deadline: TEST.deadline,
+  started_at: new Date().getTime(),
+  completed_at: new Date().getTime(),
 };
 
 export const TEST_STATE_NOT_STARTED: TestStateDtoResp = {
@@ -290,7 +293,7 @@ export const TEST_STATE_COMPLETED: TestStateDtoResp = {
   last_task_id: TEST.tasks.length - 1,
   percentage: 0.8,
   passed: true,
-  answers: TEST.tasks.map(({id, answer}, i) => ({
+  answers: TEST.tasks.map(({id, answer, solution}, i) => ({
     task_id: id,
     user_answer:
       answer.type === AnswerType.FILE
@@ -304,6 +307,7 @@ export const TEST_STATE_COMPLETED: TestStateDtoResp = {
           }
         : answer,
     correct_answer: answer,
+    solution,
     is_correct: i !== 0,
   })),
 };

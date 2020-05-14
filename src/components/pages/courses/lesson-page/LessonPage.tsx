@@ -3,7 +3,12 @@ import List, {ListItemRenderer} from 'components/common/List';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
-import {useLessons, useUserCourses, useUserHomework} from 'hooks/selectors';
+import {
+  useLessons,
+  useTestStatus,
+  useUserCourses,
+  useUserHomework,
+} from 'hooks/selectors';
 import _ from 'lodash';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
@@ -37,6 +42,10 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
     error: errorLoadingHomework,
     reload: reloadHomework,
   } = useUserHomework(courseId, lessonId);
+  const {status, error: errorLoadingTest, reload: reloadTest} = useTestStatus(
+    courseId,
+    lessonId,
+  );
   const renderLesson: ListItemRenderer<LessonInfo> = (lesson, renderProps) => {
     const {id, locked} = lesson;
 
@@ -52,7 +61,7 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
     );
   };
 
-  if (courses && lessons && homework !== undefined) {
+  if (courses && lessons && homework !== undefined && status !== undefined) {
     const course = _.find(courses, {id: courseId});
     const selectedLesson = (course && _.find(lessons, {id: lessonId})) || null;
 
@@ -85,7 +94,11 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
             >
               <div className="container p-lg-0">
                 <div className="row align-items-start">
-                  <LessonView lesson={selectedLesson} homework={homework} />
+                  <LessonView
+                    lesson={selectedLesson}
+                    testStatus={status}
+                    homework={homework}
+                  />
                   <ContentBlock
                     transparent
                     className="col-12 col-xl-auto lesson-page__other-lessons"
@@ -119,8 +132,14 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
           errorLoadingCourses,
           errorLoadingLessons,
           errorLoadingHomework,
+          errorLoadingTest,
         ]}
-        reloadCallbacks={[reloadCourses, reloadLessons, reloadHomework]}
+        reloadCallbacks={[
+          reloadCourses,
+          reloadLessons,
+          reloadHomework,
+          reloadTest,
+        ]}
       />
     );
   }

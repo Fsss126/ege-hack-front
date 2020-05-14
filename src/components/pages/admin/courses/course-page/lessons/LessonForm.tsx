@@ -28,7 +28,7 @@ interface LessonFormData {
   hometask_description: string;
   hometask_file?: FileInfo[];
   hometask_deadline?: Date;
-  test_id: string;
+  test_id?: number;
 }
 const INITIAL_FORM_DATA: LessonFormData = {
   name: '',
@@ -37,7 +37,7 @@ const INITIAL_FORM_DATA: LessonFormData = {
   description: '',
   is_locked: false,
   hometask_description: '',
-  test_id: '',
+  test_id: undefined,
   image: undefined,
   attachments: undefined,
   hometask_file: undefined,
@@ -81,6 +81,7 @@ function getRequestData(
     num: parseInt(numParam),
     description,
     is_locked,
+    test_id,
     video_link: getVideoId(video_link),
     image: (image as FileInfo[])[0].file_id,
     attachments: [],
@@ -166,7 +167,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
           locked: is_locked,
           num,
           description,
-          test,
+          test_id,
           assignment: {
             deadline: hometask_deadline,
             description: hometask_description,
@@ -192,7 +193,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
           hometask_deadline,
           hometask_description: hometask_description || '',
           hometask_file,
-          test_id: test ? test.id.toString() : '',
+          test_id,
           ...otherData,
         };
       }

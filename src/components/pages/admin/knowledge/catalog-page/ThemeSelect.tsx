@@ -9,6 +9,7 @@ import {
 import {TreeNodeProps} from 'rc-tree/lib';
 import React, {useCallback, useMemo} from 'react';
 import {ThemeInfo} from 'types/entities';
+import {getSubjectNodeId, getThemeNodeId} from 'types/knowledgeTree';
 import {Deferred} from 'utils/promiseHelper';
 
 export type TreeNode = Require<SimpleDataNode<number, string>, 'rootPId'>;
@@ -18,10 +19,6 @@ export type ThemeTreeNode = TreeNode & {
   parentThemeId?: number;
   subjectId: number;
 };
-
-export const getThemeNodeId = (id: number) => `1.theme.${id}`;
-
-export const getSubjectNodeId = (id: number) => `subject.${id}`;
 
 export const mapThemesToNodes = ({
   id,

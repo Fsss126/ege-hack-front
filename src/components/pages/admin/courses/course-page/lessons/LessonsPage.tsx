@@ -110,6 +110,14 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
                 <i className="icon-close" />
                 Удалить
               </DropdownMenuOption>
+              <DropdownMenuOption component={Link} to={`${lessonLink}edit/`}>
+                <i className="far fa-edit" />
+                Изменить
+              </DropdownMenuOption>
+              <DropdownMenuOption onClick={deleteCallback}>
+                <i className="icon-close" />
+                Удалить
+              </DropdownMenuOption>
             </DropdownMenu>
           ) : undefined,
         },

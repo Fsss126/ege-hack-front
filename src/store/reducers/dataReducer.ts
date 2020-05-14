@@ -19,18 +19,16 @@ import {
   WebinarScheduleInfo,
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
+import {KNOWLEDGE_TREE_ROOT, KnowledgeTreeLevel} from 'types/knowledgeTree';
 
 import {Action, ActionType} from '../actions';
 
 export type DataProperty<T> = Maybe<T | AxiosError>;
 
-export type KnowledgeTreeLevel = {
-  themeIds: number[];
-  taskIds: number[];
-};
-
 export type KnowledgeBaseSubject = {
-  [key in number | 'root']?: DataProperty<KnowledgeTreeLevel>;
+  [key in number | typeof KNOWLEDGE_TREE_ROOT]?: DataProperty<
+    KnowledgeTreeLevel
+  >;
 };
 
 export interface DataState {
@@ -67,7 +65,7 @@ export interface DataState {
   tasks: {
     [taskId: number]: DataProperty<TaskInfo>;
   };
-  knowledgeTree: {
+  knowledgeMap: {
     [subjectId: number]: KnowledgeBaseSubject;
   };
   tests: {
@@ -102,7 +100,7 @@ const defaultState: DataState = {
   homeworks: {},
   themes: {},
   tasks: {},
-  knowledgeTree: {},
+  knowledgeMap: {},
   tests: {},
   lessonsTests: {},
 };
@@ -643,13 +641,13 @@ export const dataReducer: Reducer<DataState, Action> = (
     }
     case ActionType.KNOWLEDGE_LEVEL_FETCHED: {
       const {subjectId, themeId, content} = action;
-      const themeKey = themeId !== undefined ? themeId : 'root';
+      const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
 
       let stateUpdate: Partial<DataState>;
 
       if (content instanceof Error) {
         stateUpdate = {
-          knowledgeTree: {
+          knowledgeMap: {
             [subjectId]: {
               [themeKey]: content,
             },
@@ -666,9 +664,10 @@ export const dataReducer: Reducer<DataState, Action> = (
         stateUpdate = {
           themes: themesMap,
           tasks: tasksMap,
-          knowledgeTree: {
+          knowledgeMap: {
             [subjectId]: {
               [themeKey]: {
+                id: themeKey,
                 themeIds,
                 taskIds,
               },
@@ -676,7 +675,7 @@ export const dataReducer: Reducer<DataState, Action> = (
           },
         };
       }
-      return _.cloneDeep(_.merge(state, stateUpdate));
+      return _.merge(stateUpdate, state);
     }
     case ActionType.KNOWLEDGE_THEME_FETCHED: {
       const {themeId, theme} = action;
@@ -693,13 +692,15 @@ export const dataReducer: Reducer<DataState, Action> = (
       const {responseTheme} = action;
       const {subject_id, id, parent_theme_id} = responseTheme;
 
-      const themeKey = parent_theme_id !== undefined ? parent_theme_id : 'root';
+      const themeKey =
+        parent_theme_id !== undefined ? parent_theme_id : KNOWLEDGE_TREE_ROOT;
 
       const stateUpdate: Partial<DataState> = {
         themes: {[id]: responseTheme},
-        knowledgeTree: {
+        knowledgeMap: {
           [subject_id]: {
             [themeKey]: {
+              id: themeKey,
               themeIds: [id],
               taskIds: [],
             },
@@ -736,13 +737,14 @@ export const dataReducer: Reducer<DataState, Action> = (
       const {responseTask} = action;
       const {subject_id, id, theme_id} = responseTask;
 
-      const themeKey = theme_id !== undefined ? theme_id : 'root';
+      const themeKey = theme_id !== undefined ? theme_id : KNOWLEDGE_TREE_ROOT;
 
       const stateUpdate: Partial<DataState> = {
         tasks: {[id]: responseTask},
-        knowledgeTree: {
+        knowledgeMap: {
           [subject_id]: {
             [themeKey]: {
+              id: themeKey,
               themeIds: [],
               taskIds: [id],
             },
@@ -803,8 +805,7 @@ export const dataReducer: Reducer<DataState, Action> = (
 
       if (lessonIndex !== -1) {
         const prevLesson = courseLessons[lessonIndex];
-        // TODO: change
-        newLessons[lessonIndex] = {...prevLesson, test: responseTest.id as any};
+        newLessons[lessonIndex] = {...prevLesson, test_id: responseTest.id};
       }
 
       return {
@@ -830,7 +831,7 @@ export const dataReducer: Reducer<DataState, Action> = (
 
       if (lessonIndex !== -1) {
         const prevLesson = courseLessons[lessonIndex];
-        newLessons[lessonIndex] = {...prevLesson, test: undefined};
+        newLessons[lessonIndex] = {...prevLesson, test_id: undefined};
       }
 
       return {

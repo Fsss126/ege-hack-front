@@ -1,15 +1,22 @@
-import {AxiosError} from 'axios';
 import {Reducer} from 'redux';
-import {SanitizedTestInfo, TestStateInfo, TestStatus} from 'types/entities';
+import {
+  SanitizedTestInfo,
+  TestStateInfo,
+  TestStatus,
+  TestStatusInfo,
+} from 'types/entities';
 
 import {Action, ActionType} from '../actions';
+import {DataProperty} from './dataReducer';
 
 export interface TestState {
-  test?: SanitizedTestInfo | AxiosError;
-  state?: TestStateInfo | AxiosError;
+  statuses: {[lessonId: number]: DataProperty<TestStatusInfo | null>};
+  test?: DataProperty<SanitizedTestInfo>;
+  state?: DataProperty<TestStateInfo>;
 }
 
 const defaultState: TestState = {
+  statuses: {},
   test: undefined,
   state: undefined,
 };
@@ -19,6 +26,17 @@ export const testReducer: Reducer<TestState, Action> = (
   action,
 ): TestState => {
   switch (action.type) {
+    case ActionType.TEST_STATUS_FETCHED: {
+      const {lessonId, status} = action;
+
+      return {
+        ...state,
+        statuses: {
+          ...state.statuses,
+          [lessonId]: status,
+        },
+      };
+    }
     case ActionType.TEST_FETCHED: {
       const {test} = action;
 

@@ -5,9 +5,13 @@ import {useKnowledgeSubjectContent, useKnowledgeTask} from 'hooks/selectors';
 import {TreeNodeProps} from 'rc-tree/lib';
 import React, {useMemo} from 'react';
 import {TaskInfo, ThemeInfo} from 'types/entities';
+import {
+  getSubjectNodeId,
+  getTaskNodeId,
+  getThemeNodeId,
+} from 'types/knowledgeTree';
 
 import {
-  getThemeNodeId,
   mapThemesToNodes,
   renderThemeIcon,
   ThemeTreeNode,
@@ -29,10 +33,10 @@ export const mapTasksToNodes = ({
   subject_id,
   text,
 }: TaskInfo): TaskTreeNode => ({
-  id: `2.task.${id}`,
+  id: getTaskNodeId(id),
   value: id,
-  pId: `1.theme.${theme_id}`,
-  rootPId: `subject.${subject_id}`,
+  pId: theme_id ? getThemeNodeId(theme_id) : undefined,
+  rootPId: getSubjectNodeId(subject_id),
   isLeaf: true,
   title: text,
   type: 'task',

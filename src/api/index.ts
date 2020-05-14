@@ -40,6 +40,7 @@ import {
   transformTask,
   transformTest,
   transformTestState,
+  transformTestStatus,
   transformUser,
   transformUserAnswer,
 } from './transforms';
@@ -210,15 +211,19 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
           ...rest,
         } as WebinarScheduleInfo;
       }
-      case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
+      case /\/knowledge\/test\/status/.test(url.pathname):
+      case /\/knowledge\/test\/(.*)\/status/.test(url.pathname):
+        return transformTestStatus(data);
+      case /\/knowledge\/test\/(.*)\/answer$/.test(url.pathname):
         const {user_answer, ...rest} = data as TestStateAnswerDto;
 
         return {
           ...rest,
           user_answer: transformUserAnswer(user_answer),
         } as TestStateAnswerInfo;
-      case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
-      case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname): {
+      case /\/knowledge\/test\/state/.test(url.pathname):
+      case /\/knowledge\/test\/(.*)\/state$/.test(url.pathname):
+      case /\/knowledge\/test\/(.*)\/complete$/.test(url.pathname): {
         return transformTestState(data);
       }
       case /\/knowledge\/tests\/(.*)$/.test(url.pathname): {
@@ -251,6 +256,7 @@ const transformError = (error: AxiosError) => {
   }
   if (error.response && error.response.status === 404) {
     switch (true) {
+      case /\/knowledge\/test\/status/.test(url.pathname):
       case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):
         return null;
       case /\/courses\/\w*\/schedule$/.test(url.pathname):
@@ -268,7 +274,7 @@ mockTestsRequests(APIRequest);
 APIRequest.interceptors.response.use(transformData, transformError);
 
 // returns mocks for all failed requests
-mockRequests(APIRequest);
+// mockRequests(APIRequest);
 
 window.APIRequest = APIRequest;
 

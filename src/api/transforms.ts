@@ -1,5 +1,4 @@
 import _ from 'lodash';
-
 import {
   AccountDto,
   AccountDtoResp,
@@ -16,8 +15,9 @@ import {
   TestDtoResp,
   TestStateAnswerDto,
   TestStateDtoResp,
+  TestStatusResp,
   UserAnswerDtoResp,
-} from '../types/dtos';
+} from 'types/dtos';
 import {
   CommonAccountInfo,
   CorrectAnswerInfo,
@@ -28,10 +28,12 @@ import {
   SubjectInfo,
   TaskInfo,
   TestInfo,
+  TestStateAnswerInfo,
   TestStateInfo,
   TestStatusInfo,
   UserAnswerInfo,
-} from '../types/entities';
+} from 'types/entities';
+
 import {API_ROOT} from './index';
 
 export const getVideoLink = (videoId: string) =>
@@ -76,7 +78,6 @@ export const transformLesson = ({
   image_link,
   is_locked: locked,
   attachments,
-  test,
   ...lesson
 }: LessonDtoResp): LessonInfo => ({
   ...lesson,
@@ -84,13 +85,6 @@ export const transformLesson = ({
   image_link: getImageLink(image_link),
   video_link: getVideoLink(video_link),
   attachments: attachments ? attachments.map(transformFileInfo) : [],
-  test: test
-    ? ({
-        ...test,
-        deadline: test.deadline ? new Date(test.deadline) : undefined,
-        progress: test.progress || 0,
-      } as TestStatusInfo)
-    : undefined,
   assignment: hometask
     ? {
         deadline: hometask.deadline ? new Date(hometask.deadline) : undefined,
@@ -141,6 +135,16 @@ export const transformHomework = ({
   files: file_info ? [transformFileInfo(file_info)] : undefined,
   pupil: transformUser(pupil),
 });
+
+export const transformTestStatus = (status: TestStatusResp): TestStatusInfo =>
+  ({
+    ...status,
+    deadline: status.deadline ? new Date(status.deadline) : undefined,
+    started_at: status.started_at ? new Date(status.started_at) : undefined,
+    completed_at: status.completed_at
+      ? new Date(status.completed_at)
+      : undefined,
+  } as TestStatusInfo);
 
 export const transformCorrectAnswer = (
   answer: CorrectAnswerDto,
@@ -196,17 +200,16 @@ export const transformTestState = ({
   progress,
   ...rest
 }: TestStateDtoResp): TestStateInfo => ({
-  answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerDto>>(
+  answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerInfo>>(
     answers,
     (result, answer) => {
       const {user_answer, correct_answer, solution} = answer;
       result[answer.task_id] = {
         ...answer,
         user_answer: transformUserAnswer(user_answer),
-        correct_answer:
-          correct_answer && solution
-            ? transformCorrectAnswer(correct_answer, solution)
-            : correct_answer,
+        correct_answer: correct_answer
+          ? transformCorrectAnswer(correct_answer, solution)
+          : correct_answer,
       };
       return result;
     },

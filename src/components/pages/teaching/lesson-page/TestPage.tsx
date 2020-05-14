@@ -1,7 +1,7 @@
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageContentProps} from 'components/layout/Page';
 import {renderDate} from 'definitions/helpers';
-import {HomeworksHookResult} from 'hooks/selectors';
+import {KnowledgeTestHookResult} from 'hooks/selectors';
 import React from 'react';
 import {LessonInfo} from 'types/entities';
 import {Permission} from 'types/enums';
@@ -13,8 +13,8 @@ import {SimpleCallback} from 'types/utility/common';
 
 interface AssignmentPageProps
   extends RouteComponentPropsWithParentProps<LessonPageParams> {
-  homeworks?: HomeworksHookResult['homeworks'];
   lesson?: LessonInfo;
+  test: KnowledgeTestHookResult['test'];
   isLoaded: boolean;
   parentSection: PageContentProps['parentSection'];
   children: React.ReactNode;
@@ -26,6 +26,7 @@ const TestPage: React.FC<AssignmentPageProps> = (props) => {
   const {
     location,
     lesson,
+    test,
     isLoaded,
     children: header,
     parentSection,
@@ -38,7 +39,7 @@ const TestPage: React.FC<AssignmentPageProps> = (props) => {
   return (
     <Page
       isLoaded={isLoaded}
-      requiredPermissions={Permission.HOMEWORK_CHECK}
+      requiredPermissions={Permission.TEST_CHECK}
       className="admin-page"
       title={title}
       errors={errors}
@@ -48,13 +49,12 @@ const TestPage: React.FC<AssignmentPageProps> = (props) => {
       {isLoaded && (
         <PageContent parentSection={parentSection}>
           {header}
-          {lesson && lesson.test ? (
+          {lesson && test ? (
             <ContentBlock>
-              <div className="description-block">{lesson.test.name}</div>
-              {lesson.test.deadline && (
+              <div className="description-block">{test.name}</div>
+              {test.deadline && (
                 <div>
-                  Дедлайн:{' '}
-                  {renderDate(lesson.test.deadline, renderDate.dateWithHour)}
+                  Дедлайн: {renderDate(test.deadline, renderDate.dateWithHour)}
                 </div>
               )}
             </ContentBlock>

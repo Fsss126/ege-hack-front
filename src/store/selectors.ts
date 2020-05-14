@@ -49,6 +49,9 @@ export const selectWebinars = (state: AppState) =>
 export const selectUpcomingWebinars = (state: AppState) =>
   selectWebinars(state).upcoming;
 
+export const selectTestStatuses = (state: AppState) =>
+  state.testReducer.statuses;
+
 export const selectTest = (state: AppState) => state.testReducer.test;
 
 export const selectTestState = (state: AppState) => state.testReducer.state;
@@ -59,8 +62,8 @@ export const selectKnowledgeTasks = (state: AppState) =>
 export const selectKnowledgeThemes = (state: AppState) =>
   selectDataReducer(state).themes;
 
-export const selectKnowledgeTree = (state: AppState) =>
-  selectDataReducer(state).knowledgeTree;
+export const selectKnowledgeMap = (state: AppState) =>
+  selectDataReducer(state).knowledgeMap;
 
 export const selectKnowledgeTests = (state: AppState) =>
   selectDataReducer(state).tests;

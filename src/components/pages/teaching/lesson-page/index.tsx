@@ -1,5 +1,10 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
-import {useHomeworks, useLesson, useTeacherCourse} from 'hooks/selectors';
+import {
+  useHomeworks,
+  useKnowledgeTest,
+  useLesson,
+  useTeacherCourse,
+} from 'hooks/selectors';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {
@@ -35,6 +40,9 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
     error: errorLoadingHomeworks,
     reload: reloadHomeworks,
   } = useHomeworks(lessonId);
+  const {test, error: errorLoadingTest, reload: reloadTest} = useKnowledgeTest(
+    lessonId,
+  );
   const isLoaded = !!(lesson && homeworks && courseId);
 
   const header = isLoaded && lesson && (
@@ -49,7 +57,11 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
           )}
         </TabNavLink>
         <TabNavLink to={`${match.url}/assignment/`}>Задание</TabNavLink>
-        {lesson.test && <TabNavLink to={`${match.url}/test/`}>Тест</TabNavLink>}
+        {lesson.test_id && (
+          <TabNavLink to={`${match.url}/test/${lesson.test_id}/`}>
+            Тест
+          </TabNavLink>
+        )}
       </TabNav>
     </TabNavBlock>
   );
@@ -65,9 +77,15 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
     errorLoadingLesson,
     errorLoadingCourse,
     errorLoadingHomeworks,
+    errorLoadingTest,
   ];
 
-  const reloadCallbacks = [reloadLesson, reloadCourse, reloadHomeworks];
+  const reloadCallbacks = [
+    reloadLesson,
+    reloadCourse,
+    reloadHomeworks,
+    reloadTest,
+  ];
 
   return (
     <Switch>
@@ -110,6 +128,7 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
         path={`${match.path}/test`}
         render={(props) => (
           <TestPage
+            test={test}
             lesson={lesson}
             isLoaded={isLoaded}
             path={path}

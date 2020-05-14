@@ -102,11 +102,10 @@ export interface AssignmentInfo
 }
 
 export interface LessonInfo
-  extends Omit<LessonDtoResp, 'is_locked' | 'hometask' | 'test'> {
+  extends Omit<LessonDtoResp, 'is_locked' | 'hometask'> {
   locked: LessonDtoResp['is_locked'];
   assignment?: AssignmentInfo;
   watchProgress?: number;
-  test?: TestStatusInfo;
 }
 
 export interface HomeworkInfo
@@ -125,15 +124,21 @@ export type TestStatusInfo = {
   status: TestStatus;
   name: string;
   deadline?: Date;
+  progress: number;
 } & (
   | {
       status: TestStatus.COMPLETED;
       percentage: number;
       passed: number;
+      started_at: Date;
+      completed_at: Date;
     }
   | {
-      status: TestStatus.NOT_STARTED | TestStatus.STARTED;
-      progress: number;
+      status: TestStatus.NOT_STARTED;
+    }
+  | {
+      status: TestStatus.STARTED;
+      started_at: Date;
     }
 );
 

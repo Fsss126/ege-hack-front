@@ -181,7 +181,7 @@ export interface LessonDtoReq extends LessonDtoCommon, ReqWithImage {
 export interface LessonDtoResp extends LessonDtoCommon, RespWithImage {
   id: number;
   attachments: FileInfo[];
-  test?: TestStatusResp;
+  test_id?: number;
 }
 
 export interface HomeworkAssessmentDtoReq {
@@ -293,10 +293,12 @@ export interface TestStatusResp {
   id: number;
   name: string;
   status: TestStatus;
-  progress?: number;
+  progress: number;
   deadline?: number;
   percentage?: number;
   passed?: boolean;
+  started_at?: number;
+  completed_at?: number;
 }
 
 export interface UserAnswerDtoCommon {

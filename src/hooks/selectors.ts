@@ -41,10 +41,10 @@ import {
   selectAdminWebinars,
   selectCredentials,
   selectHomeworks,
+  selectKnowledgeMap,
   selectKnowledgeTasks,
   selectKnowledgeTests,
   selectKnowledgeThemes,
-  selectKnowledgeTree,
   selectLessons,
   selectParticipants,
   selectShopCourses,
@@ -52,6 +52,7 @@ import {
   selectTeacherCourses,
   selectTest,
   selectTestState,
+  selectTestStatuses,
   selectUpcomingWebinars,
   selectUserCourses,
   selectUserHomeworks,
@@ -78,6 +79,7 @@ import {
   TestInfo,
   TestStateInfo,
   TestStatus,
+  TestStatusInfo,
   ThemeInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
@@ -88,6 +90,7 @@ import {
   DataProperty,
   KnowledgeBaseSubject,
 } from '../store/reducers/dataReducer';
+import {getKnowledgeTree} from '../types/knowledgeTree';
 
 const useSelector = <TSelected>(
   selector: (state: AppState) => TSelected,
@@ -1167,6 +1170,31 @@ export function useCompleteTest(): CompleteTestHookResult {
   );
 }
 
+export type TestStatusHookResult = {
+  status?: TestStatusInfo | null;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useTestStatus(
+  courseId: number,
+  lessonId: number,
+): TestStatusHookResult {
+  const status = useSelector(selectTestStatuses)[lessonId];
+  const dispatch = useDispatch<Dispatch<Action>>();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.TEST_STATUS_FETCH, courseId, lessonId});
+  }, [dispatch, courseId, lessonId]);
+  useEffect(() => {
+    if (!status) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, status]);
+  return status instanceof Error
+    ? {error: status, reload: dispatchFetchAction}
+    : {status, reload: dispatchFetchAction};
+}
+
 export type TestHookResult = {
   test?: SanitizedTestInfo;
   error?: AxiosError;
@@ -1274,7 +1302,7 @@ export function useKnowledgeLevel(
   const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
   const themes = useSelector(selectKnowledgeThemes);
   const tasks = useSelector(selectKnowledgeTasks);
-  const knowledgeTree = useSelector(selectKnowledgeTree);
+  const knowledgeTree = useSelector(selectKnowledgeMap);
   const knowledgeLevel =
     knowledgeTree[subjectId]?.[themeId === undefined ? 'root' : themeId];
   const knowledgeLevelFetch = useKnowledgeLevelFetch();
@@ -1332,16 +1360,16 @@ export function useKnowledgeLevel(
       };
 }
 
-type KnowledgeSubjectTreeHookResult = {
+type KnowledgeSubjectMapHookResult = {
   content?: KnowledgeBaseSubject | false;
   error?: AxiosError;
   reload?: SimpleCallback;
 };
-function useKnowledgeSubjectTree(
+function useKnowledgeSubjectMap(
   subjectId?: number,
-): KnowledgeSubjectTreeHookResult {
+): KnowledgeSubjectMapHookResult {
   const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
-  const knowledgeTree = useSelector(selectKnowledgeTree);
+  const knowledgeTree = useSelector(selectKnowledgeMap);
   const subjectContent = subjectId ? knowledgeTree[subjectId] : undefined;
   const knowledgeLevelFetch = useKnowledgeLevelFetch();
 
@@ -1383,6 +1411,12 @@ function useKnowledgeSubjectTree(
   return {content: subjectContent, reload};
 }
 
+type KnowledgeSubjectTreeHookResult = {
+  content?: KnowledgeBaseSubject | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
 export type KnowledgeSubjectContentHookResult = {
   themes?: ThemeInfo[] | false;
   tasks?: TaskInfo[] | false;
@@ -1394,7 +1428,7 @@ export type KnowledgeSubjectContentHookResult = {
 export function useKnowledgeSubjectContent(
   subjectId?: number,
 ): KnowledgeSubjectContentHookResult {
-  const {content: subjectContent, error, reload} = useKnowledgeSubjectTree(
+  const {content: subjectContent, error, reload} = useKnowledgeSubjectMap(
     subjectId,
   );
   const themes = useSelector(selectKnowledgeThemes);
@@ -1573,7 +1607,7 @@ export function useRevokeKnowledgeTask(): RevokeKnowledgeTaskHookResult {
 export type KnowledgeTestHookResult = {
   test?: TestInfo | false;
   error?: AxiosError;
-  reload?: SimpleCallback;
+  reload: SimpleCallback;
 };
 
 export function useKnowledgeTest(lessonId: number): KnowledgeTestHookResult {

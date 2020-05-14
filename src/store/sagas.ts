@@ -62,12 +62,13 @@ import {
   TestStartRequestAction,
   TestStateFetchAction,
   TestStateFetchedAction,
+  TestStatusFetchAction,
   UpcomingWebinarsFetchAction,
   UserHomeworksFetchAction,
   WebinarDeleteRequestAction,
 } from './actions';
 import {AppState} from './reducers';
-import {selectLessons} from './selectors';
+import {selectKnowledgeMap, selectLessons} from './selectors';
 
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
@@ -630,6 +631,47 @@ function* fetchTest() {
   });
 }
 
+function* fetchTestStatus() {
+  yield* waitForLogin<TestStatusFetchAction>(
+    ActionType.TEST_STATUS_FETCH,
+    function* (channel) {
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: TestStatusFetchAction) {
+          const {lessonId, courseId} = action;
+          try {
+            const status: TestStatusInfo = yield call(
+              APIRequest.get,
+              `/knowledge/test/status`,
+              {
+                params: {
+                  lessonId,
+                },
+              },
+            );
+            yield put({
+              type: ActionType.TEST_STATUS_FETCHED,
+              status,
+              // testId,
+              lessonId,
+              courseId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.TEST_STATUS_FETCHED,
+              status: error,
+              // testId,
+              lessonId,
+              courseId,
+            });
+          }
+        },
+        (action) => action.lessonId,
+      );
+    },
+  );
+}
+
 function* fetchTestState() {
   yield* waitForLogin<TestStateFetchAction>(
     ActionType.TEST_STATE_FETCH,
@@ -637,16 +679,21 @@ function* fetchTestState() {
       yield takeLeadingPerKey(
         channel,
         function* (action: TestStateFetchAction) {
-          const {testId, lessonId, courseId} = action;
+          const {lessonId, courseId} = action;
           try {
             const state: TestStateInfo = yield call(
-              APIRequest.post,
-              `/knowledge/tests/${testId}/state`,
+              APIRequest.get,
+              `/knowledge/test/state/`,
+              {
+                params: {
+                  lessonId,
+                },
+              },
             );
             yield put({
               type: ActionType.TEST_STATE_FETCHED,
               state,
-              testId,
+              // testId,
               lessonId,
               courseId,
             });
@@ -654,13 +701,13 @@ function* fetchTestState() {
             yield put({
               type: ActionType.TEST_STATE_FETCHED,
               state: error,
-              testId,
+              // testId,
               lessonId,
               courseId,
             });
           }
         },
-        (action) => action.testId,
+        (action) => action.lessonId,
       );
     },
   );
@@ -674,14 +721,14 @@ function* processTestStart() {
       yield put({type: ActionType.TEST_FETCH, testId});
       yield put({
         type: ActionType.TEST_STATE_FETCH,
-        testId,
+        // testId,
         lessonId,
         courseId,
       });
       const {state}: TestStateFetchedAction = yield take(
         (action: Action) =>
           action.type === ActionType.TEST_STATE_FETCHED &&
-          action.testId === testId,
+          action.lessonId === lessonId,
       );
 
       if (state instanceof Error) {
@@ -706,11 +753,11 @@ function* processTestComplete() {
       try {
         const state: TestStatePassedInfo = yield call(
           APIRequest.post,
-          `/knowledge/tests/${testId}/complete`,
+          `/knowledge/test/${testId}/complete`,
         );
         yield put({
           type: ActionType.TEST_STATE_FETCHED,
-          testId,
+          // testId,
           lessonId,
           courseId,
           state,
@@ -727,54 +774,6 @@ function* processTestComplete() {
     },
     (action) => action.testId,
   );
-}
-
-function* processTestStateFetched() {
-  yield takeEvery(ActionType.TEST_STATE_FETCHED, function* (
-    action: TestStateFetchedAction,
-  ) {
-    const {state, courseId, lessonId} = action;
-
-    if (state instanceof Error) {
-      return;
-    }
-
-    const {id, status, percentage, progress, passed} = state as any;
-    const statusInfo: Partial<TestStatusInfo> = {
-      id,
-      status,
-      percentage,
-      progress,
-      passed,
-    };
-    const lessons = (yield select(selectLessons)) as Yield<
-      typeof selectLessons
-    >;
-    const courseLessons = lessons[courseId];
-
-    if (!(courseLessons instanceof Array)) {
-      return;
-    }
-    const lesson = _.find(courseLessons, {id: lessonId});
-
-    if (!lesson) {
-      return;
-    }
-
-    const updatedLessons: LessonInfo = {
-      ...lesson,
-      test: {
-        ...lesson.test,
-        ...statusInfo,
-      } as TestStatusInfo,
-    };
-
-    yield put({
-      type: ActionType.LESSONS_REVOKE,
-      courseId,
-      responseLesson: updatedLessons,
-    });
-  });
 }
 
 function* processTestSaveAnswer() {
@@ -800,7 +799,7 @@ function* processTestSaveAnswer() {
       try {
         const answerInfo = yield call(
           APIRequest.put,
-          `/knowledge/tests/${testId}/answer`,
+          `/knowledge/test/${testId}/answer`,
           requestData,
         );
         yield delay(300);
@@ -846,48 +845,55 @@ function* processTestSaveAnswer() {
   );
 }
 
+// TODO: move check into saga
 function* fetchKnowledgeLevel() {
-  yield takeLeadingPerKey(
+  yield* waitForLogin<KnowledgeLevelFetchAction>(
     ActionType.KNOWLEDGE_LEVEL_FETCH,
-    function* (action: KnowledgeLevelFetchAction) {
-      const {subjectId, themeId, onSuccess, onError} = action;
-      try {
-        const content: KnowledgeLevelInfo = yield call(
-          APIRequest.get,
-          '/knowledge/content',
-          {
-            params: themeId
-              ? {
-                  subjectId,
-                  themeId,
-                }
-              : {subjectId},
-          },
-        );
-        yield put({
-          type: ActionType.KNOWLEDGE_LEVEL_FETCHED,
-          subjectId,
-          themeId,
-          content,
-        });
+    function* (channel) {
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: KnowledgeLevelFetchAction) {
+          const {subjectId, themeId, onSuccess, onError} = action;
+          const subj = yield select(selectKnowledgeMap);
+          try {
+            const content: KnowledgeLevelInfo = yield call(
+              APIRequest.get,
+              '/knowledge/content',
+              {
+                params: themeId
+                  ? {
+                      subjectId,
+                      themeId,
+                    }
+                  : {subjectId},
+              },
+            );
+            yield put({
+              type: ActionType.KNOWLEDGE_LEVEL_FETCHED,
+              subjectId,
+              themeId,
+              content,
+            });
 
-        if (onSuccess) {
-          yield call(onSuccess, subjectId, themeId, content);
-        }
-      } catch (e) {
-        yield put({
-          type: ActionType.KNOWLEDGE_LEVEL_FETCHED,
-          subjectId,
-          themeId,
-          content: e,
-        });
+            if (onSuccess) {
+              yield call(onSuccess, subjectId, themeId, content);
+            }
+          } catch (e) {
+            yield put({
+              type: ActionType.KNOWLEDGE_LEVEL_FETCHED,
+              subjectId,
+              themeId,
+              content: e,
+            });
 
-        if (onError) {
-          yield call(onError, subjectId, themeId, e);
-        }
-      }
+            if (onError) {
+              yield call(onError, subjectId, themeId, e);
+            }
+          }
+        },
+        (action) => [action.subjectId, action.themeId],
+      );
     },
-    (action) => [action.subjectId, action.themeId],
   );
 }
 
@@ -895,28 +901,32 @@ function* fetchKnowledgeTheme() {
   yield* waitForLogin<KnowledgeThemeFetchAction>(
     ActionType.KNOWLEDGE_THEME_FETCH,
     function* (channel) {
-      yield takeLeading(channel, function* (action: KnowledgeThemeFetchAction) {
-        const {subjectId, themeId} = action;
-        try {
-          const theme: ThemeInfo = yield call(
-            APIRequest.get,
-            `/knowledge/content/themes/${themeId}`,
-          );
-          yield put({
-            type: ActionType.KNOWLEDGE_THEME_FETCHED,
-            theme,
-            subjectId,
-            themeId,
-          });
-        } catch (error) {
-          yield put({
-            type: ActionType.KNOWLEDGE_THEME_FETCHED,
-            theme: error,
-            subjectId,
-            themeId,
-          });
-        }
-      });
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: KnowledgeThemeFetchAction) {
+          const {subjectId, themeId} = action;
+          try {
+            const theme: ThemeInfo = yield call(
+              APIRequest.get,
+              `/knowledge/content/themes/${themeId}`,
+            );
+            yield put({
+              type: ActionType.KNOWLEDGE_THEME_FETCHED,
+              theme,
+              subjectId,
+              themeId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.KNOWLEDGE_THEME_FETCHED,
+              theme: error,
+              subjectId,
+              themeId,
+            });
+          }
+        },
+        (action) => [action.subjectId, action.themeId],
+      );
     },
   );
 }
@@ -955,31 +965,35 @@ function* fetchKnowledgeTest() {
   yield* waitForLogin<KnowledgeTestFetchAction>(
     ActionType.KNOWLEDGE_TEST_FETCH,
     function* (channel) {
-      yield takeLeading(channel, function* (action: KnowledgeTestFetchAction) {
-        const {lessonId} = action;
-        try {
-          const test: TestInfo = yield call(
-            APIRequest.get,
-            `/knowledge/tests`,
-            {
-              params: {
-                lessonId,
+      yield takeLeadingPerKey(
+        channel,
+        function* (action: KnowledgeTestFetchAction) {
+          const {lessonId} = action;
+          try {
+            const test: TestInfo = yield call(
+              APIRequest.get,
+              `/knowledge/tests`,
+              {
+                params: {
+                  lessonId,
+                },
               },
-            },
-          );
-          yield put({
-            type: ActionType.KNOWLEDGE_TEST_FETCHED,
-            test,
-            lessonId,
-          });
-        } catch (error) {
-          yield put({
-            type: ActionType.KNOWLEDGE_TEST_FETCHED,
-            test: error,
-            lessonId,
-          });
-        }
-      });
+            );
+            yield put({
+              type: ActionType.KNOWLEDGE_TEST_FETCHED,
+              test,
+              lessonId,
+            });
+          } catch (error) {
+            yield put({
+              type: ActionType.KNOWLEDGE_TEST_FETCHED,
+              test: error,
+              lessonId,
+            });
+          }
+        },
+        (action) => action.lessonId,
+      );
     },
   );
 }
@@ -1012,6 +1026,7 @@ export default function* rootSaga() {
   yield spawn(fetchAdminWebinars);
   yield spawn(fetchTeacherCourses);
   yield spawn(fetchHomeworks);
+  yield spawn(fetchTestStatus);
   yield spawn(fetchTest);
   yield spawn(fetchTestState);
   yield spawn(fetchKnowledgeLevel);
@@ -1029,6 +1044,5 @@ export default function* rootSaga() {
   yield spawn(processTestStart);
   yield spawn(processTestComplete);
   yield spawn(processTestSaveAnswer);
-  yield spawn(processTestStateFetched);
   yield spawn(init);
 }

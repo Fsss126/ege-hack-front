@@ -14,6 +14,7 @@ import {
   TestStateAnswerInfo,
   TestStateInfo,
   TestStatePassedInfo,
+  TestStatusInfo,
   ThemeInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
@@ -81,6 +82,8 @@ export enum ActionType {
   TEST_FETCH = 'TEST_FETCH',
   TEST_FETCHED = 'TEST_FETCHED',
   TEST_COMPLETE_REQUEST = 'TEST_COMPLETE_REQUEST',
+  TEST_STATUS_FETCH = 'TEST_STATUS_FETCH',
+  TEST_STATUS_FETCHED = 'TEST_STATUS_FETCHED',
   TEST_STATE_FETCH = 'TEST_STATE_FETCH',
   TEST_STATE_FETCHED = 'TEST_STATE_FETCHED',
   TEST_SAVE_ANSWER_REQUEST = 'TEST_SAVE_ANSWER_REQUEST',
@@ -493,16 +496,31 @@ export type TestCompleteRequestAction = {
   onError?: TestCompleteErrorCallback;
 };
 
+export type TestStatusFetchAction = {
+  type: ActionType.TEST_STATUS_FETCH;
+  // testId: number;
+  lessonId: number;
+  courseId: number;
+};
+
+export type TestStatusFetchedAction = {
+  type: ActionType.TEST_STATUS_FETCHED;
+  // testId: number;
+  lessonId: number;
+  courseId: number;
+  status: TestStatusInfo | null | AxiosError;
+};
+
 export type TestStateFetchAction = {
   type: ActionType.TEST_STATE_FETCH;
-  testId: number;
+  // testId: number;
   lessonId: number;
   courseId: number;
 };
 
 export type TestStateFetchedAction = {
   type: ActionType.TEST_STATE_FETCHED;
-  testId: number;
+  // testId: number;
   lessonId: number;
   courseId: number;
   state: TestStateInfo | AxiosError;
@@ -754,6 +772,8 @@ export type Action = {type: ActionType} & (
   | WebinarDeleteRequestAction
   | WebinarDeleteAction
   | TestStartRequestAction
+  | TestStatusFetchAction
+  | TestStatusFetchedAction
   | TestFetchAction
   | TestFetchedAction
   | TestCompleteRequestAction

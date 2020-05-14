@@ -4,13 +4,14 @@ import VideoPlayer from 'components/common/VideoPlayer';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import {File} from 'components/ui/input';
 import React from 'react';
-import {HomeworkInfo, LessonInfo} from 'types/entities';
+import {HomeworkInfo, LessonInfo, TestStatusInfo} from 'types/entities';
 
 import HomeworkLoader from './HomeworkLoader';
 import {TestAssignment} from './TestAssignment';
 
 export interface LessonViewProps {
   lesson: LessonInfo;
+  testStatus: TestStatusInfo | null;
   homework: HomeworkInfo | null;
 }
 const LessonView: React.FC<LessonViewProps> = (props) => {
@@ -22,10 +23,10 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       description,
       assignment,
       attachments,
-      test,
       course_id,
     },
     homework,
+    testStatus,
   } = props;
 
   return (
@@ -83,13 +84,17 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
           </div>
         </div>
       )}
-      {test && (
+      {testStatus && (
         <div className="block-container m-lg test-container">
           <h3>
             <i className="icon-checkbox prefix-icon" />
             Тест
           </h3>
-          <TestAssignment courseId={course_id} lessonId={id} test={test} />
+          <TestAssignment
+            courseId={course_id}
+            lessonId={id}
+            test={testStatus}
+          />
         </div>
       )}
     </ContentBlock>
