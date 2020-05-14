@@ -84,7 +84,6 @@ export const mapThemesToNodes = ({
   parent_theme_id,
   subject_id,
   has_sub_themes,
-  has_sub_tasks,
   name,
 }: ThemeInfo): ThemeTreeNode => ({
   id: getThemeNodeId(id),
@@ -95,7 +94,7 @@ export const mapThemesToNodes = ({
   themeId: id,
   parentThemeId: parent_theme_id,
   subjectId: subject_id,
-  isLeaf: !has_sub_themes && !has_sub_tasks,
+  isLeaf: !has_sub_themes,
 });
 
 export function useLoadThemeLevel() {
@@ -118,6 +117,7 @@ export function useThemeSelect(
   subjects: SubjectInfo[],
   subject_id?: number,
   themeId?: number,
+  ...excludedThemes: ThemeInfo[]
 ) {
   const {
     themes,
@@ -156,12 +156,21 @@ export function useThemeSelect(
 
   const loadedNodeIds = loadedThemes.map((id) => getThemeNodeId(id));
 
+  // TODO: set isLeaf flag of parent nodes with no children left after filtering
+  const filteredTreeNodes = useMemo(
+    () =>
+      themeTreeNodes?.filter(({value}) =>
+        _.every(excludedThemes, (theme) => value !== theme.id),
+      ),
+    [excludedThemes, themeTreeNodes],
+  );
+
   return {
     hasError,
     notFound,
     isLoading,
     subjectOptions,
-    themeTreeNodes,
+    themeTreeNodes: filteredTreeNodes,
     loadedNodeIds,
     loadData,
     errors,
@@ -247,7 +256,12 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
     themeTreeNodes,
     loadedNodeIds,
     loadData,
-  } = useThemeSelect(subjects, subject_id, parent_theme_id);
+  } = useThemeSelect(
+    subjects,
+    subject_id,
+    parent_theme_id,
+    ...(theme ? [theme] : []),
+  );
 
   const onSubjectChange = useCallback(
     (value: any, name: any) => {

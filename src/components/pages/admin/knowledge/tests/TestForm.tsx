@@ -81,6 +81,7 @@ export const mapTasksToNodes = ({
 
 export const mapThemeToContainingNodes = (theme: ThemeInfo): ThemeTreeNode => ({
   ...mapThemesToNodes(theme),
+  isLeaf: !theme.has_sub_themes && !theme.has_sub_tasks,
   selectable: false,
   value: NaN,
 });
