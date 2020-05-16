@@ -563,34 +563,61 @@ export const dataReducer: Reducer<DataState, Action> = (
 
       const themeKey =
         parent_theme_id !== undefined ? parent_theme_id : KNOWLEDGE_TREE_ROOT;
+      const containingLevel = state.knowledgeMap[subject_id]?.[themeKey];
+      const updatedLevel =
+        containingLevel && !(containingLevel instanceof Error)
+          ? {
+              ...containingLevel,
+              themeIds:
+                _.indexOf(containingLevel.themeIds, id) < 0
+                  ? _.concat(containingLevel.themeIds, id)
+                  : containingLevel,
+            }
+          : containingLevel;
 
-      const stateUpdate: Partial<DataState> = {
-        themes: {[id]: responseTheme},
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          [id]: responseTheme,
+        },
         knowledgeMap: {
+          ...state.knowledgeMap,
           [subject_id]: {
-            [themeKey]: {
-              id: themeKey,
-              themeIds: [id],
-              taskIds: [],
-            },
+            ...(state.knowledgeMap[subject_id] || {}),
+            [themeKey]: updatedLevel,
           },
         },
       };
+    }
+    case ActionType.KNOWLEDGE_THEME_DELETE: {
+      const {subjectId, themeId, parentThemeId} = action;
 
-      const customizer = (objValue: any, srcValue: any, key: string) => {
-        if (_.isArray(objValue)) {
-          if (key === 'themeIds') {
-            return _.indexOf(objValue, id) < 0
-              ? objValue.concat(srcValue)
-              : objValue;
-          } else if (key === 'taskIds') {
-            return objValue.concat(srcValue);
-          }
-        }
+      const themeKey =
+        parentThemeId !== undefined ? parentThemeId : KNOWLEDGE_TREE_ROOT;
+      const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];
+      const updatedLevel =
+        containingLevel && !(containingLevel instanceof Error)
+          ? {
+              ...containingLevel,
+              themeIds: _.without(containingLevel.themeIds, themeId),
+            }
+          : containingLevel;
+
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          [themeId]: undefined,
+        },
+        knowledgeMap: {
+          ...state.knowledgeMap,
+          [subjectId]: {
+            ...(state.knowledgeMap[subjectId] || {}),
+            [themeKey]: updatedLevel,
+          },
+        },
       };
-
-      debugger;
-      return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
     }
     case ActionType.KNOWLEDGE_TASK_FETCHED: {
       const {taskId, task} = action;
@@ -608,33 +635,60 @@ export const dataReducer: Reducer<DataState, Action> = (
       const {subject_id, id, theme_id} = responseTask;
 
       const themeKey = theme_id !== undefined ? theme_id : KNOWLEDGE_TREE_ROOT;
+      const containingLevel = state.knowledgeMap[subject_id]?.[themeKey];
+      const updatedLevel =
+        containingLevel && !(containingLevel instanceof Error)
+          ? {
+              ...containingLevel,
+              taskIds:
+                _.indexOf(containingLevel.taskIds, id) < 0
+                  ? _.concat(containingLevel.taskIds, id)
+                  : containingLevel,
+            }
+          : containingLevel;
 
-      const stateUpdate: Partial<DataState> = {
-        tasks: {[id]: responseTask},
+      return {
+        ...state,
+        tasks: {
+          ...state.tasks,
+          [id]: responseTask,
+        },
         knowledgeMap: {
+          ...state.knowledgeMap,
           [subject_id]: {
-            [themeKey]: {
-              id: themeKey,
-              themeIds: [],
-              taskIds: [id],
-            },
+            ...(state.knowledgeMap[subject_id] || {}),
+            [themeKey]: updatedLevel,
           },
         },
       };
+    }
+    case ActionType.KNOWLEDGE_TASK_DELETE: {
+      const {subjectId, themeId, taskId} = action;
 
-      const customizer = (objValue: any, srcValue: any, key: string) => {
-        if (_.isArray(objValue)) {
-          if (key === 'taskIds') {
-            return _.indexOf(objValue, id) < 0
-              ? objValue.concat(srcValue)
-              : objValue;
-          } else if (key === 'themeIds') {
-            return objValue.concat(srcValue);
-          }
-        }
+      const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
+      const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];
+      const updatedLevel =
+        containingLevel && !(containingLevel instanceof Error)
+          ? {
+              ...containingLevel,
+              tasksIds: _.without(containingLevel.taskIds, themeId),
+            }
+          : containingLevel;
+
+      return {
+        ...state,
+        tasks: {
+          ...state.tasks,
+          [taskId]: undefined,
+        },
+        knowledgeMap: {
+          ...state.knowledgeMap,
+          [subjectId]: {
+            ...(state.knowledgeMap[subjectId] || {}),
+            [themeKey]: updatedLevel,
+          },
+        },
       };
-
-      return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
     }
     case ActionType.KNOWLEDGE_TEST_FETCHED: {
       const {lessonId, test} = action;
