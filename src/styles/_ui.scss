@@ -833,56 +833,22 @@ input[type=number] {
       .ant-select-tree-list {
         padding: $menu-list-padding;
         @include hide-scrollbar;
+      }
 
-        //noinspection CssReplaceWithShorthandSafely
-        .ant-select-tree-treenode {
-          padding: $menu-option-padding;
-          padding-left: $menu-option-padding-horizontal / 3 * 2;
-          cursor: default;
+      .ant-select-tree-treenode {
+        padding: $menu-option-padding;
+        padding-left: $menu-option-padding-horizontal / 3 * 2;
 
-          .ant-select-tree-node-content-wrapper {
-            background: none;
-            cursor: inherit;
-          }
+        &.ant-select-tree-treenode-selected {
+          background: $bg-active;
+        }
 
-          &.ant-select-tree-treenode-selected {
+        &.ant-select-tree-treenode--selectable {
+          cursor: pointer;
+
+          &:hover {
             background: $bg-active;
           }
-
-          &.ant-select-tree-treenode--selectable {
-            cursor: pointer;
-
-            &:hover {
-              background: $bg-active;
-            }
-          }
-        }
-
-        .ant-select-tree-switcher {
-          transition: transform .3s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          &ant-select-tree-switcher_open {
-            transform: rotate(0deg);
-          }
-
-          &.ant-select-tree-switcher_close {
-            transform: rotate(-90deg);
-          }
-
-          .ant-select-tree-switcher-icon, .ant-select-tree-switcher-loading-icon {
-            display: block;
-            color: $text-light-grey;
-          }
-          .ant-select-tree-switcher-icon {
-            font-size: 0.8em;
-          }
-        }
-
-        .ant-select-tree-icon__customize {
-          margin-right: 8px;
         }
       }
     }
@@ -892,6 +858,70 @@ input[type=number] {
       font-size: 14px;
       color: $text-grey;
       text-align: center;
+    }
+  }
+}
+
+.ant-select-tree {
+  font-size: 1em;
+
+  .ant-select-tree-list {
+    //noinspection CssReplaceWithShorthandSafely
+    .ant-select-tree-treenode {
+      display: flex !important;
+      width: 100% !important;
+      cursor: default;
+
+      .ant-select-tree-node-content-wrapper {
+        background: none;
+        cursor: inherit;
+      }
+
+      &.ant-select-tree-treenode-selected {
+        background: $bg-hover;
+      }
+
+      .ant-select-tree-node-content-wrapper {
+        display: flex !important;
+        padding-right: 0;
+        flex-grow: 1;
+
+        .ant-select-tree-title {
+          display: block;
+          flex-grow: 1;
+        }
+      }
+    }
+
+    .ant-select-tree-switcher {
+      transition: transform .3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &ant-select-tree-switcher_open {
+        transform: rotate(0deg);
+      }
+
+      &.ant-select-tree-switcher_close {
+        transform: rotate(-90deg);
+      }
+
+      .ant-select-tree-switcher-icon, .ant-select-tree-switcher-loading-icon {
+        display: block;
+        color: $text-light-grey;
+      }
+      .ant-select-tree-switcher-icon {
+        font-size: 0.8em;
+      }
+    }
+
+    .ant-select-tree-icon__customize {
+      margin-right: 8px;
+    }
+
+    .ant-select-tree-treenode-motion {
+      width: 100%;
     }
   }
 }

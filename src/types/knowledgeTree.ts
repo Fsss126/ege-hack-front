@@ -1,4 +1,9 @@
-import {DataState} from '../store/reducers/dataReducer';
+import {
+  DataProperty,
+  DataState,
+  KnowledgeBaseSubject,
+} from 'store/reducers/dataReducer';
+
 import {SubjectInfo, TaskInfo, ThemeInfo} from './entities';
 
 export enum TreeEntityType {
@@ -15,19 +20,21 @@ interface TreeEntity<
   id: string;
   pId?: string;
   parentType?: TreeEntityType.SUBJECT | TreeEntityType.THEME;
-  rootId?: string;
+  rootPId?: string;
   entity: E;
+  subjectId?: number;
+  themeId?: number;
   children: (TaskTreeEntity | ThemeTreeEntity)[];
 }
 
 export type TaskTreeEntity = Require<
   TreeEntity<TaskInfo, TreeEntityType.TASK>,
-  'pId' | 'rootId' | 'parentType'
+  'pId' | 'rootPId' | 'parentType'
 >;
 
 export type ThemeTreeEntity = Require<
   TreeEntity<ThemeInfo, TreeEntityType.THEME>,
-  'pId' | 'rootId'
+  'pId' | 'rootPId'
 >;
 
 export type SubjectTreeEntity = TreeEntity<SubjectInfo, TreeEntityType.SUBJECT>;
@@ -58,10 +65,11 @@ export const getTaskNodeId = (id: number) => `2.task.${id}`;
 const getSubjectEntities = (subjects: SubjectInfo[]) =>
   _(subjects)
     .map(
-      (entity): SubjectTreeEntity => ({
+      (subject): SubjectTreeEntity => ({
         type: TreeEntityType.SUBJECT,
-        id: getSubjectNodeId(entity.id),
-        entity,
+        id: getSubjectNodeId(subject.id),
+        entity: subject,
+        subjectId: subject.id,
         children: [],
       }),
     )
@@ -77,8 +85,10 @@ const getThemeEntities = (themes: ThemeInfo[]) =>
           theme.parent_theme_id !== undefined
             ? getThemeNodeId(theme.parent_theme_id)
             : getSubjectNodeId(theme.subject_id),
-        rootId: getSubjectNodeId(theme.subject_id),
+        rootPId: getSubjectNodeId(theme.subject_id),
         entity: theme,
+        subjectId: theme.subject_id,
+        themeId: theme.id,
         children: [],
       }),
     )
@@ -94,7 +104,7 @@ const getTaskEntities = (tasks: TaskInfo[]) =>
           task.theme_id !== undefined
             ? getThemeNodeId(task.theme_id)
             : getSubjectNodeId(task.subject_id),
-        rootId: getSubjectNodeId(task.subject_id),
+        rootPId: getSubjectNodeId(task.subject_id),
         parentType:
           task.theme_id !== undefined
             ? TreeEntityType.THEME
@@ -105,14 +115,28 @@ const getTaskEntities = (tasks: TaskInfo[]) =>
     )
     .value();
 
-export function getKnowledgeTree(
-  subjects: SubjectInfo[],
-  themes: ThemeInfo[],
-  tasks: TaskInfo[],
-) {
-  const subjectEntities = getSubjectEntities(subjects);
-  const themeEntities = getThemeEntities(themes);
-  const taskEntities = getTaskEntities(tasks);
+export function getKnowledgeTree<
+  E extends KnowledgeTreeEntity = KnowledgeTreeEntity
+>({
+  subjects,
+  themes,
+  tasks,
+  mapEntities,
+}: {
+  subjects: SubjectInfo[];
+  themes: ThemeInfo[];
+  tasks: TaskInfo[];
+  mapEntities?: (entity: KnowledgeTreeEntity) => E;
+}) {
+  const subjectEntities = (mapEntities
+    ? getSubjectEntities(subjects).map(mapEntities)
+    : getSubjectEntities(subjects)) as E[];
+  const themeEntities = (mapEntities
+    ? getThemeEntities(themes).map(mapEntities)
+    : getThemeEntities(themes)) as E[];
+  const taskEntities = (mapEntities
+    ? getTaskEntities(tasks).map(mapEntities)
+    : getTaskEntities(tasks)) as E[];
 
   const concatPipeline = _<KnowledgeTreeEntity>(themeEntities).concat(
     taskEntities,
@@ -124,7 +148,7 @@ export function getKnowledgeTree(
   const entitiesMap = concatPipeline
     .concat(subjectEntities)
     .keyBy('id')
-    .value();
+    .value() as Dictionary<E>;
 
   _.forEach(content, (entity) => {
     const parentEl = entitiesMap[entity.pId];
@@ -174,4 +198,60 @@ export function getKnowledgeTreeForSubject(
     entitiesMap,
     tree: topLevel,
   };
+}
+
+export function getKnowledgeSubjectContent(
+  subjectContent: KnowledgeBaseSubject | false | undefined,
+  themes: Dictionary<DataProperty<ThemeInfo>, number>,
+  tasks: Dictionary<DataProperty<TaskInfo>, number>,
+) {
+  const loadedThemes: number[] = [];
+
+  let subjectThemes: ThemeInfo[] | false | undefined;
+  let subjectTasks: TaskInfo[] | false | undefined;
+
+  if (subjectContent === false) {
+    subjectThemes = false;
+  } else if (!subjectContent || !subjectContent.root) {
+    subjectThemes = undefined;
+  } else {
+    subjectThemes = [];
+    subjectTasks = [];
+
+    for (const key in subjectContent) {
+      const level = subjectContent[key];
+
+      if (!level || level instanceof Error) {
+        continue;
+      }
+
+      let isLoaded = true;
+
+      for (const themeId of level.themeIds) {
+        const theme = themes[themeId];
+
+        if (!theme || theme instanceof Error) {
+          isLoaded = false;
+        } else {
+          subjectThemes.push(theme);
+        }
+      }
+
+      for (const taskId of level.taskIds) {
+        const task = tasks[taskId];
+
+        if (!task || task instanceof Error) {
+          isLoaded = false;
+        } else {
+          subjectTasks.push(task);
+        }
+      }
+
+      if (isLoaded && key !== 'root') {
+        loadedThemes.push(parseInt(key));
+      }
+    }
+  }
+
+  return {loadedThemes, subjectThemes, subjectTasks} as const;
 }

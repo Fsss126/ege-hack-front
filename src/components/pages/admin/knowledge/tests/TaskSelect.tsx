@@ -9,6 +9,7 @@ import {
   getSubjectNodeId,
   getTaskNodeId,
   getThemeNodeId,
+  TreeEntityType,
 } from 'types/knowledgeTree';
 
 import {
@@ -17,14 +18,14 @@ import {
   ThemeTreeNode,
   TreeNode,
   useLoadThemeLevel,
-} from '../catalog-page/ThemeSelect';
+} from '../themes/ThemeSelect';
 
 export type ContainingThemeTreeNode = ThemeTreeNode & {
-  type: 'theme';
+  type: TreeEntityType.THEME;
 };
 
 export type TaskTreeNode = TreeNode & {
-  type: 'task';
+  type: TreeEntityType.TASK;
 };
 
 export const mapTasksToNodes = ({
@@ -39,7 +40,7 @@ export const mapTasksToNodes = ({
   rootPId: getSubjectNodeId(subject_id),
   isLeaf: true,
   title: text,
-  type: 'task',
+  type: TreeEntityType.TASK,
 });
 
 export const mapThemeToContainingNodes = (
@@ -49,7 +50,7 @@ export const mapThemeToContainingNodes = (
   isLeaf: !theme.has_sub_themes && !theme.has_sub_tasks,
   selectable: false,
   value: NaN,
-  type: 'theme',
+  type: TreeEntityType.THEME,
 });
 
 export function useTaskSelect(subjectId?: number, taskId?: number) {
@@ -116,11 +117,11 @@ export function useTaskSelect(subjectId?: number, taskId?: number) {
 export const renderIcon = (props: TreeNodeProps) => {
   const {type} = props as TaskTreeNode | ContainingThemeTreeNode;
 
-  return type === 'theme' ? (
+  return type === TreeEntityType.THEME ? (
     renderThemeIcon(props)
-  ) : (
+  ) : type === TreeEntityType.TASK ? (
     <i className="icon-assignment" />
-  );
+  ) : null;
 };
 
 type TaskSelectProps = Omit<

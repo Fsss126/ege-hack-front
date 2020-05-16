@@ -23,8 +23,8 @@ import {
   getVideoId,
   getVideoLinkIsValid,
 } from '../../courses/course-page/lessons/LessonForm';
-import {SubjectOption} from './ThemeForm';
-import {ThemeSelect} from './ThemeSelect';
+import {SubjectOption} from '../themes/ThemeForm';
+import {ThemeSelect} from '../themes/ThemeSelect';
 
 type TaskFormData = {
   image?: FileInfo[];
@@ -251,7 +251,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
   const onSubjectChange = useCallback(
     (value: any, name: any) => {
       onInputChange(value, name);
-      onInputChange(undefined, 'themeId');
+      onInputChange(undefined, 'theme_id');
     },
     [onInputChange],
   );

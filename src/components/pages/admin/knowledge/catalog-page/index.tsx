@@ -3,7 +3,7 @@ import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {RouteComponentPropsWithParentProps} from 'types/routes';
 
-import ThemeCatalogPage from './ThemeCatalogPage';
+import CatalogPage from './CatalogPage';
 
 export type CoursesPageProps = RouteComponentPropsWithParentProps;
 const CoursesPage: React.FC<CoursesPageProps> = (props) => {
@@ -24,9 +24,9 @@ const CoursesPage: React.FC<CoursesPageProps> = (props) => {
       <Route
         path={[`${path}/list`, `${path}/calendar`]}
         render={(props) => (
-          <ThemeCatalogPage path={path} url={url} {...props}>
+          <CatalogPage path={path} url={url} {...props}>
             {header}
-          </ThemeCatalogPage>
+          </CatalogPage>
         )}
       />
       <Route render={() => <Redirect to={`${path}/list/`} />} />

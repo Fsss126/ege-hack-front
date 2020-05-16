@@ -16,7 +16,7 @@ import {CourseInfo, SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithParentProps} from 'types/routes';
 
-import {TreeCatalog} from '../../../../common/TreeCatalog';
+import {KnowledgeCatalog} from './KnowledgeCatalog';
 
 const filterBy = {
   search: true,
@@ -27,7 +27,7 @@ const filterBy = {
 export type CourseCatalogPageProps = RouteComponentPropsWithParentProps & {
   children: React.ReactElement;
 };
-const ThemeCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
+const CatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
   const {location, url, children: header} = props;
   const {
     catalog,
@@ -42,7 +42,7 @@ const ThemeCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
 
   const onDelete = useDeleteCourse();
 
-  const canEdit = useCheckPermissions(Permission.COURSE_EDIT);
+  const canEdit = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
 
   const renderCourse = useCallback(
     (course, {link, ...rest}) => {
@@ -108,7 +108,7 @@ const ThemeCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
       errors={[errorLoadingCatalog, errorLoadingSubjects]}
       reloadCallbacks={[reloadCatalog, reloadSubjects]}
     >
-      {isLoaded && (
+      {!!(catalog && subjects) && (
         <PageContent>
           <CourseCatalog.Body
             subjects={subjects as SubjectInfo[]}
@@ -135,7 +135,7 @@ const ThemeCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
                 </Button>
               </ButtonsBlock>
             )}
-            <TreeCatalog />
+            <KnowledgeCatalog subjects={subjects} />
             <CourseCatalog.Filter filterBy={filterBy} />
             <CourseCatalog.Catalog plain renderCourse={renderCourse} />
           </CourseCatalog.Body>
@@ -145,4 +145,4 @@ const ThemeCatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
   );
 };
 
-export default ThemeCatalogPage;
+export default CatalogPage;

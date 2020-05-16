@@ -66,7 +66,7 @@ export interface DataState {
     [taskId: number]: DataProperty<TaskInfo>;
   };
   knowledgeMap: {
-    [subjectId: number]: KnowledgeBaseSubject;
+    [subjectId: number]: Maybe<KnowledgeBaseSubject>;
   };
   tests: {
     [testId: number]: DataProperty<TestInfo>;

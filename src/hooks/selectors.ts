@@ -90,7 +90,13 @@ import {
   DataProperty,
   KnowledgeBaseSubject,
 } from '../store/reducers/dataReducer';
-import {getKnowledgeTree} from '../types/knowledgeTree';
+import {
+  getKnowledgeSubjectContent,
+  getKnowledgeTree,
+  getSubjectNodeId,
+  getThemeNodeId,
+  KnowledgeTreeEntity,
+} from '../types/knowledgeTree';
 
 const useSelector = <TSelected>(
   selector: (state: AppState) => TSelected,
@@ -1369,8 +1375,8 @@ function useKnowledgeSubjectMap(
   subjectId?: number,
 ): KnowledgeSubjectMapHookResult {
   const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
-  const knowledgeTree = useSelector(selectKnowledgeMap);
-  const subjectContent = subjectId ? knowledgeTree[subjectId] : undefined;
+  const knowledgeMap = useSelector(selectKnowledgeMap);
+  const subjectContent = subjectId ? knowledgeMap[subjectId] : undefined;
   const knowledgeLevelFetch = useKnowledgeLevelFetch();
 
   const dispatchFetchAction = useCallback(
@@ -1411,12 +1417,6 @@ function useKnowledgeSubjectMap(
   return {content: subjectContent, reload};
 }
 
-type KnowledgeSubjectTreeHookResult = {
-  content?: KnowledgeBaseSubject | false;
-  error?: AxiosError;
-  reload?: SimpleCallback;
-};
-
 export type KnowledgeSubjectContentHookResult = {
   themes?: ThemeInfo[] | false;
   tasks?: TaskInfo[] | false;
@@ -1435,55 +1435,7 @@ export function useKnowledgeSubjectContent(
   const tasks = useSelector(selectKnowledgeTasks);
 
   const {loadedThemes, subjectThemes, subjectTasks} = useMemo(() => {
-    const loadedThemes: number[] = [];
-
-    let subjectThemes: ThemeInfo[] | false | undefined;
-    let subjectTasks: TaskInfo[] | false | undefined;
-
-    if (subjectContent === false) {
-      subjectThemes = false;
-    } else if (!subjectContent || !subjectContent.root) {
-      subjectThemes = undefined;
-    } else {
-      subjectThemes = [];
-      subjectTasks = [];
-
-      for (const key in subjectContent) {
-        const level = subjectContent[key];
-
-        if (!level || level instanceof Error) {
-          continue;
-        }
-
-        let isLoaded = true;
-
-        for (const themeId of level.themeIds) {
-          const theme = themes[themeId];
-
-          if (!theme || theme instanceof Error) {
-            isLoaded = false;
-          } else {
-            subjectThemes.push(theme);
-          }
-        }
-
-        for (const taskId of level.taskIds) {
-          const task = tasks[taskId];
-
-          if (!task || task instanceof Error) {
-            isLoaded = false;
-          } else {
-            subjectTasks.push(task);
-          }
-        }
-
-        if (isLoaded && key !== 'root') {
-          loadedThemes.push(parseInt(key));
-        }
-      }
-    }
-
-    return {loadedThemes, subjectThemes, subjectTasks} as const;
+    return getKnowledgeSubjectContent(subjectContent, themes, tasks);
   }, [subjectContent, tasks, themes]);
 
   return error
@@ -1494,6 +1446,61 @@ export function useKnowledgeSubjectContent(
         loadedThemes,
         reload,
       };
+}
+
+export function useKnowLedgeTree<
+  E extends KnowledgeTreeEntity = KnowledgeTreeEntity
+>(subjects: SubjectInfo[], mapEntities?: (entity: KnowledgeTreeEntity) => E) {
+  const map = useSelector(selectKnowledgeMap);
+  const themes = useSelector(selectKnowledgeThemes);
+  const tasks = useSelector(selectKnowledgeTasks);
+
+  return useMemo(() => {
+    const collectedThemes: (Maybe<ThemeInfo[]> | false)[] = [];
+    const collectedTasks: (Maybe<TaskInfo[]> | false)[] = [];
+    const loadedThemes: number[][] = [];
+    const loadedSubjects: number[] = [];
+
+    _.forEach(subjects, (subject) => {
+      const subjectContent = map[subject.id];
+
+      if (!subjectContent) {
+        return;
+      }
+      loadedSubjects.push(subject.id);
+
+      const {
+        subjectThemes,
+        subjectTasks,
+        loadedThemes: loadedSubjectThemes,
+      } = getKnowledgeSubjectContent(subjectContent, themes, tasks);
+      collectedThemes.push(subjectThemes);
+      collectedTasks.push(subjectTasks);
+      loadedThemes.push(loadedSubjectThemes);
+    });
+
+    const filteredThemes = _(collectedThemes).compact().flatten().value();
+    const filteredTasks = _(collectedTasks).compact().flatten().value();
+    const loadedEntities = [
+      ..._(loadedThemes)
+        .flatten()
+        .map((id) => getThemeNodeId(id))
+        .value(),
+      ..._(loadedSubjects)
+        .map((id) => getSubjectNodeId(id))
+        .value(),
+    ];
+
+    return {
+      ...getKnowledgeTree({
+        subjects,
+        themes: filteredThemes,
+        tasks: filteredTasks,
+        mapEntities,
+      }),
+      loadedEntities,
+    };
+  }, [map, mapEntities, subjects, tasks, themes]);
 }
 
 export type KnowledgeThemeHookResult = {

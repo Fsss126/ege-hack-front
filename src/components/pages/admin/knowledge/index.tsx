@@ -3,10 +3,10 @@ import {RouteComponentProps} from 'react-router';
 import {Route, Switch} from 'react-router-dom';
 
 import CatalogPage from './catalog-page';
-import TaskCreatingPage from './catalog-page/TaskCreatingPage';
-import TaskEditingPage from './catalog-page/TaskEditingPage';
-import ThemeCreatingPage from './catalog-page/ThemeCreatingPage';
-import ThemeEditingPage from './catalog-page/ThemeEditingPage';
+import TaskCreatingPage from './tasks/TaskCreatingPage';
+import TaskEditingPage from './tasks/TaskEditingPage';
+import ThemeCreatingPage from './themes/ThemeCreatingPage';
+import ThemeEditingPage from './themes/ThemeEditingPage';
 
 const Knowledge: React.FC<RouteComponentProps<any>> = ({match}) => {
   return (
