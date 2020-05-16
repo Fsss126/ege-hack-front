@@ -1061,17 +1061,22 @@ export function useStartTest(): StartTestHookResult {
   return useCallback(
     (params) => {
       const {courseId, lessonId, testId, onSuccess, onError} = params;
-      const onSuccessCallback: TestStartCallback = (testId, testState) => {
-        const {last_task_id, status} = testState;
+      const onSuccessCallback: TestStartCallback = (
+        testId,
+        testState,
+        test,
+      ) => {
+        const {last_task_id, is_completed: isCompleted} = testState;
+        const {tasks} = test;
         const testUrl = `/courses/${courseId}/${lessonId}/test/${testId}`;
-        const isCompleted = status === TestStatus.COMPLETED;
+        const taskId = last_task_id !== undefined ? last_task_id : tasks[0].id;
 
         if (onSuccess) {
-          onSuccess(testId, testState);
+          onSuccess(testId, testState, test);
         }
 
         history.push(
-          isCompleted ? `${testUrl}/results/` : `${testUrl}/${last_task_id}/`,
+          isCompleted ? `${testUrl}/results/` : `${testUrl}/${taskId}/`,
         );
       };
 

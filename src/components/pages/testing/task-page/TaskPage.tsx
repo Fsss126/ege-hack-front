@@ -47,9 +47,7 @@ export const TaskPage: React.FC<RouteComponentPropsWithParentProps<
   if (test && task && state) {
     const {name} = test;
     const {order} = task;
-    const {status} = state;
-
-    const isCompleted = status === TestStatus.COMPLETED;
+    const {is_completed: isCompleted} = state;
 
     title = `Вопрос ${order + 1} – ${name}`;
     content = (

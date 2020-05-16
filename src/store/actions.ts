@@ -450,6 +450,7 @@ export type WebinarDeleteAction = {
 export type TestStartCallback = (
   testId: number,
   testInfo: TestStateInfo,
+  test: TestInfo,
 ) => void;
 
 export type TestStartErrorCallback = (
@@ -513,14 +514,14 @@ export type TestStatusFetchedAction = {
 
 export type TestStateFetchAction = {
   type: ActionType.TEST_STATE_FETCH;
-  // testId: number;
+  testId: number;
   lessonId: number;
   courseId: number;
 };
 
 export type TestStateFetchedAction = {
   type: ActionType.TEST_STATE_FETCHED;
-  // testId: number;
+  testId: number;
   lessonId: number;
   courseId: number;
   state: TestStateInfo | AxiosError;

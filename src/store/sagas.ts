@@ -1,10 +1,10 @@
 /*eslint-disable @typescript-eslint/unbound-method*/
 import {TakeableChannel} from '@redux-saga/core';
 import Auth from 'definitions/auth';
-import {instanceOf} from 'prop-types';
 import {
   actionChannel,
   ActionPattern,
+  all,
   call,
   delay,
   put as putEffect,
@@ -49,8 +49,11 @@ import {
   CourseWebinarsFetchAction,
   HomeworksFetchAction,
   KnowledgeLevelFetchAction,
+  KnowledgeTaskDeleteRequestAction,
   KnowledgeTaskFetchAction,
+  KnowledgeTestDeleteRequestAction,
   KnowledgeTestFetchAction,
+  KnowledgeThemeDeleteRequestAction,
   KnowledgeThemeFetchAction,
   LessonDeleteRequestAction,
   LessonsFetchAction,
@@ -59,6 +62,7 @@ import {
   SubjectDeleteRequestAction,
   TestCompleteRequestAction,
   TestFetchAction,
+  TestFetchedAction,
   TestSaveAnswerRequestAction,
   TestStartRequestAction,
   TestStateFetchAction,
@@ -69,7 +73,7 @@ import {
   WebinarDeleteRequestAction,
 } from './actions';
 import {AppState} from './reducers';
-import {selectKnowledgeMap, selectLessons} from './selectors';
+import {selectKnowledgeMap} from './selectors';
 
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
@@ -643,7 +647,7 @@ function* fetchTestStatus() {
           try {
             const status: TestStatusInfo = yield call(
               APIRequest.get,
-              `/knowledge/test/status`,
+              `/knowledge/tests/status`,
               {
                 params: {
                   lessonId,
@@ -680,21 +684,16 @@ function* fetchTestState() {
       yield takeLeadingPerKey(
         channel,
         function* (action: TestStateFetchAction) {
-          const {lessonId, courseId} = action;
+          const {lessonId, courseId, testId} = action;
           try {
             const state: TestStateInfo = yield call(
               APIRequest.get,
-              `/knowledge/test/state/`,
-              {
-                params: {
-                  lessonId,
-                },
-              },
+              `/knowledge/tests/${testId}/state`,
             );
             yield put({
               type: ActionType.TEST_STATE_FETCHED,
               state,
-              // testId,
+              testId,
               lessonId,
               courseId,
             });
@@ -702,7 +701,7 @@ function* fetchTestState() {
             yield put({
               type: ActionType.TEST_STATE_FETCHED,
               state: error,
-              // testId,
+              testId,
               lessonId,
               courseId,
             });
@@ -722,23 +721,35 @@ function* processTestStart() {
       yield put({type: ActionType.TEST_FETCH, testId});
       yield put({
         type: ActionType.TEST_STATE_FETCH,
-        // testId,
+        testId,
         lessonId,
         courseId,
       });
-      const {state}: TestStateFetchedAction = yield take(
-        (action: Action) =>
-          action.type === ActionType.TEST_STATE_FETCHED &&
-          action.lessonId === lessonId,
-      );
+      const {stateFetchedAction, testFetchedAction} = yield all({
+        stateFetchedAction: take(
+          (action: Action) =>
+            action.type === ActionType.TEST_STATE_FETCHED &&
+            action.lessonId === lessonId,
+        ),
+        testFetchedAction: take(
+          (action: Action) =>
+            action.type === ActionType.TEST_FETCHED && action.testId === testId,
+        ),
+      });
+      const {state}: TestStateFetchedAction = stateFetchedAction;
+      const {test}: TestFetchedAction = testFetchedAction;
 
-      if (state instanceof Error) {
+      if (state instanceof Error || test instanceof Error) {
         if (onError) {
-          yield call(onError, testId, state);
+          yield call(
+            onError,
+            testId,
+            state instanceof Error ? state : (test as any),
+          );
         }
       } else {
         if (onSuccess) {
-          yield call(onSuccess, testId, state);
+          yield call(onSuccess, testId, state, test);
         }
       }
     },
@@ -754,11 +765,11 @@ function* processTestComplete() {
       try {
         const state: TestStatePassedInfo = yield call(
           APIRequest.post,
-          `/knowledge/test/${testId}/complete`,
+          `/knowledge/tests/${testId}/complete`,
         );
         yield put({
           type: ActionType.TEST_STATE_FETCHED,
-          // testId,
+          testId,
           lessonId,
           courseId,
           state,
@@ -799,8 +810,8 @@ function* processTestSaveAnswer() {
 
       try {
         const answerInfo = yield call(
-          APIRequest.put,
-          `/knowledge/test/${testId}/answer`,
+          APIRequest.post,
+          `/knowledge/tests/${testId}/answer`,
           requestData,
         );
         yield delay(300);
@@ -999,6 +1010,84 @@ function* fetchKnowledgeTest() {
   );
 }
 
+function* processThemeDelete() {
+  yield takeLeadingPerKey(
+    ActionType.KNOWLEDGE_THEME_DELETE_REQUEST,
+    function* (action: KnowledgeThemeDeleteRequestAction) {
+      const {subjectId, themeId, parentThemeId, onDelete, onError} = action;
+      try {
+        yield call(APIRequest.delete, `/knowledge/content/themes/${themeId}`);
+        if (onDelete) {
+          yield call(onDelete, subjectId, themeId, parentThemeId);
+        }
+        yield put({
+          type: ActionType.KNOWLEDGE_THEME_DELETE,
+          subjectId,
+          themeId,
+          parentThemeId,
+        });
+      } catch (error) {
+        if (onError) {
+          yield call(onError, subjectId, themeId, parentThemeId, error);
+        }
+      }
+    },
+    (action) => action.themeId,
+  );
+}
+
+function* processTaskDelete() {
+  yield takeLeadingPerKey(
+    ActionType.KNOWLEDGE_TASK_DELETE_REQUEST,
+    function* (action: KnowledgeTaskDeleteRequestAction) {
+      const {subjectId, taskId, themeId, onDelete, onError} = action;
+      try {
+        yield call(APIRequest.delete, `/knowledge/content/tasks/${taskId}`);
+        if (onDelete) {
+          yield call(onDelete, subjectId, taskId, themeId);
+        }
+        yield put({
+          type: ActionType.KNOWLEDGE_TASK_DELETE,
+          subjectId,
+          taskId,
+          themeId,
+        });
+      } catch (error) {
+        if (onError) {
+          yield call(onError, subjectId, taskId, themeId, error);
+        }
+      }
+    },
+    (action) => action.taskId,
+  );
+}
+
+function* processTestDelete() {
+  yield takeLeadingPerKey(
+    ActionType.KNOWLEDGE_TEST_DELETE_REQUEST,
+    function* (action: KnowledgeTestDeleteRequestAction) {
+      const {courseId, lessonId, testId, onDelete, onError} = action;
+      try {
+        yield call(APIRequest.delete, `/knowledge/tests/${testId}`);
+        if (onDelete) {
+          yield call(onDelete, courseId, lessonId, testId);
+        }
+        yield put({
+          type: ActionType.KNOWLEDGE_TEST_DELETE,
+          courseId,
+          lessonId,
+          testId,
+        });
+      } catch (error) {
+        if (onError) {
+          yield call(onError, courseId, lessonId, testId, error);
+        }
+      }
+    },
+    (action) => action.testId,
+  );
+}
+
 function* init() {
   const credentials = yield select(
     (state: AppState) => state.dataReducer.credentials,
@@ -1041,6 +1130,9 @@ export default function* rootSaga() {
   yield spawn(processParticipantDelete);
   yield spawn(processAccountsDelete);
   yield spawn(processWebinarDelete);
+  yield spawn(processThemeDelete);
+  yield spawn(processTaskDelete);
+  yield spawn(processTestDelete);
 
   yield spawn(processTestStart);
   yield spawn(processTestComplete);

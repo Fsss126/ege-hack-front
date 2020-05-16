@@ -211,23 +211,27 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
           ...rest,
         } as WebinarScheduleInfo;
       }
-      case /\/knowledge\/test\/status/.test(url.pathname):
-      case /\/knowledge\/test\/(.*)\/status/.test(url.pathname):
+      case /\/knowledge\/tests\/status/.test(url.pathname):
+      case /\/knowledge\/tests\/(.*)\/status/.test(url.pathname):
         return transformTestStatus(data);
-      case /\/knowledge\/test\/(.*)\/answer$/.test(url.pathname):
+      case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
         const {user_answer, ...rest} = data as TestStateAnswerDto;
 
         return {
           ...rest,
           user_answer: transformUserAnswer(user_answer),
         } as TestStateAnswerInfo;
-      case /\/knowledge\/test\/state/.test(url.pathname):
-      case /\/knowledge\/test\/(.*)\/state$/.test(url.pathname):
-      case /\/knowledge\/test\/(.*)\/complete$/.test(url.pathname): {
+      case /\/knowledge\/tests\/state/.test(url.pathname):
+      case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
+      case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname): {
         return transformTestState(data);
       }
-      case /\/knowledge\/tests\/(.*)$/.test(url.pathname): {
-        return transformTest(data);
+      case /\/knowledge\/tests\/(.*)$/.test(url.pathname):
+      case /\/knowledge\/tests$/.test(url.pathname): {
+        if (config.method !== 'delete') {
+          return transformTest(data);
+        }
+        return null;
       }
       case /\/knowledge\/content$/.test(url.pathname): {
         return transformKnowledgeLevel(data);
@@ -256,7 +260,8 @@ const transformError = (error: AxiosError) => {
   }
   if (error.response && error.response.status === 404) {
     switch (true) {
-      case /\/knowledge\/test\/status/.test(url.pathname):
+      case /\/knowledge\/tests/.test(url.pathname):
+      case /\/knowledge\/tests\/status/.test(url.pathname):
       case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):
         return null;
       case /\/courses\/\w*\/schedule$/.test(url.pathname):
@@ -269,7 +274,7 @@ const transformError = (error: AxiosError) => {
   }
 };
 
-mockTestsRequests(APIRequest);
+// mockTestsRequests(APIRequest);
 
 APIRequest.interceptors.response.use(transformData, transformError);
 

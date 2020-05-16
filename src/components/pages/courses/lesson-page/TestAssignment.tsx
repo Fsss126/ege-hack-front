@@ -14,11 +14,12 @@ import {TestStatusInfo} from 'types/entities';
 export interface TestStatusProps {
   courseId: number;
   lessonId: number;
+  testId: number;
   test: TestStatusInfo;
 }
 
 export const TestAssignment: React.FC<TestStatusProps> = (props) => {
-  const {test, courseId, lessonId} = props;
+  const {test, courseId, testId, lessonId} = props;
   const [isFetchingTest, setIsFetchingTest] = useState<boolean | null>(null);
   const state = useLoadingState(isFetchingTest, isFetchingTest === false);
   const fetchCallback = useCallback(() => {
@@ -27,20 +28,20 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
 
   const startTestCallback = useStartTest();
 
-  const {status, id, name, deadline} = test;
+  const {status, name, deadline} = test;
 
   const onClick = useCallback(() => {
     setIsFetchingTest(true);
     startTestCallback({
       courseId,
       lessonId,
-      testId: id,
+      testId,
       onSuccess: fetchCallback,
       onError: fetchCallback,
     });
-  }, [courseId, fetchCallback, id, lessonId, startTestCallback]);
+  }, [courseId, fetchCallback, testId, lessonId, startTestCallback]);
 
-  if (test.status === TestStatus.COMPLETED) {
+  if (test.is_completed) {
     const {percentage, passed} = test;
 
     return (

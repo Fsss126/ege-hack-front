@@ -15,6 +15,7 @@ import {
   TestDtoResp,
   TestStateAnswerDto,
   TestStateDtoResp,
+  TestStatus,
   TestStatusResp,
   UserAnswerDtoResp,
 } from 'types/dtos';
@@ -136,11 +137,17 @@ export const transformHomework = ({
   pupil: transformUser(pupil),
 });
 
+const getIsTestCompleted = (status: TestStatus) =>
+  status === TestStatus.PASSED ||
+  status === TestStatus.NOT_PASSED ||
+  status === TestStatus.AWAIT;
+
 export const transformTestStatus = (status: TestStatusResp): TestStatusInfo =>
   ({
     ...status,
     deadline: status.deadline ? new Date(status.deadline) : undefined,
     started_at: status.started_at ? new Date(status.started_at) : undefined,
+    is_completed: getIsTestCompleted(status.status),
     completed_at: status.completed_at
       ? new Date(status.completed_at)
       : undefined,
@@ -178,7 +185,10 @@ export const transformTest = ({
   ...rest
 }: TestDtoResp): TestInfo => ({
   deadline: deadline ? new Date(deadline) : undefined,
-  tasks: tasks.map((task) => transformTask(task)),
+  tasks: tasks.map((task, index) => ({
+    ...transformTask(task),
+    order: index,
+  })),
   ...rest,
 });
 
@@ -196,30 +206,36 @@ export const transformUserAnswer = (
 export const transformTestState = ({
   answers,
   status,
-  last_task_id,
   progress,
   ...rest
-}: TestStateDtoResp): TestStateInfo => ({
-  answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerInfo>>(
-    answers,
-    (result, answer) => {
-      const {user_answer, correct_answer, solution} = answer;
-      result[answer.task_id] = {
-        ...answer,
-        user_answer: transformUserAnswer(user_answer),
-        correct_answer: correct_answer
-          ? transformCorrectAnswer(correct_answer, solution)
-          : correct_answer,
-      };
-      return result;
-    },
-    {},
-  ) as any,
-  ...rest,
-  last_task_id: last_task_id || 0,
-  progress: progress || 0,
-  status: status as any,
-});
+}: TestStateDtoResp): TestStateInfo =>
+  ({
+    answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerInfo>>(
+      answers,
+      (result, answer) => {
+        const {user_answer, correct_answer, solution} = answer;
+        result[answer.task_id] = {
+          ...answer,
+          user_answer: transformUserAnswer(user_answer),
+          correct_answer: correct_answer
+            ? transformCorrectAnswer(correct_answer, solution)
+            : correct_answer,
+        };
+        return result;
+      },
+      {},
+    ) as any,
+    ...rest,
+    progress: progress || 0,
+    is_completed: getIsTestCompleted(status),
+    passed:
+      status === TestStatus.PASSED
+        ? true
+        : status === TestStatus.NOT_PASSED
+        ? false
+        : undefined,
+    status,
+  } as TestStateInfo);
 
 export const transformKnowledgeLevel = ({
   tasks,

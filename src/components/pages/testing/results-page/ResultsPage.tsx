@@ -62,10 +62,13 @@ export const ResultsPage: React.FC<RouteComponentPropsWithParentProps<
   if (test && state) {
     const {name, tasks, pass_criteria: minPercentage} = test;
 
-    if (state.status !== TestStatus.COMPLETED) {
+    if (!state.is_completed) {
       const {last_task_id} = state;
+      const firstTaskId = tasks[0].id;
 
-      return <Redirect to={`../${last_task_id}/`} />;
+      const taskId = last_task_id !== undefined ? last_task_id : firstTaskId;
+
+      return <Redirect to={`../${taskId}/`} />;
     }
 
     const {percentage, passed, answers} = state;

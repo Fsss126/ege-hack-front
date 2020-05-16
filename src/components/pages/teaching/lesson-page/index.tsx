@@ -43,7 +43,7 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
   const {test, error: errorLoadingTest, reload: reloadTest} = useKnowledgeTest(
     lessonId,
   );
-  const isLoaded = !!(lesson && homeworks && courseId);
+  const isLoaded = !!(lesson && homeworks && courseId && test !== undefined);
 
   const header = isLoaded && lesson && (
     <TabNavBlock title={lesson.name}>
@@ -57,7 +57,7 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
           )}
         </TabNavLink>
         <TabNavLink to={`${match.url}/assignment/`}>Задание</TabNavLink>
-        {lesson.test_id && (
+        {test && (
           <TabNavLink to={`${match.url}/test/${lesson.test_id}/`}>
             Тест
           </TabNavLink>

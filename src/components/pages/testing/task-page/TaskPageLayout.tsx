@@ -25,9 +25,8 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
 
   const {name} = test;
   const {text, order, image_link, score, complexity} = task;
-  const {status, progress} = state;
+  const {is_completed: isCompleted, progress} = state;
   const tasksCount = test.tasks.length;
-  const isCompleted = status === TestStatus.COMPLETED;
 
   let percentage;
 

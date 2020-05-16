@@ -22,7 +22,7 @@ interface TaskViewerProps {
 export const TaskPageContent: React.FC<TaskViewerProps> = (props) => {
   const {testId, taskId, lessonId, courseId, test, state, task} = props;
 
-  if (state.status === TestStatus.COMPLETED) {
+  if (state.is_completed) {
     return (
       <TaskResultContent
         testId={testId}

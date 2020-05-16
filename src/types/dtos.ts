@@ -251,7 +251,6 @@ export interface TaskDtoReq extends TaskDtoCommon, Partial<ReqWithImage> {}
 
 export interface TaskDtoResp extends TaskDtoCommon, Partial<RespWithImage> {
   id: number;
-  order: number;
 }
 
 interface ThemeDtoCommon {
@@ -284,9 +283,11 @@ export interface TestDtoResp extends TestDtoCommon {
 }
 
 export enum TestStatus {
-  COMPLETED = 'COMPLETED',
-  STARTED = 'STARTED',
   NOT_STARTED = 'NOT_STARTED',
+  STARTED = 'STARTED',
+  AWAIT = 'AWAIT',
+  PASSED = 'PASSED',
+  NOT_PASSED = 'NOT_PASSED',
 }
 
 export interface TestStatusResp {

@@ -46,11 +46,10 @@ export const TaskNav: React.FC<TaskNavProps> = (props) => {
 
   const {tasks} = test;
   const {order} = task;
-  const {status, answers} = state;
+  const {answers, is_completed: isCompleted} = state;
   const tasksCount = tasks.length;
   const isFirstTask = order === 0;
   const isLastTask = order === tasksCount - 1;
-  const isCompleted = status === TestStatus.COMPLETED;
 
   const next = isLastTask ? '../results/' : `../${test.tasks[order + 1].id}`;
   const prev = isFirstTask ? undefined : `../${test.tasks[order - 1].id}`;

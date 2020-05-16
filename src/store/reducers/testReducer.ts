@@ -46,11 +46,11 @@ export const testReducer: Reducer<TestState, Action> = (
       };
     }
     case ActionType.TEST_STATE_FETCHED: {
-      const {state} = action;
+      const {state: testState} = action;
 
       return {
-        ...defaultState,
-        state,
+        ...state,
+        state: testState,
       };
     }
     case ActionType.TEST_SAVE_ANSWER: {
@@ -59,7 +59,7 @@ export const testReducer: Reducer<TestState, Action> = (
         state.test instanceof Error ||
         !state.state ||
         state.state instanceof Error ||
-        state.state.status === TestStatus.COMPLETED
+        state.state.is_completed
       ) {
         return state;
       }

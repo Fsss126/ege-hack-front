@@ -127,18 +127,21 @@ export type TestStatusInfo = {
   progress: number;
 } & (
   | {
-      status: TestStatus.COMPLETED;
+      status: TestStatus.PASSED | TestStatus.NOT_STARTED | TestStatus.AWAIT;
       percentage: number;
       passed: number;
       started_at: Date;
       completed_at: Date;
+      is_completed: true;
     }
   | {
       status: TestStatus.NOT_STARTED;
+      is_completed: false;
     }
   | {
       status: TestStatus.STARTED;
       started_at: Date;
+      is_completed: false;
     }
 );
 
@@ -153,12 +156,17 @@ export interface TaskInfo extends Omit<TaskDtoResp, 'solution' | 'answer'> {
   answer: CorrectAnswerInfo;
 }
 
+export interface TestTaskInfo extends TaskInfo {
+  order: number;
+}
+
 export interface SanitizedTaskAnswer {
   type: AnswerType;
 }
 
 export interface SanitizedTaskInfo
   extends Omit<TaskDtoResp, 'answer' | 'theme_id' | 'subject_id' | 'solution'> {
+  order: number;
   answer: SanitizedTaskAnswer;
 }
 
@@ -166,7 +174,7 @@ export type ThemeInfo = ThemeDtoResp;
 
 export interface TestInfo extends Omit<TestDtoResp, 'deadline' | 'tasks'> {
   deadline?: Date;
-  tasks: TaskInfo[];
+  tasks: TestTaskInfo[];
 }
 
 export interface SanitizedTestInfo extends Omit<TestInfo, 'tasks'> {
@@ -198,21 +206,23 @@ export type TestStateAnswerInfo =
 type CommonTestStateInfo = {
   id: number;
   status: TestStatus;
-  last_task_id: number;
+  last_task_id?: number;
   progress: number;
 };
 
 export interface TestStateActiveInfo extends CommonTestStateInfo {
   status: TestStatus.NOT_STARTED | TestStatus.STARTED;
+  is_completed: false;
   answers: {
     [key: number]: TestStateActiveAnswerInfo;
   };
 }
 
 export interface TestStatePassedInfo extends CommonTestStateInfo {
-  status: TestStatus.COMPLETED;
+  status: TestStatus.PASSED | TestStatus.NOT_STARTED | TestStatus.AWAIT;
   percentage: number;
-  passed: boolean;
+  passed?: boolean;
+  is_completed: true;
   answers: {
     [key: number]: TestStatePassedAnswerInfo;
   };

@@ -3,7 +3,7 @@ import HomeworkAssignment from 'components/common/HomeworkAssignment';
 import VideoPlayer from 'components/common/VideoPlayer';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import {File} from 'components/ui/input';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {HomeworkInfo, LessonInfo, TestStatusInfo} from 'types/entities';
 
 import HomeworkLoader from './HomeworkLoader';
@@ -24,6 +24,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       assignment,
       attachments,
       course_id,
+      test_id,
     },
     homework,
     testStatus,
@@ -84,13 +85,14 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
           </div>
         </div>
       )}
-      {testStatus && (
+      {test_id && testStatus && (
         <div className="block-container m-lg test-container">
           <h3>
             <i className="icon-checkbox prefix-icon" />
             Тест
           </h3>
           <TestAssignment
+            testId={test_id}
             courseId={course_id}
             lessonId={id}
             test={testStatus}

@@ -193,7 +193,6 @@ export const TEST_TASKS: TaskDtoResp[] = [
     subject_id: 1,
     name: 'Задача про велосипедистов',
     theme_id: 10,
-    order: 0,
     score: 1,
     complexity: 5,
     answer: {
@@ -208,7 +207,6 @@ export const TEST_TASKS: TaskDtoResp[] = [
     subject_id: 1,
     name: 'Задача про мост',
     theme_id: 1,
-    order: 1,
     score: 1,
     answer: {
       type: AnswerType.NUMBER,
@@ -223,7 +221,6 @@ export const TEST_TASKS: TaskDtoResp[] = [
     subject_id: 1,
     name: 'Задача про резистор',
     theme_id: 1,
-    order: 2,
     score: 1,
     complexity: 10,
     answer: {
@@ -260,7 +257,7 @@ export const TEST_STATUS_NOT_STARTED: TestStatusResp = {
 export const TEST_STATUS_COMPLETED: TestStatusResp = {
   id: TEST.id,
   name: TEST.name,
-  status: TestStatus.COMPLETED,
+  status: TestStatus.PASSED,
   progress: 1,
   percentage: 1,
   passed: true,
@@ -289,7 +286,7 @@ export const TEST_STATE_STARTED: TestStateDtoResp = {
 
 export const TEST_STATE_COMPLETED: TestStateDtoResp = {
   id: TEST.id,
-  status: TestStatus.COMPLETED,
+  status: TestStatus.PASSED,
   last_task_id: TEST.tasks.length - 1,
   percentage: 0.8,
   passed: true,
