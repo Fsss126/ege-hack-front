@@ -898,6 +898,7 @@ input[type=number] {
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 1;
 
       &ant-select-tree-switcher_open {
         transform: rotate(0deg);

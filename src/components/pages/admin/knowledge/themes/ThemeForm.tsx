@@ -165,7 +165,6 @@ const ThemeForm: React.FC<CourseFormProps> = (props) => {
             placeholder="Родительская тема"
             name="parent_theme_id"
             onChange={onInputChange}
-            open
             value={parent_theme_id}
           />
           <Input.Input

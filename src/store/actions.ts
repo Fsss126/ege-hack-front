@@ -607,11 +607,13 @@ export type KnowledgeThemeRevokeAction = {
 export type KnowledgeThemeDeleteCallback = (
   subjectId: number,
   themeId: number,
+  parentThemeId?: number,
 ) => void;
 
 export type KnowledgeThemeDeleteErrorCallback = (
   subjectId: number,
   themeId: number,
+  parentThemeId: number | undefined,
   error: AxiosError,
 ) => void;
 
@@ -619,6 +621,7 @@ export type KnowledgeThemeDeleteRequestAction = {
   type: ActionType.KNOWLEDGE_THEME_DELETE_REQUEST;
   subjectId: number;
   themeId: number;
+  parentThemeId?: number;
   onDelete?: KnowledgeThemeDeleteCallback;
   onError?: KnowledgeThemeDeleteErrorCallback;
 };
@@ -627,6 +630,7 @@ export type KnowledgeThemeDeleteAction = {
   type: ActionType.KNOWLEDGE_THEME_DELETE;
   subjectId: number;
   themeId: number;
+  parentThemeId?: number;
 };
 
 export type KnowledgeTaskFetchAction = {
@@ -650,11 +654,13 @@ export type KnowledgeTaskRevokeAction = {
 export type KnowledgeTaskDeleteCallback = (
   subjectId: number,
   taskId: number,
+  themeId?: number,
 ) => void;
 
 export type KnowledgeTaskDeleteErrorCallback = (
   subjectId: number,
   taskId: number,
+  themeId: number | undefined,
   error: AxiosError,
 ) => void;
 
@@ -662,6 +668,7 @@ export type KnowledgeTaskDeleteRequestAction = {
   type: ActionType.KNOWLEDGE_TASK_DELETE_REQUEST;
   subjectId: number;
   taskId: number;
+  themeId?: number;
   onDelete?: KnowledgeTaskDeleteCallback;
   onError?: KnowledgeTaskDeleteErrorCallback;
 };
@@ -670,6 +677,7 @@ export type KnowledgeTaskDeleteAction = {
   type: ActionType.KNOWLEDGE_TASK_DELETE;
   subjectId: number;
   taskId: number;
+  themeId?: number;
 };
 
 export type KnowledgeTestFetchAction = {
@@ -680,7 +688,7 @@ export type KnowledgeTestFetchAction = {
 export type KnowledgeTestFetchedAction = {
   type: ActionType.KNOWLEDGE_TEST_FETCHED;
   lessonId: number;
-  test: TestInfo | AxiosError;
+  test: TestInfo | null | AxiosError;
 };
 
 export type KnowledgeTestRevokeAction = {
@@ -691,11 +699,13 @@ export type KnowledgeTestRevokeAction = {
 };
 
 export type KnowledgeTestDeleteCallback = (
+  courseId: number,
   lessonId: number,
   testId: number,
 ) => void;
 
 export type KnowledgeTestDeleteErrorCallback = (
+  courseId: number,
   lessonId: number,
   testId: number,
   error: AxiosError,
@@ -705,6 +715,7 @@ export type KnowledgeTestDeleteRequestAction = {
   type: ActionType.KNOWLEDGE_TEST_DELETE_REQUEST;
   courseId: number;
   lessonId: number;
+  testId: number;
   onDelete?: KnowledgeTestDeleteCallback;
   onError?: KnowledgeTestDeleteErrorCallback;
 };
@@ -713,6 +724,7 @@ export type KnowledgeTestDeleteAction = {
   type: ActionType.KNOWLEDGE_TEST_DELETE;
   courseId: number;
   lessonId: number;
+  testId: number;
 };
 
 export type Action = {type: ActionType} & (

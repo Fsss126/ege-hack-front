@@ -1,6 +1,7 @@
 /*eslint-disable @typescript-eslint/unbound-method*/
 import {TakeableChannel} from '@redux-saga/core';
 import Auth from 'definitions/auth';
+import {instanceOf} from 'prop-types';
 import {
   actionChannel,
   ActionPattern,

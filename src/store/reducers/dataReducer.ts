@@ -69,10 +69,10 @@ export interface DataState {
     [subjectId: number]: Maybe<KnowledgeBaseSubject>;
   };
   tests: {
-    [testId: number]: DataProperty<TestInfo>;
+    [testId: number]: TestInfo;
   };
   lessonsTests: {
-    [lessonId: number]: DataProperty<number>;
+    [lessonId: number]: DataProperty<number | null>;
   };
 }
 
@@ -138,24 +138,12 @@ export const dataReducer: Reducer<DataState, Action> = (
         credentials: undefined,
       };
     }
-    case ActionType.USER_INFO_FETCH: {
-      return {
-        ...state,
-        userInfo: undefined,
-      };
-    }
     case ActionType.USER_INFO_FETCHED: {
       const {userInfo} = action;
 
       return {
         ...state,
         userInfo,
-      };
-    }
-    case ActionType.SHOP_COURSES_FETCH: {
-      return {
-        ...state,
-        shopCourses: undefined,
       };
     }
     case ActionType.SHOP_COURSES_FETCHED: {
@@ -166,24 +154,12 @@ export const dataReducer: Reducer<DataState, Action> = (
         shopCourses: courses,
       };
     }
-    case ActionType.USER_COURSES_FETCH: {
-      return {
-        ...state,
-        userCourses: undefined,
-      };
-    }
     case ActionType.USER_COURSES_FETCHED: {
       const {courses} = action;
 
       return {
         ...state,
         userCourses: courses,
-      };
-    }
-    case ActionType.SUBJECTS_FETCH: {
-      return {
-        ...state,
-        subjects: undefined,
       };
     }
     case ActionType.SUBJECTS_FETCHED: {
@@ -194,29 +170,12 @@ export const dataReducer: Reducer<DataState, Action> = (
         subjects,
       };
     }
-    case ActionType.USER_TEACHERS_FETCH: {
-      return {
-        ...state,
-        userTeachers: undefined,
-      };
-    }
     case ActionType.USER_TEACHERS_FETCHED: {
       const {teachers} = action;
 
       return {
         ...state,
         userTeachers: teachers,
-      };
-    }
-    case ActionType.ACCOUNTS_FETCH: {
-      const {role} = action;
-
-      return {
-        ...state,
-        users: {
-          ...state.users,
-          [role]: undefined,
-        },
       };
     }
     case ActionType.ACCOUNTS_FETCHED: {
@@ -241,17 +200,6 @@ export const dataReducer: Reducer<DataState, Action> = (
           role === AccountRole.TEACHER ? undefined : state.userTeachers,
       };
     }
-    case ActionType.LESSONS_FETCH: {
-      const {courseId} = action;
-
-      return {
-        ...state,
-        lessons: {
-          ...state.lessons,
-          [courseId]: undefined,
-        },
-      };
-    }
     case ActionType.LESSONS_FETCHED: {
       const {courseId, lessons} = action;
 
@@ -260,17 +208,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {
           ...state.lessons,
           [courseId]: lessons,
-        },
-      };
-    }
-    case ActionType.COURSE_WEBINARS_FETCH: {
-      const {courseId} = action;
-
-      return {
-        ...state,
-        webinars: {
-          ...state.webinars,
-          [courseId]: undefined,
         },
       };
     }
@@ -285,15 +222,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
-    case ActionType.UPCOMING_WEBINARS_FETCH: {
-      return {
-        ...state,
-        webinars: {
-          ...state.webinars,
-          upcoming: undefined,
-        },
-      };
-    }
     case ActionType.UPCOMING_WEBINARS_FETCHED: {
       const {webinars} = action;
 
@@ -302,17 +230,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         webinars: {
           ...state.webinars,
           upcoming: webinars,
-        },
-      };
-    }
-    case ActionType.PARTICIPANTS_FETCH: {
-      const {courseId} = action;
-
-      return {
-        ...state,
-        participants: {
-          ...state.participants,
-          [courseId]: undefined,
         },
       };
     }
@@ -327,29 +244,12 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
-    case ActionType.ADMIN_COURSES_FETCH: {
-      return {
-        ...state,
-        adminCourses: undefined,
-      };
-    }
     case ActionType.ADMIN_COURSES_FETCHED: {
       const {courses} = action;
 
       return {
         ...state,
         adminCourses: courses,
-      };
-    }
-    case ActionType.ADMIN_WEBINARS_FETCH: {
-      const {courseId} = action;
-
-      return {
-        ...state,
-        adminWebinars: {
-          ...state.adminWebinars,
-          [courseId]: undefined,
-        },
       };
     }
     case ActionType.ADMIN_WEBINARS_FETCHED: {
@@ -361,12 +261,6 @@ export const dataReducer: Reducer<DataState, Action> = (
           ...state.adminWebinars,
           [courseId]: webinars,
         },
-      };
-    }
-    case ActionType.TEACHER_COURSES_FETCH: {
-      return {
-        ...state,
-        teacherCourses: undefined,
       };
     }
     case ActionType.TEACHER_COURSES_FETCHED: {
@@ -416,20 +310,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {
           ...loadedLessons,
           [courseId]: courseLessons.filter(({id}) => id !== lessonId),
-        },
-      };
-    }
-    case ActionType.USER_HOMEWORKS_FETCH: {
-      const {courseId, lessonId} = action;
-
-      return {
-        ...state,
-        userHomeworks: {
-          ...state.userHomeworks,
-          [courseId]: {
-            ...(state.userHomeworks[courseId] || {}),
-            [lessonId]: undefined,
-          },
         },
       };
     }
@@ -484,17 +364,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         participants: {
           ...loadedParticipants,
           [courseId]: courseParticipants.filter(({id}) => id !== userId),
-        },
-      };
-    }
-    case ActionType.HOMEWORKS_FETCH: {
-      const {lessonId} = action;
-
-      return {
-        ...state,
-        homeworks: {
-          ...state.homeworks,
-          [lessonId]: undefined,
         },
       };
     }
@@ -720,6 +589,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         }
       };
 
+      debugger;
       return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
     }
     case ActionType.KNOWLEDGE_TASK_FETCHED: {
@@ -766,27 +636,30 @@ export const dataReducer: Reducer<DataState, Action> = (
 
       return _.cloneDeep(_.mergeWith(state, stateUpdate, customizer));
     }
-    case ActionType.KNOWLEDGE_TEST_FETCH: {
-      const {lessonId} = action;
-
-      return {
-        ...state,
-        tests: {
-          ...state.tests,
-          [lessonId]: undefined,
-        },
-      };
-    }
     case ActionType.KNOWLEDGE_TEST_FETCHED: {
       const {lessonId, test} = action;
 
-      return {
-        ...state,
-        tests: {
-          ...state.tests,
-          [lessonId]: test,
-        },
-      };
+      if (test instanceof Error || test === null) {
+        return {
+          ...state,
+          lessonsTests: {
+            ...state.lessonsTests,
+            [lessonId]: test,
+          },
+        };
+      } else {
+        return {
+          ...state,
+          tests: {
+            ...state.tests,
+            [test.id]: test,
+          },
+          lessonsTests: {
+            ...state.lessonsTests,
+            [lessonId]: test.id,
+          },
+        };
+      }
     }
     case ActionType.KNOWLEDGE_TEST_REVOKE: {
       const {lessonId, courseId, responseTest} = action;
@@ -794,7 +667,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {[courseId]: courseLessons, ...loadedLessons},
       } = state;
 
-      const tests = {...state.tests, [lessonId]: responseTest};
+      const tests = {...state.tests, [responseTest.id]: responseTest};
 
       if (!courseLessons || courseLessons instanceof Error) {
         return {...state, tests};
@@ -812,15 +685,19 @@ export const dataReducer: Reducer<DataState, Action> = (
         ...state,
         lessons: {...loadedLessons, [courseId]: newLessons},
         tests,
+        lessonsTests: {
+          ...state.lessonsTests,
+          [lessonId]: responseTest.id,
+        },
       };
     }
     case ActionType.KNOWLEDGE_TEST_DELETE: {
-      const {courseId, lessonId} = action;
+      const {courseId, lessonId, testId} = action;
       const {
         lessons: {[courseId]: courseLessons, ...loadedLessons},
       } = state;
 
-      const tests = {...state.tests, [lessonId]: undefined};
+      const {[testId]: removedTest, ...tests} = state.tests;
 
       if (!courseLessons || courseLessons instanceof Error) {
         return {...state, tests};
@@ -837,6 +714,7 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         lessons: {...loadedLessons, [courseId]: newLessons},
+        lessonsTests: {...state.lessonsTests, [lessonId]: null},
         tests,
       };
     }
