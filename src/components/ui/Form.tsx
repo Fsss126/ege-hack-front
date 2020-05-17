@@ -123,7 +123,8 @@ export function useFormValidityChecker<D extends FormData>(
       }
       return true;
     },
-    [checkInput, formElement, ...dependencies],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [formElement, ...dependencies],
   );
 }
 

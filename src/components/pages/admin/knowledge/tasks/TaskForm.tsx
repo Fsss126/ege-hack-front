@@ -132,7 +132,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
     formElementRef.current,
     (name, input, formData) => {
       if (name === 'image') {
-        return formData.image && !!formData.image[0];
+        return true;
       }
 
       if (name === 'video_solution') {
