@@ -1,10 +1,9 @@
-import {Tree} from 'antd';
 import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
+import TreeCatalog, {CatalogTreeNode} from 'components/common/TreeCatalog';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import {ContentBlock} from 'components/layout/ContentBlock';
 import {
   DeleteKnowledgeTaskHookResult,
   DeleteKnowledgeThemeHookResult,
@@ -12,34 +11,36 @@ import {
   useDeleteKnowledgeTheme,
   useKnowLedgeTree,
 } from 'hooks/selectors';
-import {DataNode} from 'rc-tree/lib/interface';
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Link} from 'react-router-dom';
 import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {KnowledgeTreeEntity, TreeEntityType} from 'types/knowledgeTree';
 
+import {FilterFunc} from '../../../../common/Catalog';
 import {renderIcon} from '../tests/TaskSelect';
 import {useLoadThemeLevel} from '../themes/ThemeSelect';
 
-interface TreeCatalogProps {
-  subjects: SubjectInfo[];
-}
+const filterBy = {
+  search: true,
+  subject: false,
+  online: false,
+};
 
-type TreeEntityNode = KnowledgeTreeEntity & DataNode;
+type TreeEntityNode = KnowledgeTreeEntity & CatalogTreeNode;
 
 interface TreeElementContentProps {
   entity: KnowledgeTreeEntity;
+  url: string;
+  filtered?: boolean;
   canEdit?: boolean;
   onDeleteTheme: DeleteKnowledgeThemeHookResult;
   onDeleteTask: DeleteKnowledgeTaskHookResult;
 }
 const TreeElementContent = (props: TreeElementContentProps) => {
-  const {entity, canEdit, onDeleteTask, onDeleteTheme} = props;
+  const {entity, url: root, canEdit, onDeleteTask, onDeleteTheme} = props;
 
   let menu;
-
-  const root = `..`;
 
   switch (entity.type) {
     case TreeEntityType.SUBJECT: {
@@ -151,8 +152,20 @@ const TreeElementContent = (props: TreeElementContentProps) => {
   );
 };
 
+const filter: FilterFunc<TreeEntityNode> = (entity, params) => {
+  const {search} = params;
+
+  return entity.entity.name.includes(search);
+};
+
+interface TreeCatalogProps {
+  subjects: SubjectInfo[];
+  header?: React.ReactNode;
+  url: string;
+}
+
 export const KnowledgeCatalog = (props: TreeCatalogProps) => {
-  const {subjects} = props;
+  const {subjects, header, url} = props;
 
   const onDeleteTheme = useDeleteKnowledgeTheme();
   const onDeleteTask = useDeleteKnowledgeTask();
@@ -160,39 +173,47 @@ export const KnowledgeCatalog = (props: TreeCatalogProps) => {
   const canEdit = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
 
   const mapNodeData = useCallback(
-    (entity: KnowledgeTreeEntity): TreeEntityNode =>
-      ({
+    (entity: KnowledgeTreeEntity) => {
+      const node = {
         ...entity,
         isLeaf: entity.type === TreeEntityType.TASK,
         key: entity.id,
         icon: renderIcon,
         className: 'list__item list__item-selectable list__item-plain',
-        title: (
-          <TreeElementContent
-            entity={entity}
-            canEdit={canEdit}
-            onDeleteTask={onDeleteTask}
-            onDeleteTheme={onDeleteTheme}
-          />
-        ),
-      } as TreeEntityNode),
-    [canEdit, onDeleteTask, onDeleteTheme],
+      } as TreeEntityNode;
+
+      node.title = (
+        <TreeElementContent
+          entity={entity}
+          filtered={node.filtered}
+          url={url}
+          canEdit={canEdit}
+          onDeleteTask={onDeleteTask}
+          onDeleteTheme={onDeleteTheme}
+        />
+      );
+
+      return node;
+    },
+    [canEdit, onDeleteTask, onDeleteTheme, url],
   );
 
-  const {tree, loadedEntities} = useKnowLedgeTree(subjects, mapNodeData);
+  const {tree, loadedEntities, entitiesMap} = useKnowLedgeTree(
+    subjects,
+    mapNodeData,
+  );
   const loadData = useLoadThemeLevel();
+  const entitiesList = useMemo(() => _.values(entitiesMap), [entitiesMap]);
 
   return (
-    <ContentBlock stacked>
-      <Tree
-        switcherIcon={<i className="icon-angle-down" />}
-        prefixCls="ant-select-tree"
-        className="list"
-        showIcon
-        treeData={tree as any}
-        loadData={loadData as any}
+    <TreeCatalog.Body tree={tree} items={entitiesList} filter={filter}>
+      {header}
+      <TreeCatalog.Filter filterBy={filterBy} />
+      <TreeCatalog.Catalog
         loadedKeys={loadedEntities}
+        loadData={loadData as any}
+        emptyPlaceholder="В базе нет предметов"
       />
-    </ContentBlock>
+    </TreeCatalog.Body>
   );
 };

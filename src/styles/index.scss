@@ -631,7 +631,9 @@ header {
     padding: $content-padding;
 
     .content-block__title {
-      margin-bottom: 1em;
+      &:not(:last-child) {
+        margin-bottom: 1em;
+      }
 
       &:not(.catalog__catalog-title) + .list {
         margin-top: -0.5em;

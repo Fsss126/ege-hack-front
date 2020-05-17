@@ -1,100 +1,54 @@
-import Course from 'components/common/Course';
-import CourseCatalog from 'components/common/CourseCatalog';
-import DropdownMenu, {
-  DropdownIconButton,
-  DropdownMenuOption,
-} from 'components/common/DropdownMenu';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import {ButtonsBlock} from 'components/layout/ButtonsBlock';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
-import {useAdminCourses, useDeleteCourse, useSubjects} from 'hooks/selectors';
-import React, {useCallback} from 'react';
+import {useSubjects} from 'hooks/selectors';
+import React from 'react';
 import {Link} from 'react-router-dom';
-import {CourseInfo, SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithParentProps} from 'types/routes';
 
 import {KnowledgeCatalog} from './KnowledgeCatalog';
 
-const filterBy = {
-  search: true,
-  subject: true,
-  online: true,
-};
-
-export type CourseCatalogPageProps = RouteComponentPropsWithParentProps & {
-  children: React.ReactElement;
-};
-const CatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
-  const {location, url, children: header} = props;
-  const {
-    catalog,
-    error: errorLoadingCatalog,
-    reload: reloadCatalog,
-  } = useAdminCourses();
+const CatalogPage: React.FC<RouteComponentPropsWithParentProps> = (props) => {
+  const {location, url} = props;
   const {
     subjects,
     error: errorLoadingSubjects,
     reload: reloadSubjects,
   } = useSubjects();
 
-  const onDelete = useDeleteCourse();
-
   const canEdit = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
 
-  const renderCourse = useCallback(
-    (course, {link, ...rest}) => {
-      const {id, hide_from_market} = course;
-      const courseLink = `${url}/${link}`;
-      const deleteCallback = (): void => {
-        onDelete(id);
-      };
-
-      return (
-        <Course
-          course={course}
-          selectable
-          key={id}
-          link={courseLink}
-          noOnClickOnAction
-          action={
-            canEdit && (
-              <DropdownMenu
-                content={<DropdownIconButton className="icon-ellipsis" />}
-              >
-                <DropdownMenuOption component={Link} to={`${courseLink}edit/`}>
-                  <i className="far fa-edit" />
-                  Изменить
-                </DropdownMenuOption>
-                <DropdownMenuOption onClick={deleteCallback}>
-                  <i className="icon-close" />
-                  Удалить
-                </DropdownMenuOption>
-                <DropdownMenuOption
-                  component={Link}
-                  to={`${courseLink}lessons/create/`}
-                >
-                  <i className="icon-add" />
-                  Добавить урок
-                </DropdownMenuOption>
-                {!hide_from_market && (
-                  <DropdownMenuOption component={Link} to={`/shop/${id}/`}>
-                    <i className="icon-logout" />
-                    Открыть в магазине
-                  </DropdownMenuOption>
-                )}
-              </DropdownMenu>
-            )
-          }
-          {...rest}
-        />
-      );
-    },
-    [canEdit, onDelete, url],
+  const header = (
+    <>
+      <ContentBlock title="База заданий" titleInside titleBig />
+      {canEdit && (
+        <ButtonsBlock stacked>
+          <Button
+            neutral
+            component={Link}
+            to={`${url}/theme/create/`}
+            after={<i className="icon-add" />}
+          >
+            Добавить тему
+          </Button>
+          <Button
+            neutral
+            component={Link}
+            to={`${url}/task/create/`}
+            after={<i className="icon-add" />}
+          >
+            Добавить задачу
+          </Button>
+        </ButtonsBlock>
+      )}
+    </>
   );
-  const isLoaded = !!(catalog && subjects);
+
+  const isLoaded = !!subjects;
 
   return (
     <Page
@@ -102,43 +56,15 @@ const CatalogPage: React.FC<CourseCatalogPageProps> = (props) => {
       loadUserInfo
       requiredRoles={ADMIN_ROLES}
       fullMatch={false}
-      className="admin-page admin-page--courses"
+      className="admin-page admin-page--knowdlege"
       title="Управление курсами"
       location={location}
-      errors={[errorLoadingCatalog, errorLoadingSubjects]}
-      reloadCallbacks={[reloadCatalog, reloadSubjects]}
+      errors={[errorLoadingSubjects]}
+      reloadCallbacks={[reloadSubjects]}
     >
-      {!!(catalog && subjects) && (
+      {!!subjects && (
         <PageContent>
-          <CourseCatalog.Body
-            subjects={subjects as SubjectInfo[]}
-            courses={catalog as CourseInfo[]}
-          >
-            {header}
-            {canEdit && (
-              <ButtonsBlock stacked>
-                <Button
-                  neutral
-                  component={Link}
-                  to={`${url}/theme/create/`}
-                  after={<i className="icon-add" />}
-                >
-                  Добавить тему
-                </Button>
-                <Button
-                  neutral
-                  component={Link}
-                  to={`${url}/task/create/`}
-                  after={<i className="icon-add" />}
-                >
-                  Добавить задачу
-                </Button>
-              </ButtonsBlock>
-            )}
-            <KnowledgeCatalog subjects={subjects} />
-            <CourseCatalog.Filter filterBy={filterBy} />
-            <CourseCatalog.Catalog plain renderCourse={renderCourse} />
-          </CourseCatalog.Body>
+          <KnowledgeCatalog subjects={subjects} header={header} url={url} />
         </PageContent>
       )}
     </Page>

@@ -8,8 +8,11 @@ import {InputChangeHandler} from '../ui/input/Input';
 import {OptionShape} from '../ui/input/Select';
 import List, {ListItemRenderer, ListItemRenderProps, ListProps} from './List';
 
-export type CatalogContextState = FilterParams & {
+export type FilterContextState = FilterParams & {
   options?: OptionShape<number>[];
+};
+
+export type CatalogContextState = FilterContextState & {
   items: any[];
   totalItems: number;
 };
@@ -67,6 +70,7 @@ export type FilterProps = {
   children?: React.ReactNode;
   transparent?: boolean;
   stacked?: boolean;
+  context?: React.Context<FilterContextState>;
 };
 const Filter: React.FC<FilterProps> = (props) => {
   const {
@@ -78,9 +82,11 @@ const Filter: React.FC<FilterProps> = (props) => {
     transparent,
     stacked,
     children,
+    context,
   } = props;
   const {options, subject, online, search: searchKey} = React.useContext(
-    CatalogContext,
+    context ||
+      ((CatalogContext as unknown) as React.Context<FilterContextState>),
   );
   const onChange = useFilterCallback();
 
