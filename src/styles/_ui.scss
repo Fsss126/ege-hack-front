@@ -737,7 +737,10 @@ input[type=number] {
       }
 
       .ant-select-selection-placeholder {
-        color: $text-grey;
+        .ant-select-placeholder {
+          display: inline-block;
+          color: $text-grey;
+        }
       }
 
       .ant-select-selection-item {
@@ -900,7 +903,7 @@ input[type=number] {
       justify-content: center;
       z-index: 1;
 
-      &ant-select-tree-switcher_open {
+      &.ant-select-tree-switcher_open {
         transform: rotate(0deg);
       }
 

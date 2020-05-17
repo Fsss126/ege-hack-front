@@ -7,14 +7,14 @@ import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
 } from 'components/common/DropdownMenu';
-import {
+import ConditionalRenderer, {
   RequiredPermissions,
   useCheckPermissions,
 } from 'components/ConditionalRender';
 import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
-import {useDeleteLesson} from 'hooks/selectors';
+import {useDeleteKnowledgeTest, useDeleteLesson} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo} from 'types/entities';
@@ -80,18 +80,27 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
 
   const canEdit = useCheckPermissions(Permission.LESSON_EDIT);
 
-  const onDelete = useDeleteLesson();
+  const onDeleteLesson = useDeleteLesson();
+  const onDeleteTest = useDeleteKnowledgeTest();
 
   const courseLink = `/admin/courses/${courseId}`;
 
   const renderLesson: CatalogItemRenderer<LessonInfo> = useCallback(
     (lesson, {link, ...rest}, index) => {
-      const {id, course_id} = lesson;
+      const {id, course_id, test_id} = lesson;
       const lessonLink = `${path}/${course_id}/${link}`;
+      const adminLink = `${courseLink}/${link}`;
 
-      const deleteCallback = (): void => {
-        onDelete(course_id, id);
+      const deleteLessonCallback = (): void => {
+        onDeleteLesson(course_id, id);
       };
+
+      const deleteTestCallback =
+        test_id !== undefined
+          ? (): void => {
+              onDeleteTest(course_id, id, test_id);
+            }
+          : undefined;
 
       return render(
         lesson,
@@ -102,29 +111,46 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
             <DropdownMenu
               content={<DropdownIconButton className="icon-ellipsis" />}
             >
-              <DropdownMenuOption component={Link} to={`${lessonLink}edit/`}>
+              <DropdownMenuOption component={Link} to={`${adminLink}edit/`}>
                 <i className="far fa-edit" />
                 Изменить
               </DropdownMenuOption>
-              <DropdownMenuOption onClick={deleteCallback}>
+              <DropdownMenuOption onClick={deleteLessonCallback}>
                 <i className="icon-close" />
                 Удалить
               </DropdownMenuOption>
-              <DropdownMenuOption component={Link} to={`${lessonLink}edit/`}>
-                <i className="far fa-edit" />
-                Изменить
-              </DropdownMenuOption>
-              <DropdownMenuOption onClick={deleteCallback}>
-                <i className="icon-close" />
-                Удалить
-              </DropdownMenuOption>
+              <ConditionalRenderer requiredPermissions={Permission.TEST_EDIT}>
+                {test_id !== undefined ? (
+                  <>
+                    <DropdownMenuOption
+                      component={Link}
+                      to={`${adminLink}test/edit`}
+                    >
+                      <i className="far fa-edit" />
+                      Изменить тест
+                    </DropdownMenuOption>
+                    <DropdownMenuOption onClick={deleteTestCallback}>
+                      <i className="icon-close" />
+                      Удалить тест
+                    </DropdownMenuOption>
+                  </>
+                ) : (
+                  <DropdownMenuOption
+                    component={Link}
+                    to={`${adminLink}test/create/`}
+                  >
+                    <i className="icon-add" />
+                    Добавить тест
+                  </DropdownMenuOption>
+                )}
+              </ConditionalRenderer>
             </DropdownMenu>
           ) : undefined,
         },
         index,
       );
     },
-    [path, render, canEdit, onDelete],
+    [path, courseLink, render, canEdit, onDeleteLesson, onDeleteTest],
   );
   const title = course && `Уроки курса ${course.name}`;
 

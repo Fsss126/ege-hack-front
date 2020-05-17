@@ -32,14 +32,14 @@ export const mapTasksToNodes = ({
   id,
   theme_id,
   subject_id,
-  text,
+  name,
 }: TaskInfo): TaskTreeNode => ({
   id: getTaskNodeId(id),
   value: id,
   pId: theme_id ? getThemeNodeId(theme_id) : undefined,
   rootPId: getSubjectNodeId(subject_id),
   isLeaf: true,
-  title: text,
+  title: name,
   type: TreeEntityType.TASK,
 });
 
@@ -134,10 +134,11 @@ type TaskSelectProps = Omit<
   | 'loadData'
 > & {
   subjectId?: number;
+  selectedTaskIds?: number[];
 };
 
 export const TaskSelect = (props: TaskSelectProps) => {
-  const {subjectId, value, ...rest} = props;
+  const {subjectId, value, selectedTaskIds, ...rest} = props;
 
   const {
     hasError,
@@ -158,6 +159,7 @@ export const TaskSelect = (props: TaskSelectProps) => {
       disabled={treeNodes === undefined}
       value={value}
       treeIcon={renderIcon}
+      disabledValues={selectedTaskIds}
       {...rest}
     />
   );

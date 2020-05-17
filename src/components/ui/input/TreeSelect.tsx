@@ -46,7 +46,12 @@ type TreeSelectCallback<V extends Key, T extends Key = V> = (
 
 export type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
   SelectProps<V>,
-  'treeData' | 'onChange' | 'treeDataSimpleMode' | 'loadData' | 'placeholder'
+  | 'treeData'
+  | 'onChange'
+  | 'treeDataSimpleMode'
+  | 'loadData'
+  | 'placeholder'
+  | 'value'
 > & {
   onChange?: InputChangeHandler<V>;
   onSelect?: TreeSelectCallback<V, T>;
@@ -55,6 +60,8 @@ export type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
   placeholder?: string;
   required?: boolean;
   withContainer?: boolean;
+  value?: V;
+  disabledValues?: V[];
 } & (
     | {
         treeDataSimpleMode: true | SimpleModeConfig;
@@ -150,7 +157,6 @@ const TreeSelect = <V extends Key, T extends Key = V>(
   const {
     onChange,
     name,
-    key,
     treeData: passedTreeData,
     treeDataSimpleMode,
     value,
@@ -159,28 +165,70 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     withContainer,
     required,
     loading,
+    disabledValues,
     ...rest
   } = props;
 
-  const treeData = useSimplifyTreeData(treeDataSimpleMode, passedTreeData);
+  const rawTreeData = useSimplifyTreeData(treeDataSimpleMode, passedTreeData);
 
   const defaultExpandedKeys = useDefaultExpandedKeys<V, T>(
     treeDataSimpleMode || true,
-    treeData,
+    rawTreeData,
     value,
   );
 
+  const [treeData, selectedNode] = useMemo(() => {
+    const selectedNode = _.find(rawTreeData, (node) => node.value === value);
+    const parentNode = selectedNode
+      ? _.find(rawTreeData, (node) => node.id === selectedNode.pId)
+      : undefined;
+
+    if (
+      !value ||
+      !rawTreeData ||
+      !selectedNode ||
+      !selectedNode.pId ||
+      parentNode
+    ) {
+      return [rawTreeData, undefined];
+    }
+
+    const filteredTreeData = _.filter(
+      rawTreeData,
+      (node) => node.value !== value,
+    );
+
+    return [filteredTreeData, selectedNode];
+  }, [rawTreeData, value]);
+
+  const filteredTreeData = useMemo(() => {
+    return disabledValues
+      ? _.map(treeData, (node) => {
+          const isSelected = _.indexOf(disabledValues, node.value) >= 0;
+
+          if (node.value === value || !isSelected) {
+            return node;
+          }
+
+          return {
+            ...node,
+            disabled: true,
+          };
+        })
+      : treeData;
+  }, [disabledValues, treeData, value]);
+
   const mappedTreeData = useMemo(() => {
-    return !treeData
-      ? treeData
-      : treeData.map((node) => ({
+    return !filteredTreeData
+      ? filteredTreeData
+      : filteredTreeData.map((node) => ({
           ...node,
           className: classNames(node.className, {
             'ant-select-tree-treenode--selectable': node.selectable !== false,
             'ant-select-tree-treenode--disabled': node.disabled,
           }),
         }));
-  }, [treeData]);
+  }, [filteredTreeData]);
 
   const changeCallback = useMemo(
     () =>
@@ -209,18 +257,25 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     }
   }, [name, required]);
 
+  const hasData = value === undefined || treeData !== undefined;
+
   const suffixIcon = () => <i className="icon-angle-down" />;
   const clearIcon = <i className="icon-close" />;
   const switcherIcon = <i className="icon-angle-down" />;
   const noDataPlaceholder = (
     <div className="ant-select-dropdown__no-data">Нет опций</div>
   );
-
   const formattedPlaceholder = getPlaceholder(placeholder, required);
-
-  const hasData = value === undefined || treeData !== undefined;
-
   const loadingPlaceholder = <div className="spinner-border" />;
+  const placeholderElement = loading ? (
+    loadingPlaceholder
+  ) : selectedNode ? (
+    selectedNode.title
+  ) : (
+    <div className="ant-select-placeholder">
+      {withContainer ? 'Не выбрано' : formattedPlaceholder}
+    </div>
+  );
 
   const input = (
     <div className="ant-select-container" ref={elementRef}>
@@ -241,16 +296,12 @@ const TreeSelect = <V extends Key, T extends Key = V>(
         treeDataSimpleMode={treeDataSimpleMode}
         notFoundContent={noDataPlaceholder}
         treeNodeFilterProp="title"
-        value={loading || !hasData ? undefined : value}
+        value={
+          loading || !hasData ? undefined : selectedNode ? undefined : value
+        }
         loadData={loadData as any}
         loading={loading}
-        placeholder={
-          loading
-            ? loadingPlaceholder
-            : withContainer
-            ? 'Не выбрано'
-            : formattedPlaceholder
-        }
+        placeholder={placeholderElement}
         {...rest}
       />
     </div>

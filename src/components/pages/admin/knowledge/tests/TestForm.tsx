@@ -16,7 +16,7 @@ import * as Input from 'components/ui/input';
 import {useRevokeKnowledgeTest} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {TestDtoReq} from 'types/dtos';
-import {SubjectInfo, TestInfo} from 'types/entities';
+import {TestInfo} from 'types/entities';
 
 import {TaskSelect} from './TaskSelect';
 
@@ -53,7 +53,7 @@ function getRequestData(formData: TestFormData): TestDtoReq {
 }
 
 type TaskElementRenderProps = {
-  selectedTasks: number[];
+  selectedTasksIds?: number[];
   subjectId: number;
 };
 
@@ -61,13 +61,14 @@ type TaskElementProps = ElementComponentProps<TaskData, TaskElementRenderProps>;
 
 // TODO: disable selected tasks
 const TaskElement = (props: TaskElementProps) => {
-  const {taskId, selectedTasks, subjectId, onChange, index} = props;
+  const {taskId, selectedTasksIds, subjectId, onChange, index} = props;
 
   return (
     <FormElement name="tasks" index={index} onChange={onChange} key={index}>
       <FieldsContainer>
         <div className="col-12">
           <TaskSelect
+            selectedTaskIds={selectedTasksIds}
             subjectId={subjectId}
             placeholder="Задание"
             name={`tasks[${index}].taskId`}
@@ -116,6 +117,9 @@ const TestForm: React.FC<TestFormProps> = (props) => {
         return true;
       }
       if (name === 'tasks') {
+        if (formData.tasks.length === 0) {
+          return false;
+        }
         for (const task of formData.tasks) {
           if (!task.taskId) {
             return false;
@@ -239,7 +243,7 @@ const TestForm: React.FC<TestFormProps> = (props) => {
         name="tasks"
         addBtnText="Добавить задание"
         initialElementData={INITIAL_TASK_DATA}
-        renderProps={{selectedTasks, subjectId}}
+        renderProps={{selectedTasksIds: selectedTasks, subjectId}}
         elementComponent={TaskElement}
       />
     </Form>
