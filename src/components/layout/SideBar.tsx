@@ -152,15 +152,8 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                       <NavLink
                         className="layout__sidebar-menu-link"
                         to="/admin/knowledge/"
-                        disabled={!DEBUG_MODE}
                       >
-                        База знаний
-                        {!DEBUG_MODE && (
-                          <>
-                            {' '}
-                            <span className="badge accent">Скоро</span>
-                          </>
-                        )}
+                        База заданий
                       </NavLink>
                     </ConditionalRenderer>
                     <ConditionalRenderer
