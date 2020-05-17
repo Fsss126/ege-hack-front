@@ -73,7 +73,6 @@ import {
   WebinarDeleteRequestAction,
 } from './actions';
 import {AppState} from './reducers';
-import {selectKnowledgeMap} from './selectors';
 
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
@@ -866,7 +865,6 @@ function* fetchKnowledgeLevel() {
         channel,
         function* (action: KnowledgeLevelFetchAction) {
           const {subjectId, themeId, onSuccess, onError} = action;
-          const subj = yield select(selectKnowledgeMap);
           try {
             const content: KnowledgeLevelInfo = yield call(
               APIRequest.get,

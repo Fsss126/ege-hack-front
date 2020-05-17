@@ -14,7 +14,6 @@ import {
   SanitizedTaskInfo,
   SanitizedTestInfo,
   TestStateInfo,
-  TestStatus,
 } from 'types/entities';
 
 export type LinkClickCallback = (

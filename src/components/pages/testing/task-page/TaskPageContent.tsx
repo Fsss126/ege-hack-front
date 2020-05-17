@@ -3,7 +3,6 @@ import {
   SanitizedTaskInfo,
   SanitizedTestInfo,
   TestStateInfo,
-  TestStatus,
 } from 'types/entities';
 
 import {TaskInputContent} from './TaskInputContent';

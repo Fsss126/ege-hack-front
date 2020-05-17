@@ -1,7 +1,6 @@
 import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState, useTestTask} from 'hooks/selectors';
 import React from 'react';
-import {TestStatus} from 'types/dtos';
 import {
   RouteComponentPropsWithParentProps,
   TestTaskPageParams,

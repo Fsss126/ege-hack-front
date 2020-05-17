@@ -1,10 +1,5 @@
 import {Reducer} from 'redux';
-import {
-  SanitizedTestInfo,
-  TestStateInfo,
-  TestStatus,
-  TestStatusInfo,
-} from 'types/entities';
+import {SanitizedTestInfo, TestStateInfo, TestStatusInfo} from 'types/entities';
 
 import {Action, ActionType} from '../actions';
 import {DataProperty} from './dataReducer';

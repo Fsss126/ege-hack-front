@@ -11,7 +11,7 @@ import Auth, {
 import _ from 'lodash';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useDispatch, useSelector as useSelectorGen} from 'react-redux';
-import {match, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
 import {
   AccountsDeleteCallback,
@@ -85,7 +85,6 @@ import {
   TeacherInfo,
   TestInfo,
   TestStateInfo,
-  TestStatus,
   TestStatusInfo,
   ThemeInfo,
   WebinarScheduleInfo,

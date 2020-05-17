@@ -7,7 +7,6 @@ import {
   SanitizedTaskInfo,
   SanitizedTestInfo,
   TestStateInfo,
-  TestStatus,
 } from 'types/entities';
 
 export interface TaskPageLayoutProps {

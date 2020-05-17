@@ -5,7 +5,6 @@ import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Redirect} from 'react-router';
-import {TestStatus} from 'types/dtos';
 import {TestStatePassedAnswerInfo} from 'types/entities';
 import {RouteComponentPropsWithParentProps, TestPageParams} from 'types/routes';
 

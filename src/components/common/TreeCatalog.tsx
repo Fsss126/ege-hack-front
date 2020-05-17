@@ -60,7 +60,6 @@ const TreeCatalog = <T extends CatalogTreeNode>(
     title,
     titleInside,
     context,
-    children,
     filter,
     stacked,
     tree: passedTree,
