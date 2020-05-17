@@ -1,4 +1,4 @@
-import {ADMIN_ROLES, DEBUG_MODE, TEACHER_ROLES} from 'definitions/constants';
+import {ADMIN_ROLES, TEACHER_ROLES} from 'definitions/constants';
 import React, {useCallback} from 'react';
 import {AccountRole, Permission} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
