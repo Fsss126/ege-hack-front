@@ -22,14 +22,15 @@ export const IncorrectBadge = () => {
 };
 
 interface ResultsProps {
-  userAnswer: UserAnswerInfo;
+  userAnswer?: UserAnswerInfo;
   correctAnswer: CorrectAnswerInfo;
   isCorrect: boolean;
 }
 
 export const Results = (props: ResultsProps) => {
   const {userAnswer, correctAnswer, isCorrect} = props;
-  const {type, value} = userAnswer;
+  const {value} = userAnswer || {};
+  const {type} = correctAnswer;
   const {value: correctValue, text_solution, video_solution} = correctAnswer;
   const isAnswered = value !== undefined;
   const hasSolution = !!(text_solution || video_solution);

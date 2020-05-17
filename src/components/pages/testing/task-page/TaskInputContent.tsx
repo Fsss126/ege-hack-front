@@ -66,7 +66,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
   let initialValue: TestAnswerValue | undefined;
 
-  if (answer) {
+  if (answer && answer.user_answer) {
     ({
       user_answer: {value: initialValue},
     } = answer);

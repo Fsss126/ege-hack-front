@@ -10,7 +10,7 @@ import {
   PersonWebinarDto,
   SubjectDtoResp,
   TeacherDtoResp,
-  TestStateAnswerDto,
+  TestAnswerResp,
   WebinarScheduleDtoResp,
 } from 'types/dtos';
 import {
@@ -215,7 +215,7 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
       case /\/knowledge\/tests\/(.*)\/status/.test(url.pathname):
         return transformTestStatus(data);
       case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
-        const {user_answer, ...rest} = data as TestStateAnswerDto;
+        const {user_answer, ...rest} = data as TestAnswerResp;
 
         return {
           ...rest,

@@ -216,7 +216,9 @@ export const transformTestState = ({
         const {user_answer, correct_answer, solution} = answer;
         result[answer.task_id] = {
           ...answer,
-          user_answer: transformUserAnswer(user_answer),
+          user_answer: user_answer
+            ? transformUserAnswer(user_answer)
+            : undefined,
           correct_answer: correct_answer
             ? transformCorrectAnswer(correct_answer, solution)
             : correct_answer,

@@ -191,7 +191,7 @@ export type TestAnswerValue = UserAnswerInfo['value'];
 
 export interface TestStateActiveAnswerInfo {
   task_id: number;
-  user_answer: UserAnswerInfo;
+  user_answer?: UserAnswerInfo;
 }
 
 export interface TestStatePassedAnswerInfo extends TestStateActiveAnswerInfo {

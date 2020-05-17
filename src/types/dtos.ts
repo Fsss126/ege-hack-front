@@ -318,11 +318,14 @@ export interface UserAnswerDtoResp {
 
 export interface TestStateAnswerDto {
   task_id: number;
-  user_answer: UserAnswerDtoResp;
+  user_answer?: UserAnswerDtoResp;
   correct_answer?: CorrectAnswerDto;
   solution?: SolutionDto;
   is_correct?: boolean;
 }
+
+export interface TestAnswerResp
+  extends Require<TestStateAnswerDto, 'user_answer'> {}
 
 export interface TestStateDtoResp {
   id: number;
