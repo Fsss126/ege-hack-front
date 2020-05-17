@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import React from 'react';
 import {Link, LinkProps} from 'react-router-dom';
-import {TeacherInfo} from 'types/entities';
+import {TeacherProfileInfo} from 'types/entities';
 
 import Contacts from './Contacts';
 import CoverImage from './CoverImage';
 
 export type TeacherProps = {
-  teacher: TeacherInfo;
+  teacher: TeacherProfileInfo;
   link: LinkProps['to'];
   bio?: boolean;
   className?: string;

@@ -5,7 +5,7 @@ import {useSubjects, useUserTeachers} from 'hooks/selectors';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {CourseDtoReq} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {CourseInfo, SubjectInfo, TeacherProfileInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
 import CourseForm from './CourseForm';
@@ -61,7 +61,7 @@ const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
           <ContentBlock>
             <CourseForm
               subjects={subjects as SubjectInfo[]}
-              teachers={teachers as TeacherInfo[]}
+              teachers={teachers as TeacherProfileInfo[]}
               title="Новый курс"
               errorMessage="Ошибка при создании курса"
               cancelLink={returnLink}

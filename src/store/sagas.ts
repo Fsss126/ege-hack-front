@@ -29,7 +29,7 @@ import {
   PersonWebinar,
   SubjectInfo,
   TaskInfo,
-  TeacherInfo,
+  TeacherProfileInfo,
   TestInfo,
   TestStateInfo,
   TestStatePassedInfo,
@@ -153,7 +153,7 @@ function* fetchUserTeachers() {
   yield* waitForLogin(ActionType.USER_TEACHERS_FETCH, function* (channel) {
     yield takeLeading(channel, function* () {
       try {
-        const teachers: TeacherInfo[] = yield call(
+        const teachers: TeacherProfileInfo[] = yield call(
           APIRequest.get,
           '/accounts/teachers',
         );

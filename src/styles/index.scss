@@ -326,9 +326,10 @@ header {
   .user-nav {
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     .user-nav__user-name {
-      cursor: default;
+      font-family: $font-medium;
       margin-right: 18px;
       display: none;
       @include media-breakpoint-up(lg) {

@@ -9,23 +9,31 @@ import {
   HomeworkDtoResp,
   KnowledgeLevelDtoResponse,
   LessonDtoResp,
+  PupilDtoReq,
+  PupilDtoResp,
   SolutionDto,
   SubjectDtoResp,
   TaskDtoResp,
+  TeacherDtoResp,
   TestDtoResp,
   TestStateAnswerDto,
   TestStateDtoResp,
   TestStatus,
   TestStatusResp,
   UserAnswerDtoResp,
+  VkUserDto,
 } from 'types/dtos';
 import {
-  CommonAccountInfo,
+  AccountInfo,
+  ContactInfo,
   CorrectAnswerInfo,
   CourseInfo,
   HomeworkInfo,
   KnowledgeLevelInfo,
   LessonInfo,
+  ProfileInfo,
+  PupilInfo,
+  PupilProfileInfo,
   SubjectInfo,
   TaskInfo,
   TestInfo,
@@ -33,6 +41,7 @@ import {
   TestStateInfo,
   TestStatusInfo,
   UserAnswerInfo,
+  VkUserInfo,
 } from 'types/entities';
 
 import {API_ROOT} from './index';
@@ -97,33 +106,65 @@ export const transformLesson = ({
     : hometask,
 });
 
-export const transformUser = <
-  T extends AccountDto | AccountDtoResp,
-  R extends CommonAccountInfo
->(
-  accountDto: T,
-): R => {
-  const {account_id: id, vk_info, instagram, ...user} = accountDto as any;
-  const {photo_max: photo, first_name, last_name, ...info} = vk_info || {};
+const transformVkInfo = (vkDto: VkUserDto): VkUserInfo => {
+  const {photo_max: photo, first_name, last_name, ...info} = vkDto;
 
   return {
-    id,
-    ...user,
-    vk_info: vk_info
-      ? {
-          ...info,
-          photo,
-          first_name,
-          last_name,
-          full_name: `${first_name} ${last_name}`,
-        }
-      : undefined,
-    contacts: {
-      ig: instagram,
-      vk: vk_info ? `https://vk.com/id${vk_info.id}` : undefined,
-    },
+    ...info,
+    photo,
+    first_name,
+    last_name,
+    full_name: `${first_name} ${last_name}`,
   };
 };
+
+const transformContacts = (
+  vkDto: VkUserDto,
+  instagram?: string,
+): ContactInfo => ({
+  ig: instagram,
+  vk: `https://vk.com/id${vkDto.id}`,
+});
+
+export const transformProfileInfo = <T extends TeacherDtoResp | PupilDtoResp>(
+  accountDto: T,
+): Omit<T, keyof AccountDto | 'instagram'> & ProfileInfo => {
+  const {account_id: id, vk_info, instagram, ...user} = accountDto;
+
+  return {
+    ...user,
+    id,
+    vk_info: transformVkInfo(vk_info),
+    contacts: transformContacts(vk_info, instagram),
+  };
+};
+
+const transformPupilProfileInfo = (
+  pupilDto: PupilDtoResp,
+): PupilProfileInfo => ({
+  ...transformProfileInfo(pupilDto),
+  final_year: pupilDto.final_year ? new Date(pupilDto.final_year) : undefined,
+});
+
+const transformPupilInfo = <T extends PupilDtoReq>(
+  pupilInfo: T,
+): OmitCommon<T, PupilDtoReq> & PupilInfo => ({
+  ...pupilInfo,
+  final_year: pupilInfo.final_year ? new Date(pupilInfo.final_year) : undefined,
+});
+
+export const transformAccountInfo = ({
+  vk_info,
+  teacher,
+  pupil,
+  ...account
+}: AccountDtoResp): AccountInfo => ({
+  ...account,
+  vk_info: transformVkInfo(vk_info),
+  pupil: pupil ? transformPupilInfo(pupil) : undefined,
+  teacher,
+  contacts: transformContacts(vk_info, pupil?.instagram || teacher?.instagram),
+});
 
 export const transformHomework = ({
   file_info,
@@ -134,7 +175,7 @@ export const transformHomework = ({
   ...rest,
   date: date ? new Date(date) : undefined,
   files: file_info ? [transformFileInfo(file_info)] : undefined,
-  pupil: transformUser(pupil),
+  pupil: transformPupilProfileInfo(pupil),
 });
 
 const getIsTestCompleted = (status: TestStatus) =>

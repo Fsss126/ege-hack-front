@@ -1,19 +1,26 @@
 import {ContentBlock} from 'components/layout/ContentBlock';
 import React from 'react';
-import {ContactInfo, VkUserInfo} from 'types/entities';
+import {ProfileInfo} from 'types/entities';
 
 import Contacts from './Contacts';
 import CoverImage from './CoverImage';
 
-export type UserProfileProps = Partial<
-  Pick<VkUserInfo, 'first_name' | 'last_name' | 'photo'>
-> & {
-  contacts?: ContactInfo;
-  about?: React.ReactNode;
-  role?: React.ReactNode;
+export type UserProfileProps = {
+  accountInfo?: ProfileInfo;
+  text?: string;
+  children?: React.ReactNode;
 };
 const UserProfile: React.FC<UserProfileProps> = (props) => {
-  const {first_name, last_name, photo, contacts, about, role} = props;
+  const {accountInfo, text, children} = props;
+  let photo, first_name, last_name, contacts;
+
+  if (accountInfo) {
+    ({
+      vk_info: {photo, first_name, last_name},
+      contacts,
+    } = accountInfo);
+  }
+
   const fullName =
     first_name && last_name ? `${first_name} ${last_name}` : undefined;
 
@@ -39,11 +46,9 @@ const UserProfile: React.FC<UserProfileProps> = (props) => {
               <div className="ph-text" />
             </h2>
           )}
-          {role && <div className="font-size-sm">{role}</div>}
+          {text && <div className="font-size-sm">{text}</div>}
           {contacts && <Contacts contacts={contacts} />}
-          <div className="description-block font-size-sm align-self-lg-start">
-            {about}
-          </div>
+          {children}
         </div>
       </ContentBlock>
     </React.Fragment>

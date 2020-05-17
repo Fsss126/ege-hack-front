@@ -80,8 +80,7 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
 
   if (teacher && catalog && subjects) {
     const {
-      vk_info: {first_name, last_name, photo},
-      contacts,
+      vk_info: {first_name, last_name},
       subjects: teacherSubjects,
       bio,
     } = teacher;
@@ -89,23 +88,18 @@ const TeacherPage: React.FC<TeacherPageProps> = (props) => {
     const teachersCourses = catalog.filter(
       (course) => _.indexOf(course.teacher_ids, id) >= 0,
     );
-    const profile = {
-      first_name,
-      last_name,
-      photo,
-      contacts,
-      about: bio,
-      role: teacherSubjects
-        .map(({name}, i) => (i === 0 ? name : name.toLowerCase()))
-        .join(', '),
-    };
-    const fullName = `${first_name} ${last_name}`;
-
-    title = fullName;
+    const subjectsText = teacherSubjects
+      .map(({name}, i) => (i === 0 ? name : name.toLowerCase()))
+      .join(', ');
+    title = `${first_name} ${last_name}`;
     content = (
       <CourseCatalog.Body subjects={subjects} courses={teachersCourses}>
         <PageContent parentSection={{name: 'Преподаватели'}}>
-          <UserProfile {...profile} />
+          <UserProfile accountInfo={teacher} text={subjectsText}>
+            <div className="description-block font-size-sm align-self-lg-start">
+              {bio}
+            </div>
+          </UserProfile>
           <CourseCatalog.Catalog
             renderCourse={renderCourse}
             title="Курсы преподавателя"

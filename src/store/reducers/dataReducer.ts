@@ -12,7 +12,7 @@ import {
   PersonWebinar,
   SubjectInfo,
   TaskInfo,
-  TeacherInfo,
+  TeacherProfileInfo,
   TestInfo,
   ThemeInfo,
   UserCourseInfo,
@@ -37,7 +37,7 @@ export interface DataState {
   shopCourses?: DataProperty<CourseInfo[]>;
   userCourses?: DataProperty<UserCourseInfo[]>;
   subjects?: DataProperty<SubjectInfo[]>;
-  userTeachers?: DataProperty<TeacherInfo[]>;
+  userTeachers?: DataProperty<TeacherProfileInfo[]>;
   userHomeworks: {
     [courseId: number]: {
       [lessonId: number]: DataProperty<HomeworkInfo | null>;

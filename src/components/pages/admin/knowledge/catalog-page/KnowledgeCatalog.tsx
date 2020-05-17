@@ -1,3 +1,4 @@
+import {FilterFunc} from 'components/common/Catalog';
 import DropdownMenu, {
   DropdownIconButton,
   DropdownMenuOption,
@@ -17,7 +18,6 @@ import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {KnowledgeTreeEntity, TreeEntityType} from 'types/knowledgeTree';
 
-import {FilterFunc} from '../../../../common/Catalog';
 import {renderIcon} from '../tests/TaskSelect';
 import {useLoadThemeLevel} from '../themes/ThemeSelect';
 
@@ -176,7 +176,12 @@ export const KnowledgeCatalog = (props: TreeCatalogProps) => {
     (entity: KnowledgeTreeEntity) => {
       const node = {
         ...entity,
-        isLeaf: entity.type === TreeEntityType.TASK,
+        isLeaf:
+          entity.type === TreeEntityType.TASK
+            ? true
+            : entity.type === TreeEntityType.THEME
+            ? !entity.entity.has_sub_tasks && !entity.entity.has_sub_themes
+            : false,
         key: entity.id,
         icon: renderIcon,
         className: 'list__item list__item-selectable list__item-plain',

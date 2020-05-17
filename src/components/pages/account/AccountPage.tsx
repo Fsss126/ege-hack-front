@@ -1,19 +1,19 @@
 import UserProfile from 'components/common/UserProfile';
 import Page, {PageContent} from 'components/layout/Page';
 import {useUserInfo} from 'hooks/selectors';
+import {
+  isPupilAccountInfo,
+  isTeacherAccountInfo,
+} from 'modules/userInfo/userInfo.utils';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
+
+import {PupilProfile} from './PupilProfile';
+import {TeacherProfile} from './TeacherProfile';
 
 const AccountPage: React.FC<RouteComponentProps> = (props) => {
   const {location} = props;
   const {userInfo} = useUserInfo();
-  let photo, first_name, last_name;
-
-  if (userInfo) {
-    ({
-      vk_info: {photo, first_name, last_name},
-    } = userInfo);
-  }
 
   const isLoaded = !!userInfo;
 
@@ -26,11 +26,17 @@ const AccountPage: React.FC<RouteComponentProps> = (props) => {
       location={location}
     >
       <PageContent>
-        <UserProfile
-          first_name={first_name}
-          last_name={last_name}
-          photo={photo}
-        />
+        {userInfo ? (
+          isTeacherAccountInfo(userInfo) ? (
+            <TeacherProfile accountInfo={userInfo} />
+          ) : isPupilAccountInfo(userInfo) ? (
+            <PupilProfile accountInfo={userInfo} />
+          ) : (
+            <UserProfile accountInfo={userInfo} />
+          )
+        ) : (
+          <UserProfile accountInfo={userInfo} />
+        )}
       </PageContent>
     </Page>
   );

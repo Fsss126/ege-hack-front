@@ -82,7 +82,7 @@ import {
   SanitizedTestInfo,
   SubjectInfo,
   TaskInfo,
-  TeacherInfo,
+  TeacherProfileInfo,
   TestInfo,
   TestStateInfo,
   TestStatusInfo,
@@ -274,7 +274,7 @@ export function useDiscount(
 }
 
 export type UserTeachersHookResult = {
-  teachers?: TeacherInfo[];
+  teachers?: TeacherProfileInfo[];
   error?: AxiosError;
   reload: SimpleCallback;
 };
@@ -296,7 +296,7 @@ export function useUserTeachers(): UserTeachersHookResult {
 }
 
 export type UserTeacherHookResult = {
-  teacher?: TeacherInfo;
+  teacher?: TeacherProfileInfo;
   error?: AxiosError | true;
   reload: SimpleCallback;
 };

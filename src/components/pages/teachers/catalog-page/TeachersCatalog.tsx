@@ -7,7 +7,7 @@ import Catalog, {
 import Teacher from 'components/common/Teacher';
 import _ from 'lodash';
 import React from 'react';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {CourseInfo, SubjectInfo, TeacherProfileInfo} from 'types/entities';
 
 const Filter: React.FC<FilterProps> = (props) => (
   <Catalog.Filter
@@ -52,14 +52,14 @@ const TeachersCatalog = (props: TeachersCatalogProps) => {
   );
 };
 
-const filter: FilterFunc<TeacherInfo> = (teacher, {subject}) =>
+const filter: FilterFunc<TeacherProfileInfo> = (teacher, {subject}) =>
   subject ? teacher.subjects.some(({id}) => subject === id) : true;
 
 export type CourseBodyProps = Omit<
   CatalogBodyProps<CourseInfo>,
   'items' | 'options' | 'filter'
 > & {
-  teachers: TeacherInfo[];
+  teachers: TeacherProfileInfo[];
   subjects: SubjectInfo[];
 };
 const Body: React.FC<CourseBodyProps> = (props) => {
@@ -71,7 +71,7 @@ const Body: React.FC<CourseBodyProps> = (props) => {
       subjects,
     );
     const subjectsTeachers = _.reduce<
-      TeacherInfo,
+      TeacherProfileInfo,
       {[key: number]: SubjectInfo}
     >(
       teachers,

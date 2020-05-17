@@ -14,7 +14,7 @@ import {useRevokeCourses} from 'hooks/selectors';
 import React, {useCallback, useMemo, useRef} from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import {CourseDtoReq, FileInfo} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {CourseInfo, SubjectInfo, TeacherProfileInfo} from 'types/entities';
 
 type CourseFormData = {
   name: string;
@@ -77,7 +77,7 @@ type FormComponentProps = FormProps<CourseInfo>;
 
 export type CourseFormProps = {
   subjects: SubjectInfo[];
-  teachers: TeacherInfo[];
+  teachers: TeacherProfileInfo[];
   title?: string;
   createRequest: (data: CourseDtoReq) => Promise<CourseInfo>;
   onSubmitted: SubmittedHandler<CourseInfo>;

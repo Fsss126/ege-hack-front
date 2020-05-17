@@ -9,7 +9,7 @@ import {
   PersonWebinar,
   SubjectInfo,
   TaskInfo,
-  TeacherInfo,
+  TeacherProfileInfo,
   TestInfo,
   TestStateAnswerInfo,
   TestStateInfo,
@@ -176,7 +176,7 @@ export type UserTeachersFetchAction = {type: ActionType.USER_TEACHERS_FETCH};
 
 export type UserTeachersFetchedAction = {
   type: ActionType.USER_TEACHERS_FETCHED;
-  teachers: TeacherInfo[] | AxiosError;
+  teachers: TeacherProfileInfo[] | AxiosError;
 };
 
 export type AccountsFetchAction = {

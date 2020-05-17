@@ -19,7 +19,7 @@ import {
   LessonInfo,
   PersonWebinar,
   SubjectInfo,
-  TeacherInfo,
+  TeacherProfileInfo,
   TestStatusInfo,
   UserCourseInfo,
 } from 'types/entities';
@@ -50,12 +50,8 @@ export const ACCOUNT_INFO: AccountInfo = {
     photo: poster,
     full_name: 'Alexandra Petrova',
   },
-  pupil: {
-    account_id: 154792439,
-  },
-  teacher: {
-    account_id: 154792439,
-  },
+  pupil: {},
+  teacher: {},
   contacts: {},
 };
 
@@ -77,7 +73,7 @@ export const SUBJECTS: SubjectInfo[] = [
   {id: 15, name: 'Испанский язык', image_link: poster},
 ];
 
-export const TEACHERS: TeacherInfo[] = [
+export const TEACHERS: TeacherProfileInfo[] = [
   {
     id: 154792439,
     vk_info: {

@@ -5,7 +5,7 @@ import {useAdminCourse, useSubjects, useUserTeachers} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {CourseDtoReq} from 'types/dtos';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {CourseInfo, SubjectInfo, TeacherProfileInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {CoursePageParams} from 'types/routes';
 
@@ -79,7 +79,7 @@ const CourseEditingPage: React.FC<RouteComponentProps<CoursePageParams>> = (
             <CourseForm
               course={course as CourseInfo}
               subjects={subjects as SubjectInfo[]}
-              teachers={teachers as TeacherInfo[]}
+              teachers={teachers as TeacherProfileInfo[]}
               title="Изменение курса"
               errorMessage="Ошибка при сохранении изменений"
               cancelLink={returnLink}

@@ -11,10 +11,10 @@ import {
   LessonDtoResp,
   LoginResp,
   PersonWebinarDto,
-  PupilDtoResp,
+  PupilDtoReq,
   SubjectDtoResp,
   TaskDtoResp,
-  TeacherDtoResp,
+  TeacherDtoReq,
   TestDtoResp,
   TestStatus,
   ThemeDtoResp,
@@ -40,23 +40,36 @@ export interface ContactInfo {
   ok?: string;
 }
 
-export interface CommonAccountInfo {
+export interface ProfileInfo {
   id: number;
   vk_info: VkUserInfo;
   contacts: ContactInfo;
 }
 
-export interface PupilInfo
-  extends Omit<PupilDtoResp, 'account_id' | 'vk_info'>,
-    CommonAccountInfo {}
+export interface PupilInfo extends Omit<PupilDtoReq, 'final_year'> {
+  final_year?: Date;
+}
 
-export interface TeacherInfo
-  extends Omit<TeacherDtoResp, 'account_id' | 'vk_info'>,
-    CommonAccountInfo {}
+export interface PupilProfileInfo
+  extends Omit<PupilInfo, 'instagram'>,
+    ProfileInfo {}
+
+export interface TeacherInfo extends Omit<TeacherDtoReq, 'instagram'> {}
+
+export interface TeacherProfileInfo extends TeacherInfo, ProfileInfo {
+  subjects: SubjectInfo[];
+}
 
 export interface AccountInfo
-  extends Omit<AccountDtoResp, 'vk_info'>,
-    CommonAccountInfo {}
+  extends Omit<AccountDtoResp, 'vk_info' | 'pupil' | 'teacher'>,
+    ProfileInfo {
+  pupil?: PupilInfo;
+  teacher?: TeacherInfo;
+}
+
+export interface TeacherAccountInfo extends Require<AccountInfo, 'teacher'> {}
+
+export interface PupilAccountInfo extends Require<AccountInfo, 'pupil'> {}
 
 export interface CourseInfo
   extends Omit<CourseDtoResp, 'date_start' | 'date_end' | 'teacher_id'> {
@@ -76,7 +89,7 @@ export interface CourseParticipantInfo
       CourseParticipantDto,
       'account_id' | 'vk_info' | 'join_date_time'
     >,
-    CommonAccountInfo {
+    ProfileInfo {
   join_date_time: Date;
 }
 
@@ -112,7 +125,7 @@ export interface HomeworkInfo
   extends Omit<HomeworkDtoResp, 'date' | 'file_info' | 'pupil'> {
   date?: Date;
   files?: FileInfo[];
-  pupil: PupilInfo;
+  pupil: PupilProfileInfo;
 }
 
 export type DiscountInfo = DiscountMessage;

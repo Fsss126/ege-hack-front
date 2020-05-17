@@ -41,6 +41,8 @@ export interface PupilDtoReq {
   city?: string;
   school?: string;
   final_year?: number;
+  phone?: string;
+  email?: string;
 }
 
 export interface PupilDtoResp extends PupilDtoReq, AccountDto {}

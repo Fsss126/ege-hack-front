@@ -7,7 +7,7 @@ import _ from 'lodash';
 import React, {useMemo} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';
-import {CourseInfo, LessonInfo, TeacherInfo} from 'types/entities';
+import {CourseInfo, LessonInfo, TeacherProfileInfo} from 'types/entities';
 
 import {SimpleCallback} from '../../types/utility/common';
 import ConditionalRenderer from '../ConditionalRender';
@@ -23,7 +23,7 @@ import Teacher from './Teacher';
 
 type CourseOverviewConextState = {
   course: CourseInfo;
-  teachers: TeacherInfo[];
+  teachers: TeacherProfileInfo[];
   lessons: LessonInfo[];
 };
 export const CourseOverviewContext = React.createContext<
@@ -191,7 +191,7 @@ const Lessons: React.FC<LessonsProps> = (props) => {
 
 export type CourseOverviewProps = Pick<RouteComponentProps, 'location'> & {
   course?: CourseInfo;
-  teachers?: TeacherInfo[];
+  teachers?: TeacherProfileInfo[];
   lessons?: LessonInfo[];
   path: string;
   children: React.ReactNode;
@@ -220,7 +220,7 @@ const CourseOverview: React.FC<CourseOverviewProps> = (props) => {
     }
 
     return course.teacher_ids.map(
-      (id) => _.find(passedTeachers, {id}) as TeacherInfo,
+      (id) => _.find(passedTeachers, {id}) as TeacherProfileInfo,
     );
   }, [course, passedTeachers]);
 

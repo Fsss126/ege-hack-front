@@ -14,13 +14,12 @@ import {
   WebinarScheduleDtoResp,
 } from 'types/dtos';
 import {
-  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
   LessonInfo,
   PersonWebinar,
-  TeacherInfo,
+  TeacherProfileInfo,
   TestStateAnswerInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
@@ -32,16 +31,17 @@ import {mockTestsRequests} from './mocks';
 // tslint:disable-next-line:no-duplicate-imports
 import {mockRequests} from './mocks';
 import {
+  transformAccountInfo,
   transformCourse,
   transformHomework,
   transformKnowledgeLevel,
   transformLesson,
+  transformProfileInfo,
   transformSubject,
   transformTask,
   transformTest,
   transformTestState,
   transformTestStatus,
-  transformUser,
   transformUserAnswer,
 } from './transforms';
 
@@ -101,11 +101,13 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
   const getData = (): any => {
     switch (true) {
       case url.pathname === '/accounts/info':
-        return transformUser<AccountDtoResp, AccountInfo>(data);
+        return transformAccountInfo(data as AccountDtoResp);
       case url.pathname === '/accounts/teachers':
-        return (data as TeacherDtoResp[]).map<TeacherInfo>(transformUser);
+        return (data as TeacherDtoResp[]).map<TeacherProfileInfo>(
+          transformProfileInfo,
+        );
       case url.pathname === '/accounts/management':
-        return (data as AccountDtoResp[]).map<AccountInfo>(transformUser);
+        return (data as AccountDtoResp[]).map(transformAccountInfo);
       case url.pathname === '/subjects':
         if (config.method === 'get') {
           return (data as SubjectDtoResp[]).map(transformSubject);
@@ -115,13 +117,11 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
       case /\/subjects\/(\w*)$/.test(url.pathname):
         return transformSubject(data);
       case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):
-        return transformUser<TeacherDtoResp, TeacherInfo>(
-          data as TeacherDtoResp,
-        );
+        return transformProfileInfo(data as TeacherDtoResp);
       case /\/courses\/(\w*)\/participants$/.test(url.pathname):
         return (data as CourseParticipantDto[]).map<CourseParticipantInfo>(
           (participant) => ({
-            ...transformUser(participant),
+            ...transformProfileInfo(participant),
             join_date_time: new Date(participant.join_date_time),
           }),
         );
