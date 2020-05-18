@@ -27,7 +27,7 @@ type WebinarData = {
 
 type WebinarsFormData = {
   click_meeting_link: string;
-  image?: FileInfo[];
+  image?: Nullable<FileInfo[]>;
   webinars: WebinarData[];
 };
 const INITIAL_FORM_DATA: WebinarsFormData = {
@@ -85,7 +85,7 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
     formElementRef.current,
     (name, input, formData) => {
       if (name === 'image') {
-        return formData.image && !!formData.image[0];
+        return !!formData.image && !!formData.image[0];
       }
       if (name === 'webinars') {
         for (const webinar of formData.webinars) {
@@ -135,7 +135,7 @@ const WebinarsForm: React.FC<WebinarsFormProps> = (props) => {
   const {image, click_meeting_link, webinars} = formData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialImageFile = useMemo(() => formData.image, []);
+  const initialImageFile = useMemo(() => formData.image || undefined, []);
 
   const revokeWebinars = useRevokeWebinars(courseId);
 

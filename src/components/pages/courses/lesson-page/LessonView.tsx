@@ -42,7 +42,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       {attachments && attachments.length > 0 && (
         <div className="block-container attachment-container">
           <h3>
-            <i className="icon-book prefix-icon" />
+            <i className="icon-book prefix-icon align-middle" />
             Материалы к уроку
           </h3>
           <div className="attachment__files file-container">
@@ -55,7 +55,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       {assignment && (
         <div className="block-container m-lg hw-container">
           <h3>
-            <i className="icon-assignment prefix-icon" />
+            <i className="icon-assignment prefix-icon align-middle" />
             Домашнее задание
           </h3>
           <HomeworkAssignment assignment={assignment} />

@@ -1826,6 +1826,11 @@ header {
       margin-top: 20px;
 
       .list__item {
+        .title {
+          font-family: $font-medium;
+          color: $text-grey;
+        }
+
         &:nth-child(even) {
           background-color: $bg-grey;
         }

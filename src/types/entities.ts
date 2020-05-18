@@ -132,31 +132,43 @@ export type DiscountInfo = DiscountMessage;
 
 export {AnswerType, TestStatus} from './dtos';
 
-export type TestStatusInfo = {
+interface CommonTestStatusInfo {
   id: number;
   status: TestStatus;
   name: string;
   deadline?: Date;
   progress: number;
-} & (
-  | {
-      status: TestStatus.PASSED | TestStatus.NOT_STARTED | TestStatus.AWAIT;
-      percentage: number;
-      passed: number;
-      started_at: Date;
-      completed_at: Date;
-      is_completed: true;
-    }
-  | {
-      status: TestStatus.NOT_STARTED;
-      is_completed: false;
-    }
-  | {
-      status: TestStatus.STARTED;
-      started_at: Date;
-      is_completed: false;
-    }
-);
+}
+
+interface TestStatusActiveInfo extends CommonTestStatusInfo {
+  status: TestStatus.STARTED | TestStatus.NOT_STARTED;
+  started_at?: Date;
+  is_completed: false;
+  is_rated: false;
+}
+
+interface TestStatusAwaitingInfo extends CommonTestStatusInfo {
+  status: TestStatus.AWAIT;
+  started_at: Date;
+  completed_at: Date;
+  is_completed: true;
+  is_rated: false;
+}
+
+interface TestStatusPassedInfo extends CommonTestStatusInfo {
+  status: TestStatus.PASSED | TestStatus.NOT_STARTED;
+  percentage: number;
+  passed: boolean;
+  started_at: Date;
+  completed_at: Date;
+  is_completed: true;
+  is_rated: true;
+}
+
+export type TestStatusInfo =
+  | TestStatusActiveInfo
+  | TestStatusAwaitingInfo
+  | TestStatusPassedInfo;
 
 export interface CorrectAnswerInfo {
   type: AnswerType;
@@ -207,6 +219,11 @@ export interface TestStateActiveAnswerInfo {
   user_answer?: UserAnswerInfo;
 }
 
+export interface TestStateAwaitingAnswerInfo extends TestStateActiveAnswerInfo {
+  correct_answer?: CorrectAnswerDto;
+  is_correct?: boolean;
+}
+
 export interface TestStatePassedAnswerInfo extends TestStateActiveAnswerInfo {
   correct_answer: CorrectAnswerDto;
   is_correct: boolean;
@@ -226,22 +243,38 @@ type CommonTestStateInfo = {
 export interface TestStateActiveInfo extends CommonTestStateInfo {
   status: TestStatus.NOT_STARTED | TestStatus.STARTED;
   is_completed: false;
+  is_rated: false;
   answers: {
     [key: number]: TestStateActiveAnswerInfo;
   };
 }
 
-export interface TestStatePassedInfo extends CommonTestStateInfo {
-  status: TestStatus.PASSED | TestStatus.NOT_STARTED | TestStatus.AWAIT;
-  percentage: number;
+export interface TestStateAwaitingInfo extends CommonTestStateInfo {
+  status: TestStatus.AWAIT;
+  percentage?: number;
   passed?: boolean;
   is_completed: true;
+  is_rated: false;
+  answers: {
+    [key: number]: TestStateAwaitingAnswerInfo;
+  };
+}
+
+export interface TestStatePassedInfo extends CommonTestStateInfo {
+  status: TestStatus.PASSED | TestStatus.NOT_STARTED;
+  percentage: number;
+  passed: boolean;
+  is_completed: true;
+  is_rated: true;
   answers: {
     [key: number]: TestStatePassedAnswerInfo;
   };
 }
 
-export type TestStateInfo = TestStateActiveInfo | TestStatePassedInfo;
+export type TestStateInfo =
+  | TestStateActiveInfo
+  | TestStateAwaitingInfo
+  | TestStatePassedInfo;
 
 export interface KnowledgeLevelInfo {
   themes: ThemeInfo[];

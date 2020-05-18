@@ -20,7 +20,7 @@ type CourseFormData = {
   name: string;
   subject_id?: number;
   teacher_id?: number;
-  image?: FileInfo[];
+  image?: Nullable<FileInfo[]>;
   spread_sheet_link: string;
   price: string;
   date_start?: Date;
@@ -38,7 +38,7 @@ const INITIAL_FORM_DATA: CourseFormData = {
   spread_sheet_link: '',
   date_start: undefined,
   date_end: undefined,
-  image: undefined,
+  image: null,
 };
 
 function getRequestData(formData: CourseFormData): CourseDtoReq {
@@ -117,7 +117,7 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
     formElementRef.current,
     (name, input, formData) => {
       if (name === 'image') {
-        return formData.image && !!formData.image[0];
+        return !!(formData.image && !!formData.image[0]);
       }
     },
   );
@@ -177,7 +177,7 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
   } = formData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialImageFile = useMemo(() => formData.image, []);
+  const initialImageFile = useMemo(() => formData.image || undefined, []);
 
   const from = date_start;
   const to = date_end;
@@ -233,7 +233,7 @@ const CourseForm: React.FC<CourseFormProps> = (props) => {
             required
             value={image}
             maxFiles={1}
-            initialFiles={initialImageFile}
+            initialFiles={initialImageFile || undefined}
             accept="image/*"
             onChange={onInputChange}
             maxSizeBytes={1024 * 1024}

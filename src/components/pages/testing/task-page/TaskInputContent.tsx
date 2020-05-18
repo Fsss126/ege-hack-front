@@ -1,4 +1,5 @@
 import {addMockedTestAnswerResponses} from 'api/mocks';
+import NavigationBlocker from 'components/common/NavigationBlocker';
 import {
   useForm,
   useFormHandleError,
@@ -20,7 +21,6 @@ import {
 } from 'types/entities';
 import {Deferred} from 'utils/promiseHelper';
 
-import NavigationBlocker from '../../../common/NavigationBlocker';
 import {AnswerInput} from './AnswerInput';
 import {LinkClickCallback, TaskNav} from './TaskNav';
 import {TaskPageLayout} from './TaskPageLayout';

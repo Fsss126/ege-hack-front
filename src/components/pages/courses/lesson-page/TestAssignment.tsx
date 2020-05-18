@@ -41,7 +41,7 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
     });
   }, [courseId, fetchCallback, testId, lessonId, startTestCallback]);
 
-  if (test.is_completed) {
+  if (test.is_rated) {
     const {percentage, passed} = test;
 
     return (
@@ -74,7 +74,7 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
       </div>
     );
   } else {
-    const {progress} = test;
+    const {progress, is_completed} = test;
     const isStarted = status === TestStatus.STARTED;
 
     return (
@@ -89,13 +89,20 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
                 Пройдено {progress * 100}%
               </ProgressIndicator>
             )}
+            {is_completed && (
+              <div className="description-text">На проверке</div>
+            )}
           </div>
           <div className="col-auto">
             <Button
               after={<LoadingIndicator state={state} />}
               onClick={onClick}
             >
-              {isStarted ? 'Продолжить' : 'Начать тест'}
+              {is_completed
+                ? 'Смотреть ответы'
+                : isStarted
+                ? 'Продолжить'
+                : 'Начать тест'}
             </Button>
           </div>
         </div>

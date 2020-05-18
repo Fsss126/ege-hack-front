@@ -20,13 +20,13 @@ import {LessonInfo} from 'types/entities';
 interface LessonFormData {
   name: string;
   num: string;
-  image?: FileInfo[];
+  image?: Nullable<FileInfo[]>;
   video_link: string;
   description: string;
   is_locked: boolean;
-  attachments?: FileInfo[];
+  attachments?: Nullable<FileInfo[]>;
   hometask_description: string;
-  hometask_file?: FileInfo[];
+  hometask_file?: FileInfo[] | null;
   hometask_deadline?: Date;
   test_id?: number;
 }
@@ -38,9 +38,9 @@ const INITIAL_FORM_DATA: LessonFormData = {
   is_locked: false,
   hometask_description: '',
   test_id: undefined,
-  image: undefined,
+  image: null,
   attachments: undefined,
-  hometask_file: undefined,
+  hometask_file: null,
   hometask_deadline: undefined,
 };
 
@@ -215,7 +215,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
   } = formData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialImageFile = useMemo(() => formData.image, []);
+  const initialImageFile = useMemo(() => formData.image || undefined, []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialVideoLink = useMemo(() => formData.video_link, []);
 
@@ -264,7 +264,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
             value={image}
             required
             maxFiles={1}
-            initialFiles={initialImageFile}
+            initialFiles={initialImageFile || undefined}
             accept="image/*"
             onChange={onInputChange}
             maxSizeBytes={1024 * 1024}

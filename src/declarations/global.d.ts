@@ -16,6 +16,8 @@ declare global {
 
     declare type Maybe<T> = T | undefined;
 
+    declare type Nullable<T> = T | null;
+
     declare type Key = string | number;
 
     declare type Dictionary<T, K extends Key = string> = K extends string ? { [key: string]: T } : { [key: number]: T };

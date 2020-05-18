@@ -11,7 +11,7 @@ export type ListItemRenderer<T, P extends object = {}> = (
   index: number,
 ) => React.ReactElement;
 
-export type ListProps<T extends object = any, P extends object = {}> = {
+export type ListProps<T, P extends object = {}> = {
   children: T[];
   renderItem: ListItemRenderer<T, P>;
   renderProps: P;
@@ -24,7 +24,7 @@ export type ListProps<T extends object = any, P extends object = {}> = {
     items: React.ReactElement[],
   ) => React.ReactNode;
 };
-const List = <T extends object = any, P extends object = {}>(
+const List = <T, P extends object = {}>(
   props: ListProps<T, P>,
 ): React.ReactElement => {
   const {

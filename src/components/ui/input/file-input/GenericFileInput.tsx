@@ -187,7 +187,7 @@ export type FileInputProps = {
   onChange?: InputChangeCallback;
   onSubmit?: InputSubmitCallback;
   name: string;
-  value?: FileInfo[];
+  value?: FileInfo[] | null;
   required: boolean;
   disabled: boolean | (() => boolean);
   InputComponent?: DropzoneProps['InputComponent'] | null;
@@ -290,7 +290,7 @@ const GenericFileInput = (props: FileInputProps): React.ReactElement => {
 
   // reset on null
   useEffect(() => {
-    if (value === undefined) {
+    if (value === null) {
       for (const file of inputFilesRef.current) {
         file.remove();
       }

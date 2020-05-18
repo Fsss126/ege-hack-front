@@ -27,7 +27,7 @@ import {SubjectOption} from '../themes/ThemeForm';
 import {ThemeSelect} from '../themes/ThemeSelect';
 
 type TaskFormData = {
-  image?: FileInfo[];
+  image?: Nullable<FileInfo[]>;
   name: string;
   text: string;
   complexity: string;
@@ -40,6 +40,7 @@ type TaskFormData = {
   text_solution: string;
 };
 const INITIAL_FORM_DATA: TaskFormData = {
+  image: null,
   name: '',
   text: '',
   complexity: '',
@@ -221,7 +222,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
   } = formData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialImageFile = useMemo(() => formData.image, []);
+  const initialImageFile = useMemo(() => formData.image || undefined, []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialVideoLink = useMemo(() => formData.video_solution, []);
 
@@ -319,9 +320,20 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
             isClearable={false}
             onChange={onTypeChange}
           />
-          {type !== AnswerType.FILE && (
+          {type === AnswerType.TEXT && (
             <Input.Input
               name="value"
+              required
+              placeholder="Ответ"
+              value={value}
+              onChange={onInputChange}
+            />
+          )}
+          {type === AnswerType.NUMBER && (
+            <Input.Input
+              type="decimal"
+              name="value"
+              step="0.00001"
               required
               placeholder="Ответ"
               value={value}
@@ -336,7 +348,7 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
                   required
                   value={image}
                   maxFiles={1}
-                  initialFiles={initialImageFile}
+                  initialFiles={initialImageFile || undefined}
                   accept="image/*"
                   onChange={onInputChange}
                   maxSizeBytes={1024 * 1024}

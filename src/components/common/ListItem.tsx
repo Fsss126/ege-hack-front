@@ -11,7 +11,7 @@ export type ListItemClickHandler<T = any, P = {}> = (
 ) => void;
 
 export type ListItemProps<T = any, P = undefined> = {
-  preview: React.ReactChild;
+  preview?: React.ReactChild;
   title: string;
   subtitle?: string;
   item: T;
@@ -29,7 +29,7 @@ export type ListItemProps<T = any, P = undefined> = {
   | {truncate: true; description?: string}
   | {truncate: false; description?: React.ReactNode}
 );
-const ListItem = <T extends {} = any, P = undefined>(
+const ListItem = <T, P = undefined>(
   props: ListItemProps<T, P>,
 ): React.ReactElement => {
   const {

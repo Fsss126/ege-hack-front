@@ -178,10 +178,11 @@ export const transformHomework = ({
   pupil: transformPupilProfileInfo(pupil),
 });
 
+const getIsTestRated = (status: TestStatus) =>
+  status === TestStatus.PASSED || status === TestStatus.NOT_PASSED;
+
 const getIsTestCompleted = (status: TestStatus) =>
-  status === TestStatus.PASSED ||
-  status === TestStatus.NOT_PASSED ||
-  status === TestStatus.AWAIT;
+  getIsTestRated(status) || status === TestStatus.AWAIT;
 
 export const transformTestStatus = (status: TestStatusResp): TestStatusInfo =>
   ({
@@ -189,6 +190,7 @@ export const transformTestStatus = (status: TestStatusResp): TestStatusInfo =>
     deadline: status.deadline ? new Date(status.deadline) : undefined,
     started_at: status.started_at ? new Date(status.started_at) : undefined,
     is_completed: getIsTestCompleted(status.status),
+    is_rated: getIsTestRated(status.status),
     completed_at: status.completed_at
       ? new Date(status.completed_at)
       : undefined,
@@ -271,6 +273,7 @@ export const transformTestState = ({
     ...rest,
     progress: progress || 0,
     is_completed: getIsTestCompleted(status),
+    is_rated: getIsTestRated(status),
     passed:
       status === TestStatus.PASSED
         ? true

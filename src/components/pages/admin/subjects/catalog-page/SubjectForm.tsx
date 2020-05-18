@@ -15,7 +15,7 @@ import {SubjectInfo} from 'types/entities';
 
 type SubjectFormData = {
   name: string;
-  image?: FileInfo[];
+  image?: Nullable<FileInfo[]>;
   description: string;
 };
 const INITIAL_FORM_DATA: SubjectFormData = {
@@ -53,7 +53,7 @@ const SubjectForm: React.FC<SubjectFormProps> = (props) => {
     formElementRef.current,
     (name, input, formData) => {
       if (name === 'image') {
-        return formData.image && !!formData.image[0];
+        return !!(formData.image && !!formData.image[0]);
       }
     },
   );
@@ -87,7 +87,7 @@ const SubjectForm: React.FC<SubjectFormProps> = (props) => {
   const {name, image, description} = formData;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialImageFile = useMemo(() => formData.image, []);
+  const initialImageFile = useMemo(() => formData.image || undefined, []);
 
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<SubjectInfo>>
