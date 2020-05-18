@@ -1,5 +1,6 @@
 import {useUserInfo} from 'hooks/selectors';
 import _ from 'lodash';
+import React from 'react';
 import {AccountInfo} from 'types/entities';
 
 import {AccountRole, Permission} from '../types/enums';
@@ -66,7 +67,7 @@ export type ConditionalRenderProps = {
   requiredPermissions?: RequiredPermissions;
   requiredRoles?: RequiredRoles;
   fullMatch?: boolean;
-  children?: React.ReactElement;
+  children?: React.ReactNode;
 };
 const ConditionalRenderer: React.FC<ConditionalRenderProps> = (props) => {
   const {requiredPermissions, requiredRoles, children, fullMatch} = props;
@@ -76,7 +77,7 @@ const ConditionalRenderer: React.FC<ConditionalRenderProps> = (props) => {
     fullMatch,
   );
 
-  return render && children ? children : null;
+  return render && children ? <>{children}</> : null;
 };
 
 export default ConditionalRenderer;

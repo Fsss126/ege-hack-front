@@ -171,6 +171,7 @@ export type SelectProps<V = any, L extends React.ReactNode = string> = {
   options: OptionsType<OptionShape<V, L>>;
   name: string;
   withContainer?: boolean;
+  icon?: React.ReactNode;
 } & Omit<SelectInputProps<OptionShape<V, L>>, 'value' | 'onChange' | 'name'>;
 
 export class Select<
@@ -204,6 +205,7 @@ export class Select<
       required,
       onChange,
       withContainer,
+      icon,
       ...selectProps
     } = this.props;
 
@@ -248,7 +250,7 @@ export class Select<
     );
 
     return withContainer ? (
-      <InputContainer placeholder={placeholder} required={required}>
+      <InputContainer placeholder={placeholder} icon={icon} required={required}>
         {select}
       </InputContainer>
     ) : (

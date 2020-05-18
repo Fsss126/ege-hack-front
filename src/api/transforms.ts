@@ -44,6 +44,7 @@ import {
   VkUserInfo,
 } from 'types/entities';
 
+import {getGradeByGraduationYear} from '../modules/userInfo/userInfo.utils';
 import {API_ROOT} from './index';
 
 export const getVideoLink = (videoId: string) =>
@@ -143,14 +144,18 @@ const transformPupilProfileInfo = (
   pupilDto: PupilDtoResp,
 ): PupilProfileInfo => ({
   ...transformProfileInfo(pupilDto),
-  final_year: pupilDto.final_year ? new Date(pupilDto.final_year) : undefined,
+  grade: pupilDto.final_year
+    ? getGradeByGraduationYear(pupilDto.final_year)
+    : undefined,
 });
 
 const transformPupilInfo = <T extends PupilDtoReq>(
   pupilInfo: T,
 ): OmitCommon<T, PupilDtoReq> & PupilInfo => ({
   ...pupilInfo,
-  final_year: pupilInfo.final_year ? new Date(pupilInfo.final_year) : undefined,
+  grade: pupilInfo.final_year
+    ? getGradeByGraduationYear(pupilInfo.final_year)
+    : undefined,
 });
 
 export const transformAccountInfo = ({
@@ -161,8 +166,8 @@ export const transformAccountInfo = ({
 }: AccountDtoResp): AccountInfo => ({
   ...account,
   vk_info: transformVkInfo(vk_info),
-  pupil: pupil ? transformPupilInfo(pupil) : undefined,
-  teacher,
+  pupil: pupil ? transformPupilInfo(_.omit(pupil, 'account_id')) : undefined,
+  teacher: _.omit(teacher, 'account_id'),
   contacts: transformContacts(vk_info, pupil?.instagram || teacher?.instagram),
 });
 

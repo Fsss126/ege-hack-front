@@ -30,6 +30,7 @@ export enum ActionType {
   LOG_OUT = 'LOG_OUT',
   USER_INFO_FETCH = 'USER_INFO_FETCH',
   USER_INFO_FETCHED = 'USER_INFO_FETCHED',
+  USER_INFO_REVOKE = 'USER_INFO_REVOKE',
   SHOP_COURSES_FETCH = 'SHOP_COURSES_FETCH',
   SHOP_COURSES_FETCHED = 'SHOP_COURSES_FETCHED',
   USER_COURSES_FETCH = 'USER_COURSES_FETCH',
@@ -133,6 +134,11 @@ export type UserInfoFetchAction = {type: ActionType.USER_INFO_FETCH};
 export type UserInfoFetchedAction = {
   type: ActionType.USER_INFO_FETCHED;
   userInfo: AccountInfo | AxiosError;
+};
+
+export type UserInfoRevokeAction = {
+  type: ActionType.USER_INFO_REVOKE;
+  responseInfo: AccountInfo;
 };
 
 export type ShopCoursesFetchAction = {type: ActionType.SHOP_COURSES_FETCH};
@@ -736,6 +742,7 @@ export type Action = {type: ActionType} & (
   | LogoutAction
   | UserInfoFetchAction
   | UserInfoFetchedAction
+  | UserInfoRevokeAction
   | ShopCoursesFetchAction
   | ShopCoursesFetchedAction
   | AdminCoursesFetchAction

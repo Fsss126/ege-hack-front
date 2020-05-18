@@ -60,6 +60,7 @@ export type TreeSelectProps<V extends Key, T extends Key = V> = Omit<
   placeholder?: string;
   required?: boolean;
   withContainer?: boolean;
+  icon?: React.ReactNode;
   value?: V;
   disabledValues?: V[];
 } & (
@@ -163,6 +164,7 @@ const TreeSelect = <V extends Key, T extends Key = V>(
     loadData,
     placeholder,
     withContainer,
+    icon,
     required,
     loading,
     disabledValues,
@@ -308,7 +310,7 @@ const TreeSelect = <V extends Key, T extends Key = V>(
   );
 
   return withContainer ? (
-    <InputContainer placeholder={placeholder} required={required}>
+    <InputContainer placeholder={placeholder} icon={icon} required={required}>
       {input}
     </InputContainer>
   ) : (

@@ -146,6 +146,14 @@ export const dataReducer: Reducer<DataState, Action> = (
         userInfo,
       };
     }
+    case ActionType.USER_INFO_REVOKE: {
+      const {responseInfo} = action;
+
+      return {
+        ...state,
+        userInfo: responseInfo,
+      };
+    }
     case ActionType.SHOP_COURSES_FETCHED: {
       const {courses} = action;
 

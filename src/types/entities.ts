@@ -46,8 +46,8 @@ export interface ProfileInfo {
   contacts: ContactInfo;
 }
 
-export interface PupilInfo extends Omit<PupilDtoReq, 'final_year'> {
-  final_year?: Date;
+export interface PupilInfo extends PupilDtoReq {
+  grade?: number;
 }
 
 export interface PupilProfileInfo

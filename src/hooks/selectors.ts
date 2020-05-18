@@ -170,6 +170,19 @@ export function useUserInfo(): UserInfoHookResult {
     : {userInfo, reload: dispatchFetchAction};
 }
 
+export type RevokeUserInfoHookResult = (responseInfo: AccountInfo) => void;
+
+export function useRevokeUserInfo(): RevokeUserInfoHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseInfo: AccountInfo) => {
+      dispatch({type: ActionType.USER_INFO_REVOKE, responseInfo});
+    },
+    [dispatch],
+  );
+}
+
 export type SubjectsHookResult = {
   subjects?: SubjectInfo[];
   error?: AxiosError;

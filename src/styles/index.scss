@@ -1256,6 +1256,8 @@ header {
   }
 
   .user-profile__info {
+    cursor: default;
+
     .ph-text {
       width: 200px;
     }
@@ -1292,10 +1294,6 @@ header {
   .teacher-page {
     .social-media {
       margin-top: 16px;
-    }
-
-    .description-block {
-      padding-bottom: 16px;
     }
   }
 
@@ -1424,6 +1422,20 @@ header {
           white-space: nowrap;
           text-overflow: ellipsis;
           @include overflow-hidden;
+        }
+      }
+    }
+  }
+
+  .account-settings {
+    .account-settings__account {
+      margin-bottom: 24px;
+
+      .account-settings__avatar {
+        width: 58px;
+
+        @include media-breakpoint-down(xs) {
+          width: 58px;
         }
       }
     }

@@ -9,5 +9,13 @@ export interface TeacherProfileProps {
 export const TeacherProfile = (props: TeacherProfileProps) => {
   const {accountInfo} = props;
 
-  return <UserProfile accountInfo={accountInfo} />;
+  return (
+    <UserProfile accountInfo={accountInfo}>
+      {accountInfo?.teacher.bio && (
+        <div className="description-block font-size-sm align-self-lg-start">
+          {accountInfo.teacher.bio}
+        </div>
+      )}
+    </UserProfile>
+  );
 };

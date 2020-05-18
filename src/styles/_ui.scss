@@ -209,6 +209,14 @@ label {
     color: $text-grey;
     font-size: $font-size-sm;
     padding-bottom: 12px;
+
+    i {
+      font-size: 1rem;
+      display: inline-block;
+      color: $icon-grey;
+      vertical-align: middle;
+      margin-right: 12px;
+    }
   }
 }
 
