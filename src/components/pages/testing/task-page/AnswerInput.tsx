@@ -39,7 +39,8 @@ export const AnswerInput = forwardRef<HTMLFormElement, AnswerInputProps>(
         {type === AnswerType.NUMBER && (
           <Input.Input
             name="value"
-            type="number"
+            type="decimal"
+            step="0.00001"
             onChange={onChange}
             value={value as string}
           />

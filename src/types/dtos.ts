@@ -334,6 +334,7 @@ export interface TestAnswerResp
 export interface TestStateDtoResp extends CommonTestStatusResp {
   id: number;
   last_task_id?: number;
+  deadline?: number;
   answers: TestStateAnswerDto[];
 }
 

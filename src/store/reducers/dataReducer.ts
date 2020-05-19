@@ -578,21 +578,37 @@ export const dataReducer: Reducer<DataState, Action> = (
         parent_theme_id !== undefined ? parent_theme_id : KNOWLEDGE_TREE_ROOT;
       const containingLevel = state.knowledgeMap[subject_id]?.[themeKey];
       const updatedLevel =
-        containingLevel && !(containingLevel instanceof Error)
+        containingLevel instanceof Error
+          ? containingLevel
+          : containingLevel
           ? {
               ...containingLevel,
-              themeIds:
-                _.indexOf(containingLevel.themeIds, id) < 0
-                  ? _.concat(containingLevel.themeIds, id)
-                  : containingLevel.themeIds,
+              themeIds: _.includes(containingLevel.themeIds, id)
+                ? containingLevel.themeIds
+                : _.concat(containingLevel.themeIds, id),
             }
-          : containingLevel;
+          : {id: themeKey, taskIds: [], themeIds: [id]};
+
+      const parentTheme =
+        parent_theme_id !== undefined
+          ? state.themes[parent_theme_id]
+          : undefined;
+      const parentThemeUpdate =
+        !parentTheme || parentTheme instanceof Error
+          ? undefined
+          : {
+              ...parentTheme,
+              has_sub_themes: true,
+            };
 
       return {
         ...state,
         themes: {
           ...state.themes,
           [id]: responseTheme,
+          ...(parentThemeUpdate
+            ? {[parentThemeUpdate.id]: parentThemeUpdate}
+            : {}),
         },
         knowledgeMap: {
           ...state.knowledgeMap,
@@ -610,24 +626,37 @@ export const dataReducer: Reducer<DataState, Action> = (
         parentThemeId !== undefined ? parentThemeId : KNOWLEDGE_TREE_ROOT;
       const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];
       const updatedLevel =
-        containingLevel && !(containingLevel instanceof Error)
-          ? {
+        !containingLevel || containingLevel instanceof Error
+          ? undefined
+          : {
               ...containingLevel,
               themeIds: _.without(containingLevel.themeIds, themeId),
-            }
-          : containingLevel;
+            };
+
+      const parentTheme =
+        parentThemeId !== undefined ? state.themes[parentThemeId] : undefined;
+      const parentThemeUpdate =
+        !parentTheme || parentTheme instanceof Error || !updatedLevel
+          ? undefined
+          : {
+              ...parentTheme,
+              has_sub_themes: updatedLevel.themeIds.length > 0,
+            };
 
       return {
         ...state,
         themes: {
           ...state.themes,
           [themeId]: undefined,
+          ...(parentThemeUpdate
+            ? {[parentThemeUpdate.id]: parentThemeUpdate}
+            : undefined),
         },
         knowledgeMap: {
           ...state.knowledgeMap,
           [subjectId]: {
             ...(state.knowledgeMap[subjectId] || {}),
-            [themeKey]: updatedLevel,
+            ...(updatedLevel ? {[themeKey]: updatedLevel} : {}),
           },
         },
       };
@@ -650,18 +679,35 @@ export const dataReducer: Reducer<DataState, Action> = (
       const themeKey = theme_id !== undefined ? theme_id : KNOWLEDGE_TREE_ROOT;
       const containingLevel = state.knowledgeMap[subject_id]?.[themeKey];
       const updatedLevel =
-        containingLevel && !(containingLevel instanceof Error)
+        containingLevel instanceof Error
+          ? containingLevel
+          : containingLevel
           ? {
               ...containingLevel,
-              taskIds:
-                _.indexOf(containingLevel.taskIds, id) < 0
-                  ? _.concat(containingLevel.taskIds, id)
-                  : containingLevel.taskIds,
+              taskIds: _.includes(containingLevel.taskIds, id)
+                ? containingLevel.taskIds
+                : _.concat(containingLevel.taskIds, id),
             }
-          : containingLevel;
+          : {id: themeKey, taskIds: [id], themeIds: []};
+
+      const parentTheme =
+        theme_id !== undefined ? state.themes[theme_id] : undefined;
+      const parentThemeUpdate =
+        !parentTheme || parentTheme instanceof Error
+          ? undefined
+          : {
+              ...parentTheme,
+              has_sub_tasks: true,
+            };
 
       return {
         ...state,
+        themes: {
+          ...state.themes,
+          ...(parentThemeUpdate
+            ? {[parentThemeUpdate.id]: parentThemeUpdate}
+            : {}),
+        },
         tasks: {
           ...state.tasks,
           [id]: responseTask,
@@ -681,15 +727,31 @@ export const dataReducer: Reducer<DataState, Action> = (
       const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
       const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];
       const updatedLevel =
-        containingLevel && !(containingLevel instanceof Error)
-          ? {
+        !containingLevel || containingLevel instanceof Error
+          ? undefined
+          : {
               ...containingLevel,
-              tasksIds: _.without(containingLevel.taskIds, themeId),
-            }
-          : containingLevel;
+              taskIds: _.without(containingLevel.taskIds, taskId),
+            };
+
+      const parentTheme =
+        themeId !== undefined ? state.themes[themeId] : undefined;
+      const parentThemeUpdate =
+        !parentTheme || parentTheme instanceof Error || !updatedLevel
+          ? undefined
+          : {
+              ...parentTheme,
+              has_sub_tasks: updatedLevel.taskIds.length > 0,
+            };
 
       return {
         ...state,
+        themes: {
+          ...state.themes,
+          ...(parentThemeUpdate
+            ? {[parentThemeUpdate.id]: parentThemeUpdate}
+            : {}),
+        },
         tasks: {
           ...state.tasks,
           [taskId]: undefined,
@@ -698,7 +760,7 @@ export const dataReducer: Reducer<DataState, Action> = (
           ...state.knowledgeMap,
           [subjectId]: {
             ...(state.knowledgeMap[subjectId] || {}),
-            [themeKey]: updatedLevel,
+            ...(updatedLevel ? {[themeKey]: updatedLevel} : {}),
           },
         },
       };

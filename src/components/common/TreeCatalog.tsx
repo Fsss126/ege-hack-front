@@ -201,6 +201,23 @@ const Body = <T extends CatalogTreeNode>(
     // eslint-disable-next-line
   }, [filter, filterParams]);
 
+  useEffect(() => {
+    const collapsedKeys = _.reduce<T, T['key'][]>(
+      items,
+      (result, item) => {
+        if (_.includes(expandedKeys, item.key) && item.isLeaf) {
+          result.push(item.key);
+        }
+        return result;
+      },
+      [],
+    );
+
+    if (collapsedKeys.length > 0) {
+      setExpandedKeys(_.without(expandedKeys, ...collapsedKeys));
+    }
+  }, [expandedKeys, items]);
+
   return (
     <CatalogContext.Provider
       value={{

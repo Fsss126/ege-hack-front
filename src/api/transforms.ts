@@ -273,10 +273,12 @@ export const transformUserAnswer = (
 
 export const transformTestState = ({
   answers,
+  deadline,
   ...rest
 }: TestStateDtoResp): TestStateInfo =>
   ({
     ...transformCommonTestStatus(rest),
+    deadline: deadline ? new Date(deadline) : undefined,
     answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerInfo>>(
       answers,
       (result, answer) => {

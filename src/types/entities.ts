@@ -243,6 +243,7 @@ export type TestStateAnswerInfo =
 
 interface CommonTestStateInfo {
   last_task_id?: number;
+  deadline?: Date;
 }
 
 export interface TestStateActiveInfo
