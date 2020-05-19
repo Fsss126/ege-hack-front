@@ -207,7 +207,7 @@ const TestForm: React.FC<TestFormProps> = (props) => {
             onChange={onInputChange}
           />
           <div className="row">
-            <div className="col">
+            <div className="col-6">
               <Input.DateInput
                 value={deadline}
                 placeholder="Дедлайн"
@@ -221,20 +221,27 @@ const TestForm: React.FC<TestFormProps> = (props) => {
                 onChange={onInputChange}
               />
             </div>
-            <div className="col">
-              <Input.Input
-                name="pass_criteria"
-                required
-                type="decimal"
-                placeholder="Порог прохождения"
-                step="0.01"
-                min="0"
-                max="1"
-                value={pass_criteria}
+            <div className="col-6">
+              <Input.TimeInput
+                name="deadline"
+                disabled={!deadline}
+                value={deadline}
+                placeholder="Время"
                 onChange={onInputChange}
               />
             </div>
           </div>
+          <Input.Input
+            name="pass_criteria"
+            required
+            type="decimal"
+            placeholder="Порог прохождения"
+            step="0.01"
+            min="0"
+            max="1"
+            value={pass_criteria}
+            onChange={onInputChange}
+          />
         </FieldsContainer>
       </div>
       <FormElementGroup<TaskData, TaskElementRenderProps>
