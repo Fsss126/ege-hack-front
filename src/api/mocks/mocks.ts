@@ -193,7 +193,7 @@ export const TEST_TASKS: TaskDtoResp[] = [
     complexity: 5,
     answer: {
       type: AnswerType.NUMBER,
-      num_value: 0.5,
+      value: 0.5,
     },
   },
   {
@@ -206,7 +206,7 @@ export const TEST_TASKS: TaskDtoResp[] = [
     score: 1,
     answer: {
       type: AnswerType.NUMBER,
-      num_value: 1,
+      value: 1,
     },
   },
   {
@@ -248,6 +248,7 @@ export const TEST_STATUS_NOT_STARTED: TestStatusResp = {
   status: TestStatus.NOT_STARTED,
   progress: 0,
   deadline: TEST.deadline,
+  pass_criteria: 0.6,
 };
 
 export const TEST_STATUS_COMPLETED: TestStatusResp = {
@@ -256,10 +257,10 @@ export const TEST_STATUS_COMPLETED: TestStatusResp = {
   status: TestStatus.PASSED,
   progress: 1,
   percentage: 1,
-  passed: true,
   deadline: TEST.deadline,
   started_at: new Date().getTime(),
   completed_at: new Date().getTime(),
+  pass_criteria: 0.6,
 };
 
 export const TEST_STATE_NOT_STARTED: TestStateDtoResp = {

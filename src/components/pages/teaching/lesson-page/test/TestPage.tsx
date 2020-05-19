@@ -51,7 +51,7 @@ const TestPage: React.FC<AssignmentPageProps> = (props) => {
           {header}
           {lesson && test ? (
             <ContentBlock>
-              <div className="description-block">{test.name}</div>
+              <div className="description-text">{test.name}</div>
               {test.deadline && (
                 <div>
                   Дедлайн: {renderDate(test.deadline, renderDate.dateWithHour)}

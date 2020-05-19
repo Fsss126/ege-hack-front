@@ -42,7 +42,7 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
   }, [courseId, fetchCallback, testId, lessonId, startTestCallback]);
 
   if (test.is_rated) {
-    const {percentage, passed} = test;
+    const {percentage, status, passed} = test;
 
     return (
       <div className="test-view container p-0">

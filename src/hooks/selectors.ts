@@ -58,6 +58,7 @@ import {
   selectSubjects,
   selectTeacherCourses,
   selectTest,
+  selectTestResults,
   selectTestState,
   selectTestStatuses,
   selectUpcomingWebinars,
@@ -84,6 +85,7 @@ import {
   TaskInfo,
   TeacherProfileInfo,
   TestInfo,
+  TestResultInfo,
   TestStateInfo,
   TestStatusInfo,
   ThemeInfo,
@@ -1293,6 +1295,35 @@ export function useTestState(
   return state instanceof Error
     ? {error: state, reload: dispatchFetchAction}
     : {state, reload: dispatchFetchAction};
+}
+
+export type TestResultsHookResult = {
+  results?: TestResultInfo[] | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useTestResults(
+  lessonId: number,
+  testId: number,
+): TestResultsHookResult {
+  const isAllowed = useCheckPermissions(Permission.TEST_CHECK);
+  const results = useSelector(selectTestResults)[testId];
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.TEST_RESULTS_FETCH, lessonId, testId});
+  }, [dispatch, lessonId, testId]);
+  useEffect(() => {
+    if (isAllowed) {
+      if (!results) {
+        dispatchFetchAction();
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, results]);
+
+  return results instanceof Error
+    ? {error: results, reload: dispatchFetchAction}
+    : {results: !isAllowed ? false : results, reload: dispatchFetchAction};
 }
 
 export type KnowledgeLevelFetchHookResult = (

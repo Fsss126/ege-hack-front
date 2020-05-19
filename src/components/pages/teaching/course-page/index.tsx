@@ -30,8 +30,8 @@ const renderLesson: CatalogItemRenderer<LessonInfo> = (
   lesson,
   {link, ...rest},
 ) => {
-  const {id, locked, assignment} = lesson;
-  const isSelectable = !!assignment;
+  const {id, locked, assignment, test_id} = lesson;
+  const isSelectable = !!assignment || test_id !== undefined;
 
   return (
     <Lesson

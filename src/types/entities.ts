@@ -132,22 +132,20 @@ export type DiscountInfo = DiscountMessage;
 
 export {AnswerType, TestStatus} from './dtos';
 
-interface CommonTestStatusInfo {
+interface CommonTestStatusFields {
   id: number;
   status: TestStatus;
-  name: string;
-  deadline?: Date;
   progress: number;
 }
 
-interface TestStatusActiveInfo extends CommonTestStatusInfo {
+interface TestStatusActiveInfo extends CommonTestStatusFields {
   status: TestStatus.STARTED | TestStatus.NOT_STARTED;
   started_at?: Date;
   is_completed: false;
   is_rated: false;
 }
 
-interface TestStatusAwaitingInfo extends CommonTestStatusInfo {
+interface TestStatusAwaitingInfo extends CommonTestStatusFields {
   status: TestStatus.AWAIT;
   started_at: Date;
   completed_at: Date;
@@ -155,7 +153,7 @@ interface TestStatusAwaitingInfo extends CommonTestStatusInfo {
   is_rated: false;
 }
 
-interface TestStatusPassedInfo extends CommonTestStatusInfo {
+interface TestStatusPassedInfo extends CommonTestStatusFields {
   status: TestStatus.PASSED | TestStatus.NOT_STARTED;
   percentage: number;
   passed: boolean;
@@ -165,10 +163,17 @@ interface TestStatusPassedInfo extends CommonTestStatusInfo {
   is_rated: true;
 }
 
-export type TestStatusInfo =
+export type CommonTestStatusInfo =
   | TestStatusActiveInfo
   | TestStatusAwaitingInfo
   | TestStatusPassedInfo;
+
+export type TestStatusInfo = {
+  name: string;
+  deadline?: Date;
+  last_task_id?: number;
+  pass_criteria: number;
+} & CommonTestStatusInfo;
 
 export interface CorrectAnswerInfo {
   type: AnswerType;
@@ -227,6 +232,7 @@ export interface TestStateAwaitingAnswerInfo extends TestStateActiveAnswerInfo {
 export interface TestStatePassedAnswerInfo extends TestStateActiveAnswerInfo {
   correct_answer: CorrectAnswerDto;
   is_correct: boolean;
+  passed: boolean;
 }
 
 export type TestStateAnswerInfo =
@@ -275,6 +281,14 @@ export type TestStateInfo =
   | TestStateActiveInfo
   | TestStateAwaitingInfo
   | TestStatePassedInfo;
+
+export type TestCheckingStatusInfo = CommonTestStatusInfo;
+
+export interface TestResultInfo {
+  test_id: number;
+  status: TestCheckingStatusInfo;
+  pupil: PupilProfileInfo;
+}
 
 export interface KnowledgeLevelInfo {
   themes: ThemeInfo[];

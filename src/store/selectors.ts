@@ -68,5 +68,8 @@ export const selectKnowledgeMap = (state: AppState) =>
 export const selectKnowledgeTests = (state: AppState) =>
   selectDataReducer(state).tests;
 
+export const selectTestResults = (state: AppState) =>
+  selectDataReducer(state).testResults;
+
 export const selectLessonTests = (state: AppState) =>
   selectDataReducer(state).lessonsTests;

@@ -11,6 +11,7 @@ import {
   SubjectDtoResp,
   TeacherDtoResp,
   TestAnswerResp,
+  TestResultResp,
   WebinarScheduleDtoResp,
 } from 'types/dtos';
 import {
@@ -40,6 +41,7 @@ import {
   transformSubject,
   transformTask,
   transformTest,
+  transformTestResult,
   transformTestState,
   transformTestStatus,
   transformUserAnswer,
@@ -226,6 +228,11 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
       case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname): {
         return transformTestState(data);
       }
+      case /\/knowledge\/tests\/results/.test(url.pathname):
+      case /\/knowledge\/tests\/(.*)\/results/.test(url.pathname):
+        return (data as TestResultResp[]).map((result) =>
+          transformTestResult(result),
+        );
       case /\/knowledge\/tests\/(.*)$/.test(url.pathname):
       case /\/knowledge\/tests$/.test(url.pathname): {
         if (config.method !== 'delete') {

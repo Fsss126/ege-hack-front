@@ -108,7 +108,7 @@ export const addMockedTestAnswerResponses = (
           task_id: id,
           user_answer: {
             type: AnswerType.FILE,
-            file_info: value,
+            value,
           },
         }
       : {

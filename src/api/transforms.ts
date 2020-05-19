@@ -3,6 +3,7 @@ import {
   AccountDto,
   AccountDtoResp,
   AnswerType,
+  CommonTestStatusResp,
   CorrectAnswerDto,
   CourseDtoResp,
   FileInfo,
@@ -16,6 +17,7 @@ import {
   TaskDtoResp,
   TeacherDtoResp,
   TestDtoResp,
+  TestResultResp,
   TestStateAnswerDto,
   TestStateDtoResp,
   TestStatus,
@@ -25,6 +27,7 @@ import {
 } from 'types/dtos';
 import {
   AccountInfo,
+  CommonTestStatusInfo,
   ContactInfo,
   CorrectAnswerInfo,
   CourseInfo,
@@ -37,6 +40,7 @@ import {
   SubjectInfo,
   TaskInfo,
   TestInfo,
+  TestResultInfo,
   TestStateAnswerInfo,
   TestStateInfo,
   TestStatusInfo,
@@ -189,28 +193,44 @@ const getIsTestRated = (status: TestStatus) =>
 const getIsTestCompleted = (status: TestStatus) =>
   getIsTestRated(status) || status === TestStatus.AWAIT;
 
-export const transformTestStatus = (status: TestStatusResp): TestStatusInfo =>
+const getIsTestPassed = (status: TestStatus) =>
+  status === TestStatus.PASSED
+    ? true
+    : status === TestStatus.NOT_PASSED
+    ? false
+    : undefined;
+
+const transformCommonTestStatus = <T extends CommonTestStatusResp>(status: T) =>
   ({
     ...status,
-    deadline: status.deadline ? new Date(status.deadline) : undefined,
     started_at: status.started_at ? new Date(status.started_at) : undefined,
     is_completed: getIsTestCompleted(status.status),
     is_rated: getIsTestRated(status.status),
+    passed: getIsTestPassed(status.status),
+    percentage:
+      status.percentage !== undefined
+        ? status.percentage.toFixed(2)
+        : undefined,
     completed_at: status.completed_at
       ? new Date(status.completed_at)
       : undefined,
-  } as TestStatusInfo);
+  } as OmitCommon<T, CommonTestStatusResp> & CommonTestStatusInfo);
+
+export const transformTestStatus = (
+  status: TestStatusResp,
+): TestStatusInfo => ({
+  ...transformCommonTestStatus(status),
+  deadline: status.deadline ? new Date(status.deadline) : undefined,
+});
 
 export const transformCorrectAnswer = (
   answer: CorrectAnswerDto,
   solution?: SolutionDto,
 ): CorrectAnswerInfo => {
-  const {type, num_value, text_value} = answer;
   const {video_value, text_value: text_solution} = solution || {};
 
   return {
-    type,
-    value: type === AnswerType.TEXT ? text_value : num_value,
+    ...answer,
     video_solution: video_value ? getVideoLink(video_value) : video_value,
     text_solution,
   };
@@ -243,11 +263,11 @@ export const transformTest = ({
 export const transformUserAnswer = (
   answer: UserAnswerDtoResp,
 ): UserAnswerInfo => {
-  const {type, value, file_info} = answer;
+  const {type, value} = answer;
 
   return {
     type,
-    value: file_info ? transformFileInfo(file_info) : value,
+    value: typeof value === 'object' ? transformFileInfo(value) : value,
   } as UserAnswerInfo;
 };
 
@@ -255,6 +275,7 @@ export const transformTestState = ({
   answers,
   status,
   progress,
+  percentage,
   ...rest
 }: TestStateDtoResp): TestStateInfo =>
   ({
@@ -276,17 +297,23 @@ export const transformTestState = ({
       {},
     ) as any,
     ...rest,
+    percentage: percentage !== undefined ? percentage.toFixed(2) : undefined,
     progress: progress || 0,
     is_completed: getIsTestCompleted(status),
     is_rated: getIsTestRated(status),
-    passed:
-      status === TestStatus.PASSED
-        ? true
-        : status === TestStatus.NOT_PASSED
-        ? false
-        : undefined,
+    passed: getIsTestPassed(status),
     status,
   } as TestStateInfo);
+
+export const transformTestResult = ({
+  pupil,
+  status,
+  ...rest
+}: TestResultResp): TestResultInfo => ({
+  ...rest,
+  status: transformCommonTestStatus(status),
+  pupil: transformPupilProfileInfo({vk_info: pupil, account_id: pupil.id}),
+});
 
 export const transformKnowledgeLevel = ({
   tasks,

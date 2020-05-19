@@ -31,6 +31,7 @@ import {
   TaskInfo,
   TeacherProfileInfo,
   TestInfo,
+  TestResultInfo,
   TestStateInfo,
   TestStatePassedInfo,
   TestStatusInfo,
@@ -63,6 +64,7 @@ import {
   TestCompleteRequestAction,
   TestFetchAction,
   TestFetchedAction,
+  TestResultsFetchAction,
   TestSaveAnswerRequestAction,
   TestStartRequestAction,
   TestStateFetchAction,
@@ -856,6 +858,36 @@ function* processTestSaveAnswer() {
   );
 }
 
+function* fetchTestResults() {
+  yield* waitForLogin<TestResultsFetchAction>(
+    ActionType.TEST_RESULTS_FETCH,
+    function* (channel) {
+      yield takeLeading(channel, function* (action: TestResultsFetchAction) {
+        const {testId, lessonId} = action;
+        try {
+          const results: TestResultInfo[] = yield call(
+            APIRequest.get,
+            `/knowledge/tests/${testId}/results`,
+          );
+          yield put({
+            type: ActionType.TEST_RESULTS_FETCHED,
+            results,
+            testId,
+            lessonId,
+          });
+        } catch (error) {
+          yield put({
+            type: ActionType.TEST_RESULTS_FETCHED,
+            results: error,
+            testId,
+            lessonId,
+          });
+        }
+      });
+    },
+  );
+}
+
 // TODO: move check into saga
 function* fetchKnowledgeLevel() {
   yield* waitForLogin<KnowledgeLevelFetchAction>(
@@ -1117,6 +1149,7 @@ export default function* rootSaga() {
   yield spawn(fetchTestStatus);
   yield spawn(fetchTest);
   yield spawn(fetchTestState);
+  yield spawn(fetchTestResults);
   yield spawn(fetchKnowledgeLevel);
   yield spawn(fetchKnowledgeTheme);
   yield spawn(fetchKnowledgeTask);

@@ -11,6 +11,7 @@ import {
   TaskInfo,
   TeacherProfileInfo,
   TestInfo,
+  TestResultInfo,
   TestStateAnswerInfo,
   TestStateInfo,
   TestStatePassedInfo,
@@ -19,8 +20,7 @@ import {
   UserCourseInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
-
-import {AccountRole} from '../types/enums';
+import {AccountRole} from 'types/enums';
 
 export enum ActionType {
   LOG_IN = 'LOG_IN',
@@ -89,6 +89,8 @@ export enum ActionType {
   TEST_STATE_FETCHED = 'TEST_STATE_FETCHED',
   TEST_SAVE_ANSWER_REQUEST = 'TEST_SAVE_ANSWER_REQUEST',
   TEST_SAVE_ANSWER = 'TEST_SAVE_ANSWER',
+  TEST_RESULTS_FETCH = 'TEST_RESULTS_FETCH',
+  TEST_RESULTS_FETCHED = 'TEST_RESULTS_FETCHED',
   KNOWLEDGE_LEVEL_FETCH = 'KNOWLEDGE_LEVEL_FETCH',
   KNOWLEDGE_LEVEL_FETCHED = 'KNOWLEDGE_LEVEL_FETCHED',
   KNOWLEDGE_THEME_FETCH = 'KNOWLEDGE_THEME_FETCH',
@@ -566,6 +568,19 @@ export type TestSaveAnswerAction = {
   answerInfo: TestStateAnswerInfo;
 };
 
+export type TestResultsFetchAction = {
+  type: ActionType.TEST_RESULTS_FETCH;
+  testId: number;
+  lessonId: number;
+};
+
+export type TestResultsFetchedAction = {
+  type: ActionType.TEST_RESULTS_FETCHED;
+  testId: number;
+  lessonId: number;
+  results: TestResultInfo[] | AxiosError;
+};
+
 export type KnowledgeLevelFetchCallback = (
   subjectId: number,
   themeId: number | undefined,
@@ -799,6 +814,8 @@ export type Action = {type: ActionType} & (
   | TestCompleteRequestAction
   | TestStateFetchAction
   | TestStateFetchedAction
+  | TestResultsFetchAction
+  | TestResultsFetchedAction
   | TestSaveAnswerRequestAction
   | TestSaveAnswerAction
   | KnowledgeLevelFetchAction

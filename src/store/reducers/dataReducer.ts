@@ -14,6 +14,7 @@ import {
   TaskInfo,
   TeacherProfileInfo,
   TestInfo,
+  TestResultInfo,
   ThemeInfo,
   UserCourseInfo,
   WebinarScheduleInfo,
@@ -71,6 +72,9 @@ export interface DataState {
   tests: {
     [testId: number]: TestInfo;
   };
+  testResults: {
+    [testId: number]: DataProperty<TestResultInfo[]>;
+  };
   lessonsTests: {
     [lessonId: number]: DataProperty<number | null>;
   };
@@ -103,6 +107,7 @@ const defaultState: DataState = {
   knowledgeMap: {},
   tests: {},
   lessonsTests: {},
+  testResults: {},
 };
 
 export const dataReducer: Reducer<DataState, Action> = (
@@ -778,6 +783,17 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {...loadedLessons, [courseId]: newLessons},
         lessonsTests: {...state.lessonsTests, [lessonId]: null},
         tests,
+      };
+    }
+    case ActionType.TEST_RESULTS_FETCHED: {
+      const {testId, results} = action;
+
+      return {
+        ...state,
+        testResults: {
+          ...state.testResults,
+          [testId]: results,
+        },
       };
     }
     default:

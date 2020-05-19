@@ -229,8 +229,7 @@ export enum AnswerType {
 
 export interface CorrectAnswerDto {
   type: AnswerType;
-  text_value?: string;
-  num_value?: number;
+  value?: number | string;
 }
 
 export interface SolutionDto {
@@ -292,16 +291,20 @@ export enum TestStatus {
   NOT_PASSED = 'NOT_PASSED',
 }
 
-export interface TestStatusResp {
+export interface CommonTestStatusResp {
   id: number;
-  name: string;
   status: TestStatus;
-  progress: number;
-  deadline?: number;
+  progress?: number;
   percentage?: number;
-  passed?: boolean;
   started_at?: number;
   completed_at?: number;
+}
+
+export interface TestStatusResp extends CommonTestStatusResp {
+  pass_criteria: number;
+  name: string;
+  deadline?: number;
+  last_task_id?: number;
 }
 
 export interface UserAnswerDtoCommon {
@@ -314,8 +317,7 @@ export interface UserAnswerDtoReq extends UserAnswerDtoCommon {
 
 export interface UserAnswerDtoResp {
   type: AnswerType;
-  value?: string | number;
-  file_info?: FileInfo;
+  value?: string | number | FileInfo;
 }
 
 export interface TestStateAnswerDto {
@@ -342,4 +344,12 @@ export interface TestStateDtoResp {
 export interface KnowledgeLevelDtoResponse {
   themes: ThemeDtoResp[];
   tasks: TaskDtoResp[];
+}
+
+export interface TestCheckingStatusResp extends CommonTestStatusResp {}
+
+export interface TestResultResp {
+  test_id: number;
+  status: TestCheckingStatusResp;
+  pupil: VkUserDto;
 }

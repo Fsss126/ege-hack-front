@@ -3,17 +3,19 @@ import Catalog, {
   FilterFunc,
 } from 'components/common/Catalog';
 import Page, {PageContent, PageContentProps} from 'components/layout/Page';
-import {HomeworksHookResult} from 'hooks/selectors';
-import React, {useCallback} from 'react';
-import {HomeworkInfo, LessonInfo} from 'types/entities';
-import {Permission} from 'types/enums';
 import {
-  LessonPageParams,
-  RouteComponentPropsWithParentProps,
-} from 'types/routes';
+  HomeworksHookResult,
+  KnowledgeTestHookResult,
+  useTestResults,
+} from 'hooks/selectors';
+import React, {useCallback} from 'react';
+import {HomeworkInfo, LessonInfo, TestResultInfo} from 'types/entities';
+import {Permission} from 'types/enums';
+import {RouteComponentPropsWithParentProps, TestPageParams} from 'types/routes';
 import {SimpleCallback} from 'types/utility/common';
 
-import Homework from './Homework';
+import Homework from '../homeworks/Homework';
+import TestResult from './TestResult';
 
 const filterBy = {
   search: true,
@@ -21,7 +23,7 @@ const filterBy = {
   online: false,
 };
 
-const filter: FilterFunc<HomeworkInfo> = (
+const filter: FilterFunc<TestResultInfo> = (
   {
     pupil: {
       vk_info: {full_name},
@@ -36,8 +38,8 @@ const filter: FilterFunc<HomeworkInfo> = (
 };
 
 interface HomeworksPageProps
-  extends RouteComponentPropsWithParentProps<LessonPageParams> {
-  homeworks?: HomeworksHookResult['homeworks'];
+  extends RouteComponentPropsWithParentProps<TestPageParams> {
+  test: KnowledgeTestHookResult['test'];
   lesson?: LessonInfo;
   isLoaded: boolean;
   parentSection: PageContentProps['parentSection'];
@@ -46,21 +48,33 @@ interface HomeworksPageProps
   reloadCallbacks: SimpleCallback[];
 }
 
-const HomeworksPage: React.FC<HomeworksPageProps> = (props) => {
+const TestResultsPage: React.FC<HomeworksPageProps> = (props) => {
   const {
     location,
-    homeworks,
     lesson,
     isLoaded,
     children: header,
     parentSection,
     errors,
     reloadCallbacks,
+    match,
   } = props;
 
-  const renderHomework: CatalogItemRenderer<HomeworkInfo> = useCallback(
-    (homework, {link, ...renderProps}) => (
-      <Homework key={homework.pupil.id} homework={homework} {...renderProps} />
+  const {
+    params: {lessonId: param_lesson, testId: param_test},
+  } = match;
+  const lessonId = parseInt(param_lesson);
+  const testId = parseInt(param_test);
+
+  const {
+    results,
+    error: errorLoadingTestResults,
+    reload: reloadTestResults,
+  } = useTestResults(lessonId, testId);
+
+  const renderResult: CatalogItemRenderer<TestResultInfo> = useCallback(
+    (result, {link, ...renderProps}) => (
+      <TestResult key={result.pupil.id} result={result} {...renderProps} />
     ),
     [],
   );
@@ -72,21 +86,21 @@ const HomeworksPage: React.FC<HomeworksPageProps> = (props) => {
       requiredPermissions={Permission.HOMEWORK_CHECK}
       className="admin-page teaching-page--homeworks"
       title={title}
-      errors={errors}
-      reloadCallbacks={reloadCallbacks}
+      errors={[...errors, errorLoadingTestResults]}
+      reloadCallbacks={[...reloadCallbacks, reloadTestResults]}
       location={location}
     >
-      {isLoaded && homeworks && (
-        <Catalog.Body items={homeworks} filter={filter}>
+      {isLoaded && results && (
+        <Catalog.Body items={results} filter={filter}>
           <PageContent parentSection={parentSection}>
             {header}
             <Catalog.Filter filterBy={filterBy} stacked />
             <Catalog.Catalog
               className="users-list"
-              emptyPlaceholder="Нет загруженных работ"
-              noMatchPlaceholder="Нет совпадающих работ"
+              emptyPlaceholder="Нет результатов теста"
+              noMatchPlaceholder="Нет совпадающих результатов"
               plain
-              renderItem={renderHomework}
+              renderItem={renderResult}
             />
           </PageContent>
         </Catalog.Body>
@@ -95,4 +109,4 @@ const HomeworksPage: React.FC<HomeworksPageProps> = (props) => {
   );
 };
 
-export default HomeworksPage;
+export default TestResultsPage;

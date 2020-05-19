@@ -1,4 +1,5 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
+import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import {
   useHomeworks,
   useKnowledgeTest,
@@ -12,9 +13,10 @@ import {
   RouteComponentPropsWithParentProps,
 } from 'types/routes';
 
-import AssignmentPage from './AssignmentPage';
-import HomeworksPage from './HomeworksPage';
-import TestPage from './TestPage';
+import AssignmentPage from './assignment/AssignmentPage';
+import HomeworksPage from './homeworks/HomeworksPage';
+import TestResultsPage from './test-results/TestResultsPage';
+import TestPage from './test/TestPage';
 
 const LessonPage: React.FC<RouteComponentPropsWithParentProps<
   LessonPageParams
@@ -48,18 +50,25 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
   const header = isLoaded && lesson && (
     <TabNavBlock title={lesson.name}>
       <TabNav>
-        <TabNavLink to={`${match.url}/homeworks/`}>
-          Работы{' '}
-          {homeworks && (
-            <span className="badge">
-              {homeworks.filter((homework) => !!homework.files).length}
-            </span>
-          )}
-        </TabNavLink>
+        {lesson && lesson.assignment && (
+          <TabNavLink to={`${match.url}/homeworks/`}>
+            Работы{' '}
+            {homeworks && (
+              <span className="badge">
+                {homeworks.filter((homework) => !!homework.files).length}
+              </span>
+            )}
+          </TabNavLink>
+        )}
         <TabNavLink to={`${match.url}/assignment/`}>Задание</TabNavLink>
         {test && (
-          <TabNavLink to={`${match.url}/test/${lesson.test_id}/`}>
+          <TabNavLink exact to={`${match.url}/test/${lesson.test_id}/`}>
             Тест
+          </TabNavLink>
+        )}
+        {test && (
+          <TabNavLink to={`${match.url}/test/${lesson.test_id}/results/`}>
+            Результаты теста
           </TabNavLink>
         )}
       </TabNav>
@@ -69,7 +78,7 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
   const parentSection = course
     ? {
         name: course.name,
-        url: '../../',
+        url: `${path}/${courseId}/`,
       }
     : undefined;
 
@@ -125,7 +134,8 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
         )}
       />
       <Route
-        path={`${match.path}/test`}
+        exact
+        path={`${match.path}/test/:testId(\\d+)`}
         render={(props) => (
           <TestPage
             test={test}
@@ -143,9 +153,41 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
         )}
       />
       <Route
-        render={() => (
-          <Redirect to={`${path}/${courseId}/${lessonId}/homeworks/`} />
+        path={`${match.path}/test/:testId(\\d+)/results/`}
+        render={(props) => (
+          <TestResultsPage
+            test={test}
+            lesson={lesson}
+            isLoaded={isLoaded}
+            path={path}
+            url={url}
+            parentSection={parentSection}
+            errors={errors}
+            reloadCallbacks={reloadCallbacks}
+            {...props}
+          >
+            {header}
+          </TestResultsPage>
         )}
+      />
+      <Route
+        render={({location}) => {
+          if (lesson && lesson.test_id) {
+            return (
+              <Redirect
+                to={`${path}/${courseId}/${lessonId}/test/${lesson.test_id}/results/`}
+              />
+            );
+          }
+
+          if (!lesson || lesson.assignment) {
+            return (
+              <Redirect to={`${path}/${courseId}/${lessonId}/homeworks/`} />
+            );
+          }
+
+          return <NotFoundErrorPage location={location} />;
+        }}
       />
     </Switch>
   );

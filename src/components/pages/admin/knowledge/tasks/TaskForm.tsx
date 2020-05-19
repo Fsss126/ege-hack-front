@@ -84,10 +84,10 @@ function getRequestData(formData: TaskFormData): TaskDtoReq {
       type === AnswerType.NUMBER
         ? {
             type,
-            num_value: parseFloat(value),
+            value: parseFloat(value),
           }
         : type === AnswerType.TEXT
-        ? {type, text_value: value}
+        ? {type, value}
         : {type},
     solution: {
       video_value: video_solution,
