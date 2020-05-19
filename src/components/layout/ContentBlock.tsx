@@ -31,21 +31,25 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
       <h3 className="content-block__title">{title}</h3>
     ));
 
+  const renderBlock = (title && titleInside && titleElement) || children;
+
   return (
     <>
       {title && !titleInside && (
         <div className="layout__content-block-title">{titleElement}</div>
       )}
       {outerContent}
-      <div
-        className={classNames('layout__content-block', className, {
-          'layout__content-block--stacked': stacked,
-          'layout__content-block--transparent': transparent,
-        })}
-      >
-        {title && titleInside && titleElement}
-        {children}
-      </div>
+      {renderBlock && (
+        <div
+          className={classNames('layout__content-block', className, {
+            'layout__content-block--stacked': stacked,
+            'layout__content-block--transparent': transparent,
+          })}
+        >
+          {title && titleInside && titleElement}
+          {children}
+        </div>
+      )}
     </>
   );
 };

@@ -1,10 +1,14 @@
-import {ADMIN_ROLES, TEACHER_ROLES} from 'definitions/constants';
+import {
+  ADMIN_ROLES,
+  TEACHER_ROLES,
+  TOGGLE_FEATURES,
+} from 'definitions/constants';
 import React, {useCallback} from 'react';
 import {AccountRole, Permission} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
 
 import Contacts from '../common/Contacts';
-import ConditionalRenderer from '../ConditionalRender';
+import ConditionalRenderer, {FeatureToggleGuard} from '../ConditionalRender';
 import {NavLink} from '../ui/Link';
 
 export type SideBarProps = {
@@ -71,9 +75,23 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                     <NavLink
                       className="layout__sidebar-menu-link"
                       to="/courses/"
+                      isActive={(match, location) => {
+                        if (!match) {
+                          return false;
+                        }
+                        return !/\/courses\/schedule/.test(location.pathname);
+                      }}
                     >
                       Мои курсы
                     </NavLink>
+                    <FeatureToggleGuard feature={TOGGLE_FEATURES.schedule}>
+                      <NavLink
+                        className="layout__sidebar-menu-link"
+                        to="/courses/schedule"
+                      >
+                        Расписание
+                      </NavLink>
+                    </FeatureToggleGuard>
                     <NavLink
                       className="layout__sidebar-menu-link"
                       to="/homework/"

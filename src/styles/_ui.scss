@@ -1,10 +1,4 @@
-@import "~bootstrap/scss/bootstrap-grid";
-@import "~bootstrap/scss/bootstrap-reboot";
-@import "~bootstrap/scss/spinners";
-@import "~bootstrap/scss/utilities";
-@import "~bootstrap/scss/forms";
-@import "~react-day-picker/lib/style";
-@import "~antd/dist/antd";
+@import "imports";
 @import "fonts";
 @import "variables";
 @import "animations";
@@ -654,8 +648,9 @@ input[type=number] {
       z-index: 10;
 
       .select__menu-list {
-        //overflow: auto;
         max-height: none;
+        height: auto;
+        overflow-y: visible;
         padding: $menu-list-padding;
         width: 100%;
         .select__menu-notice {
@@ -1007,6 +1002,108 @@ input[type=number] {
 
   .DayPickerInput-OverlayWrapper {
     position: static;
+  }
+}
+
+.fc {
+  .fc-center {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    h2 {
+      margin: 0;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    @include media-breakpoint-down(sm) {
+      h2 {
+        width: 100%;
+        order: -1;
+      }
+
+      .fc-today-button {
+        display: none;
+      }
+
+      .fc-button-group ~ .fc-button-group {
+        margin-left: auto;
+      }
+    }
+
+    .fc-right {
+      @include media-breakpoint-down(sm) {
+        min-width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+
+  .fc-day.fc-today {
+    background: $accent-bg;
+  }
+
+  .fc-event {
+    color: black;
+    background: $accent-orange;
+    border: none;
+
+    .fc-content {
+      padding: 2px 4px;
+
+      .fc-time {
+        font-family: $font-medium;
+      }
+    }
+
+    &.fc-day-grid-event .fc-content {
+      display: flex;
+      overflow: scroll;
+      @include hide-scrollbar;
+
+      .fc-time {
+        padding-right: 4px;
+      }
+    }
+
+    &.fc-time-grid-event {
+      .fc-time {
+        font-size: 1em;
+      }
+    }
+  }
+
+  .fc-button {
+    color: inherit;
+    outline: none;
+    box-shadow: none;
+    background: none;
+    border: $border;
+    border-radius: $element-border-radius;
+
+    &.fc-button-primary:not(:disabled):active,
+    &.fc-button-primary:not(:disabled).fc-button-active {
+      background: $bg-hover-deep;
+      border: $border;
+      color: black;
+      box-shadow: none;
+    }
+
+    &.fc-today-button {
+      transition: opacity .3s;
+      opacity: 1;
+
+      &:disabled {
+        opacity: 0;
+      }
+    }
+  }
+
+  th, td {
+    border: $border;
   }
 }
 

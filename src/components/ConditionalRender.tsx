@@ -1,3 +1,4 @@
+import {getIsFeatureEnabled, TOGGLE_FEATURES} from 'definitions/constants';
 import {useUserInfo} from 'hooks/selectors';
 import _ from 'lodash';
 import React from 'react';
@@ -63,12 +64,12 @@ export function useCheckPermissions(
   );
 }
 
-export type ConditionalRenderProps = {
+export interface ConditionalRenderProps {
   requiredPermissions?: RequiredPermissions;
   requiredRoles?: RequiredRoles;
   fullMatch?: boolean;
   children?: React.ReactNode;
-};
+}
 const ConditionalRenderer: React.FC<ConditionalRenderProps> = (props) => {
   const {requiredPermissions, requiredRoles, children, fullMatch} = props;
   const render = useCheckPermissions(
@@ -78,6 +79,18 @@ const ConditionalRenderer: React.FC<ConditionalRenderProps> = (props) => {
   );
 
   return render && children ? <>{children}</> : null;
+};
+
+export interface FeatureToggleGuardProps {
+  feature: TOGGLE_FEATURES;
+  children: React.ReactNode;
+}
+
+export const FeatureToggleGuard = (props: FeatureToggleGuardProps) => {
+  const {feature, children} = props;
+  const isFeatureEnabled = getIsFeatureEnabled(feature);
+
+  return isFeatureEnabled && children ? <>{children}</> : null;
 };
 
 export default ConditionalRenderer;

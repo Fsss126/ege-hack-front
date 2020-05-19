@@ -5,6 +5,7 @@ import DropdownMenu, {
 import Lesson from 'components/common/Lesson';
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {useCheckPermissions} from 'components/ConditionalRender';
+import {getIsFeatureEnabled, TOGGLE_FEATURES} from 'definitions/constants';
 import {
   useAdminCourse,
   useAdminLessons,
@@ -22,6 +23,7 @@ import {
 
 import LessonsPage, {LessonRenderer} from './lessons/LessonsPage';
 import ParticipantsPage from './participants/ParticipantsPage';
+import SchedulePage from './schedule/SchedulePage';
 import WebinarsPage from './webinars/WebinarsPage';
 
 const renderLesson: LessonRenderer = (lesson, {link: lessonLink, ...rest}) => {
@@ -130,11 +132,14 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
             <span className="badge">{webinars.webinars.length}</span>
           )}
         </TabNavLink>
-        <TabNavLink to={`${match.url}/teachers/`} disabled>
-          Преподаватели
+        <TabNavLink
+          to={`${match.url}/calendar/`}
+          disabled={!getIsFeatureEnabled(TOGGLE_FEATURES.schedule)}
+        >
+          Календарь
         </TabNavLink>
         <TabNavLink to={`${match.url}/teachers/`} disabled>
-          Календарь
+          Преподаватели
         </TabNavLink>
       </TabNav>
     </TabNavBlock>
@@ -216,6 +221,26 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
           </WebinarsPage>
         )}
       />
+      {getIsFeatureEnabled(TOGGLE_FEATURES.schedule) && (
+        <Route
+          path={`${match.path}/calendar`}
+          render={(props) => (
+            <SchedulePage
+              course={course ? course : undefined}
+              webinars={webinars ? webinars : undefined}
+              isLoaded={isLoaded}
+              path={path}
+              url={url}
+              parentSection={parentSection}
+              errors={errors}
+              reloadCallbacks={reloadCallbacks}
+              {...props}
+            >
+              {header}
+            </SchedulePage>
+          )}
+        />
+      )}
       <Route render={() => <Redirect to={`${path}/${courseId}/lessons/`} />} />
     </Switch>
   );

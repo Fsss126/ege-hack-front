@@ -130,7 +130,7 @@ const CoursePage: React.FC<RouteComponentPropsWithParentProps<
         <TabNavLink to={`${match.url}/teachers/`} disabled>
           Преподаватели
         </TabNavLink>
-        <TabNavLink to={`${match.url}/teachers/`} disabled>
+        <TabNavLink to={`${match.url}/calendar/`} disabled>
           Календарь
         </TabNavLink>
       </TabNav>

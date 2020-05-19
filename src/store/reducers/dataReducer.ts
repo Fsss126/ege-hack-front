@@ -584,7 +584,7 @@ export const dataReducer: Reducer<DataState, Action> = (
               themeIds:
                 _.indexOf(containingLevel.themeIds, id) < 0
                   ? _.concat(containingLevel.themeIds, id)
-                  : containingLevel,
+                  : containingLevel.themeIds,
             }
           : containingLevel;
 
@@ -656,7 +656,7 @@ export const dataReducer: Reducer<DataState, Action> = (
               taskIds:
                 _.indexOf(containingLevel.taskIds, id) < 0
                   ? _.concat(containingLevel.taskIds, id)
-                  : containingLevel,
+                  : containingLevel.taskIds,
             }
           : containingLevel;
 

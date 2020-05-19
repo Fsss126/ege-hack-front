@@ -179,8 +179,8 @@ const Lessons: React.FC<LessonsProps> = (props) => {
   return (
     <Catalog.Catalog
       title="Уроки"
-      emptyPlaceholder="Нет курсов"
-      noMatchPlaceholder="Нет курсов, соответствующих условиям поиска"
+      emptyPlaceholder="Нет уроков"
+      noMatchPlaceholder="Нет уроков, соответствующих условиям поиска"
       renderItem={renderLesson}
       {...rest}
     >
