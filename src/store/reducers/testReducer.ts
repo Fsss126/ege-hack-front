@@ -1,5 +1,10 @@
 import {Reducer} from 'redux';
-import {SanitizedTestInfo, TestStateInfo, TestStatusInfo} from 'types/entities';
+import {
+  CommonTestStatusInfo,
+  SanitizedTestInfo,
+  TestStateInfo,
+  TestStatusInfo,
+} from 'types/entities';
 
 import {Action, ActionType} from '../actions';
 import {DataProperty} from './dataReducer';
@@ -41,10 +46,24 @@ export const testReducer: Reducer<TestState, Action> = (
       };
     }
     case ActionType.TEST_STATE_FETCHED: {
-      const {state: testState} = action;
+      const {state: testState, lessonId} = action;
+      let {
+        statuses: {[lessonId]: testStatus},
+      } = state;
+
+      if (
+        testStatus &&
+        !(testStatus instanceof Error) &&
+        !(testState instanceof Error)
+      ) {
+        const statusUpdate = _.omit(testState, 'answers');
+
+        testStatus = {...testStatus, ...(statusUpdate as any)};
+      }
 
       return {
         ...state,
+        statuses: {...state.statuses, [lessonId]: testStatus},
         state: testState,
       };
     }
@@ -58,8 +77,9 @@ export const testReducer: Reducer<TestState, Action> = (
       ) {
         return state;
       }
-      const {answerInfo, taskId} = action;
+      const {answerInfo, taskId, lessonId} = action;
       const {
+        statuses: {[lessonId]: status},
         state: {answers},
         test: {tasks},
       } = state;
@@ -67,15 +87,24 @@ export const testReducer: Reducer<TestState, Action> = (
         ...answers,
         [taskId]: answerInfo,
       };
-      const answersCount = Object.values(mergedAnswers).length;
+      const answersCount = _.values(mergedAnswers).length;
       const tasksCount = tasks.length;
+      const statusUpdate = {
+        answers: mergedAnswers,
+        progress: answersCount / tasksCount,
+      };
 
       return {
         ...state,
+        statuses: {
+          [lessonId]:
+            status && !(status instanceof Error)
+              ? {...status, ...statusUpdate}
+              : status,
+        },
         state: {
           ...state.state,
-          answers: mergedAnswers,
-          progress: answersCount / tasksCount,
+          ...statusUpdate,
         },
       };
     }

@@ -838,7 +838,7 @@ export function useRevokeUserHomework(
 }
 
 export type UpcomingWebinarsHookResult = {
-  webinars?: PersonWebinar[] | false;
+  webinars?: PersonWebinar[];
   error?: AxiosError;
   reload: SimpleCallback;
 };

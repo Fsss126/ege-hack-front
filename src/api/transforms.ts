@@ -273,36 +273,33 @@ export const transformUserAnswer = (
 
 export const transformTestState = ({
   answers,
-  status,
-  progress,
-  percentage,
   ...rest
 }: TestStateDtoResp): TestStateInfo =>
   ({
+    ...transformCommonTestStatus(rest),
     answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerInfo>>(
       answers,
       (result, answer) => {
         const {user_answer, correct_answer, solution} = answer;
-        result[answer.task_id] = {
-          ...answer,
-          user_answer: user_answer
-            ? transformUserAnswer(user_answer)
-            : undefined,
-          correct_answer: correct_answer
-            ? transformCorrectAnswer(correct_answer, solution)
-            : correct_answer,
-        };
+
+        if (
+          (user_answer && user_answer.value !== undefined) ||
+          correct_answer
+        ) {
+          result[answer.task_id] = {
+            ...answer,
+            user_answer: user_answer
+              ? transformUserAnswer(user_answer)
+              : undefined,
+            correct_answer: correct_answer
+              ? transformCorrectAnswer(correct_answer, solution)
+              : correct_answer,
+          };
+        }
         return result;
       },
       {},
     ) as any,
-    ...rest,
-    percentage: percentage !== undefined ? percentage.toFixed(2) : undefined,
-    progress: progress || 0,
-    is_completed: getIsTestCompleted(status),
-    is_rated: getIsTestRated(status),
-    passed: getIsTestPassed(status),
-    status,
   } as TestStateInfo);
 
 export const transformTestResult = ({

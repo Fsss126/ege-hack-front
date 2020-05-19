@@ -133,7 +133,6 @@ export type DiscountInfo = DiscountMessage;
 export {AnswerType, TestStatus} from './dtos';
 
 interface CommonTestStatusFields {
-  id: number;
   status: TestStatus;
   progress: number;
 }
@@ -151,16 +150,18 @@ interface TestStatusAwaitingInfo extends CommonTestStatusFields {
   completed_at: Date;
   is_completed: true;
   is_rated: false;
+  percentage?: number;
+  passed?: boolean;
 }
 
 interface TestStatusPassedInfo extends CommonTestStatusFields {
   status: TestStatus.PASSED | TestStatus.NOT_STARTED;
-  percentage: number;
-  passed: boolean;
   started_at: Date;
   completed_at: Date;
   is_completed: true;
   is_rated: true;
+  percentage: number;
+  passed: boolean;
 }
 
 export type CommonTestStatusInfo =
@@ -169,6 +170,7 @@ export type CommonTestStatusInfo =
   | TestStatusPassedInfo;
 
 export type TestStatusInfo = {
+  id: number;
   name: string;
   deadline?: Date;
   last_task_id?: number;
@@ -239,39 +241,29 @@ export type TestStateAnswerInfo =
   | TestStateActiveAnswerInfo
   | TestStatePassedAnswerInfo;
 
-type CommonTestStateInfo = {
-  id: number;
-  status: TestStatus;
+interface CommonTestStateInfo {
   last_task_id?: number;
-  progress: number;
-};
+}
 
-export interface TestStateActiveInfo extends CommonTestStateInfo {
-  status: TestStatus.NOT_STARTED | TestStatus.STARTED;
-  is_completed: false;
-  is_rated: false;
+export interface TestStateActiveInfo
+  extends TestStatusActiveInfo,
+    CommonTestStateInfo {
   answers: {
     [key: number]: TestStateActiveAnswerInfo;
   };
 }
 
-export interface TestStateAwaitingInfo extends CommonTestStateInfo {
-  status: TestStatus.AWAIT;
-  percentage?: number;
-  passed?: boolean;
-  is_completed: true;
-  is_rated: false;
+export interface TestStateAwaitingInfo
+  extends TestStatusAwaitingInfo,
+    CommonTestStateInfo {
   answers: {
     [key: number]: TestStateAwaitingAnswerInfo;
   };
 }
 
-export interface TestStatePassedInfo extends CommonTestStateInfo {
-  status: TestStatus.PASSED | TestStatus.NOT_STARTED;
-  percentage: number;
-  passed: boolean;
-  is_completed: true;
-  is_rated: true;
+export interface TestStatePassedInfo
+  extends TestStatusPassedInfo,
+    CommonTestStateInfo {
   answers: {
     [key: number]: TestStatePassedAnswerInfo;
   };

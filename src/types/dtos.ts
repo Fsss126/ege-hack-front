@@ -292,7 +292,6 @@ export enum TestStatus {
 }
 
 export interface CommonTestStatusResp {
-  id: number;
   status: TestStatus;
   progress?: number;
   percentage?: number;
@@ -301,6 +300,7 @@ export interface CommonTestStatusResp {
 }
 
 export interface TestStatusResp extends CommonTestStatusResp {
+  id: number;
   pass_criteria: number;
   name: string;
   deadline?: number;
@@ -331,12 +331,8 @@ export interface TestStateAnswerDto {
 export interface TestAnswerResp
   extends Require<TestStateAnswerDto, 'user_answer'> {}
 
-export interface TestStateDtoResp {
+export interface TestStateDtoResp extends CommonTestStatusResp {
   id: number;
-  status: TestStatus;
-  progress?: number;
-  percentage?: number;
-  passed?: boolean;
   last_task_id?: number;
   answers: TestStateAnswerDto[];
 }
@@ -346,7 +342,9 @@ export interface KnowledgeLevelDtoResponse {
   tasks: TaskDtoResp[];
 }
 
-export interface TestCheckingStatusResp extends CommonTestStatusResp {}
+export interface TestCheckingStatusResp extends CommonTestStatusResp {
+  id: number;
+}
 
 export interface TestResultResp {
   test_id: number;

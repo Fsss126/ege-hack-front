@@ -286,7 +286,6 @@ export const TEST_STATE_COMPLETED: TestStateDtoResp = {
   status: TestStatus.PASSED,
   last_task_id: TEST.tasks.length - 1,
   percentage: 0.8,
-  passed: true,
   answers: TEST.tasks.map(({id, answer, solution}, i) => ({
     task_id: id,
     user_answer:
