@@ -1,13 +1,9 @@
 import CourseSchedule from 'components/common/CourseSchedule';
-import {useCheckPermissions} from 'components/ConditionalRender';
-import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import Button from 'components/ui/Button';
-import {ADMIN_ROLES} from 'definitions/constants';
-import {useAdminCourses, useSubjects, useTeacherCourses} from 'hooks/selectors';
+import {useTeacherCourses} from 'hooks/selectors';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
-import {Link} from 'react-router-dom';
 import {CourseInfo, PersonWebinar} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithParentProps} from 'types/routes';
@@ -17,7 +13,7 @@ export type CourseCatalogPageProps = RouteComponentPropsWithParentProps & {
 };
 
 const SchedulePage: React.FC<RouteComponentPropsWithParentProps> = (props) => {
-  const {location, path, children: header, url} = props;
+  const {location, children: header, url} = props;
   const {
     catalog,
     error: errorLoadingCatalog,

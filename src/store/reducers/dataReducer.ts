@@ -36,7 +36,6 @@ export type KnowledgeBaseSubject = {
 export interface DataState {
   shopCourses?: DataProperty<CourseInfo[]>;
   userCourses?: DataProperty<UserCourseInfo[]>;
-  subjects?: DataProperty<SubjectInfo[]>;
   userTeachers?: DataProperty<TeacherProfileInfo[]>;
   userHomeworks: {
     [courseId: number]: {
@@ -82,7 +81,6 @@ export interface DataState {
 const defaultState: DataState = {
   shopCourses: undefined,
   userCourses: undefined,
-  subjects: undefined,
   userTeachers: undefined,
   userHomeworks: {},
   users: {
@@ -126,14 +124,6 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         userCourses: courses,
-      };
-    }
-    case ActionType.SUBJECTS_FETCHED: {
-      const {subjects} = action;
-
-      return {
-        ...state,
-        subjects,
       };
     }
     case ActionType.USER_TEACHERS_FETCHED: {
@@ -367,49 +357,6 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         homeworks: {[lessonId]: newHomeworks, ...loadedHomeworks},
-      };
-    }
-    case ActionType.SUBJECTS_REVOKE: {
-      const {responseSubject} = action;
-      const updateCatalog = (
-        catalog: SubjectInfo[] | AxiosError | undefined,
-      ): SubjectInfo[] | AxiosError | undefined => {
-        if (!(catalog instanceof Array)) {
-          return catalog;
-        }
-        const courseIndex = _.findIndex<SubjectInfo>(catalog, {
-          id: responseSubject.id,
-        });
-        const newCatalog = [...catalog];
-
-        if (courseIndex !== -1) {
-          const prevCourse = catalog[courseIndex];
-          newCatalog[courseIndex] = {...prevCourse, ...responseSubject};
-        } else {
-          newCatalog.push(responseSubject);
-        }
-        return newCatalog;
-      };
-      const {subjects} = state;
-
-      return {
-        ...state,
-        subjects: updateCatalog(subjects),
-      };
-    }
-    case ActionType.SUBJECT_DELETE: {
-      const {subjectId} = action;
-      const removeSubject = (
-        catalog: SubjectInfo[] | AxiosError | undefined,
-      ): SubjectInfo[] | AxiosError | undefined =>
-        catalog instanceof Array
-          ? catalog.filter(({id}) => id !== subjectId)
-          : catalog;
-      const {subjects} = state;
-
-      return {
-        ...state,
-        subjects: removeSubject(subjects),
       };
     }
     case ActionType.COURSES_REVOKE: {

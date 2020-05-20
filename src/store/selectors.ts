@@ -2,9 +2,6 @@ import {AppState} from './reducers';
 
 export const selectDataReducer = (state: AppState) => state.dataReducer;
 
-export const selectSubjects = (state: AppState) =>
-  selectDataReducer(state).subjects;
-
 export const selectShopCourses = (state: AppState) =>
   selectDataReducer(state).shopCourses;
 

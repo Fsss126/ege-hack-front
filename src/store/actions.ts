@@ -1,4 +1,6 @@
 import {AxiosError} from 'axios';
+import {SubjectsAction} from 'modules/subjects/subjects.reducers';
+import {UserAction} from 'modules/user/user.reducers';
 import {
   AccountInfo,
   CourseInfo,
@@ -7,7 +9,6 @@ import {
   KnowledgeLevelInfo,
   LessonInfo,
   PersonWebinar,
-  SubjectInfo,
   TaskInfo,
   TeacherProfileInfo,
   TestInfo,
@@ -23,15 +24,11 @@ import {
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
 
-import {UserAction} from '../modules/user/user.reducers';
-
 export enum ActionType {
   SHOP_COURSES_FETCH = 'SHOP_COURSES_FETCH',
   SHOP_COURSES_FETCHED = 'SHOP_COURSES_FETCHED',
   USER_COURSES_FETCH = 'USER_COURSES_FETCH',
   USER_COURSES_FETCHED = 'USER_COURSES_FETCHED',
-  SUBJECTS_FETCH = 'SUBJECTS_FETCH',
-  SUBJECTS_FETCHED = 'SUBJECTS_FETCHED',
   USER_TEACHERS_FETCH = 'USER_TEACHERS_FETCH',
   USER_TEACHERS_FETCHED = 'USER_TEACHERS_FETCHED',
   ACCOUNTS_FETCH = 'ACCOUNTS_FETCH',
@@ -65,9 +62,6 @@ export enum ActionType {
   HOMEWORKS_FETCH = 'HOMEWORKS_FETCH',
   HOMEWORKS_FETCHED = 'HOMEWORKS_FETCHED',
   HOMEWORKS_REVOKE = 'HOMEWORKS_REVOKE',
-  SUBJECTS_REVOKE = 'SUBJECTS_REVOKE',
-  SUBJECT_DELETE_REQUEST = 'SUBJECT_DELETE_REQUEST',
-  SUBJECT_DELETE = 'SUBJECT_DELETE',
   COURSES_REVOKE = 'COURSES_REVOKE',
   COURSE_DELETE_REQUEST = 'COURSE_DELETE_REQUEST',
   COURSE_DELETE = 'COURSE_DELETE',
@@ -133,13 +127,6 @@ export type UserCoursesFetchAction = {type: ActionType.USER_COURSES_FETCH};
 export type UserCoursesFetchedAction = {
   type: ActionType.USER_COURSES_FETCHED;
   courses: UserCourseInfo[] | AxiosError;
-};
-
-export type SubjectsFetchAction = {type: ActionType.SUBJECTS_FETCH};
-
-export type SubjectsFetchedAction = {
-  type: ActionType.SUBJECTS_FETCHED;
-  subjects: SubjectInfo[] | AxiosError;
 };
 
 export type UserTeachersFetchAction = {type: ActionType.USER_TEACHERS_FETCH};
@@ -334,30 +321,6 @@ export type ParticipantDeleteAction = {
   type: ActionType.PARTICIPANTS_DELETE;
   courseId: number;
   userId: number;
-};
-
-export type SubjectsRevokeAction = {
-  type: ActionType.SUBJECTS_REVOKE;
-  responseSubject: SubjectInfo;
-};
-
-export type SubjectDeleteCallback = (courseId: number) => void;
-
-export type SubjectDeleteErrorCallback = (
-  subjectId: number,
-  error: AxiosError,
-) => void;
-
-export type SubjectDeleteRequestAction = {
-  type: ActionType.SUBJECT_DELETE_REQUEST;
-  subjectId: number;
-  onDelete?: SubjectDeleteCallback;
-  onError?: SubjectDeleteErrorCallback;
-};
-
-export type SubjectDeleteAction = {
-  type: ActionType.SUBJECT_DELETE;
-  subjectId: number;
 };
 
 export type CoursesRevokeAction = {
@@ -713,6 +676,7 @@ export type KnowledgeTestDeleteAction = {
 
 export type Action =
   | UserAction
+  | SubjectsAction
   | ShopCoursesFetchAction
   | ShopCoursesFetchedAction
   | AdminCoursesFetchAction
@@ -721,8 +685,6 @@ export type Action =
   | TeacherCoursesFetchedAction
   | UserCoursesFetchAction
   | UserCoursesFetchedAction
-  | SubjectsFetchAction
-  | SubjectsFetchedAction
   | UserTeachersFetchAction
   | UserTeachersFetchedAction
   | AccountsFetchAction
@@ -752,9 +714,6 @@ export type Action =
   | ParticipantDeleteRequestAction
   | ParticipantDeleteAction
   | HomeworksRevokeAction
-  | SubjectsRevokeAction
-  | SubjectDeleteRequestAction
-  | SubjectDeleteAction
   | CoursesRevokeAction
   | CourseDeleteRequestAction
   | CourseDeleteAction

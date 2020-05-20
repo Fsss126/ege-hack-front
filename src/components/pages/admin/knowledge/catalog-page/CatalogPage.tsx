@@ -4,7 +4,7 @@ import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
-import {useSubjects} from 'hooks/selectors';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {Permission} from 'types/enums';

@@ -5,8 +5,9 @@ import UserProfile from 'components/common/UserProfile';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
-import {useShopCatalog, useSubjects, useUserTeacher} from 'hooks/selectors';
+import {useShopCatalog, useUserTeacher} from 'hooks/selectors';
 import _ from 'lodash';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {Fragment, useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
 import {

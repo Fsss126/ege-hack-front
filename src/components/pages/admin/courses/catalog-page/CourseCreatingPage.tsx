@@ -1,7 +1,8 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useSubjects, useUserTeachers} from 'hooks/selectors';
+import {useUserTeachers} from 'hooks/selectors';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {CourseDtoReq} from 'types/dtos';

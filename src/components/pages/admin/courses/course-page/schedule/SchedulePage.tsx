@@ -1,18 +1,11 @@
 import CourseSchedule from 'components/common/CourseSchedule';
-import {useCheckPermissions} from 'components/ConditionalRender';
-import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
-import Button from 'components/ui/Button';
-import {ADMIN_ROLES} from 'definitions/constants';
-import {useAdminCourses, useSubjects} from 'hooks/selectors';
-import React, {useCallback, useMemo} from 'react';
-import {Link} from 'react-router-dom';
-import {CourseInfo, PersonWebinar, WebinarScheduleInfo} from 'types/entities';
+import React, {useMemo} from 'react';
+import {CourseInfo, WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithParentProps} from 'types/routes';
-
-import {SimpleCallback} from '../../../../../../types/utility/common';
+import {SimpleCallback} from 'types/utility/common';
 
 export type SchedulePageProps = RouteComponentPropsWithParentProps & {
   parentSection?: PageParentSection;

@@ -3,18 +3,13 @@ import Catalog, {
   FilterFunc,
 } from 'components/common/Catalog';
 import Page, {PageContent, PageContentProps} from 'components/layout/Page';
-import {
-  HomeworksHookResult,
-  KnowledgeTestHookResult,
-  useTestResults,
-} from 'hooks/selectors';
+import {KnowledgeTestHookResult, useTestResults} from 'hooks/selectors';
 import React, {useCallback} from 'react';
-import {HomeworkInfo, LessonInfo, TestResultInfo} from 'types/entities';
+import {LessonInfo, TestResultInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithParentProps, TestPageParams} from 'types/routes';
 import {SimpleCallback} from 'types/utility/common';
 
-import Homework from '../homeworks/Homework';
 import TestResult from './TestResult';
 
 const filterBy = {

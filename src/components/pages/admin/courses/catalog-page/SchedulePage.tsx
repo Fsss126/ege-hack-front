@@ -5,7 +5,8 @@ import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
-import {useAdminCourses, useSubjects} from 'hooks/selectors';
+import {useAdminCourses} from 'hooks/selectors';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {CourseInfo, PersonWebinar} from 'types/entities';
@@ -19,11 +20,7 @@ const SchedulePage: React.FC<RouteComponentPropsWithParentProps> = (props) => {
     error: errorLoadingCatalog,
     reload: reloadCatalog,
   } = useAdminCourses();
-  const {
-    subjects,
-    error: errorLoadingSubjects,
-    reload: reloadSubjects,
-  } = useSubjects();
+  const {error: errorLoadingSubjects, reload: reloadSubjects} = useSubjects();
 
   const canEdit = useCheckPermissions(Permission.COURSE_EDIT);
 

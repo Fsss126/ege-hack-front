@@ -1,11 +1,8 @@
 import CourseSchedule from 'components/common/CourseSchedule';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {
-  useSubjects,
-  useUpcomingWebinars,
-  useUserCourses,
-} from 'hooks/selectors';
+import {useUpcomingWebinars, useUserCourses} from 'hooks/selectors';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
 import {CourseInfo, PersonWebinar} from 'types/entities';
 import {RouteComponentPropsWithParentProps} from 'types/routes';

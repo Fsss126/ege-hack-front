@@ -1,6 +1,8 @@
 /*eslint-disable @typescript-eslint/unbound-method*/
+import APIRequest from 'api';
+import {subjectsSaga} from 'modules/subjects/subjects.sagas';
+import {userSaga} from 'modules/user/user.sagas';
 import {
-  actionChannel,
   ActionPattern,
   all,
   call,
@@ -15,6 +17,7 @@ import {
   takeEvery,
   takeLeading,
 } from 'redux-saga/effects';
+import {AccountsRoleReq, UserAnswerDtoReq} from 'types/dtos';
 import {
   AccountInfo,
   CourseInfo,
@@ -23,7 +26,6 @@ import {
   KnowledgeLevelInfo,
   LessonInfo,
   PersonWebinar,
-  SubjectInfo,
   TaskInfo,
   TeacherProfileInfo,
   TestInfo,
@@ -38,9 +40,6 @@ import {
 } from 'types/entities';
 import {takeLeadingPerKey} from 'utils/sagaHelpers';
 
-import APIRequest from '../api';
-import {userSaga} from '../modules/user/user.sagas';
-import {AccountsRoleReq, UserAnswerDtoReq} from '../types/dtos';
 import {
   AccountsDeleteRequestAction,
   AccountsFetchAction,
@@ -61,7 +60,6 @@ import {
   LessonsFetchAction,
   ParticipantDeleteRequestAction,
   ParticipantsFetchAction,
-  SubjectDeleteRequestAction,
   TestCompleteRequestAction,
   TestFetchAction,
   TestFetchedAction,
@@ -75,25 +73,11 @@ import {
   UserHomeworksFetchAction,
   WebinarDeleteRequestAction,
 } from './actions';
-import {AppState} from './reducers';
 import {waitForLogin} from './sagas/watchers';
 
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
 const put = (action: Action): PutEffect<Action> => putEffect<Action>(action);
-
-function* fetchSubjects() {
-  yield* waitForLogin(ActionType.SUBJECTS_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const subjects: SubjectInfo[] = yield call(APIRequest.get, '/subjects');
-        yield put({type: ActionType.SUBJECTS_FETCHED, subjects});
-      } catch (error) {
-        yield put({type: ActionType.SUBJECTS_FETCHED, subjects: error});
-      }
-    });
-  });
-}
 
 function* fetchShopCourses() {
   yield* waitForLogin(ActionType.SHOP_COURSES_FETCH, function* (channel) {
@@ -508,27 +492,6 @@ function* processAccountsDelete() {
       }
     }
   });
-}
-
-function* processSubjectDelete() {
-  yield takeLeadingPerKey(
-    ActionType.SUBJECT_DELETE_REQUEST,
-    function* (action: SubjectDeleteRequestAction) {
-      const {subjectId, onDelete, onError} = action;
-      try {
-        yield call(APIRequest.delete, `/subjects/${subjectId}`);
-        if (onDelete) {
-          yield call(onDelete, subjectId);
-        }
-        yield put({type: ActionType.SUBJECT_DELETE, subjectId});
-      } catch (error) {
-        if (onError) {
-          yield call(onError, subjectId, error);
-        }
-      }
-    },
-    (action) => action.subjectId,
-  );
 }
 
 function* processCourseDelete() {
@@ -1102,10 +1065,10 @@ function* processTestDelete() {
 
 export default function* rootSaga() {
   yield fork(userSaga);
+  yield fork(subjectsSaga);
 
   yield spawn(fetchShopCourses);
   yield spawn(fetchUserCourses);
-  yield spawn(fetchSubjects);
   yield spawn(fetchUserTeachers);
   yield spawn(fetchUserHomeworks);
   yield spawn(fetchAccounts);
@@ -1126,7 +1089,6 @@ export default function* rootSaga() {
   yield spawn(fetchKnowledgeTask);
   yield spawn(fetchKnowledgeTest);
 
-  yield spawn(processSubjectDelete);
   yield spawn(processCourseDelete);
   yield spawn(processLessonDelete);
   yield spawn(processParticipantDelete);

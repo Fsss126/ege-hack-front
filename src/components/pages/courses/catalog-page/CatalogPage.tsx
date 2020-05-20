@@ -3,11 +3,8 @@ import CourseCatalog from 'components/common/CourseCatalog';
 import WebinarSchedule from 'components/common/WebinarSchedule';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
-import {
-  useSubjects,
-  useUpcomingWebinars,
-  useUserCourses,
-} from 'hooks/selectors';
+import {useUpcomingWebinars, useUserCourses} from 'hooks/selectors';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React from 'react';
 import {LearningStatus} from 'types/enums';
 import {RouteComponentPropsWithParentProps} from 'types/routes';
