@@ -121,10 +121,13 @@ export interface LessonInfo
   watchProgress?: number;
 }
 
-export interface HomeworkInfo
+export interface UserHomeworkInfo
   extends Omit<HomeworkDtoResp, 'date' | 'file_info' | 'pupil'> {
   date?: Date;
   files?: FileInfo[];
+}
+
+export interface HomeworkInfo extends UserHomeworkInfo {
   pupil: PupilProfileInfo;
 }
 

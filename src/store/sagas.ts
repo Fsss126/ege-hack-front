@@ -16,9 +16,6 @@ import {
   takeEvery,
   takeLeading,
 } from 'redux-saga/effects';
-
-import APIRequest from '../api';
-import {AccountsRoleReq, UserAnswerDtoReq} from '../types/dtos';
 import {
   AccountInfo,
   CourseInfo,
@@ -37,9 +34,13 @@ import {
   TestStatusInfo,
   ThemeInfo,
   UserCourseInfo,
+  UserHomeworkInfo,
   WebinarScheduleInfo,
-} from '../types/entities';
-import {takeLeadingPerKey} from '../utils/sagaHelpers';
+} from 'types/entities';
+import {takeLeadingPerKey} from 'utils/sagaHelpers';
+
+import APIRequest from '../api';
+import {AccountsRoleReq, UserAnswerDtoReq} from '../types/dtos';
 import {
   AccountsDeleteRequestAction,
   AccountsFetchAction,
@@ -241,7 +242,7 @@ function* fetchUserHomeworks() {
         function* (action: UserHomeworksFetchAction) {
           const {courseId, lessonId} = action;
           try {
-            const homework: HomeworkInfo = yield call(
+            const homework: UserHomeworkInfo = yield call(
               APIRequest.get,
               `/lessons/${lessonId}/homeworks/pupil`,
             );

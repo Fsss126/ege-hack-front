@@ -8,6 +8,7 @@ import {
   HomeworkDtoResp,
   LessonDtoResp,
   PersonWebinarDto,
+  PupilHomeworkDtoResp,
   SubjectDtoResp,
   TeacherDtoResp,
   TestAnswerResp,
@@ -38,6 +39,7 @@ import {
   transformKnowledgeLevel,
   transformLesson,
   transformProfileInfo,
+  transformPupilHomework,
   transformSubject,
   transformTask,
   transformTest,
@@ -160,15 +162,18 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
       case /\/lessons\/(\w*)\/homeworks$/.test(url.pathname): {
         return (data as HomeworkDtoResp[]).map<HomeworkInfo>(transformHomework);
       }
-      case /\/lessons\/(\w*)\/homeworks\/pupil/.test(url.pathname): {
+      case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname): {
         if (
           config.method === 'get' ||
           config.method === 'put' ||
           config.method === 'patch'
         ) {
-          return transformHomework(data);
+          return transformPupilHomework(data as PupilHomeworkDtoResp);
         }
         return null;
+      }
+      case /\/lessons\/(\w*)\/homeworks\/pupil\/(\w*)/.test(url.pathname): {
+        return transformHomework(data as HomeworkDtoResp);
       }
       case url.pathname === '/courses/schedule/person':
       case /\/courses\/\w*\/schedule\/person$/.test(url.pathname): {

@@ -4,7 +4,7 @@ import VideoPlayer from 'components/common/VideoPlayer';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import {File} from 'components/ui/input';
 import React from 'react';
-import {HomeworkInfo, LessonInfo, TestStatusInfo} from 'types/entities';
+import {LessonInfo, TestStatusInfo, UserHomeworkInfo} from 'types/entities';
 
 import HomeworkLoader from './HomeworkLoader';
 import {TestAssignment} from './TestAssignment';
@@ -12,7 +12,7 @@ import {TestAssignment} from './TestAssignment';
 export interface LessonViewProps {
   lesson: LessonInfo;
   testStatus: TestStatusInfo | null;
-  homework: HomeworkInfo | null;
+  homework: UserHomeworkInfo | null;
 }
 const LessonView: React.FC<LessonViewProps> = (props) => {
   const {

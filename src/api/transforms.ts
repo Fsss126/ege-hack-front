@@ -12,6 +12,7 @@ import {
   LessonDtoResp,
   PupilDtoReq,
   PupilDtoResp,
+  PupilHomeworkDtoResp,
   SolutionDto,
   SubjectDtoResp,
   TaskDtoResp,
@@ -45,6 +46,7 @@ import {
   TestStateInfo,
   TestStatusInfo,
   UserAnswerInfo,
+  UserHomeworkInfo,
   VkUserInfo,
 } from 'types/entities';
 
@@ -175,15 +177,23 @@ export const transformAccountInfo = ({
   contacts: transformContacts(vk_info, pupil?.instagram || teacher?.instagram),
 });
 
-export const transformHomework = ({
+export const transformPupilHomework = <
+  T extends PupilHomeworkDtoResp = PupilHomeworkDtoResp
+>({
   file_info,
-  pupil,
   date,
   ...rest
-}: HomeworkDtoResp): HomeworkInfo => ({
+}: T) => ({
   ...rest,
   date: date ? new Date(date) : undefined,
   files: file_info ? [transformFileInfo(file_info)] : undefined,
+});
+
+export const transformHomework = ({
+  pupil,
+  ...rest
+}: HomeworkDtoResp): HomeworkInfo => ({
+  ...transformPupilHomework(rest),
   pupil: transformPupilProfileInfo(pupil),
 });
 

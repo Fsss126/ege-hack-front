@@ -89,6 +89,7 @@ import {
   TestStateInfo,
   TestStatusInfo,
   ThemeInfo,
+  UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {AccountRole, Permission} from 'types/enums';
@@ -790,7 +791,7 @@ export function useRevokeWebinars(courseId: number): RevokeWebinarssHookResult {
 }
 
 export type UserHomeworkHookResult = {
-  homework?: HomeworkInfo | null;
+  homework?: UserHomeworkInfo | null;
   error?: AxiosError;
   reload: SimpleCallback;
 };

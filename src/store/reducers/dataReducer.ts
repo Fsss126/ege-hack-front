@@ -17,6 +17,7 @@ import {
   TestResultInfo,
   ThemeInfo,
   UserCourseInfo,
+  UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
@@ -41,7 +42,7 @@ export interface DataState {
   userTeachers?: DataProperty<TeacherProfileInfo[]>;
   userHomeworks: {
     [courseId: number]: {
-      [lessonId: number]: DataProperty<HomeworkInfo | null>;
+      [lessonId: number]: DataProperty<UserHomeworkInfo | null>;
     };
   };
   users: Record<AccountRole, DataProperty<AccountInfo[]>>;

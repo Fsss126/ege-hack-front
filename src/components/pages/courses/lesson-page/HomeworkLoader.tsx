@@ -4,10 +4,10 @@ import {FileInput} from 'components/ui/input';
 import {InputSubmitCallback} from 'components/ui/input/file-input/GenericFileInput';
 import {useRevokeUserHomework} from 'hooks/selectors';
 import React from 'react';
-import {HomeworkInfo} from 'types/entities';
+import {HomeworkInfo, UserHomeworkInfo} from 'types/entities';
 
 export type HomeworkLoaderProps = {
-  homework: HomeworkInfo | null;
+  homework: UserHomeworkInfo | null;
   deadline?: Date;
   courseId: number;
   lessonId: number;

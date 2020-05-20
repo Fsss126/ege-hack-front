@@ -191,10 +191,13 @@ export interface HomeworkAssessmentDtoReq {
   mark?: number;
 }
 
-export interface HomeworkDtoResp extends HomeworkAssessmentDtoReq {
+export interface PupilHomeworkDtoResp extends HomeworkAssessmentDtoReq {
   date?: number;
   file_info?: FileInfo;
   lesson_id: number;
+}
+
+export interface HomeworkDtoResp extends PupilHomeworkDtoResp {
   pupil: PupilDtoResp;
 }
 

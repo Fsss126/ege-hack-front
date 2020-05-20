@@ -18,6 +18,7 @@ import {
   TestStatusInfo,
   ThemeInfo,
   UserCourseInfo,
+  UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
@@ -268,14 +269,14 @@ export type UserHomeworksFetchedAction = {
   type: ActionType.USER_HOMEWORKS_FETCHED;
   courseId: number;
   lessonId: number;
-  homework: HomeworkInfo | AxiosError;
+  homework: UserHomeworkInfo | AxiosError;
 };
 
 export type UserHomeworksRevokeAction = {
   type: ActionType.USER_HOMEWORKS_REVOKE;
   courseId: number;
   lessonId: number;
-  responseHomework: HomeworkInfo;
+  responseHomework: UserHomeworkInfo;
 };
 
 export type CourseWebinarsFetchAction = {
