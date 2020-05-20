@@ -5,7 +5,7 @@ import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {ADMIN_ROLES} from 'definitions/constants';
-import {useAdminCourses} from 'hooks/selectors';
+import {useAdminCourses} from 'modules/courses/courses.hooks';
 import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';

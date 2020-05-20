@@ -1,7 +1,7 @@
 import Course from 'components/common/Course';
 import CourseCatalog from 'components/common/CourseCatalog';
 import Page, {PageContent} from 'components/layout/Page';
-import {useTeacherCourses} from 'hooks/selectors';
+import {useTeacherCourses} from 'modules/courses/courses.hooks';
 import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
 import {Permission} from 'types/enums';

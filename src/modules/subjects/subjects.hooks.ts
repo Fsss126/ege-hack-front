@@ -2,13 +2,14 @@ import {useRedirect} from 'hooks/selectors';
 import _ from 'lodash';
 import {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {CourseDeleteCallback, CourseDeleteErrorCallback} from 'store/actions';
 import {SubjectInfo} from 'types/entities';
 
 import {
+  SubjectDeleteCallback,
+  SubjectDeleteErrorCallback,
   subjectDeleteRequest,
-  subjectInfoRevoke,
-  subjectsInfoFetch,
+  subjectRevoke,
+  subjectsFetch,
 } from './subjects.actions';
 import {selectSubjects} from './subjects.selectors';
 
@@ -16,7 +17,7 @@ export function useSubjects() {
   const subjects = useSelector(selectSubjects);
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
-    dispatch(subjectsInfoFetch());
+    dispatch(subjectsFetch());
   }, [dispatch]);
   useEffect(() => {
     if (!subjects) {
@@ -44,7 +45,7 @@ export function useRevokeSubjects() {
 
   return useCallback(
     (responseSubject: SubjectInfo) => {
-      dispatch(subjectInfoRevoke(responseSubject));
+      dispatch(subjectRevoke(responseSubject));
     },
     [dispatch],
   );
@@ -52,8 +53,8 @@ export function useRevokeSubjects() {
 
 export function useDeleteSubject(
   redirectUrl?: string,
-  onDelete?: CourseDeleteCallback,
-  onError?: CourseDeleteErrorCallback,
+  onDelete?: SubjectDeleteCallback,
+  onError?: SubjectDeleteErrorCallback,
 ) {
   const dispatch = useDispatch();
   const redirectIfSupplied = useRedirect(redirectUrl);

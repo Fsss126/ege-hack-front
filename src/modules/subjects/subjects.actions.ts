@@ -24,16 +24,14 @@ export interface SubjectDeleteRequestPayload extends SubjectDeletePayload {
   onError?: SubjectDeleteErrorCallback;
 }
 
-export const subjectsInfoFetch = infoActionCreator(
-  ESubjectsAction.SUBJECTS_FETCH,
-);
+export const subjectsFetch = infoActionCreator(ESubjectsAction.SUBJECTS_FETCH);
 
-export const subjectsInfoFetched = fetchedActionCreator<
+export const subjectsFetched = fetchedActionCreator<
   ESubjectsAction.SUBJECTS_FETCHED,
   SubjectInfo[]
 >(ESubjectsAction.SUBJECTS_FETCHED);
 
-export const subjectInfoRevoke = loadedActionCreator<
+export const subjectRevoke = loadedActionCreator<
   ESubjectsAction.SUBJECTS_REVOKE,
   SubjectInfo
 >(ESubjectsAction.SUBJECTS_REVOKE);

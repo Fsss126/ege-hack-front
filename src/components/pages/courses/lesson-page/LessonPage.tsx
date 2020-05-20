@@ -3,13 +3,9 @@ import List, {ListItemRenderer} from 'components/common/List';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
-import {
-  useLessons,
-  useTestStatus,
-  useUserCourses,
-  useUserHomework,
-} from 'hooks/selectors';
+import {useLessons, useTestStatus, useUserHomework} from 'hooks/selectors';
 import _ from 'lodash';
+import {useUserCourses} from 'modules/courses/courses.hooks';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {LessonInfo} from 'types/entities';

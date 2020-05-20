@@ -1,9 +1,9 @@
 import {AxiosError} from 'axios';
+import {CoursesAction} from 'modules/courses/courses.reducers';
 import {SubjectsAction} from 'modules/subjects/subjects.reducers';
 import {UserAction} from 'modules/user/user.reducers';
 import {
   AccountInfo,
-  CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
   KnowledgeLevelInfo,
@@ -18,17 +18,12 @@ import {
   TestStatePassedInfo,
   TestStatusInfo,
   ThemeInfo,
-  UserCourseInfo,
   UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
 
 export enum ActionType {
-  SHOP_COURSES_FETCH = 'SHOP_COURSES_FETCH',
-  SHOP_COURSES_FETCHED = 'SHOP_COURSES_FETCHED',
-  USER_COURSES_FETCH = 'USER_COURSES_FETCH',
-  USER_COURSES_FETCHED = 'USER_COURSES_FETCHED',
   USER_TEACHERS_FETCH = 'USER_TEACHERS_FETCH',
   USER_TEACHERS_FETCHED = 'USER_TEACHERS_FETCHED',
   ACCOUNTS_FETCH = 'ACCOUNTS_FETCH',
@@ -57,14 +52,9 @@ export enum ActionType {
   ADMIN_COURSES_FETCHED = 'ADMIN_COURSES_FETCHED',
   ADMIN_WEBINARS_FETCH = 'ADMIN_WEBINARS_FETCH',
   ADMIN_WEBINARS_FETCHED = 'ADMIN_WEBINARS_FETCHED',
-  TEACHER_COURSES_FETCH = 'TEACHER_COURSES_FETCH',
-  TEACHER_COURSES_FETCHED = 'TEACHER_COURSES_FETCHED',
   HOMEWORKS_FETCH = 'HOMEWORKS_FETCH',
   HOMEWORKS_FETCHED = 'HOMEWORKS_FETCHED',
   HOMEWORKS_REVOKE = 'HOMEWORKS_REVOKE',
-  COURSES_REVOKE = 'COURSES_REVOKE',
-  COURSE_DELETE_REQUEST = 'COURSE_DELETE_REQUEST',
-  COURSE_DELETE = 'COURSE_DELETE',
   WEBINARS_REVOKE = 'WEBINARS_REVOKE',
   WEBINAR_DELETE_REQUEST = 'WEBINAR_DELETE_REQUEST',
   WEBINAR_DELETE = 'WEBINAR_DELETE',
@@ -98,36 +88,6 @@ export enum ActionType {
   KNOWLEDGE_TEST_DELETE_REQUEST = 'KNOWLEDGE_TEST_DELETE_REQUEST',
   KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
-
-export type ShopCoursesFetchAction = {type: ActionType.SHOP_COURSES_FETCH};
-
-export type ShopCoursesFetchedAction = {
-  type: ActionType.SHOP_COURSES_FETCHED;
-  courses: CourseInfo[] | AxiosError;
-};
-
-export type AdminCoursesFetchAction = {type: ActionType.ADMIN_COURSES_FETCH};
-
-export type AdminCoursesFetchedAction = {
-  type: ActionType.ADMIN_COURSES_FETCHED;
-  courses: CourseInfo[] | AxiosError;
-};
-
-export type TeacherCoursesFetchAction = {
-  type: ActionType.TEACHER_COURSES_FETCH;
-};
-
-export type TeacherCoursesFetchedAction = {
-  type: ActionType.TEACHER_COURSES_FETCHED;
-  courses: CourseInfo[] | AxiosError;
-};
-
-export type UserCoursesFetchAction = {type: ActionType.USER_COURSES_FETCH};
-
-export type UserCoursesFetchedAction = {
-  type: ActionType.USER_COURSES_FETCHED;
-  courses: UserCourseInfo[] | AxiosError;
-};
 
 export type UserTeachersFetchAction = {type: ActionType.USER_TEACHERS_FETCH};
 
@@ -321,30 +281,6 @@ export type ParticipantDeleteAction = {
   type: ActionType.PARTICIPANTS_DELETE;
   courseId: number;
   userId: number;
-};
-
-export type CoursesRevokeAction = {
-  type: ActionType.COURSES_REVOKE;
-  responseCourse: CourseInfo;
-};
-
-export type CourseDeleteCallback = (courseId: number) => void;
-
-export type CourseDeleteErrorCallback = (
-  courseId: number,
-  error: AxiosError,
-) => void;
-
-export type CourseDeleteRequestAction = {
-  type: ActionType.COURSE_DELETE_REQUEST;
-  courseId: number;
-  onDelete?: CourseDeleteCallback;
-  onError?: CourseDeleteErrorCallback;
-};
-
-export type CourseDeleteAction = {
-  type: ActionType.COURSE_DELETE;
-  courseId: number;
 };
 
 export type WebinarsRevokeAction = {
@@ -677,14 +613,7 @@ export type KnowledgeTestDeleteAction = {
 export type Action =
   | UserAction
   | SubjectsAction
-  | ShopCoursesFetchAction
-  | ShopCoursesFetchedAction
-  | AdminCoursesFetchAction
-  | AdminCoursesFetchedAction
-  | TeacherCoursesFetchAction
-  | TeacherCoursesFetchedAction
-  | UserCoursesFetchAction
-  | UserCoursesFetchedAction
+  | CoursesAction
   | UserTeachersFetchAction
   | UserTeachersFetchedAction
   | AccountsFetchAction
@@ -714,9 +643,6 @@ export type Action =
   | ParticipantDeleteRequestAction
   | ParticipantDeleteAction
   | HomeworksRevokeAction
-  | CoursesRevokeAction
-  | CourseDeleteRequestAction
-  | CourseDeleteAction
   | WebinarsRevokeAction
   | WebinarDeleteRequestAction
   | WebinarDeleteAction

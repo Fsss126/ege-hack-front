@@ -1,12 +1,13 @@
 import CourseSchedule from 'components/common/CourseSchedule';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useTeacherCourses} from 'hooks/selectors';
 import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
 import {CourseInfo, PersonWebinar} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithParentProps} from 'types/routes';
+
+import {useTeacherCourses} from '../../../../modules/courses/courses.hooks';
 
 export type CourseCatalogPageProps = RouteComponentPropsWithParentProps & {
   children: React.ReactElement;

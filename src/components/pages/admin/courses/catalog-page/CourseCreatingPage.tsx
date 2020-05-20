@@ -14,7 +14,7 @@ import CourseForm from './CourseForm';
 const createRequest = (requestData: CourseDtoReq): Promise<CourseInfo> =>
   APIRequest.post('/courses', requestData) as Promise<CourseInfo>;
 
-const returnLink = '/admin/';
+const returnLink = '/admin/courses/';
 
 const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
   const {location} = props;

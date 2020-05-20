@@ -7,7 +7,7 @@ import {ESubjectsAction} from './subjects.constants';
 
 export type SubjectsAction = TypedAction<typeof import('./subjects.actions')>;
 
-export const subjects: Reducer<DataProperty<SubjectInfo[]>, SubjectsAction> = (
+const subjects: Reducer<DataProperty<SubjectInfo[]>, SubjectsAction> = (
   state = null,
   action,
 ) => {

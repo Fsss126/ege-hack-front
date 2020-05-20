@@ -7,7 +7,7 @@ import {EUserAction} from './user.constants';
 
 export type UserAction = TypedAction<typeof import('./user.actions')>;
 
-export const credentials: Reducer<DataProperty<Credentials>, UserAction> = (
+const credentials: Reducer<DataProperty<Credentials>, UserAction> = (
   state = Auth.getCredentials(),
   action,
 ) => {
@@ -25,7 +25,7 @@ export const credentials: Reducer<DataProperty<Credentials>, UserAction> = (
   }
 };
 
-export const userInfo: Reducer<DataProperty<AccountInfo>, UserAction> = (
+const userInfo: Reducer<DataProperty<AccountInfo>, UserAction> = (
   state = null,
   action,
 ) => {

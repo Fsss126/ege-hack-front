@@ -7,12 +7,11 @@ import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import {getIsFeatureEnabled, TOGGLE_FEATURES} from 'definitions/constants';
 import {
-  useAdminCourse,
   useAdminLessons,
   useAdminWebinars,
-  useDeleteCourse,
   useParticipants,
 } from 'hooks/selectors';
+import {useAdminCourse, useDeleteCourse} from 'modules/courses/courses.hooks';
 import React, {useCallback} from 'react';
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import {Permission} from 'types/enums';

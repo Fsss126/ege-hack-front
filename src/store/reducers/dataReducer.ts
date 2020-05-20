@@ -34,8 +34,6 @@ export type KnowledgeBaseSubject = {
 };
 
 export interface DataState {
-  shopCourses?: DataProperty<CourseInfo[]>;
-  userCourses?: DataProperty<UserCourseInfo[]>;
   userTeachers?: DataProperty<TeacherProfileInfo[]>;
   userHomeworks: {
     [courseId: number]: {
@@ -54,7 +52,6 @@ export interface DataState {
   participants: {
     [courseId: number]: DataProperty<CourseParticipantInfo[]>;
   };
-  adminCourses?: DataProperty<CourseInfo[]>;
   adminWebinars: {[courseId: number]: DataProperty<WebinarScheduleInfo>};
   teacherCourses?: DataProperty<CourseInfo[]>;
   homeworks: {[lessonId: number]: DataProperty<HomeworkInfo[]>};
@@ -79,9 +76,6 @@ export interface DataState {
 }
 
 const defaultState: DataState = {
-  shopCourses: undefined,
-  userCourses: undefined,
-  userTeachers: undefined,
   userHomeworks: {},
   users: {
     [AccountRole.PUPIL]: undefined,
@@ -93,7 +87,6 @@ const defaultState: DataState = {
   lessons: {},
   webinars: {},
   participants: {},
-  adminCourses: undefined,
   adminWebinars: {},
   teacherCourses: undefined,
   homeworks: {},
@@ -110,22 +103,6 @@ export const dataReducer: Reducer<DataState, Action> = (
   action,
 ): DataState => {
   switch (action.type) {
-    case ActionType.SHOP_COURSES_FETCHED: {
-      const {courses} = action;
-
-      return {
-        ...state,
-        shopCourses: courses,
-      };
-    }
-    case ActionType.USER_COURSES_FETCHED: {
-      const {courses} = action;
-
-      return {
-        ...state,
-        userCourses: courses,
-      };
-    }
     case ActionType.USER_TEACHERS_FETCHED: {
       const {teachers} = action;
 
@@ -200,14 +177,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
-    case ActionType.ADMIN_COURSES_FETCHED: {
-      const {courses} = action;
-
-      return {
-        ...state,
-        adminCourses: courses,
-      };
-    }
     case ActionType.ADMIN_WEBINARS_FETCHED: {
       const {courseId, webinars} = action;
 
@@ -217,14 +186,6 @@ export const dataReducer: Reducer<DataState, Action> = (
           ...state.adminWebinars,
           [courseId]: webinars,
         },
-      };
-    }
-    case ActionType.TEACHER_COURSES_FETCHED: {
-      const {courses} = action;
-
-      return {
-        ...state,
-        teacherCourses: courses,
       };
     }
     case ActionType.LESSONS_REVOKE: {
@@ -303,7 +264,7 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         participants: {...state.participants, [courseId]: responseParticipants},
-        userCourses: undefined,
+        // userCourses: undefined,
       };
     }
     case ActionType.PARTICIPANTS_DELETE: {
@@ -357,53 +318,6 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         homeworks: {[lessonId]: newHomeworks, ...loadedHomeworks},
-      };
-    }
-    case ActionType.COURSES_REVOKE: {
-      const {responseCourse} = action;
-      const updateCatalog = <T extends CourseInfo>(
-        catalog: T[] | AxiosError | undefined,
-      ): T[] | AxiosError | undefined => {
-        if (!(catalog instanceof Array)) {
-          return catalog;
-        }
-        const courseIndex = _.findIndex<CourseInfo>(catalog, {
-          id: responseCourse.id,
-        });
-        const newCatalog = [...catalog];
-
-        if (courseIndex !== -1) {
-          const prevCourse = catalog[courseIndex];
-          newCatalog[courseIndex] = {...prevCourse, ...responseCourse};
-        } else {
-          newCatalog.push(responseCourse as T);
-        }
-        return newCatalog;
-      };
-      const {userCourses, adminCourses, shopCourses} = state;
-
-      return {
-        ...state,
-        userCourses: updateCatalog(userCourses),
-        adminCourses: updateCatalog(adminCourses),
-        shopCourses: updateCatalog(shopCourses),
-      };
-    }
-    case ActionType.COURSE_DELETE: {
-      const {courseId} = action;
-      const removeCourse = <T extends CourseInfo>(
-        catalog: T[] | AxiosError | undefined,
-      ): T[] | AxiosError | undefined =>
-        catalog instanceof Array
-          ? catalog.filter(({id}) => id !== courseId)
-          : catalog;
-      const {userCourses, adminCourses, shopCourses} = state;
-
-      return {
-        ...state,
-        userCourses: removeCourse(userCourses),
-        adminCourses: removeCourse(adminCourses),
-        shopCourses: removeCourse(shopCourses),
       };
     }
     case ActionType.WEBINARS_REVOKE:

@@ -3,12 +3,8 @@ import Lesson from 'components/common/Lesson';
 import WebinarSchedule from 'components/common/WebinarSchedule';
 import {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
-import {
-  useCourseWebinars,
-  useLessons,
-  useUserCourse,
-  useUserTeachers,
-} from 'hooks/selectors';
+import {useCourseWebinars, useLessons, useUserTeachers} from 'hooks/selectors';
+import {useUserCourse} from 'modules/courses/courses.hooks';
 import React from 'react';
 import {
   CoursePageParams,

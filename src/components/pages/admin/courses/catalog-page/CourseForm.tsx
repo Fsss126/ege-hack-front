@@ -10,7 +10,7 @@ import Form, {
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {OptionShape} from 'components/ui/input/Select';
-import {useRevokeCourses} from 'hooks/selectors';
+import {useRevokeCourses} from 'modules/courses/courses.hooks';
 import React, {useCallback, useMemo, useRef} from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import {CourseDtoReq, FileInfo} from 'types/dtos';

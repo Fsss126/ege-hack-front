@@ -3,7 +3,7 @@ import CourseCatalog from 'components/common/CourseCatalog';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderPrice} from 'definitions/helpers';
-import {useShopCatalog} from 'hooks/selectors';
+import {useShopCatalog} from 'modules/courses/courses.hooks';
 import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';

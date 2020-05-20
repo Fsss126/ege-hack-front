@@ -1,5 +1,6 @@
 /*eslint-disable @typescript-eslint/unbound-method*/
 import APIRequest from 'api';
+import {coursesSaga} from 'modules/courses/courses.sagas';
 import {subjectsSaga} from 'modules/subjects/subjects.sagas';
 import {userSaga} from 'modules/user/user.sagas';
 import {
@@ -20,7 +21,6 @@ import {
 import {AccountsRoleReq, UserAnswerDtoReq} from 'types/dtos';
 import {
   AccountInfo,
-  CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
   KnowledgeLevelInfo,
@@ -34,7 +34,6 @@ import {
   TestStatePassedInfo,
   TestStatusInfo,
   ThemeInfo,
-  UserCourseInfo,
   UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
@@ -46,7 +45,6 @@ import {
   Action,
   ActionType,
   AdminWebinarsFetchAction,
-  CourseDeleteRequestAction,
   CourseWebinarsFetchAction,
   HomeworksFetchAction,
   KnowledgeLevelFetchAction,
@@ -78,44 +76,6 @@ import {waitForLogin} from './sagas/watchers';
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
 const put = (action: Action): PutEffect<Action> => putEffect<Action>(action);
-
-function* fetchShopCourses() {
-  yield* waitForLogin(ActionType.SHOP_COURSES_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const courses: CourseInfo[] = yield call(APIRequest.get, '/courses', {
-          params: {
-            group: 'MARKET',
-          },
-        });
-        yield put({type: ActionType.SHOP_COURSES_FETCHED, courses});
-      } catch (error) {
-        yield put({type: ActionType.SHOP_COURSES_FETCHED, courses: error});
-      }
-    });
-  });
-}
-
-function* fetchUserCourses() {
-  yield* waitForLogin(ActionType.USER_COURSES_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const courses: UserCourseInfo[] = yield call(
-          APIRequest.get,
-          '/courses',
-          {
-            params: {
-              group: 'PERSON',
-            },
-          },
-        );
-        yield put({type: ActionType.USER_COURSES_FETCHED, courses});
-      } catch (error) {
-        yield put({type: ActionType.USER_COURSES_FETCHED, courses: error});
-      }
-    });
-  });
-}
 
 function* fetchUserTeachers() {
   yield* waitForLogin(ActionType.USER_TEACHERS_FETCH, function* (channel) {
@@ -318,23 +278,6 @@ function* fetchParticipants() {
   );
 }
 
-function* fetchAdminCourses() {
-  yield* waitForLogin(ActionType.ADMIN_COURSES_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const courses: CourseInfo[] = yield call(APIRequest.get, '/courses', {
-          params: {
-            group: 'ALL',
-          },
-        });
-        yield put({type: ActionType.ADMIN_COURSES_FETCHED, courses});
-      } catch (error) {
-        yield put({type: ActionType.ADMIN_COURSES_FETCHED, courses: error});
-      }
-    });
-  });
-}
-
 function* fetchAdminWebinars() {
   yield* waitForLogin<AdminWebinarsFetchAction>(
     ActionType.ADMIN_WEBINARS_FETCH,
@@ -365,22 +308,6 @@ function* fetchAdminWebinars() {
       );
     },
   );
-}
-
-function* fetchTeacherCourses() {
-  yield* waitForLogin(ActionType.TEACHER_COURSES_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const courses: CourseInfo[] = yield call(
-          APIRequest.get,
-          '/courses/homeworkCheck',
-        );
-        yield put({type: ActionType.TEACHER_COURSES_FETCHED, courses});
-      } catch (error) {
-        yield put({type: ActionType.TEACHER_COURSES_FETCHED, courses: error});
-      }
-    });
-  });
 }
 
 function* fetchHomeworks() {
@@ -492,27 +419,6 @@ function* processAccountsDelete() {
       }
     }
   });
-}
-
-function* processCourseDelete() {
-  yield takeLeadingPerKey(
-    ActionType.COURSE_DELETE_REQUEST,
-    function* (action: CourseDeleteRequestAction) {
-      const {courseId, onDelete, onError} = action;
-      try {
-        yield call(APIRequest.delete, `/courses/${courseId}`);
-        if (onDelete) {
-          yield call(onDelete, courseId);
-        }
-        yield put({type: ActionType.COURSE_DELETE, courseId});
-      } catch (error) {
-        if (onError) {
-          yield call(onError, courseId, error);
-        }
-      }
-    },
-    (action) => action.courseId,
-  );
 }
 
 function* processWebinarDelete() {
@@ -1066,9 +972,8 @@ function* processTestDelete() {
 export default function* rootSaga() {
   yield fork(userSaga);
   yield fork(subjectsSaga);
+  yield fork(coursesSaga);
 
-  yield spawn(fetchShopCourses);
-  yield spawn(fetchUserCourses);
   yield spawn(fetchUserTeachers);
   yield spawn(fetchUserHomeworks);
   yield spawn(fetchAccounts);
@@ -1076,9 +981,7 @@ export default function* rootSaga() {
   yield spawn(fetchCourseWebinars);
   yield spawn(fetchUpcomingWebinars);
   yield spawn(fetchParticipants);
-  yield spawn(fetchAdminCourses);
   yield spawn(fetchAdminWebinars);
-  yield spawn(fetchTeacherCourses);
   yield spawn(fetchHomeworks);
   yield spawn(fetchTestStatus);
   yield spawn(fetchTest);
@@ -1089,7 +992,6 @@ export default function* rootSaga() {
   yield spawn(fetchKnowledgeTask);
   yield spawn(fetchKnowledgeTest);
 
-  yield spawn(processCourseDelete);
   yield spawn(processLessonDelete);
   yield spawn(processParticipantDelete);
   yield spawn(processAccountsDelete);

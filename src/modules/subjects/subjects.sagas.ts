@@ -6,7 +6,7 @@ import {takeLeadingPerKey} from 'utils/sagaHelpers';
 import {
   subjectDelete,
   subjectDeleteRequest,
-  subjectsInfoFetched,
+  subjectsFetched,
 } from './subjects.actions';
 import {ESubjectsAction} from './subjects.constants';
 
@@ -14,9 +14,9 @@ function* fetchSubjectsInfo() {
   yield takeLeading([ESubjectsAction.SUBJECTS_FETCH], function* () {
     try {
       const subjects: SubjectInfo[] = yield call(APIRequest.get, '/subjects');
-      yield put(subjectsInfoFetched(subjects));
+      yield put(subjectsFetched(subjects));
     } catch (error) {
-      yield put(subjectsInfoFetched(error));
+      yield put(subjectsFetched(error));
     }
   });
 }

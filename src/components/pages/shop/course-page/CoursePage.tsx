@@ -1,12 +1,8 @@
 import CourseOverview from 'components/common/CourseOverview';
 import Lesson from 'components/common/Lesson';
 import {PageContent} from 'components/layout/Page';
-import {
-  useDiscount,
-  useLessons,
-  useShopCourse,
-  useUserTeachers,
-} from 'hooks/selectors';
+import {useDiscount, useLessons, useUserTeachers} from 'hooks/selectors';
+import {useShopCourse} from 'modules/courses/courses.hooks';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
 import {

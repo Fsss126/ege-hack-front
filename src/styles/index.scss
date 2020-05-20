@@ -1535,17 +1535,13 @@ header {
       opacity: 1;
     }
 
-    .layout__content-block.tab-nav-container ~ .layout__content-block {
+    .layout__content-block.tab-nav-container ~ .layout__content-block:not(.catalog__catalog--empty) {
       margin-top: 0;
     }
 
     .catalog__filters {
       background: white;
       padding: $content-padding;
-
-      & + .catalog__catalog:not(.catalog__catalog--empty) {
-        margin-top: 0;
-      }
     }
 
     .schedule-calendar h2 {

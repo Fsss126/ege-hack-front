@@ -12,8 +12,6 @@ import {
   AccountsDeleteErrorCallback,
   Action,
   ActionType,
-  CourseDeleteCallback,
-  CourseDeleteErrorCallback,
   KnowledgeLevelFetchCallback,
   KnowledgeLevelFetchErrorCallback,
   KnowledgeTaskDeleteCallback,
@@ -38,7 +36,6 @@ import {
 import {AppState} from 'store/reducers';
 import {DataProperty, KnowledgeBaseSubject} from 'store/reducers/dataReducer';
 import {
-  selectAdminCourses,
   selectAdminWebinars,
   selectHomeworks,
   selectKnowledgeMap,
@@ -48,14 +45,11 @@ import {
   selectLessons,
   selectLessonTests,
   selectParticipants,
-  selectShopCourses,
-  selectTeacherCourses,
   selectTest,
   selectTestResults,
   selectTestState,
   selectTestStatuses,
   selectUpcomingWebinars,
-  selectUserCourses,
   selectUserHomeworks,
   selectUsers,
   selectUserTeachers,
@@ -261,173 +255,6 @@ export function useDeleteAccount(
     },
     [dispatch, onDelete, onError, role],
   );
-}
-
-export type ShopCatalogHookResult = {
-  catalog?: CourseInfo[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useShopCatalog(): ShopCatalogHookResult {
-  const shopCourses = useSelector(selectShopCourses);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.SHOP_COURSES_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (!shopCourses) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, shopCourses]);
-  return shopCourses instanceof Error
-    ? {error: shopCourses, reload: dispatchFetchAction}
-    : {catalog: shopCourses, reload: dispatchFetchAction};
-}
-
-export type ShopCourseHookResult = {
-  course?: CourseInfo;
-  error?: AxiosError | true;
-  reload: SimpleCallback;
-};
-
-export function useShopCourse(courseId: number): ShopCourseHookResult {
-  const {catalog, error, reload} = useShopCatalog();
-  const course = catalog ? _.find(catalog, {id: courseId}) : undefined;
-
-  return {
-    course,
-    error: catalog && !course ? true : error,
-    reload,
-  };
-}
-
-export type AdminCoursesHookResult = {
-  catalog?: CourseInfo[] | false;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useAdminCourses(): AdminCoursesHookResult {
-  const isAllowed = useCheckPermissions(Permission.COURSE_EDIT);
-  const adminCourses = useSelector(selectAdminCourses);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.ADMIN_COURSES_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (isAllowed) {
-      if (!adminCourses) {
-        dispatchFetchAction();
-      }
-    }
-  }, [adminCourses, dispatchFetchAction, isAllowed]);
-  return adminCourses instanceof Error
-    ? {error: adminCourses, reload: dispatchFetchAction}
-    : {catalog: !isAllowed ? false : adminCourses, reload: dispatchFetchAction};
-}
-
-export type AdminCourseHookResult = {
-  course?: CourseInfo | false;
-  error?: AxiosError | true;
-  reload: SimpleCallback;
-};
-
-export function useAdminCourse(courseId: number): AdminCourseHookResult {
-  const {catalog, error, reload} = useAdminCourses();
-  const course = catalog ? _.find(catalog, {id: courseId}) : undefined;
-
-  return {
-    course: catalog === false ? false : course,
-    error: catalog && !course ? true : error,
-    reload,
-  };
-}
-
-export type TeacherCoursesHookResult = AdminCoursesHookResult;
-
-export function useTeacherCourses(): TeacherCoursesHookResult {
-  const isAllowed = useCheckPermissions(Permission.HOMEWORK_CHECK);
-  const teacherCourses = useSelector(selectTeacherCourses);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEACHER_COURSES_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (isAllowed) {
-      if (!teacherCourses) {
-        dispatchFetchAction();
-      }
-    }
-  }, [dispatchFetchAction, isAllowed, teacherCourses]);
-  return teacherCourses instanceof Error
-    ? {error: teacherCourses, reload: dispatchFetchAction}
-    : {
-        catalog: !isAllowed ? false : teacherCourses,
-        reload: dispatchFetchAction,
-      };
-}
-
-export type TeacherCourseHookResult = AdminCourseHookResult;
-
-export function useTeacherCourse(courseId: number): TeacherCourseHookResult {
-  const {catalog, error, reload} = useTeacherCourses();
-  const course = catalog ? _.find(catalog, {id: courseId}) : undefined;
-
-  return {
-    course,
-    error: catalog && !course ? true : error,
-    reload,
-  };
-}
-
-export type RevokeCoursesHookResult = (responseCourse: CourseInfo) => void;
-
-export function useRevokeCourses(): RevokeCoursesHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseCourse: CourseInfo) => {
-      dispatch({type: ActionType.COURSES_REVOKE, responseCourse});
-    },
-    [dispatch],
-  );
-}
-
-export type UserCoursesHookResult = {
-  courses?: CourseInfo[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useUserCourses(): UserCoursesHookResult {
-  const userCourses = useSelector(selectUserCourses);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.USER_COURSES_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (!userCourses) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, userCourses]);
-  return userCourses instanceof Error
-    ? {error: userCourses, reload: dispatchFetchAction}
-    : {courses: userCourses, reload: dispatchFetchAction};
-}
-
-// TODO: add separe API query
-export type UserCourseHookResult = ShopCourseHookResult;
-
-export function useUserCourse(courseId: number): UserCourseHookResult {
-  const {courses, error, reload} = useUserCourses();
-  const course = courses ? _.find(courses, {id: courseId}) : undefined;
-
-  return {
-    course,
-    error: courses && !course ? true : error,
-    reload,
-  };
 }
 
 export type LessonsHookResult = {
@@ -747,39 +574,6 @@ export function useRedirect(redirectUrl?: string): RedirectHookResult {
       history.replace(redirectUrl);
     }
   }, [history, redirectUrl]);
-}
-
-export type DeleteCourseHookResult = (courseId: number) => void;
-
-export function useDeleteCourse(
-  redirectUrl?: string,
-  onDelete?: CourseDeleteCallback,
-  onError?: CourseDeleteErrorCallback,
-): DeleteCourseHookResult {
-  const dispatch = useDispatch();
-  const redirectIfSupplied = useRedirect(redirectUrl);
-
-  const deleteCallback = useCallback(
-    (courseId) => {
-      redirectIfSupplied();
-      if (onDelete) {
-        onDelete(courseId);
-      }
-    },
-    [redirectIfSupplied, onDelete],
-  );
-
-  return useCallback(
-    (courseId) => {
-      dispatch({
-        type: ActionType.COURSE_DELETE_REQUEST,
-        courseId,
-        onDelete: deleteCallback,
-        onError,
-      });
-    },
-    [dispatch, deleteCallback, onError],
-  );
 }
 
 export type DeleteLessonHookResult = (
