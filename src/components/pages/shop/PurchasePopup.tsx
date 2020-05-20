@@ -3,7 +3,7 @@ import Form, {useForm, useFormValidityChecker} from 'components/ui/Form';
 import {Input} from 'components/ui/input';
 import Popup, {PopupAnimation} from 'components/ui/Popup';
 import {useForceUpdate} from 'hooks/common';
-import {useUserInfo} from 'hooks/selectors';
+import {useUserInfo} from 'modules/user/user.hooks';
 import React, {useCallback, useEffect, useRef} from 'react';
 import {PaymentReq} from 'types/dtos';
 import {CourseInfo} from 'types/entities';

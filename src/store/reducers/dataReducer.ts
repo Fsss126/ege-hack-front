@@ -34,8 +34,6 @@ export type KnowledgeBaseSubject = {
 };
 
 export interface DataState {
-  credentials?: DataProperty<Credentials>;
-  userInfo?: DataProperty<AccountInfo>;
   shopCourses?: DataProperty<CourseInfo[]>;
   userCourses?: DataProperty<UserCourseInfo[]>;
   subjects?: DataProperty<SubjectInfo[]>;
@@ -82,8 +80,6 @@ export interface DataState {
 }
 
 const defaultState: DataState = {
-  credentials: Auth.getCredentials(),
-  userInfo: undefined,
   shopCourses: undefined,
   userCourses: undefined,
   subjects: undefined,
@@ -116,50 +112,6 @@ export const dataReducer: Reducer<DataState, Action> = (
   action,
 ): DataState => {
   switch (action.type) {
-    case ActionType.LOG_IN_REQUEST: {
-      return {
-        ...state,
-        credentials: undefined,
-      };
-    }
-    case ActionType.LOG_IN_SUCCESS: {
-      const {credentials} = action;
-
-      return {
-        ...state,
-        credentials,
-      };
-    }
-    case ActionType.LOG_IN_ERROR: {
-      const {error} = action;
-
-      return {
-        ...state,
-        credentials: error,
-      };
-    }
-    case ActionType.LOG_OUT: {
-      return {
-        ...defaultState,
-        credentials: undefined,
-      };
-    }
-    case ActionType.USER_INFO_FETCHED: {
-      const {userInfo} = action;
-
-      return {
-        ...state,
-        userInfo,
-      };
-    }
-    case ActionType.USER_INFO_REVOKE: {
-      const {responseInfo} = action;
-
-      return {
-        ...state,
-        userInfo: responseInfo,
-      };
-    }
     case ActionType.SHOP_COURSES_FETCHED: {
       const {courses} = action;
 

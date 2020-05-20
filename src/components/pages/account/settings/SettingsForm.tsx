@@ -12,12 +12,12 @@ import Form, {
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {OptionShape} from 'components/ui/input/Select';
-import {useRevokeUserInfo} from 'hooks/selectors';
+import {useRevokeUserInfo} from 'modules/user/user.hooks';
 import {
   getGraduationYearByGrade,
   LAST_GRADE,
   MIDDLE_SCHOOL_FIRST_GRADE,
-} from 'modules/userInfo/userInfo.utils';
+} from 'modules/user/user.utils';
 import React, {useCallback, useRef} from 'react';
 import {AccountDtoReq} from 'types/dtos';
 import {AccountInfo, PupilInfo, TeacherInfo} from 'types/entities';

@@ -29,6 +29,18 @@ declare global {
     // tslint:disable-next-line:ban-types
     export type DeepPartial<T> = T extends Function ? T : (T extends object ? { [P in keyof T]?: DeepPartial<T[P]>; } : T);
 
+    declare type AnyAction<T = unknown> = {
+        type: string;
+        payload?: T;
+    };
+
+    declare type TypedAction<TActionModule> = {
+        // tslint:disable-next-line:ban-types
+        [P in keyof TActionModule]: TActionModule[P] extends Function
+          ? ReturnType<TActionModule[P]>
+          : never;
+    }[keyof TActionModule];
+
     declare type Yield<T> = T extends import('redux-saga').EventChannel<infer U1>
       ? U1
       : ReturnType<T> extends Promise<infer U2>

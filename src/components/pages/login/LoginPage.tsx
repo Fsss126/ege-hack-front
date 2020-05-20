@@ -2,7 +2,7 @@ import Page from 'components/layout/Page';
 import Auth from 'definitions/auth';
 import {DEFAULT_LOGIN_REDIRECT} from 'definitions/constants';
 import {getCurrentUrl} from 'definitions/helpers';
-import {useCredentials} from 'hooks/selectors';
+import {useCredentials} from 'modules/user/user.hooks';
 import React, {useCallback, useEffect} from 'react';
 import {StaticContext} from 'react-router';
 import {Redirect, RouteComponentProps} from 'react-router-dom';

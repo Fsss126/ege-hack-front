@@ -50,7 +50,7 @@ import {
   VkUserInfo,
 } from 'types/entities';
 
-import {getGradeByGraduationYear} from '../modules/userInfo/userInfo.utils';
+import {getGradeByGraduationYear} from '../modules/user/user.utils';
 import {API_ROOT} from './index';
 
 export const getVideoLink = (videoId: string) =>

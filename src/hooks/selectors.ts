@@ -1,16 +1,10 @@
 import APIRequest, {getCancelToken} from 'api';
 import {AxiosError, Canceler} from 'axios';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import Auth, {
-  AuthErrorCallback,
-  AuthEventTypes,
-  AuthLoginCallback,
-  AuthLogoutCallback,
-  AuthSuccessCallback,
-} from 'definitions/auth';
 import _ from 'lodash';
+import {useCredentials} from 'modules/user/user.hooks';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {useDispatch, useSelector as useSelectorGen} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
 import {
@@ -42,10 +36,10 @@ import {
   WebinarDeleteErrorCallback,
 } from 'store/actions';
 import {AppState} from 'store/reducers';
+import {DataProperty, KnowledgeBaseSubject} from 'store/reducers/dataReducer';
 import {
   selectAdminCourses,
   selectAdminWebinars,
-  selectCredentials,
   selectHomeworks,
   selectKnowledgeMap,
   selectKnowledgeTasks,
@@ -64,7 +58,6 @@ import {
   selectUpcomingWebinars,
   selectUserCourses,
   selectUserHomeworks,
-  selectUserInfo,
   selectUsers,
   selectUserTeachers,
   selectWebinars,
@@ -73,7 +66,6 @@ import {
   AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
-  Credentials,
   DiscountInfo,
   HomeworkInfo,
   KnowledgeLevelInfo,
@@ -93,98 +85,14 @@ import {
   WebinarScheduleInfo,
 } from 'types/entities';
 import {AccountRole, Permission} from 'types/enums';
-import {SimpleCallback} from 'types/utility/common';
-
-import {
-  DataProperty,
-  KnowledgeBaseSubject,
-} from '../store/reducers/dataReducer';
 import {
   getKnowledgeSubjectContent,
   getKnowledgeTree,
   getSubjectNodeId,
   getThemeNodeId,
   KnowledgeTreeEntity,
-} from '../types/knowledgeTree';
-
-const useSelector = <TSelected>(
-  selector: (state: AppState) => TSelected,
-  equalityFn?: (left: TSelected, right: TSelected) => boolean,
-): TSelected => useSelectorGen(selector, equalityFn);
-
-export function useUserAuth(): void {
-  const dispatch = useDispatch();
-
-  React.useLayoutEffect(() => {
-    const loginCallback: AuthLoginCallback = () => {
-      dispatch({type: ActionType.LOG_IN_REQUEST});
-    };
-    const successCallback: AuthSuccessCallback = (credentials) => {
-      dispatch({type: ActionType.LOG_IN_SUCCESS, credentials});
-      dispatch({type: ActionType.USER_INFO_FETCH});
-    };
-    const errorCallback: AuthErrorCallback = (error) => {
-      dispatch({type: ActionType.LOG_IN_ERROR, error});
-    };
-    const logoutCallback: AuthLogoutCallback = (): void => {
-      dispatch({type: ActionType.LOG_OUT});
-    };
-
-    Auth.subscribe(AuthEventTypes.login, loginCallback);
-    Auth.subscribe(AuthEventTypes.success, successCallback);
-    Auth.subscribe(AuthEventTypes.error, errorCallback);
-    Auth.subscribe(AuthEventTypes.logout, logoutCallback);
-
-    return (): void => {
-      Auth.unsubscribe(AuthEventTypes.login, loginCallback);
-      Auth.unsubscribe(AuthEventTypes.success, successCallback);
-      Auth.unsubscribe(AuthEventTypes.error, errorCallback);
-      Auth.unsubscribe(AuthEventTypes.logout, logoutCallback);
-    };
-  }, [dispatch]);
-}
-
-export type CredentialsHookResult = {
-  credentials?: Credentials;
-  error?: AxiosError;
-};
-
-export function useCredentials(): CredentialsHookResult {
-  const credentials = useSelector(selectCredentials);
-
-  return credentials instanceof Error ? {error: credentials} : {credentials};
-}
-
-export type UserInfoHookResult = {
-  userInfo?: AccountInfo;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useUserInfo(): UserInfoHookResult {
-  const userInfo = useSelector(selectUserInfo);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.USER_INFO_FETCH});
-  }, [dispatch]);
-
-  return userInfo instanceof Error
-    ? {error: userInfo, reload: dispatchFetchAction}
-    : {userInfo, reload: dispatchFetchAction};
-}
-
-export type RevokeUserInfoHookResult = (responseInfo: AccountInfo) => void;
-
-export function useRevokeUserInfo(): RevokeUserInfoHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseInfo: AccountInfo) => {
-      dispatch({type: ActionType.USER_INFO_REVOKE, responseInfo});
-    },
-    [dispatch],
-  );
-}
+} from 'types/knowledgeTree';
+import {SimpleCallback} from 'types/utility/common';
 
 export type SubjectsHookResult = {
   subjects?: SubjectInfo[];

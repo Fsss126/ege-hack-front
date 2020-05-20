@@ -1,6 +1,6 @@
 import {getIsFeatureEnabled, TOGGLE_FEATURES} from 'definitions/constants';
-import {useUserInfo} from 'hooks/selectors';
 import _ from 'lodash';
+import {useUserInfo} from 'modules/user/user.hooks';
 import React from 'react';
 import {AccountInfo} from 'types/entities';
 

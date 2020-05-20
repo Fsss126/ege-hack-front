@@ -23,15 +23,9 @@ import {
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
 
+import {UserAction} from '../modules/user/user.reducers';
+
 export enum ActionType {
-  LOG_IN = 'LOG_IN',
-  LOG_IN_REQUEST = 'LOG_IN_REQUEST',
-  LOG_IN_SUCCESS = 'LOG_IN_SUCCESS',
-  LOG_IN_ERROR = 'LOG_IN_ERROR',
-  LOG_OUT = 'LOG_OUT',
-  USER_INFO_FETCH = 'USER_INFO_FETCH',
-  USER_INFO_FETCHED = 'USER_INFO_FETCHED',
-  USER_INFO_REVOKE = 'USER_INFO_REVOKE',
   SHOP_COURSES_FETCH = 'SHOP_COURSES_FETCH',
   SHOP_COURSES_FETCHED = 'SHOP_COURSES_FETCHED',
   USER_COURSES_FETCH = 'USER_COURSES_FETCH',
@@ -110,39 +104,6 @@ export enum ActionType {
   KNOWLEDGE_TEST_DELETE_REQUEST = 'KNOWLEDGE_TEST_DELETE_REQUEST',
   KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
-
-interface Credentials {
-  access_token: string;
-  refresh_token: string;
-}
-
-export type LoginAction = {type: ActionType.LOG_IN};
-
-export type LoginRequestAction = {type: ActionType.LOG_IN_REQUEST};
-
-export type LoginSuccessAction = {
-  type: ActionType.LOG_IN_SUCCESS;
-  credentials: Credentials;
-};
-
-export type LoginErrorAction = {
-  type: ActionType.LOG_IN_ERROR;
-  error: AxiosError;
-};
-
-export type LogoutAction = {type: ActionType.LOG_OUT};
-
-export type UserInfoFetchAction = {type: ActionType.USER_INFO_FETCH};
-
-export type UserInfoFetchedAction = {
-  type: ActionType.USER_INFO_FETCHED;
-  userInfo: AccountInfo | AxiosError;
-};
-
-export type UserInfoRevokeAction = {
-  type: ActionType.USER_INFO_REVOKE;
-  responseInfo: AccountInfo;
-};
 
 export type ShopCoursesFetchAction = {type: ActionType.SHOP_COURSES_FETCH};
 
@@ -750,15 +711,8 @@ export type KnowledgeTestDeleteAction = {
   testId: number;
 };
 
-export type Action = {type: ActionType} & (
-  | LoginAction
-  | LoginRequestAction
-  | LoginSuccessAction
-  | LoginErrorAction
-  | LogoutAction
-  | UserInfoFetchAction
-  | UserInfoFetchedAction
-  | UserInfoRevokeAction
+export type Action =
+  | UserAction
   | ShopCoursesFetchAction
   | ShopCoursesFetchedAction
   | AdminCoursesFetchAction
@@ -835,5 +789,4 @@ export type Action = {type: ActionType} & (
   | KnowledgeTestFetchedAction
   | KnowledgeTestRevokeAction
   | KnowledgeTestDeleteRequestAction
-  | KnowledgeTestDeleteAction
-);
+  | KnowledgeTestDeleteAction;

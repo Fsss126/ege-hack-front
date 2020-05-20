@@ -1,12 +1,11 @@
 /*eslint-disable @typescript-eslint/unbound-method*/
-import {TakeableChannel} from '@redux-saga/core';
-import Auth from 'definitions/auth';
 import {
   actionChannel,
   ActionPattern,
   all,
   call,
   delay,
+  fork,
   put as putEffect,
   PutEffect,
   select,
@@ -40,6 +39,7 @@ import {
 import {takeLeadingPerKey} from 'utils/sagaHelpers';
 
 import APIRequest from '../api';
+import {userSaga} from '../modules/user/user.sagas';
 import {AccountsRoleReq, UserAnswerDtoReq} from '../types/dtos';
 import {
   AccountsDeleteRequestAction,
@@ -76,19 +76,11 @@ import {
   WebinarDeleteRequestAction,
 } from './actions';
 import {AppState} from './reducers';
+import {waitForLogin} from './sagas/watchers';
 
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
 const put = (action: Action): PutEffect<Action> => putEffect<Action>(action);
-
-function* waitForLogin<A extends Action = Action>(
-  pattern: ActionPattern<A>,
-  saga: (channel: TakeableChannel<A>) => Generator,
-) {
-  const channel = yield actionChannel(pattern);
-  yield take([ActionType.LOG_IN, ActionType.LOG_IN_SUCCESS]);
-  yield spawn(saga, channel);
-}
 
 function* fetchSubjects() {
   yield* waitForLogin(ActionType.SUBJECTS_FETCH, function* (channel) {
@@ -100,17 +92,6 @@ function* fetchSubjects() {
         yield put({type: ActionType.SUBJECTS_FETCHED, subjects: error});
       }
     });
-  });
-}
-
-function* fetchUserInfo() {
-  yield takeLeading([ActionType.USER_INFO_FETCH], function* () {
-    try {
-      const userInfo: AccountInfo = yield call(Auth.getUserInfo);
-      yield put({type: ActionType.USER_INFO_FETCHED, userInfo});
-    } catch (error) {
-      yield put({type: ActionType.USER_INFO_FETCHED, userInfo: error});
-    }
   });
 }
 
@@ -1119,19 +1100,8 @@ function* processTestDelete() {
   );
 }
 
-function* init() {
-  const credentials = yield select(
-    (state: AppState) => state.dataReducer.credentials,
-  );
-
-  if (credentials) {
-    yield put({type: ActionType.LOG_IN});
-    yield put({type: ActionType.USER_INFO_FETCH});
-  }
-}
-
 export default function* rootSaga() {
-  yield spawn(fetchUserInfo);
+  yield fork(userSaga);
 
   yield spawn(fetchShopCourses);
   yield spawn(fetchUserCourses);
@@ -1169,5 +1139,4 @@ export default function* rootSaga() {
   yield spawn(processTestStart);
   yield spawn(processTestComplete);
   yield spawn(processTestSaveAnswer);
-  yield spawn(init);
 }

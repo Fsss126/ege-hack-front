@@ -20,12 +20,12 @@ function setCredentialsToStorage(credentials: Credentials): void {
   );
 }
 
-function getCredentialsFromStorage(): Maybe<Credentials> {
+function getCredentialsFromStorage(): Nullable<Credentials> {
   try {
     const storedString = localStorage.getItem(LOCAL_STORAGE_KEY);
 
     if (!storedString) {
-      return undefined;
+      return null;
     }
     const credentials = JSON.parse(storedString);
 
@@ -57,7 +57,7 @@ type AuthEventHandlers = {
 };
 
 class Auth {
-  credentials?: Credentials;
+  credentials: Nullable<Credentials> = null;
   userInfo?: AccountInfo;
   eventHandlers: AuthEventHandlers = {};
 
@@ -68,11 +68,11 @@ class Auth {
       this.setCredentials(credentials);
     } catch (e) {
       console.error('Error retrieving credentials from local storage.');
-      this.setCredentials(undefined);
+      this.setCredentials(null);
     }
   }
 
-  setCredentials(credentials: Credentials | undefined): void {
+  setCredentials(credentials: Nullable<Credentials>): void {
     this.credentials = credentials;
   }
 
@@ -82,7 +82,7 @@ class Auth {
 
   onLogout = (): void => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
-    this.credentials = undefined;
+    this.credentials = null;
     this.userInfo = undefined;
     for (const handler of this.eventHandlers[AuthEventTypes.logout] || []) {
       handler();

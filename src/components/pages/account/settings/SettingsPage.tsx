@@ -1,5 +1,5 @@
 import Page, {PageContent} from 'components/layout/Page';
-import {useUserInfo} from 'hooks/selectors';
+import {useUserInfo} from 'modules/user/user.hooks';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {AccountRole} from 'types/enums';

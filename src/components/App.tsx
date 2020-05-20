@@ -2,7 +2,7 @@ import 'styles/index.scss';
 
 import {Location, LocationListener} from 'history';
 import {useToggle} from 'hooks/common';
-import {useUserAuth} from 'hooks/selectors';
+import {useUserAuth} from 'modules/user/user.hooks';
 import React, {
   createContext,
   ReactElement,
