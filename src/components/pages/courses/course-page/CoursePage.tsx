@@ -3,8 +3,9 @@ import Lesson from 'components/common/Lesson';
 import WebinarSchedule from 'components/common/WebinarSchedule';
 import {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
-import {useCourseWebinars, useLessons, useUserTeachers} from 'hooks/selectors';
+import {useCourseWebinars, useLessons} from 'hooks/selectors';
 import {useUserCourse} from 'modules/courses/courses.hooks';
+import {useTeachers} from 'modules/teachers/teachers.hooks';
 import React from 'react';
 import {
   CoursePageParams,
@@ -32,7 +33,7 @@ const CoursePage: React.FC<RouteComponentPropsWithParentProps<
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useUserTeachers();
+  } = useTeachers();
   const {
     lessons,
     error: errorLoadingLessons,

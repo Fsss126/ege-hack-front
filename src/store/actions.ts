@@ -23,9 +23,9 @@ import {
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
 
+import {TeachersAction} from '../modules/teachers/teachers.reducers';
+
 export enum ActionType {
-  USER_TEACHERS_FETCH = 'USER_TEACHERS_FETCH',
-  USER_TEACHERS_FETCHED = 'USER_TEACHERS_FETCHED',
   ACCOUNTS_FETCH = 'ACCOUNTS_FETCH',
   ACCOUNTS_FETCHED = 'ACCOUNTS_FETCHED',
   ACCOUNTS_REVOKE = 'ACCOUNTS_REVOKE',
@@ -88,13 +88,6 @@ export enum ActionType {
   KNOWLEDGE_TEST_DELETE_REQUEST = 'KNOWLEDGE_TEST_DELETE_REQUEST',
   KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
-
-export type UserTeachersFetchAction = {type: ActionType.USER_TEACHERS_FETCH};
-
-export type UserTeachersFetchedAction = {
-  type: ActionType.USER_TEACHERS_FETCHED;
-  teachers: TeacherProfileInfo[] | AxiosError;
-};
 
 export type AccountsFetchAction = {
   type: ActionType.ACCOUNTS_FETCH;
@@ -614,8 +607,7 @@ export type Action =
   | UserAction
   | SubjectsAction
   | CoursesAction
-  | UserTeachersFetchAction
-  | UserTeachersFetchedAction
+  | TeachersAction
   | AccountsFetchAction
   | AccountsFetchedAction
   | AccountsRevokeAction

@@ -103,14 +103,6 @@ export const dataReducer: Reducer<DataState, Action> = (
   action,
 ): DataState => {
   switch (action.type) {
-    case ActionType.USER_TEACHERS_FETCHED: {
-      const {teachers} = action;
-
-      return {
-        ...state,
-        userTeachers: teachers,
-      };
-    }
     case ActionType.ACCOUNTS_FETCHED: {
       const {accounts, role} = action;
 

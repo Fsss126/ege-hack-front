@@ -52,7 +52,6 @@ import {
   selectUpcomingWebinars,
   selectUserHomeworks,
   selectUsers,
-  selectUserTeachers,
   selectWebinars,
 } from 'store/selectors';
 import {
@@ -68,7 +67,6 @@ import {
   SanitizedTestInfo,
   SubjectInfo,
   TaskInfo,
-  TeacherProfileInfo,
   TestInfo,
   TestResultInfo,
   TestStateInfo,
@@ -149,45 +147,6 @@ export function useDiscount(
   }, [credentials, selectedCourses, error, fetchDiscount]);
 
   return {discount, error, reload: fetchDiscount, isLoading};
-}
-
-export type UserTeachersHookResult = {
-  teachers?: TeacherProfileInfo[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useUserTeachers(): UserTeachersHookResult {
-  const teachers = useSelector(selectUserTeachers);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.USER_TEACHERS_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (!teachers) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, teachers]);
-  return teachers instanceof Error
-    ? {error: teachers, reload: dispatchFetchAction}
-    : {teachers, reload: dispatchFetchAction};
-}
-
-export type UserTeacherHookResult = {
-  teacher?: TeacherProfileInfo;
-  error?: AxiosError | true;
-  reload: SimpleCallback;
-};
-
-export function useUserTeacher(teacherId: number): UserTeacherHookResult {
-  const {teachers, error, reload} = useUserTeachers();
-  const teacher = teachers ? _.find(teachers, {id: teacherId}) : undefined;
-
-  return {
-    teacher,
-    error: teachers && !teacher ? true : error,
-    reload,
-  };
 }
 
 export type AccountsHookResult = {

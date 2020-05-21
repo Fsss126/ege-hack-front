@@ -1,8 +1,9 @@
 import CourseOverview from 'components/common/CourseOverview';
 import Lesson from 'components/common/Lesson';
 import {PageContent} from 'components/layout/Page';
-import {useDiscount, useLessons, useUserTeachers} from 'hooks/selectors';
+import {useDiscount, useLessons} from 'hooks/selectors';
 import {useShopCourse} from 'modules/courses/courses.hooks';
+import {useTeachers} from 'modules/teachers/teachers.hooks';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
 import {
@@ -41,7 +42,7 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useUserTeachers();
+  } = useTeachers();
   const {
     lessons,
     error: errorLoadingLessons,

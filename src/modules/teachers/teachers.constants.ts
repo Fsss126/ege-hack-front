@@ -1,0 +1,4 @@
+export enum ETeachersAction {
+  TEACHERS_FETCH = 'TEACHERS_FETCH',
+  TEACHERS_FETCHED = 'TEACHERS_FETCHED',
+}

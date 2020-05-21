@@ -2,6 +2,7 @@
 import APIRequest from 'api';
 import {coursesSaga} from 'modules/courses/courses.sagas';
 import {subjectsSaga} from 'modules/subjects/subjects.sagas';
+import {teachersSaga} from 'modules/teachers/teachers.sagas';
 import {userSaga} from 'modules/user/user.sagas';
 import {
   ActionPattern,
@@ -27,7 +28,6 @@ import {
   LessonInfo,
   PersonWebinar,
   TaskInfo,
-  TeacherProfileInfo,
   TestInfo,
   TestResultInfo,
   TestStateInfo,
@@ -76,22 +76,6 @@ import {waitForLogin} from './sagas/watchers';
 const take = (pattern?: ActionPattern<Action>): TakeEffect =>
   takeEffect<Action>(pattern);
 const put = (action: Action): PutEffect<Action> => putEffect<Action>(action);
-
-function* fetchUserTeachers() {
-  yield* waitForLogin(ActionType.USER_TEACHERS_FETCH, function* (channel) {
-    yield takeLeading(channel, function* () {
-      try {
-        const teachers: TeacherProfileInfo[] = yield call(
-          APIRequest.get,
-          '/accounts/teachers',
-        );
-        yield put({type: ActionType.USER_TEACHERS_FETCHED, teachers});
-      } catch (error) {
-        yield put({type: ActionType.USER_TEACHERS_FETCHED, teachers: error});
-      }
-    });
-  });
-}
 
 function* fetchAccounts() {
   yield* waitForLogin<AccountsFetchAction>(
@@ -973,8 +957,8 @@ export default function* rootSaga() {
   yield fork(userSaga);
   yield fork(subjectsSaga);
   yield fork(coursesSaga);
+  yield fork(teachersSaga);
 
-  yield spawn(fetchUserTeachers);
   yield spawn(fetchUserHomeworks);
   yield spawn(fetchAccounts);
   yield spawn(fetchLessons);

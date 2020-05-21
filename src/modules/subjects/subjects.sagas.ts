@@ -10,7 +10,7 @@ import {
 } from './subjects.actions';
 import {ESubjectsAction} from './subjects.constants';
 
-function* fetchSubjectsInfo() {
+function* fetchSubjects() {
   yield takeLeading([ESubjectsAction.SUBJECTS_FETCH], function* () {
     try {
       const subjects: SubjectInfo[] = yield call(APIRequest.get, '/subjects');
@@ -43,5 +43,5 @@ function* processSubjectDelete() {
 }
 
 export function* subjectsSaga(): any {
-  yield all([fork(fetchSubjectsInfo), fork(processSubjectDelete)]);
+  yield all([fork(fetchSubjects), fork(processSubjectDelete)]);
 }
