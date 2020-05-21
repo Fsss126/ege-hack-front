@@ -13,7 +13,7 @@ const subjects: Reducer<DataProperty<SubjectInfo[]>, SubjectsAction> = (
 ) => {
   switch (action.type) {
     case ESubjectsAction.SUBJECTS_FETCHED: {
-      return action.payload;
+      return action.payload.data;
     }
     case ESubjectsAction.SUBJECTS_REVOKE: {
       const responseSubject = action.payload;

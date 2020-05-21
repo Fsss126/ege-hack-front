@@ -1,22 +1,33 @@
 import {AxiosError} from 'axios';
 
-export const infoActionCreator = <T extends string>(type: T) => {
+export const infoActionCreator = <TType extends string>(type: TType) => {
   return () => ({type} as const);
 };
 
-export const loadedActionCreator = <T extends string, P>(type: T) => {
-  return (payload: P) => ({type, payload} as const);
+export const loadedActionCreator = <TType extends string, TParams>(
+  type: TType,
+) => {
+  return (payload: TParams) => ({type, payload} as const);
 };
 
 export const fetchActionCreator = <
-  T extends string,
-  P extends Record<string, number>
+  TType extends string,
+  TParams extends object
 >(
-  type: T,
+  type: TType,
 ) => {
-  return loadedActionCreator<T, P>(type);
+  return loadedActionCreator<TType, TParams>(type);
 };
 
-export const fetchedActionCreator = <T extends string, P>(type: T) => {
-  return loadedActionCreator<T, P | AxiosError>(type);
+export const fetchedActionCreator = <
+  TType extends string,
+  TPayload,
+  TParams extends object = {}
+>(
+  type: TType,
+) => {
+  return loadedActionCreator<
+    TType,
+    {data: TPayload | AxiosError} & Readonly<TParams>
+  >(type);
 };

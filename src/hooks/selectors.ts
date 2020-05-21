@@ -6,11 +6,9 @@ import {useCredentials} from 'modules/user/user.hooks';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import {Dispatch} from 'redux';
 import {
   AccountsDeleteCallback,
   AccountsDeleteErrorCallback,
-  Action,
   ActionType,
   KnowledgeLevelFetchCallback,
   KnowledgeLevelFetchErrorCallback,
@@ -24,12 +22,6 @@ import {
   LessonDeleteErrorCallback,
   ParticipantDeleteCallback,
   ParticipantDeleteErrorCallback,
-  TestCompleteCallback,
-  TestCompleteErrorCallback,
-  TestSaveAnswerCallback,
-  TestSaveAnswerErrorCallback,
-  TestStartCallback,
-  TestStartErrorCallback,
   WebinarDeleteCallback,
   WebinarDeleteErrorCallback,
 } from 'store/actions';
@@ -45,10 +37,7 @@ import {
   selectLessons,
   selectLessonTests,
   selectParticipants,
-  selectTest,
   selectTestResults,
-  selectTestState,
-  selectTestStatuses,
   selectUpcomingWebinars,
   selectUserHomeworks,
   selectUsers,
@@ -63,14 +52,10 @@ import {
   KnowledgeLevelInfo,
   LessonInfo,
   PersonWebinar,
-  SanitizedTaskInfo,
-  SanitizedTestInfo,
   SubjectInfo,
   TaskInfo,
   TestInfo,
   TestResultInfo,
-  TestStateInfo,
-  TestStatusInfo,
   ThemeInfo,
   UserHomeworkInfo,
   WebinarScheduleInfo,
@@ -634,243 +619,6 @@ export function useDeleteWebinar(
     },
     [dispatch, deleteCallback, onError],
   );
-}
-
-export type StartTestHookResult = (params: {
-  courseId: number;
-  lessonId: number;
-  testId: number;
-  onSuccess?: TestStartCallback;
-  onError?: TestStartErrorCallback;
-}) => void;
-
-export function useStartTest(): StartTestHookResult {
-  const dispatch = useDispatch<Dispatch<Action>>();
-  const history = useHistory();
-
-  return useCallback(
-    (params) => {
-      const {courseId, lessonId, testId, onSuccess, onError} = params;
-      const onSuccessCallback: TestStartCallback = (
-        testId,
-        testState,
-        test,
-      ) => {
-        const {last_task_id, is_completed: isCompleted} = testState;
-        const {tasks} = test;
-        const testUrl = `/courses/${courseId}/${lessonId}/test/${testId}`;
-        const taskId = last_task_id !== undefined ? last_task_id : tasks[0].id;
-
-        if (onSuccess) {
-          onSuccess(testId, testState, test);
-        }
-
-        history.push(
-          isCompleted ? `${testUrl}/results/` : `${testUrl}/${taskId}/`,
-        );
-      };
-
-      dispatch({
-        type: ActionType.TEST_START_REQUEST,
-        testId,
-        courseId,
-        lessonId,
-        onSuccess: onSuccessCallback,
-        onError,
-      });
-    },
-    [dispatch, history],
-  );
-}
-
-export type SaveAnswerHookResult = (params: {
-  testId: number;
-  taskId: number;
-  lessonId: number;
-  courseId: number;
-  answer: string;
-  complete: boolean;
-  navigateTo: string;
-  onSuccess: TestSaveAnswerCallback;
-  onError: TestSaveAnswerErrorCallback;
-}) => void;
-
-export function useSaveAnswer(): SaveAnswerHookResult {
-  const dispatch = useDispatch<Dispatch<Action>>();
-  const history = useHistory();
-
-  return useCallback(
-    (params) => {
-      const {
-        testId,
-        taskId,
-        lessonId,
-        courseId,
-        answer,
-        complete,
-        navigateTo,
-        onSuccess,
-        onError,
-      } = params;
-      const onSuccessCallback: TestSaveAnswerCallback = (
-        testId,
-        taskId,
-        savedAnswer,
-      ) => {
-        onSuccess(testId, taskId, savedAnswer);
-        history.push(navigateTo);
-      };
-
-      dispatch({
-        type: ActionType.TEST_SAVE_ANSWER_REQUEST,
-        testId,
-        taskId,
-        lessonId,
-        courseId,
-        answer,
-        complete,
-        onSuccess: onSuccessCallback,
-        onError,
-      });
-    },
-    [dispatch, history],
-  );
-}
-
-export type CompleteTestHookResult = (params: {
-  testId: number;
-  lessonId: number;
-  courseId: number;
-  navigateTo: string;
-  onSuccess: TestCompleteCallback;
-  onError: TestCompleteErrorCallback;
-}) => void;
-
-export function useCompleteTest(): CompleteTestHookResult {
-  const dispatch = useDispatch<Dispatch<Action>>();
-  const history = useHistory();
-
-  return useCallback(
-    (params) => {
-      const {
-        testId,
-        lessonId,
-        courseId,
-        navigateTo,
-        onSuccess,
-        onError,
-      } = params;
-      const onSuccessCallback: TestCompleteCallback = (testId, results) => {
-        onSuccess(testId, results);
-        history.push(navigateTo);
-      };
-
-      dispatch({
-        type: ActionType.TEST_COMPLETE_REQUEST,
-        testId,
-        lessonId,
-        courseId,
-        onSuccess: onSuccessCallback,
-        onError,
-      });
-    },
-    [dispatch, history],
-  );
-}
-
-export type TestStatusHookResult = {
-  status?: TestStatusInfo | null;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useTestStatus(
-  courseId: number,
-  lessonId: number,
-): TestStatusHookResult {
-  const status = useSelector(selectTestStatuses)[lessonId];
-  const dispatch = useDispatch<Dispatch<Action>>();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEST_STATUS_FETCH, courseId, lessonId});
-  }, [dispatch, courseId, lessonId]);
-  useEffect(() => {
-    if (!status) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, status]);
-  return status instanceof Error
-    ? {error: status, reload: dispatchFetchAction}
-    : {status, reload: dispatchFetchAction};
-}
-
-export type TestHookResult = {
-  test?: SanitizedTestInfo;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useTest(testId: number): TestHookResult {
-  const test = useSelector(selectTest);
-  const dispatch = useDispatch<Dispatch<Action>>();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEST_FETCH, testId});
-  }, [testId, dispatch]);
-  useEffect(() => {
-    if (!test) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, test]);
-  return test instanceof Error
-    ? {error: test, reload: dispatchFetchAction}
-    : {test, reload: dispatchFetchAction};
-}
-
-export type TestTaskHookResult = {
-  task?: SanitizedTaskInfo;
-  error?: AxiosError | true;
-  reload: SimpleCallback;
-};
-
-export function useTestTask(
-  testId: number,
-  taskId: number,
-): TestTaskHookResult {
-  const {test, error, reload} = useTest(testId);
-  const task = test
-    ? _.find<SanitizedTaskInfo>(test.tasks, {id: taskId})
-    : undefined;
-
-  return {
-    task,
-    error: test && !task ? true : error,
-    reload,
-  };
-}
-
-export type TestStateHookResult = {
-  state?: TestStateInfo;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useTestState(
-  testId: number,
-  lessonId: number,
-  courseId: number,
-): TestStateHookResult {
-  const state = useSelector(selectTestState);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEST_STATE_FETCH, testId, lessonId, courseId});
-  }, [dispatch, testId, lessonId, courseId]);
-  useEffect(() => {
-    if (!state) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, state]);
-  return state instanceof Error
-    ? {error: state, reload: dispatchFetchAction}
-    : {state, reload: dispatchFetchAction};
 }
 
 export type TestResultsHookResult = {

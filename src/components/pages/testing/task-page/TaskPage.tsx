@@ -1,5 +1,9 @@
 import Page, {PageContent} from 'components/layout/Page';
-import {useTest, useTestState, useTestTask} from 'hooks/selectors';
+import {
+  useTest,
+  useTestState,
+  useTestTask,
+} from 'modules/testing/testing.hooks';
 import React from 'react';
 import {
   RouteComponentPropsWithParentProps,

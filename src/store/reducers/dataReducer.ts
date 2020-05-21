@@ -1,22 +1,17 @@
 import {AxiosError} from 'axios';
-import Auth from 'definitions/auth';
 import _ from 'lodash';
 import {Reducer} from 'redux';
 import {
   AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
-  Credentials,
   HomeworkInfo,
   LessonInfo,
   PersonWebinar,
-  SubjectInfo,
   TaskInfo,
-  TeacherProfileInfo,
   TestInfo,
   TestResultInfo,
   ThemeInfo,
-  UserCourseInfo,
   UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
@@ -34,7 +29,6 @@ export type KnowledgeBaseSubject = {
 };
 
 export interface DataState {
-  userTeachers?: DataProperty<TeacherProfileInfo[]>;
   userHomeworks: {
     [courseId: number]: {
       [lessonId: number]: DataProperty<UserHomeworkInfo | null>;
@@ -121,8 +115,8 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         users: {...state.users, [role]: responseAccounts},
-        userTeachers:
-          role === AccountRole.TEACHER ? undefined : state.userTeachers,
+        // userTeachers:
+        //   role === AccountRole.TEACHER ? undefined : state.userTeachers,
       };
     }
     case ActionType.LESSONS_FETCHED: {

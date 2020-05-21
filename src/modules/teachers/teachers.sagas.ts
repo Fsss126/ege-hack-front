@@ -10,13 +10,13 @@ function* fetchTeachers() {
   yield* waitForLogin(ETeachersAction.TEACHERS_FETCH, function* (channel) {
     yield takeLeading(channel, function* () {
       try {
-        const teachers: TeacherProfileInfo[] = yield call(
+        const data: TeacherProfileInfo[] = yield call(
           APIRequest.get,
           '/accounts/teachers',
         );
-        yield put(teachersFetched(teachers));
+        yield put(teachersFetched({data}));
       } catch (error) {
-        yield put(teachersFetched(error));
+        yield put(teachersFetched({data: error}));
       }
     });
   });

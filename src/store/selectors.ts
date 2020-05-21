@@ -25,13 +25,6 @@ export const selectWebinars = (state: AppState) =>
 export const selectUpcomingWebinars = (state: AppState) =>
   selectWebinars(state).upcoming;
 
-export const selectTestStatuses = (state: AppState) =>
-  state.testReducer.statuses;
-
-export const selectTest = (state: AppState) => state.testReducer.test;
-
-export const selectTestState = (state: AppState) => state.testReducer.state;
-
 export const selectKnowledgeTasks = (state: AppState) =>
   selectDataReducer(state).tasks;
 

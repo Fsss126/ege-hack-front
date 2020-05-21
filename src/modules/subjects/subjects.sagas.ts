@@ -13,10 +13,10 @@ import {ESubjectsAction} from './subjects.constants';
 function* fetchSubjects() {
   yield takeLeading([ESubjectsAction.SUBJECTS_FETCH], function* () {
     try {
-      const subjects: SubjectInfo[] = yield call(APIRequest.get, '/subjects');
-      yield put(subjectsFetched(subjects));
+      const data: SubjectInfo[] = yield call(APIRequest.get, '/subjects');
+      yield put(subjectsFetched({data}));
     } catch (error) {
-      yield put(subjectsFetched(error));
+      yield put(subjectsFetched({data: error}));
     }
   });
 }

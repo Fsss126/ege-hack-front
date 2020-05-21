@@ -9,7 +9,7 @@ import {
 } from 'components/ui/Form';
 import {useLoadingState} from 'components/ui/LoadingIndicator';
 import MessagePopup from 'components/ui/MessagePopup';
-import {useCompleteTest, useSaveAnswer} from 'hooks/selectors';
+import {useCompleteTest, useSaveAnswer} from 'modules/testing/testing.hooks';
 import React, {useCallback, useRef, useState} from 'react';
 import {FileInfo} from 'types/dtos';
 import {

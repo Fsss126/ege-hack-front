@@ -1,6 +1,8 @@
 import {AxiosError} from 'axios';
 import {CoursesAction} from 'modules/courses/courses.reducers';
 import {SubjectsAction} from 'modules/subjects/subjects.reducers';
+import {TeachersAction} from 'modules/teachers/teachers.reducers';
+import {TestingAction} from 'modules/testing/testing.reducers';
 import {UserAction} from 'modules/user/user.reducers';
 import {
   AccountInfo,
@@ -10,20 +12,13 @@ import {
   LessonInfo,
   PersonWebinar,
   TaskInfo,
-  TeacherProfileInfo,
   TestInfo,
   TestResultInfo,
-  TestStateAnswerInfo,
-  TestStateInfo,
-  TestStatePassedInfo,
-  TestStatusInfo,
   ThemeInfo,
   UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
-
-import {TeachersAction} from '../modules/teachers/teachers.reducers';
 
 export enum ActionType {
   ACCOUNTS_FETCH = 'ACCOUNTS_FETCH',
@@ -58,16 +53,6 @@ export enum ActionType {
   WEBINARS_REVOKE = 'WEBINARS_REVOKE',
   WEBINAR_DELETE_REQUEST = 'WEBINAR_DELETE_REQUEST',
   WEBINAR_DELETE = 'WEBINAR_DELETE',
-  TEST_START_REQUEST = 'TEST_START_REQUEST',
-  TEST_FETCH = 'TEST_FETCH',
-  TEST_FETCHED = 'TEST_FETCHED',
-  TEST_COMPLETE_REQUEST = 'TEST_COMPLETE_REQUEST',
-  TEST_STATUS_FETCH = 'TEST_STATUS_FETCH',
-  TEST_STATUS_FETCHED = 'TEST_STATUS_FETCHED',
-  TEST_STATE_FETCH = 'TEST_STATE_FETCH',
-  TEST_STATE_FETCHED = 'TEST_STATE_FETCHED',
-  TEST_SAVE_ANSWER_REQUEST = 'TEST_SAVE_ANSWER_REQUEST',
-  TEST_SAVE_ANSWER = 'TEST_SAVE_ANSWER',
   TEST_RESULTS_FETCH = 'TEST_RESULTS_FETCH',
   TEST_RESULTS_FETCHED = 'TEST_RESULTS_FETCHED',
   KNOWLEDGE_LEVEL_FETCH = 'KNOWLEDGE_LEVEL_FETCH',
@@ -309,119 +294,6 @@ export type WebinarDeleteAction = {
   responseWebinars: WebinarScheduleInfo;
 };
 
-export type TestStartCallback = (
-  testId: number,
-  testInfo: TestStateInfo,
-  test: TestInfo,
-) => void;
-
-export type TestStartErrorCallback = (
-  testId: number,
-  error: AxiosError,
-) => void;
-
-export type TestStartRequestAction = {
-  type: ActionType.TEST_START_REQUEST;
-  testId: number;
-  lessonId: number;
-  courseId: number;
-  onSuccess?: TestStartCallback;
-  onError?: TestStartErrorCallback;
-};
-
-export type TestFetchAction = {
-  type: ActionType.TEST_FETCH;
-  testId: number;
-};
-
-export type TestFetchedAction = {
-  type: ActionType.TEST_FETCHED;
-  testId: number;
-  test: TestInfo | AxiosError;
-};
-
-export type TestCompleteCallback = (
-  testId: number,
-  results: TestStatePassedInfo,
-) => void;
-
-export type TestCompleteErrorCallback = (
-  testId: number,
-  error: AxiosError,
-) => void;
-
-export type TestCompleteRequestAction = {
-  type: ActionType.TEST_COMPLETE_REQUEST;
-  testId: number;
-  lessonId: number;
-  courseId: number;
-  onSuccess?: TestCompleteCallback;
-  onError?: TestCompleteErrorCallback;
-};
-
-export type TestStatusFetchAction = {
-  type: ActionType.TEST_STATUS_FETCH;
-  // testId: number;
-  lessonId: number;
-  courseId: number;
-};
-
-export type TestStatusFetchedAction = {
-  type: ActionType.TEST_STATUS_FETCHED;
-  // testId: number;
-  lessonId: number;
-  courseId: number;
-  status: TestStatusInfo | null | AxiosError;
-};
-
-export type TestStateFetchAction = {
-  type: ActionType.TEST_STATE_FETCH;
-  testId: number;
-  lessonId: number;
-  courseId: number;
-};
-
-export type TestStateFetchedAction = {
-  type: ActionType.TEST_STATE_FETCHED;
-  testId: number;
-  lessonId: number;
-  courseId: number;
-  state: TestStateInfo | AxiosError;
-};
-
-export type TestSaveAnswerCallback = (
-  testId: number,
-  taskId: number,
-  savedAnswer: TestStateAnswerInfo,
-) => void;
-
-export type TestSaveAnswerErrorCallback = (
-  testId: number,
-  taskId: number,
-  error: AxiosError,
-) => void;
-
-export type TestSaveAnswerRequestAction = {
-  type: ActionType.TEST_SAVE_ANSWER_REQUEST;
-  testId: number;
-  taskId: number;
-  lessonId: number;
-  courseId: number;
-  answer: string;
-  complete: boolean;
-  onSuccess?: TestSaveAnswerCallback;
-  onError?: TestSaveAnswerErrorCallback;
-};
-
-export type TestSaveAnswerAction = {
-  type: ActionType.TEST_SAVE_ANSWER;
-  testId: number;
-  taskId: number;
-  lessonId: number;
-  courseId: number;
-  answerInfo: TestStateAnswerInfo;
-};
-
 export type TestResultsFetchAction = {
   type: ActionType.TEST_RESULTS_FETCH;
   testId: number;
@@ -608,6 +480,7 @@ export type Action =
   | SubjectsAction
   | CoursesAction
   | TeachersAction
+  | TestingAction
   | AccountsFetchAction
   | AccountsFetchedAction
   | AccountsRevokeAction
@@ -638,18 +511,8 @@ export type Action =
   | WebinarsRevokeAction
   | WebinarDeleteRequestAction
   | WebinarDeleteAction
-  | TestStartRequestAction
-  | TestStatusFetchAction
-  | TestStatusFetchedAction
-  | TestFetchAction
-  | TestFetchedAction
-  | TestCompleteRequestAction
-  | TestStateFetchAction
-  | TestStateFetchedAction
   | TestResultsFetchAction
   | TestResultsFetchedAction
-  | TestSaveAnswerRequestAction
-  | TestSaveAnswerAction
   | KnowledgeLevelFetchAction
   | KnowledgeLevelFetchedAction
   | KnowledgeThemeFetchAction

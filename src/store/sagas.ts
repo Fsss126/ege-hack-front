@@ -6,20 +6,17 @@ import {teachersSaga} from 'modules/teachers/teachers.sagas';
 import {userSaga} from 'modules/user/user.sagas';
 import {
   ActionPattern,
-  all,
   call,
-  delay,
   fork,
   put as putEffect,
   PutEffect,
-  select,
   spawn,
   take as takeEffect,
   TakeEffect,
   takeEvery,
   takeLeading,
 } from 'redux-saga/effects';
-import {AccountsRoleReq, UserAnswerDtoReq} from 'types/dtos';
+import {AccountsRoleReq} from 'types/dtos';
 import {
   AccountInfo,
   CourseParticipantInfo,
@@ -30,15 +27,13 @@ import {
   TaskInfo,
   TestInfo,
   TestResultInfo,
-  TestStateInfo,
-  TestStatePassedInfo,
-  TestStatusInfo,
   ThemeInfo,
   UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {takeLeadingPerKey} from 'utils/sagaHelpers';
 
+import {testingSaga} from '../modules/testing/testing.sagas';
 import {
   AccountsDeleteRequestAction,
   AccountsFetchAction,
@@ -58,15 +53,7 @@ import {
   LessonsFetchAction,
   ParticipantDeleteRequestAction,
   ParticipantsFetchAction,
-  TestCompleteRequestAction,
-  TestFetchAction,
-  TestFetchedAction,
   TestResultsFetchAction,
-  TestSaveAnswerRequestAction,
-  TestStartRequestAction,
-  TestStateFetchAction,
-  TestStateFetchedAction,
-  TestStatusFetchAction,
   UpcomingWebinarsFetchAction,
   UserHomeworksFetchAction,
   WebinarDeleteRequestAction,
@@ -453,246 +440,6 @@ function* processWebinarDelete() {
   );
 }
 
-function* fetchTest() {
-  yield* waitForLogin<TestFetchAction>(ActionType.TEST_FETCH, function* (
-    channel,
-  ) {
-    yield takeLeading(channel, function* (action: TestFetchAction) {
-      const {testId} = action;
-      try {
-        const test: TestInfo = yield call(
-          APIRequest.get,
-          `/knowledge/tests/${testId}/`,
-        );
-        yield put({type: ActionType.TEST_FETCHED, test, testId});
-      } catch (error) {
-        yield put({type: ActionType.TEST_FETCHED, test: error, testId});
-      }
-    });
-  });
-}
-
-function* fetchTestStatus() {
-  yield* waitForLogin<TestStatusFetchAction>(
-    ActionType.TEST_STATUS_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: TestStatusFetchAction) {
-          const {lessonId, courseId} = action;
-          try {
-            const status: TestStatusInfo = yield call(
-              APIRequest.get,
-              `/knowledge/tests/status`,
-              {
-                params: {
-                  lessonId,
-                },
-              },
-            );
-            yield put({
-              type: ActionType.TEST_STATUS_FETCHED,
-              status,
-              // testId,
-              lessonId,
-              courseId,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.TEST_STATUS_FETCHED,
-              status: error,
-              // testId,
-              lessonId,
-              courseId,
-            });
-          }
-        },
-        (action) => action.lessonId,
-      );
-    },
-  );
-}
-
-function* fetchTestState() {
-  yield* waitForLogin<TestStateFetchAction>(
-    ActionType.TEST_STATE_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: TestStateFetchAction) {
-          const {lessonId, courseId, testId} = action;
-          try {
-            const state: TestStateInfo = yield call(
-              APIRequest.get,
-              `/knowledge/tests/${testId}/state`,
-            );
-            yield put({
-              type: ActionType.TEST_STATE_FETCHED,
-              state,
-              testId,
-              lessonId,
-              courseId,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.TEST_STATE_FETCHED,
-              state: error,
-              testId,
-              lessonId,
-              courseId,
-            });
-          }
-        },
-        (action) => action.lessonId,
-      );
-    },
-  );
-}
-
-function* processTestStart() {
-  yield takeLeadingPerKey(
-    ActionType.TEST_START_REQUEST,
-    function* (action: TestStartRequestAction) {
-      const {testId, lessonId, courseId, onSuccess, onError} = action;
-      yield put({type: ActionType.TEST_FETCH, testId});
-      yield put({
-        type: ActionType.TEST_STATE_FETCH,
-        testId,
-        lessonId,
-        courseId,
-      });
-      const {stateFetchedAction, testFetchedAction} = yield all({
-        stateFetchedAction: take(
-          (action: Action) =>
-            action.type === ActionType.TEST_STATE_FETCHED &&
-            action.lessonId === lessonId,
-        ),
-        testFetchedAction: take(
-          (action: Action) =>
-            action.type === ActionType.TEST_FETCHED && action.testId === testId,
-        ),
-      });
-      const {state}: TestStateFetchedAction = stateFetchedAction;
-      const {test}: TestFetchedAction = testFetchedAction;
-
-      if (state instanceof Error || test instanceof Error) {
-        if (onError) {
-          yield call(
-            onError,
-            testId,
-            state instanceof Error ? state : (test as any),
-          );
-        }
-      } else {
-        if (onSuccess) {
-          yield call(onSuccess, testId, state, test);
-        }
-      }
-    },
-    (action) => action.testId,
-  );
-}
-
-function* processTestComplete() {
-  yield takeLeadingPerKey(
-    ActionType.TEST_COMPLETE_REQUEST,
-    function* (action: TestCompleteRequestAction) {
-      const {testId, lessonId, courseId, onSuccess, onError} = action;
-      try {
-        const state: TestStatePassedInfo = yield call(
-          APIRequest.post,
-          `/knowledge/tests/${testId}/complete`,
-        );
-        yield put({
-          type: ActionType.TEST_STATE_FETCHED,
-          testId,
-          lessonId,
-          courseId,
-          state,
-        });
-
-        if (onSuccess) {
-          yield call(onSuccess, testId, state);
-        }
-      } catch (e) {
-        if (onError) {
-          yield call(onError, testId, e);
-        }
-      }
-    },
-    (action) => action.testId,
-  );
-}
-
-function* processTestSaveAnswer() {
-  yield takeLeadingPerKey(
-    ActionType.TEST_SAVE_ANSWER_REQUEST,
-    function* (action: TestSaveAnswerRequestAction) {
-      const {
-        testId,
-        taskId,
-        lessonId,
-        courseId,
-        answer,
-        complete,
-        onSuccess,
-        onError,
-      } = action;
-
-      const requestData: UserAnswerDtoReq = {
-        task_id: taskId,
-        user_answer: answer,
-      };
-
-      try {
-        const answerInfo = yield call(
-          APIRequest.post,
-          `/knowledge/tests/${testId}/answer`,
-          requestData,
-        );
-        yield delay(300);
-        yield put({
-          type: ActionType.TEST_SAVE_ANSWER,
-          taskId,
-          testId,
-          lessonId,
-          courseId,
-          answerInfo,
-        });
-        yield select();
-
-        if (complete) {
-          yield put({
-            type: ActionType.TEST_COMPLETE_REQUEST,
-            testId,
-            lessonId,
-            courseId,
-            onSuccess: () => {
-              if (onSuccess) {
-                onSuccess(testId, taskId, answerInfo);
-              }
-            },
-            onError: (testId, error) => {
-              if (onError) {
-                onError(testId, taskId, error);
-              }
-            },
-          });
-        }
-
-        if (onSuccess) {
-          yield call(onSuccess, testId, taskId, answerInfo);
-        }
-      } catch (e) {
-        if (onError) {
-          yield call(onError, testId, taskId, e);
-        }
-      }
-    },
-    (action) => [action.testId, action.taskId],
-  );
-}
-
 function* fetchTestResults() {
   yield* waitForLogin<TestResultsFetchAction>(
     ActionType.TEST_RESULTS_FETCH,
@@ -958,6 +705,7 @@ export default function* rootSaga() {
   yield fork(subjectsSaga);
   yield fork(coursesSaga);
   yield fork(teachersSaga);
+  yield fork(testingSaga);
 
   yield spawn(fetchUserHomeworks);
   yield spawn(fetchAccounts);
@@ -967,9 +715,6 @@ export default function* rootSaga() {
   yield spawn(fetchParticipants);
   yield spawn(fetchAdminWebinars);
   yield spawn(fetchHomeworks);
-  yield spawn(fetchTestStatus);
-  yield spawn(fetchTest);
-  yield spawn(fetchTestState);
   yield spawn(fetchTestResults);
   yield spawn(fetchKnowledgeLevel);
   yield spawn(fetchKnowledgeTheme);
@@ -983,8 +728,4 @@ export default function* rootSaga() {
   yield spawn(processThemeDelete);
   yield spawn(processTaskDelete);
   yield spawn(processTestDelete);
-
-  yield spawn(processTestStart);
-  yield spawn(processTestComplete);
-  yield spawn(processTestSaveAnswer);
 }

@@ -12,7 +12,7 @@ const teachers: Reducer<DataProperty<TeacherProfileInfo[]>, TeachersAction> = (
 ) => {
   switch (action.type) {
     case ETeachersAction.TEACHERS_FETCHED: {
-      return action.payload;
+      return action.payload.data;
     }
     default:
       return state;

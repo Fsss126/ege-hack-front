@@ -18,14 +18,14 @@ function* fetchShopCourses() {
   yield* waitForLogin(ECoursesAction.SHOP_COURSES_FETCH, function* (channel) {
     yield takeLeading(channel, function* () {
       try {
-        const courses: CourseInfo[] = yield call(APIRequest.get, '/courses', {
+        const data: CourseInfo[] = yield call(APIRequest.get, '/courses', {
           params: {
             group: 'MARKET',
           },
         });
-        yield put(shopCoursesFetched(courses));
+        yield put(shopCoursesFetched({data}));
       } catch (error) {
-        yield put(shopCoursesFetched(error));
+        yield put(shopCoursesFetched({data: error}));
       }
     });
   });
@@ -35,18 +35,14 @@ function* fetchUserCourses() {
   yield* waitForLogin(ECoursesAction.USER_COURSES_FETCH, function* (channel) {
     yield takeLeading(channel, function* () {
       try {
-        const courses: UserCourseInfo[] = yield call(
-          APIRequest.get,
-          '/courses',
-          {
-            params: {
-              group: 'PERSON',
-            },
+        const data: UserCourseInfo[] = yield call(APIRequest.get, '/courses', {
+          params: {
+            group: 'PERSON',
           },
-        );
-        yield put(userCoursesFetched(courses));
+        });
+        yield put(userCoursesFetched({data}));
       } catch (error) {
-        yield put(userCoursesFetched(error));
+        yield put(userCoursesFetched({data: error}));
       }
     });
   });
@@ -56,14 +52,14 @@ function* fetchAdminCourses() {
   yield* waitForLogin(ECoursesAction.ADMIN_COURSES_FETCH, function* (channel) {
     yield takeLeading(channel, function* () {
       try {
-        const courses: CourseInfo[] = yield call(APIRequest.get, '/courses', {
+        const data: CourseInfo[] = yield call(APIRequest.get, '/courses', {
           params: {
             group: 'ALL',
           },
         });
-        yield put(adminCoursesFetched(courses));
+        yield put(adminCoursesFetched({data}));
       } catch (error) {
-        yield put(adminCoursesFetched(error));
+        yield put(adminCoursesFetched({data: error}));
       }
     });
   });
@@ -75,13 +71,13 @@ function* fetchTeacherCourses() {
   ) {
     yield takeLeading(channel, function* () {
       try {
-        const courses: CourseInfo[] = yield call(
+        const data: CourseInfo[] = yield call(
           APIRequest.get,
           '/courses/homeworkCheck',
         );
-        yield put(teacherCoursesFetched(courses));
+        yield put(teacherCoursesFetched({data}));
       } catch (error) {
-        yield put(teacherCoursesFetched(error));
+        yield put(teacherCoursesFetched({data: error}));
       }
     });
   });

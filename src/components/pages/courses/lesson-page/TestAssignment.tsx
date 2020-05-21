@@ -6,7 +6,7 @@ import {
 } from 'components/ui/LoadingIndicator';
 import {ProgressIndicator} from 'components/ui/ProgressIndicator';
 import {renderDate} from 'definitions/helpers';
-import {useStartTest} from 'hooks/selectors';
+import {useStartTest} from 'modules/testing/testing.hooks';
 import React, {useCallback, useState} from 'react';
 import {TestStatus} from 'types/dtos';
 import {TestStatusInfo} from 'types/entities';

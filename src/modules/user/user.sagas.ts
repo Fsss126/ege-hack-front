@@ -18,10 +18,10 @@ export function* loginSaga() {
 function* fetchUserInfo() {
   yield takeLeading([EUserAction.USER_INFO_FETCH], function* () {
     try {
-      const userInfo: AccountInfo = yield call(Auth.getUserInfo);
-      yield put(userInfoFetched(userInfo));
+      const data: AccountInfo = yield call(Auth.getUserInfo);
+      yield put(userInfoFetched({data}));
     } catch (error) {
-      yield put(userInfoFetched(error));
+      yield put(userInfoFetched({data: error}));
     }
   });
 }

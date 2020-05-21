@@ -1582,6 +1582,10 @@ header {
     .test-task__badge {
       margin-right: 12px;
 
+      i {
+        display: block;
+      }
+
       &.test-task__correct-badge {
         background: $success-green;
       }

@@ -42,7 +42,7 @@ const shopCourses: Reducer<DataProperty<CourseInfo[]>, CoursesAction> = (
 ) => {
   switch (action.type) {
     case ECoursesAction.SHOP_COURSES_FETCHED: {
-      return action.payload;
+      return action.payload.data;
     }
     case ECoursesAction.COURSES_REVOKE: {
       const responseCourse = action.payload;
@@ -65,7 +65,7 @@ const userCourses: Reducer<DataProperty<UserCourseInfo[]>, CoursesAction> = (
 ) => {
   switch (action.type) {
     case ECoursesAction.USER_COURSES_FETCHED: {
-      return action.payload;
+      return action.payload.data;
     }
     case ECoursesAction.COURSES_REVOKE: {
       const responseCourse = action.payload;
@@ -88,7 +88,7 @@ const adminCourses: Reducer<DataProperty<CourseInfo[]>, CoursesAction> = (
 ) => {
   switch (action.type) {
     case ECoursesAction.ADMIN_COURSES_FETCHED: {
-      return action.payload;
+      return action.payload.data;
     }
     case ECoursesAction.COURSES_REVOKE: {
       const responseCourse = action.payload;
@@ -111,7 +111,7 @@ const teacherCourses: Reducer<DataProperty<CourseInfo[]>, CoursesAction> = (
 ) => {
   switch (action.type) {
     case ECoursesAction.TEACHER_COURSES_FETCHED: {
-      return action.payload;
+      return action.payload.data;
     }
     case ECoursesAction.COURSES_REVOKE: {
       const responseCourse = action.payload;
