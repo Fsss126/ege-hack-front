@@ -9,7 +9,6 @@ import {
   CourseParticipantInfo,
   HomeworkInfo,
   KnowledgeLevelInfo,
-  LessonInfo,
   PersonWebinar,
   TaskInfo,
   TestInfo,
@@ -20,17 +19,14 @@ import {
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
 
+import {LessonsAction} from '../modules/lessons/lessons.reducers';
+
 export enum ActionType {
   ACCOUNTS_FETCH = 'ACCOUNTS_FETCH',
   ACCOUNTS_FETCHED = 'ACCOUNTS_FETCHED',
   ACCOUNTS_REVOKE = 'ACCOUNTS_REVOKE',
   ACCOUNTS_DELETE_REQUEST = 'ACCOUNTS_DELETE_REQUEST',
   ACCOUNTS_DELETE = 'ACCOUNTS_DELETE',
-  LESSONS_FETCH = 'LESSONS_FETCH',
-  LESSONS_FETCHED = 'LESSONS_FETCHED',
-  LESSONS_REVOKE = 'LESSONS_REVOKE',
-  LESSON_DELETE_REQUEST = 'LESSON_DELETE_REQUEST',
-  LESSON_DELETE = 'LESSON_DELETE',
   USER_HOMEWORKS_FETCH = 'USER_HOMEWORKS_FETCH',
   USER_HOMEWORKS_FETCHED = 'USER_HOMEWORKS_FETCHED',
   USER_HOMEWORKS_REVOKE = 'USER_HOMEWORKS_REVOKE',
@@ -43,8 +39,6 @@ export enum ActionType {
   PARTICIPANTS_DELETE_REQUEST = 'PARTICIPANTS_DELETE_REQUEST',
   PARTICIPANTS_DELETE = 'PARTICIPANTS_DELETE',
   PARTICIPANTS_REVOKE = 'PARTICIPANTS_REVOKE',
-  ADMIN_COURSES_FETCH = 'ADMIN_COURSES_FETCH',
-  ADMIN_COURSES_FETCHED = 'ADMIN_COURSES_FETCHED',
   ADMIN_WEBINARS_FETCH = 'ADMIN_WEBINARS_FETCH',
   ADMIN_WEBINARS_FETCHED = 'ADMIN_WEBINARS_FETCHED',
   HOMEWORKS_FETCH = 'HOMEWORKS_FETCH',
@@ -110,39 +104,6 @@ export type AccountsDeleteAction = {
   type: ActionType.ACCOUNTS_DELETE;
   role: AccountRole;
   responseAccounts: AccountInfo[];
-};
-
-export type LessonsFetchAction = {
-  type: ActionType.LESSONS_FETCH;
-  courseId: number;
-};
-
-export type LessonsFetchedAction = {
-  type: ActionType.LESSONS_FETCHED;
-  courseId: number;
-  lessons: LessonInfo[] | AxiosError;
-};
-
-export type LessonDeleteCallback = (courseId: number, lessonId: number) => void;
-
-export type LessonDeleteErrorCallback = (
-  courseId: number,
-  lessonId: number,
-  error: AxiosError,
-) => void;
-
-export type LessonDeleteRequestAction = {
-  type: ActionType.LESSON_DELETE_REQUEST;
-  courseId: number;
-  lessonId: number;
-  onDelete?: LessonDeleteCallback;
-  onError?: LessonDeleteErrorCallback;
-};
-
-export type LessonDeleteAction = {
-  type: ActionType.LESSON_DELETE;
-  courseId: number;
-  lessonId: number;
 };
 
 export type UserHomeworksFetchAction = {
@@ -222,12 +183,6 @@ export type HomeworksRevokeAction = {
   type: ActionType.HOMEWORKS_REVOKE;
   lessonId: number;
   responseHomework: HomeworkInfo;
-};
-
-export type LessonRevokeAction = {
-  type: ActionType.LESSONS_REVOKE;
-  courseId: number;
-  responseLesson: LessonInfo;
 };
 
 export type ParticipantsRevokeAction = {
@@ -481,16 +436,12 @@ export type Action =
   | CoursesAction
   | TeachersAction
   | TestingAction
+  | LessonsAction
   | AccountsFetchAction
   | AccountsFetchedAction
   | AccountsRevokeAction
   | AccountsDeleteRequestAction
   | AccountsDeleteAction
-  | LessonsFetchAction
-  | LessonsFetchedAction
-  | LessonRevokeAction
-  | LessonDeleteRequestAction
-  | LessonDeleteAction
   | UserHomeworksFetchAction
   | UserHomeworksFetchedAction
   | UserHomeworksRevokeAction

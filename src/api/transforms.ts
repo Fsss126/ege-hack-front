@@ -2,7 +2,6 @@ import _ from 'lodash';
 import {
   AccountDto,
   AccountDtoResp,
-  AnswerType,
   CommonTestStatusResp,
   CorrectAnswerDto,
   CourseDtoResp,

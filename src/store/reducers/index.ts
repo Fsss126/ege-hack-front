@@ -1,4 +1,5 @@
 import {coursesReducer} from 'modules/courses/courses.reducers';
+import {lessonsReducer} from 'modules/lessons/lessons.reducers';
 import {subjectsReducer} from 'modules/subjects/subjects.reducers';
 import {teachersReducer} from 'modules/teachers/teachers.reducers';
 import {testingReducer} from 'modules/testing/testing.reducers';
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   coursesReducer,
   teachersReducer,
   testingReducer,
+  lessonsReducer,
   dataReducer,
 });
 

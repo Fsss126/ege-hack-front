@@ -45,7 +45,7 @@ const shopCourses: Reducer<DataProperty<CourseInfo[]>, CoursesAction> = (
       return action.payload.data;
     }
     case ECoursesAction.COURSES_REVOKE: {
-      const responseCourse = action.payload;
+      const responseCourse = action.payload.data;
 
       return updateCatalog(state, responseCourse);
     }
@@ -68,7 +68,7 @@ const userCourses: Reducer<DataProperty<UserCourseInfo[]>, CoursesAction> = (
       return action.payload.data;
     }
     case ECoursesAction.COURSES_REVOKE: {
-      const responseCourse = action.payload;
+      const responseCourse = action.payload.data;
 
       return updateCatalog(state, responseCourse);
     }
@@ -91,7 +91,7 @@ const adminCourses: Reducer<DataProperty<CourseInfo[]>, CoursesAction> = (
       return action.payload.data;
     }
     case ECoursesAction.COURSES_REVOKE: {
-      const responseCourse = action.payload;
+      const responseCourse = action.payload.data;
 
       return updateCatalog(state, responseCourse);
     }
@@ -114,7 +114,7 @@ const teacherCourses: Reducer<DataProperty<CourseInfo[]>, CoursesAction> = (
       return action.payload.data;
     }
     case ECoursesAction.COURSES_REVOKE: {
-      const responseCourse = action.payload;
+      const responseCourse = action.payload.data;
 
       return updateCatalog(state, responseCourse);
     }

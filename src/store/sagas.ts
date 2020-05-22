@@ -1,8 +1,10 @@
 /*eslint-disable @typescript-eslint/unbound-method*/
 import APIRequest from 'api';
 import {coursesSaga} from 'modules/courses/courses.sagas';
+import {lessonsSaga} from 'modules/lessons/lessons.sagas';
 import {subjectsSaga} from 'modules/subjects/subjects.sagas';
 import {teachersSaga} from 'modules/teachers/teachers.sagas';
+import {testingSaga} from 'modules/testing/testing.sagas';
 import {userSaga} from 'modules/user/user.sagas';
 import {
   ActionPattern,
@@ -22,7 +24,6 @@ import {
   CourseParticipantInfo,
   HomeworkInfo,
   KnowledgeLevelInfo,
-  LessonInfo,
   PersonWebinar,
   TaskInfo,
   TestInfo,
@@ -33,7 +34,6 @@ import {
 } from 'types/entities';
 import {takeLeadingPerKey} from 'utils/sagaHelpers';
 
-import {testingSaga} from '../modules/testing/testing.sagas';
 import {
   AccountsDeleteRequestAction,
   AccountsFetchAction,
@@ -49,8 +49,6 @@ import {
   KnowledgeTestFetchAction,
   KnowledgeThemeDeleteRequestAction,
   KnowledgeThemeFetchAction,
-  LessonDeleteRequestAction,
-  LessonsFetchAction,
   ParticipantDeleteRequestAction,
   ParticipantsFetchAction,
   TestResultsFetchAction,
@@ -99,34 +97,6 @@ function* fetchAccounts() {
       );
     },
   );
-}
-
-function* fetchLessons() {
-  yield* waitForLogin<LessonsFetchAction>(ActionType.LESSONS_FETCH, function* (
-    channel,
-  ) {
-    yield takeLeadingPerKey(
-      channel,
-      function* (action: LessonsFetchAction) {
-        const {courseId} = action;
-        try {
-          const lessons: LessonInfo[] = yield call(APIRequest.get, '/lessons', {
-            params: {
-              courseId,
-            },
-          });
-          yield put({type: ActionType.LESSONS_FETCHED, lessons, courseId});
-        } catch (error) {
-          yield put({
-            type: ActionType.LESSONS_FETCHED,
-            lessons: error,
-            courseId,
-          });
-        }
-      },
-      (action) => action.courseId,
-    );
-  });
 }
 
 function* fetchUserHomeworks() {
@@ -310,27 +280,6 @@ function* fetchHomeworks() {
         (action) => action.lessonId,
       );
     },
-  );
-}
-
-function* processLessonDelete() {
-  yield takeLeadingPerKey(
-    ActionType.LESSON_DELETE_REQUEST,
-    function* (action: LessonDeleteRequestAction) {
-      const {courseId, lessonId, onDelete, onError} = action;
-      try {
-        yield call(APIRequest.delete, `/lessons/${lessonId}`);
-        if (onDelete) {
-          yield call(onDelete, courseId, lessonId);
-        }
-        yield put({type: ActionType.LESSON_DELETE, courseId, lessonId});
-      } catch (error) {
-        if (onError) {
-          yield call(onError, courseId, lessonId, error);
-        }
-      }
-    },
-    (action) => action.lessonId,
   );
 }
 
@@ -706,10 +655,10 @@ export default function* rootSaga() {
   yield fork(coursesSaga);
   yield fork(teachersSaga);
   yield fork(testingSaga);
+  yield fork(lessonsSaga);
 
   yield spawn(fetchUserHomeworks);
   yield spawn(fetchAccounts);
-  yield spawn(fetchLessons);
   yield spawn(fetchCourseWebinars);
   yield spawn(fetchUpcomingWebinars);
   yield spawn(fetchParticipants);
@@ -721,7 +670,6 @@ export default function* rootSaga() {
   yield spawn(fetchKnowledgeTask);
   yield spawn(fetchKnowledgeTest);
 
-  yield spawn(processLessonDelete);
   yield spawn(processParticipantDelete);
   yield spawn(processAccountsDelete);
   yield spawn(processWebinarDelete);

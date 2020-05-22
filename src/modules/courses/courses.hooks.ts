@@ -147,8 +147,8 @@ export function useRevokeCourses() {
   const dispatch = useDispatch();
 
   return useCallback(
-    (responseCourse: CourseInfo) => {
-      dispatch(courseRevoke(responseCourse));
+    (data: CourseInfo) => {
+      dispatch(courseRevoke({data}));
     },
     [dispatch],
   );

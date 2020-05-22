@@ -14,7 +14,8 @@ import ConditionalRenderer, {
 import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
-import {useDeleteKnowledgeTest, useDeleteLesson} from 'hooks/selectors';
+import {useDeleteKnowledgeTest} from 'hooks/selectors';
+import {useDeleteLesson} from 'modules/lessons/lessons.hooks';
 import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo} from 'types/entities';

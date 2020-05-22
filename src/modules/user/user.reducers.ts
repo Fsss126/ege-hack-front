@@ -30,11 +30,9 @@ const userInfo: Reducer<DataProperty<AccountInfo>, UserAction> = (
   action,
 ) => {
   switch (action.type) {
-    case EUserAction.USER_INFO_FETCHED: {
-      return action.payload.data;
-    }
+    case EUserAction.USER_INFO_FETCHED:
     case EUserAction.USER_INFO_REVOKE: {
-      return action.payload;
+      return action.payload.data;
     }
     default:
       return state;

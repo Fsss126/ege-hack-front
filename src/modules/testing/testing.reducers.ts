@@ -8,7 +8,7 @@ import {ETestingAction} from './testing.constants';
 export type TestingAction = TypedAction<typeof import('./testing.actions')>;
 
 const statuses: Reducer<
-  Dictionary<Maybe<DataProperty<TestStatusInfo>>, number>,
+  Dictionary<DataProperty<TestStatusInfo>, number>,
   TestingAction
 > = (state = {}, action) => {
   switch (action.type) {

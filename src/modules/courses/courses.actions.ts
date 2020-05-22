@@ -1,5 +1,6 @@
 import {AxiosError} from 'axios';
 import {
+  dataActionCreator,
   fetchedActionCreator,
   infoActionCreator,
   loadedActionCreator,
@@ -60,7 +61,7 @@ export const teacherCoursesFetched = fetchedActionCreator<
   CourseInfo[]
 >(ECoursesAction.TEACHER_COURSES_FETCHED);
 
-export const courseRevoke = loadedActionCreator<
+export const courseRevoke = dataActionCreator<
   ECoursesAction.COURSES_REVOKE,
   CourseInfo
 >(ECoursesAction.COURSES_REVOKE);

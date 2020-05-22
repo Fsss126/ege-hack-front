@@ -8,11 +8,11 @@ import Lesson from 'components/common/Lesson';
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import {
-  useAdminLessons,
   useParticipants,
   // useAdminWebinars
 } from 'hooks/selectors';
 import {useDeleteCourse, useTeacherCourse} from 'modules/courses/courses.hooks';
+import {useAdminLessons} from 'modules/lessons/lessons.hooks';
 import React, {useCallback} from 'react';
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import {LessonInfo} from 'types/entities';

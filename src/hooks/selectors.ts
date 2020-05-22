@@ -18,8 +18,6 @@ import {
   KnowledgeTestDeleteErrorCallback,
   KnowledgeThemeDeleteCallback,
   KnowledgeThemeDeleteErrorCallback,
-  LessonDeleteCallback,
-  LessonDeleteErrorCallback,
   ParticipantDeleteCallback,
   ParticipantDeleteErrorCallback,
   WebinarDeleteCallback,
@@ -34,7 +32,6 @@ import {
   selectKnowledgeTasks,
   selectKnowledgeTests,
   selectKnowledgeThemes,
-  selectLessons,
   selectLessonTests,
   selectParticipants,
   selectTestResults,
@@ -201,61 +198,6 @@ export function useDeleteAccount(
   );
 }
 
-export type LessonsHookResult = {
-  lessons?: LessonInfo[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useLessons(courseId: number): LessonsHookResult {
-  const lessons = useSelector(selectLessons)[courseId];
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.LESSONS_FETCH, courseId});
-  }, [courseId, dispatch]);
-  useEffect(() => {
-    if (!lessons) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, lessons]);
-  return lessons instanceof Error
-    ? {error: lessons, reload: dispatchFetchAction}
-    : {lessons, reload: dispatchFetchAction};
-}
-
-export type RevokeLessonsHookResult = (responseLesson: LessonInfo) => void;
-
-export function useRevokeLessons(courseId: number): RevokeLessonsHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseLesson) => {
-      dispatch({type: ActionType.LESSONS_REVOKE, courseId, responseLesson});
-    },
-    [dispatch, courseId],
-  );
-}
-
-export type LessonHookResult = {
-  lesson?: LessonInfo;
-  error?: AxiosError | true;
-  reload: SimpleCallback;
-};
-
-export function useLesson(
-  courseId: number,
-  lessonId: number,
-): LessonHookResult {
-  const {lessons, error, reload} = useLessons(courseId);
-  const lesson = lessons ? _.find(lessons, {id: lessonId}) : undefined;
-
-  return {
-    lesson,
-    error: lessons && !lesson ? true : error,
-    reload,
-  };
-}
-
 export type HomeworksHookResult = {
   homeworks?: HomeworkInfo[] | false;
   error?: AxiosError;
@@ -303,29 +245,6 @@ export type AdminLessonsHookResult = {
   error?: AxiosError;
   reload: SimpleCallback;
 };
-
-export function useAdminLessons(courseId: number): AdminLessonsHookResult {
-  const {lessons, error, reload} = useLessons(courseId);
-  const isAllowed = useCheckPermissions(Permission.LESSON_EDIT);
-
-  return {lessons: !isAllowed ? false : lessons, error, reload};
-}
-
-export type AdminLessonHookResult = {
-  lesson?: LessonInfo | false;
-  error?: AxiosError | true;
-  reload: SimpleCallback;
-};
-
-export function useAdminLesson(
-  courseId: number,
-  lessonId: number,
-): AdminLessonHookResult {
-  const {lesson, error, reload} = useLesson(courseId, lessonId);
-  const isAllowed = useCheckPermissions(Permission.LESSON_EDIT);
-
-  return {lesson: !isAllowed ? false : lesson, error, reload};
-}
 
 export type ParticipantsHookResult = {
   participants?: CourseParticipantInfo[] | false;
@@ -520,51 +439,14 @@ export function useRedirect(redirectUrl?: string): RedirectHookResult {
   }, [history, redirectUrl]);
 }
 
-export type DeleteLessonHookResult = (
-  courseId: number,
-  lessonId: number,
-) => void;
-
-export function useDeleteLesson(
-  redirectUrl?: string,
-  onDelete?: ParticipantDeleteCallback,
-  onError?: ParticipantDeleteErrorCallback,
-): DeleteLessonHookResult {
-  const dispatch = useDispatch();
-  const redirectIfSupplied = useRedirect(redirectUrl);
-
-  const deleteCallback = useCallback(
-    (courseId, lessonId) => {
-      redirectIfSupplied();
-      if (onDelete) {
-        onDelete(courseId, lessonId);
-      }
-    },
-    [redirectIfSupplied, onDelete],
-  );
-
-  return useCallback(
-    (courseId, lessonId) => {
-      dispatch({
-        type: ActionType.LESSON_DELETE_REQUEST,
-        courseId,
-        lessonId,
-        onDelete: deleteCallback,
-        onError,
-      });
-    },
-    [dispatch, deleteCallback, onError],
-  );
-}
-
 export type DeleteParticipantHookResult = (
   courseId: number,
   userId: number,
 ) => void;
 
 export function useDeleteParticipant(
-  onDelete?: LessonDeleteCallback,
-  onError?: LessonDeleteErrorCallback,
+  onDelete?: ParticipantDeleteCallback,
+  onError?: ParticipantDeleteErrorCallback,
 ): DeleteParticipantHookResult {
   const dispatch = useDispatch();
 

@@ -19,6 +19,16 @@ export const fetchActionCreator = <
   return loadedActionCreator<TType, TParams>(type);
 };
 
+export const dataActionCreator = <
+  TType extends string,
+  TPayload,
+  TParams extends object = {}
+>(
+  type: TType,
+) => {
+  return loadedActionCreator<TType, {data: TPayload} & TParams>(type);
+};
+
 export const fetchedActionCreator = <
   TType extends string,
   TPayload,
@@ -26,8 +36,5 @@ export const fetchedActionCreator = <
 >(
   type: TType,
 ) => {
-  return loadedActionCreator<
-    TType,
-    {data: TPayload | AxiosError} & Readonly<TParams>
-  >(type);
+  return dataActionCreator<TType, TPayload | AxiosError, TParams>(type);
 };

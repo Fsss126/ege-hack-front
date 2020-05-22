@@ -6,12 +6,9 @@ import Lesson from 'components/common/Lesson';
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import {getIsFeatureEnabled, TOGGLE_FEATURES} from 'definitions/constants';
-import {
-  useAdminLessons,
-  useAdminWebinars,
-  useParticipants,
-} from 'hooks/selectors';
+import {useAdminWebinars, useParticipants} from 'hooks/selectors';
 import {useAdminCourse, useDeleteCourse} from 'modules/courses/courses.hooks';
+import {useAdminLessons} from 'modules/lessons/lessons.hooks';
 import React, {useCallback} from 'react';
 import {Link, Redirect, Route, Switch} from 'react-router-dom';
 import {Permission} from 'types/enums';

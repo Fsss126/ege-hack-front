@@ -1,5 +1,6 @@
 import {AxiosError} from 'axios';
 import {
+  dataActionCreator,
   fetchedActionCreator,
   infoActionCreator,
   loadedActionCreator,
@@ -31,7 +32,7 @@ export const userInfoFetched = fetchedActionCreator<
   AccountInfo
 >(EUserAction.USER_INFO_FETCHED);
 
-export const userInfoRevoke = loadedActionCreator<
+export const userInfoRevoke = dataActionCreator<
   EUserAction.USER_INFO_REVOKE,
   AccountInfo
 >(EUserAction.USER_INFO_REVOKE);

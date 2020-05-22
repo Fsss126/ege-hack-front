@@ -27,7 +27,7 @@ const CoursePrice: React.FC<CoursePriceProps> = (props) => {
   } = props;
   const {course} = React.useContext(CourseOverviewContext);
   const {price: fullPrice, purchased} = course;
-  const {discounted_price: price, message} = discountInfo || {};
+  const {discounted_price: price} = discountInfo || {};
   const discount = price ? fullPrice - price : undefined;
 
   const loadingState = useLoadingState(isLoading, false, !!error);

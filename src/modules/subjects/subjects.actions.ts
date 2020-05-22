@@ -1,5 +1,6 @@
 import {AxiosError} from 'axios';
 import {
+  dataActionCreator,
   fetchedActionCreator,
   infoActionCreator,
   loadedActionCreator,
@@ -31,7 +32,7 @@ export const subjectsFetched = fetchedActionCreator<
   SubjectInfo[]
 >(ESubjectsAction.SUBJECTS_FETCHED);
 
-export const subjectRevoke = loadedActionCreator<
+export const subjectRevoke = dataActionCreator<
   ESubjectsAction.SUBJECTS_REVOKE,
   SubjectInfo
 >(ESubjectsAction.SUBJECTS_REVOKE);

@@ -16,7 +16,7 @@ const subjects: Reducer<DataProperty<SubjectInfo[]>, SubjectsAction> = (
       return action.payload.data;
     }
     case ESubjectsAction.SUBJECTS_REVOKE: {
-      const responseSubject = action.payload;
+      const responseSubject = action.payload.data;
 
       if (!(state instanceof Array)) {
         return state;

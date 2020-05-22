@@ -119,17 +119,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         //   role === AccountRole.TEACHER ? undefined : state.userTeachers,
       };
     }
-    case ActionType.LESSONS_FETCHED: {
-      const {courseId, lessons} = action;
-
-      return {
-        ...state,
-        lessons: {
-          ...state.lessons,
-          [courseId]: lessons,
-        },
-      };
-    }
     case ActionType.COURSE_WEBINARS_FETCHED: {
       const {courseId, webinars} = action;
 
@@ -171,48 +160,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         adminWebinars: {
           ...state.adminWebinars,
           [courseId]: webinars,
-        },
-      };
-    }
-    case ActionType.LESSONS_REVOKE: {
-      const {courseId, responseLesson} = action;
-      const {
-        lessons: {[courseId]: courseLessons, ...loadedLessons},
-      } = state;
-
-      if (!courseLessons || courseLessons instanceof Error) {
-        return state;
-      }
-      const lessonIndex = _.findIndex(courseLessons, {id: responseLesson.id});
-      let newLessons = [...courseLessons];
-
-      if (lessonIndex !== -1) {
-        const prevLesson = courseLessons[lessonIndex];
-        newLessons[lessonIndex] = {...prevLesson, ...responseLesson};
-        newLessons = _.sortBy(newLessons, 'num');
-      } else {
-        newLessons.push(responseLesson);
-      }
-
-      return {
-        ...state,
-        lessons: {...loadedLessons, [courseId]: newLessons},
-      };
-    }
-    case ActionType.LESSON_DELETE: {
-      const {courseId, lessonId} = action;
-      const {
-        lessons: {[courseId]: courseLessons, ...loadedLessons},
-      } = state;
-
-      if (!courseLessons || courseLessons instanceof Error) {
-        return state;
-      }
-      return {
-        ...state,
-        lessons: {
-          ...loadedLessons,
-          [courseId]: courseLessons.filter(({id}) => id !== lessonId),
         },
       };
     }

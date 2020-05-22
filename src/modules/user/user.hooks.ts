@@ -75,8 +75,8 @@ export function useRevokeUserInfo() {
   const dispatch = useDispatch();
 
   return useCallback(
-    (responseInfo: AccountInfo) => {
-      dispatch(userInfoRevoke(responseInfo));
+    (data: AccountInfo) => {
+      dispatch(userInfoRevoke({data}));
     },
     [dispatch],
   );

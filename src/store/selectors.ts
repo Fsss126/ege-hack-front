@@ -4,9 +4,6 @@ export const selectDataReducer = (state: AppState) => state.dataReducer;
 
 export const selectUsers = (state: AppState) => selectDataReducer(state).users;
 
-export const selectLessons = (state: AppState) =>
-  selectDataReducer(state).lessons;
-
 export const selectUserHomeworks = (state: AppState) =>
   selectDataReducer(state).userHomeworks;
 

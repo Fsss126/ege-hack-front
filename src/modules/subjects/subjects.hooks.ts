@@ -44,8 +44,8 @@ export function useRevokeSubjects() {
   const dispatch = useDispatch();
 
   return useCallback(
-    (responseSubject: SubjectInfo) => {
-      dispatch(subjectRevoke(responseSubject));
+    (data: SubjectInfo) => {
+      dispatch(subjectRevoke({data}));
     },
     [dispatch],
   );
