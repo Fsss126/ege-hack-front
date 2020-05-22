@@ -2,18 +2,17 @@ import APIRequest from 'api';
 import NavigationBlocker from 'components/common/NavigationBlocker';
 import {FileInput} from 'components/ui/input';
 import {InputSubmitCallback} from 'components/ui/input/file-input/GenericFileInput';
-import {useRevokeUserHomework} from 'hooks/selectors';
+import {useRevokeUserHomework} from 'modules/homeworks/homeworks.hooks';
 import React from 'react';
 import {HomeworkInfo, UserHomeworkInfo} from 'types/entities';
 
 export type HomeworkLoaderProps = {
   homework: UserHomeworkInfo | null;
   deadline?: Date;
-  courseId: number;
   lessonId: number;
 };
 const HomeworkLoader: React.FC<HomeworkLoaderProps> = (props) => {
-  const {homework, deadline, courseId, lessonId} = props;
+  const {homework, deadline, lessonId} = props;
   const isHomeworkSubmissionClosed = React.useCallback(
     () => !!(deadline && new Date() >= deadline),
     [deadline],
@@ -23,7 +22,7 @@ const HomeworkLoader: React.FC<HomeworkLoaderProps> = (props) => {
     setChanges(changed);
   }, []);
 
-  const revokeUserHomework = useRevokeUserHomework(courseId, lessonId);
+  const revokeUserHomework = useRevokeUserHomework(lessonId);
 
   const onSubmit: InputSubmitCallback = React.useCallback(
     async (files) => {

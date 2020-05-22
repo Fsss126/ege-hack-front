@@ -1,7 +1,8 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
-import {useHomeworks, useKnowledgeTest} from 'hooks/selectors';
+import {useKnowledgeTest} from 'hooks/selectors';
 import {useTeacherCourse} from 'modules/courses/courses.hooks';
+import {useHomeworks} from 'modules/homeworks/homeworks.hooks';
 import {useLesson} from 'modules/lessons/lessons.hooks';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';

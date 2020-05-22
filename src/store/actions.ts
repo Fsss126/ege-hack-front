@@ -40,10 +40,11 @@ export type UsersAction = TypedAction<
   typeof import('modules/users/users.actions')
 >;
 
+export type HomeworksAction = TypedAction<
+  typeof import('modules/homeworks/homeworks.actions')
+>;
+
 export enum ActionType {
-  USER_HOMEWORKS_FETCH = 'USER_HOMEWORKS_FETCH',
-  USER_HOMEWORKS_FETCHED = 'USER_HOMEWORKS_FETCHED',
-  USER_HOMEWORKS_REVOKE = 'USER_HOMEWORKS_REVOKE',
   COURSE_WEBINARS_FETCH = 'COURSE_WEBINARS_FETCH',
   COURSE_WEBINARS_FETCHED = 'COURSE_WEBINARS_FETCHED',
   UPCOMING_WEBINARS_FETCH = 'UPCOMING_WEBINARS_FETCH',
@@ -55,9 +56,6 @@ export enum ActionType {
   PARTICIPANTS_REVOKE = 'PARTICIPANTS_REVOKE',
   ADMIN_WEBINARS_FETCH = 'ADMIN_WEBINARS_FETCH',
   ADMIN_WEBINARS_FETCHED = 'ADMIN_WEBINARS_FETCHED',
-  HOMEWORKS_FETCH = 'HOMEWORKS_FETCH',
-  HOMEWORKS_FETCHED = 'HOMEWORKS_FETCHED',
-  HOMEWORKS_REVOKE = 'HOMEWORKS_REVOKE',
   WEBINARS_REVOKE = 'WEBINARS_REVOKE',
   WEBINAR_DELETE_REQUEST = 'WEBINAR_DELETE_REQUEST',
   WEBINAR_DELETE = 'WEBINAR_DELETE',
@@ -81,26 +79,6 @@ export enum ActionType {
   KNOWLEDGE_TEST_DELETE_REQUEST = 'KNOWLEDGE_TEST_DELETE_REQUEST',
   KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
-
-export type UserHomeworksFetchAction = {
-  type: ActionType.USER_HOMEWORKS_FETCH;
-  courseId: number;
-  lessonId: number;
-};
-
-export type UserHomeworksFetchedAction = {
-  type: ActionType.USER_HOMEWORKS_FETCHED;
-  courseId: number;
-  lessonId: number;
-  homework: UserHomeworkInfo | AxiosError;
-};
-
-export type UserHomeworksRevokeAction = {
-  type: ActionType.USER_HOMEWORKS_REVOKE;
-  courseId: number;
-  lessonId: number;
-  responseHomework: UserHomeworkInfo;
-};
 
 export type CourseWebinarsFetchAction = {
   type: ActionType.COURSE_WEBINARS_FETCH;
@@ -142,23 +120,6 @@ export type AdminWebinarsFetchedAction = {
   type: ActionType.ADMIN_WEBINARS_FETCHED;
   courseId: number;
   webinars: WebinarScheduleInfo | AxiosError;
-};
-
-export type HomeworksFetchAction = {
-  type: ActionType.HOMEWORKS_FETCH;
-  lessonId: number;
-};
-
-export type HomeworksFetchedAction = {
-  type: ActionType.HOMEWORKS_FETCHED;
-  lessonId: number;
-  homeworks: HomeworkInfo[] | AxiosError;
-};
-
-export type HomeworksRevokeAction = {
-  type: ActionType.HOMEWORKS_REVOKE;
-  lessonId: number;
-  responseHomework: HomeworkInfo;
 };
 
 export type ParticipantsRevokeAction = {
@@ -414,9 +375,7 @@ export type Action =
   | TestingAction
   | LessonsAction
   | UsersAction
-  | UserHomeworksFetchAction
-  | UserHomeworksFetchedAction
-  | UserHomeworksRevokeAction
+  | HomeworksAction
   | CourseWebinarsFetchAction
   | CourseWebinarsFetchedAction
   | UpcomingWebinarsFetchAction
@@ -425,12 +384,9 @@ export type Action =
   | ParticipantsFetchedAction
   | AdminWebinarsFetchAction
   | AdminWebinarsFetchedAction
-  | HomeworksFetchAction
-  | HomeworksFetchedAction
   | ParticipantsRevokeAction
   | ParticipantDeleteRequestAction
   | ParticipantDeleteAction
-  | HomeworksRevokeAction
   | WebinarsRevokeAction
   | WebinarDeleteRequestAction
   | WebinarDeleteAction

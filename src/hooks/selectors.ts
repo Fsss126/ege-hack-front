@@ -24,7 +24,6 @@ import {
 import {DataProperty, KnowledgeBaseSubject} from 'store/reducers/dataReducer';
 import {
   selectAdminWebinars,
-  selectHomeworks,
   selectKnowledgeMap,
   selectKnowledgeTasks,
   selectKnowledgeTests,
@@ -33,23 +32,19 @@ import {
   selectParticipants,
   selectTestResults,
   selectUpcomingWebinars,
-  selectUserHomeworks,
   selectWebinars,
 } from 'store/selectors';
 import {
   CourseInfo,
   CourseParticipantInfo,
   DiscountInfo,
-  HomeworkInfo,
   KnowledgeLevelInfo,
-  LessonInfo,
   PersonWebinar,
   SubjectInfo,
   TaskInfo,
   TestInfo,
   TestResultInfo,
   ThemeInfo,
-  UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {Permission} from 'types/enums';
@@ -125,54 +120,6 @@ export function useDiscount(
 
   return {discount, error, reload: fetchDiscount, isLoading};
 }
-
-export type HomeworksHookResult = {
-  homeworks?: HomeworkInfo[] | false;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useHomeworks(lessonId: number): HomeworksHookResult {
-  const isAllowed = useCheckPermissions(Permission.HOMEWORK_CHECK);
-  const homeworks = useSelector(selectHomeworks)[lessonId];
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.HOMEWORKS_FETCH, lessonId});
-  }, [dispatch, lessonId]);
-  useEffect(() => {
-    if (isAllowed) {
-      if (!homeworks) {
-        dispatchFetchAction();
-      }
-    }
-  }, [dispatchFetchAction, homeworks, isAllowed]);
-  return homeworks instanceof Error
-    ? {error: homeworks, reload: dispatchFetchAction}
-    : {homeworks: !isAllowed ? false : homeworks, reload: dispatchFetchAction};
-}
-
-export type RevokeHomeworksHookResult = (
-  responseHomework: HomeworkInfo,
-) => void;
-
-export function useRevokeHomeworks(
-  lessonId: number,
-): RevokeHomeworksHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseHomework) => {
-      dispatch({type: ActionType.HOMEWORKS_REVOKE, lessonId, responseHomework});
-    },
-    [dispatch, lessonId],
-  );
-}
-
-export type AdminLessonsHookResult = {
-  lessons?: LessonInfo[] | false;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
 
 export type ParticipantsHookResult = {
   participants?: CourseParticipantInfo[] | false;
@@ -260,54 +207,6 @@ export function useRevokeWebinars(courseId: number): RevokeWebinarssHookResult {
       dispatch({type: ActionType.WEBINARS_REVOKE, courseId, responseWebinars});
     },
     [dispatch, courseId],
-  );
-}
-
-export type UserHomeworkHookResult = {
-  homework?: UserHomeworkInfo | null;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useUserHomework(
-  courseId: number,
-  lessonId: number,
-): UserHomeworkHookResult {
-  const homework = (useSelector(selectUserHomeworks)[courseId] || {})[lessonId];
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.USER_HOMEWORKS_FETCH, courseId, lessonId});
-  }, [courseId, dispatch, lessonId]);
-  useEffect(() => {
-    if (!homework && homework !== null) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, homework]);
-  return homework instanceof Error
-    ? {error: homework, reload: dispatchFetchAction}
-    : {homework, reload: dispatchFetchAction};
-}
-
-export type RevokeUserHomeworkHookResult = (
-  responseHomework: HomeworkInfo,
-) => void;
-
-export function useRevokeUserHomework(
-  courseId: number,
-  lessonId: number,
-): RevokeUserHomeworkHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseHomework) => {
-      dispatch({
-        type: ActionType.USER_HOMEWORKS_REVOKE,
-        courseId,
-        lessonId,
-        responseHomework,
-      });
-    },
-    [courseId, dispatch, lessonId],
   );
 }
 

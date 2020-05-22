@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {getGradeByGraduationYear} from 'modules/user/user.utils';
 import {
   AccountDto,
   AccountDtoResp,
@@ -45,11 +46,9 @@ import {
   TestStateInfo,
   TestStatusInfo,
   UserAnswerInfo,
-  UserHomeworkInfo,
   VkUserInfo,
 } from 'types/entities';
 
-import {getGradeByGraduationYear} from '../modules/user/user.utils';
 import {API_ROOT} from './index';
 
 export const getVideoLink = (videoId: string) =>

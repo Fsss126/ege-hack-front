@@ -3,7 +3,6 @@ import Catalog, {
   FilterFunc,
 } from 'components/common/Catalog';
 import Page, {PageContent, PageContentProps} from 'components/layout/Page';
-import {HomeworksHookResult} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Redirect} from 'react-router';
 import {HomeworkInfo, LessonInfo} from 'types/entities';
@@ -38,7 +37,7 @@ const filter: FilterFunc<HomeworkInfo> = (
 
 interface HomeworksPageProps
   extends RouteComponentPropsWithParentProps<LessonPageParams> {
-  homeworks?: HomeworksHookResult['homeworks'];
+  homeworks?: HomeworkInfo[] | false;
   lesson?: LessonInfo;
   isLoaded: boolean;
   parentSection: PageContentProps['parentSection'];

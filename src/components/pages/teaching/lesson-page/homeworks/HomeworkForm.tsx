@@ -2,7 +2,7 @@ import APIRequest from 'api';
 import Form, {useForm, useFormValidityChecker} from 'components/ui/Form';
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
-import {useRevokeHomeworks} from 'hooks/selectors';
+import {useRevokeHomeworks} from 'modules/homeworks/homeworks.hooks';
 import React, {useCallback, useRef, useState} from 'react';
 import {HomeworkAssessmentDtoReq} from 'types/dtos';
 import {HomeworkInfo} from 'types/entities';

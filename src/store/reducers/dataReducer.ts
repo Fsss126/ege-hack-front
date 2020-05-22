@@ -4,13 +4,11 @@ import {Reducer} from 'redux';
 import {
   CourseInfo,
   CourseParticipantInfo,
-  HomeworkInfo,
   PersonWebinar,
   TaskInfo,
   TestInfo,
   TestResultInfo,
   ThemeInfo,
-  UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {KNOWLEDGE_TREE_ROOT, KnowledgeTreeLevel} from 'types/knowledgeTree';
@@ -26,11 +24,6 @@ export type KnowledgeBaseSubject = {
 };
 
 export interface DataState {
-  userHomeworks: {
-    [courseId: number]: {
-      [lessonId: number]: DataProperty<UserHomeworkInfo | null>;
-    };
-  };
   // TODO: normalize
   // courseLessons: {[courseId: number]: DataProperty<number[]>};
   // lessons: {[lessonId: number]: LessonInfo};
@@ -43,7 +36,6 @@ export interface DataState {
   };
   adminWebinars: {[courseId: number]: DataProperty<WebinarScheduleInfo>};
   teacherCourses?: DataProperty<CourseInfo[]>;
-  homeworks: {[lessonId: number]: DataProperty<HomeworkInfo[]>};
   themes: {
     [themeId: number]: DataProperty<ThemeInfo>;
   };
@@ -65,12 +57,10 @@ export interface DataState {
 }
 
 const defaultState: DataState = {
-  userHomeworks: {},
   webinars: {},
   participants: {},
   adminWebinars: {},
   teacherCourses: undefined,
-  homeworks: {},
   themes: {},
   tasks: {},
   knowledgeMap: {},
@@ -128,34 +118,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
-    case ActionType.USER_HOMEWORKS_FETCHED: {
-      const {courseId, lessonId, homework} = action;
-
-      return {
-        ...state,
-        userHomeworks: {
-          ...state.userHomeworks,
-          [courseId]: {
-            ...(state.userHomeworks[courseId] || {}),
-            [lessonId]: homework,
-          },
-        },
-      };
-    }
-    case ActionType.USER_HOMEWORKS_REVOKE: {
-      const {courseId, lessonId, responseHomework} = action;
-
-      return {
-        ...state,
-        userHomeworks: {
-          ...state.userHomeworks,
-          [courseId]: {
-            ...(state.userHomeworks[courseId] || {}),
-            [lessonId]: responseHomework,
-          },
-        },
-      };
-    }
     case ActionType.PARTICIPANTS_REVOKE: {
       const {responseParticipants, courseId} = action;
 
@@ -180,42 +142,6 @@ export const dataReducer: Reducer<DataState, Action> = (
           ...loadedParticipants,
           [courseId]: courseParticipants.filter(({id}) => id !== userId),
         },
-      };
-    }
-    case ActionType.HOMEWORKS_FETCHED: {
-      const {lessonId, homeworks} = action;
-
-      return {
-        ...state,
-        homeworks: {
-          ...state.homeworks,
-          [lessonId]: homeworks,
-        },
-      };
-    }
-    case ActionType.HOMEWORKS_REVOKE: {
-      const {lessonId, responseHomework} = action;
-      const {
-        pupil: {id: studentId},
-        mark,
-        comment,
-      } = responseHomework;
-      const {
-        homeworks: {[lessonId]: lessonHomeworks, ...loadedHomeworks},
-      } = state;
-
-      if (!lessonHomeworks || lessonHomeworks instanceof Error) {
-        return state;
-      }
-      const lessonIndex = _.findIndex(lessonHomeworks, {
-        pupil: {id: studentId},
-      });
-      const homework = lessonHomeworks[lessonIndex];
-      const newHomeworks = [...lessonHomeworks];
-      newHomeworks[lessonIndex] = {...homework, mark, comment};
-      return {
-        ...state,
-        homeworks: {[lessonId]: newHomeworks, ...loadedHomeworks},
       };
     }
     case ActionType.WEBINARS_REVOKE:
@@ -503,7 +429,7 @@ export const dataReducer: Reducer<DataState, Action> = (
       }
     }
     case ActionType.KNOWLEDGE_TEST_REVOKE: {
-      const {lessonId, courseId, responseTest} = action;
+      const {lessonId, responseTest} = action;
 
       const tests = {...state.tests, [responseTest.id]: responseTest};
 

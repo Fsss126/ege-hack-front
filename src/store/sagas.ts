@@ -1,6 +1,7 @@
 /*eslint-disable @typescript-eslint/unbound-method*/
 import APIRequest from 'api';
 import {coursesSaga} from 'modules/courses/courses.sagas';
+import {homeworksSaga} from 'modules/homeworks/homeworks.sagas';
 import {lessonsSaga} from 'modules/lessons/lessons.sagas';
 import {subjectsSaga} from 'modules/subjects/subjects.sagas';
 import {teachersSaga} from 'modules/teachers/teachers.sagas';
@@ -10,14 +11,12 @@ import {usersSaga} from 'modules/users/users.sagas';
 import {call, fork, put, spawn, takeLeading} from 'redux-saga/effects';
 import {
   CourseParticipantInfo,
-  HomeworkInfo,
   KnowledgeLevelInfo,
   PersonWebinar,
   TaskInfo,
   TestInfo,
   TestResultInfo,
   ThemeInfo,
-  UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {takeLeadingPerKey} from 'utils/sagaHelpers';
@@ -26,7 +25,6 @@ import {
   ActionType,
   AdminWebinarsFetchAction,
   CourseWebinarsFetchAction,
-  HomeworksFetchAction,
   KnowledgeLevelFetchAction,
   KnowledgeTaskDeleteRequestAction,
   KnowledgeTaskFetchAction,
@@ -38,44 +36,9 @@ import {
   ParticipantsFetchAction,
   TestResultsFetchAction,
   UpcomingWebinarsFetchAction,
-  UserHomeworksFetchAction,
   WebinarDeleteRequestAction,
 } from './actions';
 import {waitForLogin} from './sagas/watchers';
-
-function* fetchUserHomeworks() {
-  yield* waitForLogin<UserHomeworksFetchAction>(
-    ActionType.USER_HOMEWORKS_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: UserHomeworksFetchAction) {
-          const {courseId, lessonId} = action;
-          try {
-            const homework: UserHomeworkInfo = yield call(
-              APIRequest.get,
-              `/lessons/${lessonId}/homeworks/pupil`,
-            );
-            yield put({
-              type: ActionType.USER_HOMEWORKS_FETCHED,
-              homework,
-              courseId,
-              lessonId,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.USER_HOMEWORKS_FETCHED,
-              homework: error,
-              courseId,
-              lessonId,
-            });
-          }
-        },
-        (action) => action.lessonId,
-      );
-    },
-  );
-}
 
 function* fetchCourseWebinars() {
   yield* waitForLogin<CourseWebinarsFetchAction>(
@@ -190,38 +153,6 @@ function* fetchAdminWebinars() {
           }
         },
         (action) => action.courseId,
-      );
-    },
-  );
-}
-
-function* fetchHomeworks() {
-  yield* waitForLogin<HomeworksFetchAction>(
-    ActionType.HOMEWORKS_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: HomeworksFetchAction) {
-          const {lessonId} = action;
-          try {
-            const homeworks: HomeworkInfo[] = yield call(
-              APIRequest.get,
-              `/lessons/${lessonId}/homeworks`,
-            );
-            yield put({
-              type: ActionType.HOMEWORKS_FETCHED,
-              homeworks,
-              lessonId,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.HOMEWORKS_FETCHED,
-              homeworks: error,
-              lessonId,
-            });
-          }
-        },
-        (action) => action.lessonId,
       );
     },
   );
@@ -567,13 +498,12 @@ export default function* rootSaga() {
   yield fork(testingSaga);
   yield fork(lessonsSaga);
   yield fork(usersSaga);
+  yield fork(homeworksSaga);
 
-  yield spawn(fetchUserHomeworks);
   yield spawn(fetchCourseWebinars);
   yield spawn(fetchUpcomingWebinars);
   yield spawn(fetchParticipants);
   yield spawn(fetchAdminWebinars);
-  yield spawn(fetchHomeworks);
   yield spawn(fetchTestResults);
   yield spawn(fetchKnowledgeLevel);
   yield spawn(fetchKnowledgeTheme);
