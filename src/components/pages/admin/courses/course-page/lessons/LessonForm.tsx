@@ -378,6 +378,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
             value={hometask_file}
             maxFiles={1}
             // accept="image/*,audio/*,video/*"
+            maxSizeBytes={1024 * 1024 * 15}
             initialFiles={
               lesson && lesson.assignment && lesson.assignment.files
                 ? lesson.assignment.files
