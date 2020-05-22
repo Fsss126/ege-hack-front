@@ -141,10 +141,9 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
   const renderWebinar: CatalogItemRenderer<WebinarInfo> = useCallback(
     (webinar, {link, ...rest}) => {
       const {id} = webinar;
-      const deleteCallback = (): void => {
-        if (webinarSchedule) {
-          onDelete(courseId, id);
-        }
+      const deleteCallback = (event: React.MouseEvent): void => {
+        event.preventDefault();
+        onDelete(courseId, id);
       };
       const editLink = `${courseLink}/webinars/edit/`;
 
@@ -173,7 +172,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
         />
       );
     },
-    [courseLink, canEdit, webinarSchedule, courseId, onDelete],
+    [courseLink, canEdit, courseId, onDelete],
   );
   const title = course && `Вебинары курса ${course.name}`;
 

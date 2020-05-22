@@ -44,12 +44,11 @@ export type WebinarsAction = TypedAction<
   typeof import('modules/webinars/webinars.actions')
 >;
 
+export type ParticipantsAction = TypedAction<
+  typeof import('modules/participants/participants.actions')
+>;
+
 export enum ActionType {
-  PARTICIPANTS_FETCH = 'PARTICIPANTS_FETCH',
-  PARTICIPANTS_FETCHED = 'PARTICIPANTS_FETCHED',
-  PARTICIPANTS_DELETE_REQUEST = 'PARTICIPANTS_DELETE_REQUEST',
-  PARTICIPANTS_DELETE = 'PARTICIPANTS_DELETE',
-  PARTICIPANTS_REVOKE = 'PARTICIPANTS_REVOKE',
   TEST_RESULTS_FETCH = 'TEST_RESULTS_FETCH',
   TEST_RESULTS_FETCHED = 'TEST_RESULTS_FETCHED',
   KNOWLEDGE_LEVEL_FETCH = 'KNOWLEDGE_LEVEL_FETCH',
@@ -70,48 +69,6 @@ export enum ActionType {
   KNOWLEDGE_TEST_DELETE_REQUEST = 'KNOWLEDGE_TEST_DELETE_REQUEST',
   KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
-
-export type ParticipantsFetchAction = {
-  type: ActionType.PARTICIPANTS_FETCH;
-  courseId: number;
-};
-
-export type ParticipantsFetchedAction = {
-  type: ActionType.PARTICIPANTS_FETCHED;
-  courseId: number;
-  participants: CourseParticipantInfo[] | AxiosError;
-};
-
-export type ParticipantsRevokeAction = {
-  type: ActionType.PARTICIPANTS_REVOKE;
-  courseId: number;
-  responseParticipants: CourseParticipantInfo[];
-};
-
-export type ParticipantDeleteCallback = (
-  courseId: number,
-  userId: number,
-) => void;
-
-export type ParticipantDeleteErrorCallback = (
-  courseId: number,
-  userId: number,
-  error: AxiosError,
-) => void;
-
-export type ParticipantDeleteRequestAction = {
-  type: ActionType.PARTICIPANTS_DELETE_REQUEST;
-  courseId: number;
-  userId: number;
-  onDelete?: ParticipantDeleteCallback;
-  onError?: ParticipantDeleteErrorCallback;
-};
-
-export type ParticipantDeleteAction = {
-  type: ActionType.PARTICIPANTS_DELETE;
-  courseId: number;
-  userId: number;
-};
 
 export type WebinarDeleteCallback = (
   courseId: number,
@@ -315,11 +272,7 @@ export type Action =
   | UsersAction
   | HomeworksAction
   | WebinarsAction
-  | ParticipantsFetchAction
-  | ParticipantsFetchedAction
-  | ParticipantsRevokeAction
-  | ParticipantDeleteRequestAction
-  | ParticipantDeleteAction
+  | ParticipantsAction
   | TestResultsFetchAction
   | TestResultsFetchedAction
   | KnowledgeLevelFetchAction

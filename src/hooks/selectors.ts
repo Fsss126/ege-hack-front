@@ -16,8 +16,6 @@ import {
   KnowledgeTestDeleteErrorCallback,
   KnowledgeThemeDeleteCallback,
   KnowledgeThemeDeleteErrorCallback,
-  ParticipantDeleteCallback,
-  ParticipantDeleteErrorCallback,
 } from 'store/actions';
 import {DataProperty, KnowledgeBaseSubject} from 'store/reducers/dataReducer';
 import {
@@ -26,7 +24,6 @@ import {
   selectKnowledgeTests,
   selectKnowledgeThemes,
   selectLessonTests,
-  selectParticipants,
   selectTestResults,
 } from 'store/selectors';
 import {
@@ -114,55 +111,6 @@ export function useDiscount(
   return {discount, error, reload: fetchDiscount, isLoading};
 }
 
-export type ParticipantsHookResult = {
-  participants?: CourseParticipantInfo[] | false;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useParticipants(courseId: number): ParticipantsHookResult {
-  const isAllowed = useCheckPermissions(Permission.PARTICIPANT_MANAGEMENT);
-  const participants = useSelector(selectParticipants)[courseId];
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.PARTICIPANTS_FETCH, courseId});
-  }, [courseId, dispatch]);
-  useEffect(() => {
-    if (isAllowed) {
-      if (!participants) {
-        dispatchFetchAction();
-      }
-    }
-  }, [dispatchFetchAction, isAllowed, participants]);
-  return participants instanceof Error
-    ? {error: participants, reload: dispatchFetchAction}
-    : {
-        participants: !isAllowed ? false : participants,
-        reload: dispatchFetchAction,
-      };
-}
-
-export type RevokeParticipantsHookResult = (
-  responseParticipants: CourseParticipantInfo[],
-) => void;
-
-export function useRevokeParticipants(
-  courseId: number,
-): RevokeParticipantsHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseParticipants) => {
-      dispatch({
-        type: ActionType.PARTICIPANTS_REVOKE,
-        courseId,
-        responseParticipants,
-      });
-    },
-    [dispatch, courseId],
-  );
-}
-
 export type RedirectHookResult = SimpleCallback;
 
 export function useRedirect(redirectUrl?: string): RedirectHookResult {
@@ -173,31 +121,6 @@ export function useRedirect(redirectUrl?: string): RedirectHookResult {
       history.replace(redirectUrl);
     }
   }, [history, redirectUrl]);
-}
-
-export type DeleteParticipantHookResult = (
-  courseId: number,
-  userId: number,
-) => void;
-
-export function useDeleteParticipant(
-  onDelete?: ParticipantDeleteCallback,
-  onError?: ParticipantDeleteErrorCallback,
-): DeleteParticipantHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (courseId, userId) => {
-      dispatch({
-        type: ActionType.PARTICIPANTS_DELETE_REQUEST,
-        courseId,
-        userId,
-        onDelete,
-        onError,
-      });
-    },
-    [dispatch, onDelete, onError],
-  );
 }
 
 export type TestResultsHookResult = {

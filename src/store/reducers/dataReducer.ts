@@ -1,14 +1,7 @@
 import {AxiosError} from 'axios';
 import _ from 'lodash';
 import {Reducer} from 'redux';
-import {
-  CourseInfo,
-  CourseParticipantInfo,
-  TaskInfo,
-  TestInfo,
-  TestResultInfo,
-  ThemeInfo,
-} from 'types/entities';
+import {TaskInfo, TestInfo, TestResultInfo, ThemeInfo} from 'types/entities';
 import {KNOWLEDGE_TREE_ROOT, KnowledgeTreeLevel} from 'types/knowledgeTree';
 
 import {Action, ActionType} from '../actions';
@@ -25,10 +18,6 @@ export interface DataState {
   // TODO: normalize
   // courseLessons: {[courseId: number]: DataProperty<number[]>};
   // lessons: {[lessonId: number]: LessonInfo};
-  participants: {
-    [courseId: number]: DataProperty<CourseParticipantInfo[]>;
-  };
-  teacherCourses?: DataProperty<CourseInfo[]>;
   themes: {
     [themeId: number]: DataProperty<ThemeInfo>;
   };
@@ -50,8 +39,6 @@ export interface DataState {
 }
 
 const defaultState: DataState = {
-  participants: {},
-  teacherCourses: undefined,
   themes: {},
   tasks: {},
   knowledgeMap: {},
@@ -65,43 +52,6 @@ export const dataReducer: Reducer<DataState, Action> = (
   action,
 ): DataState => {
   switch (action.type) {
-    case ActionType.PARTICIPANTS_FETCHED: {
-      const {courseId, participants} = action;
-
-      return {
-        ...state,
-        participants: {
-          ...state.participants,
-          [courseId]: participants,
-        },
-      };
-    }
-    case ActionType.PARTICIPANTS_REVOKE: {
-      const {responseParticipants, courseId} = action;
-
-      return {
-        ...state,
-        participants: {...state.participants, [courseId]: responseParticipants},
-        // userCourses: undefined,
-      };
-    }
-    case ActionType.PARTICIPANTS_DELETE: {
-      const {courseId, userId} = action;
-      const {
-        participants: {[courseId]: courseParticipants, ...loadedParticipants},
-      } = state;
-
-      if (!courseParticipants || courseParticipants instanceof Error) {
-        return state;
-      }
-      return {
-        ...state,
-        participants: {
-          ...loadedParticipants,
-          [courseId]: courseParticipants.filter(({id}) => id !== userId),
-        },
-      };
-    }
     case ActionType.KNOWLEDGE_LEVEL_FETCHED: {
       const {subjectId, themeId, content} = action;
       const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;

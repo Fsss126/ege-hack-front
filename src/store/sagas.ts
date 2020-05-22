@@ -3,6 +3,7 @@ import APIRequest from 'api';
 import {coursesSaga} from 'modules/courses/courses.sagas';
 import {homeworksSaga} from 'modules/homeworks/homeworks.sagas';
 import {lessonsSaga} from 'modules/lessons/lessons.sagas';
+import {participantsSaga} from 'modules/participants/participants.sagas';
 import {subjectsSaga} from 'modules/subjects/subjects.sagas';
 import {teachersSaga} from 'modules/teachers/teachers.sagas';
 import {testingSaga} from 'modules/testing/testing.sagas';
@@ -11,7 +12,6 @@ import {usersSaga} from 'modules/users/users.sagas';
 import {webinarsSaga} from 'modules/webinars/webinars.sagas';
 import {call, fork, put, spawn, takeLeading} from 'redux-saga/effects';
 import {
-  CourseParticipantInfo,
   KnowledgeLevelInfo,
   TaskInfo,
   TestInfo,
@@ -29,67 +29,9 @@ import {
   KnowledgeTestFetchAction,
   KnowledgeThemeDeleteRequestAction,
   KnowledgeThemeFetchAction,
-  ParticipantDeleteRequestAction,
-  ParticipantsFetchAction,
   TestResultsFetchAction,
 } from './actions';
 import {waitForLogin} from './sagas/watchers';
-
-function* fetchParticipants() {
-  yield* waitForLogin<ParticipantsFetchAction>(
-    ActionType.PARTICIPANTS_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: ParticipantsFetchAction) {
-          const {courseId} = action;
-          try {
-            const participants: CourseParticipantInfo[] = yield call(
-              APIRequest.get,
-              `/courses/${courseId}/participants`,
-            );
-            yield put({
-              type: ActionType.PARTICIPANTS_FETCHED,
-              participants,
-              courseId,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.PARTICIPANTS_FETCHED,
-              participants: error,
-              courseId,
-            });
-          }
-        },
-        (action) => action.courseId,
-      );
-    },
-  );
-}
-
-function* processParticipantDelete() {
-  yield takeLeadingPerKey(
-    ActionType.PARTICIPANTS_DELETE_REQUEST,
-    function* (action: ParticipantDeleteRequestAction) {
-      const {courseId, userId, onDelete, onError} = action;
-      try {
-        yield call(
-          APIRequest.delete,
-          `courses/${courseId}/participants/${userId}`,
-        );
-        if (onDelete) {
-          yield call(onDelete, courseId, userId);
-        }
-        yield put({type: ActionType.PARTICIPANTS_DELETE, courseId, userId});
-      } catch (error) {
-        if (onError) {
-          yield call(onError, courseId, userId, error);
-        }
-      }
-    },
-    (action) => [action.courseId, action.userId],
-  );
-}
 
 function* fetchTestResults() {
   yield* waitForLogin<TestResultsFetchAction>(
@@ -361,15 +303,14 @@ export default function* rootSaga() {
   yield fork(usersSaga);
   yield fork(homeworksSaga);
   yield fork(webinarsSaga);
+  yield fork(participantsSaga);
 
-  yield spawn(fetchParticipants);
   yield spawn(fetchTestResults);
   yield spawn(fetchKnowledgeLevel);
   yield spawn(fetchKnowledgeTheme);
   yield spawn(fetchKnowledgeTask);
   yield spawn(fetchKnowledgeTest);
 
-  yield spawn(processParticipantDelete);
   yield spawn(processThemeDelete);
   yield spawn(processTaskDelete);
   yield spawn(processTestDelete);
