@@ -1,16 +1,15 @@
 import _ from 'lodash';
 import {combineReducers, Reducer} from 'redux';
+import {Action, ActionType} from 'store/actions';
 import {DataProperty} from 'store/reducers/types';
 import {LessonInfo} from 'types/entities';
 
 import {ELessonsAction} from './lessons.constants';
 
-export type LessonsAction = TypedAction<typeof import('./lessons.actions')>;
-
-const lessons: Reducer<
-  Dictionary<DataProperty<LessonInfo[]>>,
-  LessonsAction
-> = (state = {}, action) => {
+const lessons: Reducer<Dictionary<DataProperty<LessonInfo[]>>, Action> = (
+  state = {},
+  action,
+) => {
   switch (action.type) {
     case ELessonsAction.LESSONS_FETCHED: {
       const {courseId, data} = action.payload;
@@ -51,6 +50,42 @@ const lessons: Reducer<
         ...loadedLessons,
         [courseId]: courseLessons.filter(({id}) => id !== lessonId),
       };
+    }
+    case ActionType.KNOWLEDGE_TEST_REVOKE: {
+      const {lessonId, courseId, responseTest} = action;
+      const {[courseId]: courseLessons, ...loadedLessons} = state;
+
+      if (!courseLessons || courseLessons instanceof Error) {
+        return state;
+      }
+
+      const lessonIndex = _.findIndex(courseLessons, {id: lessonId});
+      const newLessons = [...courseLessons];
+
+      if (lessonIndex !== -1) {
+        const prevLesson = courseLessons[lessonIndex];
+        newLessons[lessonIndex] = {...prevLesson, test_id: responseTest.id};
+      }
+
+      return {...loadedLessons, [courseId]: newLessons};
+    }
+    case ActionType.KNOWLEDGE_TEST_DELETE: {
+      const {courseId, lessonId} = action;
+      const {[courseId]: courseLessons, ...loadedLessons} = state;
+
+      if (!courseLessons || courseLessons instanceof Error) {
+        return state;
+      }
+
+      const lessonIndex = _.findIndex(courseLessons, {id: lessonId});
+      const newLessons = [...courseLessons];
+
+      if (lessonIndex !== -1) {
+        const prevLesson = courseLessons[lessonIndex];
+        newLessons[lessonIndex] = {...prevLesson, test_id: undefined};
+      }
+
+      return {...loadedLessons, [courseId]: newLessons};
     }
     default:
       return state;

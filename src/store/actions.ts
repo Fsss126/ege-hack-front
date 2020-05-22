@@ -19,7 +19,9 @@ import {
 } from 'types/entities';
 import {AccountRole} from 'types/enums';
 
-import {LessonsAction} from '../modules/lessons/lessons.reducers';
+export type LessonsAction = TypedAction<
+  typeof import('modules/lessons/lessons.actions')
+>;
 
 export enum ActionType {
   ACCOUNTS_FETCH = 'ACCOUNTS_FETCH',

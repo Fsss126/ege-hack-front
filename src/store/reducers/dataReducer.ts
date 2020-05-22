@@ -38,7 +38,6 @@ export interface DataState {
   // TODO: normalize
   // courseLessons: {[courseId: number]: DataProperty<number[]>};
   // lessons: {[lessonId: number]: LessonInfo};
-  lessons: {[courseId: number]: DataProperty<LessonInfo[]>};
   webinars: {
     [courseId: number]: DataProperty<PersonWebinar[]>;
     upcoming?: DataProperty<PersonWebinar[]>;
@@ -78,7 +77,6 @@ const defaultState: DataState = {
     [AccountRole.ADMIN]: undefined,
     [AccountRole.MODERATOR]: undefined,
   },
-  lessons: {},
   webinars: {},
   participants: {},
   adminWebinars: {},
@@ -539,27 +537,11 @@ export const dataReducer: Reducer<DataState, Action> = (
     }
     case ActionType.KNOWLEDGE_TEST_REVOKE: {
       const {lessonId, courseId, responseTest} = action;
-      const {
-        lessons: {[courseId]: courseLessons, ...loadedLessons},
-      } = state;
 
       const tests = {...state.tests, [responseTest.id]: responseTest};
 
-      if (!courseLessons || courseLessons instanceof Error) {
-        return {...state, tests};
-      }
-
-      const lessonIndex = _.findIndex(courseLessons, {id: lessonId});
-      const newLessons = [...courseLessons];
-
-      if (lessonIndex !== -1) {
-        const prevLesson = courseLessons[lessonIndex];
-        newLessons[lessonIndex] = {...prevLesson, test_id: responseTest.id};
-      }
-
       return {
         ...state,
-        lessons: {...loadedLessons, [courseId]: newLessons},
         tests,
         lessonsTests: {
           ...state.lessonsTests,
@@ -568,28 +550,12 @@ export const dataReducer: Reducer<DataState, Action> = (
       };
     }
     case ActionType.KNOWLEDGE_TEST_DELETE: {
-      const {courseId, lessonId, testId} = action;
-      const {
-        lessons: {[courseId]: courseLessons, ...loadedLessons},
-      } = state;
+      const {lessonId, testId} = action;
 
       const {[testId]: removedTest, ...tests} = state.tests;
 
-      if (!courseLessons || courseLessons instanceof Error) {
-        return {...state, tests};
-      }
-
-      const lessonIndex = _.findIndex(courseLessons, {id: lessonId});
-      const newLessons = [...courseLessons];
-
-      if (lessonIndex !== -1) {
-        const prevLesson = courseLessons[lessonIndex];
-        newLessons[lessonIndex] = {...prevLesson, test_id: undefined};
-      }
-
       return {
         ...state,
-        lessons: {...loadedLessons, [courseId]: newLessons},
         lessonsTests: {...state.lessonsTests, [lessonId]: null},
         tests,
       };
