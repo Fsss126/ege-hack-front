@@ -56,7 +56,9 @@ const DateInput = forwardRef<DayPickerInput, DateInputProps>(
           newDate.setHours(value.getHours());
           newDate.setMinutes(value.getMinutes());
         }
-        onChange && onChange(newDate, name);
+        if (onChange) {
+          onChange(newDate, name);
+        }
       },
       [onChange, value, name],
     );

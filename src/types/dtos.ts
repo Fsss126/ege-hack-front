@@ -41,6 +41,8 @@ export interface PupilDtoReq {
   city?: string;
   school?: string;
   final_year?: number;
+  phone?: string;
+  email?: string;
 }
 
 export interface PupilDtoResp extends PupilDtoReq, AccountDto {}
@@ -59,7 +61,12 @@ export interface AccountDtoReq {
   teacher?: TeacherDtoReq;
 }
 
-export interface UserInfoDtoResp {
+export interface AccountsRoleReq {
+  accounts: string[];
+  role: AccountRole;
+}
+
+export interface AccountDtoResp {
   id: number;
   email?: string;
   roles: AccountRole[];
@@ -147,7 +154,7 @@ export interface FileInfo {
 }
 
 export interface HometaskDtoResp {
-  deadline: number;
+  deadline?: number;
   description?: string;
   file_info?: FileInfo;
 }
@@ -176,7 +183,7 @@ export interface LessonDtoReq extends LessonDtoCommon, ReqWithImage {
 export interface LessonDtoResp extends LessonDtoCommon, RespWithImage {
   id: number;
   attachments: FileInfo[];
-  test?: TestStatusResp;
+  test_id?: number;
 }
 
 export interface HomeworkAssessmentDtoReq {
@@ -184,10 +191,13 @@ export interface HomeworkAssessmentDtoReq {
   mark?: number;
 }
 
-export interface HomeworkDtoResp extends HomeworkAssessmentDtoReq {
+export interface PupilHomeworkDtoResp extends HomeworkAssessmentDtoReq {
   date?: number;
   file_info?: FileInfo;
   lesson_id: number;
+}
+
+export interface HomeworkDtoResp extends PupilHomeworkDtoResp {
   pupil: PupilDtoResp;
 }
 
@@ -222,52 +232,82 @@ export enum AnswerType {
 
 export interface CorrectAnswerDto {
   type: AnswerType;
-  value?: string | number;
-  videoSolution?: string;
-  textSolution?: string;
+  value?: number | string;
 }
 
-export interface TaskDtoResp extends Partial<RespWithImage> {
-  id: number;
+export interface SolutionDto {
+  text_value?: string;
+  video_value?: string;
+}
+
+interface TaskDtoCommon {
+  name: string;
   text: string;
   complexity?: number;
-  weight: number;
-  subjectId: number;
-  themeId: number;
-  order: number;
+  score: number;
+  subject_id: number;
+  theme_id?: number;
   answer: CorrectAnswerDto;
+  solution?: SolutionDto;
 }
 
-export interface ThemeDtoResp {
+export interface TaskDtoReq extends TaskDtoCommon, Partial<ReqWithImage> {}
+
+export interface TaskDtoResp extends TaskDtoCommon, Partial<RespWithImage> {
   id: number;
-  title: string;
-  subjectId: number;
-  parentThemeId?: number;
-  order: number;
 }
 
-export interface TestDtoResp {
+interface ThemeDtoCommon {
+  name: string;
+  subject_id: number;
+  parent_theme_id?: number;
+}
+
+export interface ThemeDtoReq extends ThemeDtoCommon {}
+
+export interface ThemeDtoResp extends ThemeDtoCommon {
   id: number;
+  has_sub_themes: boolean;
+  has_sub_tasks: boolean;
+}
+
+interface TestDtoCommon {
   name: string;
   deadline?: number;
-  percentage: number;
+  pass_criteria: number;
+}
+
+export interface TestDtoReq extends TestDtoCommon {
+  task_ids: number[];
+}
+
+export interface TestDtoResp extends TestDtoCommon {
+  id: number;
   tasks: TaskDtoResp[];
 }
 
 export enum TestStatus {
-  COMPLETED = 'COMPLETED',
-  STARTED = 'STARTED',
   NOT_STARTED = 'NOT_STARTED',
+  STARTED = 'STARTED',
+  AWAIT = 'AWAIT',
+  PASSED = 'PASSED',
+  NOT_PASSED = 'NOT_PASSED',
 }
 
-export interface TestStatusResp {
-  id: number;
-  name: string;
+export interface CommonTestStatusResp {
   status: TestStatus;
   progress?: number;
-  deadline?: number;
   percentage?: number;
-  passed?: boolean;
+  started_at?: number;
+  completed_at?: number;
+}
+
+export interface TestStatusResp extends CommonTestStatusResp {
+  id: number;
+  pass_criteria: number;
+  name: string;
+  deadline?: number;
+  last_task_id?: number;
 }
 
 export interface UserAnswerDtoCommon {
@@ -280,22 +320,38 @@ export interface UserAnswerDtoReq extends UserAnswerDtoCommon {
 
 export interface UserAnswerDtoResp {
   type: AnswerType;
-  value?: string | number;
-  file_info?: FileInfo;
+  value?: string | number | FileInfo;
 }
 
 export interface TestStateAnswerDto {
   task_id: number;
-  user_answer: UserAnswerDtoResp;
+  user_answer?: UserAnswerDtoResp;
   correct_answer?: CorrectAnswerDto;
+  solution?: SolutionDto;
   is_correct?: boolean;
 }
 
-export interface TestStateDtoResp {
-  status: TestStatus;
-  progress?: number;
-  percentage?: number;
-  passed?: boolean;
+export interface TestAnswerResp
+  extends Require<TestStateAnswerDto, 'user_answer'> {}
+
+export interface TestStateDtoResp extends CommonTestStatusResp {
+  id: number;
   last_task_id?: number;
+  deadline?: number;
   answers: TestStateAnswerDto[];
+}
+
+export interface KnowledgeLevelDtoResponse {
+  themes: ThemeDtoResp[];
+  tasks: TaskDtoResp[];
+}
+
+export interface TestCheckingStatusResp extends CommonTestStatusResp {
+  id: number;
+}
+
+export interface TestResultResp {
+  test_id: number;
+  status: TestCheckingStatusResp;
+  pupil: VkUserDto;
 }

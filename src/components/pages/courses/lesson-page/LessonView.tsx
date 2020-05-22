@@ -1,35 +1,37 @@
 import {ExpandableContainer} from 'components/common/ExpandableContainer';
 import HomeworkAssignment from 'components/common/HomeworkAssignment';
 import VideoPlayer from 'components/common/VideoPlayer';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import {File} from 'components/ui/input';
 import React from 'react';
-import {HomeworkInfo, LessonInfo} from 'types/entities';
+import {LessonInfo, TestStatusInfo, UserHomeworkInfo} from 'types/entities';
 
 import HomeworkLoader from './HomeworkLoader';
 import {TestAssignment} from './TestAssignment';
 
 export interface LessonViewProps {
   lesson: LessonInfo;
-  homework: HomeworkInfo;
+  testStatus: TestStatusInfo | null;
+  homework: UserHomeworkInfo | null;
 }
 const LessonView: React.FC<LessonViewProps> = (props) => {
   const {
     lesson: {
       id,
       name,
-      image_link: cover,
       video_link: video,
       description,
       assignment,
       attachments,
-      test,
       course_id,
+      test_id,
     },
     homework,
+    testStatus,
   } = props;
 
   return (
-    <div className="col-12 col-lg layout__content-block lesson-page__current-lesson">
+    <ContentBlock className="col-12 col-xl lesson-page__current-lesson">
       <div className="block-container video-container">
         <VideoPlayer video_link={video} />
       </div>
@@ -40,7 +42,7 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       {attachments && attachments.length > 0 && (
         <div className="block-container attachment-container">
           <h3>
-            <i className="icon-book prefix-icon" />
+            <i className="icon-book prefix-icon align-middle" />
             Материалы к уроку
           </h3>
           <div className="attachment__files file-container">
@@ -53,13 +55,14 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
       {assignment && (
         <div className="block-container m-lg hw-container">
           <h3>
-            <i className="icon-assignment prefix-icon" />
+            <i className="icon-assignment prefix-icon align-middle" />
             Домашнее задание
           </h3>
           <HomeworkAssignment assignment={assignment} />
           <HomeworkLoader
             homework={homework}
             deadline={assignment.deadline}
+            courseId={course_id}
             lessonId={id}
           />
           <div className="hw-result">
@@ -82,16 +85,21 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
           </div>
         </div>
       )}
-      {test && (
+      {test_id && testStatus && (
         <div className="block-container m-lg test-container">
           <h3>
             <i className="icon-checkbox prefix-icon" />
             Тест
           </h3>
-          <TestAssignment courseId={course_id} lessonId={id} test={test} />
+          <TestAssignment
+            testId={test_id}
+            courseId={course_id}
+            lessonId={id}
+            test={testStatus}
+          />
         </div>
       )}
-    </div>
+    </ContentBlock>
   );
 };
 

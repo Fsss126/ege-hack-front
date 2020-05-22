@@ -3,7 +3,7 @@ import Form, {useForm, useFormValidityChecker} from 'components/ui/Form';
 import {Input} from 'components/ui/input';
 import Popup, {PopupAnimation} from 'components/ui/Popup';
 import {useForceUpdate} from 'hooks/common';
-import {useUser} from 'hooks/selectors';
+import {useUserInfo} from 'hooks/selectors';
 import React, {useCallback, useEffect, useRef} from 'react';
 import {PaymentReq} from 'types/dtos';
 import {CourseInfo} from 'types/entities';
@@ -27,7 +27,7 @@ interface PurchasePopupProps {
 
 const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
   const {opened, selectedCourses, onCloseClick} = props;
-  const {userInfo} = useUser();
+  const {userInfo} = useUserInfo();
   const formElementRef = useRef(null);
   const forceUpdate = useForceUpdate();
   const checkValidity = useFormValidityChecker(
@@ -36,9 +36,9 @@ const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
     [opened],
   );
   const {formData, isValid, onInputChange, reset} = useForm<FormData>(
-    (state) => ({
+    () => ({
       email:
-        userInfo && !(userInfo instanceof Error) && userInfo.email
+        userInfo && userInfo.email
           ? userInfo.email
           : localStorage.getItem(LOCAL_STORAGE_KEY) || '',
     }),
@@ -68,7 +68,6 @@ const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
   }, [opened, onInputChange, userInfo, email]);
 
   const onSubmit = React.useCallback(() => {
-    console.log('submit', email);
     localStorage.setItem(LOCAL_STORAGE_KEY, email);
     return createLinkRequest(getRequestData(email, selectedCourses));
   }, [email, getRequestData, selectedCourses]);
@@ -84,17 +83,14 @@ const PurchasePopup: React.FC<PurchasePopupProps> = (props) => {
           action: reloadCallback,
         },
       ]);
-      console.log(error);
+      console.error(error);
     },
     [],
   );
 
-  const onSubmitted = React.useCallback(
-    (response, showSuccessMessage, reset) => {
-      window.location = response.link;
-    },
-    [],
-  );
+  const onSubmitted = React.useCallback((response) => {
+    window.location = response.link;
+  }, []);
 
   return (
     <Popup

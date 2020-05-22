@@ -1,4 +1,5 @@
 import {
+  AccountDtoResp,
   AnswerType,
   CorrectAnswerDto,
   CourseDtoResp,
@@ -10,15 +11,13 @@ import {
   LessonDtoResp,
   LoginResp,
   PersonWebinarDto,
-  PupilDtoResp,
+  PupilDtoReq,
   SubjectDtoResp,
   TaskDtoResp,
-  TeacherDtoResp,
+  TeacherDtoReq,
   TestDtoResp,
   TestStatus,
-  TestStatusResp,
   ThemeDtoResp,
-  UserInfoDtoResp,
   VkUserDto,
   WebinarDtoResp,
   WebinarScheduleDtoResp,
@@ -41,23 +40,36 @@ export interface ContactInfo {
   ok?: string;
 }
 
-export interface AccountInfo {
+export interface ProfileInfo {
   id: number;
   vk_info: VkUserInfo;
   contacts: ContactInfo;
 }
 
-export interface PupilInfo
-  extends Omit<PupilDtoResp, 'account_id' | 'vk_info'>,
-    AccountInfo {}
+export interface PupilInfo extends PupilDtoReq {
+  grade?: number;
+}
 
-export interface TeacherInfo
-  extends Omit<TeacherDtoResp, 'account_id' | 'vk_info'>,
-    AccountInfo {}
+export interface PupilProfileInfo
+  extends Omit<PupilInfo, 'instagram'>,
+    ProfileInfo {}
 
-export interface UserInfo
-  extends Omit<UserInfoDtoResp, 'vk_info'>,
-    AccountInfo {}
+export interface TeacherInfo extends Omit<TeacherDtoReq, 'instagram'> {}
+
+export interface TeacherProfileInfo extends TeacherInfo, ProfileInfo {
+  subjects: SubjectInfo[];
+}
+
+export interface AccountInfo
+  extends Omit<AccountDtoResp, 'vk_info' | 'pupil' | 'teacher'>,
+    ProfileInfo {
+  pupil?: PupilInfo;
+  teacher?: TeacherInfo;
+}
+
+export interface TeacherAccountInfo extends Require<AccountInfo, 'teacher'> {}
+
+export interface PupilAccountInfo extends Require<AccountInfo, 'pupil'> {}
 
 export interface CourseInfo
   extends Omit<CourseDtoResp, 'date_start' | 'date_end' | 'teacher_id'> {
@@ -65,6 +77,8 @@ export interface CourseInfo
   date_end: Date;
   teacher_ids: CourseDtoResp['teacher_id'][];
 }
+
+export type BasicAccountInfo = Omit<AccountInfo, 'permissions' | 'roles'>;
 
 export interface UserCourseInfo extends CourseInfo {
   status: LearningStatus;
@@ -75,7 +89,7 @@ export interface CourseParticipantInfo
       CourseParticipantDto,
       'account_id' | 'vk_info' | 'join_date_time'
     >,
-    AccountInfo {
+    ProfileInfo {
   join_date_time: Date;
 }
 
@@ -96,63 +110,106 @@ export interface PersonWebinar
 
 export interface AssignmentInfo
   extends Omit<HometaskDtoResp, 'deadline' | 'file_info'> {
-  deadline: Date;
+  deadline?: Date;
   files?: FileInfo[];
 }
 
 export interface LessonInfo
-  extends Omit<LessonDtoResp, 'is_locked' | 'hometask' | 'test'> {
+  extends Omit<LessonDtoResp, 'is_locked' | 'hometask'> {
   locked: LessonDtoResp['is_locked'];
   assignment?: AssignmentInfo;
   watchProgress?: number;
-  test?: TestStatusInfo;
 }
 
-export interface HomeworkInfo
+export interface UserHomeworkInfo
   extends Omit<HomeworkDtoResp, 'date' | 'file_info' | 'pupil'> {
   date?: Date;
   files?: FileInfo[];
-  pupil: PupilInfo;
+}
+
+export interface HomeworkInfo extends UserHomeworkInfo {
+  pupil: PupilProfileInfo;
 }
 
 export type DiscountInfo = DiscountMessage;
 
 export {AnswerType, TestStatus} from './dtos';
 
+interface CommonTestStatusFields {
+  status: TestStatus;
+  progress: number;
+}
+
+interface TestStatusActiveInfo extends CommonTestStatusFields {
+  status: TestStatus.STARTED | TestStatus.NOT_STARTED;
+  started_at?: Date;
+  is_completed: false;
+  is_rated: false;
+}
+
+interface TestStatusAwaitingInfo extends CommonTestStatusFields {
+  status: TestStatus.AWAIT;
+  started_at: Date;
+  completed_at: Date;
+  is_completed: true;
+  is_rated: false;
+  percentage?: number;
+  passed?: boolean;
+}
+
+interface TestStatusPassedInfo extends CommonTestStatusFields {
+  status: TestStatus.PASSED | TestStatus.NOT_STARTED;
+  started_at: Date;
+  completed_at: Date;
+  is_completed: true;
+  is_rated: true;
+  percentage: number;
+  passed: boolean;
+}
+
+export type CommonTestStatusInfo =
+  | TestStatusActiveInfo
+  | TestStatusAwaitingInfo
+  | TestStatusPassedInfo;
+
 export type TestStatusInfo = {
   id: number;
-  status: TestStatus;
   name: string;
   deadline?: Date;
-} & (
-  | {
-      status: TestStatus.COMPLETED;
-      percentage: number;
-      passed: number;
-    }
-  | {
-      status: TestStatus.NOT_STARTED | TestStatus.STARTED;
-      progress: number;
-    }
-);
+  last_task_id?: number;
+  pass_criteria: number;
+} & CommonTestStatusInfo;
 
-export type CorrectAnswerInfo = CorrectAnswerDto;
+export interface CorrectAnswerInfo {
+  type: AnswerType;
+  value?: string | number;
+  video_solution?: string;
+  text_solution?: string;
+}
 
-export type TaskInfo = TaskDtoResp;
+export interface TaskInfo extends Omit<TaskDtoResp, 'solution' | 'answer'> {
+  answer: CorrectAnswerInfo;
+}
+
+export interface TestTaskInfo extends TaskInfo {
+  order: number;
+}
 
 export interface SanitizedTaskAnswer {
   type: AnswerType;
 }
 
 export interface SanitizedTaskInfo
-  extends Omit<TaskDtoResp, 'answer' | 'themeId' | 'subjectId'> {
+  extends Omit<TaskDtoResp, 'answer' | 'theme_id' | 'subject_id' | 'solution'> {
+  order: number;
   answer: SanitizedTaskAnswer;
 }
 
 export type ThemeInfo = ThemeDtoResp;
 
-export interface TestInfo extends Omit<TestDtoResp, 'deadline'> {
+export interface TestInfo extends Omit<TestDtoResp, 'deadline' | 'tasks'> {
   deadline?: Date;
+  tasks: TestTaskInfo[];
 }
 
 export interface SanitizedTestInfo extends Omit<TestInfo, 'tasks'> {
@@ -169,38 +226,67 @@ export type TestAnswerValue = UserAnswerInfo['value'];
 
 export interface TestStateActiveAnswerInfo {
   task_id: number;
-  user_answer: UserAnswerInfo;
+  user_answer?: UserAnswerInfo;
+}
+
+export interface TestStateAwaitingAnswerInfo extends TestStateActiveAnswerInfo {
+  correct_answer?: CorrectAnswerDto;
+  is_correct?: boolean;
 }
 
 export interface TestStatePassedAnswerInfo extends TestStateActiveAnswerInfo {
   correct_answer: CorrectAnswerDto;
   is_correct: boolean;
+  passed: boolean;
 }
 
 export type TestStateAnswerInfo =
   | TestStateActiveAnswerInfo
   | TestStatePassedAnswerInfo;
 
-type CommonTestStateInfo = {
-  status: TestStatus;
-  last_task_id: number;
-  progress: number;
-};
+interface CommonTestStateInfo {
+  last_task_id?: number;
+  deadline?: Date;
+}
 
-export interface TestStateActiveInfo extends CommonTestStateInfo {
-  status: TestStatus.NOT_STARTED | TestStatus.STARTED;
+export interface TestStateActiveInfo
+  extends TestStatusActiveInfo,
+    CommonTestStateInfo {
   answers: {
     [key: number]: TestStateActiveAnswerInfo;
   };
 }
 
-export interface TestStatePassedInfo extends CommonTestStateInfo {
-  status: TestStatus.COMPLETED;
-  percentage: number;
-  passed: boolean;
+export interface TestStateAwaitingInfo
+  extends TestStatusAwaitingInfo,
+    CommonTestStateInfo {
+  answers: {
+    [key: number]: TestStateAwaitingAnswerInfo;
+  };
+}
+
+export interface TestStatePassedInfo
+  extends TestStatusPassedInfo,
+    CommonTestStateInfo {
   answers: {
     [key: number]: TestStatePassedAnswerInfo;
   };
 }
 
-export type TestStateInfo = TestStateActiveInfo | TestStatePassedInfo;
+export type TestStateInfo =
+  | TestStateActiveInfo
+  | TestStateAwaitingInfo
+  | TestStatePassedInfo;
+
+export type TestCheckingStatusInfo = CommonTestStatusInfo;
+
+export interface TestResultInfo {
+  test_id: number;
+  status: TestCheckingStatusInfo;
+  pupil: PupilProfileInfo;
+}
+
+export interface KnowledgeLevelInfo {
+  themes: ThemeInfo[];
+  tasks: TaskInfo[];
+}

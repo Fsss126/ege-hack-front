@@ -1,35 +1,49 @@
-import TabNav, {TabNavLink} from 'components/common/TabNav';
+import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
+import {getIsFeatureEnabled, TOGGLE_FEATURES} from 'definitions/constants';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {RouteComponentPropsWithParentProps} from 'types/routes';
 
 import CourseCatalogPage from './CourseCatalogPage';
+import SchedulePage from './SchedulePage';
 
-const CoursesPage: React.FC<RouteComponentPropsWithPath> = (props) => {
-  const {path} = props;
+const CoursesPage: React.FC<RouteComponentPropsWithParentProps> = (props) => {
+  const {path, url} = props;
   const header = (
-    <div className="layout__content-block tab-nav-container">
-      <h2>Преподавание</h2>
+    <TabNavBlock title="Преподавание">
       <TabNav>
         <TabNavLink to={`${path}/list/`}>Список</TabNavLink>
-        <TabNavLink to={`${path}/calendar/`} disabled>
+        <TabNavLink
+          to={`${path}/calendar/`}
+          disabled={!getIsFeatureEnabled(TOGGLE_FEATURES.schedule)}
+        >
           Календарь
         </TabNavLink>
       </TabNav>
-    </div>
+    </TabNavBlock>
   );
 
   return (
     <Switch>
       <Route
-        path={[`${path}/list`, `${path}/calendar`]}
+        path={`${path}/list`}
         render={(props) => (
-          <CourseCatalogPage path={path} {...props}>
+          <CourseCatalogPage path={path} url={url} {...props}>
             {header}
           </CourseCatalogPage>
         )}
       />
-      <Route render={() => <Redirect to={`${path}/list/`} />} />
+      {getIsFeatureEnabled(TOGGLE_FEATURES.schedule) && (
+        <Route
+          path={`${path}/calendar`}
+          render={(props) => (
+            <SchedulePage path={path} url={url} {...props}>
+              {header}
+            </SchedulePage>
+          )}
+        />
+      )}
+      <Route render={() => <Redirect to={`${url}/list/`} />} />
     </Switch>
   );
 };

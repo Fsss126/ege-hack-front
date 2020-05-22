@@ -1,6 +1,8 @@
-import {useUser} from 'hooks/selectors';
+import {getIsFeatureEnabled, TOGGLE_FEATURES} from 'definitions/constants';
+import {useUserInfo} from 'hooks/selectors';
 import _ from 'lodash';
-import {UserInfo} from 'types/entities';
+import React from 'react';
+import {AccountInfo} from 'types/entities';
 
 import {AccountRole, Permission} from '../types/enums';
 
@@ -9,7 +11,7 @@ export type RequiredPermissions = Permission | Permission[];
 export type RequiredRoles = AccountRole | AccountRole[];
 
 export function checkPermissions(
-  userInfo: UserInfo,
+  userInfo: AccountInfo,
   requiredPermissions?: RequiredPermissions,
   requiredRoles?: RequiredRoles,
   fullMatch = true,
@@ -49,9 +51,9 @@ export function useCheckPermissions(
   requiredRoles?: RequiredRoles,
   fullMatch = true,
 ): boolean | undefined {
-  const {userInfo} = useUser();
+  const {userInfo, error} = useUserInfo();
 
-  if (!userInfo || userInfo instanceof Error) {
+  if (!userInfo || error) {
     return undefined;
   }
   return checkPermissions(
@@ -62,12 +64,12 @@ export function useCheckPermissions(
   );
 }
 
-export type ConditionalRenderProps = {
+export interface ConditionalRenderProps {
   requiredPermissions?: RequiredPermissions;
   requiredRoles?: RequiredRoles;
   fullMatch?: boolean;
-  children?: React.ReactElement;
-};
+  children?: React.ReactNode;
+}
 const ConditionalRenderer: React.FC<ConditionalRenderProps> = (props) => {
   const {requiredPermissions, requiredRoles, children, fullMatch} = props;
   const render = useCheckPermissions(
@@ -76,7 +78,19 @@ const ConditionalRenderer: React.FC<ConditionalRenderProps> = (props) => {
     fullMatch,
   );
 
-  return render && children ? children : null;
+  return render && children ? <>{children}</> : null;
+};
+
+export interface FeatureToggleGuardProps {
+  feature: TOGGLE_FEATURES;
+  children: React.ReactNode;
+}
+
+export const FeatureToggleGuard = (props: FeatureToggleGuardProps) => {
+  const {feature, children} = props;
+  const isFeatureEnabled = getIsFeatureEnabled(feature);
+
+  return isFeatureEnabled && children ? <>{children}</> : null;
 };
 
 export default ConditionalRenderer;

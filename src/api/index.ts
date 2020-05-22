@@ -2,14 +2,17 @@ import axios, {AxiosError, AxiosResponse} from 'axios';
 import Auth from 'definitions/auth';
 import _ from 'lodash';
 import {
+  AccountDtoResp,
   CourseDtoResp,
   CourseParticipantDto,
   HomeworkDtoResp,
   LessonDtoResp,
   PersonWebinarDto,
+  PupilHomeworkDtoResp,
+  SubjectDtoResp,
   TeacherDtoResp,
-  TestStateAnswerDto,
-  UserInfoDtoResp,
+  TestAnswerResp,
+  TestResultResp,
   WebinarScheduleDtoResp,
 } from 'types/dtos';
 import {
@@ -18,27 +21,31 @@ import {
   HomeworkInfo,
   LessonInfo,
   PersonWebinar,
-  TeacherInfo,
-  TestInfo,
+  TeacherProfileInfo,
   TestStateAnswerInfo,
-  TestStateInfo,
-  UserAnswerInfo,
   UserCourseInfo,
-  UserInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
 import {LearningStatus} from 'types/enums';
 
 import {getUrl} from './helpers';
 import {mockTestsRequests} from './mocks';
-// import {mockRequests} from './mocks';
+// tslint:disable-next-line:no-duplicate-imports
+import {mockRequests} from './mocks';
 import {
+  transformAccountInfo,
   transformCourse,
   transformHomework,
+  transformKnowledgeLevel,
   transformLesson,
+  transformProfileInfo,
+  transformPupilHomework,
+  transformSubject,
+  transformTask,
   transformTest,
+  transformTestResult,
   transformTestState,
-  transformUser,
+  transformTestStatus,
   transformUserAnswer,
 } from './transforms';
 
@@ -57,6 +64,7 @@ export const getCancelToken = () => {
 
 const APIRequest = axios.create({
   baseURL: API_ROOT,
+  timeout: 10000,
   paramsSerializer: (params) => {
     const searchParams = new URLSearchParams();
     _.forEach(params, (value, key) => {
@@ -72,7 +80,7 @@ const APIRequest = axios.create({
   },
 });
 
-APIRequest.interceptors.request.use(function (config) {
+APIRequest.interceptors.request.use((config) => {
   const url = getUrl(config);
 
   if (/\/login/.test(url.pathname)) {
@@ -90,24 +98,34 @@ APIRequest.interceptors.request.use(function (config) {
   }
 });
 
-//Interceptors
+// Interceptors
 const transformData = (response: AxiosResponse): AxiosResponse => {
   const {config, data} = response;
   const url = getUrl(config);
   const getData = (): any => {
     switch (true) {
       case url.pathname === '/accounts/info':
-        return transformUser<UserInfoDtoResp, UserInfo>(data);
+        return transformAccountInfo(data as AccountDtoResp);
       case url.pathname === '/accounts/teachers':
-        return (data as TeacherDtoResp[]).map<TeacherInfo>(transformUser);
-      case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):
-        return transformUser<TeacherDtoResp, TeacherInfo>(
-          data as TeacherDtoResp,
+        return (data as TeacherDtoResp[]).map<TeacherProfileInfo>(
+          transformProfileInfo,
         );
+      case url.pathname === '/accounts/management':
+        return (data as AccountDtoResp[]).map(transformAccountInfo);
+      case url.pathname === '/subjects':
+        if (config.method === 'get') {
+          return (data as SubjectDtoResp[]).map(transformSubject);
+        } else {
+          return transformSubject(data);
+        }
+      case /\/subjects\/(\w*)$/.test(url.pathname):
+        return transformSubject(data);
+      case /\/accounts\/teachers\/(\w*)$/.test(url.pathname):
+        return transformProfileInfo(data as TeacherDtoResp);
       case /\/courses\/(\w*)\/participants$/.test(url.pathname):
         return (data as CourseParticipantDto[]).map<CourseParticipantInfo>(
           (participant) => ({
-            ...transformUser(participant),
+            ...transformProfileInfo(participant),
             join_date_time: new Date(participant.join_date_time),
           }),
         );
@@ -144,15 +162,18 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
       case /\/lessons\/(\w*)\/homeworks$/.test(url.pathname): {
         return (data as HomeworkDtoResp[]).map<HomeworkInfo>(transformHomework);
       }
-      case /\/lessons\/(\w*)\/homeworks\/pupil/.test(url.pathname): {
+      case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname): {
         if (
           config.method === 'get' ||
           config.method === 'put' ||
           config.method === 'patch'
         ) {
-          return transformHomework(data);
+          return transformPupilHomework(data as PupilHomeworkDtoResp);
         }
-        return;
+        return null;
+      }
+      case /\/lessons\/(\w*)\/homeworks\/pupil\/(\w*)/.test(url.pathname): {
+        return transformHomework(data as HomeworkDtoResp);
       }
       case url.pathname === '/courses/schedule/person':
       case /\/courses\/\w*\/schedule\/person$/.test(url.pathname): {
@@ -197,19 +218,40 @@ const transformData = (response: AxiosResponse): AxiosResponse => {
           ...rest,
         } as WebinarScheduleInfo;
       }
+      case /\/knowledge\/tests\/status/.test(url.pathname):
+      case /\/knowledge\/tests\/(.*)\/status/.test(url.pathname):
+        return transformTestStatus(data);
       case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
-        const {user_answer, ...rest} = data as TestStateAnswerDto;
+        const {user_answer, ...rest} = data as TestAnswerResp;
 
         return {
           ...rest,
           user_answer: transformUserAnswer(user_answer),
         } as TestStateAnswerInfo;
+      case /\/knowledge\/tests\/state/.test(url.pathname):
       case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
       case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname): {
-        return transformTestState(data) as TestStateInfo;
+        return transformTestState(data);
       }
-      case /\/knowledge\/tests\/(.*)$/.test(url.pathname): {
-        return transformTest(data) as TestInfo;
+      case /\/knowledge\/tests\/results/.test(url.pathname):
+      case /\/knowledge\/tests\/(.*)\/results/.test(url.pathname):
+        return (data as TestResultResp[]).map((result) =>
+          transformTestResult(result),
+        );
+      case /\/knowledge\/tests\/(.*)$/.test(url.pathname):
+      case /\/knowledge\/tests$/.test(url.pathname): {
+        if (config.method !== 'delete') {
+          return transformTest(data);
+        }
+        return null;
+      }
+      case /\/knowledge\/content$/.test(url.pathname): {
+        return transformKnowledgeLevel(data);
+      }
+      case /\/knowledge\/content\/tasks\/(.*)$/.test(url.pathname): {
+        if (config.method !== 'delete') {
+          return transformTask(data);
+        }
       }
       default:
         return response.data;
@@ -230,6 +272,8 @@ const transformError = (error: AxiosError) => {
   }
   if (error.response && error.response.status === 404) {
     switch (true) {
+      case /\/knowledge\/tests/.test(url.pathname):
+      case /\/knowledge\/tests\/status/.test(url.pathname):
       case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):
         return null;
       case /\/courses\/\w*\/schedule$/.test(url.pathname):
@@ -242,11 +286,11 @@ const transformError = (error: AxiosError) => {
   }
 };
 
-mockTestsRequests(APIRequest);
+// mockTestsRequests(APIRequest);
 
 APIRequest.interceptors.response.use(transformData, transformError);
 
-//returns mocks for all failed requests
+// returns mocks for all failed requests
 // mockRequests(APIRequest);
 
 window.APIRequest = APIRequest;

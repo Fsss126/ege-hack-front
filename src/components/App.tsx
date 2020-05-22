@@ -1,4 +1,4 @@
-import 'sass/index.scss';
+import 'styles/index.scss';
 
 import {Location, LocationListener} from 'history';
 import {useToggle} from 'hooks/common';
@@ -19,6 +19,8 @@ import {
   useLocation,
 } from 'react-router-dom';
 
+import {DEBUG_MODE} from '../definitions/constants';
+import {ErrorBoundary} from './ErrorBoundary';
 import {NotFoundErrorPage} from './layout/ErrorPage';
 import Account from './pages/account';
 import Admin from './pages/admin';
@@ -27,6 +29,7 @@ import Login from './pages/login';
 import Shop from './pages/shop';
 import Teachers from './pages/teachers';
 import Teaching from './pages/teaching';
+import {SnackbarProvider} from './SnackbarProvider';
 
 function useLocationChangeEffect(effect: LocationListener): void {
   const history = useHistory();
@@ -52,7 +55,9 @@ function useForceTrailingSlash(): void {
   const path = location.pathname;
 
   if (path.slice(-1) !== '/') {
-    console.log(window.location);
+    if (DEBUG_MODE) {
+      console.warn('Force trailing slash', path);
+    }
     history.replace(path + '/');
   }
 }
@@ -76,7 +81,10 @@ export function useSideBarState(): UIState['sidebar'] {
 }
 
 const onLocationChange = (location: Location): void => {
-  console.log(`- - - location: '${location.pathname}'`);
+  if (DEBUG_MODE) {
+    // eslint-disable-next-line no-console
+    console.log(`- - - location: '${location.pathname}'`);
+  }
 };
 
 const DefaultRedirect = (): ReactElement => <Redirect to="/courses" />;
@@ -87,23 +95,27 @@ function App(): ReactElement {
   useForceTrailingSlash();
   useScrollToTop();
   useLocationChangeEffect(onLocationChange);
+  const location = useLocation();
   const uiState = useUIState();
 
   return (
     <UIContext.Provider value={uiState}>
-      <Switch>
-        <Route path="/index.html" component={DefaultRedirect} />
-        <Route exact path="/" component={DefaultRedirect} />
-        <Route path="/login" component={Login} />
-        <Route path="/courses" component={MyCourses} />
-        <Route path="/shop" component={Shop} />
-        <Route path="/teachers" component={Teachers} />
-        <Route path="/account" component={Account} />
-        <Route path="/admin" component={Admin} />
-        <Route path="/teaching" component={Teaching} />
-        {/*<Route path="/:section" component={Page}/>*/}
-        <Route component={NotFoundErrorPage} />
-      </Switch>
+      <SnackbarProvider>
+        <ErrorBoundary location={location}>
+          <Switch>
+            <Route path="/index.html" component={DefaultRedirect} />
+            <Route exact path="/" component={DefaultRedirect} />
+            <Route path="/login" component={Login} />
+            <Route path="/courses" component={MyCourses} />
+            <Route path="/shop" component={Shop} />
+            <Route path="/teachers" component={Teachers} />
+            <Route path="/account" component={Account} />
+            <Route path="/admin" component={Admin} />
+            <Route path="/teaching" component={Teaching} />
+            <Route component={NotFoundErrorPage} />
+          </Switch>
+        </ErrorBoundary>
+      </SnackbarProvider>
     </UIContext.Provider>
   );
 }

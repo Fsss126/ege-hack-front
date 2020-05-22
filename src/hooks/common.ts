@@ -1,13 +1,5 @@
-import React, {
-  Ref,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
-
-import {SimpleCallback} from '../types/utility/common';
+import React, {Ref, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {SimpleCallback} from 'types/utility/common';
 
 export function useTruncate(text?: string): [Ref<any>, boolean] {
   const descriptionRef = useRef<any>(null);

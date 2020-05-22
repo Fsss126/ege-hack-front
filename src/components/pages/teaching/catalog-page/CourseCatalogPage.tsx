@@ -4,7 +4,7 @@ import Page, {PageContent} from 'components/layout/Page';
 import {useSubjects, useTeacherCourses} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Permission} from 'types/enums';
-import {RouteComponentPropsWithPath} from 'types/routes';
+import {RouteComponentPropsWithParentProps} from 'types/routes';
 
 const filterBy = {
   search: true,
@@ -12,9 +12,15 @@ const filterBy = {
   online: true,
 };
 
-const CourseCatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
+const CourseCatalogPage: React.FC<RouteComponentPropsWithParentProps> = (
+  props,
+) => {
   const {location, path, children: header} = props;
-  const {catalog, error, reload} = useTeacherCourses();
+  const {
+    catalog,
+    error: errorLoadingCourses,
+    reload: reloadCourses,
+  } = useTeacherCourses();
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -48,13 +54,15 @@ const CourseCatalogPage: React.FC<RouteComponentPropsWithPath> = (props) => {
       requiredPermissions={Permission.HOMEWORK_CHECK}
       className="admin-page admin-page--courses"
       title="Проверка работ"
+      errors={[errorLoadingCourses, errorLoadingSubjects]}
+      reloadCallbacks={[reloadCourses, reloadSubjects]}
       location={location}
     >
       {isLoaded && catalog && subjects && (
         <PageContent>
           <CourseCatalog.Body subjects={subjects} courses={catalog}>
             {header}
-            <CourseCatalog.Filter filterBy={filterBy} />
+            <CourseCatalog.Filter filterBy={filterBy} stacked />
             <CourseCatalog.Catalog plain renderCourse={renderCourse} />
           </CourseCatalog.Body>
         </PageContent>

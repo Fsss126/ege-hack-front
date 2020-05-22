@@ -33,7 +33,9 @@ export type ActionButtonProps = {
 } & MessageAction;
 class ActionButton extends React.Component<ActionButtonProps> {
   onClick = (): void => {
-    'action' in this.props && this.props.action && this.props.action();
+    if ('action' in this.props && this.props.action) {
+      this.props.action();
+    }
     this.props.callback();
   };
 
@@ -126,23 +128,27 @@ class MessagePopup extends React.Component<{}, MessagePopupProps> {
           {message && message.action ? (
             <div className="row action-wrap justify-content-center">
               <div className="col btn-container">
-                <ActionButton
-                  {...message.action}
-                  callback={this.close}
-                  accent={true}
-                />
+                <div className="btn-container__inner justify-content-center">
+                  <ActionButton
+                    {...message.action}
+                    callback={this.close}
+                    accent={true}
+                  />
+                </div>
               </div>
             </div>
           ) : null}
           {message && message.actions ? (
             <div className="row action-wrap justify-content-center">
               <div className="col btn-container">
-                {_.insertAfterEach(
-                  message.actions.map((action, i) => (
-                    <ActionButton {...action} callback={this.close} key={i} />
-                  )),
-                  ' ',
-                )}
+                <div className="btn-container__inner justify-content-center">
+                  {_.insertAfterEach(
+                    message.actions.map((action, i) => (
+                      <ActionButton {...action} callback={this.close} key={i} />
+                    )),
+                    ' ',
+                  )}
+                </div>
               </div>
             </div>
           ) : null}

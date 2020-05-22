@@ -14,6 +14,7 @@ export type ButtonProps<
   afterAction?: SimpleCallback;
   before?: React.ReactNode;
   beforeAction?: SimpleCallback;
+  clickOnWrapper: boolean;
   component: T;
   className?: string;
   dataAttribute?: boolean;
@@ -39,6 +40,7 @@ const Button = <T extends React.ElementType>(
     beforeAction,
     component: Component,
     onClick,
+    clickOnWrapper,
     dataAttribute,
     ...rest
   } = props;
@@ -53,7 +55,11 @@ const Button = <T extends React.ElementType>(
   );
 
   return (
-    <Component className={joinedClassname} {...rest}>
+    <Component
+      className={joinedClassname}
+      onClick={clickOnWrapper && active ? onClick : undefined}
+      {...rest}
+    >
       <span className="btn__content">
         {before && (
           <div
@@ -73,7 +79,7 @@ const Button = <T extends React.ElementType>(
         )}
         <span
           className="btn__name"
-          onClick={active ? onClick : undefined}
+          onClick={!clickOnWrapper && active ? onClick : undefined}
           data-content={dataAttribute ? children : undefined}
         >
           {!dataAttribute && children}
@@ -99,6 +105,7 @@ Button.defaultProps = {
   neutral: false,
   loading: false,
   component: 'div',
+  clickOnWrapper: false,
 };
 
 export default Button;

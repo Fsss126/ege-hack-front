@@ -1,6 +1,6 @@
 import {addMockedTestAnswerResponses} from 'api/mocks';
+import NavigationBlocker from 'components/common/NavigationBlocker';
 import {
-  FormSubmitHandler,
   useForm,
   useFormHandleError,
   useFormHandleSubmitted,
@@ -21,7 +21,6 @@ import {
 } from 'types/entities';
 import {Deferred} from 'utils/promiseHelper';
 
-import NavigationBlocker from '../../../common/NavigationBlocker';
 import {AnswerInput} from './AnswerInput';
 import {LinkClickCallback, TaskNav} from './TaskNav';
 import {TaskPageLayout} from './TaskPageLayout';
@@ -33,6 +32,8 @@ interface InputData {
 interface TaskResultContentProps {
   testId: number;
   taskId: number;
+  lessonId: number;
+  courseId: number;
   test: SanitizedTestInfo;
   state: TestStateActiveInfo;
   task: SanitizedTaskInfo;
@@ -51,7 +52,7 @@ function getRequestData(data: InputData): string {
 }
 
 export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
-  const {testId, taskId, ...layoutProps} = props;
+  const {testId, taskId, lessonId, courseId, ...layoutProps} = props;
   const {task, test, state} = layoutProps;
   const {
     answers: {[taskId]: answer},
@@ -65,7 +66,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
   let initialValue: TestAnswerValue | undefined;
 
-  if (answer) {
+  if (answer && answer.user_answer) {
     ({
       user_answer: {value: initialValue},
     } = answer);
@@ -115,6 +116,8 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
       saveAnswerCallback({
         testId,
         taskId,
+        lessonId,
+        courseId,
         answer,
         complete,
         navigateTo,
@@ -124,7 +127,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
       return deferred.promise;
     },
-    [formData, saveAnswerCallback, taskId, testId, task],
+    [formData, task, saveAnswerCallback, testId, taskId, lessonId, courseId],
   );
 
   const submitTest = useCallback(
@@ -135,6 +138,8 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
       completeCallback({
         testId,
+        lessonId,
+        courseId,
         navigateTo,
         onSuccess: deferred.resolve,
         onError: deferred.reject,
@@ -142,7 +147,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
 
       return deferred.promise;
     },
-    [completeCallback, testId],
+    [completeCallback, courseId, lessonId, testId],
   );
 
   const onError = React.useCallback(
@@ -156,7 +161,7 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
           action: reloadCallback,
         },
       ]);
-      console.log(error);
+      console.error(error);
     },
     [],
   );
@@ -181,10 +186,10 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
   );
   const loadingState = useLoadingState(submitting, submitting === false);
 
-  const onNextClick: LinkClickCallback = useCallback(
-    (link, event) => {
+  const onNavClick: LinkClickCallback = useCallback(
+    (link, complete, event) => {
       if (!hasChanged) {
-        if (isLastTask) {
+        if (complete && isLastTask) {
           event.preventDefault();
           event.stopPropagation();
 
@@ -196,22 +201,9 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
       event.preventDefault();
       event.stopPropagation();
 
-      handleSubmit(submitAnswer(isLastTask, link));
+      handleSubmit(submitAnswer(complete && isLastTask, link));
     },
     [handleSubmit, hasChanged, isLastTask, submitAnswer, submitTest],
-  );
-
-  const onPrevClick: LinkClickCallback = useCallback(
-    (link, event) => {
-      if (!hasChanged) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-      handleSubmit(submitAnswer(false, link));
-    },
-    [handleSubmit, hasChanged, submitAnswer],
   );
 
   const nav = (
@@ -220,9 +212,9 @@ export const TaskInputContent: React.FC<TaskResultContentProps> = (props) => {
       test={test}
       state={state}
       loadingState={loadingState}
-      onNextClick={onNextClick}
-      onPrevClick={onPrevClick}
+      onClick={onNavClick}
       navigateTo={navigateLink}
+      nextAccent={hasChanged}
     />
   );
 

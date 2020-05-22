@@ -3,6 +3,7 @@ import Auth from 'definitions/auth';
 import _ from 'lodash';
 import {Reducer} from 'redux';
 import {
+  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   Credentials,
@@ -10,32 +11,74 @@ import {
   LessonInfo,
   PersonWebinar,
   SubjectInfo,
-  TeacherInfo,
+  TaskInfo,
+  TeacherProfileInfo,
+  TestInfo,
+  TestResultInfo,
+  ThemeInfo,
   UserCourseInfo,
-  UserInfo,
-  WebinarInfo,
+  UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
+import {AccountRole} from 'types/enums';
+import {KNOWLEDGE_TREE_ROOT, KnowledgeTreeLevel} from 'types/knowledgeTree';
 
 import {Action, ActionType} from '../actions';
 
+export type DataProperty<T> = Maybe<T | AxiosError>;
+
+export type KnowledgeBaseSubject = {
+  [key in number | typeof KNOWLEDGE_TREE_ROOT]?: DataProperty<
+    KnowledgeTreeLevel
+  >;
+};
+
 export interface DataState {
-  credentials: Credentials | null | AxiosError;
-  userInfo?: UserInfo | AxiosError;
-  shopCourses?: CourseInfo[] | AxiosError;
-  userCourses?: UserCourseInfo[] | AxiosError;
-  subjects?: SubjectInfo[] | AxiosError;
-  teachers?: TeacherInfo[] | AxiosError;
-  lessons: {[courseId: number]: LessonInfo[] | AxiosError};
-  webinars: {
-    [courseId: number]: PersonWebinar[] | AxiosError;
-    upcoming?: PersonWebinar[] | AxiosError;
+  credentials?: DataProperty<Credentials>;
+  userInfo?: DataProperty<AccountInfo>;
+  shopCourses?: DataProperty<CourseInfo[]>;
+  userCourses?: DataProperty<UserCourseInfo[]>;
+  subjects?: DataProperty<SubjectInfo[]>;
+  userTeachers?: DataProperty<TeacherProfileInfo[]>;
+  userHomeworks: {
+    [courseId: number]: {
+      [lessonId: number]: DataProperty<UserHomeworkInfo | null>;
+    };
   };
-  participants: {[courseId: number]: CourseParticipantInfo[] | AxiosError};
-  adminCourses?: CourseInfo[] | AxiosError;
-  adminWebinars: {[courseId: number]: WebinarScheduleInfo | AxiosError};
-  teacherCourses?: CourseInfo[] | AxiosError;
-  homeworks: {[lessonId: number]: HomeworkInfo[] | AxiosError};
+  users: Record<AccountRole, DataProperty<AccountInfo[]>>;
+  // TODO: normalize
+  // courseLessons: {[courseId: number]: DataProperty<number[]>};
+  // lessons: {[lessonId: number]: LessonInfo};
+  lessons: {[courseId: number]: DataProperty<LessonInfo[]>};
+  webinars: {
+    [courseId: number]: DataProperty<PersonWebinar[]>;
+    upcoming?: DataProperty<PersonWebinar[]>;
+  };
+  participants: {
+    [courseId: number]: DataProperty<CourseParticipantInfo[]>;
+  };
+  adminCourses?: DataProperty<CourseInfo[]>;
+  adminWebinars: {[courseId: number]: DataProperty<WebinarScheduleInfo>};
+  teacherCourses?: DataProperty<CourseInfo[]>;
+  homeworks: {[lessonId: number]: DataProperty<HomeworkInfo[]>};
+  themes: {
+    [themeId: number]: DataProperty<ThemeInfo>;
+  };
+  tasks: {
+    [taskId: number]: DataProperty<TaskInfo>;
+  };
+  knowledgeMap: {
+    [subjectId: number]: Maybe<KnowledgeBaseSubject>;
+  };
+  tests: {
+    [testId: number]: TestInfo;
+  };
+  testResults: {
+    [testId: number]: DataProperty<TestResultInfo[]>;
+  };
+  lessonsTests: {
+    [lessonId: number]: DataProperty<number | null>;
+  };
 }
 
 const defaultState: DataState = {
@@ -44,7 +87,15 @@ const defaultState: DataState = {
   shopCourses: undefined,
   userCourses: undefined,
   subjects: undefined,
-  teachers: undefined,
+  userTeachers: undefined,
+  userHomeworks: {},
+  users: {
+    [AccountRole.PUPIL]: undefined,
+    [AccountRole.TEACHER]: undefined,
+    [AccountRole.HELPER]: undefined,
+    [AccountRole.ADMIN]: undefined,
+    [AccountRole.MODERATOR]: undefined,
+  },
   lessons: {},
   webinars: {},
   participants: {},
@@ -52,14 +103,25 @@ const defaultState: DataState = {
   adminWebinars: {},
   teacherCourses: undefined,
   homeworks: {},
+  themes: {},
+  tasks: {},
+  knowledgeMap: {},
+  tests: {},
+  lessonsTests: {},
+  testResults: {},
 };
 
-// TODO: add utils normalization
 export const dataReducer: Reducer<DataState, Action> = (
   state = defaultState,
   action,
 ): DataState => {
   switch (action.type) {
+    case ActionType.LOG_IN_REQUEST: {
+      return {
+        ...state,
+        credentials: undefined,
+      };
+    }
     case ActionType.LOG_IN_SUCCESS: {
       const {credentials} = action;
 
@@ -68,10 +130,18 @@ export const dataReducer: Reducer<DataState, Action> = (
         credentials,
       };
     }
+    case ActionType.LOG_IN_ERROR: {
+      const {error} = action;
+
+      return {
+        ...state,
+        credentials: error,
+      };
+    }
     case ActionType.LOG_OUT: {
       return {
         ...defaultState,
-        credentials: null,
+        credentials: undefined,
       };
     }
     case ActionType.USER_INFO_FETCHED: {
@@ -80,6 +150,14 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         userInfo,
+      };
+    }
+    case ActionType.USER_INFO_REVOKE: {
+      const {responseInfo} = action;
+
+      return {
+        ...state,
+        userInfo: responseInfo,
       };
     }
     case ActionType.SHOP_COURSES_FETCHED: {
@@ -106,12 +184,34 @@ export const dataReducer: Reducer<DataState, Action> = (
         subjects,
       };
     }
-    case ActionType.TEACHERS_FETCHED: {
+    case ActionType.USER_TEACHERS_FETCHED: {
       const {teachers} = action;
 
       return {
         ...state,
-        teachers,
+        userTeachers: teachers,
+      };
+    }
+    case ActionType.ACCOUNTS_FETCHED: {
+      const {accounts, role} = action;
+
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          [role]: accounts,
+        },
+      };
+    }
+    case ActionType.ACCOUNTS_DELETE:
+    case ActionType.ACCOUNTS_REVOKE: {
+      const {responseAccounts, role} = action;
+
+      return {
+        ...state,
+        users: {...state.users, [role]: responseAccounts},
+        userTeachers:
+          role === AccountRole.TEACHER ? undefined : state.userTeachers,
       };
     }
     case ActionType.LESSONS_FETCHED: {
@@ -185,24 +285,13 @@ export const dataReducer: Reducer<DataState, Action> = (
         teacherCourses: courses,
       };
     }
-    case ActionType.HOMEWORKS_FETCHED: {
-      const {lessonId, homeworks} = action;
-
-      return {
-        ...state,
-        homeworks: {
-          ...state.homeworks,
-          [lessonId]: homeworks,
-        },
-      };
-    }
     case ActionType.LESSONS_REVOKE: {
       const {courseId, responseLesson} = action;
       const {
         lessons: {[courseId]: courseLessons, ...loadedLessons},
       } = state;
 
-      if (courseLessons instanceof Error) {
+      if (!courseLessons || courseLessons instanceof Error) {
         return state;
       }
       const lessonIndex = _.findIndex(courseLessons, {id: responseLesson.id});
@@ -210,12 +299,12 @@ export const dataReducer: Reducer<DataState, Action> = (
 
       if (lessonIndex !== -1) {
         const prevLesson = courseLessons[lessonIndex];
-        const mergedLesson = {...prevLesson, ...responseLesson};
-        newLessons[lessonIndex] = mergedLesson;
+        newLessons[lessonIndex] = {...prevLesson, ...responseLesson};
         newLessons = _.sortBy(newLessons, 'num');
       } else {
         newLessons.push(responseLesson);
       }
+
       return {
         ...state,
         lessons: {...loadedLessons, [courseId]: newLessons},
@@ -227,7 +316,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {[courseId]: courseLessons, ...loadedLessons},
       } = state;
 
-      if (courseLessons instanceof Error) {
+      if (!courseLessons || courseLessons instanceof Error) {
         return state;
       }
       return {
@@ -235,6 +324,34 @@ export const dataReducer: Reducer<DataState, Action> = (
         lessons: {
           ...loadedLessons,
           [courseId]: courseLessons.filter(({id}) => id !== lessonId),
+        },
+      };
+    }
+    case ActionType.USER_HOMEWORKS_FETCHED: {
+      const {courseId, lessonId, homework} = action;
+
+      return {
+        ...state,
+        userHomeworks: {
+          ...state.userHomeworks,
+          [courseId]: {
+            ...(state.userHomeworks[courseId] || {}),
+            [lessonId]: homework,
+          },
+        },
+      };
+    }
+    case ActionType.USER_HOMEWORKS_REVOKE: {
+      const {courseId, lessonId, responseHomework} = action;
+
+      return {
+        ...state,
+        userHomeworks: {
+          ...state.userHomeworks,
+          [courseId]: {
+            ...(state.userHomeworks[courseId] || {}),
+            [lessonId]: responseHomework,
+          },
         },
       };
     }
@@ -253,7 +370,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         participants: {[courseId]: courseParticipants, ...loadedParticipants},
       } = state;
 
-      if (courseParticipants instanceof Error) {
+      if (!courseParticipants || courseParticipants instanceof Error) {
         return state;
       }
       return {
@@ -261,6 +378,17 @@ export const dataReducer: Reducer<DataState, Action> = (
         participants: {
           ...loadedParticipants,
           [courseId]: courseParticipants.filter(({id}) => id !== userId),
+        },
+      };
+    }
+    case ActionType.HOMEWORKS_FETCHED: {
+      const {lessonId, homeworks} = action;
+
+      return {
+        ...state,
+        homeworks: {
+          ...state.homeworks,
+          [lessonId]: homeworks,
         },
       };
     }
@@ -275,7 +403,7 @@ export const dataReducer: Reducer<DataState, Action> = (
         homeworks: {[lessonId]: lessonHomeworks, ...loadedHomeworks},
       } = state;
 
-      if (lessonHomeworks instanceof Error) {
+      if (!lessonHomeworks || lessonHomeworks instanceof Error) {
         return state;
       }
       const lessonIndex = _.findIndex(lessonHomeworks, {
@@ -287,6 +415,49 @@ export const dataReducer: Reducer<DataState, Action> = (
       return {
         ...state,
         homeworks: {[lessonId]: newHomeworks, ...loadedHomeworks},
+      };
+    }
+    case ActionType.SUBJECTS_REVOKE: {
+      const {responseSubject} = action;
+      const updateCatalog = (
+        catalog: SubjectInfo[] | AxiosError | undefined,
+      ): SubjectInfo[] | AxiosError | undefined => {
+        if (!(catalog instanceof Array)) {
+          return catalog;
+        }
+        const courseIndex = _.findIndex<SubjectInfo>(catalog, {
+          id: responseSubject.id,
+        });
+        const newCatalog = [...catalog];
+
+        if (courseIndex !== -1) {
+          const prevCourse = catalog[courseIndex];
+          newCatalog[courseIndex] = {...prevCourse, ...responseSubject};
+        } else {
+          newCatalog.push(responseSubject);
+        }
+        return newCatalog;
+      };
+      const {subjects} = state;
+
+      return {
+        ...state,
+        subjects: updateCatalog(subjects),
+      };
+    }
+    case ActionType.SUBJECT_DELETE: {
+      const {subjectId} = action;
+      const removeSubject = (
+        catalog: SubjectInfo[] | AxiosError | undefined,
+      ): SubjectInfo[] | AxiosError | undefined =>
+        catalog instanceof Array
+          ? catalog.filter(({id}) => id !== subjectId)
+          : catalog;
+      const {subjects} = state;
+
+      return {
+        ...state,
+        subjects: removeSubject(subjects),
       };
     }
     case ActionType.COURSES_REVOKE: {
@@ -349,6 +520,343 @@ export const dataReducer: Reducer<DataState, Action> = (
         ...state,
         adminWebinars: {...adminWebinars, [courseId]: responseWebinars},
         webinars: loadedWebinars,
+      };
+    }
+    case ActionType.KNOWLEDGE_LEVEL_FETCHED: {
+      const {subjectId, themeId, content} = action;
+      const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
+
+      let stateUpdate: Partial<DataState>;
+
+      if (content instanceof Error) {
+        stateUpdate = {
+          knowledgeMap: {
+            [subjectId]: {
+              [themeKey]: content,
+            },
+          },
+        };
+      } else {
+        const {themes, tasks} = content;
+        const themesMap = _.keyBy(themes, 'id');
+        const tasksMap = _.keyBy(tasks, 'id');
+
+        const themeIds = _.map(themes, 'id');
+        const taskIds = _.map(tasks, 'id');
+
+        stateUpdate = {
+          themes: themesMap,
+          tasks: tasksMap,
+          knowledgeMap: {
+            [subjectId]: {
+              [themeKey]: {
+                id: themeKey,
+                themeIds,
+                taskIds,
+              },
+            },
+          },
+        };
+      }
+      return _.merge(stateUpdate, state);
+    }
+    case ActionType.KNOWLEDGE_THEME_FETCHED: {
+      const {themeId, theme} = action;
+
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          [themeId]: theme,
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_THEME_REVOKE: {
+      const {responseTheme} = action;
+      const {subject_id, id, parent_theme_id} = responseTheme;
+
+      const themeKey =
+        parent_theme_id !== undefined ? parent_theme_id : KNOWLEDGE_TREE_ROOT;
+      const containingLevel = state.knowledgeMap[subject_id]?.[themeKey];
+      const updatedLevel =
+        containingLevel instanceof Error
+          ? containingLevel
+          : containingLevel
+          ? {
+              ...containingLevel,
+              themeIds: _.includes(containingLevel.themeIds, id)
+                ? containingLevel.themeIds
+                : _.concat(containingLevel.themeIds, id),
+            }
+          : {id: themeKey, taskIds: [], themeIds: [id]};
+
+      const parentTheme =
+        parent_theme_id !== undefined
+          ? state.themes[parent_theme_id]
+          : undefined;
+      const parentThemeUpdate =
+        !parentTheme || parentTheme instanceof Error
+          ? undefined
+          : {
+              ...parentTheme,
+              has_sub_themes: true,
+            };
+
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          [id]: responseTheme,
+          ...(parentThemeUpdate
+            ? {[parentThemeUpdate.id]: parentThemeUpdate}
+            : {}),
+        },
+        knowledgeMap: {
+          ...state.knowledgeMap,
+          [subject_id]: {
+            ...(state.knowledgeMap[subject_id] || {}),
+            [themeKey]: updatedLevel,
+          },
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_THEME_DELETE: {
+      const {subjectId, themeId, parentThemeId} = action;
+
+      const themeKey =
+        parentThemeId !== undefined ? parentThemeId : KNOWLEDGE_TREE_ROOT;
+      const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];
+      const updatedLevel =
+        !containingLevel || containingLevel instanceof Error
+          ? undefined
+          : {
+              ...containingLevel,
+              themeIds: _.without(containingLevel.themeIds, themeId),
+            };
+
+      const parentTheme =
+        parentThemeId !== undefined ? state.themes[parentThemeId] : undefined;
+      const parentThemeUpdate =
+        !parentTheme || parentTheme instanceof Error || !updatedLevel
+          ? undefined
+          : {
+              ...parentTheme,
+              has_sub_themes: updatedLevel.themeIds.length > 0,
+            };
+
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          [themeId]: undefined,
+          ...(parentThemeUpdate
+            ? {[parentThemeUpdate.id]: parentThemeUpdate}
+            : undefined),
+        },
+        knowledgeMap: {
+          ...state.knowledgeMap,
+          [subjectId]: {
+            ...(state.knowledgeMap[subjectId] || {}),
+            ...(updatedLevel ? {[themeKey]: updatedLevel} : {}),
+          },
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_TASK_FETCHED: {
+      const {taskId, task} = action;
+
+      return {
+        ...state,
+        tasks: {
+          ...state.tasks,
+          [taskId]: task,
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_TASK_REVOKE: {
+      const {responseTask} = action;
+      const {subject_id, id, theme_id} = responseTask;
+
+      const themeKey = theme_id !== undefined ? theme_id : KNOWLEDGE_TREE_ROOT;
+      const containingLevel = state.knowledgeMap[subject_id]?.[themeKey];
+      const updatedLevel =
+        containingLevel instanceof Error
+          ? containingLevel
+          : containingLevel
+          ? {
+              ...containingLevel,
+              taskIds: _.includes(containingLevel.taskIds, id)
+                ? containingLevel.taskIds
+                : _.concat(containingLevel.taskIds, id),
+            }
+          : {id: themeKey, taskIds: [id], themeIds: []};
+
+      const parentTheme =
+        theme_id !== undefined ? state.themes[theme_id] : undefined;
+      const parentThemeUpdate =
+        !parentTheme || parentTheme instanceof Error
+          ? undefined
+          : {
+              ...parentTheme,
+              has_sub_tasks: true,
+            };
+
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          ...(parentThemeUpdate
+            ? {[parentThemeUpdate.id]: parentThemeUpdate}
+            : {}),
+        },
+        tasks: {
+          ...state.tasks,
+          [id]: responseTask,
+        },
+        knowledgeMap: {
+          ...state.knowledgeMap,
+          [subject_id]: {
+            ...(state.knowledgeMap[subject_id] || {}),
+            [themeKey]: updatedLevel,
+          },
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_TASK_DELETE: {
+      const {subjectId, themeId, taskId} = action;
+
+      const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
+      const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];
+      const updatedLevel =
+        !containingLevel || containingLevel instanceof Error
+          ? undefined
+          : {
+              ...containingLevel,
+              taskIds: _.without(containingLevel.taskIds, taskId),
+            };
+
+      const parentTheme =
+        themeId !== undefined ? state.themes[themeId] : undefined;
+      const parentThemeUpdate =
+        !parentTheme || parentTheme instanceof Error || !updatedLevel
+          ? undefined
+          : {
+              ...parentTheme,
+              has_sub_tasks: updatedLevel.taskIds.length > 0,
+            };
+
+      return {
+        ...state,
+        themes: {
+          ...state.themes,
+          ...(parentThemeUpdate
+            ? {[parentThemeUpdate.id]: parentThemeUpdate}
+            : {}),
+        },
+        tasks: {
+          ...state.tasks,
+          [taskId]: undefined,
+        },
+        knowledgeMap: {
+          ...state.knowledgeMap,
+          [subjectId]: {
+            ...(state.knowledgeMap[subjectId] || {}),
+            ...(updatedLevel ? {[themeKey]: updatedLevel} : {}),
+          },
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_TEST_FETCHED: {
+      const {lessonId, test} = action;
+
+      if (test instanceof Error || test === null) {
+        return {
+          ...state,
+          lessonsTests: {
+            ...state.lessonsTests,
+            [lessonId]: test,
+          },
+        };
+      } else {
+        return {
+          ...state,
+          tests: {
+            ...state.tests,
+            [test.id]: test,
+          },
+          lessonsTests: {
+            ...state.lessonsTests,
+            [lessonId]: test.id,
+          },
+        };
+      }
+    }
+    case ActionType.KNOWLEDGE_TEST_REVOKE: {
+      const {lessonId, courseId, responseTest} = action;
+      const {
+        lessons: {[courseId]: courseLessons, ...loadedLessons},
+      } = state;
+
+      const tests = {...state.tests, [responseTest.id]: responseTest};
+
+      if (!courseLessons || courseLessons instanceof Error) {
+        return {...state, tests};
+      }
+
+      const lessonIndex = _.findIndex(courseLessons, {id: lessonId});
+      const newLessons = [...courseLessons];
+
+      if (lessonIndex !== -1) {
+        const prevLesson = courseLessons[lessonIndex];
+        newLessons[lessonIndex] = {...prevLesson, test_id: responseTest.id};
+      }
+
+      return {
+        ...state,
+        lessons: {...loadedLessons, [courseId]: newLessons},
+        tests,
+        lessonsTests: {
+          ...state.lessonsTests,
+          [lessonId]: responseTest.id,
+        },
+      };
+    }
+    case ActionType.KNOWLEDGE_TEST_DELETE: {
+      const {courseId, lessonId, testId} = action;
+      const {
+        lessons: {[courseId]: courseLessons, ...loadedLessons},
+      } = state;
+
+      const {[testId]: removedTest, ...tests} = state.tests;
+
+      if (!courseLessons || courseLessons instanceof Error) {
+        return {...state, tests};
+      }
+
+      const lessonIndex = _.findIndex(courseLessons, {id: lessonId});
+      const newLessons = [...courseLessons];
+
+      if (lessonIndex !== -1) {
+        const prevLesson = courseLessons[lessonIndex];
+        newLessons[lessonIndex] = {...prevLesson, test_id: undefined};
+      }
+
+      return {
+        ...state,
+        lessons: {...loadedLessons, [courseId]: newLessons},
+        lessonsTests: {...state.lessonsTests, [lessonId]: null},
+        tests,
+      };
+    }
+    case ActionType.TEST_RESULTS_FETCHED: {
+      const {testId, results} = action;
+
+      return {
+        ...state,
+        testResults: {
+          ...state.testResults,
+          [testId]: results,
+        },
       };
     }
     default:

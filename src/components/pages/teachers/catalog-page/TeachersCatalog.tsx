@@ -7,7 +7,7 @@ import Catalog, {
 import Teacher from 'components/common/Teacher';
 import _ from 'lodash';
 import React from 'react';
-import {CourseInfo, SubjectInfo, TeacherInfo} from 'types/entities';
+import {CourseInfo, SubjectInfo, TeacherProfileInfo} from 'types/entities';
 
 const Filter: React.FC<FilterProps> = (props) => (
   <Catalog.Filter
@@ -25,7 +25,7 @@ const TeachersCatalog = (props: TeachersCatalogProps) => {
   const renderTeacher = React.useCallback(
     (teacher, {link, subjects, ...rest}) => (
       <div
-        className="teacher-profile-wrap list__item col-12 col-md-6 col-lg-4 d-flex"
+        className="teacher-profile-wrap list__item col-12 col-md-6 col-xl-4 d-flex"
         key={teacher.id}
       >
         <Teacher
@@ -42,6 +42,7 @@ const TeachersCatalog = (props: TeachersCatalogProps) => {
 
   return (
     <Catalog.Catalog
+      className="teachers-catalog"
       emptyPlaceholder="Нет преподавателей"
       noMatchPlaceholder="Нет преподавателей, соответствующих условиям поиска"
       flex
@@ -51,32 +52,32 @@ const TeachersCatalog = (props: TeachersCatalogProps) => {
   );
 };
 
-const filter: FilterFunc<TeacherInfo> = (teacher, {subject}) =>
+const filter: FilterFunc<TeacherProfileInfo> = (teacher, {subject}) =>
   subject ? teacher.subjects.some(({id}) => subject === id) : true;
 
 export type CourseBodyProps = Omit<
   CatalogBodyProps<CourseInfo>,
   'items' | 'options' | 'filter'
 > & {
-  teachers: TeacherInfo[];
+  teachers: TeacherProfileInfo[];
   subjects: SubjectInfo[];
 };
 const Body: React.FC<CourseBodyProps> = (props) => {
   const {teachers, subjects, ...otherProps} = props;
 
   const options = React.useMemo(() => {
-    // const subjectsMap = _.zipObject(
-    //   subjects.map(({id}) => id),
-    //   subjects,
-    // );
+    const subjectsMap = _.zipObject(
+      subjects.map(({id}) => id),
+      subjects,
+    );
     const subjectsTeachers = _.reduce<
-      TeacherInfo,
+      TeacherProfileInfo,
       {[key: number]: SubjectInfo}
     >(
       teachers,
       (result, teacher) => {
         teacher.subjects.forEach((subject) => {
-          result[subject.id] = subject;
+          result[subject.id] = subjectsMap[subject.id];
         });
         return result;
       },
@@ -87,7 +88,7 @@ const Body: React.FC<CourseBodyProps> = (props) => {
       value: id,
       label: name,
     }));
-  }, [teachers]);
+  }, [subjects, teachers]);
 
   return (
     <Catalog.Body
@@ -99,12 +100,9 @@ const Body: React.FC<CourseBodyProps> = (props) => {
   );
 };
 
-// const Page = (props) => (<Catalog.Page BodyComponent={Body} {...props}/>);
-
 export default {
   ...Catalog,
   Filter,
   Catalog: TeachersCatalog,
   Body,
-  // Page
 };

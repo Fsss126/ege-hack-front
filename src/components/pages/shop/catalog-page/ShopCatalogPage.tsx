@@ -18,7 +18,11 @@ const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
   children: selectedCoursesTab,
   location,
 }) => {
-  const {catalog, error, reload} = useShopCatalog();
+  const {
+    catalog,
+    error: errorLoadingCatalog,
+    reload: reloadCatalog,
+  } = useShopCatalog();
   const {
     subjects,
     error: errorLoadingSubjects,
@@ -72,6 +76,8 @@ const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
       loadUserInfo
       className="course-shop"
       title="Магазин курсов"
+      errors={[errorLoadingCatalog, errorLoadingSubjects]}
+      reloadCallbacks={[reloadCatalog, reloadSubjects]}
       location={location}
     >
       {isLoaded && (

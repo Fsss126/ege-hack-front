@@ -1,10 +1,14 @@
-import {ADMIN_ROLES, TEACHER_ROLES} from 'definitions/constants';
+import {
+  ADMIN_ROLES,
+  TEACHER_ROLES,
+  TOGGLE_FEATURES,
+} from 'definitions/constants';
 import React, {useCallback} from 'react';
-import {AccountRole} from 'types/enums';
+import {AccountRole, Permission} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
 
 import Contacts from '../common/Contacts';
-import ConditionalRenderer from '../ConditionalRender';
+import ConditionalRenderer, {FeatureToggleGuard} from '../ConditionalRender';
 import {NavLink} from '../ui/Link';
 
 export type SideBarProps = {
@@ -71,9 +75,23 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                     <NavLink
                       className="layout__sidebar-menu-link"
                       to="/courses/"
+                      isActive={(match, location) => {
+                        if (!match) {
+                          return false;
+                        }
+                        return !/\/courses\/schedule/.test(location.pathname);
+                      }}
                     >
                       Мои курсы
                     </NavLink>
+                    <FeatureToggleGuard feature={TOGGLE_FEATURES.schedule}>
+                      <NavLink
+                        className="layout__sidebar-menu-link"
+                        to="/courses/schedule"
+                      >
+                        Расписание
+                      </NavLink>
+                    </FeatureToggleGuard>
                     <NavLink
                       className="layout__sidebar-menu-link"
                       to="/homework/"
@@ -130,16 +148,42 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                     <i className="prefix-icon m-lg icon-edit" />
                   </div>
                   <div className="layout__sidebar-menu-col">
-                    <NavLink className="layout__sidebar-menu-link" to="/admin/">
-                      Управление контентом
-                    </NavLink>
                     <NavLink
                       className="layout__sidebar-menu-link"
-                      to="/admin/users/"
-                      disabled
+                      to="/admin/courses/"
                     >
-                      Пользователи
+                      Курсы
                     </NavLink>
+                    <ConditionalRenderer
+                      requiredPermissions={[Permission.SUBJECT_EDIT]}
+                    >
+                      <NavLink
+                        className="layout__sidebar-menu-link"
+                        to="/admin/subjects/"
+                      >
+                        Предметы
+                      </NavLink>
+                    </ConditionalRenderer>
+                    <ConditionalRenderer
+                      requiredPermissions={[Permission.KNOWLEDGE_CONTENT_EDIT]}
+                    >
+                      <NavLink
+                        className="layout__sidebar-menu-link"
+                        to="/admin/knowledge/"
+                      >
+                        База заданий
+                      </NavLink>
+                    </ConditionalRenderer>
+                    <ConditionalRenderer
+                      requiredPermissions={[Permission.PARTICIPANT_MANAGEMENT]}
+                    >
+                      <NavLink
+                        className="layout__sidebar-menu-link"
+                        to="/admin/users/"
+                      >
+                        Пользователи
+                      </NavLink>
+                    </ConditionalRenderer>
                   </div>
                 </div>
               </ConditionalRenderer>

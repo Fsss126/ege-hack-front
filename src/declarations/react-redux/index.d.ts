@@ -1,6 +1,6 @@
-import {Dispatch} from "../global";
-import {useDispatch} from "react-redux";
+import {Dispatch} from 'redux';
+import {Action} from '../../store/actions';
 
 declare module 'react-redux' {
-    function useDispatch<TDispatch = Dispatch>(): TDispatch;
+    function useDispatch<TDispatch = Dispatch<Action>>(): TDispatch;
 }

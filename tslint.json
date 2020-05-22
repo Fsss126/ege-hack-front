@@ -1,7 +1,20 @@
 {
-  "extends": ["tslint:latest", "tslint-react", "tslint-config-prettier"],
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "tslint-config-prettier"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "./src/serviceWorker.js"
+    ]
+  },
   "rules": {
-    "quotemark": [true, "single", "jsx-double"],
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
+    ],
     "no-console": false,
     "member-ordering": false,
     "no-submodule-imports": false,
@@ -20,15 +33,21 @@
     "object-literal-key-quotes": false,
     "no-implicit-dependencies": false,
     "variable-name": {
-      "options": ["allow-leading-underscore", "allow-pascal-case", "allow-snake-case"]
+      "options": [
+        "allow-leading-underscore",
+        "allow-pascal-case",
+        "allow-snake-case"
+      ]
     },
     "array-type": false,
     "radix": false,
     "forin": false,
-    "jsx-no-lambda": {
-      "severity": "warning"
+    "jsx-no-lambda": false,
+    "max-classes-per-file": {
+      "severity": "warn"
     },
     "no-this-assignment": false,
-    "one-variable-per-declaration": false
+    "one-variable-per-declaration": false,
+    "no-restricted-globals": false
   }
 }

@@ -1,67 +1,91 @@
-import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState, useTestTask} from 'hooks/selectors';
-import React, {useCallback} from 'react';
-import {RouteComponentPropsWithPath, TestTaskPageParams} from 'types/routes';
+import React from 'react';
+import {
+  RouteComponentPropsWithParentProps,
+  TestTaskPageParams,
+} from 'types/routes';
 
 import {TaskPageContent} from './TaskPageContent';
 
-export const TaskPage: React.FC<RouteComponentPropsWithPath<
+export const TaskPage: React.FC<RouteComponentPropsWithParentProps<
   TestTaskPageParams
 >> = (props) => {
   const {
     match: {
-      params: {testId: param_test, taskId: param_question},
+      params: {
+        testId: param_test,
+        taskId: param_question,
+        lessonId: param_lesson,
+        courseId: param_course,
+      },
     },
-    path: root,
     location,
   } = props;
   const testId = parseInt(param_test);
   const taskId = parseInt(param_question);
+  const lessonId = parseInt(param_lesson);
+  const courseId = parseInt(param_course);
 
   const {test} = useTest(testId);
-  const {task, error, reload} = useTestTask(testId, taskId);
+  const {task, error: errorLoadingTask, reload: reloadTask} = useTestTask(
+    testId,
+    taskId,
+  );
   const {
     state,
     error: errorLoadingTestState,
     reload: reloadTestState,
-  } = useTestState(testId);
+  } = useTestState(testId, lessonId, courseId);
+
+  const isLoaded = !!(test && task && state);
+
+  let title;
+  let content;
 
   if (test && task && state) {
     const {name} = test;
     const {order} = task;
+    const {is_completed: isCompleted} = state;
 
-    return (
-      <Page
-        isLoaded={true}
-        title={`Вопрос ${order + 1} – ${name}`}
-        className="test-page test-task-page"
-        location={location}
+    title = `Вопрос ${order + 1} – ${name}`;
+    content = (
+      <PageContent
+        parentSection={
+          isCompleted
+            ? {name: 'Вернуться к результатам', url: '../results/'}
+            : {name: 'Вернуться к уроку', url: '../../../'}
+        }
       >
-        <PageContent
-          parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
-        >
-          <TaskPageContent
-            key={location.pathname}
-            testId={testId}
-            taskId={taskId}
-            test={test}
-            state={state}
-            task={task}
-          />
-        </PageContent>
-      </Page>
+        <TaskPageContent
+          key={location.pathname}
+          testId={testId}
+          taskId={taskId}
+          lessonId={lessonId}
+          courseId={courseId}
+          test={test}
+          state={state}
+          task={task}
+        />
+      </PageContent>
     );
-  } else if (error) {
-    return (
-      <NotFoundErrorPage
-        message="Вопрос теста не найден"
-        url={root}
-        text="Вернуться к уроку"
-        location={location}
-      />
-    );
-  } else {
-    return <Page isLoaded={false} location={location} />;
   }
+
+  return (
+    <Page
+      isLoaded={isLoaded}
+      title={title}
+      className="test-page test-task-page"
+      location={location}
+      errors={[errorLoadingTask, errorLoadingTestState]}
+      reloadCallbacks={[reloadTask, reloadTestState]}
+      notFoundPageProps={{
+        message: 'Вопрос теста не найден',
+        url: '../../../',
+        text: 'Вернуться к уроку',
+      }}
+    >
+      {content}
+    </Page>
+  );
 };

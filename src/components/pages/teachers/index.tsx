@@ -12,7 +12,9 @@ const Teachers: React.FC<RouteComponentProps> = (props) => {
     <Switch>
       <Route
         path={`${match.path}/:id`}
-        render={(props) => <TeacherPage path={match.path} {...props} />}
+        render={(props) => (
+          <TeacherPage path={match.path} url={match.url} {...props} />
+        )}
       />
       <Route
         exact

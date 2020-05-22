@@ -11,10 +11,7 @@ const InputPlaceholder: React.FC<IInputProps> = (props) => {
     getFilesFromEvent,
     accept,
     multiple,
-    disabled,
     onFiles,
-    files,
-    content,
   } = props;
   const {name, required} = React.useContext(FileInputContext);
   const onChange = useInputCallback(getFilesFromEvent, onFiles);

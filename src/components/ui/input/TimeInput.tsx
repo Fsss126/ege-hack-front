@@ -32,7 +32,9 @@ const TimeInput: React.FC<TimeInputProps> = (props) => {
       const time = new Date((value || new Date()).getTime());
       time.setHours(hour);
       time.setMinutes(minute);
-      onChange && onChange(time, name);
+      if (onChange) {
+        onChange(time, name);
+      }
     },
     [value, name, onChange],
   );

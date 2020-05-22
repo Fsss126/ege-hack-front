@@ -4,22 +4,24 @@ import pic from 'img/dummy-pic.jpg';
 import _ from 'lodash';
 import {LoremIpsum} from 'lorem-ipsum';
 import {
+  TaskDtoResp,
   TestDtoResp,
   TestStateDtoResp,
   TestStatus,
   TestStatusResp,
+  ThemeDtoResp,
 } from 'types/dtos';
 import {
+  AccountInfo,
   AnswerType,
   CourseInfo,
   HomeworkInfo,
   LessonInfo,
   PersonWebinar,
   SubjectInfo,
-  TeacherInfo,
+  TeacherProfileInfo,
   TestStatusInfo,
   UserCourseInfo,
-  UserInfo,
 } from 'types/entities';
 import {AccountRole, LearningStatus, Permission} from 'types/enums';
 
@@ -33,10 +35,14 @@ function getDate(daysForward: number) {
   return date;
 }
 
-export const ACCOUNT_INFO: UserInfo = {
+export const ACCOUNT_INFO: AccountInfo = {
   id: 154792439,
-  roles: [AccountRole.PUPIL, AccountRole.TEACHER],
-  permissions: [Permission.HOMEWORK_CHECK],
+  roles: [AccountRole.PUPIL, AccountRole.TEACHER, AccountRole.ADMIN],
+  permissions: [
+    Permission.HOMEWORK_CHECK,
+    Permission.SUBJECT_EDIT,
+    Permission.KNOWLEDGE_CONTENT_EDIT,
+  ],
   vk_info: {
     id: 154792439,
     first_name: 'Alexandra',
@@ -44,49 +50,30 @@ export const ACCOUNT_INFO: UserInfo = {
     photo: poster,
     full_name: 'Alexandra Petrova',
   },
-  pupil: {
-    account_id: 154792439,
-  },
-  teacher: {
-    account_id: 154792439,
-  },
+  pupil: {},
+  teacher: {},
   contacts: {},
 };
 
 export const SUBJECTS: SubjectInfo[] = [
-  // { id: 'russian', name: 'Русский язык' },
-  // { id: 'literature', name: 'Литература' },
-  // { id: 'math', name: 'Математика' },
-  // { id: 'informatics', name: 'Информатика' },
-  // { id: 'physics', name: 'Физика' },
-  // { id: 'chemistry', name: 'Химия' },
-  // { id: 'biology', name: 'Биология' },
-  // { id: 'sociology', name: 'Обществознание' },
-  // { id: 'history', name: 'История' },
-  // { id: 'geography', name: 'География' },
-  // { id: 'english', name: 'Английский язык' },
-  // { id: 'german', name: 'Немецкий язык' },
-  // { id: 'french', name: 'Французский язык' },
-  // { id: 'chinese', name: 'Китайский язык' },
-  // { id: 'spanish', name: 'Испанский язык' }
-  {id: 1, name: 'Русский язык'},
-  {id: 2, name: 'Литература'},
-  {id: 3, name: 'Математика'},
-  {id: 4, name: 'Информатика'},
-  {id: 5, name: 'Физика'},
-  {id: 6, name: 'Химия'},
-  {id: 7, name: 'Биология'},
-  {id: 8, name: 'Обществознание'},
-  {id: 9, name: 'История'},
-  {id: 10, name: 'География'},
-  {id: 11, name: 'Английский язык'},
-  {id: 12, name: 'Немецкий язык'},
-  {id: 13, name: 'Французский язык'},
-  {id: 14, name: 'Китайский язык'},
-  {id: 15, name: 'Испанский язык'},
-].map((subj) => ({...subj, image_link: ''}));
+  {id: 1, name: 'Русский язык', image_link: poster},
+  {id: 2, name: 'Литература', image_link: poster},
+  {id: 3, name: 'Математика', image_link: poster},
+  {id: 4, name: 'Информатика', image_link: poster},
+  {id: 5, name: 'Физика', image_link: poster},
+  {id: 6, name: 'Химия', image_link: poster},
+  {id: 7, name: 'Биология', image_link: poster},
+  {id: 8, name: 'Обществознание', image_link: poster},
+  {id: 9, name: 'История', image_link: poster},
+  {id: 10, name: 'География', image_link: poster},
+  {id: 11, name: 'Английский язык', image_link: poster},
+  {id: 12, name: 'Немецкий язык', image_link: poster},
+  {id: 13, name: 'Французский язык', image_link: poster},
+  {id: 14, name: 'Китайский язык', image_link: poster},
+  {id: 15, name: 'Испанский язык', image_link: poster},
+];
 
-export const TEACHERS: TeacherInfo[] = [
+export const TEACHERS: TeacherProfileInfo[] = [
   {
     id: 154792439,
     vk_info: {
@@ -193,58 +180,66 @@ export const WEBINAR_SCHEDULE: PersonWebinar[] = COURSES.slice(0, 3).map(
   }),
 );
 
+export const TEST_TASKS: TaskDtoResp[] = [
+  {
+    id: 0,
+    image_link: '/files/938f8e5f-8819-11ea-808a-072fece60c1f',
+    text:
+      'Два велосипедиста совершают кольцевую гонку с одинаковой угловой скоростью. Положения и траектории движения велосипедистов показаны на рисунке. Чему равно отношение линейных скоростей велосипедистов?',
+    subject_id: 1,
+    name: 'Задача про велосипедистов',
+    theme_id: 10,
+    score: 1,
+    complexity: 5,
+    answer: {
+      type: AnswerType.NUMBER,
+      value: 0.5,
+    },
+  },
+  {
+    id: 1,
+    text:
+      'Верхнюю точку моста радиусом 100 м автомобиль проходит со скоростью 20 м/с. Чему равно центростремительное ускорение автомобиля? (Ответ дайте в метрах в секунду в квадрате.)',
+    subject_id: 1,
+    name: 'Задача про мост',
+    theme_id: 1,
+    score: 1,
+    answer: {
+      type: AnswerType.NUMBER,
+      value: 1,
+    },
+  },
+  {
+    id: 2,
+    image_link: '/files/e09c97c1-8819-11ea-808a-072fece60c1f',
+    text:
+      'В схеме на рисунке сопротивление резистора и полное сопротивление реостата равны R, ЭДС батарейки равна Е, её внутреннее сопротивление ничтожно (). Как ведут себя (увеличиваются, уменьшаются, остаются постоянными) показания идеального вольтметра при перемещении движка реостата из крайнего верхнего в крайнее нижнее положение? Ответ поясните, указав, какие физические закономерности Вы использовали для объяснения.',
+    subject_id: 1,
+    name: 'Задача про резистор',
+    theme_id: 1,
+    score: 1,
+    complexity: 10,
+    answer: {
+      type: AnswerType.FILE,
+    },
+    solution: {
+      video_value: '375255364',
+      text_value:
+        'Вольтметр подключают параллельно к тому участку, на котором нужно измерить напряжение. При этом, естественно, часть тока в цепи начинает течь через сам вольтметр. Тем самым вольтметр вносит возмущение в цепь и показывает напряжение, которое отличается от реального (когда вольтметра нет). Идеальным вольтметром называют прибор, который данной проблемой не страдает. То есть он имеет бесконечное собственное сопротивление.',
+    },
+  },
+];
+
 export const TEST: TestDtoResp = {
-  id: 1,
+  id: 12,
   name: 'Движение по окружности',
-  percentage: 0.4,
+  pass_criteria: 0.4,
   deadline: new Date(2020, 4, 1, 20).getTime(),
-  tasks: [
-    {
-      id: 0,
-      image_link: '/files/331402b3-86a0-11ea-808a-072fece60c1f',
-      text:
-        'Два велосипедиста совершают кольцевую гонку с одинаковой угловой скоростью. Положения и траектории движения велосипедистов показаны на рисунке. Чему равно отношение линейных скоростей велосипедистов?',
-      subjectId: 0,
-      themeId: 0,
-      order: 0,
-      weight: 1,
-      complexity: 5,
-      answer: {
-        type: AnswerType.NUMBER,
-        value: 0.5,
-      },
-    },
-    {
-      id: 1,
-      text:
-        'Верхнюю точку моста радиусом 100 м автомобиль проходит со скоростью 20 м/с. Чему равно центростремительное ускорение автомобиля? (Ответ дайте в метрах в секунду в квадрате.)',
-      subjectId: 0,
-      themeId: 0,
-      order: 1,
-      weight: 1,
-      answer: {
-        type: AnswerType.NUMBER,
-        value: 1,
-      },
-    },
-    {
-      id: 2,
-      image_link: '/files/89434342-869f-11ea-808a-072fece60c1f',
-      text:
-        'В схеме на рисунке сопротивление резистора и полное сопротивление реостата равны R, ЭДС батарейки равна Е, её внутреннее сопротивление ничтожно (). Как ведут себя (увеличиваются, уменьшаются, остаются постоянными) показания идеального вольтметра при перемещении движка реостата из крайнего верхнего в крайнее нижнее положение? Ответ поясните, указав, какие физические закономерности Вы использовали для объяснения.',
-      subjectId: 0,
-      themeId: 0,
-      order: 2,
-      weight: 1,
-      complexity: 10,
-      answer: {
-        type: AnswerType.FILE,
-        videoSolution: '375255364',
-        textSolution:
-          'Вольтметр подключают параллельно к тому участку, на котором нужно измерить напряжение. При этом, естественно, часть тока в цепи начинает течь через сам вольтметр. Тем самым вольтметр вносит возмущение в цепь и показывает напряжение, которое отличается от реального (когда вольтметра нет). Идеальным вольтметром называют прибор, который данной проблемой не страдает. То есть он имеет бесконечное собственное сопротивление.',
-      },
-    },
-  ],
+  tasks: _.times(10).map((i) => ({
+    ...TEST_TASKS[i % TEST_TASKS.length],
+    id: i,
+    order: i,
+  })),
 };
 
 export const TEST_STATUS_NOT_STARTED: TestStatusResp = {
@@ -253,18 +248,23 @@ export const TEST_STATUS_NOT_STARTED: TestStatusResp = {
   status: TestStatus.NOT_STARTED,
   progress: 0,
   deadline: TEST.deadline,
+  pass_criteria: 0.6,
 };
 
 export const TEST_STATUS_COMPLETED: TestStatusResp = {
   id: TEST.id,
   name: TEST.name,
-  status: TestStatus.COMPLETED,
+  status: TestStatus.PASSED,
+  progress: 1,
   percentage: 1,
-  passed: true,
   deadline: TEST.deadline,
+  started_at: new Date().getTime(),
+  completed_at: new Date().getTime(),
+  pass_criteria: 0.6,
 };
 
 export const TEST_STATE_NOT_STARTED: TestStateDtoResp = {
+  id: TEST.id,
   status: TestStatus.NOT_STARTED,
   last_task_id: 0,
   progress: 0,
@@ -272,6 +272,7 @@ export const TEST_STATE_NOT_STARTED: TestStateDtoResp = {
 };
 
 export const TEST_STATE_STARTED: TestStateDtoResp = {
+  id: TEST.id,
   status: TestStatus.NOT_STARTED,
   last_task_id: 2,
   answers: TEST.tasks.slice(0, 2).map(({id, answer}) => ({
@@ -281,11 +282,11 @@ export const TEST_STATE_STARTED: TestStateDtoResp = {
 };
 
 export const TEST_STATE_COMPLETED: TestStateDtoResp = {
-  status: TestStatus.COMPLETED,
+  id: TEST.id,
+  status: TestStatus.PASSED,
   last_task_id: TEST.tasks.length - 1,
   percentage: 0.8,
-  passed: true,
-  answers: TEST.tasks.map(({id, answer}, i) => ({
+  answers: TEST.tasks.map(({id, answer, solution}, i) => ({
     task_id: id,
     user_answer:
       answer.type === AnswerType.FILE
@@ -299,6 +300,7 @@ export const TEST_STATE_COMPLETED: TestStateDtoResp = {
           }
         : answer,
     correct_answer: answer,
+    solution,
     is_correct: i !== 0,
   })),
 };
@@ -336,6 +338,37 @@ export const LESSONS: LessonInfo[] = _.times(4, (j) => {
     } as TestStatusInfo,
   };
 });
+
+export const THEMES: ThemeDtoResp[] = [
+  {
+    id: 1,
+    name: 'Lorem ipsum dolor sit amet',
+    subject_id: 1,
+    has_sub_themes: true,
+    has_sub_tasks: false,
+  },
+  {
+    id: 2,
+    name: 'Lorem ipsum dolor sit amet',
+    subject_id: 1,
+    has_sub_themes: true,
+    has_sub_tasks: false,
+  },
+  {
+    id: 3,
+    name: 'Lorem ipsum dolor sit amet',
+    subject_id: 1,
+    has_sub_themes: true,
+    has_sub_tasks: false,
+  },
+  {
+    id: 4,
+    name: 'Lorem ipsum dolor sit amet',
+    subject_id: 1,
+    has_sub_themes: false,
+    has_sub_tasks: false,
+  },
+];
 
 // export const TEST_ID = 1;
 // export const TEST_HASH = '2d01669a3c8cda169545b4f7b607efb3';

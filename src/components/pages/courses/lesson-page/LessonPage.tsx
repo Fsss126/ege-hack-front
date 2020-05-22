@@ -1,8 +1,14 @@
 import Lesson from 'components/common/Lesson';
 import List, {ListItemRenderer} from 'components/common/List';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
-import {useHomework, useLessons, useUserCourses} from 'hooks/selectors';
+import {
+  useLessons,
+  useTestStatus,
+  useUserCourses,
+  useUserHomework,
+} from 'hooks/selectors';
 import _ from 'lodash';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
@@ -21,8 +27,11 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
   const courseId = parseInt(param_course);
   const lessonId = parseInt(param_lesson);
 
-  const {courses, error, reload} = useUserCourses();
-  // const {teachers, error: errorLoadingTeachers, reload: reloadTeachers} = useTeachers();
+  const {
+    courses,
+    error: errorLoadingCourses,
+    reload: reloadCourses,
+  } = useUserCourses();
   const {
     lessons,
     error: errorLoadingLessons,
@@ -32,7 +41,11 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
     homework,
     error: errorLoadingHomework,
     reload: reloadHomework,
-  } = useHomework(lessonId);
+  } = useUserHomework(courseId, lessonId);
+  const {status, error: errorLoadingTest, reload: reloadTest} = useTestStatus(
+    courseId,
+    lessonId,
+  );
   const renderLesson: ListItemRenderer<LessonInfo> = (lesson, renderProps) => {
     const {id, locked} = lesson;
 
@@ -48,7 +61,7 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
     );
   };
 
-  if (courses && lessons && homework !== undefined) {
+  if (courses && lessons && homework !== undefined && status !== undefined) {
     const course = _.find(courses, {id: courseId});
     const selectedLesson = (course && _.find(lessons, {id: lessonId})) || null;
 
@@ -75,11 +88,21 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
           location={location}
         >
           <PageContent parentSection={{name: course.name}}>
-            <div className="layout__content-block layout__content-block--transparent">
+            <ContentBlock
+              transparent
+              className="lesson-page__top-content-block"
+            >
               <div className="container p-lg-0">
                 <div className="row align-items-start">
-                  <LessonView lesson={selectedLesson} homework={homework} />
-                  <div className="col-12 col-lg-auto layout__content-block layout__content-block--transparent lesson-page__other-lessons">
+                  <LessonView
+                    lesson={selectedLesson}
+                    testStatus={status}
+                    homework={homework}
+                  />
+                  <ContentBlock
+                    transparent
+                    className="col-12 col-xl-auto lesson-page__other-lessons"
+                  >
                     {nextVideo && <h3>Следующее занятие</h3>}
                     {nextVideo && (
                       <List renderItem={renderLesson}>{[nextVideo]}</List>
@@ -90,10 +113,10 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
                         <List renderItem={renderLesson}>{otherLessons}</List>
                       </React.Fragment>
                     )}
-                  </div>
+                  </ContentBlock>
                 </div>
               </div>
-            </div>
+            </ContentBlock>
           </PageContent>
         </Page>
       );
@@ -101,7 +124,24 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
       return <NotFoundErrorPage message="Урок не найден" location={location} />;
     }
   } else {
-    return <Page isLoaded={false} location={location} />;
+    return (
+      <Page
+        isLoaded={false}
+        location={location}
+        errors={[
+          errorLoadingCourses,
+          errorLoadingLessons,
+          errorLoadingHomework,
+          errorLoadingTest,
+        ]}
+        reloadCallbacks={[
+          reloadCourses,
+          reloadLessons,
+          reloadHomework,
+          reloadTest,
+        ]}
+      />
+    );
   }
 };
 

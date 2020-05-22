@@ -1,21 +1,23 @@
 import CourseOverview from 'components/common/CourseOverview';
 import Lesson from 'components/common/Lesson';
-import {NotFoundErrorPage} from 'components/layout/ErrorPage';
-import Page, {PageContent} from 'components/layout/Page';
+import {PageContent} from 'components/layout/Page';
 import {
   useDiscount,
   useLessons,
   useShopCourse,
-  useTeachers,
+  useUserTeachers,
 } from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
-import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {
+  CoursePageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 
 import CoursePrice from './CoursePrice';
 
 interface CoursePageProps
-  extends RouteComponentPropsWithPath<CoursePageParams> {
+  extends RouteComponentPropsWithParentProps<CoursePageParams> {
   selectedCourses: Set<CourseInfo>;
   onCourseSelect: (course: CourseInfo) => void;
   children: React.ReactNode;
@@ -34,12 +36,16 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
     params: {courseId: param_id},
   } = match;
   const courseId = parseInt(param_id);
-  const {course, error, reload} = useShopCourse(courseId);
+  const {
+    course,
+    error: errorLoadingCourse,
+    reload: reloadCourse,
+  } = useShopCourse(courseId);
   const {
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useTeachers();
+  } = useUserTeachers();
   const {
     lessons,
     error: errorLoadingLessons,
@@ -72,43 +78,49 @@ const CoursePage: React.FC<CoursePageProps> = (props) => {
     [course, courseId],
   );
 
+  const isLoaded = !!(course && teachers && lessons);
+
+  let content;
+
   if (course && teachers && lessons) {
-    return (
-      <CourseOverview.Body
-        path={root}
-        course={course}
-        teachers={teachers}
-        lessons={lessons}
-        location={location}
-      >
+    content = (
+      <>
         <div>
           <PageContent parentSection={{name: 'Магазин курсов'}}>
             <CourseOverview.Description />
             <CoursePrice
+              isLoading={isLoading}
               isSelected={isSelected}
               discount={discount}
               onSelect={onCourseSelect}
               error={errorLoadingDiscount}
               reload={reloadDiscount}
             />
-            <CourseOverview.Teachers />
+          </PageContent>
+          <CourseOverview.Teachers />
+          <PageContent>
             <CourseOverview.Lessons renderLesson={renderLesson} />
           </PageContent>
         </div>
         {selectedCoursesTab}
-      </CourseOverview.Body>
+      </>
     );
-  } else if (error) {
-    return (
-      <NotFoundErrorPage
-        message="Курс не найден"
-        url={root}
-        location={location}
-      />
-    );
-  } else {
-    return <Page isLoaded={false} location={location} />;
   }
+
+  return (
+    <CourseOverview.Body
+      isLoaded={isLoaded}
+      path={root}
+      course={course}
+      teachers={teachers}
+      lessons={lessons}
+      errors={[errorLoadingCourse, errorLoadingLessons, errorLoadingTeachers]}
+      reloadCallbacks={[reloadCourse, reloadLessons, reloadTeachers]}
+      location={location}
+    >
+      {content}
+    </CourseOverview.Body>
+  );
 };
 
 export default CoursePage;

@@ -1,29 +1,56 @@
 import _ from 'lodash';
-
 import {
   AccountDto,
+  AccountDtoResp,
+  AnswerType,
+  CommonTestStatusResp,
   CorrectAnswerDto,
   CourseDtoResp,
   FileInfo,
   HomeworkDtoResp,
+  KnowledgeLevelDtoResponse,
   LessonDtoResp,
+  PupilDtoReq,
+  PupilDtoResp,
+  PupilHomeworkDtoResp,
+  SolutionDto,
+  SubjectDtoResp,
+  TaskDtoResp,
+  TeacherDtoResp,
   TestDtoResp,
+  TestResultResp,
   TestStateAnswerDto,
   TestStateDtoResp,
+  TestStatus,
+  TestStatusResp,
   UserAnswerDtoResp,
-  UserInfoDtoResp,
-} from '../types/dtos';
+  VkUserDto,
+} from 'types/dtos';
 import {
   AccountInfo,
+  CommonTestStatusInfo,
+  ContactInfo,
   CorrectAnswerInfo,
   CourseInfo,
   HomeworkInfo,
+  KnowledgeLevelInfo,
   LessonInfo,
+  ProfileInfo,
+  PupilInfo,
+  PupilProfileInfo,
+  SubjectInfo,
+  TaskInfo,
   TestInfo,
+  TestResultInfo,
+  TestStateAnswerInfo,
   TestStateInfo,
   TestStatusInfo,
   UserAnswerInfo,
-} from '../types/entities';
+  UserHomeworkInfo,
+  VkUserInfo,
+} from 'types/entities';
+
+import {getGradeByGraduationYear} from '../modules/userInfo/userInfo.utils';
 import {API_ROOT} from './index';
 
 export const getVideoLink = (videoId: string) =>
@@ -40,6 +67,14 @@ export const transformFileInfo = (file: FileInfo): FileInfo => {
   };
 };
 
+export const transformSubject = ({
+  image_link,
+  ...rest
+}: SubjectDtoResp): SubjectInfo => ({
+  image_link: image_link ? getImageLink(image_link) : image_link,
+  ...rest,
+});
+
 export const transformCourse = ({
   date_start,
   date_end,
@@ -49,7 +84,7 @@ export const transformCourse = ({
 }: CourseDtoResp): CourseInfo => ({
   date_start: new Date(date_start),
   date_end: new Date(date_end),
-  image_link: `${API_ROOT}${image_link}`,
+  image_link: getImageLink(image_link),
   teacher_ids: [teacher_id],
   ...rest,
 });
@@ -60,7 +95,6 @@ export const transformLesson = ({
   image_link,
   is_locked: locked,
   attachments,
-  test,
   ...lesson
 }: LessonDtoResp): LessonInfo => ({
   ...lesson,
@@ -68,16 +102,9 @@ export const transformLesson = ({
   image_link: getImageLink(image_link),
   video_link: getVideoLink(video_link),
   attachments: attachments ? attachments.map(transformFileInfo) : [],
-  test: test
-    ? ({
-        ...test,
-        deadline: test.deadline ? new Date(test.deadline) : undefined,
-        progress: test.progress || 0,
-      } as TestStatusInfo)
-    : undefined,
   assignment: hometask
     ? {
-        deadline: new Date(hometask.deadline),
+        deadline: hometask.deadline ? new Date(hometask.deadline) : undefined,
         description: hometask.description,
         files: hometask.file_info
           ? [transformFileInfo(hometask.file_info)]
@@ -86,56 +113,149 @@ export const transformLesson = ({
     : hometask,
 });
 
-export const transformUser = <
-  T extends AccountDto | UserInfoDtoResp,
-  R extends AccountInfo
->(
-  accountDto: T,
-): R => {
-  const {account_id: id, vk_info, instagram, ...user} = accountDto as any;
-  const {photo_max: photo, first_name, last_name, ...info} = vk_info || {};
+const transformVkInfo = (vkDto: VkUserDto): VkUserInfo => {
+  const {photo_max: photo, first_name, last_name, ...info} = vkDto;
 
   return {
-    id,
-    ...user,
-    vk_info: vk_info
-      ? {
-          ...info,
-          photo,
-          first_name,
-          last_name,
-          full_name: `${first_name} ${last_name}`,
-        }
-      : undefined,
-    contacts: {
-      ig: instagram,
-      vk: vk_info ? `https://vk.com/id${vk_info.id}` : undefined,
-    },
+    ...info,
+    photo,
+    first_name,
+    last_name,
+    full_name: `${first_name} ${last_name}`,
   };
 };
 
-export const transformHomework = ({
-  file_info,
+const transformContacts = (
+  vkDto: VkUserDto,
+  instagram?: string,
+): ContactInfo => ({
+  ig: instagram,
+  vk: `https://vk.com/id${vkDto.id}`,
+});
+
+export const transformProfileInfo = <T extends TeacherDtoResp | PupilDtoResp>(
+  accountDto: T,
+): Omit<T, keyof AccountDto | 'instagram'> & ProfileInfo => {
+  const {account_id: id, vk_info, instagram, ...user} = accountDto;
+
+  return {
+    ...user,
+    id,
+    vk_info: transformVkInfo(vk_info),
+    contacts: transformContacts(vk_info, instagram),
+  };
+};
+
+const transformPupilProfileInfo = (
+  pupilDto: PupilDtoResp,
+): PupilProfileInfo => ({
+  ...transformProfileInfo(pupilDto),
+  grade: pupilDto.final_year
+    ? getGradeByGraduationYear(pupilDto.final_year)
+    : undefined,
+});
+
+const transformPupilInfo = <T extends PupilDtoReq>(
+  pupilInfo: T,
+): OmitCommon<T, PupilDtoReq> & PupilInfo => ({
+  ...pupilInfo,
+  grade: pupilInfo.final_year
+    ? getGradeByGraduationYear(pupilInfo.final_year)
+    : undefined,
+});
+
+export const transformAccountInfo = ({
+  vk_info,
+  teacher,
   pupil,
+  ...account
+}: AccountDtoResp): AccountInfo => ({
+  ...account,
+  vk_info: transformVkInfo(vk_info),
+  pupil: pupil ? transformPupilInfo(_.omit(pupil, 'account_id')) : undefined,
+  teacher: _.omit(teacher, 'account_id'),
+  contacts: transformContacts(vk_info, pupil?.instagram || teacher?.instagram),
+});
+
+export const transformPupilHomework = <
+  T extends PupilHomeworkDtoResp = PupilHomeworkDtoResp
+>({
+  file_info,
   date,
   ...rest
-}: HomeworkDtoResp): HomeworkInfo => ({
+}: T) => ({
   ...rest,
   date: date ? new Date(date) : undefined,
   files: file_info ? [transformFileInfo(file_info)] : undefined,
-  pupil: transformUser(pupil),
+});
+
+export const transformHomework = ({
+  pupil,
+  ...rest
+}: HomeworkDtoResp): HomeworkInfo => ({
+  ...transformPupilHomework(rest),
+  pupil: transformPupilProfileInfo(pupil),
+});
+
+const getIsTestRated = (status: TestStatus) =>
+  status === TestStatus.PASSED || status === TestStatus.NOT_PASSED;
+
+const getIsTestCompleted = (status: TestStatus) =>
+  getIsTestRated(status) || status === TestStatus.AWAIT;
+
+const getIsTestPassed = (status: TestStatus) =>
+  status === TestStatus.PASSED
+    ? true
+    : status === TestStatus.NOT_PASSED
+    ? false
+    : undefined;
+
+const transformCommonTestStatus = <T extends CommonTestStatusResp>(status: T) =>
+  ({
+    ...status,
+    started_at: status.started_at ? new Date(status.started_at) : undefined,
+    is_completed: getIsTestCompleted(status.status),
+    is_rated: getIsTestRated(status.status),
+    passed: getIsTestPassed(status.status),
+    percentage:
+      status.percentage !== undefined
+        ? status.percentage.toFixed(2)
+        : undefined,
+    completed_at: status.completed_at
+      ? new Date(status.completed_at)
+      : undefined,
+  } as OmitCommon<T, CommonTestStatusResp> & CommonTestStatusInfo);
+
+export const transformTestStatus = (
+  status: TestStatusResp,
+): TestStatusInfo => ({
+  ...transformCommonTestStatus(status),
+  deadline: status.deadline ? new Date(status.deadline) : undefined,
 });
 
 export const transformCorrectAnswer = (
   answer: CorrectAnswerDto,
+  solution?: SolutionDto,
 ): CorrectAnswerInfo => {
-  const {videoSolution} = answer;
+  const {video_value, text_value: text_solution} = solution || {};
 
   return {
     ...answer,
-    videoSolution: videoSolution ? getVideoLink(videoSolution) : videoSolution,
+    video_solution: video_value ? getVideoLink(video_value) : video_value,
+    text_solution,
   };
 };
+
+export const transformTask = ({
+  image_link,
+  answer,
+  solution,
+  ...rest
+}: TaskDtoResp): TaskInfo => ({
+  ...rest,
+  image_link: image_link ? getImageLink(image_link) : image_link,
+  answer: transformCorrectAnswer(answer, solution),
+});
 
 export const transformTest = ({
   deadline,
@@ -143,54 +263,71 @@ export const transformTest = ({
   ...rest
 }: TestDtoResp): TestInfo => ({
   deadline: deadline ? new Date(deadline) : undefined,
-  tasks: _.sortBy(tasks, 'order').map((task, i) => {
-    const {image_link, answer} = task;
-
-    return {
-      ...task,
-      order: i,
-      image_link: image_link ? getImageLink(image_link) : image_link,
-      answer: transformCorrectAnswer(answer),
-    };
-  }),
+  tasks: tasks.map((task, index) => ({
+    ...transformTask(task),
+    order: index,
+  })),
   ...rest,
 });
 
 export const transformUserAnswer = (
   answer: UserAnswerDtoResp,
 ): UserAnswerInfo => {
-  const {type, value, file_info} = answer;
+  const {type, value} = answer;
 
   return {
     type,
-    value: file_info ? transformFileInfo(file_info) : value,
+    value: typeof value === 'object' ? transformFileInfo(value) : value,
   } as UserAnswerInfo;
 };
 
 export const transformTestState = ({
   answers,
-  status,
-  last_task_id,
-  progress,
+  deadline,
   ...rest
-}: TestStateDtoResp): TestStateInfo => ({
-  answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerDto>>(
-    answers,
-    (result, answer) => {
-      const {user_answer, correct_answer} = answer;
-      result[answer.task_id] = {
-        ...answer,
-        user_answer: transformUserAnswer(user_answer),
-        correct_answer: correct_answer
-          ? transformCorrectAnswer(correct_answer)
-          : correct_answer,
-      };
-      return result;
-    },
-    {},
-  ) as any,
+}: TestStateDtoResp): TestStateInfo =>
+  ({
+    ...transformCommonTestStatus(rest),
+    deadline: deadline ? new Date(deadline) : undefined,
+    answers: _.reduce<TestStateAnswerDto, Record<number, TestStateAnswerInfo>>(
+      answers,
+      (result, answer) => {
+        const {user_answer, correct_answer, solution} = answer;
+
+        if (
+          (user_answer && user_answer.value !== undefined) ||
+          correct_answer
+        ) {
+          result[answer.task_id] = {
+            ...answer,
+            user_answer: user_answer
+              ? transformUserAnswer(user_answer)
+              : undefined,
+            correct_answer: correct_answer
+              ? transformCorrectAnswer(correct_answer, solution)
+              : correct_answer,
+          };
+        }
+        return result;
+      },
+      {},
+    ) as any,
+  } as TestStateInfo);
+
+export const transformTestResult = ({
+  pupil,
+  status,
+  ...rest
+}: TestResultResp): TestResultInfo => ({
   ...rest,
-  last_task_id: last_task_id || 0,
-  progress: progress || 0,
-  status: status as any,
+  status: transformCommonTestStatus(status),
+  pupil: transformPupilProfileInfo({vk_info: pupil, account_id: pupil.id}),
+});
+
+export const transformKnowledgeLevel = ({
+  tasks,
+  ...rest
+}: KnowledgeLevelDtoResponse): KnowledgeLevelInfo => ({
+  ...rest,
+  tasks: tasks.map((task) => transformTask(task)),
 });

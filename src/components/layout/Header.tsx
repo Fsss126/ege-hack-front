@@ -2,16 +2,18 @@ import Auth from 'definitions/auth';
 import logo from 'img/logo.svg';
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {Credentials, UserInfo} from 'types/entities';
+import {AccountInfo, Credentials} from 'types/entities';
+import {AccountRole} from 'types/enums';
 import {SimpleCallback} from 'types/utility/common';
 
 import CoverImage from '../common/CoverImage';
 import DropdownMenu, {DropdownMenuOption} from '../common/DropdownMenu';
+import ConditionalRenderer from '../ConditionalRender';
 
 export type HeaderProps = {
   onMenuButtonClick: SimpleCallback;
   user: Credentials | null;
-  userInfo?: UserInfo;
+  userInfo?: AccountInfo;
   sidebar: boolean;
   showUserNav: boolean;
 };
@@ -87,13 +89,17 @@ const Header: React.FC<HeaderProps> = (props) => {
                       <i className="icon-profile" />
                       Аккаунт
                     </DropdownMenuOption>
-                    <DropdownMenuOption<typeof Link>
-                      component={Link}
-                      to="/account/settings/"
+                    <ConditionalRenderer
+                      requiredRoles={[AccountRole.PUPIL, AccountRole.TEACHER]}
                     >
-                      <i className="icon-settings" />
-                      Настройки
-                    </DropdownMenuOption>
+                      <DropdownMenuOption<typeof Link>
+                        component={Link}
+                        to="/account/settings/"
+                      >
+                        <i className="icon-settings" />
+                        Настройки
+                      </DropdownMenuOption>
+                    </ConditionalRenderer>
                     <DropdownMenuOption tabIndex={2} onClick={Auth.logout}>
                       <i className="icon-logout" />
                       Выход

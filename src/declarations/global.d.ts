@@ -1,11 +1,47 @@
-import { AxiosInstance } from "axios";
-import {Includes, InsertAfterEach} from "definitions/mixins";
+import { AxiosInstance } from 'axios';
+import {Includes, InsertAfterEach} from 'definitions/mixins';
 
 declare global {
+    declare type OmitCommon<T extends K, K> = Omit<T, keyof K>;
+
+    declare type Optionalize<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+    declare type OptionalizeCommon<T extends K, K> = Omit<T, keyof K> & Partial<K>;
+
+    declare type Require<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
+    declare type RequireCommon<T extends K, K> = T & Required<Pick<T, keyof K>>;
+
+    declare type ArrayElement<ArrayType extends unknown[]> = ArrayType[number];
+
+    declare type Maybe<T> = T | undefined;
+
+    declare type Nullable<T> = T | null;
+
+    declare type Key = string | number;
+
+    declare type Dictionary<T, K extends Key = string> = K extends string ? { [key: string]: T } : { [key: number]: T };
+
+    declare type PartialDictionary<T, K extends Key = string> = Partial<Dictionary<T, K>>;
+
+    declare type PartialRecord<K extends keyof any, T> = Partial<Record<K, T>>;
+
+    // tslint:disable-next-line:ban-types
+    export type DeepPartial<T> = T extends Function ? T : (T extends object ? { [P in keyof T]?: DeepPartial<T[P]>; } : T);
+
+    declare type Yield<T> = T extends import('redux-saga').EventChannel<infer U1>
+      ? U1
+      : ReturnType<T> extends Promise<infer U2>
+        ? U2
+        : ReturnType<T> extends Generator<unknown, infer U3>
+          ? U3
+          : ReturnType<T>;
+
     declare interface Window {
-        VK: any;
         APIRequest: AxiosInstance;
     }
+
+    declare const VK: any;
 
     declare namespace NodeJS {
         export interface ProcessEnv {

@@ -1,8 +1,6 @@
 import _, {Dictionary, List, LoDashStatic, NumericDictionary} from 'lodash';
 
-export interface InsertAfterEach<T> {
-  (array: T[], insertedItem: T): T[];
-}
+export type InsertAfterEach<T> = (array: T[], insertedItem: T) => T[];
 function insertAfterEach<T>(
   this: LoDashStatic,
   array: T[],

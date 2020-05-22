@@ -1,5 +1,6 @@
 import APIRequest from 'api';
-import {Credentials, UserInfo} from 'types/entities';
+import {AxiosError} from 'axios';
+import {AccountInfo, Credentials} from 'types/entities';
 import {SimpleCallback} from 'types/utility/common';
 
 const LOCAL_STORAGE_KEY = 'ege-hack-user-data';
@@ -7,6 +8,8 @@ const VK_APP_ID = process.env.REACT_APP_VK_APP_ID;
 
 export enum AuthEventTypes {
   login = 'auth.login',
+  success = 'auth.success',
+  error = 'auth.error',
   logout = 'auth.logout',
 }
 
@@ -17,12 +20,12 @@ function setCredentialsToStorage(credentials: Credentials): void {
   );
 }
 
-function getCredentialsFromStorage(): Credentials | null {
+function getCredentialsFromStorage(): Maybe<Credentials> {
   try {
     const storedString = localStorage.getItem(LOCAL_STORAGE_KEY);
 
     if (!storedString) {
-      return null;
+      return undefined;
     }
     const credentials = JSON.parse(storedString);
 
@@ -38,17 +41,25 @@ function getCredentialsFromStorage(): Credentials | null {
   }
 }
 
-export type AuthLoginCallback = (credentials: Credentials | null) => void;
+export type AuthLoginCallback = SimpleCallback;
+
+export type AuthSuccessCallback = (credentials: Credentials) => void;
+
+export type AuthErrorCallback = (error: AxiosError) => void;
 
 export type AuthLogoutCallback = SimpleCallback;
 
+type AuthEventHandlers = {
+  [AuthEventTypes.login]?: AuthLoginCallback[];
+  [AuthEventTypes.success]?: AuthSuccessCallback[];
+  [AuthEventTypes.error]?: AuthErrorCallback[];
+  [AuthEventTypes.logout]?: AuthLogoutCallback[];
+};
+
 class Auth {
-  credentials!: Credentials | null;
-  userInfo?: UserInfo;
-  eventHandlers: {
-    [AuthEventTypes.login]?: AuthLoginCallback[];
-    [AuthEventTypes.logout]?: AuthLogoutCallback[];
-  } = {};
+  credentials?: Credentials;
+  userInfo?: AccountInfo;
+  eventHandlers: AuthEventHandlers = {};
 
   constructor() {
     let credentials;
@@ -56,73 +67,82 @@ class Auth {
       credentials = getCredentialsFromStorage();
       this.setCredentials(credentials);
     } catch (e) {
-      console.log('error retrieving credentials from local storage');
-      this.setCredentials(null);
+      console.error('Error retrieving credentials from local storage.');
+      this.setCredentials(undefined);
     }
   }
 
-  setCredentials(credentials: Credentials | null): void {
+  setCredentials(credentials: Credentials | undefined): void {
     this.credentials = credentials;
-    for (const handler of this.eventHandlers[AuthEventTypes.login] || []) {
-      handler(this.credentials);
-    }
   }
 
   login = (redirectUrl: string): void => {
     window.location.href = `https://oauth.vk.com/authorize?client_id=${VK_APP_ID}&display=page&redirect_uri=${redirectUrl}&response_type=code&openapi=1&scope=email`;
-    // if (!window.VK)
-    //     return;
-    // if (!initVK)
-    //     window.VK.init({apiId: process.env.REACT_APP_VK_APP_ID});
-    // window.VK.Auth.login(this.onLogin, 4194304);
   };
 
-  logout = (): void => {
-    console.info('Logout');
+  onLogout = (): void => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
-    this.credentials = null;
+    this.credentials = undefined;
     this.userInfo = undefined;
     for (const handler of this.eventHandlers[AuthEventTypes.logout] || []) {
       handler();
     }
   };
 
-  onLogin = async (code: string, redirectUrl: string): Promise<void> => {
-    console.log('login', code);
-    const credentials: Credentials = await APIRequest.post('/login/vk', {
-      code,
-      redirect_uri: redirectUrl,
-    });
-    console.info('got credentials', credentials);
+  onSuccess = (credentials: Credentials): void => {
     setCredentialsToStorage(credentials);
     this.setCredentials(credentials);
+    for (const handler of this.eventHandlers[AuthEventTypes.success] || []) {
+      handler(credentials);
+    }
   };
 
-  subscribe(eventType: AuthEventTypes.login, handler: AuthLoginCallback): void;
-  subscribe(
-    eventType: AuthEventTypes.logout,
-    handler: AuthLogoutCallback,
-  ): void;
-  subscribe(
-    eventType: AuthEventTypes,
-    handler: AuthLoginCallback | AuthLogoutCallback,
+  onError = (e: AxiosError): void => {
+    for (const handler of this.eventHandlers[AuthEventTypes.error] || []) {
+      handler(e);
+    }
+  };
+
+  logout = (): void => {
+    if (!VK) {
+      this.onLogout();
+      return;
+    }
+    VK.init({apiId: VK_APP_ID});
+
+    const timeout = setTimeout(this.onLogout, 500);
+
+    VK.Auth.getLoginStatus(() => {
+      VK.Auth.logout(() => {
+        clearTimeout(timeout);
+        this.onLogout();
+      });
+    });
+  };
+
+  onLogin = async (code: string, redirectUrl: string): Promise<void> => {
+    try {
+      const credentials: Credentials = await APIRequest.post('/login/vk', {
+        code,
+        redirect_uri: redirectUrl,
+      });
+      this.onSuccess(credentials);
+    } catch (e) {
+      this.onError(e);
+    }
+  };
+
+  subscribe<E extends keyof AuthEventHandlers>(
+    eventType: E,
+    handler: ArrayElement<NonNullable<AuthEventHandlers[E]>>,
   ): void {
-    (
-      this.eventHandlers[eventType] || (this.eventHandlers[eventType] = [])
-    ).push(handler);
+    ((this.eventHandlers[eventType] ||
+      (this.eventHandlers[eventType] = [])) as any).push(handler);
   }
 
-  unsubscribe(
-    eventType: AuthEventTypes.login,
-    handler: AuthLoginCallback,
-  ): void;
-  unsubscribe(
-    eventType: AuthEventTypes.logout,
-    handler: AuthLogoutCallback,
-  ): void;
-  unsubscribe(
-    eventType: AuthEventTypes,
-    handler: AuthLoginCallback | AuthLogoutCallback,
+  unsubscribe<E extends keyof AuthEventHandlers>(
+    eventType: E,
+    handler: ArrayElement<NonNullable<AuthEventHandlers[E]>>,
   ): void {
     const {
       eventHandlers: {[eventType]: eventHandlers},
@@ -131,9 +151,10 @@ class Auth {
     if (!eventHandlers) {
       return;
     }
-    this.eventHandlers[eventType] = eventHandlers.filter(
-      (func) => func !== handler,
-    ) as any;
+    this.eventHandlers[eventType] = (eventHandlers as any).filter(
+      (func: AuthSuccessCallback | AuthErrorCallback | SimpleCallback) =>
+        func !== handler,
+    );
   }
 
   getAccessToken(): string {

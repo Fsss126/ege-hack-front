@@ -1,15 +1,13 @@
 import classNames from 'classnames';
-import {useTruncate} from 'hooks/common';
 import React from 'react';
 import {Link, LinkProps} from 'react-router-dom';
-import Truncate from 'react-truncate';
-import {TeacherInfo} from 'types/entities';
+import {TeacherProfileInfo} from 'types/entities';
 
 import Contacts from './Contacts';
 import CoverImage from './CoverImage';
 
 export type TeacherProps = {
-  teacher: TeacherInfo;
+  teacher: TeacherProfileInfo;
   link: LinkProps['to'];
   bio?: boolean;
   className?: string;
@@ -20,18 +18,15 @@ const Teacher: React.FC<TeacherProps> = (props) => {
       vk_info: {first_name, last_name, photo},
       contacts,
       subjects: teacherSubjects,
-      bio: about,
     },
     link,
     bio = false,
     className,
   } = props;
-  const onClick = React.useCallback((event) => {
-    const clicked = !event.target.closest('.social-media');
-    // event.preventDefault();
-  }, []);
-  // const teacherSubjects = subject_ids.map(id => _.find(subjects, {id}));
-  const [descriptionRef, isFontLoaded] = useTruncate(about);
+  // const onClick = React.useCallback((event) => {
+  //   const clicked = !event.target.closest('.social-media');
+  //   // event.preventDefault();
+  // }, []);
 
   return (
     <Link
@@ -42,7 +37,6 @@ const Teacher: React.FC<TeacherProps> = (props) => {
         'align-items-center',
         className,
       )}
-      onClick={onClick}
     >
       <div className="container p-0">
         <div className="row flex-nowrap">
@@ -70,19 +64,6 @@ const Teacher: React.FC<TeacherProps> = (props) => {
             </div>
           </div>
         </div>
-        {/*{bio && (*/}
-        {/*  <div className="row">*/}
-        {/*    <div className="col-12">*/}
-        {/*      <div className="description-block">*/}
-        {/*        {isFontLoaded ? (*/}
-        {/*          <Truncate lines={4} ref={descriptionRef}>*/}
-        {/*            {about}*/}
-        {/*          </Truncate>*/}
-        {/*        ) : null}*/}
-        {/*      </div>*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*)}*/}
       </div>
     </Link>
   );

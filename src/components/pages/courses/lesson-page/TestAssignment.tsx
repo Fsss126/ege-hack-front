@@ -14,11 +14,12 @@ import {TestStatusInfo} from 'types/entities';
 export interface TestStatusProps {
   courseId: number;
   lessonId: number;
+  testId: number;
   test: TestStatusInfo;
 }
 
 export const TestAssignment: React.FC<TestStatusProps> = (props) => {
-  const {test, courseId, lessonId} = props;
+  const {test, courseId, testId, lessonId} = props;
   const [isFetchingTest, setIsFetchingTest] = useState<boolean | null>(null);
   const state = useLoadingState(isFetchingTest, isFetchingTest === false);
   const fetchCallback = useCallback(() => {
@@ -27,21 +28,21 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
 
   const startTestCallback = useStartTest();
 
-  const {status, id, name, deadline} = test;
+  const {status, name, deadline} = test;
 
   const onClick = useCallback(() => {
     setIsFetchingTest(true);
     startTestCallback({
       courseId,
       lessonId,
-      testId: id,
+      testId,
       onSuccess: fetchCallback,
       onError: fetchCallback,
     });
-  }, [courseId, fetchCallback, id, lessonId, startTestCallback]);
+  }, [courseId, fetchCallback, testId, lessonId, startTestCallback]);
 
-  if (test.status === TestStatus.COMPLETED) {
-    const {percentage, passed} = test;
+  if (test.is_rated) {
+    const {percentage, status, passed} = test;
 
     return (
       <div className="test-view container p-0">
@@ -73,7 +74,7 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
       </div>
     );
   } else {
-    const {progress} = test;
+    const {progress, is_completed} = test;
     const isStarted = status === TestStatus.STARTED;
 
     return (
@@ -88,10 +89,20 @@ export const TestAssignment: React.FC<TestStatusProps> = (props) => {
                 Пройдено {progress * 100}%
               </ProgressIndicator>
             )}
+            {is_completed && (
+              <div className="description-text">На проверке</div>
+            )}
           </div>
           <div className="col-auto">
-            <Button after={<LoadingIndicator state={state} />} onClick={onClick}>
-              {isStarted ? 'Продолжить' : 'Начать тест'}
+            <Button
+              after={<LoadingIndicator state={state} />}
+              onClick={onClick}
+            >
+              {is_completed
+                ? 'Смотреть ответы'
+                : isStarted
+                ? 'Продолжить'
+                : 'Начать тест'}
             </Button>
           </div>
         </div>

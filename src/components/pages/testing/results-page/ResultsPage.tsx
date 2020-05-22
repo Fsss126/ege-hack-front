@@ -1,39 +1,47 @@
-import classNames from 'classnames';
 import List, {ListItemRenderer} from 'components/common/List';
 import ListItem from 'components/common/ListItem';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import {useTest, useTestState} from 'hooks/selectors';
 import React, {useCallback} from 'react';
 import {Redirect} from 'react-router';
-import {TestStatus} from 'types/dtos';
-import {TestStatePassedAnswerInfo} from 'types/entities';
-import {RouteComponentPropsWithPath, TestPageParams} from 'types/routes';
+import {
+  SanitizedTaskInfo,
+  TestStateAwaitingInfo,
+  TestStatePassedInfo,
+} from 'types/entities';
+import {RouteComponentPropsWithParentProps, TestPageParams} from 'types/routes';
 
 import {CorrectBadge, IncorrectBadge} from '../task-page/Results';
 import {ResultBar} from './ResultBar';
 
-export const ResultsPage: React.FC<RouteComponentPropsWithPath<
+export const ResultsPage: React.FC<RouteComponentPropsWithParentProps<
   TestPageParams
 >> = (props) => {
   const {
     match: {
-      params: {testId: param_test},
+      params: {testId: param_test, lessonId: param_lesson},
     },
-    path: root,
     location,
   } = props;
   const testId = parseInt(param_test);
+  const lessonId = parseInt(param_lesson);
+  const courseId = parseInt(param_lesson);
 
-  const {test} = useTest(testId);
+  const {test, error: errorLoadingTest, reload: reloadTest} = useTest(testId);
   const {
     state,
     error: errorLoadingTestState,
     reload: reloadTestState,
-  } = useTestState(testId);
+  } = useTestState(testId, lessonId, courseId);
 
-  const renderAnswer: ListItemRenderer<TestStatePassedAnswerInfo> = useCallback(
-    (answer, renderProps, index) => {
-      const {is_correct, task_id: id} = answer;
+  const renderAnswer: ListItemRenderer<SanitizedTaskInfo> = useCallback(
+    (task, renderProps, index) => {
+      const {id} = task;
+      const {answers, is_rated} =
+        (state as Maybe<TestStateAwaitingInfo | TestStatePassedInfo>) || {};
+      const {[id]: answer} = answers || {};
+      const {is_correct} = answer || {};
 
       return (
         <ListItem
@@ -43,64 +51,97 @@ export const ResultsPage: React.FC<RouteComponentPropsWithPath<
           title={`Вопрос ${index + 1}`}
           selectable
           noOnClickOnAction
-          preview={is_correct ? <CorrectBadge /> : <IncorrectBadge />}
+          preview={
+            is_rated ? (
+              is_correct ? (
+                <CorrectBadge />
+              ) : (
+                <IncorrectBadge />
+              )
+            ) : undefined
+          }
           link={`../${id}`}
           action={<i className="icon-btn icon-angle-right" />}
           {...renderProps}
         />
       );
     },
-    [],
+    [state],
   );
 
+  const isLoaded = !!(test && state);
+
+  let content;
+  let title;
+
   if (test && state) {
-    const {name, tasks, percentage: minPercentage} = test;
+    const {name, tasks, pass_criteria: minPercentage} = test;
 
-    if (state.status !== TestStatus.COMPLETED) {
+    if (!state.is_completed) {
       const {last_task_id} = state;
+      const firstTaskId = tasks[0].id;
 
-      return <Redirect to={`../${last_task_id}/`} />;
+      const taskId = last_task_id !== undefined ? last_task_id : firstTaskId;
+
+      return <Redirect to={`../${taskId}/`} />;
     }
 
-    const {percentage, passed, answers} = state;
+    const {percentage, passed, is_rated, answers} = state;
     const tasksCount = tasks.length;
-    let correctCount = 0;
-    const answersList = tasks.map(({id}) => {
-      const answer = answers[id];
+    const correctCount = _.reduce(
+      tasks,
+      (result, task) => {
+        const answer = answers[task.id];
 
-      if (answer && answer.is_correct) {
-        correctCount++;
-      }
-      return answer || null;
-    });
+        if (answer && answer.is_correct) {
+          result++;
+        }
 
-    return (
-      <Page
-        isLoaded={true}
-        title={`Результаты – ${name}`}
-        className="test-page test-results-page"
-        location={location}
+        return result;
+      },
+      0,
+    );
+
+    title = `Результаты – ${name}`;
+    content = (
+      <PageContent
+        parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
       >
-        <PageContent
-          parentSection={{name: 'Вернуться к уроку', url: '../../../'}}
-        >
-          <div className="layout__content-block">
-            <h2 className="test__test-title">{name}</h2>
-            <h3 className="test-passage">
-              {passed ? 'Тест пройден' : 'Тест не пройден'}
-            </h3>
+        <ContentBlock>
+          <h2 className="test__test-title">{name}</h2>
+          <h3 className="test-passage">
+            {is_rated
+              ? passed
+                ? 'Тест пройден'
+                : 'Тест не пройден'
+              : 'Тест ожидает оценки'}
+          </h3>
+          {percentage !== undefined && (
             <ResultBar percentage={percentage} minPercentage={minPercentage} />
+          )}
+          {is_rated && (
             <div className="tasks-count">
               Вопросов: {correctCount}/{tasksCount}
             </div>
-            <List renderItem={renderAnswer} plain className="test-results">
-              {answersList}
-            </List>
-          </div>
-        </PageContent>
-      </Page>
+          )}
+          <List renderItem={renderAnswer} plain className="test-results">
+            {tasks}
+          </List>
+        </ContentBlock>
+      </PageContent>
     );
-  } else {
-    return <Page isLoaded={false} location={location} />;
   }
+
+  return (
+    <Page
+      isLoaded={isLoaded}
+      title={title}
+      className="test-page test-results-page"
+      errors={[errorLoadingTest, errorLoadingTestState]}
+      reloadCallbacks={[reloadTest, reloadTestState]}
+      location={location}
+    >
+      {content}
+    </Page>
+  );
 };

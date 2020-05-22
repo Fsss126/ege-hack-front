@@ -143,8 +143,7 @@ class MenuList<T extends OptionShape = OptionShape> extends Component<
   componentDidMount(): void {
     // needed to the select to scroll the list to the selected option
     if (this.scrollBar.current) {
-      // TODO: investigate why declaration merging not working in this case
-      assignRef(this.props.innerRef, (this.scrollBar.current as any).view);
+      assignRef(this.props.innerRef, this.scrollBar.current.view);
     }
   }
 
@@ -168,10 +167,11 @@ class MenuList<T extends OptionShape = OptionShape> extends Component<
 
 export type SelectProps<V = any, L extends React.ReactNode = string> = {
   value?: V;
-  callback: InputChangeHandler<V | undefined>;
+  onChange: InputChangeHandler<V | undefined>;
   options: OptionsType<OptionShape<V, L>>;
   name: string;
   withContainer?: boolean;
+  icon?: React.ReactNode;
 } & Omit<SelectInputProps<OptionShape<V, L>>, 'value' | 'onChange' | 'name'>;
 
 export class Select<
@@ -185,7 +185,7 @@ export class Select<
   };
 
   onChange = (option: ValueType<OptionShape<V, L>>): void => {
-    this.props.callback(
+    this.props.onChange(
       option && 'value' in option ? option.value : null,
       this.props.name,
     );
@@ -205,6 +205,7 @@ export class Select<
       required,
       onChange,
       withContainer,
+      icon,
       ...selectProps
     } = this.props;
 
@@ -249,7 +250,7 @@ export class Select<
     );
 
     return withContainer ? (
-      <InputContainer placeholder={placeholder} required={required}>
+      <InputContainer placeholder={placeholder} icon={icon} required={required}>
         {select}
       </InputContainer>
     ) : (

@@ -3,7 +3,12 @@ import VideoPlayer from 'components/common/VideoPlayer';
 import {File} from 'components/ui/input';
 import React from 'react';
 import {FileInfo} from 'types/dtos';
-import {AnswerType, CorrectAnswerInfo, UserAnswerInfo} from 'types/entities';
+import {
+  AnswerType,
+  CorrectAnswerInfo,
+  SanitizedTaskInfo,
+  UserAnswerInfo,
+} from 'types/entities';
 
 export const CorrectBadge = () => {
   return (
@@ -22,27 +27,35 @@ export const IncorrectBadge = () => {
 };
 
 interface ResultsProps {
-  userAnswer: UserAnswerInfo;
-  correctAnswer: CorrectAnswerInfo;
-  isCorrect: boolean;
+  task: SanitizedTaskInfo;
+  userAnswer?: UserAnswerInfo;
+  correctAnswer?: CorrectAnswerInfo;
+  isCorrect?: boolean;
+  isRated: boolean;
 }
 
 export const Results = (props: ResultsProps) => {
-  const {userAnswer, correctAnswer, isCorrect} = props;
-  const {type, value} = userAnswer;
-  const {value: correctValue, textSolution, videoSolution} = correctAnswer;
+  const {userAnswer, correctAnswer, task, isCorrect, isRated} = props;
+  const {value} = userAnswer || {};
+  const {
+    answer: {type},
+  } = task;
+  const {value: correctValue, text_solution, video_solution} =
+    correctAnswer || {};
   const isAnswered = value !== undefined;
-  const hasSolution = !!(textSolution || videoSolution);
+  const isResultShown = isAnswered && isRated;
+  const hasSolution = !!(text_solution || video_solution);
 
   return (
     <div className="test-task__result">
       {(type === AnswerType.TEXT || type === AnswerType.NUMBER) && (
         <>
           <h4 className="test-task__result-user-answer">
-            {isAnswered && (isCorrect ? <CorrectBadge /> : <IncorrectBadge />)}
+            {isResultShown &&
+              (isCorrect ? <CorrectBadge /> : <IncorrectBadge />)}
             Ответ: <span>{isAnswered ? value : 'Нет ответа'}</span>
           </h4>
-          {!isCorrect && (
+          {isRated && !isCorrect && (
             <h4 className="test-task__result-correct-answer">
               <CorrectBadge /> Правильный ответ: {correctValue}
             </h4>
@@ -54,7 +67,8 @@ export const Results = (props: ResultsProps) => {
           <>
             <h4>Ответ: </h4>
             <div className="d-flex align-items-center">
-              {isCorrect ? <CorrectBadge /> : <IncorrectBadge />}
+              {isResultShown &&
+                (isCorrect ? <CorrectBadge /> : <IncorrectBadge />)}
               <File file={value as FileInfo} />
             </div>
           </>
@@ -67,9 +81,9 @@ export const Results = (props: ResultsProps) => {
           toggleText="Решение"
           initiallyExpanded={!isCorrect}
         >
-          {videoSolution && <VideoPlayer video_link={videoSolution} />}
-          {textSolution && (
-            <div className="test-task__solution-text">{textSolution}</div>
+          {video_solution && <VideoPlayer video_link={video_solution} />}
+          {text_solution && (
+            <div className="test-task__solution-text">{text_solution}</div>
           )}
         </ExpandableContainer>
       )}

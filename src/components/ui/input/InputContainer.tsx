@@ -5,6 +5,7 @@ import {getPlaceholder} from './Input';
 
 interface InputContainerProps {
   placeholder?: string;
+  icon?: React.ReactNode;
   required?: boolean;
   className?: string;
   children: React.ReactNode;
@@ -13,12 +14,13 @@ interface InputContainerProps {
 export const InputContainer = (
   props: InputContainerProps,
 ): React.ReactElement => {
-  const {placeholder, required, className, children} = props;
+  const {placeholder, icon, required, className, children} = props;
 
   return (
     <div className={classNames('input-container', className)}>
       {placeholder && (
         <div className="input-container__title">
+          {icon}
           {getPlaceholder(placeholder, required)}
         </div>
       )}

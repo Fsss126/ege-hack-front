@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   ACCOUNT_INFO,
   HOMEWORK,
@@ -11,10 +12,17 @@ import {
   TEST_STATE_NOT_STARTED,
   TEST_STATUS_COMPLETED,
   TEST_STATUS_NOT_STARTED,
+  TEST_TASKS,
+  THEMES,
   WEBINAR_SCHEDULE,
 } from 'api/mocks/mocks';
 import {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
-import {AnswerType, TestStateAnswerDto} from 'types/dtos';
+import {DEBUG_MODE} from 'definitions/constants';
+import {
+  AnswerType,
+  KnowledgeLevelDtoResponse,
+  TestStateAnswerDto,
+} from 'types/dtos';
 import {SanitizedTaskInfo, TestAnswerValue} from 'types/entities';
 
 import {getUrl} from '../helpers';
@@ -100,7 +108,7 @@ export const addMockedTestAnswerResponses = (
           task_id: id,
           user_answer: {
             type: AnswerType.FILE,
-            file_info: value,
+            value,
           },
         }
       : {
@@ -114,23 +122,16 @@ export const addMockedTestAnswerResponses = (
 };
 
 export const mockTestsRequests = (api: AxiosInstance) => {
+  if (!DEBUG_MODE) {
+    return;
+  }
   api.interceptors.response.use(
     (response) => {
-      const {config, data} = response;
+      const {config} = response;
       const url = getUrl(config);
       switch (true) {
-        case /\/lessons(\/\w*)?$/.test(url.pathname):
-          if (config.method === 'get') {
-            return {
-              ...response,
-              data: data.map((lesson: any) => ({
-                ...lesson,
-                test: TEST_STATUS_NOT_STARTED,
-              })),
-            };
-          } else {
-            return response;
-          }
+        case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname):
+          return getMockedResponse(config, TEST_STATE_COMPLETED);
         default:
           return response;
       }
@@ -144,17 +145,55 @@ export const mockTestsRequests = (api: AxiosInstance) => {
       switch (true) {
         case /\/knowledge\/tests\/(.*)\/answer$/.test(url.pathname):
           const response = mockedTestAnswerResponses.pop();
-          console.log(response);
 
           if (response) {
             return getMockedResponse(config, response);
           }
+        case /\/knowledge\/tests\/status/.test(url.pathname):
+        case /\/knowledge\/tests\/(.*)\/status$/.test(url.pathname):
+          return getMockedResponse(config, TEST_STATUS_NOT_STARTED);
+        case /\/knowledge\/tests\/state/.test(url.pathname):
         case /\/knowledge\/tests\/(.*)\/state$/.test(url.pathname):
           return getMockedResponse(config, TEST_STATE_NOT_STARTED);
         case /\/knowledge\/tests\/(.*)\/complete$/.test(url.pathname):
           return getMockedResponse(config, TEST_STATE_COMPLETED);
+        case /\/knowledge\/tests/.test(url.pathname):
         case /\/knowledge\/tests\/(.*)$/.test(url.pathname):
           return getMockedResponse(config, TEST);
+        case /\/knowledge\/content/.test(url.pathname):
+          const {subjectId, themeId} = config.params;
+
+          const content: KnowledgeLevelDtoResponse = {
+            themes: THEMES.map((theme, index) => ({
+              ...theme,
+              id: parseInt(`${subjectId}${themeId || ''}${index}`),
+              subject_id: subjectId,
+              parent_theme_id: themeId,
+            })),
+            tasks: [],
+          };
+
+          return getMockedResponse(config, content);
+        case /\/knowledge\/theme\/(.*)\/$/.test(url.pathname): {
+          const id = Number(
+            /\/knowledge\/theme\/(.*)\/$/.exec(url.pathname)?.[1],
+          );
+
+          return getMockedResponse(config, {
+            ...THEMES[0],
+            id,
+          });
+        }
+        case /\/knowledge\/tasks\/(.*)\/$/.test(url.pathname): {
+          const id = Number(
+            /\/knowledge\/tasks\/(.*)\/$/.exec(url.pathname)?.[1],
+          );
+
+          return getMockedResponse(config, {
+            ...TEST_TASKS[0],
+            id,
+          });
+        }
         default:
           throw error;
       }

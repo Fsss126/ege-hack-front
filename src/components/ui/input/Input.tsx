@@ -95,7 +95,7 @@ function parsePrice(price: string): string {
 }
 
 export const getPlaceholder = (
-  placeholder: string,
+  placeholder?: string,
   required?: boolean,
 ): string | undefined =>
   placeholder ? (required ? `${placeholder}*` : placeholder) : undefined;
@@ -105,6 +105,7 @@ export type InputProps = {
   parse?: IdentityFunction<InputValue>;
   onChange?: InputChangeHandler<InputValue>;
   withContainer?: boolean;
+  icon?: React.ReactNode;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>;
 
 export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
@@ -118,6 +119,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     placeholder,
     required,
     withContainer,
+    icon,
     ...rest
   } = props;
   // if (type === "price") {
@@ -135,7 +137,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       required={required}
       value={format ? format(value) : value}
       onChange={onChange}
-      type={type === 'number' || type === 'price' ? 'text' : type}
+      type={
+        type === 'number' || type === 'price'
+          ? 'text'
+          : type === 'decimal'
+          ? 'number'
+          : type
+      }
       onKeyPress={
         type === 'number' || type === 'price' ? onNumberKeyPress : undefined
       }
@@ -149,7 +157,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   );
 
   return withContainer ? (
-    <InputContainer placeholder={placeholder} required={required}>
+    <InputContainer placeholder={placeholder} icon={icon} required={required}>
       {input}
     </InputContainer>
   ) : (
@@ -165,6 +173,7 @@ Input.defaultProps = {
 export type TextAreaProps = {
   onChange: InputChangeHandler<InputValue, HTMLTextAreaElement>;
   withContainer?: boolean;
+  icon?: React.ReactNode;
 } & Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>;
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -175,6 +184,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       placeholder,
       required,
       withContainer,
+      icon,
       ...rest
     } = props;
     const onChange = useChangeHandler<HTMLTextAreaElement>(callback, 'value');
@@ -190,7 +200,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     );
 
     return withContainer ? (
-      <InputContainer placeholder={placeholder} required={required}>
+      <InputContainer placeholder={placeholder} icon={icon} required={required}>
         {textarea}
       </InputContainer>
     ) : (

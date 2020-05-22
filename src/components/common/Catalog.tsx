@@ -1,15 +1,18 @@
 import classNames from 'classnames';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import * as Input from 'components/ui/input';
 import React, {useCallback, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 
-import {ContentBlock} from '../layout/ContentBlock';
 import {InputChangeHandler} from '../ui/input/Input';
 import {OptionShape} from '../ui/input/Select';
 import List, {ListItemRenderer, ListItemRenderProps, ListProps} from './List';
 
-export type CatalogContextState = FilterParams & {
+export type FilterContextState = FilterParams & {
   options?: OptionShape<number>[];
+};
+
+export type CatalogContextState = FilterContextState & {
   items: any[];
   totalItems: number;
 };
@@ -67,6 +70,7 @@ export type FilterProps = {
   children?: React.ReactNode;
   transparent?: boolean;
   stacked?: boolean;
+  context?: React.Context<FilterContextState>;
 };
 const Filter: React.FC<FilterProps> = (props) => {
   const {
@@ -78,9 +82,11 @@ const Filter: React.FC<FilterProps> = (props) => {
     transparent,
     stacked,
     children,
+    context,
   } = props;
   const {options, subject, online, search: searchKey} = React.useContext(
-    CatalogContext,
+    context ||
+      ((CatalogContext as unknown) as React.Context<FilterContextState>),
   );
   const onChange = useFilterCallback();
 
@@ -90,7 +96,7 @@ const Filter: React.FC<FilterProps> = (props) => {
       transparent={transparent}
       stacked={stacked}
     >
-      <div className="container p-0">
+      <div className="catalog__filters-container container p-0">
         <div className="row align-items-center">
           {filterBySubject && options && (
             <div className="catalog__filter-container subject-select-container col-auto align-items-center">
@@ -100,7 +106,7 @@ const Filter: React.FC<FilterProps> = (props) => {
                 options={options}
                 value={subject}
                 placeholder="Предмет"
-                callback={onChange}
+                onChange={onChange}
               />
             </div>
           )}
@@ -272,5 +278,4 @@ export default {
   Filter,
   Catalog,
   Body,
-  // Page: CatalogPage
 };

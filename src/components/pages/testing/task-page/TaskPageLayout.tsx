@@ -1,4 +1,5 @@
 import {ImageViewer} from 'components/common/ImageViewer';
+import {ContentBlock} from 'components/layout/ContentBlock';
 import {ProgressIndicator} from 'components/ui/ProgressIndicator';
 import Tooltip from 'components/ui/Tooltip';
 import React from 'react';
@@ -6,7 +7,6 @@ import {
   SanitizedTaskInfo,
   SanitizedTestInfo,
   TestStateInfo,
-  TestStatus,
 } from 'types/entities';
 
 export interface TaskPageLayoutProps {
@@ -23,10 +23,9 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
   const {test, state, task, nav, children} = props;
 
   const {name} = test;
-  const {text, order, image_link, weight, complexity} = task;
-  const {status, progress} = state;
+  const {text, order, image_link, score, complexity} = task;
+  const {is_completed: isCompleted, progress} = state;
   const tasksCount = test.tasks.length;
-  const isCompleted = status === TestStatus.COMPLETED;
 
   let percentage;
 
@@ -34,12 +33,11 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
     percentage = state.percentage;
   }
 
-  const showTaskInfo = !!(weight || complexity);
+  const showTaskInfo = !!(score || complexity);
 
   return (
     <>
-      <div className="layout__content-block">
-        <h2 className="test__test-title">{name}</h2>
+      <ContentBlock title={`Тест: ${name}`}>
         <div className="container">
           <div className="row flex-nowrap align-items-center">
             <div className="col p-0">
@@ -52,7 +50,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
                         {complexity !== undefined && (
                           <div>Сложность: {complexity}</div>
                         )}
-                        {weight !== undefined && <div>Вес: {weight}</div>}
+                        {score !== undefined && <div>Вес: {score}</div>}
                       </div>
                     }
                     position="bottom"
@@ -65,7 +63,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
             <div className="col-auto p-0">
               {percentage !== undefined ? (
                 <ProgressIndicator progress={percentage}>
-                  Результат {percentage * 80}%
+                  Результат {percentage * 100}%
                 </ProgressIndicator>
               ) : (
                 <ProgressIndicator progress={progress}>
@@ -81,7 +79,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
               </div>
               <div className="col p-0">
                 {complexity !== undefined && <div>Сложность: {complexity}</div>}
-                {weight !== undefined && <div>Вес: {weight}</div>}
+                {score !== undefined && <div>Вес: {score}</div>}
               </div>
             </div>
           )}
@@ -93,7 +91,7 @@ export const TaskPageLayout: React.FC<TaskPageLayoutProps> = (props) => {
         )}
         <div className="test-task__task-text">{text}</div>
         <div className="test-task__task-answer">{children}</div>
-      </div>
+      </ContentBlock>
       {nav}
     </>
   );

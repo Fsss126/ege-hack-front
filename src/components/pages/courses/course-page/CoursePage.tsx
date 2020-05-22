@@ -1,27 +1,32 @@
 import CourseOverview, {LessonRenderer} from 'components/common/CourseOverview';
 import Lesson from 'components/common/Lesson';
 import WebinarSchedule from 'components/common/WebinarSchedule';
-import Page, {PageContent} from 'components/layout/Page';
+import {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {
   useCourseWebinars,
   useLessons,
-  useTeachers,
   useUserCourse,
+  useUserTeachers,
 } from 'hooks/selectors';
 import React from 'react';
-import {CoursePageParams, RouteComponentPropsWithPath} from 'types/routes';
+import {
+  CoursePageParams,
+  RouteComponentPropsWithParentProps,
+} from 'types/routes';
 
-const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
-  path,
-  match,
-  location,
-}) => {
+const CoursePage: React.FC<RouteComponentPropsWithParentProps<
+  CoursePageParams
+>> = ({path, match, location}) => {
   const {
     params: {courseId: param_id},
   } = match;
   const courseId = parseInt(param_id);
-  const {course, error, reload} = useUserCourse(courseId);
+  const {
+    course,
+    error: errorLoadingCourse,
+    reload: reloadCourse,
+  } = useUserCourse(courseId);
   const {
     webinars,
     error: errorLoadingWebinars,
@@ -31,7 +36,7 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useTeachers();
+  } = useUserTeachers();
   const {
     lessons,
     error: errorLoadingLessons,
@@ -59,15 +64,13 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
     );
   };
 
+  const isLoaded = !!(course && lessons && teachers && webinars);
+
+  let content;
+
   if (course && lessons && teachers && webinars) {
-    return (
-      <CourseOverview.Body
-        path={path}
-        course={course}
-        lessons={lessons}
-        teachers={teachers}
-        location={location}
-      >
+    content = (
+      <>
         <PageContent parentSection={{name: 'Мои курсы'}}>
           <CourseOverview.Title />
         </PageContent>
@@ -75,11 +78,33 @@ const CoursePage: React.FC<RouteComponentPropsWithPath<CoursePageParams>> = ({
         <PageContent>
           <CourseOverview.Lessons renderLesson={renderLesson} />
         </PageContent>
-      </CourseOverview.Body>
+      </>
     );
-  } else {
-    return <Page isLoaded={false} location={location} />;
   }
+  return (
+    <CourseOverview.Body
+      isLoaded={isLoaded}
+      path={path}
+      course={course}
+      lessons={lessons}
+      teachers={teachers}
+      location={location}
+      errors={[
+        errorLoadingCourse,
+        errorLoadingLessons,
+        errorLoadingTeachers,
+        errorLoadingWebinars,
+      ]}
+      reloadCallbacks={[
+        reloadCourse,
+        reloadLessons,
+        reloadTeachers,
+        reloadWebinars,
+      ]}
+    >
+      {content}
+    </CourseOverview.Body>
+  );
 };
 
 export default CoursePage;

@@ -1,11 +1,13 @@
 import classNames from 'classnames';
-import {useUser} from 'hooks/selectors';
-import React from 'react';
+import {useCredentials, useUserInfo} from 'hooks/selectors';
+import {SnackbarKey, useSnackbar} from 'notistack';
+import React, {useEffect, useRef, useState} from 'react';
 import {Helmet} from 'react-helmet';
 import {RouteComponentProps} from 'react-router';
-import {Link, LinkProps, Redirect, useLocation} from 'react-router-dom';
+import {Link, LinkProps, Redirect} from 'react-router-dom';
 import Sticky from 'react-sticky-el';
 import {CSSTransition} from 'react-transition-group';
+import {SimpleCallback} from 'types/utility/common';
 
 import {useSideBarState} from '../App';
 import {
@@ -13,14 +15,29 @@ import {
   RequiredRoles,
   useCheckPermissions,
 } from '../ConditionalRender';
-import {PermissionsDeniedErrorPage} from './ErrorPage';
+import {
+  LOADING_STATE,
+  LoadingIndicator,
+  useLoadingState,
+} from '../ui/LoadingIndicator';
+import {
+  NotFoundErrorPage,
+  PermissionsDeniedErrorPage,
+  SpecificErrorPageProps,
+} from './ErrorPage';
 import Header from './Header';
 import SideBar from './SideBar';
 
-const PageLoadingPlaceholder: React.FC = () => (
+interface PageLoadingPlaceholderProps {
+  state: LOADING_STATE;
+}
+
+const PageLoadingPlaceholder: React.FC<PageLoadingPlaceholderProps> = (
+  props,
+) => (
   <div className="layout__content">
     <div className="layout__loading-spinner">
-      <i className="spinner-border" />
+      <LoadingIndicator state={props.state} />
     </div>
   </div>
 );
@@ -28,7 +45,6 @@ const PageLoadingPlaceholder: React.FC = () => (
 export type PageLinkProps = {
   arrow: boolean;
   forward: boolean;
-  // } & React.ComponentProps<typeof Link>;
 } & LinkProps;
 
 export const PageLink: React.withDefaultProps<React.FC<PageLinkProps>> = ({
@@ -97,13 +113,6 @@ export const BottomTab: React.FC<BottomTabProps> = ({
   </Sticky>
 );
 
-// TODO: Add page error boundary
-class PageErrorBoundary extends React.Component {
-  state = {
-    error: null,
-  };
-}
-
 enum LayoutAnimationClassNames {
   enter = 'sidebar-opened',
   enterActive = 'sidebar-opened',
@@ -112,8 +121,87 @@ enum LayoutAnimationClassNames {
   exitActive = 'sidebar-hiding',
 }
 
-// TODO: check error and show popup
-// TODO: parent sections using context
+export function useHandleErrors(
+  errors: any[],
+  reloadCallbacks: Maybe<SimpleCallback>[],
+) {
+  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+
+  const [hasError, setHasError] = useState(
+    errors.some((error) => !!error && error !== true),
+  );
+  const [notFound, setNotFound] = useState(
+    errors.some((error) => error === true),
+  );
+
+  if (errors.length !== reloadCallbacks.length) {
+    throw new Error('Wrong errors or reloadCallbacks props provided.');
+  }
+
+  useEffect(() => {
+    for (const error of errors) {
+      if (error === true) {
+        setNotFound(true);
+        return;
+      }
+    }
+
+    for (const error of errors) {
+      if (error) {
+        setHasError(true);
+        break;
+      }
+    }
+  }, [errors]);
+
+  const errorsRef = useRef<any[]>(errors);
+  const reloadCallbacksRef = useRef<Maybe<SimpleCallback>[]>(reloadCallbacks);
+  const snackbarKeyRef = useRef<SnackbarKey>();
+
+  errorsRef.current = errors;
+  reloadCallbacksRef.current = reloadCallbacks;
+
+  useEffect(() => {
+    if (hasError) {
+      // eslint-disable-next-line prefer-const
+      let snackbarKey: SnackbarKey;
+
+      const reloadCallback = () => {
+        const reloadCallbacks = reloadCallbacksRef.current;
+        const errors = errorsRef.current;
+
+        setHasError(false);
+        closeSnackbar(snackbarKey);
+
+        for (const [i, callback] of reloadCallbacks.entries()) {
+          if (errors[i] && callback) {
+            callback();
+          }
+        }
+      };
+
+      snackbarKey = enqueueSnackbar('Ошибка при загрузке', {
+        persist: true,
+        key: new Date().getTime(),
+        variant: 'error',
+        preventDuplicate: true,
+        action: <i className="icon-reload" onClick={reloadCallback} />,
+      });
+      snackbarKeyRef.current = snackbarKey;
+    }
+  }, [closeSnackbar, enqueueSnackbar, hasError]);
+
+  useEffect(() => {
+    return () => {
+      closeSnackbar(snackbarKeyRef.current);
+    };
+  }, [closeSnackbar]);
+
+  return {
+    hasError,
+    notFound,
+  };
+}
 
 export type PageProps = {
   title?: string;
@@ -128,6 +216,10 @@ export type PageProps = {
   fullMatch?: boolean;
   loadUserInfo: boolean;
   isLoaded: boolean;
+  errors?: any[];
+  reloadCallbacks?: Maybe<SimpleCallback>[];
+  withShimmer?: boolean;
+  notFoundPageProps?: Omit<SpecificErrorPageProps, 'location'>;
 } & Pick<RouteComponentProps, 'location'>;
 const Page = (props: PageProps) => {
   const {
@@ -144,9 +236,18 @@ const Page = (props: PageProps) => {
     loadUserInfo,
     isLoaded,
     location,
+    errors: passedErrors,
+    reloadCallbacks: passedErrorCallbacks,
+    withShimmer,
+    notFoundPageProps = {},
   } = props;
   const [isSideBarOpened, toggleSideBar] = useSideBarState();
-  const {credentials, userInfo} = useUser();
+  const {credentials} = useCredentials();
+  const {
+    userInfo,
+    error: errorLoadingUserInfo,
+    reload: reloadUserInfo,
+  } = useUserInfo();
 
   const permissionsSatisfied = useCheckPermissions(
     requiredPermissions,
@@ -154,8 +255,19 @@ const Page = (props: PageProps) => {
     fullMatch,
   );
 
+  const errors = [errorLoadingUserInfo, ...(passedErrors || [])];
+  const reloadCallbacks = [reloadUserInfo, ...(passedErrorCallbacks || [])];
+
+  const {hasError, notFound} = useHandleErrors(errors, reloadCallbacks);
+
+  const loadingState = useLoadingState(
+    !isLoaded && !hasError,
+    isLoaded,
+    hasError,
+  );
+
   if (checkLogin) {
-    if (credentials === null) {
+    if (!credentials) {
       return (
         <Redirect
           to={{
@@ -174,7 +286,12 @@ const Page = (props: PageProps) => {
       ? requiredPermissions || loadUserInfo
         ? credentials && userInfo
         : !!credentials
-      : true) && isLoaded;
+      : true) &&
+    (withShimmer || isLoaded);
+
+  if (notFound) {
+    return <NotFoundErrorPage location={location} {...notFoundPageProps} />;
+  }
 
   return (
     <div className="app">
@@ -224,7 +341,11 @@ const Page = (props: PageProps) => {
                   <title>{title} – ЕГЭ HACK</title>
                 </Helmet>
               )}
-              {showContent ? children : <PageLoadingPlaceholder />}
+              {showContent ? (
+                children
+              ) : (
+                <PageLoadingPlaceholder state={loadingState} />
+              )}
             </div>
           </React.Fragment>
         </div>

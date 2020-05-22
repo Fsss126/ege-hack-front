@@ -1,38 +1,37 @@
 import APIRequest, {getCancelToken} from 'api';
 import {AxiosError, Canceler} from 'axios';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import Auth, {AuthEventTypes} from 'definitions/auth';
+import Auth, {
+  AuthErrorCallback,
+  AuthEventTypes,
+  AuthLoginCallback,
+  AuthLogoutCallback,
+  AuthSuccessCallback,
+} from 'definitions/auth';
 import _ from 'lodash';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useDispatch, useSelector as useSelectorGen} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {Dispatch} from 'redux';
 import {
-  selectAdminCourses,
-  selectAdminWebinars,
-  selectHomeworks,
-  selectLessons,
-  selectParticipants,
-  selectShopCourses,
-  selectSubjects,
-  selectTeacherCourses,
-  selectTest,
-  selectTestState,
-  selectUpcomingWebinars,
-  selectUser,
-  selectUserCourses,
-  selectWebinars,
-} from 'store/selectors';
-import {Permission} from 'types/enums';
-import {SimpleCallback} from 'types/utility/common';
-
-import {
+  AccountsDeleteCallback,
+  AccountsDeleteErrorCallback,
   Action,
   ActionType,
   CourseDeleteCallback,
   CourseDeleteErrorCallback,
+  KnowledgeLevelFetchCallback,
+  KnowledgeLevelFetchErrorCallback,
+  KnowledgeTaskDeleteCallback,
+  KnowledgeTaskDeleteErrorCallback,
+  KnowledgeTestDeleteCallback,
+  KnowledgeTestDeleteErrorCallback,
+  KnowledgeThemeDeleteCallback,
+  KnowledgeThemeDeleteErrorCallback,
   LessonDeleteCallback,
   LessonDeleteErrorCallback,
+  ParticipantDeleteCallback,
+  ParticipantDeleteErrorCallback,
   TestCompleteCallback,
   TestCompleteErrorCallback,
   TestSaveAnswerCallback,
@@ -41,26 +40,72 @@ import {
   TestStartErrorCallback,
   WebinarDeleteCallback,
   WebinarDeleteErrorCallback,
-} from '../store/actions';
-import {AppState} from '../store/reducers';
+} from 'store/actions';
+import {AppState} from 'store/reducers';
 import {
+  selectAdminCourses,
+  selectAdminWebinars,
+  selectCredentials,
+  selectHomeworks,
+  selectKnowledgeMap,
+  selectKnowledgeTasks,
+  selectKnowledgeTests,
+  selectKnowledgeThemes,
+  selectLessons,
+  selectLessonTests,
+  selectParticipants,
+  selectShopCourses,
+  selectSubjects,
+  selectTeacherCourses,
+  selectTest,
+  selectTestResults,
+  selectTestState,
+  selectTestStatuses,
+  selectUpcomingWebinars,
+  selectUserCourses,
+  selectUserHomeworks,
+  selectUserInfo,
+  selectUsers,
+  selectUserTeachers,
+  selectWebinars,
+} from 'store/selectors';
+import {
+  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   Credentials,
   DiscountInfo,
   HomeworkInfo,
+  KnowledgeLevelInfo,
   LessonInfo,
   PersonWebinar,
   SanitizedTaskInfo,
   SanitizedTestInfo,
   SubjectInfo,
-  TeacherInfo,
+  TaskInfo,
+  TeacherProfileInfo,
   TestInfo,
+  TestResultInfo,
   TestStateInfo,
-  TestStatus,
-  WebinarInfo,
+  TestStatusInfo,
+  ThemeInfo,
+  UserHomeworkInfo,
   WebinarScheduleInfo,
-} from '../types/entities';
+} from 'types/entities';
+import {AccountRole, Permission} from 'types/enums';
+import {SimpleCallback} from 'types/utility/common';
+
+import {
+  DataProperty,
+  KnowledgeBaseSubject,
+} from '../store/reducers/dataReducer';
+import {
+  getKnowledgeSubjectContent,
+  getKnowledgeTree,
+  getSubjectNodeId,
+  getThemeNodeId,
+  KnowledgeTreeEntity,
+} from '../types/knowledgeTree';
 
 const useSelector = <TSelected>(
   selector: (state: AppState) => TSelected,
@@ -68,35 +113,77 @@ const useSelector = <TSelected>(
 ): TSelected => useSelectorGen(selector, equalityFn);
 
 export function useUserAuth(): void {
-  const dispatch = useDispatch<Dispatch<Action>>();
+  const dispatch = useDispatch();
 
   React.useLayoutEffect(() => {
-    const loginCallback = (credentials: Credentials | null): void => {
-      dispatch({type: ActionType.LOG_IN_SUCCESS, credentials});
+    const loginCallback: AuthLoginCallback = () => {
+      dispatch({type: ActionType.LOG_IN_REQUEST});
     };
-    const logoutCallback = (): void => {
+    const successCallback: AuthSuccessCallback = (credentials) => {
+      dispatch({type: ActionType.LOG_IN_SUCCESS, credentials});
+      dispatch({type: ActionType.USER_INFO_FETCH});
+    };
+    const errorCallback: AuthErrorCallback = (error) => {
+      dispatch({type: ActionType.LOG_IN_ERROR, error});
+    };
+    const logoutCallback: AuthLogoutCallback = (): void => {
       dispatch({type: ActionType.LOG_OUT});
     };
+
     Auth.subscribe(AuthEventTypes.login, loginCallback);
+    Auth.subscribe(AuthEventTypes.success, successCallback);
+    Auth.subscribe(AuthEventTypes.error, errorCallback);
     Auth.subscribe(AuthEventTypes.logout, logoutCallback);
+
     return (): void => {
       Auth.unsubscribe(AuthEventTypes.login, loginCallback);
+      Auth.unsubscribe(AuthEventTypes.success, successCallback);
+      Auth.unsubscribe(AuthEventTypes.error, errorCallback);
       Auth.unsubscribe(AuthEventTypes.logout, logoutCallback);
     };
   }, [dispatch]);
 }
 
-interface RequestsStore {
-  [key: string]: any;
+export type CredentialsHookResult = {
+  credentials?: Credentials;
+  error?: AxiosError;
+};
+
+export function useCredentials(): CredentialsHookResult {
+  const credentials = useSelector(selectCredentials);
+
+  return credentials instanceof Error ? {error: credentials} : {credentials};
 }
-const requests: RequestsStore = {};
 
-export type UserHookResult = ReturnType<typeof selectUser>;
+export type UserInfoHookResult = {
+  userInfo?: AccountInfo;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
 
-export function useUser(): UserHookResult {
-  const {credentials, userInfo} = useSelector(selectUser);
+export function useUserInfo(): UserInfoHookResult {
+  const userInfo = useSelector(selectUserInfo);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.USER_INFO_FETCH});
+  }, [dispatch]);
 
-  return {credentials, userInfo};
+  return userInfo instanceof Error
+    ? {error: userInfo, reload: dispatchFetchAction}
+    : {userInfo, reload: dispatchFetchAction};
+}
+
+export type RevokeUserInfoHookResult = (responseInfo: AccountInfo) => void;
+
+export function useRevokeUserInfo(): RevokeUserInfoHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseInfo: AccountInfo) => {
+      dispatch({type: ActionType.USER_INFO_REVOKE, responseInfo});
+    },
+    [dispatch],
+  );
 }
 
 export type SubjectsHookResult = {
@@ -121,6 +208,23 @@ export function useSubjects(): SubjectsHookResult {
     : {subjects, reload: dispatchFetchAction};
 }
 
+export type SubjectHookResult = {
+  subject?: SubjectInfo;
+  error?: AxiosError | true;
+  reload: SimpleCallback;
+};
+
+export function useSubject(teacherId: number): SubjectHookResult {
+  const {subjects, error, reload} = useSubjects();
+  const subject = subjects ? _.find(subjects, {id: teacherId}) : undefined;
+
+  return {
+    subject,
+    error: subjects && !subject ? true : error,
+    reload,
+  };
+}
+
 export type DiscountHookResult = {
   discount?: DiscountInfo;
   error?: AxiosError;
@@ -131,7 +235,7 @@ export type DiscountHookResult = {
 export function useDiscount(
   selectedCourses: Set<CourseInfo> | number,
 ): DiscountHookResult {
-  const {credentials} = useUser();
+  const {credentials} = useCredentials();
   const [discount, setDiscount] = React.useState<DiscountInfo>();
   const [error, setError] = React.useState();
   const [isLoading, setLoading] = React.useState(true);
@@ -169,7 +273,7 @@ export function useDiscount(
       );
       setDiscount(discount);
     } catch (e) {
-      console.log('error loading discount', e);
+      console.error('Error loading discount', e);
       setError(e);
     } finally {
       setLoading(false);
@@ -185,17 +289,17 @@ export function useDiscount(
   return {discount, error, reload: fetchDiscount, isLoading};
 }
 
-export type TeachersHookResult = {
-  teachers?: TeacherInfo[];
+export type UserTeachersHookResult = {
+  teachers?: TeacherProfileInfo[];
   error?: AxiosError;
   reload: SimpleCallback;
 };
 
-export function useTeachers(): TeachersHookResult {
-  const {teachers} = useSelector(({dataReducer: {teachers}}) => ({teachers}));
+export function useUserTeachers(): UserTeachersHookResult {
+  const teachers = useSelector(selectUserTeachers);
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEACHERS_FETCH});
+    dispatch({type: ActionType.USER_TEACHERS_FETCH});
   }, [dispatch]);
   useEffect(() => {
     if (!teachers) {
@@ -207,14 +311,14 @@ export function useTeachers(): TeachersHookResult {
     : {teachers, reload: dispatchFetchAction};
 }
 
-export type TeacherHookResult = {
-  teacher?: TeacherInfo;
+export type UserTeacherHookResult = {
+  teacher?: TeacherProfileInfo;
   error?: AxiosError | true;
   reload: SimpleCallback;
 };
 
-export function useTeacher(teacherId: number): TeacherHookResult {
-  const {teachers, error, reload} = useTeachers();
+export function useUserTeacher(teacherId: number): UserTeacherHookResult {
+  const {teachers, error, reload} = useUserTeachers();
   const teacher = teachers ? _.find(teachers, {id: teacherId}) : undefined;
 
   return {
@@ -222,6 +326,73 @@ export function useTeacher(teacherId: number): TeacherHookResult {
     error: teachers && !teacher ? true : error,
     reload,
   };
+}
+
+export type AccountsHookResult = {
+  accounts?: AccountInfo[];
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useAccounts(role: AccountRole): AccountsHookResult {
+  const selector = useCallback((state: AppState) => selectUsers(state)[role], [
+    role,
+  ]);
+  const accounts = useSelector(selector);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.ACCOUNTS_FETCH, role});
+  }, [dispatch, role]);
+  useEffect(() => {
+    if (!accounts) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, accounts]);
+  return accounts instanceof Error
+    ? {error: accounts, reload: dispatchFetchAction}
+    : {accounts, reload: dispatchFetchAction};
+}
+
+export type RevokeAccountsHookResult = (
+  responseAccounts: AccountInfo[],
+) => void;
+
+export function useRevokeAccounts(role: AccountRole): RevokeAccountsHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseAccounts) => {
+      dispatch({
+        type: ActionType.ACCOUNTS_REVOKE,
+        role,
+        responseAccounts,
+      });
+    },
+    [dispatch, role],
+  );
+}
+
+export type DeleteAccountHookResult = (accountId: number) => void;
+
+export function useDeleteAccount(
+  role: AccountRole,
+  onDelete?: AccountsDeleteCallback,
+  onError?: AccountsDeleteErrorCallback,
+): DeleteAccountHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (accountId) => {
+      dispatch({
+        type: ActionType.ACCOUNTS_DELETE_REQUEST,
+        role,
+        accountIds: [accountId],
+        onDelete,
+        onError,
+      });
+    },
+    [dispatch, onDelete, onError, role],
+  );
 }
 
 export type ShopCatalogHookResult = {
@@ -263,7 +434,6 @@ export function useShopCourse(courseId: number): ShopCourseHookResult {
   };
 }
 
-// TODO: check permissions in sagas
 export type AdminCoursesHookResult = {
   catalog?: CourseInfo[] | false;
   error?: AxiosError;
@@ -341,6 +511,19 @@ export function useTeacherCourse(courseId: number): TeacherCourseHookResult {
     error: catalog && !course ? true : error,
     reload,
   };
+}
+
+export type RevokeSubjectsHookResult = (responseSubject: SubjectInfo) => void;
+
+export function useRevokeSubjects(): RevokeSubjectsHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseSubject: SubjectInfo) => {
+      dispatch({type: ActionType.SUBJECTS_REVOKE, responseSubject});
+    },
+    [dispatch],
+  );
 }
 
 export type RevokeCoursesHookResult = (responseCourse: CourseInfo) => void;
@@ -520,7 +703,7 @@ export function useAdminLesson(
 
 export type ParticipantsHookResult = {
   participants?: CourseParticipantInfo[] | false;
-  error?: AxiosError | true;
+  error?: AxiosError;
   reload: SimpleCallback;
 };
 
@@ -607,58 +790,56 @@ export function useRevokeWebinars(courseId: number): RevokeWebinarssHookResult {
   );
 }
 
-export type HomeworkHookResult = {
-  homework?: HomeworkInfo;
+export type UserHomeworkHookResult = {
+  homework?: UserHomeworkInfo | null;
   error?: AxiosError;
   reload: SimpleCallback;
 };
 
-export function useHomework(lessonId: number): HomeworkHookResult {
-  const {credentials} = useUser();
-  const [homework, setHomework] = useState<HomeworkInfo>();
-  const [error, setError] = useState<AxiosError>();
-  const fetchHomework = useCallback(async () => {
-    if (requests.homework && requests.homework[lessonId]) {
-      return requests.homework[lessonId];
+export function useUserHomework(
+  courseId: number,
+  lessonId: number,
+): UserHomeworkHookResult {
+  const homework = (useSelector(selectUserHomeworks)[courseId] || {})[lessonId];
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.USER_HOMEWORKS_FETCH, courseId, lessonId});
+  }, [courseId, dispatch, lessonId]);
+  useEffect(() => {
+    if (!homework && homework !== null) {
+      dispatchFetchAction();
     }
-    const request = APIRequest.get<HomeworkInfo>(
-      `/lessons/${lessonId}/homeworks/pupil`,
-    );
-    (requests.homework || (requests.homework = {}))[lessonId] = request;
-    try {
-      if (error) {
-        setError(undefined);
-      }
-      const homework: HomeworkInfo = (await request) as any;
-      setHomework(homework);
-    } catch (e) {
-      console.error(e);
-      setError(e);
-    } finally {
-      delete requests.homework[lessonId];
-    }
-    return request;
-  }, [error, lessonId]);
+  }, [dispatchFetchAction, homework]);
+  return homework instanceof Error
+    ? {error: homework, reload: dispatchFetchAction}
+    : {homework, reload: dispatchFetchAction};
+}
 
-  React.useEffect(() => {
-    if (
-      credentials &&
-      !(
-        homework ||
-        homework === null ||
-        (requests.homework && requests.homework[lessonId]) ||
-        error
-      )
-    ) {
-      fetchHomework();
-    }
-  }, [credentials, homework, lessonId, error, fetchHomework]);
+export type RevokeUserHomeworkHookResult = (
+  responseHomework: HomeworkInfo,
+) => void;
 
-  return {homework, error, reload: fetchHomework};
+export function useRevokeUserHomework(
+  courseId: number,
+  lessonId: number,
+): RevokeUserHomeworkHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseHomework) => {
+      dispatch({
+        type: ActionType.USER_HOMEWORKS_REVOKE,
+        courseId,
+        lessonId,
+        responseHomework,
+      });
+    },
+    [courseId, dispatch, lessonId],
+  );
 }
 
 export type UpcomingWebinarsHookResult = {
-  webinars?: PersonWebinar[] | false;
+  webinars?: PersonWebinar[];
   error?: AxiosError;
   reload: SimpleCallback;
 };
@@ -713,6 +894,39 @@ function useRedirect(redirectUrl?: string): RedirectHookResult {
   }, [history, redirectUrl]);
 }
 
+export type DeleteSubjectHookResult = (subjectId: number) => void;
+
+export function useDeleteSubject(
+  redirectUrl?: string,
+  onDelete?: CourseDeleteCallback,
+  onError?: CourseDeleteErrorCallback,
+): DeleteSubjectHookResult {
+  const dispatch = useDispatch();
+  const redirectIfSupplied = useRedirect(redirectUrl);
+
+  const deleteCallback = useCallback(
+    (subjectId) => {
+      redirectIfSupplied();
+      if (onDelete) {
+        onDelete(subjectId);
+      }
+    },
+    [redirectIfSupplied, onDelete],
+  );
+
+  return useCallback(
+    (subjectId) => {
+      dispatch({
+        type: ActionType.SUBJECT_DELETE_REQUEST,
+        subjectId,
+        onDelete: deleteCallback,
+        onError,
+      });
+    },
+    [dispatch, deleteCallback, onError],
+  );
+}
+
 export type DeleteCourseHookResult = (courseId: number) => void;
 
 export function useDeleteCourse(
@@ -753,8 +967,8 @@ export type DeleteLessonHookResult = (
 
 export function useDeleteLesson(
   redirectUrl?: string,
-  onDelete?: LessonDeleteCallback,
-  onError?: LessonDeleteErrorCallback,
+  onDelete?: ParticipantDeleteCallback,
+  onError?: ParticipantDeleteErrorCallback,
 ): DeleteLessonHookResult {
   const dispatch = useDispatch();
   const redirectIfSupplied = useRedirect(redirectUrl);
@@ -783,10 +997,15 @@ export function useDeleteLesson(
   );
 }
 
+export type DeleteParticipantHookResult = (
+  courseId: number,
+  userId: number,
+) => void;
+
 export function useDeleteParticipant(
   onDelete?: LessonDeleteCallback,
   onError?: LessonDeleteErrorCallback,
-) {
+): DeleteParticipantHookResult {
   const dispatch = useDispatch();
 
   return useCallback(
@@ -857,23 +1076,30 @@ export function useStartTest(): StartTestHookResult {
   return useCallback(
     (params) => {
       const {courseId, lessonId, testId, onSuccess, onError} = params;
-      const onSuccessCallback: TestStartCallback = (testId, testState) => {
-        const {last_task_id, status} = testState;
+      const onSuccessCallback: TestStartCallback = (
+        testId,
+        testState,
+        test,
+      ) => {
+        const {last_task_id, is_completed: isCompleted} = testState;
+        const {tasks} = test;
         const testUrl = `/courses/${courseId}/${lessonId}/test/${testId}`;
-        const isCompleted = status === TestStatus.COMPLETED;
+        const taskId = last_task_id !== undefined ? last_task_id : tasks[0].id;
 
         if (onSuccess) {
-          onSuccess(testId, testState);
+          onSuccess(testId, testState, test);
         }
 
         history.push(
-          isCompleted ? `${testUrl}/results/` : `${testUrl}/${last_task_id}/`,
+          isCompleted ? `${testUrl}/results/` : `${testUrl}/${taskId}/`,
         );
       };
 
       dispatch({
         type: ActionType.TEST_START_REQUEST,
         testId,
+        courseId,
+        lessonId,
         onSuccess: onSuccessCallback,
         onError,
       });
@@ -885,6 +1111,8 @@ export function useStartTest(): StartTestHookResult {
 export type SaveAnswerHookResult = (params: {
   testId: number;
   taskId: number;
+  lessonId: number;
+  courseId: number;
   answer: string;
   complete: boolean;
   navigateTo: string;
@@ -901,6 +1129,8 @@ export function useSaveAnswer(): SaveAnswerHookResult {
       const {
         testId,
         taskId,
+        lessonId,
+        courseId,
         answer,
         complete,
         navigateTo,
@@ -920,6 +1150,8 @@ export function useSaveAnswer(): SaveAnswerHookResult {
         type: ActionType.TEST_SAVE_ANSWER_REQUEST,
         testId,
         taskId,
+        lessonId,
+        courseId,
         answer,
         complete,
         onSuccess: onSuccessCallback,
@@ -932,6 +1164,8 @@ export function useSaveAnswer(): SaveAnswerHookResult {
 
 export type CompleteTestHookResult = (params: {
   testId: number;
+  lessonId: number;
+  courseId: number;
   navigateTo: string;
   onSuccess: TestCompleteCallback;
   onError: TestCompleteErrorCallback;
@@ -943,7 +1177,14 @@ export function useCompleteTest(): CompleteTestHookResult {
 
   return useCallback(
     (params) => {
-      const {testId, navigateTo, onSuccess, onError} = params;
+      const {
+        testId,
+        lessonId,
+        courseId,
+        navigateTo,
+        onSuccess,
+        onError,
+      } = params;
       const onSuccessCallback: TestCompleteCallback = (testId, results) => {
         onSuccess(testId, results);
         history.push(navigateTo);
@@ -952,12 +1193,39 @@ export function useCompleteTest(): CompleteTestHookResult {
       dispatch({
         type: ActionType.TEST_COMPLETE_REQUEST,
         testId,
+        lessonId,
+        courseId,
         onSuccess: onSuccessCallback,
         onError,
       });
     },
     [dispatch, history],
   );
+}
+
+export type TestStatusHookResult = {
+  status?: TestStatusInfo | null;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useTestStatus(
+  courseId: number,
+  lessonId: number,
+): TestStatusHookResult {
+  const status = useSelector(selectTestStatuses)[lessonId];
+  const dispatch = useDispatch<Dispatch<Action>>();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.TEST_STATUS_FETCH, courseId, lessonId});
+  }, [dispatch, courseId, lessonId]);
+  useEffect(() => {
+    if (!status) {
+      dispatchFetchAction();
+    }
+  }, [dispatchFetchAction, status]);
+  return status instanceof Error
+    ? {error: status, reload: dispatchFetchAction}
+    : {status, reload: dispatchFetchAction};
 }
 
 export type TestHookResult = {
@@ -968,7 +1236,7 @@ export type TestHookResult = {
 
 export function useTest(testId: number): TestHookResult {
   const test = useSelector(selectTest);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<Dispatch<Action>>();
   const dispatchFetchAction = useCallback(() => {
     dispatch({type: ActionType.TEST_FETCH, testId});
   }, [testId, dispatch]);
@@ -1010,12 +1278,16 @@ export type TestStateHookResult = {
   reload: SimpleCallback;
 };
 
-export function useTestState(testId: number): TestStateHookResult {
+export function useTestState(
+  testId: number,
+  lessonId: number,
+  courseId: number,
+): TestStateHookResult {
   const state = useSelector(selectTestState);
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEST_STATE_FETCH, testId});
-  }, [testId, dispatch]);
+    dispatch({type: ActionType.TEST_STATE_FETCH, testId, lessonId, courseId});
+  }, [dispatch, testId, lessonId, courseId]);
   useEffect(() => {
     if (!state) {
       dispatchFetchAction();
@@ -1024,4 +1296,545 @@ export function useTestState(testId: number): TestStateHookResult {
   return state instanceof Error
     ? {error: state, reload: dispatchFetchAction}
     : {state, reload: dispatchFetchAction};
+}
+
+export type TestResultsHookResult = {
+  results?: TestResultInfo[] | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useTestResults(
+  lessonId: number,
+  testId: number,
+): TestResultsHookResult {
+  const isAllowed = useCheckPermissions(Permission.TEST_CHECK);
+  const results = useSelector(selectTestResults)[testId];
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.TEST_RESULTS_FETCH, lessonId, testId});
+  }, [dispatch, lessonId, testId]);
+  useEffect(() => {
+    if (isAllowed) {
+      if (!results) {
+        dispatchFetchAction();
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, results]);
+
+  return results instanceof Error
+    ? {error: results, reload: dispatchFetchAction}
+    : {results: !isAllowed ? false : results, reload: dispatchFetchAction};
+}
+
+export type KnowledgeLevelFetchHookResult = (
+  subjectId: number,
+  themeId?: number,
+  onSuccess?: KnowledgeLevelFetchCallback,
+  onError?: KnowledgeLevelFetchErrorCallback,
+) => void;
+
+export function useKnowledgeLevelFetch(): KnowledgeLevelFetchHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (subjectId, themeId, onSuccess, onError) => {
+      dispatch({
+        type: ActionType.KNOWLEDGE_LEVEL_FETCH,
+        subjectId,
+        themeId,
+        onSuccess,
+        onError,
+      });
+    },
+    [dispatch],
+  );
+}
+
+export type KnowledgeLevelHookResult = {
+  content?: KnowledgeLevelInfo | false;
+  error?: AxiosError | true;
+  reload: SimpleCallback;
+};
+
+export function useKnowledgeLevel(
+  subjectId: number,
+  themeId?: number,
+): KnowledgeLevelHookResult {
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
+  const themes = useSelector(selectKnowledgeThemes);
+  const tasks = useSelector(selectKnowledgeTasks);
+  const knowledgeTree = useSelector(selectKnowledgeMap);
+  const knowledgeLevel =
+    knowledgeTree[subjectId]?.[themeId === undefined ? 'root' : themeId];
+  const knowledgeLevelFetch = useKnowledgeLevelFetch();
+  const dispatchFetchAction = useCallback(() => {
+    knowledgeLevelFetch(subjectId, themeId);
+  }, [knowledgeLevelFetch, subjectId, themeId]);
+
+  useEffect(() => {
+    if (isAllowed) {
+      if (!knowledgeLevel) {
+        dispatchFetchAction();
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, knowledgeLevel]);
+
+  let errorInMap: AxiosError | true | undefined;
+
+  const content = useMemo(() => {
+    if (!knowledgeLevel || knowledgeLevel instanceof Error) {
+      return undefined;
+    } else {
+      const filter = <T extends TaskInfo | ThemeInfo>(
+        theme: DataProperty<T>,
+      ): theme is T => {
+        if (!theme) {
+          errorInMap = true;
+        } else if (theme instanceof Error) {
+          errorInMap = theme;
+        }
+
+        return !!theme && !(theme instanceof Error);
+      };
+
+      const content: KnowledgeLevelInfo = {
+        themes: knowledgeLevel.themeIds
+          .map((themeId) => themes[themeId])
+          .filter(filter),
+        tasks: knowledgeLevel.taskIds
+          .map((taskId) => tasks[taskId])
+          .filter(filter),
+      };
+
+      return content;
+    }
+  }, [knowledgeLevel, tasks, themes]);
+
+  return knowledgeLevel instanceof Error || errorInMap
+    ? {
+        error: knowledgeLevel instanceof Error ? knowledgeLevel : errorInMap,
+        reload: dispatchFetchAction,
+      }
+    : {
+        content: !isAllowed ? false : content,
+        reload: dispatchFetchAction,
+      };
+}
+
+type KnowledgeSubjectMapHookResult = {
+  content?: KnowledgeBaseSubject | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+function useKnowledgeSubjectMap(
+  subjectId?: number,
+): KnowledgeSubjectMapHookResult {
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
+  const knowledgeMap = useSelector(selectKnowledgeMap);
+  const subjectContent = subjectId ? knowledgeMap[subjectId] : undefined;
+  const knowledgeLevelFetch = useKnowledgeLevelFetch();
+
+  const dispatchFetchAction = useCallback(
+    (subjectId: number) => {
+      knowledgeLevelFetch(subjectId);
+    },
+    [knowledgeLevelFetch],
+  );
+
+  useEffect(() => {
+    if (isAllowed) {
+      if (subjectId !== undefined && !(subjectContent && subjectContent.root)) {
+        dispatchFetchAction(subjectId);
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, subjectContent, subjectId]);
+
+  const reload = useMemo(
+    () =>
+      subjectId !== undefined
+        ? () => dispatchFetchAction(subjectId)
+        : undefined,
+    [dispatchFetchAction, subjectId],
+  );
+
+  if (isAllowed === false) {
+    return {content: false};
+  }
+
+  if (!subjectContent || !subjectContent.root) {
+    return {content: undefined, reload};
+  }
+
+  if (subjectContent.root instanceof Error) {
+    return {error: subjectContent.root, reload};
+  }
+
+  return {content: subjectContent, reload};
+}
+
+export type KnowledgeSubjectContentHookResult = {
+  themes?: ThemeInfo[] | false;
+  tasks?: TaskInfo[] | false;
+  loadedThemes: number[];
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useKnowledgeSubjectContent(
+  subjectId?: number,
+): KnowledgeSubjectContentHookResult {
+  const {content: subjectContent, error, reload} = useKnowledgeSubjectMap(
+    subjectId,
+  );
+  const themes = useSelector(selectKnowledgeThemes);
+  const tasks = useSelector(selectKnowledgeTasks);
+
+  const {loadedThemes, subjectThemes, subjectTasks} = useMemo(() => {
+    return getKnowledgeSubjectContent(subjectContent, themes, tasks);
+  }, [subjectContent, tasks, themes]);
+
+  return error
+    ? {error, loadedThemes, reload}
+    : {
+        themes: subjectThemes,
+        tasks: subjectTasks,
+        loadedThemes,
+        reload,
+      };
+}
+
+export function useKnowLedgeTree<
+  E extends KnowledgeTreeEntity = KnowledgeTreeEntity
+>(subjects: SubjectInfo[], mapEntities?: (entity: KnowledgeTreeEntity) => E) {
+  const map = useSelector(selectKnowledgeMap);
+  const themes = useSelector(selectKnowledgeThemes);
+  const tasks = useSelector(selectKnowledgeTasks);
+
+  return useMemo(() => {
+    const collectedThemes: (Maybe<ThemeInfo[]> | false)[] = [];
+    const collectedTasks: (Maybe<TaskInfo[]> | false)[] = [];
+    const loadedThemes: number[][] = [];
+    const loadedSubjects: number[] = [];
+
+    _.forEach(subjects, (subject) => {
+      const subjectContent = map[subject.id];
+
+      if (!subjectContent) {
+        return;
+      }
+      loadedSubjects.push(subject.id);
+
+      const {
+        subjectThemes,
+        subjectTasks,
+        loadedThemes: loadedSubjectThemes,
+      } = getKnowledgeSubjectContent(subjectContent, themes, tasks);
+      collectedThemes.push(subjectThemes);
+      collectedTasks.push(subjectTasks);
+      loadedThemes.push(loadedSubjectThemes);
+    });
+
+    const filteredThemes = _(collectedThemes).compact().flatten().value();
+    const filteredTasks = _(collectedTasks).compact().flatten().value();
+    const loadedEntities = [
+      ..._(loadedThemes)
+        .flatten()
+        .map((id) => getThemeNodeId(id))
+        .value(),
+      ..._(loadedSubjects)
+        .map((id) => getSubjectNodeId(id))
+        .value(),
+    ];
+
+    return {
+      ...getKnowledgeTree({
+        subjects,
+        themes: filteredThemes,
+        tasks: filteredTasks,
+        mapEntities,
+      }),
+      loadedEntities,
+    };
+  }, [map, mapEntities, subjects, tasks, themes]);
+}
+
+export type KnowledgeThemeHookResult = {
+  theme?: ThemeInfo | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useKnowledgeTheme(
+  subjectId?: number,
+  themeId?: number,
+): KnowledgeThemeHookResult {
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
+  const themes = useSelector(selectKnowledgeThemes);
+  const theme = themeId ? themes[themeId] : undefined;
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(
+    (subjectId: number, themeId: number) => {
+      dispatch({type: ActionType.KNOWLEDGE_THEME_FETCH, subjectId, themeId});
+    },
+    [dispatch],
+  );
+  useEffect(() => {
+    if (isAllowed) {
+      if (subjectId !== undefined && themeId !== undefined && !theme) {
+        dispatchFetchAction(subjectId, themeId);
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, subjectId, theme, themeId]);
+
+  const reloadCallback = useMemo(
+    () =>
+      subjectId !== undefined && themeId !== undefined
+        ? () => dispatchFetchAction(subjectId, themeId)
+        : undefined,
+    [dispatchFetchAction, subjectId, themeId],
+  );
+
+  return theme instanceof Error
+    ? {error: theme, reload: reloadCallback}
+    : {theme: !isAllowed ? false : theme, reload: reloadCallback};
+}
+
+export type RevokeKnowledgeThemeHookResult = (responseTheme: ThemeInfo) => void;
+
+export function useRevokeKnowledgeTheme(): RevokeKnowledgeThemeHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseTheme: ThemeInfo) => {
+      dispatch({type: ActionType.KNOWLEDGE_THEME_REVOKE, responseTheme});
+    },
+    [dispatch],
+  );
+}
+
+export type DeleteKnowledgeThemeHookResult = (
+  subjectId: number,
+  themeId: number,
+  parentThemeId?: number,
+) => void;
+
+export function useDeleteKnowledgeTheme(
+  redirectUrl?: string,
+  onDelete?: KnowledgeThemeDeleteCallback,
+  onError?: KnowledgeThemeDeleteErrorCallback,
+): DeleteKnowledgeThemeHookResult {
+  const dispatch = useDispatch();
+  const redirectIfSupplied = useRedirect(redirectUrl);
+
+  const deleteCallback = useCallback(
+    (subjectId, themeId, parentThemeId) => {
+      redirectIfSupplied();
+      if (onDelete) {
+        onDelete(subjectId, themeId, parentThemeId);
+      }
+    },
+    [redirectIfSupplied, onDelete],
+  );
+
+  return useCallback(
+    (subjectId, themeId, parentThemeId) => {
+      dispatch({
+        type: ActionType.KNOWLEDGE_THEME_DELETE_REQUEST,
+        subjectId,
+        themeId,
+        parentThemeId,
+        onDelete: deleteCallback,
+        onError,
+      });
+    },
+    [dispatch, deleteCallback, onError],
+  );
+}
+
+export type KnowledgeTaskHookResult = {
+  task?: TaskInfo | false;
+  error?: AxiosError;
+  reload?: SimpleCallback;
+};
+
+export function useKnowledgeTask(
+  subjectId?: number,
+  taskId?: number,
+): KnowledgeTaskHookResult {
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
+  const tasks = useSelector(selectKnowledgeTasks);
+  const task = taskId ? tasks[taskId] : undefined;
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(
+    (subjectId: number, taskId: number) => {
+      dispatch({type: ActionType.KNOWLEDGE_TASK_FETCH, subjectId, taskId});
+    },
+    [dispatch],
+  );
+  useEffect(() => {
+    if (isAllowed) {
+      if (subjectId !== undefined && taskId !== undefined && !task) {
+        dispatchFetchAction(subjectId, taskId);
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, subjectId, task, taskId]);
+
+  const reloadCallback = useMemo(
+    () =>
+      subjectId !== undefined && taskId !== undefined
+        ? () => dispatchFetchAction(subjectId, taskId)
+        : undefined,
+    [dispatchFetchAction, subjectId, taskId],
+  );
+
+  return task instanceof Error
+    ? {error: task, reload: reloadCallback}
+    : {task: !isAllowed ? false : task, reload: reloadCallback};
+}
+
+export type RevokeKnowledgeTaskHookResult = (responseTask: TaskInfo) => void;
+
+export function useRevokeKnowledgeTask(): RevokeKnowledgeTaskHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseTask: TaskInfo) => {
+      dispatch({type: ActionType.KNOWLEDGE_TASK_REVOKE, responseTask});
+    },
+    [dispatch],
+  );
+}
+
+export type DeleteKnowledgeTaskHookResult = (
+  subjectId: number,
+  taskId: number,
+  themeId?: number,
+) => void;
+
+export function useDeleteKnowledgeTask(
+  redirectUrl?: string,
+  onDelete?: KnowledgeTaskDeleteCallback,
+  onError?: KnowledgeTaskDeleteErrorCallback,
+): DeleteKnowledgeTaskHookResult {
+  const dispatch = useDispatch();
+  const redirectIfSupplied = useRedirect(redirectUrl);
+
+  const deleteCallback = useCallback(
+    (subjectId, taskId, themeId) => {
+      redirectIfSupplied();
+      if (onDelete) {
+        onDelete(subjectId, taskId, themeId);
+      }
+    },
+    [redirectIfSupplied, onDelete],
+  );
+
+  return useCallback(
+    (subjectId, taskId, themeId) => {
+      dispatch({
+        type: ActionType.KNOWLEDGE_TASK_DELETE_REQUEST,
+        subjectId,
+        taskId,
+        themeId,
+        onDelete: deleteCallback,
+        onError,
+      });
+    },
+    [dispatch, deleteCallback, onError],
+  );
+}
+
+export type KnowledgeTestHookResult = {
+  test?: TestInfo | null | false;
+  error?: AxiosError;
+  reload: SimpleCallback;
+};
+
+export function useKnowledgeTest(lessonId: number): KnowledgeTestHookResult {
+  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
+  const testId = useSelector(selectLessonTests)[lessonId];
+  const tests = useSelector(selectKnowledgeTests);
+  const dispatch = useDispatch();
+  const dispatchFetchAction = useCallback(() => {
+    dispatch({type: ActionType.KNOWLEDGE_TEST_FETCH, lessonId});
+  }, [dispatch, lessonId]);
+  useEffect(() => {
+    if (isAllowed) {
+      if (testId === undefined) {
+        dispatchFetchAction();
+      }
+    }
+  }, [dispatchFetchAction, isAllowed, lessonId, testId]);
+
+  return testId instanceof Error
+    ? {error: testId, reload: dispatchFetchAction}
+    : {
+        test: !isAllowed
+          ? false
+          : testId === null || testId === undefined
+          ? testId
+          : tests[testId],
+        reload: dispatchFetchAction,
+      };
+}
+
+type RevokeKnowledgeTestHookResult = (responseTest: TestInfo) => void;
+
+export function useRevokeKnowledgeTest(
+  courseId: number,
+  lessonId: number,
+): RevokeKnowledgeTestHookResult {
+  const dispatch = useDispatch();
+
+  return useCallback(
+    (responseTest: TestInfo) => {
+      dispatch({
+        type: ActionType.KNOWLEDGE_TEST_REVOKE,
+        responseTest,
+        courseId,
+        lessonId,
+      });
+    },
+    [courseId, dispatch, lessonId],
+  );
+}
+
+export type DeleteKnowledgeTestHookResult = (
+  courseId: number,
+  lessonId: number,
+  testId: number,
+) => void;
+
+export function useDeleteKnowledgeTest(
+  redirectUrl?: string,
+  onDelete?: KnowledgeTestDeleteCallback,
+  onError?: KnowledgeTestDeleteErrorCallback,
+): DeleteKnowledgeTestHookResult {
+  const dispatch = useDispatch();
+  const redirectIfSupplied = useRedirect(redirectUrl);
+
+  const deleteCallback = useCallback(
+    (courseId, lessonId, testId) => {
+      redirectIfSupplied();
+      if (onDelete) {
+        onDelete(courseId, lessonId, testId);
+      }
+    },
+    [redirectIfSupplied, onDelete],
+  );
+
+  return useCallback(
+    (courseId, lessonId, testId) => {
+      dispatch({
+        type: ActionType.KNOWLEDGE_TEST_DELETE_REQUEST,
+        courseId,
+        lessonId,
+        testId,
+        onDelete: deleteCallback,
+        onError,
+      });
+    },
+    [dispatch, deleteCallback, onError],
+  );
 }

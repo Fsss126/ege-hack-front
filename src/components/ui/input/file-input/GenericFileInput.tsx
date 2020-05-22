@@ -115,7 +115,7 @@ export function usePreviewState(
       }
       responseRef.current = {file_name, file_link, file_id};
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
   const deleteCallback = React.useCallback(() => {
@@ -187,7 +187,7 @@ export type FileInputProps = {
   onChange?: InputChangeCallback;
   onSubmit?: InputSubmitCallback;
   name: string;
-  value?: FileInfo[];
+  value?: FileInfo[] | null;
   required: boolean;
   disabled: boolean | (() => boolean);
   InputComponent?: DropzoneProps['InputComponent'] | null;

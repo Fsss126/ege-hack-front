@@ -1,0 +1,54 @@
+// colors
+$border-grey: #ebebeb;
+$icon-grey: #bbbbbb;
+$bg-grey: #f8f8f8;
+$bg-hover: rgba(0,0,0, 0.01);
+$bg-hover-deep: rgba(0,0,0, 0.04);
+$bg-active: $bg-grey;
+$text-dark: #525252;
+$text-grey: #888888;
+$text-light-grey: #d7d7d7;
+$accent-orange: #fa9346;
+$accent-bg: lighten($accent-orange, 30%);
+$error-red: #ff797b;
+$error-bg: #fec8c8;
+$success-green: #80e080;
+$success-bg: #c6efc6;
+$vk-blue: #4a76a8;
+$green: #63d263;
+$orange: #ffae45;
+$red: #fd5454;
+
+// fonts
+$font-light: 'Gotham Pro Light', san-serif;
+$font-medium: 'Gotham Pro Medium', sans-serif;
+$font-regular: 'Gotham Pro Regular', sans-serif;
+$font-bold: 'Gotham Pro Bold', sans-serif;
+$icon-font: 'icomoon';
+$font-awesome: Font Awesome\ 5 Free;
+
+$card-border-radius: 10px;
+
+$element-border-radius: $card-border-radius;
+$element-padding-vertical: 8px;
+$element-padding-horizontal: 16px;
+$element-padding: $element-padding-vertical $element-padding-horizontal;
+
+$menu-list-padding: 0;
+$menu-option-padding-vertical: 6px;
+$menu-option-padding-horizontal: 12px;
+$menu-option-padding: $menu-option-padding-vertical $menu-option-padding-horizontal;
+
+$icon-btn-padding: 0.25em;
+$icon-btn-border-radius: 30%;
+
+$content-padding-vertical: 20px;
+$content-padding-horizontal: 24px;
+$content-padding: $content-padding-vertical $content-padding-horizontal;
+
+$content-padding-vertical-sm: 16px;
+$content-padding-horizontal-sm: 22px;
+$content-padding-sm: $content-padding-vertical-sm $content-padding-horizontal-sm;
+
+$border: 1px solid $border-grey;
+$border-dashed: 1.5px dashed $border-grey;
