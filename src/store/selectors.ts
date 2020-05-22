@@ -5,15 +5,6 @@ export const selectDataReducer = (state: AppState) => state.dataReducer;
 export const selectParticipants = (state: AppState) =>
   selectDataReducer(state).participants;
 
-export const selectAdminWebinars = (state: AppState) =>
-  selectDataReducer(state).adminWebinars;
-
-export const selectWebinars = (state: AppState) =>
-  selectDataReducer(state).webinars;
-
-export const selectUpcomingWebinars = (state: AppState) =>
-  selectWebinars(state).upcoming;
-
 export const selectKnowledgeTasks = (state: AppState) =>
   selectDataReducer(state).tasks;
 

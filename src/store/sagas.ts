@@ -8,23 +8,20 @@ import {teachersSaga} from 'modules/teachers/teachers.sagas';
 import {testingSaga} from 'modules/testing/testing.sagas';
 import {userSaga} from 'modules/user/user.sagas';
 import {usersSaga} from 'modules/users/users.sagas';
+import {webinarsSaga} from 'modules/webinars/webinars.sagas';
 import {call, fork, put, spawn, takeLeading} from 'redux-saga/effects';
 import {
   CourseParticipantInfo,
   KnowledgeLevelInfo,
-  PersonWebinar,
   TaskInfo,
   TestInfo,
   TestResultInfo,
   ThemeInfo,
-  WebinarScheduleInfo,
 } from 'types/entities';
 import {takeLeadingPerKey} from 'utils/sagaHelpers';
 
 import {
   ActionType,
-  AdminWebinarsFetchAction,
-  CourseWebinarsFetchAction,
   KnowledgeLevelFetchAction,
   KnowledgeTaskDeleteRequestAction,
   KnowledgeTaskFetchAction,
@@ -35,64 +32,8 @@ import {
   ParticipantDeleteRequestAction,
   ParticipantsFetchAction,
   TestResultsFetchAction,
-  UpcomingWebinarsFetchAction,
-  WebinarDeleteRequestAction,
 } from './actions';
 import {waitForLogin} from './sagas/watchers';
-
-function* fetchCourseWebinars() {
-  yield* waitForLogin<CourseWebinarsFetchAction>(
-    ActionType.COURSE_WEBINARS_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: CourseWebinarsFetchAction) {
-          const {courseId} = action;
-          try {
-            const webinars: PersonWebinar[] = yield call(
-              APIRequest.get,
-              `/courses/${courseId}/schedule/person`,
-            );
-            yield put({
-              type: ActionType.COURSE_WEBINARS_FETCHED,
-              webinars,
-              courseId,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.COURSE_WEBINARS_FETCHED,
-              webinars: error,
-              courseId,
-            });
-          }
-        },
-        (action) => action.courseId,
-      );
-    },
-  );
-}
-
-function* fetchUpcomingWebinars() {
-  yield* waitForLogin<UpcomingWebinarsFetchAction>(
-    ActionType.UPCOMING_WEBINARS_FETCH,
-    function* (channel) {
-      yield takeLeading(channel, function* () {
-        try {
-          const webinars: PersonWebinar[] = yield call(
-            APIRequest.get,
-            '/courses/schedule/person',
-          );
-          yield put({type: ActionType.UPCOMING_WEBINARS_FETCHED, webinars});
-        } catch (error) {
-          yield put({
-            type: ActionType.UPCOMING_WEBINARS_FETCHED,
-            webinars: error,
-          });
-        }
-      });
-    },
-  );
-}
 
 function* fetchParticipants() {
   yield* waitForLogin<ParticipantsFetchAction>(
@@ -126,38 +67,6 @@ function* fetchParticipants() {
   );
 }
 
-function* fetchAdminWebinars() {
-  yield* waitForLogin<AdminWebinarsFetchAction>(
-    ActionType.ADMIN_WEBINARS_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: AdminWebinarsFetchAction) {
-          const {courseId} = action;
-          try {
-            const webinars: WebinarScheduleInfo = yield call(
-              APIRequest.get,
-              `/courses/${courseId}/schedule`,
-            );
-            yield put({
-              type: ActionType.ADMIN_WEBINARS_FETCHED,
-              webinars,
-              courseId,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.ADMIN_WEBINARS_FETCHED,
-              webinars: error,
-              courseId,
-            });
-          }
-        },
-        (action) => action.courseId,
-      );
-    },
-  );
-}
-
 function* processParticipantDelete() {
   yield takeLeadingPerKey(
     ActionType.PARTICIPANTS_DELETE_REQUEST,
@@ -179,54 +88,6 @@ function* processParticipantDelete() {
       }
     },
     (action) => [action.courseId, action.userId],
-  );
-}
-
-function* processWebinarDelete() {
-  yield takeLeadingPerKey(
-    ActionType.WEBINAR_DELETE_REQUEST,
-    function* (action: WebinarDeleteRequestAction) {
-      const {courseId, webinarId, webinarsSchedule, onDelete, onError} = action;
-      const {
-        course_id,
-        click_meeting_link,
-        image_link,
-        webinars,
-      } = webinarsSchedule;
-      const requestData = {
-        course_id,
-        click_meeting_link,
-        image: image_link.split('/').pop(),
-        webinars: webinars
-          .filter(({id}) => id !== webinarId)
-          .map(({date_start, ...rest}) => ({
-            ...rest,
-            date_start: date_start.getTime(),
-          })),
-      };
-      try {
-        const responseWebinars: WebinarScheduleInfo = yield call(
-          APIRequest.put,
-          `/courses/${courseId}/schedule`,
-          requestData,
-        );
-
-        if (onDelete) {
-          yield call(onDelete, courseId, webinarId);
-        }
-        yield put({
-          type: ActionType.WEBINAR_DELETE,
-          courseId,
-          webinarId,
-          responseWebinars,
-        });
-      } catch (error) {
-        if (onError) {
-          yield call(onError, courseId, webinarId, error);
-        }
-      }
-    },
-    (action) => [action.courseId, action.webinarId],
   );
 }
 
@@ -499,11 +360,9 @@ export default function* rootSaga() {
   yield fork(lessonsSaga);
   yield fork(usersSaga);
   yield fork(homeworksSaga);
+  yield fork(webinarsSaga);
 
-  yield spawn(fetchCourseWebinars);
-  yield spawn(fetchUpcomingWebinars);
   yield spawn(fetchParticipants);
-  yield spawn(fetchAdminWebinars);
   yield spawn(fetchTestResults);
   yield spawn(fetchKnowledgeLevel);
   yield spawn(fetchKnowledgeTheme);
@@ -511,7 +370,6 @@ export default function* rootSaga() {
   yield spawn(fetchKnowledgeTest);
 
   yield spawn(processParticipantDelete);
-  yield spawn(processWebinarDelete);
   yield spawn(processThemeDelete);
   yield spawn(processTaskDelete);
   yield spawn(processTestDelete);

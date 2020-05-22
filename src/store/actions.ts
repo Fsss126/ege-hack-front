@@ -1,15 +1,11 @@
 import {AxiosError} from 'axios';
 import {
   CourseParticipantInfo,
-  HomeworkInfo,
   KnowledgeLevelInfo,
-  PersonWebinar,
   TaskInfo,
   TestInfo,
   TestResultInfo,
   ThemeInfo,
-  UserHomeworkInfo,
-  WebinarScheduleInfo,
 } from 'types/entities';
 
 export type UserAction = TypedAction<
@@ -44,21 +40,16 @@ export type HomeworksAction = TypedAction<
   typeof import('modules/homeworks/homeworks.actions')
 >;
 
+export type WebinarsAction = TypedAction<
+  typeof import('modules/webinars/webinars.actions')
+>;
+
 export enum ActionType {
-  COURSE_WEBINARS_FETCH = 'COURSE_WEBINARS_FETCH',
-  COURSE_WEBINARS_FETCHED = 'COURSE_WEBINARS_FETCHED',
-  UPCOMING_WEBINARS_FETCH = 'UPCOMING_WEBINARS_FETCH',
-  UPCOMING_WEBINARS_FETCHED = 'UPCOMING_WEBINARS_FETCHED',
   PARTICIPANTS_FETCH = 'PARTICIPANTS_FETCH',
   PARTICIPANTS_FETCHED = 'PARTICIPANTS_FETCHED',
   PARTICIPANTS_DELETE_REQUEST = 'PARTICIPANTS_DELETE_REQUEST',
   PARTICIPANTS_DELETE = 'PARTICIPANTS_DELETE',
   PARTICIPANTS_REVOKE = 'PARTICIPANTS_REVOKE',
-  ADMIN_WEBINARS_FETCH = 'ADMIN_WEBINARS_FETCH',
-  ADMIN_WEBINARS_FETCHED = 'ADMIN_WEBINARS_FETCHED',
-  WEBINARS_REVOKE = 'WEBINARS_REVOKE',
-  WEBINAR_DELETE_REQUEST = 'WEBINAR_DELETE_REQUEST',
-  WEBINAR_DELETE = 'WEBINAR_DELETE',
   TEST_RESULTS_FETCH = 'TEST_RESULTS_FETCH',
   TEST_RESULTS_FETCHED = 'TEST_RESULTS_FETCHED',
   KNOWLEDGE_LEVEL_FETCH = 'KNOWLEDGE_LEVEL_FETCH',
@@ -80,26 +71,6 @@ export enum ActionType {
   KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
 
-export type CourseWebinarsFetchAction = {
-  type: ActionType.COURSE_WEBINARS_FETCH;
-  courseId: number;
-};
-
-export type CourseWebinarsFetchedAction = {
-  type: ActionType.COURSE_WEBINARS_FETCHED;
-  courseId: number;
-  webinars: PersonWebinar[] | AxiosError;
-};
-
-export type UpcomingWebinarsFetchAction = {
-  type: ActionType.UPCOMING_WEBINARS_FETCH;
-};
-
-export type UpcomingWebinarsFetchedAction = {
-  type: ActionType.UPCOMING_WEBINARS_FETCHED;
-  webinars: PersonWebinar[] | AxiosError;
-};
-
 export type ParticipantsFetchAction = {
   type: ActionType.PARTICIPANTS_FETCH;
   courseId: number;
@@ -109,17 +80,6 @@ export type ParticipantsFetchedAction = {
   type: ActionType.PARTICIPANTS_FETCHED;
   courseId: number;
   participants: CourseParticipantInfo[] | AxiosError;
-};
-
-export type AdminWebinarsFetchAction = {
-  type: ActionType.ADMIN_WEBINARS_FETCH;
-  courseId: number;
-};
-
-export type AdminWebinarsFetchedAction = {
-  type: ActionType.ADMIN_WEBINARS_FETCHED;
-  courseId: number;
-  webinars: WebinarScheduleInfo | AxiosError;
 };
 
 export type ParticipantsRevokeAction = {
@@ -153,12 +113,6 @@ export type ParticipantDeleteAction = {
   userId: number;
 };
 
-export type WebinarsRevokeAction = {
-  type: ActionType.WEBINARS_REVOKE;
-  courseId: number;
-  responseWebinars: WebinarScheduleInfo;
-};
-
 export type WebinarDeleteCallback = (
   courseId: number,
   webinarId: number,
@@ -169,22 +123,6 @@ export type WebinarDeleteErrorCallback = (
   webinarId: number,
   error: AxiosError,
 ) => void;
-
-export type WebinarDeleteRequestAction = {
-  type: ActionType.WEBINAR_DELETE_REQUEST;
-  courseId: number;
-  webinarId: number;
-  webinarsSchedule: WebinarScheduleInfo;
-  onDelete?: WebinarDeleteCallback;
-  onError?: WebinarDeleteErrorCallback;
-};
-
-export type WebinarDeleteAction = {
-  type: ActionType.WEBINAR_DELETE;
-  courseId: number;
-  webinarId: number;
-  responseWebinars: WebinarScheduleInfo;
-};
 
 export type TestResultsFetchAction = {
   type: ActionType.TEST_RESULTS_FETCH;
@@ -376,20 +314,12 @@ export type Action =
   | LessonsAction
   | UsersAction
   | HomeworksAction
-  | CourseWebinarsFetchAction
-  | CourseWebinarsFetchedAction
-  | UpcomingWebinarsFetchAction
-  | UpcomingWebinarsFetchedAction
+  | WebinarsAction
   | ParticipantsFetchAction
   | ParticipantsFetchedAction
-  | AdminWebinarsFetchAction
-  | AdminWebinarsFetchedAction
   | ParticipantsRevokeAction
   | ParticipantDeleteRequestAction
   | ParticipantDeleteAction
-  | WebinarsRevokeAction
-  | WebinarDeleteRequestAction
-  | WebinarDeleteAction
   | TestResultsFetchAction
   | TestResultsFetchedAction
   | KnowledgeLevelFetchAction

@@ -12,7 +12,7 @@ export const loadedActionCreator = <TType extends string, TParams>(
 
 export const fetchActionCreator = <
   TType extends string,
-  TParams extends object
+  TParams extends object = {}
 >(
   type: TType,
 ) => {

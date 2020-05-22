@@ -15,7 +15,7 @@ import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import {renderDate} from 'definitions/helpers';
-import {useDeleteWebinar} from 'hooks/selectors';
+import {useDeleteWebinar} from 'modules/webinars/webinars.hooks';
 import React, {useCallback} from 'react';
 import Countdown, {CountdownRenderProps} from 'react-countdown-now';
 import {Link} from 'react-router-dom';
@@ -143,7 +143,7 @@ const WebinarsPage: React.FC<WebinarsPageProps> = (props) => {
       const {id} = webinar;
       const deleteCallback = (): void => {
         if (webinarSchedule) {
-          onDelete(courseId, id, webinarSchedule);
+          onDelete(courseId, id);
         }
       };
       const editLink = `${courseLink}/webinars/edit/`;

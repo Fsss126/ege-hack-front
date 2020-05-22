@@ -4,12 +4,10 @@ import {Reducer} from 'redux';
 import {
   CourseInfo,
   CourseParticipantInfo,
-  PersonWebinar,
   TaskInfo,
   TestInfo,
   TestResultInfo,
   ThemeInfo,
-  WebinarScheduleInfo,
 } from 'types/entities';
 import {KNOWLEDGE_TREE_ROOT, KnowledgeTreeLevel} from 'types/knowledgeTree';
 
@@ -27,14 +25,9 @@ export interface DataState {
   // TODO: normalize
   // courseLessons: {[courseId: number]: DataProperty<number[]>};
   // lessons: {[lessonId: number]: LessonInfo};
-  webinars: {
-    [courseId: number]: DataProperty<PersonWebinar[]>;
-    upcoming?: DataProperty<PersonWebinar[]>;
-  };
   participants: {
     [courseId: number]: DataProperty<CourseParticipantInfo[]>;
   };
-  adminWebinars: {[courseId: number]: DataProperty<WebinarScheduleInfo>};
   teacherCourses?: DataProperty<CourseInfo[]>;
   themes: {
     [themeId: number]: DataProperty<ThemeInfo>;
@@ -57,9 +50,7 @@ export interface DataState {
 }
 
 const defaultState: DataState = {
-  webinars: {},
   participants: {},
-  adminWebinars: {},
   teacherCourses: undefined,
   themes: {},
   tasks: {},
@@ -74,28 +65,6 @@ export const dataReducer: Reducer<DataState, Action> = (
   action,
 ): DataState => {
   switch (action.type) {
-    case ActionType.COURSE_WEBINARS_FETCHED: {
-      const {courseId, webinars} = action;
-
-      return {
-        ...state,
-        webinars: {
-          ...state.webinars,
-          [courseId]: webinars,
-        },
-      };
-    }
-    case ActionType.UPCOMING_WEBINARS_FETCHED: {
-      const {webinars} = action;
-
-      return {
-        ...state,
-        webinars: {
-          ...state.webinars,
-          upcoming: webinars,
-        },
-      };
-    }
     case ActionType.PARTICIPANTS_FETCHED: {
       const {courseId, participants} = action;
 
@@ -104,17 +73,6 @@ export const dataReducer: Reducer<DataState, Action> = (
         participants: {
           ...state.participants,
           [courseId]: participants,
-        },
-      };
-    }
-    case ActionType.ADMIN_WEBINARS_FETCHED: {
-      const {courseId, webinars} = action;
-
-      return {
-        ...state,
-        adminWebinars: {
-          ...state.adminWebinars,
-          [courseId]: webinars,
         },
       };
     }
@@ -142,21 +100,6 @@ export const dataReducer: Reducer<DataState, Action> = (
           ...loadedParticipants,
           [courseId]: courseParticipants.filter(({id}) => id !== userId),
         },
-      };
-    }
-    case ActionType.WEBINARS_REVOKE:
-    case ActionType.WEBINAR_DELETE: {
-      const {courseId, responseWebinars} = action;
-      const {
-        adminWebinars,
-        webinars: {...loadedWebinars},
-      } = state;
-      delete loadedWebinars[courseId];
-      delete loadedWebinars.upcoming;
-      return {
-        ...state,
-        adminWebinars: {...adminWebinars, [courseId]: responseWebinars},
-        webinars: loadedWebinars,
       };
     }
     case ActionType.KNOWLEDGE_LEVEL_FETCHED: {

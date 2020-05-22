@@ -18,12 +18,9 @@ import {
   KnowledgeThemeDeleteErrorCallback,
   ParticipantDeleteCallback,
   ParticipantDeleteErrorCallback,
-  WebinarDeleteCallback,
-  WebinarDeleteErrorCallback,
 } from 'store/actions';
 import {DataProperty, KnowledgeBaseSubject} from 'store/reducers/dataReducer';
 import {
-  selectAdminWebinars,
   selectKnowledgeMap,
   selectKnowledgeTasks,
   selectKnowledgeTests,
@@ -31,21 +28,17 @@ import {
   selectLessonTests,
   selectParticipants,
   selectTestResults,
-  selectUpcomingWebinars,
-  selectWebinars,
 } from 'store/selectors';
 import {
   CourseInfo,
   CourseParticipantInfo,
   DiscountInfo,
   KnowledgeLevelInfo,
-  PersonWebinar,
   SubjectInfo,
   TaskInfo,
   TestInfo,
   TestResultInfo,
   ThemeInfo,
-  WebinarScheduleInfo,
 } from 'types/entities';
 import {Permission} from 'types/enums';
 import {
@@ -170,90 +163,6 @@ export function useRevokeParticipants(
   );
 }
 
-export type AdminWebinarsHookResult = {
-  webinars?: WebinarScheduleInfo | false;
-  error?: AxiosError | true;
-  reload: SimpleCallback;
-};
-
-export function useAdminWebinars(courseId: number): AdminWebinarsHookResult {
-  const isAllowed = useCheckPermissions(Permission.WEBINAR_EDIT);
-  const webinars = useSelector(selectAdminWebinars)[courseId];
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.ADMIN_WEBINARS_FETCH, courseId});
-  }, [courseId, dispatch]);
-  useEffect(() => {
-    if (isAllowed) {
-      if (!webinars) {
-        dispatchFetchAction();
-      }
-    }
-  }, [dispatchFetchAction, isAllowed, webinars]);
-  return webinars instanceof Error
-    ? {error: webinars, reload: dispatchFetchAction}
-    : {webinars: !isAllowed ? false : webinars, reload: dispatchFetchAction};
-}
-
-export type RevokeWebinarssHookResult = (
-  responseWebinars: WebinarScheduleInfo,
-) => void;
-
-export function useRevokeWebinars(courseId: number): RevokeWebinarssHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseWebinars) => {
-      dispatch({type: ActionType.WEBINARS_REVOKE, courseId, responseWebinars});
-    },
-    [dispatch, courseId],
-  );
-}
-
-export type UpcomingWebinarsHookResult = {
-  webinars?: PersonWebinar[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useUpcomingWebinars(): UpcomingWebinarsHookResult {
-  const webinars = useSelector(selectUpcomingWebinars);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.UPCOMING_WEBINARS_FETCH});
-  }, [dispatch]);
-  useEffect(() => {
-    if (!webinars) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, webinars]);
-  return webinars instanceof Error
-    ? {error: webinars, reload: dispatchFetchAction}
-    : {webinars, reload: dispatchFetchAction};
-}
-
-export type CourseWebinarsHookResult = {
-  webinars?: PersonWebinar[] | false;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useCourseWebinars(courseId: number): CourseWebinarsHookResult {
-  const webinars = useSelector(selectWebinars)[courseId];
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.COURSE_WEBINARS_FETCH, courseId});
-  }, [courseId, dispatch]);
-  useEffect(() => {
-    if (!webinars) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, webinars]);
-  return webinars instanceof Error
-    ? {error: webinars, reload: dispatchFetchAction}
-    : {webinars, reload: dispatchFetchAction};
-}
-
 export type RedirectHookResult = SimpleCallback;
 
 export function useRedirect(redirectUrl?: string): RedirectHookResult {
@@ -288,45 +197,6 @@ export function useDeleteParticipant(
       });
     },
     [dispatch, onDelete, onError],
-  );
-}
-
-export type DeleteWebinarHookResult = (
-  courseId: number,
-  webinarId: number,
-  webinarsSchedule: WebinarScheduleInfo,
-) => void;
-
-export function useDeleteWebinar(
-  redirectUrl?: string,
-  onDelete?: WebinarDeleteCallback,
-  onError?: WebinarDeleteErrorCallback,
-): DeleteWebinarHookResult {
-  const dispatch = useDispatch();
-  const redirectIfSupplied = useRedirect(redirectUrl);
-
-  const deleteCallback = useCallback(
-    (courseId, lessonId) => {
-      redirectIfSupplied();
-      if (onDelete) {
-        onDelete(courseId, lessonId);
-      }
-    },
-    [redirectIfSupplied, onDelete],
-  );
-
-  return useCallback(
-    (courseId, webinarId, webinarsSchedule) => {
-      dispatch({
-        type: ActionType.WEBINAR_DELETE_REQUEST,
-        courseId,
-        webinarId,
-        webinarsSchedule,
-        onDelete: deleteCallback,
-        onError,
-      });
-    },
-    [dispatch, deleteCallback, onError],
   );
 }
 
@@ -412,12 +282,12 @@ export function useKnowledgeLevel(
     }
   }, [dispatchFetchAction, isAllowed, knowledgeLevel]);
 
-  let errorInMap: AxiosError | true | undefined;
-
-  const content = useMemo(() => {
+  const {content, errorInMap} = useMemo(() => {
     if (!knowledgeLevel || knowledgeLevel instanceof Error) {
-      return undefined;
+      return {content: undefined};
     } else {
+      let errorInMap: AxiosError | true | undefined;
+
       const filter = <T extends TaskInfo | ThemeInfo>(
         theme: DataProperty<T>,
       ): theme is T => {
@@ -439,7 +309,7 @@ export function useKnowledgeLevel(
           .filter(filter),
       };
 
-      return content;
+      return {content, errorInMap};
     }
   }, [knowledgeLevel, tasks, themes]);
 
