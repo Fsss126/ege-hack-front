@@ -1,5 +1,5 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
-import {useAccounts} from 'hooks/selectors';
+import {useAccounts} from 'modules/users/users.hooks';
 import React from 'react';
 import {Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom';
 import {AccountRole} from 'types/enums';

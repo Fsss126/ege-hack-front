@@ -7,8 +7,6 @@ import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {
-  AccountsDeleteCallback,
-  AccountsDeleteErrorCallback,
   ActionType,
   KnowledgeLevelFetchCallback,
   KnowledgeLevelFetchErrorCallback,
@@ -23,7 +21,6 @@ import {
   WebinarDeleteCallback,
   WebinarDeleteErrorCallback,
 } from 'store/actions';
-import {AppState} from 'store/reducers';
 import {DataProperty, KnowledgeBaseSubject} from 'store/reducers/dataReducer';
 import {
   selectAdminWebinars,
@@ -37,11 +34,9 @@ import {
   selectTestResults,
   selectUpcomingWebinars,
   selectUserHomeworks,
-  selectUsers,
   selectWebinars,
 } from 'store/selectors';
 import {
-  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   DiscountInfo,
@@ -57,7 +52,7 @@ import {
   UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
-import {AccountRole, Permission} from 'types/enums';
+import {Permission} from 'types/enums';
 import {
   getKnowledgeSubjectContent,
   getKnowledgeTree,
@@ -129,73 +124,6 @@ export function useDiscount(
   }, [credentials, selectedCourses, error, fetchDiscount]);
 
   return {discount, error, reload: fetchDiscount, isLoading};
-}
-
-export type AccountsHookResult = {
-  accounts?: AccountInfo[];
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useAccounts(role: AccountRole): AccountsHookResult {
-  const selector = useCallback((state: AppState) => selectUsers(state)[role], [
-    role,
-  ]);
-  const accounts = useSelector(selector);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.ACCOUNTS_FETCH, role});
-  }, [dispatch, role]);
-  useEffect(() => {
-    if (!accounts) {
-      dispatchFetchAction();
-    }
-  }, [dispatchFetchAction, accounts]);
-  return accounts instanceof Error
-    ? {error: accounts, reload: dispatchFetchAction}
-    : {accounts, reload: dispatchFetchAction};
-}
-
-export type RevokeAccountsHookResult = (
-  responseAccounts: AccountInfo[],
-) => void;
-
-export function useRevokeAccounts(role: AccountRole): RevokeAccountsHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseAccounts) => {
-      dispatch({
-        type: ActionType.ACCOUNTS_REVOKE,
-        role,
-        responseAccounts,
-      });
-    },
-    [dispatch, role],
-  );
-}
-
-export type DeleteAccountHookResult = (accountId: number) => void;
-
-export function useDeleteAccount(
-  role: AccountRole,
-  onDelete?: AccountsDeleteCallback,
-  onError?: AccountsDeleteErrorCallback,
-): DeleteAccountHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (accountId) => {
-      dispatch({
-        type: ActionType.ACCOUNTS_DELETE_REQUEST,
-        role,
-        accountIds: [accountId],
-        onDelete,
-        onError,
-      });
-    },
-    [dispatch, onDelete, onError, role],
-  );
 }
 
 export type HomeworksHookResult = {

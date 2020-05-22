@@ -1,11 +1,5 @@
 import {AxiosError} from 'axios';
-import {CoursesAction} from 'modules/courses/courses.reducers';
-import {SubjectsAction} from 'modules/subjects/subjects.reducers';
-import {TeachersAction} from 'modules/teachers/teachers.reducers';
-import {TestingAction} from 'modules/testing/testing.reducers';
-import {UserAction} from 'modules/user/user.reducers';
 import {
-  AccountInfo,
   CourseParticipantInfo,
   HomeworkInfo,
   KnowledgeLevelInfo,
@@ -17,18 +11,36 @@ import {
   UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
-import {AccountRole} from 'types/enums';
+
+export type UserAction = TypedAction<
+  typeof import('modules/user/user.actions')
+>;
+
+export type SubjectsAction = TypedAction<
+  typeof import('modules/subjects/subjects.actions')
+>;
+
+export type CoursesAction = TypedAction<
+  typeof import('modules/courses/courses.actions')
+>;
+
+export type TeachersAction = TypedAction<
+  typeof import('modules/teachers/teachers.actions')
+>;
+
+export type TestingAction = TypedAction<
+  typeof import('modules/testing/testing.actions')
+>;
 
 export type LessonsAction = TypedAction<
   typeof import('modules/lessons/lessons.actions')
 >;
 
+export type UsersAction = TypedAction<
+  typeof import('modules/users/users.actions')
+>;
+
 export enum ActionType {
-  ACCOUNTS_FETCH = 'ACCOUNTS_FETCH',
-  ACCOUNTS_FETCHED = 'ACCOUNTS_FETCHED',
-  ACCOUNTS_REVOKE = 'ACCOUNTS_REVOKE',
-  ACCOUNTS_DELETE_REQUEST = 'ACCOUNTS_DELETE_REQUEST',
-  ACCOUNTS_DELETE = 'ACCOUNTS_DELETE',
   USER_HOMEWORKS_FETCH = 'USER_HOMEWORKS_FETCH',
   USER_HOMEWORKS_FETCHED = 'USER_HOMEWORKS_FETCHED',
   USER_HOMEWORKS_REVOKE = 'USER_HOMEWORKS_REVOKE',
@@ -69,44 +81,6 @@ export enum ActionType {
   KNOWLEDGE_TEST_DELETE_REQUEST = 'KNOWLEDGE_TEST_DELETE_REQUEST',
   KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
-
-export type AccountsFetchAction = {
-  type: ActionType.ACCOUNTS_FETCH;
-  role: AccountRole;
-};
-
-export type AccountsFetchedAction = {
-  type: ActionType.ACCOUNTS_FETCHED;
-  role: AccountRole;
-  accounts: AccountInfo[] | AxiosError;
-};
-
-export type AccountsRevokeAction = {
-  type: ActionType.ACCOUNTS_REVOKE;
-  role: AccountRole;
-  responseAccounts: AccountInfo[];
-};
-
-export type AccountsDeleteCallback = (accountIds: number[]) => void;
-
-export type AccountsDeleteErrorCallback = (
-  accountIds: number[],
-  error: AxiosError,
-) => void;
-
-export type AccountsDeleteRequestAction = {
-  type: ActionType.ACCOUNTS_DELETE_REQUEST;
-  role: AccountRole;
-  accountIds: number[];
-  onDelete?: AccountsDeleteCallback;
-  onError?: AccountsDeleteErrorCallback;
-};
-
-export type AccountsDeleteAction = {
-  type: ActionType.ACCOUNTS_DELETE;
-  role: AccountRole;
-  responseAccounts: AccountInfo[];
-};
 
 export type UserHomeworksFetchAction = {
   type: ActionType.USER_HOMEWORKS_FETCH;
@@ -439,11 +413,7 @@ export type Action =
   | TeachersAction
   | TestingAction
   | LessonsAction
-  | AccountsFetchAction
-  | AccountsFetchedAction
-  | AccountsRevokeAction
-  | AccountsDeleteRequestAction
-  | AccountsDeleteAction
+  | UsersAction
   | UserHomeworksFetchAction
   | UserHomeworksFetchedAction
   | UserHomeworksRevokeAction

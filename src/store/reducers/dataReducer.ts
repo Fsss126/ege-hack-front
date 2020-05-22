@@ -2,11 +2,9 @@ import {AxiosError} from 'axios';
 import _ from 'lodash';
 import {Reducer} from 'redux';
 import {
-  AccountInfo,
   CourseInfo,
   CourseParticipantInfo,
   HomeworkInfo,
-  LessonInfo,
   PersonWebinar,
   TaskInfo,
   TestInfo,
@@ -15,7 +13,6 @@ import {
   UserHomeworkInfo,
   WebinarScheduleInfo,
 } from 'types/entities';
-import {AccountRole} from 'types/enums';
 import {KNOWLEDGE_TREE_ROOT, KnowledgeTreeLevel} from 'types/knowledgeTree';
 
 import {Action, ActionType} from '../actions';
@@ -34,7 +31,6 @@ export interface DataState {
       [lessonId: number]: DataProperty<UserHomeworkInfo | null>;
     };
   };
-  users: Record<AccountRole, DataProperty<AccountInfo[]>>;
   // TODO: normalize
   // courseLessons: {[courseId: number]: DataProperty<number[]>};
   // lessons: {[lessonId: number]: LessonInfo};
@@ -70,13 +66,6 @@ export interface DataState {
 
 const defaultState: DataState = {
   userHomeworks: {},
-  users: {
-    [AccountRole.PUPIL]: undefined,
-    [AccountRole.TEACHER]: undefined,
-    [AccountRole.HELPER]: undefined,
-    [AccountRole.ADMIN]: undefined,
-    [AccountRole.MODERATOR]: undefined,
-  },
   webinars: {},
   participants: {},
   adminWebinars: {},
@@ -95,28 +84,6 @@ export const dataReducer: Reducer<DataState, Action> = (
   action,
 ): DataState => {
   switch (action.type) {
-    case ActionType.ACCOUNTS_FETCHED: {
-      const {accounts, role} = action;
-
-      return {
-        ...state,
-        users: {
-          ...state.users,
-          [role]: accounts,
-        },
-      };
-    }
-    case ActionType.ACCOUNTS_DELETE:
-    case ActionType.ACCOUNTS_REVOKE: {
-      const {responseAccounts, role} = action;
-
-      return {
-        ...state,
-        users: {...state.users, [role]: responseAccounts},
-        // userTeachers:
-        //   role === AccountRole.TEACHER ? undefined : state.userTeachers,
-      };
-    }
     case ActionType.COURSE_WEBINARS_FETCHED: {
       const {courseId, webinars} = action;
 

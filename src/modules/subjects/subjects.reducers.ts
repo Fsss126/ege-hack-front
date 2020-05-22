@@ -1,13 +1,12 @@
 import _ from 'lodash';
 import {combineReducers, Reducer} from 'redux';
+import {Action} from 'store/actions';
 import {DataProperty} from 'store/reducers/types';
 import {SubjectInfo} from 'types/entities';
 
 import {ESubjectsAction} from './subjects.constants';
 
-export type SubjectsAction = TypedAction<typeof import('./subjects.actions')>;
-
-const subjects: Reducer<DataProperty<SubjectInfo[]>, SubjectsAction> = (
+const subjects: Reducer<DataProperty<SubjectInfo[]>, Action> = (
   state = null,
   action,
 ) => {

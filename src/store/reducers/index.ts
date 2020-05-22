@@ -4,6 +4,7 @@ import {subjectsReducer} from 'modules/subjects/subjects.reducers';
 import {teachersReducer} from 'modules/teachers/teachers.reducers';
 import {testingReducer} from 'modules/testing/testing.reducers';
 import {userReducer} from 'modules/user/user.reducers';
+import {usersReducer} from 'modules/users/users.reducers';
 import {combineReducers} from 'redux';
 
 import {dataReducer} from './dataReducer';
@@ -15,6 +16,7 @@ export const rootReducer = combineReducers({
   teachersReducer,
   testingReducer,
   lessonsReducer,
+  usersReducer,
   dataReducer,
 });
 

@@ -1,12 +1,11 @@
 import {combineReducers, Reducer} from 'redux';
+import {Action} from 'store/actions';
 import {DataProperty} from 'store/reducers/types';
 import {TeacherProfileInfo} from 'types/entities';
 
 import {ETeachersAction} from './teachers.constants';
 
-export type TeachersAction = TypedAction<typeof import('./teachers.actions')>;
-
-const teachers: Reducer<DataProperty<TeacherProfileInfo[]>, TeachersAction> = (
+const teachers: Reducer<DataProperty<TeacherProfileInfo[]>, Action> = (
   state = null,
   action,
 ) => {

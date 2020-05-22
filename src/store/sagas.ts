@@ -6,21 +6,9 @@ import {subjectsSaga} from 'modules/subjects/subjects.sagas';
 import {teachersSaga} from 'modules/teachers/teachers.sagas';
 import {testingSaga} from 'modules/testing/testing.sagas';
 import {userSaga} from 'modules/user/user.sagas';
+import {usersSaga} from 'modules/users/users.sagas';
+import {call, fork, put, spawn, takeLeading} from 'redux-saga/effects';
 import {
-  ActionPattern,
-  call,
-  fork,
-  put as putEffect,
-  PutEffect,
-  spawn,
-  take as takeEffect,
-  TakeEffect,
-  takeEvery,
-  takeLeading,
-} from 'redux-saga/effects';
-import {AccountsRoleReq} from 'types/dtos';
-import {
-  AccountInfo,
   CourseParticipantInfo,
   HomeworkInfo,
   KnowledgeLevelInfo,
@@ -35,9 +23,6 @@ import {
 import {takeLeadingPerKey} from 'utils/sagaHelpers';
 
 import {
-  AccountsDeleteRequestAction,
-  AccountsFetchAction,
-  Action,
   ActionType,
   AdminWebinarsFetchAction,
   CourseWebinarsFetchAction,
@@ -57,47 +42,6 @@ import {
   WebinarDeleteRequestAction,
 } from './actions';
 import {waitForLogin} from './sagas/watchers';
-
-const take = (pattern?: ActionPattern<Action>): TakeEffect =>
-  takeEffect<Action>(pattern);
-const put = (action: Action): PutEffect<Action> => putEffect<Action>(action);
-
-function* fetchAccounts() {
-  yield* waitForLogin<AccountsFetchAction>(
-    ActionType.ACCOUNTS_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: AccountsFetchAction) {
-          const {role} = action;
-          try {
-            const accounts: AccountInfo[] = yield call(
-              APIRequest.get,
-              '/accounts/management',
-              {
-                params: {
-                  role,
-                },
-              },
-            );
-            yield put({
-              type: ActionType.ACCOUNTS_FETCHED,
-              accounts,
-              role,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.ACCOUNTS_FETCHED,
-              accounts: error,
-              role,
-            });
-          }
-        },
-        (action) => action.role,
-      );
-    },
-  );
-}
 
 function* fetchUserHomeworks() {
   yield* waitForLogin<UserHomeworksFetchAction>(
@@ -305,40 +249,6 @@ function* processParticipantDelete() {
     },
     (action) => [action.courseId, action.userId],
   );
-}
-
-function* processAccountsDelete() {
-  yield takeEvery(ActionType.ACCOUNTS_DELETE_REQUEST, function* (
-    action: AccountsDeleteRequestAction,
-  ) {
-    const {accountIds, role, onDelete, onError} = action;
-    try {
-      const request: AccountsRoleReq = {
-        accounts: accountIds.map((id) => id.toString()),
-        role,
-      };
-      const accounts: AccountInfo[] = yield call(
-        APIRequest.delete,
-        '/accounts/management',
-        {
-          data: request,
-        },
-      );
-
-      if (onDelete) {
-        yield call(onDelete, accountIds);
-      }
-      yield put({
-        type: ActionType.ACCOUNTS_DELETE,
-        role,
-        responseAccounts: accounts,
-      });
-    } catch (error) {
-      if (onError) {
-        yield call(onError, accountIds, error);
-      }
-    }
-  });
 }
 
 function* processWebinarDelete() {
@@ -656,9 +566,9 @@ export default function* rootSaga() {
   yield fork(teachersSaga);
   yield fork(testingSaga);
   yield fork(lessonsSaga);
+  yield fork(usersSaga);
 
   yield spawn(fetchUserHomeworks);
-  yield spawn(fetchAccounts);
   yield spawn(fetchCourseWebinars);
   yield spawn(fetchUpcomingWebinars);
   yield spawn(fetchParticipants);
@@ -671,7 +581,6 @@ export default function* rootSaga() {
   yield spawn(fetchKnowledgeTest);
 
   yield spawn(processParticipantDelete);
-  yield spawn(processAccountsDelete);
   yield spawn(processWebinarDelete);
   yield spawn(processThemeDelete);
   yield spawn(processTaskDelete);

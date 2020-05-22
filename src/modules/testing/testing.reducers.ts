@@ -1,15 +1,14 @@
 import _ from 'lodash';
 import {combineReducers, Reducer} from 'redux';
+import {Action} from 'store/actions';
 import {DataProperty} from 'store/reducers/types';
 import {SanitizedTestInfo, TestStateInfo, TestStatusInfo} from 'types/entities';
 
 import {ETestingAction} from './testing.constants';
 
-export type TestingAction = TypedAction<typeof import('./testing.actions')>;
-
 const statuses: Reducer<
   Dictionary<DataProperty<TestStatusInfo>, number>,
-  TestingAction
+  Action
 > = (state = {}, action) => {
   switch (action.type) {
     case ETestingAction.TEST_STATUS_FETCHED: {
@@ -42,7 +41,7 @@ const statuses: Reducer<
   }
 };
 
-const test: Reducer<DataProperty<SanitizedTestInfo>, TestingAction> = (
+const test: Reducer<DataProperty<SanitizedTestInfo>, Action> = (
   state = null,
   action,
 ) => {
@@ -55,7 +54,7 @@ const test: Reducer<DataProperty<SanitizedTestInfo>, TestingAction> = (
   }
 };
 
-const state: Reducer<DataProperty<TestStateInfo>, TestingAction> = (
+const state: Reducer<DataProperty<TestStateInfo>, Action> = (
   state = null,
   action,
 ) => {
