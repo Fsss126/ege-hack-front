@@ -1,7 +1,7 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
-import {useSubject} from 'hooks/selectors';
+import {useSubject} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {SubjectDtoReq} from 'types/dtos';

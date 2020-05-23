@@ -66,7 +66,7 @@
     "@typescript-eslint/no-use-before-define": ["error", {
       "functions": false
     }],
-    "@typescript-eslint/unbound-method": "error",
+    "@typescript-eslint/unbound-method": "off",
     "@typescript-eslint/explicit-function-return-type": "off"
   }
 }

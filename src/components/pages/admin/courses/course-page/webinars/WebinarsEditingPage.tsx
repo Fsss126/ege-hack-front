@@ -1,7 +1,8 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useAdminCourse, useAdminWebinars} from 'hooks/selectors';
+import {useAdminCourse} from 'modules/courses/courses.hooks';
+import {useAdminWebinars} from 'modules/webinars/webinars.hooks';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {WebinarScheduleDtoReq} from 'types/dtos';

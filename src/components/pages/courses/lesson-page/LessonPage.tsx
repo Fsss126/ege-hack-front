@@ -3,13 +3,11 @@ import List, {ListItemRenderer} from 'components/common/List';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
 import Page, {PageContent} from 'components/layout/Page';
-import {
-  useLessons,
-  useTestStatus,
-  useUserCourses,
-  useUserHomework,
-} from 'hooks/selectors';
 import _ from 'lodash';
+import {useUserCourses} from 'modules/courses/courses.hooks';
+import {useUserHomework} from 'modules/homeworks/homeworks.hooks';
+import {useLessons} from 'modules/lessons/lessons.hooks';
+import {useTestStatus} from 'modules/testing/testing.hooks';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {LessonInfo} from 'types/entities';
@@ -41,7 +39,7 @@ const LessonPage: React.FC<RouteComponentProps<LessonPageParams>> = (props) => {
     homework,
     error: errorLoadingHomework,
     reload: reloadHomework,
-  } = useUserHomework(courseId, lessonId);
+  } = useUserHomework(lessonId);
   const {status, error: errorLoadingTest, reload: reloadTest} = useTestStatus(
     courseId,
     lessonId,

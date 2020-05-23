@@ -11,8 +11,8 @@ import Form, {
 } from 'components/ui/Form';
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
-import {useRevokeLessons} from 'hooks/selectors';
 import _ from 'lodash';
+import {useRevokeLessons} from 'modules/lessons/lessons.hooks';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {FileInfo, HometaskDtoReq, LessonDtoReq} from 'types/dtos';
 import {LessonInfo} from 'types/entities';
@@ -378,6 +378,7 @@ const LessonForm: React.FC<LessonFormProps> = (props) => {
             value={hometask_file}
             maxFiles={1}
             // accept="image/*,audio/*,video/*"
+            maxSizeBytes={1024 * 1024 * 15}
             initialFiles={
               lesson && lesson.assignment && lesson.assignment.files
                 ? lesson.assignment.files

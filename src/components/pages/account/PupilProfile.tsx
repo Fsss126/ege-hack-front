@@ -5,6 +5,7 @@ import {PupilAccountInfo} from 'types/entities';
 interface PupilProfileProps {
   accountInfo?: PupilAccountInfo;
 }
+// TODO
 export const PupilProfile = (props: PupilProfileProps) => {
   const {accountInfo} = props;
 

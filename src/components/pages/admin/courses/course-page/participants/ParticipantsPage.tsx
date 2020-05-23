@@ -11,7 +11,7 @@ import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
 import Tooltip from 'components/ui/Tooltip';
 import {renderDate} from 'definitions/helpers';
-import {useDeleteParticipant} from 'hooks/selectors';
+import {useDeleteParticipant} from 'modules/participants/participants.hooks';
 import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {CourseInfo, CourseParticipantInfo} from 'types/entities';

@@ -9,7 +9,7 @@ import {useCheckPermissions} from 'components/ConditionalRender';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
-import {useDeleteAccount} from 'hooks/selectors';
+import {useDeleteAccount} from 'modules/users/users.hooks';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {Link} from 'react-router-dom';

@@ -2,7 +2,7 @@ import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import {RevokeRelatedDataCallback} from 'components/ui/Form';
-import {useRevokeAccounts} from 'hooks/selectors';
+import {useRevokeAccounts} from 'modules/users/users.hooks';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {AccountsRoleReq, AddParticipantsReq} from 'types/dtos';

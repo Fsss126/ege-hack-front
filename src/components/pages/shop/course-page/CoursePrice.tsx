@@ -7,11 +7,11 @@ import {
   useLoadingState,
 } from 'components/ui/LoadingIndicator';
 import {renderPrice} from 'definitions/helpers';
-import {DiscountHookResult} from 'hooks/selectors';
+import {useDiscount} from 'modules/courses/courses.hooks';
 import React, {useCallback} from 'react';
 import {CourseInfo} from 'types/entities';
 
-interface CoursePriceProps extends DiscountHookResult {
+interface CoursePriceProps extends ReturnType<typeof useDiscount> {
   isSelected: boolean;
   onSelect: (course: CourseInfo) => void;
 }
@@ -27,7 +27,7 @@ const CoursePrice: React.FC<CoursePriceProps> = (props) => {
   } = props;
   const {course} = React.useContext(CourseOverviewContext);
   const {price: fullPrice, purchased} = course;
-  const {discounted_price: price, message} = discountInfo || {};
+  const {discounted_price: price} = discountInfo || {};
   const discount = price ? fullPrice - price : undefined;
 
   const loadingState = useLoadingState(isLoading, false, !!error);

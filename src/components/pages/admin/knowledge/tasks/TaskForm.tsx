@@ -14,7 +14,7 @@ import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {InputContainer} from 'components/ui/input/InputContainer';
 import {OptionShape} from 'components/ui/input/Select';
-import {useRevokeKnowledgeTask} from 'hooks/selectors';
+import {useRevokeKnowledgeTask} from 'modules/knowledge/knowledge.hooks';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {AnswerType, FileInfo, TaskDtoReq} from 'types/dtos';
 import {SubjectInfo, TaskInfo} from 'types/entities';

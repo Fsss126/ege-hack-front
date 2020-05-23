@@ -1,16 +1,19 @@
 import {useHandleErrors} from 'components/layout/Page';
 import * as Input from 'components/ui/input';
 import {TreeSelectProps} from 'components/ui/input/TreeSelect';
-import {useKnowledgeSubjectContent, useKnowledgeTask} from 'hooks/selectors';
-import {TreeNodeProps} from 'rc-tree/lib';
-import React, {useMemo} from 'react';
-import {TaskInfo, ThemeInfo} from 'types/entities';
+import {TreeEntityType} from 'modules/knowledge/knowledge.constants';
+import {
+  useKnowledgeSubjectContent,
+  useKnowledgeTask,
+} from 'modules/knowledge/knowledge.hooks';
 import {
   getSubjectNodeId,
   getTaskNodeId,
   getThemeNodeId,
-  TreeEntityType,
-} from 'types/knowledgeTree';
+} from 'modules/knowledge/knowledge.utils';
+import {TreeNodeProps} from 'rc-tree/lib';
+import React, {useMemo} from 'react';
+import {TaskInfo, ThemeInfo} from 'types/entities';
 
 import {
   mapThemesToNodes,

@@ -3,11 +3,9 @@ import CourseCatalog from 'components/common/CourseCatalog';
 import WebinarSchedule from 'components/common/WebinarSchedule';
 import Page, {PageContent} from 'components/layout/Page';
 import Button from 'components/ui/Button';
-import {
-  useSubjects,
-  useUpcomingWebinars,
-  useUserCourses,
-} from 'hooks/selectors';
+import {useUserCourses} from 'modules/courses/courses.hooks';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
+import {useUpcomingWebinars} from 'modules/webinars/webinars.hooks';
 import React from 'react';
 import {LearningStatus} from 'types/enums';
 import {RouteComponentPropsWithParentProps} from 'types/routes';

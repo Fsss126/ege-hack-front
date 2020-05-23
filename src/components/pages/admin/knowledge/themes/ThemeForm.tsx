@@ -10,7 +10,7 @@ import Form, {
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
 import {OptionShape} from 'components/ui/input/Select';
-import {useRevokeKnowledgeTheme} from 'hooks/selectors';
+import {useRevokeKnowledgeTheme} from 'modules/knowledge/knowledge.hooks';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {ThemeDtoReq} from 'types/dtos';
 import {SubjectInfo, ThemeInfo} from 'types/entities';

@@ -1,7 +1,7 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useAdminCourse} from 'hooks/selectors';
+import {useAdminCourse} from 'modules/courses/courses.hooks';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {TestDtoReq} from 'types/dtos';

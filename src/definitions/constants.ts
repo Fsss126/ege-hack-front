@@ -22,7 +22,7 @@ export enum TOGGLE_FEATURES {
 
 const FEATURE_TOGGLE_CONFIG: Record<TOGGLE_FEATURES, boolean> = {
   [TOGGLE_FEATURES.schedule]:
-    DEBUG_MODE || !!process.env.REACT_APP_ENABLE_SCHEDULE,
+    DEBUG_MODE || Boolean(Number(process.env.REACT_APP_ENABLE_SCHEDULE)),
 };
 
 export const getIsFeatureEnabled = (feature: TOGGLE_FEATURES) =>

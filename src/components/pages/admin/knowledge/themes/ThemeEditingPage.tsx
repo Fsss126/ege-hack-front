@@ -1,7 +1,8 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useKnowledgeTheme, useSubjects} from 'hooks/selectors';
+import {useKnowledgeTheme} from 'modules/knowledge/knowledge.hooks';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {ThemeDtoReq} from 'types/dtos';

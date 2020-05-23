@@ -62,7 +62,6 @@ const LessonView: React.FC<LessonViewProps> = (props) => {
           <HomeworkLoader
             homework={homework}
             deadline={assignment.deadline}
-            courseId={course_id}
             lessonId={id}
           />
           <div className="hw-result">

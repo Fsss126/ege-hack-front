@@ -8,7 +8,7 @@ import Form, {
 } from 'components/ui/Form';
 import FieldsContainer from 'components/ui/form/FieldsContainer';
 import * as Input from 'components/ui/input';
-import {useRevokeSubjects} from 'hooks/selectors';
+import {useRevokeSubjects} from 'modules/subjects/subjects.hooks';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {FileInfo, SubjectDtoReq} from 'types/dtos';
 import {SubjectInfo} from 'types/entities';

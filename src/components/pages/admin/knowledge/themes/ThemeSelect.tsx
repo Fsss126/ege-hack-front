@@ -5,11 +5,14 @@ import {
   useKnowledgeLevelFetch,
   useKnowledgeSubjectContent,
   useKnowledgeTheme,
-} from 'hooks/selectors';
+} from 'modules/knowledge/knowledge.hooks';
+import {
+  getSubjectNodeId,
+  getThemeNodeId,
+} from 'modules/knowledge/knowledge.utils';
 import {TreeNodeProps} from 'rc-tree/lib';
 import React, {useCallback, useMemo} from 'react';
 import {ThemeInfo} from 'types/entities';
-import {getSubjectNodeId, getThemeNodeId} from 'types/knowledgeTree';
 import {Deferred} from 'utils/promiseHelper';
 
 export type TreeNode = Require<SimpleDataNode<number, string>, 'rootPId'>;
@@ -46,7 +49,12 @@ export function useLoadThemeLevel() {
       const deferred = new Deferred();
       const {subjectId, themeId} = treeNode;
 
-      fetchThemes(subjectId, themeId, deferred.resolve, deferred.reject);
+      fetchThemes({
+        subjectId,
+        themeId,
+        onSuccess: deferred.resolve,
+        onError: deferred.reject,
+      });
 
       return deferred.promise;
     },

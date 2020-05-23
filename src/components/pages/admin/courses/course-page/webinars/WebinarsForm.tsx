@@ -13,7 +13,7 @@ import {
 } from 'components/ui/form/FormElementGroup';
 import * as Input from 'components/ui/input';
 import Tooltip from 'components/ui/Tooltip';
-import {useRevokeWebinars} from 'hooks/selectors';
+import {useRevokeWebinars} from 'modules/webinars/webinars.hooks';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {FileInfo, WebinarScheduleDtoReq} from 'types/dtos';
 import {WebinarScheduleInfo} from 'types/entities';

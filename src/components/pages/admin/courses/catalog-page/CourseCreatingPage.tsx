@@ -1,7 +1,8 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useSubjects, useUserTeachers} from 'hooks/selectors';
+import {useSubjects} from 'modules/subjects/subjects.hooks';
+import {useTeachers} from 'modules/teachers/teachers.hooks';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 import {CourseDtoReq} from 'types/dtos';
@@ -13,7 +14,7 @@ import CourseForm from './CourseForm';
 const createRequest = (requestData: CourseDtoReq): Promise<CourseInfo> =>
   APIRequest.post('/courses', requestData) as Promise<CourseInfo>;
 
-const returnLink = '/admin/';
+const returnLink = '/admin/courses/';
 
 const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
   const {location} = props;
@@ -26,7 +27,7 @@ const CourseCreatingPage: React.FC<RouteComponentProps> = (props) => {
     teachers,
     error: errorLoadingTeachers,
     reload: reloadTeachers,
-  } = useUserTeachers();
+  } = useTeachers();
 
   const onSubmitted = React.useCallback(
     (response, showSuccessMessage, reset) => {

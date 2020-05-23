@@ -3,18 +3,13 @@ import Catalog, {
   FilterFunc,
 } from 'components/common/Catalog';
 import Page, {PageContent, PageContentProps} from 'components/layout/Page';
-import {
-  HomeworksHookResult,
-  KnowledgeTestHookResult,
-  useTestResults,
-} from 'hooks/selectors';
+import {useTestResults} from 'modules/tests/tests.hooks';
 import React, {useCallback} from 'react';
-import {HomeworkInfo, LessonInfo, TestResultInfo} from 'types/entities';
+import {LessonInfo, TestInfo, TestResultInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {RouteComponentPropsWithParentProps, TestPageParams} from 'types/routes';
 import {SimpleCallback} from 'types/utility/common';
 
-import Homework from '../homeworks/Homework';
 import TestResult from './TestResult';
 
 const filterBy = {
@@ -39,7 +34,7 @@ const filter: FilterFunc<TestResultInfo> = (
 
 interface HomeworksPageProps
   extends RouteComponentPropsWithParentProps<TestPageParams> {
-  test: KnowledgeTestHookResult['test'];
+  test?: TestInfo | null | false;
   lesson?: LessonInfo;
   isLoaded: boolean;
   parentSection: PageContentProps['parentSection'];

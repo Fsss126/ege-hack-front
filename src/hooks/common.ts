@@ -1,4 +1,12 @@
-import React, {Ref, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {
+  Ref,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import {useHistory} from 'react-router-dom';
 import {SimpleCallback} from 'types/utility/common';
 
 export function useTruncate(text?: string): [Ref<any>, boolean] {
@@ -82,4 +90,14 @@ export function useToggle(
   }, []);
 
   return [isOn, toggleSideBar, toggle];
+}
+
+export function useRedirect(redirectUrl?: string) {
+  const history = useHistory();
+
+  return useCallback(() => {
+    if (redirectUrl) {
+      history.replace(redirectUrl);
+    }
+  }, [history, redirectUrl]);
 }

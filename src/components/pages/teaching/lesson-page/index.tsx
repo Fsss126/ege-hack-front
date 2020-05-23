@@ -1,11 +1,9 @@
 import TabNav, {TabNavBlock, TabNavLink} from 'components/common/TabNav';
 import {NotFoundErrorPage} from 'components/layout/ErrorPage';
-import {
-  useHomeworks,
-  useKnowledgeTest,
-  useLesson,
-  useTeacherCourse,
-} from 'hooks/selectors';
+import {useTeacherCourse} from 'modules/courses/courses.hooks';
+import {useHomeworks} from 'modules/homeworks/homeworks.hooks';
+import {useLesson} from 'modules/lessons/lessons.hooks';
+import {useTest} from 'modules/tests/tests.hooks';
 import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {
@@ -42,7 +40,8 @@ const LessonPage: React.FC<RouteComponentPropsWithParentProps<
     error: errorLoadingHomeworks,
     reload: reloadHomeworks,
   } = useHomeworks(lessonId);
-  const {test, error: errorLoadingTest, reload: reloadTest} = useKnowledgeTest(
+  const {test, error: errorLoadingTest, reload: reloadTest} = useTest(
+    courseId,
     lessonId,
   );
   const isLoaded = !!(lesson && homeworks && courseId && test !== undefined);

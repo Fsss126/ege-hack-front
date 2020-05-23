@@ -1,8 +1,8 @@
 import _ from 'lodash';
+import {getGradeByGraduationYear} from 'modules/user/user.utils';
 import {
   AccountDto,
   AccountDtoResp,
-  AnswerType,
   CommonTestStatusResp,
   CorrectAnswerDto,
   CourseDtoResp,
@@ -46,11 +46,9 @@ import {
   TestStateInfo,
   TestStatusInfo,
   UserAnswerInfo,
-  UserHomeworkInfo,
   VkUserInfo,
 } from 'types/entities';
 
-import {getGradeByGraduationYear} from '../modules/userInfo/userInfo.utils';
 import {API_ROOT} from './index';
 
 export const getVideoLink = (videoId: string) =>
@@ -219,8 +217,10 @@ const transformCommonTestStatus = <T extends CommonTestStatusResp>(status: T) =>
     passed: getIsTestPassed(status.status),
     percentage:
       status.percentage !== undefined
-        ? status.percentage.toFixed(2)
+        ? Math.round(status.percentage)
         : undefined,
+    progress:
+      status.progress !== undefined ? Math.round(status.progress) : undefined,
     completed_at: status.completed_at
       ? new Date(status.completed_at)
       : undefined,

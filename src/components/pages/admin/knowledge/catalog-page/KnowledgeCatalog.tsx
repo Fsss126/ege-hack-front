@@ -6,17 +6,18 @@ import DropdownMenu, {
 import TreeCatalog, {CatalogTreeNode} from 'components/common/TreeCatalog';
 import {useCheckPermissions} from 'components/ConditionalRender';
 import {
-  DeleteKnowledgeTaskHookResult,
-  DeleteKnowledgeThemeHookResult,
+  KnowledgeTreeEntity,
+  TreeEntityType,
+} from 'modules/knowledge/knowledge.constants';
+import {
   useDeleteKnowledgeTask,
   useDeleteKnowledgeTheme,
   useKnowLedgeTree,
-} from 'hooks/selectors';
+} from 'modules/knowledge/knowledge.hooks';
 import React, {useCallback, useMemo} from 'react';
 import {Link} from 'react-router-dom';
 import {SubjectInfo} from 'types/entities';
 import {Permission} from 'types/enums';
-import {KnowledgeTreeEntity, TreeEntityType} from 'types/knowledgeTree';
 
 import {renderIcon} from '../tests/TaskSelect';
 import {useLoadThemeLevel} from '../themes/ThemeSelect';
@@ -34,8 +35,8 @@ interface TreeElementContentProps {
   url: string;
   filtered?: boolean;
   canEdit?: boolean;
-  onDeleteTheme: DeleteKnowledgeThemeHookResult;
-  onDeleteTask: DeleteKnowledgeTaskHookResult;
+  onDeleteTheme: ReturnType<typeof useDeleteKnowledgeTheme>;
+  onDeleteTask: ReturnType<typeof useDeleteKnowledgeTask>;
 }
 const TreeElementContent = (props: TreeElementContentProps) => {
   const {entity, url: root, canEdit, onDeleteTask, onDeleteTheme} = props;

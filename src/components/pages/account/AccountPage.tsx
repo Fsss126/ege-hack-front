@@ -1,10 +1,10 @@
 import UserProfile from 'components/common/UserProfile';
 import Page, {PageContent} from 'components/layout/Page';
-import {useUserInfo} from 'hooks/selectors';
+import {useUserInfo} from 'modules/user/user.hooks';
 import {
   isPupilAccountInfo,
   isTeacherAccountInfo,
-} from 'modules/userInfo/userInfo.utils';
+} from 'modules/user/user.utils';
 import React from 'react';
 import {RouteComponentProps} from 'react-router';
 

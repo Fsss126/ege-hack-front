@@ -272,8 +272,8 @@ const transformError = (error: AxiosError) => {
   }
   if (error.response && error.response.status === 404) {
     switch (true) {
-      case /\/knowledge\/tests/.test(url.pathname):
-      case /\/knowledge\/tests\/status/.test(url.pathname):
+      case /\/knowledge\/tests$/.test(url.pathname):
+      case /\/knowledge\/tests\/status$/.test(url.pathname):
       case /\/lessons\/(\w*)\/homeworks\/pupil$/.test(url.pathname):
         return null;
       case /\/courses\/\w*\/schedule$/.test(url.pathname):

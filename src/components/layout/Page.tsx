@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import {useCredentials, useUserInfo} from 'hooks/selectors';
+import {useCredentials, useUserInfo} from 'modules/user/user.hooks';
 import {SnackbarKey, useSnackbar} from 'notistack';
 import React, {useEffect, useRef, useState} from 'react';
 import {Helmet} from 'react-helmet';
