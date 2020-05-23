@@ -1,6 +1,6 @@
 import {AxiosError} from 'axios';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import {useRedirect} from 'hooks/selectors';
+import {useRedirect} from 'hooks/common';
 import _ from 'lodash';
 import {
   knowledgeLevelFetch,

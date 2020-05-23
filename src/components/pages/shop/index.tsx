@@ -1,5 +1,5 @@
 import {useToggle} from 'hooks/common';
-import {useDiscount} from 'hooks/selectors';
+import {useDiscount} from 'modules/courses/courses.hooks';
 import React, {Fragment, useCallback, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {Route, Switch} from 'react-router-dom';

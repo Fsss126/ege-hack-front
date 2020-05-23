@@ -1,8 +1,7 @@
 import CourseOverview from 'components/common/CourseOverview';
 import Lesson from 'components/common/Lesson';
 import {PageContent} from 'components/layout/Page';
-import {useDiscount} from 'hooks/selectors';
-import {useShopCourse} from 'modules/courses/courses.hooks';
+import {useDiscount, useShopCourse} from 'modules/courses/courses.hooks';
 import {useLessons} from 'modules/lessons/lessons.hooks';
 import {useTeachers} from 'modules/teachers/teachers.hooks';
 import React, {useCallback} from 'react';

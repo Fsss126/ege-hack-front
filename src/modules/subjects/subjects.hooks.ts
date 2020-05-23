@@ -1,4 +1,4 @@
-import {useRedirect} from 'hooks/selectors';
+import {useRedirect} from 'hooks/common';
 import _ from 'lodash';
 import {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';

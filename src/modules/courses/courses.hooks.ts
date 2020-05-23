@@ -1,9 +1,12 @@
+import APIRequest, {getCancelToken} from 'api';
+import {Canceler} from 'axios';
 import {useCheckPermissions} from 'components/ConditionalRender';
-import {useRedirect} from 'hooks/selectors';
+import {useRedirect} from 'hooks/common';
 import _ from 'lodash';
-import {useCallback, useEffect} from 'react';
+import {useCredentials} from 'modules/user/user.hooks';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {CourseInfo} from 'types/entities';
+import {CourseInfo, DiscountInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 
 import {
@@ -48,6 +51,61 @@ export function useShopCourse(courseId: number) {
     error: catalog && !course ? true : error,
     reload,
   } as const;
+}
+
+export function useDiscount(selectedCourses: Set<CourseInfo> | number) {
+  const {credentials} = useCredentials();
+  const [discount, setDiscount] = React.useState<DiscountInfo>();
+  const [error, setError] = React.useState();
+  const [isLoading, setLoading] = React.useState(true);
+  const cancelRef = useRef<Canceler>();
+  const fetchDiscount = useCallback(async () => {
+    const courses =
+      selectedCourses instanceof Set
+        ? [...selectedCourses].map(({id}) => id)
+        : [selectedCourses];
+
+    if (courses.length === 0) {
+      return;
+    }
+    const cancelPrev = cancelRef.current;
+
+    if (cancelPrev) {
+      cancelPrev();
+    }
+    const {token: cancelToken, cancel} = getCancelToken();
+    cancelRef.current = cancel;
+    try {
+      if (error) {
+        setError(undefined);
+      }
+      // setDiscount(null);
+      setLoading(true);
+      const discount: DiscountInfo = await APIRequest.get(
+        '/payments/discounts',
+        {
+          params: {
+            coursesIds: courses,
+          },
+          cancelToken,
+        },
+      );
+      setDiscount(discount);
+    } catch (e) {
+      console.error('Error loading discount', e);
+      setError(e);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedCourses, error]);
+
+  React.useEffect(() => {
+    if (credentials && !error) {
+      fetchDiscount();
+    }
+  }, [credentials, selectedCourses, error, fetchDiscount]);
+
+  return {discount, error, reload: fetchDiscount, isLoading} as const;
 }
 
 export function useUserCourses() {

@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import {
+  KNOWLEDGE_TREE_ROOT,
   KnowledgeBaseSubject,
   KnowledgeTreeEntity,
   SubjectTreeEntity,
@@ -6,11 +8,11 @@ import {
   ThemeTreeEntity,
   TreeEntityType,
 } from 'modules/knowledge/knowledge.constants';
-import {DataState} from 'modules/knowledge/knowledge.reducers';
 import {DataProperty} from 'store/reducers/types';
 import {SubjectInfo, TaskInfo, ThemeInfo} from 'types/entities';
 
-type KnowledgeMap = DataState['knowledgeMap'];
+export const getParentLevelKey = (themeId?: number) =>
+  themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
 
 export const getSubjectNodeId = (id: number) => `0.subject.${id}`;
 

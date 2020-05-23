@@ -1,5 +1,5 @@
 import {useCheckPermissions} from 'components/ConditionalRender';
-import {useRedirect} from 'hooks/selectors';
+import {useRedirect} from 'hooks/common';
 import {
   adminWebinarsFetch,
   upcomingWebinarsFetch,

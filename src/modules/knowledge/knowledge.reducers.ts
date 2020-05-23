@@ -1,24 +1,18 @@
 import _ from 'lodash';
 import {
   EKnowledgeAction,
-  KNOWLEDGE_TREE_ROOT,
   KnowledgeBaseSubject,
 } from 'modules/knowledge/knowledge.constants';
+import {getParentLevelKey} from 'modules/knowledge/knowledge.utils';
 import {Reducer} from 'redux';
 import {Action} from 'store/actions';
 import {DataProperty} from 'store/reducers/types';
 import {TaskInfo, ThemeInfo} from 'types/entities';
 
 export interface DataState {
-  themes: {
-    [themeId: number]: DataProperty<ThemeInfo>;
-  };
-  tasks: {
-    [taskId: number]: DataProperty<TaskInfo>;
-  };
-  knowledgeMap: {
-    [subjectId: number]: Maybe<KnowledgeBaseSubject>;
-  };
+  themes: Dictionary<DataProperty<ThemeInfo>, number>;
+  tasks: Dictionary<DataProperty<TaskInfo>>;
+  knowledgeMap: Dictionary<KnowledgeBaseSubject>;
 }
 
 const defaultState: DataState = {
@@ -34,7 +28,7 @@ export const knowledgeReducer: Reducer<DataState, Action> = (
   switch (action.type) {
     case EKnowledgeAction.KNOWLEDGE_LEVEL_FETCHED: {
       const {subjectId, themeId, data: content} = action.payload;
-      const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
+      const themeKey = getParentLevelKey(themeId);
 
       let stateUpdate: Partial<DataState>;
 
@@ -85,8 +79,7 @@ export const knowledgeReducer: Reducer<DataState, Action> = (
       const {data: responseTheme} = action.payload;
       const {subject_id, id, parent_theme_id} = responseTheme;
 
-      const themeKey =
-        parent_theme_id !== undefined ? parent_theme_id : KNOWLEDGE_TREE_ROOT;
+      const themeKey = getParentLevelKey(parent_theme_id);
       const containingLevel = state.knowledgeMap[subject_id]?.[themeKey];
       const updatedLevel =
         containingLevel instanceof Error
@@ -133,8 +126,7 @@ export const knowledgeReducer: Reducer<DataState, Action> = (
     case EKnowledgeAction.KNOWLEDGE_THEME_DELETE: {
       const {subjectId, themeId, parentThemeId} = action.payload;
 
-      const themeKey =
-        parentThemeId !== undefined ? parentThemeId : KNOWLEDGE_TREE_ROOT;
+      const themeKey = getParentLevelKey(parentThemeId);
       const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];
       const updatedLevel =
         !containingLevel || containingLevel instanceof Error
@@ -187,7 +179,7 @@ export const knowledgeReducer: Reducer<DataState, Action> = (
       const {data: responseTask} = action.payload;
       const {subject_id, id, theme_id} = responseTask;
 
-      const themeKey = theme_id !== undefined ? theme_id : KNOWLEDGE_TREE_ROOT;
+      const themeKey = getParentLevelKey(theme_id);
       const containingLevel = state.knowledgeMap[subject_id]?.[themeKey];
       const updatedLevel =
         containingLevel instanceof Error
@@ -235,7 +227,7 @@ export const knowledgeReducer: Reducer<DataState, Action> = (
     case EKnowledgeAction.KNOWLEDGE_TASK_DELETE: {
       const {subjectId, themeId, taskId} = action.payload;
 
-      const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
+      const themeKey = getParentLevelKey(themeId);
       const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];
       const updatedLevel =
         !containingLevel || containingLevel instanceof Error
