@@ -1,8 +1,8 @@
 import APIRequest from 'api';
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent} from 'components/layout/Page';
-import {useKnowledgeTest} from 'hooks/selectors';
 import {useAdminCourse} from 'modules/courses/courses.hooks';
+import {useTest} from 'modules/tests/tests.hooks';
 import React, {useCallback} from 'react';
 import {RouteComponentProps} from 'react-router';
 import {TestDtoReq} from 'types/dtos';
@@ -29,7 +29,8 @@ const TestEditingPage: React.FC<RouteComponentProps<LessonPageParams>> = (
     error: errorLoadingCourse,
     reload: reloadCourse,
   } = useAdminCourse(courseId);
-  const {test, error: errorLoadingTest, reload: reloadTest} = useKnowledgeTest(
+  const {test, error: errorLoadingTest, reload: reloadTest} = useTest(
+    courseId,
     lessonId,
   );
 

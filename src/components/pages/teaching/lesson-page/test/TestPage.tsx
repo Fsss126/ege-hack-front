@@ -1,9 +1,8 @@
 import {ContentBlock} from 'components/layout/ContentBlock';
 import Page, {PageContent, PageContentProps} from 'components/layout/Page';
 import {renderDate} from 'definitions/helpers';
-import {KnowledgeTestHookResult} from 'hooks/selectors';
 import React from 'react';
-import {LessonInfo} from 'types/entities';
+import {LessonInfo, TestInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 import {
   LessonPageParams,
@@ -14,7 +13,7 @@ import {SimpleCallback} from 'types/utility/common';
 interface AssignmentPageProps
   extends RouteComponentPropsWithParentProps<LessonPageParams> {
   lesson?: LessonInfo;
-  test: KnowledgeTestHookResult['test'];
+  test?: TestInfo | null | false;
   isLoaded: boolean;
   parentSection: PageContentProps['parentSection'];
   children: React.ReactNode;

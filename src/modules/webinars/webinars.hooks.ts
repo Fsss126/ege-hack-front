@@ -3,6 +3,8 @@ import {useRedirect} from 'hooks/selectors';
 import {
   adminWebinarsFetch,
   upcomingWebinarsFetch,
+  WebinarDeleteCallback,
+  WebinarDeleteErrorCallback,
   webinarDeleteRequest,
   webinarsFetch,
   webinarsRevoke,
@@ -14,7 +16,6 @@ import {
 } from 'modules/webinars/webinars.selectors';
 import {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {WebinarDeleteCallback, WebinarDeleteErrorCallback} from 'store/actions';
 import {WebinarScheduleInfo} from 'types/entities';
 import {Permission} from 'types/enums';
 

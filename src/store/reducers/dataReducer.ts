@@ -1,7 +1,7 @@
 import {AxiosError} from 'axios';
 import _ from 'lodash';
 import {Reducer} from 'redux';
-import {TaskInfo, TestInfo, TestResultInfo, ThemeInfo} from 'types/entities';
+import {TaskInfo, TestResultInfo, ThemeInfo} from 'types/entities';
 import {KNOWLEDGE_TREE_ROOT, KnowledgeTreeLevel} from 'types/knowledgeTree';
 
 import {Action, ActionType} from '../actions';
@@ -27,14 +27,8 @@ export interface DataState {
   knowledgeMap: {
     [subjectId: number]: Maybe<KnowledgeBaseSubject>;
   };
-  tests: {
-    [testId: number]: TestInfo;
-  };
   testResults: {
     [testId: number]: DataProperty<TestResultInfo[]>;
-  };
-  lessonsTests: {
-    [lessonId: number]: DataProperty<number | null>;
   };
 }
 
@@ -42,8 +36,6 @@ const defaultState: DataState = {
   themes: {},
   tasks: {},
   knowledgeMap: {},
-  tests: {},
-  lessonsTests: {},
   testResults: {},
 };
 
@@ -293,67 +285,6 @@ export const dataReducer: Reducer<DataState, Action> = (
             ...(state.knowledgeMap[subjectId] || {}),
             ...(updatedLevel ? {[themeKey]: updatedLevel} : {}),
           },
-        },
-      };
-    }
-    case ActionType.KNOWLEDGE_TEST_FETCHED: {
-      const {lessonId, test} = action;
-
-      if (test instanceof Error || test === null) {
-        return {
-          ...state,
-          lessonsTests: {
-            ...state.lessonsTests,
-            [lessonId]: test,
-          },
-        };
-      } else {
-        return {
-          ...state,
-          tests: {
-            ...state.tests,
-            [test.id]: test,
-          },
-          lessonsTests: {
-            ...state.lessonsTests,
-            [lessonId]: test.id,
-          },
-        };
-      }
-    }
-    case ActionType.KNOWLEDGE_TEST_REVOKE: {
-      const {lessonId, responseTest} = action;
-
-      const tests = {...state.tests, [responseTest.id]: responseTest};
-
-      return {
-        ...state,
-        tests,
-        lessonsTests: {
-          ...state.lessonsTests,
-          [lessonId]: responseTest.id,
-        },
-      };
-    }
-    case ActionType.KNOWLEDGE_TEST_DELETE: {
-      const {lessonId, testId} = action;
-
-      const {[testId]: removedTest, ...tests} = state.tests;
-
-      return {
-        ...state,
-        lessonsTests: {...state.lessonsTests, [lessonId]: null},
-        tests,
-      };
-    }
-    case ActionType.TEST_RESULTS_FETCHED: {
-      const {testId, results} = action;
-
-      return {
-        ...state,
-        testResults: {
-          ...state.testResults,
-          [testId]: results,
         },
       };
     }

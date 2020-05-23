@@ -14,8 +14,8 @@ import ConditionalRenderer, {
 import {ButtonsBlock} from 'components/layout/ButtonsBlock';
 import Page, {PageContent, PageParentSection} from 'components/layout/Page';
 import Button from 'components/ui/Button';
-import {useDeleteKnowledgeTest} from 'hooks/selectors';
 import {useDeleteLesson} from 'modules/lessons/lessons.hooks';
+import {useDeleteTest} from 'modules/tests/tests.hooks';
 import React, {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import {CourseInfo, LessonInfo} from 'types/entities';
@@ -82,7 +82,7 @@ const LessonsPage: React.FC<LessonsPageProps> = (props) => {
   const canEdit = useCheckPermissions(Permission.LESSON_EDIT);
 
   const onDeleteLesson = useDeleteLesson();
-  const onDeleteTest = useDeleteKnowledgeTest();
+  const onDeleteTest = useDeleteTest();
 
   const courseLink = `/admin/courses/${courseId}`;
 

@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import {ETestsAction} from 'modules/tests/tests.constants';
 import {combineReducers, Reducer} from 'redux';
-import {Action, ActionType} from 'store/actions';
+import {Action} from 'store/actions';
 import {DataProperty} from 'store/reducers/types';
 import {LessonInfo} from 'types/entities';
 
@@ -51,8 +52,8 @@ const lessons: Reducer<Dictionary<DataProperty<LessonInfo[]>>, Action> = (
         [courseId]: courseLessons.filter(({id}) => id !== lessonId),
       };
     }
-    case ActionType.KNOWLEDGE_TEST_REVOKE: {
-      const {lessonId, courseId, responseTest} = action;
+    case ETestsAction.TEST_REVOKE: {
+      const {lessonId, courseId, data} = action.payload;
       const {[courseId]: courseLessons, ...loadedLessons} = state;
 
       if (!courseLessons || courseLessons instanceof Error) {
@@ -64,13 +65,13 @@ const lessons: Reducer<Dictionary<DataProperty<LessonInfo[]>>, Action> = (
 
       if (lessonIndex !== -1) {
         const prevLesson = courseLessons[lessonIndex];
-        newLessons[lessonIndex] = {...prevLesson, test_id: responseTest.id};
+        newLessons[lessonIndex] = {...prevLesson, test_id: data.id};
       }
 
       return {...loadedLessons, [courseId]: newLessons};
     }
-    case ActionType.KNOWLEDGE_TEST_DELETE: {
-      const {courseId, lessonId} = action;
+    case ETestsAction.TEST_DELETE: {
+      const {courseId, lessonId} = action.payload;
       const {[courseId]: courseLessons, ...loadedLessons} = state;
 
       if (!courseLessons || courseLessons instanceof Error) {

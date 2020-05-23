@@ -7,17 +7,12 @@ import {participantsSaga} from 'modules/participants/participants.sagas';
 import {subjectsSaga} from 'modules/subjects/subjects.sagas';
 import {teachersSaga} from 'modules/teachers/teachers.sagas';
 import {testingSaga} from 'modules/testing/testing.sagas';
+import {testsSaga} from 'modules/tests/tests.sagas';
 import {userSaga} from 'modules/user/user.sagas';
 import {usersSaga} from 'modules/users/users.sagas';
 import {webinarsSaga} from 'modules/webinars/webinars.sagas';
 import {call, fork, put, spawn, takeLeading} from 'redux-saga/effects';
-import {
-  KnowledgeLevelInfo,
-  TaskInfo,
-  TestInfo,
-  TestResultInfo,
-  ThemeInfo,
-} from 'types/entities';
+import {KnowledgeLevelInfo, TaskInfo, ThemeInfo} from 'types/entities';
 import {takeLeadingPerKey} from 'utils/sagaHelpers';
 
 import {
@@ -25,43 +20,10 @@ import {
   KnowledgeLevelFetchAction,
   KnowledgeTaskDeleteRequestAction,
   KnowledgeTaskFetchAction,
-  KnowledgeTestDeleteRequestAction,
-  KnowledgeTestFetchAction,
   KnowledgeThemeDeleteRequestAction,
   KnowledgeThemeFetchAction,
-  TestResultsFetchAction,
 } from './actions';
 import {waitForLogin} from './sagas/watchers';
-
-function* fetchTestResults() {
-  yield* waitForLogin<TestResultsFetchAction>(
-    ActionType.TEST_RESULTS_FETCH,
-    function* (channel) {
-      yield takeLeading(channel, function* (action: TestResultsFetchAction) {
-        const {testId, lessonId} = action;
-        try {
-          const results: TestResultInfo[] = yield call(
-            APIRequest.get,
-            `/knowledge/tests/${testId}/results`,
-          );
-          yield put({
-            type: ActionType.TEST_RESULTS_FETCHED,
-            results,
-            testId,
-            lessonId,
-          });
-        } catch (error) {
-          yield put({
-            type: ActionType.TEST_RESULTS_FETCHED,
-            results: error,
-            testId,
-            lessonId,
-          });
-        }
-      });
-    },
-  );
-}
 
 // TODO: move check into saga
 function* fetchKnowledgeLevel() {
@@ -178,43 +140,6 @@ function* fetchKnowledgeTask() {
   );
 }
 
-function* fetchKnowledgeTest() {
-  yield* waitForLogin<KnowledgeTestFetchAction>(
-    ActionType.KNOWLEDGE_TEST_FETCH,
-    function* (channel) {
-      yield takeLeadingPerKey(
-        channel,
-        function* (action: KnowledgeTestFetchAction) {
-          const {lessonId} = action;
-          try {
-            const test: TestInfo = yield call(
-              APIRequest.get,
-              `/knowledge/tests`,
-              {
-                params: {
-                  lessonId,
-                },
-              },
-            );
-            yield put({
-              type: ActionType.KNOWLEDGE_TEST_FETCHED,
-              test,
-              lessonId,
-            });
-          } catch (error) {
-            yield put({
-              type: ActionType.KNOWLEDGE_TEST_FETCHED,
-              test: error,
-              lessonId,
-            });
-          }
-        },
-        (action) => action.lessonId,
-      );
-    },
-  );
-}
-
 function* processThemeDelete() {
   yield takeLeadingPerKey(
     ActionType.KNOWLEDGE_THEME_DELETE_REQUEST,
@@ -267,32 +192,6 @@ function* processTaskDelete() {
   );
 }
 
-function* processTestDelete() {
-  yield takeLeadingPerKey(
-    ActionType.KNOWLEDGE_TEST_DELETE_REQUEST,
-    function* (action: KnowledgeTestDeleteRequestAction) {
-      const {courseId, lessonId, testId, onDelete, onError} = action;
-      try {
-        yield call(APIRequest.delete, `/knowledge/tests/${testId}`);
-        if (onDelete) {
-          yield call(onDelete, courseId, lessonId, testId);
-        }
-        yield put({
-          type: ActionType.KNOWLEDGE_TEST_DELETE,
-          courseId,
-          lessonId,
-          testId,
-        });
-      } catch (error) {
-        if (onError) {
-          yield call(onError, courseId, lessonId, testId, error);
-        }
-      }
-    },
-    (action) => action.testId,
-  );
-}
-
 export default function* rootSaga() {
   yield fork(userSaga);
   yield fork(subjectsSaga);
@@ -304,14 +203,11 @@ export default function* rootSaga() {
   yield fork(homeworksSaga);
   yield fork(webinarsSaga);
   yield fork(participantsSaga);
+  yield fork(testsSaga);
 
-  yield spawn(fetchTestResults);
   yield spawn(fetchKnowledgeLevel);
   yield spawn(fetchKnowledgeTheme);
   yield spawn(fetchKnowledgeTask);
-  yield spawn(fetchKnowledgeTest);
-
   yield spawn(processThemeDelete);
   yield spawn(processTaskDelete);
-  yield spawn(processTestDelete);
 }

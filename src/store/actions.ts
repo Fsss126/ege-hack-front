@@ -1,12 +1,5 @@
 import {AxiosError} from 'axios';
-import {
-  CourseParticipantInfo,
-  KnowledgeLevelInfo,
-  TaskInfo,
-  TestInfo,
-  TestResultInfo,
-  ThemeInfo,
-} from 'types/entities';
+import {KnowledgeLevelInfo, TaskInfo, ThemeInfo} from 'types/entities';
 
 export type UserAction = TypedAction<
   typeof import('modules/user/user.actions')
@@ -48,9 +41,11 @@ export type ParticipantsAction = TypedAction<
   typeof import('modules/participants/participants.actions')
 >;
 
+export type TestsAction = TypedAction<
+  typeof import('modules/tests/tests.actions')
+>;
+
 export enum ActionType {
-  TEST_RESULTS_FETCH = 'TEST_RESULTS_FETCH',
-  TEST_RESULTS_FETCHED = 'TEST_RESULTS_FETCHED',
   KNOWLEDGE_LEVEL_FETCH = 'KNOWLEDGE_LEVEL_FETCH',
   KNOWLEDGE_LEVEL_FETCHED = 'KNOWLEDGE_LEVEL_FETCHED',
   KNOWLEDGE_THEME_FETCH = 'KNOWLEDGE_THEME_FETCH',
@@ -63,36 +58,7 @@ export enum ActionType {
   KNOWLEDGE_TASK_REVOKE = 'KNOWLEDGE_TASK_REVOKE',
   KNOWLEDGE_TASK_DELETE_REQUEST = 'KNOWLEDGE_TASK_DELETE_REQUEST',
   KNOWLEDGE_TASK_DELETE = 'KNOWLEDGE_TASK_DELETE',
-  KNOWLEDGE_TEST_FETCH = 'KNOWLEDGE_TEST_FETCH',
-  KNOWLEDGE_TEST_FETCHED = 'KNOWLEDGE_TEST_FETCHED',
-  KNOWLEDGE_TEST_REVOKE = 'KNOWLEDGE_TEST_REVOKE',
-  KNOWLEDGE_TEST_DELETE_REQUEST = 'KNOWLEDGE_TEST_DELETE_REQUEST',
-  KNOWLEDGE_TEST_DELETE = 'KNOWLEDGE_TEST_DELETE',
 }
-
-export type WebinarDeleteCallback = (
-  courseId: number,
-  webinarId: number,
-) => void;
-
-export type WebinarDeleteErrorCallback = (
-  courseId: number,
-  webinarId: number,
-  error: AxiosError,
-) => void;
-
-export type TestResultsFetchAction = {
-  type: ActionType.TEST_RESULTS_FETCH;
-  testId: number;
-  lessonId: number;
-};
-
-export type TestResultsFetchedAction = {
-  type: ActionType.TEST_RESULTS_FETCHED;
-  testId: number;
-  lessonId: number;
-  results: TestResultInfo[] | AxiosError;
-};
 
 export type KnowledgeLevelFetchCallback = (
   subjectId: number,
@@ -215,53 +181,6 @@ export type KnowledgeTaskDeleteAction = {
   themeId?: number;
 };
 
-export type KnowledgeTestFetchAction = {
-  type: ActionType.KNOWLEDGE_TEST_FETCH;
-  lessonId: number;
-};
-
-export type KnowledgeTestFetchedAction = {
-  type: ActionType.KNOWLEDGE_TEST_FETCHED;
-  lessonId: number;
-  test: TestInfo | null | AxiosError;
-};
-
-export type KnowledgeTestRevokeAction = {
-  type: ActionType.KNOWLEDGE_TEST_REVOKE;
-  courseId: number;
-  lessonId: number;
-  responseTest: TestInfo;
-};
-
-export type KnowledgeTestDeleteCallback = (
-  courseId: number,
-  lessonId: number,
-  testId: number,
-) => void;
-
-export type KnowledgeTestDeleteErrorCallback = (
-  courseId: number,
-  lessonId: number,
-  testId: number,
-  error: AxiosError,
-) => void;
-
-export type KnowledgeTestDeleteRequestAction = {
-  type: ActionType.KNOWLEDGE_TEST_DELETE_REQUEST;
-  courseId: number;
-  lessonId: number;
-  testId: number;
-  onDelete?: KnowledgeTestDeleteCallback;
-  onError?: KnowledgeTestDeleteErrorCallback;
-};
-
-export type KnowledgeTestDeleteAction = {
-  type: ActionType.KNOWLEDGE_TEST_DELETE;
-  courseId: number;
-  lessonId: number;
-  testId: number;
-};
-
 export type Action =
   | UserAction
   | SubjectsAction
@@ -273,8 +192,7 @@ export type Action =
   | HomeworksAction
   | WebinarsAction
   | ParticipantsAction
-  | TestResultsFetchAction
-  | TestResultsFetchedAction
+  | TestsAction
   | KnowledgeLevelFetchAction
   | KnowledgeLevelFetchedAction
   | KnowledgeThemeFetchAction
@@ -286,9 +204,4 @@ export type Action =
   | KnowledgeTaskFetchedAction
   | KnowledgeTaskRevokeAction
   | KnowledgeTaskDeleteRequestAction
-  | KnowledgeTaskDeleteAction
-  | KnowledgeTestFetchAction
-  | KnowledgeTestFetchedAction
-  | KnowledgeTestRevokeAction
-  | KnowledgeTestDeleteRequestAction
-  | KnowledgeTestDeleteAction;
+  | KnowledgeTaskDeleteAction;

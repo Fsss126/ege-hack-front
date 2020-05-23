@@ -1,5 +1,5 @@
+import {AxiosError} from 'axios';
 import {EWebinarssAction} from 'modules/webinars/webinars.constants';
-import {WebinarDeleteCallback, WebinarDeleteErrorCallback} from 'store/actions';
 import {
   dataActionCreator,
   fetchActionCreator,
@@ -12,6 +12,17 @@ import {PersonWebinar, WebinarScheduleInfo} from 'types/entities';
 export type WebinarsFetchPayload = {
   courseId: number;
 };
+
+export type WebinarDeleteCallback = (
+  courseId: number,
+  webinarId: number,
+) => void;
+
+export type WebinarDeleteErrorCallback = (
+  courseId: number,
+  webinarId: number,
+  error: AxiosError,
+) => void;
 
 export type WebinarDeleteRequestPayload = {
   courseId: number;

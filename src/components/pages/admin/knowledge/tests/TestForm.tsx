@@ -13,7 +13,7 @@ import {
   FormElementGroup,
 } from 'components/ui/form/FormElementGroup';
 import * as Input from 'components/ui/input';
-import {useRevokeKnowledgeTest} from 'hooks/selectors';
+import {useRevokeTest} from 'modules/tests/tests.hooks';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {TestDtoReq} from 'types/dtos';
 import {TestInfo} from 'types/entities';
@@ -150,7 +150,7 @@ const TestForm: React.FC<TestFormProps> = (props) => {
 
   const {name, pass_criteria, deadline, tasks} = formData;
 
-  const revokeTest = useRevokeKnowledgeTest(courseId, lessonId);
+  const revokeTest = useRevokeTest(courseId, lessonId);
 
   const onSubmit = useCallback<
     FormSubmitHandler<[undefined], Promise<TestInfo>>

@@ -12,8 +12,6 @@ import {
   KnowledgeLevelFetchErrorCallback,
   KnowledgeTaskDeleteCallback,
   KnowledgeTaskDeleteErrorCallback,
-  KnowledgeTestDeleteCallback,
-  KnowledgeTestDeleteErrorCallback,
   KnowledgeThemeDeleteCallback,
   KnowledgeThemeDeleteErrorCallback,
 } from 'store/actions';
@@ -21,20 +19,14 @@ import {DataProperty, KnowledgeBaseSubject} from 'store/reducers/dataReducer';
 import {
   selectKnowledgeMap,
   selectKnowledgeTasks,
-  selectKnowledgeTests,
   selectKnowledgeThemes,
-  selectLessonTests,
-  selectTestResults,
 } from 'store/selectors';
 import {
   CourseInfo,
-  CourseParticipantInfo,
   DiscountInfo,
   KnowledgeLevelInfo,
   SubjectInfo,
   TaskInfo,
-  TestInfo,
-  TestResultInfo,
   ThemeInfo,
 } from 'types/entities';
 import {Permission} from 'types/enums';
@@ -121,35 +113,6 @@ export function useRedirect(redirectUrl?: string): RedirectHookResult {
       history.replace(redirectUrl);
     }
   }, [history, redirectUrl]);
-}
-
-export type TestResultsHookResult = {
-  results?: TestResultInfo[] | false;
-  error?: AxiosError;
-  reload?: SimpleCallback;
-};
-
-export function useTestResults(
-  lessonId: number,
-  testId: number,
-): TestResultsHookResult {
-  const isAllowed = useCheckPermissions(Permission.TEST_CHECK);
-  const results = useSelector(selectTestResults)[testId];
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.TEST_RESULTS_FETCH, lessonId, testId});
-  }, [dispatch, lessonId, testId]);
-  useEffect(() => {
-    if (isAllowed) {
-      if (!results) {
-        dispatchFetchAction();
-      }
-    }
-  }, [dispatchFetchAction, isAllowed, results]);
-
-  return results instanceof Error
-    ? {error: results, reload: dispatchFetchAction}
-    : {results: !isAllowed ? false : results, reload: dispatchFetchAction};
 }
 
 export type KnowledgeLevelFetchHookResult = (
@@ -562,100 +525,6 @@ export function useDeleteKnowledgeTask(
         subjectId,
         taskId,
         themeId,
-        onDelete: deleteCallback,
-        onError,
-      });
-    },
-    [dispatch, deleteCallback, onError],
-  );
-}
-
-export type KnowledgeTestHookResult = {
-  test?: TestInfo | null | false;
-  error?: AxiosError;
-  reload: SimpleCallback;
-};
-
-export function useKnowledgeTest(lessonId: number): KnowledgeTestHookResult {
-  const isAllowed = useCheckPermissions(Permission.KNOWLEDGE_CONTENT_EDIT);
-  const testId = useSelector(selectLessonTests)[lessonId];
-  const tests = useSelector(selectKnowledgeTests);
-  const dispatch = useDispatch();
-  const dispatchFetchAction = useCallback(() => {
-    dispatch({type: ActionType.KNOWLEDGE_TEST_FETCH, lessonId});
-  }, [dispatch, lessonId]);
-  useEffect(() => {
-    if (isAllowed) {
-      if (testId === undefined) {
-        dispatchFetchAction();
-      }
-    }
-  }, [dispatchFetchAction, isAllowed, lessonId, testId]);
-
-  return testId instanceof Error
-    ? {error: testId, reload: dispatchFetchAction}
-    : {
-        test: !isAllowed
-          ? false
-          : testId === null || testId === undefined
-          ? testId
-          : tests[testId],
-        reload: dispatchFetchAction,
-      };
-}
-
-type RevokeKnowledgeTestHookResult = (responseTest: TestInfo) => void;
-
-export function useRevokeKnowledgeTest(
-  courseId: number,
-  lessonId: number,
-): RevokeKnowledgeTestHookResult {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (responseTest: TestInfo) => {
-      dispatch({
-        type: ActionType.KNOWLEDGE_TEST_REVOKE,
-        responseTest,
-        courseId,
-        lessonId,
-      });
-    },
-    [courseId, dispatch, lessonId],
-  );
-}
-
-export type DeleteKnowledgeTestHookResult = (
-  courseId: number,
-  lessonId: number,
-  testId: number,
-) => void;
-
-export function useDeleteKnowledgeTest(
-  redirectUrl?: string,
-  onDelete?: KnowledgeTestDeleteCallback,
-  onError?: KnowledgeTestDeleteErrorCallback,
-): DeleteKnowledgeTestHookResult {
-  const dispatch = useDispatch();
-  const redirectIfSupplied = useRedirect(redirectUrl);
-
-  const deleteCallback = useCallback(
-    (courseId, lessonId, testId) => {
-      redirectIfSupplied();
-      if (onDelete) {
-        onDelete(courseId, lessonId, testId);
-      }
-    },
-    [redirectIfSupplied, onDelete],
-  );
-
-  return useCallback(
-    (courseId, lessonId, testId) => {
-      dispatch({
-        type: ActionType.KNOWLEDGE_TEST_DELETE_REQUEST,
-        courseId,
-        lessonId,
-        testId,
         onDelete: deleteCallback,
         onError,
       });
