@@ -79,6 +79,6 @@ function* processParticipantDelete() {
   );
 }
 
-export function* participantsSaga(): any {
+export function* participantsSaga() {
   yield all([fork(fetchParticipants), fork(processParticipantDelete)]);
 }

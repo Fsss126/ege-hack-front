@@ -104,7 +104,7 @@ function* processCourseDelete() {
   );
 }
 
-export function* coursesSaga(): any {
+export function* coursesSaga() {
   yield all([
     fork(fetchShopCourses),
     fork(fetchUserCourses),

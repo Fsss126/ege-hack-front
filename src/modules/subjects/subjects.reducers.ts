@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {combineReducers, Reducer} from 'redux';
 import {Action} from 'store/actions';
-import {DataProperty, StoreProperty} from 'store/reducers/types';
+import {StoreProperty} from 'store/reducers/types';
 import {SubjectInfo} from 'types/entities';
 
 import {ESubjectsAction} from './subjects.constants';

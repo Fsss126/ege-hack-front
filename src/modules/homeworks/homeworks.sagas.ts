@@ -82,6 +82,6 @@ function* fetchHomeworks() {
   );
 }
 
-export function* homeworksSaga(): any {
+export function* homeworksSaga() {
   yield all([fork(fetchUserHomeworks), fork(fetchHomeworks)]);
 }

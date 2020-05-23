@@ -168,7 +168,7 @@ function* processWebinarDelete() {
   );
 }
 
-export function* webinarsSaga(): any {
+export function* webinarsSaga() {
   yield all([
     fork(fetchWebinars),
     fork(fetchUpcomingWebinars),

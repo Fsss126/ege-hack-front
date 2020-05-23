@@ -62,6 +62,6 @@ function* processLessonDelete() {
   );
 }
 
-export function* lessonsSaga(): any {
+export function* lessonsSaga() {
   yield all([fork(fetchLessons), fork(processLessonDelete)]);
 }

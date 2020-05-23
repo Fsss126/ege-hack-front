@@ -349,7 +349,7 @@ function* processSavedAnswer() {
   );
 }
 
-export function* testingSaga(): any {
+export function* testingSaga() {
   yield all([
     fork(fetchTest),
     fork(fetchTestStatus),

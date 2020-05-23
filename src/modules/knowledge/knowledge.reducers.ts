@@ -1,23 +1,15 @@
-import {AxiosError} from 'axios';
 import _ from 'lodash';
+import {
+  EKnowledgeAction,
+  KNOWLEDGE_TREE_ROOT,
+  KnowledgeBaseSubject,
+} from 'modules/knowledge/knowledge.constants';
 import {Reducer} from 'redux';
-import {TaskInfo, TestResultInfo, ThemeInfo} from 'types/entities';
-import {KNOWLEDGE_TREE_ROOT, KnowledgeTreeLevel} from 'types/knowledgeTree';
-
-import {Action, ActionType} from '../actions';
-
-export type DataProperty<T> = Maybe<T | AxiosError>;
-
-export type KnowledgeBaseSubject = {
-  [key in number | typeof KNOWLEDGE_TREE_ROOT]?: DataProperty<
-    KnowledgeTreeLevel
-  >;
-};
+import {Action} from 'store/actions';
+import {DataProperty} from 'store/reducers/types';
+import {TaskInfo, ThemeInfo} from 'types/entities';
 
 export interface DataState {
-  // TODO: normalize
-  // courseLessons: {[courseId: number]: DataProperty<number[]>};
-  // lessons: {[lessonId: number]: LessonInfo};
   themes: {
     [themeId: number]: DataProperty<ThemeInfo>;
   };
@@ -27,25 +19,21 @@ export interface DataState {
   knowledgeMap: {
     [subjectId: number]: Maybe<KnowledgeBaseSubject>;
   };
-  testResults: {
-    [testId: number]: DataProperty<TestResultInfo[]>;
-  };
 }
 
 const defaultState: DataState = {
   themes: {},
   tasks: {},
   knowledgeMap: {},
-  testResults: {},
 };
 
-export const dataReducer: Reducer<DataState, Action> = (
+export const knowledgeReducer: Reducer<DataState, Action> = (
   state = defaultState,
   action,
 ): DataState => {
   switch (action.type) {
-    case ActionType.KNOWLEDGE_LEVEL_FETCHED: {
-      const {subjectId, themeId, content} = action;
+    case EKnowledgeAction.KNOWLEDGE_LEVEL_FETCHED: {
+      const {subjectId, themeId, data: content} = action.payload;
       const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
 
       let stateUpdate: Partial<DataState>;
@@ -82,19 +70,19 @@ export const dataReducer: Reducer<DataState, Action> = (
       }
       return _.merge(stateUpdate, state);
     }
-    case ActionType.KNOWLEDGE_THEME_FETCHED: {
-      const {themeId, theme} = action;
+    case EKnowledgeAction.KNOWLEDGE_THEME_FETCHED: {
+      const {themeId, data} = action.payload;
 
       return {
         ...state,
         themes: {
           ...state.themes,
-          [themeId]: theme,
+          [themeId]: data,
         },
       };
     }
-    case ActionType.KNOWLEDGE_THEME_REVOKE: {
-      const {responseTheme} = action;
+    case EKnowledgeAction.KNOWLEDGE_THEME_REVOKE: {
+      const {data: responseTheme} = action.payload;
       const {subject_id, id, parent_theme_id} = responseTheme;
 
       const themeKey =
@@ -142,8 +130,8 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
-    case ActionType.KNOWLEDGE_THEME_DELETE: {
-      const {subjectId, themeId, parentThemeId} = action;
+    case EKnowledgeAction.KNOWLEDGE_THEME_DELETE: {
+      const {subjectId, themeId, parentThemeId} = action.payload;
 
       const themeKey =
         parentThemeId !== undefined ? parentThemeId : KNOWLEDGE_TREE_ROOT;
@@ -184,19 +172,19 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
-    case ActionType.KNOWLEDGE_TASK_FETCHED: {
-      const {taskId, task} = action;
+    case EKnowledgeAction.KNOWLEDGE_TASK_FETCHED: {
+      const {taskId, data} = action.payload;
 
       return {
         ...state,
         tasks: {
           ...state.tasks,
-          [taskId]: task,
+          [taskId]: data,
         },
       };
     }
-    case ActionType.KNOWLEDGE_TASK_REVOKE: {
-      const {responseTask} = action;
+    case EKnowledgeAction.KNOWLEDGE_TASK_REVOKE: {
+      const {data: responseTask} = action.payload;
       const {subject_id, id, theme_id} = responseTask;
 
       const themeKey = theme_id !== undefined ? theme_id : KNOWLEDGE_TREE_ROOT;
@@ -244,8 +232,8 @@ export const dataReducer: Reducer<DataState, Action> = (
         },
       };
     }
-    case ActionType.KNOWLEDGE_TASK_DELETE: {
-      const {subjectId, themeId, taskId} = action;
+    case EKnowledgeAction.KNOWLEDGE_TASK_DELETE: {
+      const {subjectId, themeId, taskId} = action.payload;
 
       const themeKey = themeId !== undefined ? themeId : KNOWLEDGE_TREE_ROOT;
       const containingLevel = state.knowledgeMap[subjectId]?.[themeKey];

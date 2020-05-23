@@ -120,6 +120,6 @@ function* processTestDelete() {
   );
 }
 
-export function* testsSaga(): any {
+export function* testsSaga() {
   yield all([fork(fetchTest), fork(fetchTestResults), fork(processTestDelete)]);
 }

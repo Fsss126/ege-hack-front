@@ -22,6 +22,6 @@ function* fetchTeachers() {
   });
 }
 
-export function* teachersSaga(): any {
+export function* teachersSaga() {
   yield all([fork(fetchTeachers)]);
 }

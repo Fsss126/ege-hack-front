@@ -1,58 +1,14 @@
 import {
-  DataProperty,
-  DataState,
   KnowledgeBaseSubject,
-} from 'store/reducers/dataReducer';
-
-import {SubjectInfo, TaskInfo, ThemeInfo} from './entities';
-
-export enum TreeEntityType {
-  TASK = 'task',
-  THEME = 'theme',
-  SUBJECT = 'subject',
-}
-
-interface TreeEntity<
-  E extends SubjectInfo | ThemeInfo | TaskInfo,
-  T extends TreeEntityType
-> {
-  type: T;
-  id: string;
-  pId?: string;
-  parentType?: TreeEntityType.SUBJECT | TreeEntityType.THEME;
-  rootPId?: string;
-  entity: E;
-  subjectId?: number;
-  themeId?: number;
-  children: (TaskTreeEntity | ThemeTreeEntity)[];
-}
-
-export type TaskTreeEntity = Require<
-  TreeEntity<TaskInfo, TreeEntityType.TASK>,
-  'pId' | 'rootPId' | 'parentType'
->;
-
-export type ThemeTreeEntity = Require<
-  TreeEntity<ThemeInfo, TreeEntityType.THEME>,
-  'pId' | 'rootPId'
->;
-
-export type SubjectTreeEntity = TreeEntity<SubjectInfo, TreeEntityType.SUBJECT>;
-
-export type KnowledgeTreeEntity =
-  | SubjectTreeEntity
-  | ThemeTreeEntity
-  | TaskTreeEntity;
-
-export type KnowledgeTree = KnowledgeTreeEntity[];
-
-export const KNOWLEDGE_TREE_ROOT = 'root' as const;
-
-export type KnowledgeTreeLevel = {
-  id: number | typeof KNOWLEDGE_TREE_ROOT;
-  themeIds: number[];
-  taskIds: number[];
-};
+  KnowledgeTreeEntity,
+  SubjectTreeEntity,
+  TaskTreeEntity,
+  ThemeTreeEntity,
+  TreeEntityType,
+} from 'modules/knowledge/knowledge.constants';
+import {DataState} from 'modules/knowledge/knowledge.reducers';
+import {DataProperty} from 'store/reducers/types';
+import {SubjectInfo, TaskInfo, ThemeInfo} from 'types/entities';
 
 type KnowledgeMap = DataState['knowledgeMap'];
 

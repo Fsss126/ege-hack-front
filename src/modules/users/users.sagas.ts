@@ -79,6 +79,6 @@ function* processAccountsDelete() {
   });
 }
 
-export function* usersSaga(): any {
+export function* usersSaga() {
   yield all([fork(fetchAccounts), fork(processAccountsDelete)]);
 }

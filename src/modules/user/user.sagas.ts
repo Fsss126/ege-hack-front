@@ -26,6 +26,6 @@ function* fetchUserInfo() {
   });
 }
 
-export function* userSaga(): any {
+export function* userSaga() {
   yield all([fork(loginSaga), fork(fetchUserInfo)]);
 }

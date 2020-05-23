@@ -42,6 +42,6 @@ function* processSubjectDelete() {
   );
 }
 
-export function* subjectsSaga(): any {
+export function* subjectsSaga() {
   yield all([fork(fetchSubjects), fork(processSubjectDelete)]);
 }
