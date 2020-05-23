@@ -1535,8 +1535,10 @@ header {
       opacity: 1;
     }
 
-    .layout__content-block.tab-nav-container ~ .layout__content-block:not(.catalog__catalog--empty) {
-      margin-top: 0;
+    .layout__content-block.tab-nav-container, .layout__content-block.btn-container {
+      & ~ .layout__content-block:not(.catalog__catalog--empty) {
+        margin-top: 0;
+      }
     }
 
     .catalog__filters {
