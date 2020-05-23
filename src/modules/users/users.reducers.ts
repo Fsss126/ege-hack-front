@@ -10,11 +10,11 @@ const users: Reducer<
   Action
 > = (
   state = {
-    [AccountRole.PUPIL]: null,
-    [AccountRole.TEACHER]: null,
-    [AccountRole.HELPER]: null,
-    [AccountRole.ADMIN]: null,
-    [AccountRole.MODERATOR]: null,
+    [AccountRole.PUPIL]: undefined,
+    [AccountRole.TEACHER]: undefined,
+    [AccountRole.HELPER]: undefined,
+    [AccountRole.ADMIN]: undefined,
+    [AccountRole.MODERATOR]: undefined,
   },
   action,
 ) => {

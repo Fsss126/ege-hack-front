@@ -171,8 +171,8 @@ const CoursePage: React.FC<RouteComponentPropsWithParentProps<
           <LessonsPage
             className="teaching-page"
             renderLesson={renderLesson}
-            course={course || undefined}
-            lessons={lessons || undefined}
+            course={course}
+            lessons={lessons}
             isLoaded={isLoaded}
             path={path}
             url={url}

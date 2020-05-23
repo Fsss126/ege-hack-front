@@ -16,7 +16,7 @@ import {
 import {selectLessons} from './lessons.selectors';
 
 export function useLessons(courseId: number) {
-  const lessons = useSelector(selectLessons)[courseId] || undefined;
+  const lessons = useSelector(selectLessons)[courseId];
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
     dispatch(lessonsFetch({courseId}));

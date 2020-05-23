@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import {combineReducers, Reducer} from 'redux';
 import {Action} from 'store/actions';
-import {DataProperty} from 'store/reducers/types';
+import {DataProperty, StoreProperty} from 'store/reducers/types';
 import {SubjectInfo} from 'types/entities';
 
 import {ESubjectsAction} from './subjects.constants';
 
-const subjects: Reducer<DataProperty<SubjectInfo[]>, Action> = (
+const subjects: Reducer<StoreProperty<SubjectInfo[]>, Action> = (
   state = null,
   action,
 ) => {

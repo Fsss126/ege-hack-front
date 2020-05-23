@@ -1,15 +1,15 @@
 import _ from 'lodash';
 import {combineReducers, Reducer} from 'redux';
 import {Action} from 'store/actions';
-import {DataProperty} from 'store/reducers/types';
+import {StoreProperty} from 'store/reducers/types';
 import {CourseInfo, UserCourseInfo} from 'types/entities';
 
 import {ECoursesAction} from './courses.constants';
 
 const updateCatalog = <T extends CourseInfo>(
-  catalog: DataProperty<T[]>,
+  catalog: StoreProperty<T[]>,
   responseCourse: CourseInfo,
-): DataProperty<T[]> => {
+): StoreProperty<T[]> => {
   if (!(catalog instanceof Array)) {
     return catalog;
   }
@@ -28,14 +28,14 @@ const updateCatalog = <T extends CourseInfo>(
 };
 
 const removeCourse = <T extends CourseInfo>(
-  catalog: DataProperty<T[]>,
+  catalog: StoreProperty<T[]>,
   courseId: number,
-): DataProperty<T[]> =>
+): StoreProperty<T[]> =>
   catalog instanceof Array
     ? catalog.filter(({id}) => id !== courseId)
     : catalog;
 
-const shopCourses: Reducer<DataProperty<CourseInfo[]>, Action> = (
+const shopCourses: Reducer<StoreProperty<CourseInfo[]>, Action> = (
   state = null,
   action,
 ) => {
@@ -58,7 +58,7 @@ const shopCourses: Reducer<DataProperty<CourseInfo[]>, Action> = (
   }
 };
 
-const userCourses: Reducer<DataProperty<UserCourseInfo[]>, Action> = (
+const userCourses: Reducer<StoreProperty<UserCourseInfo[]>, Action> = (
   state = null,
   action,
 ) => {
@@ -81,7 +81,7 @@ const userCourses: Reducer<DataProperty<UserCourseInfo[]>, Action> = (
   }
 };
 
-const adminCourses: Reducer<DataProperty<CourseInfo[]>, Action> = (
+const adminCourses: Reducer<StoreProperty<CourseInfo[]>, Action> = (
   state = null,
   action,
 ) => {
@@ -104,7 +104,7 @@ const adminCourses: Reducer<DataProperty<CourseInfo[]>, Action> = (
   }
 };
 
-const teacherCourses: Reducer<DataProperty<CourseInfo[]>, Action> = (
+const teacherCourses: Reducer<StoreProperty<CourseInfo[]>, Action> = (
   state = null,
   action,
 ) => {

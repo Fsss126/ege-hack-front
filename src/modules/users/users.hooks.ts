@@ -12,7 +12,7 @@ import {AccountInfo} from 'types/entities';
 import {AccountRole} from 'types/enums';
 
 export function useAccounts(role: AccountRole) {
-  const accounts = useSelector(selectUsers)[role] || undefined;
+  const accounts = useSelector(selectUsers)[role];
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
     dispatch(usersFetch({role}));

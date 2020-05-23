@@ -1,12 +1,12 @@
 import Auth from 'definitions/auth';
 import {combineReducers, Reducer} from 'redux';
 import {Action} from 'store/actions';
-import {DataProperty} from 'store/reducers/types';
+import {StoreProperty} from 'store/reducers/types';
 import {AccountInfo, Credentials} from 'types/entities';
 
 import {EUserAction} from './user.constants';
 
-const credentials: Reducer<DataProperty<Credentials>, Action> = (
+const credentials: Reducer<StoreProperty<Credentials>, Action> = (
   state = Auth.getCredentials(),
   action,
 ) => {
@@ -24,7 +24,7 @@ const credentials: Reducer<DataProperty<Credentials>, Action> = (
   }
 };
 
-const userInfo: Reducer<DataProperty<AccountInfo>, Action> = (
+const userInfo: Reducer<StoreProperty<AccountInfo>, Action> = (
   state = null,
   action,
 ) => {

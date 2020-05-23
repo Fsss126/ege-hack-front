@@ -49,7 +49,7 @@ export function useRevokeUserHomework(
 
 export function useHomeworks(lessonId: number) {
   const isAllowed = useCheckPermissions(Permission.HOMEWORK_CHECK);
-  const homeworks = useSelector(selectHomeworks)[lessonId] || undefined;
+  const homeworks = useSelector(selectHomeworks)[lessonId];
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
     dispatch(homeworkFetch({lessonId}));

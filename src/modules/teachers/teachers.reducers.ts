@@ -1,11 +1,11 @@
 import {combineReducers, Reducer} from 'redux';
 import {Action} from 'store/actions';
-import {DataProperty} from 'store/reducers/types';
+import {StoreProperty} from 'store/reducers/types';
 import {TeacherProfileInfo} from 'types/entities';
 
 import {ETeachersAction} from './teachers.constants';
 
-const teachers: Reducer<DataProperty<TeacherProfileInfo[]>, Action> = (
+const teachers: Reducer<StoreProperty<TeacherProfileInfo[]>, Action> = (
   state = null,
   action,
 ) => {

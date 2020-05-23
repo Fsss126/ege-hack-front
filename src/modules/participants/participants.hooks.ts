@@ -14,7 +14,7 @@ import {Permission} from 'types/enums';
 
 export function useParticipants(courseId: number) {
   const isAllowed = useCheckPermissions(Permission.PARTICIPANT_MANAGEMENT);
-  const participants = useSelector(selectParticipants)[courseId] || undefined;
+  const participants = useSelector(selectParticipants)[courseId];
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
     dispatch(participantsFetch({courseId}));

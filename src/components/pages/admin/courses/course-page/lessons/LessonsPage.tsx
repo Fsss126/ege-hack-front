@@ -50,7 +50,7 @@ export type LessonsPageProps = RouteComponentPropsWithParentProps<
   parentSection?: PageParentSection;
   children: React.ReactNode;
   course?: CourseInfo;
-  lessons?: LessonInfo[];
+  lessons?: LessonInfo[] | false;
   requiredPermissions?: RequiredPermissions;
   renderLesson: LessonRenderer;
   className?: string;

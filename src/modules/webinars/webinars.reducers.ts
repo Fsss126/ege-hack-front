@@ -1,10 +1,10 @@
 import {EWebinarssAction} from 'modules/webinars/webinars.constants';
 import {combineReducers, Reducer} from 'redux';
 import {Action} from 'store/actions';
-import {DataProperty} from 'store/reducers/types';
+import {DataProperty, StoreProperty} from 'store/reducers/types';
 import {PersonWebinar, WebinarScheduleInfo} from 'types/entities';
 
-const upcomingWebinars: Reducer<DataProperty<PersonWebinar[]>, Action> = (
+const upcomingWebinars: Reducer<StoreProperty<PersonWebinar[]>, Action> = (
   state = null,
   action,
 ) => {

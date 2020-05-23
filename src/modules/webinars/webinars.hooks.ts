@@ -36,7 +36,7 @@ export function useUpcomingWebinars() {
 }
 
 export function useWebinars(courseId: number) {
-  const webinars = useSelector(selectWebinars)[courseId] || undefined;
+  const webinars = useSelector(selectWebinars)[courseId];
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
     dispatch(webinarsFetch({courseId}));
@@ -53,7 +53,7 @@ export function useWebinars(courseId: number) {
 
 export function useAdminWebinars(courseId: number) {
   const isAllowed = useCheckPermissions(Permission.WEBINAR_EDIT);
-  const webinars = useSelector(selectAdminWebinars)[courseId] || undefined;
+  const webinars = useSelector(selectAdminWebinars)[courseId];
   const dispatch = useDispatch();
   const dispatchFetchAction = useCallback(() => {
     dispatch(adminWebinarsFetch({courseId}));

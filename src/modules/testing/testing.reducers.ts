@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import {combineReducers, Reducer} from 'redux';
 import {Action} from 'store/actions';
-import {DataProperty} from 'store/reducers/types';
+import {StoreProperty} from 'store/reducers/types';
 import {SanitizedTestInfo, TestStateInfo, TestStatusInfo} from 'types/entities';
 
 import {ETestingAction} from './testing.constants';
 
 const statuses: Reducer<
-  Dictionary<DataProperty<TestStatusInfo>, number>,
+  Dictionary<StoreProperty<TestStatusInfo>, number>,
   Action
 > = (state = {}, action) => {
   switch (action.type) {
@@ -41,7 +41,7 @@ const statuses: Reducer<
   }
 };
 
-const test: Reducer<DataProperty<SanitizedTestInfo>, Action> = (
+const test: Reducer<StoreProperty<SanitizedTestInfo>, Action> = (
   state = null,
   action,
 ) => {
@@ -54,7 +54,7 @@ const test: Reducer<DataProperty<SanitizedTestInfo>, Action> = (
   }
 };
 
-const state: Reducer<DataProperty<TestStateInfo>, Action> = (
+const state: Reducer<StoreProperty<TestStateInfo>, Action> = (
   state = null,
   action,
 ) => {
